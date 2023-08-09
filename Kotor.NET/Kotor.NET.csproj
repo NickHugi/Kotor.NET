@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Formats\Binary2DA\" />
+    <Folder Include="Formats\BinaryBIF\" />
+    <Folder Include="Formats\BinaryBWM\" />
+    <Folder Include="Formats\BinaryGFF\" />
+    <Folder Include="Formats\BinaryKEY\" />
+    <Folder Include="Formats\BinaryLIP\" />
+    <Folder Include="Formats\BinaryMDL\" />
+    <Folder Include="Formats\BinaryNCS\" />
+    <Folder Include="Formats\BinaryRIM\" />
+    <Folder Include="Formats\BinarySFF\" />
+    <Folder Include="Formats\BinaryTLK\" />
+    <Folder Include="Formats\BinaryTPC\" />
+    <Folder Include="Formats\BinaryTGA\" />
+    <Folder Include="Formats\AsciiLYT\" />
+    <Folder Include="Formats\AsciiVIS\" />
+    <Folder Include="Formats\AsciiTXI\" />
+    <Folder Include="Formats\BinaryLTR\" />
+  </ItemGroup>
+
+</Project>
