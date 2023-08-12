@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KotorDotNET.Data
+namespace KotorDotNET.Common.Data
 {
     public class ResourceType
     {
@@ -88,7 +88,7 @@ namespace KotorDotNET.Data
 
         public static ResourceType ByID(int id)
         {
-            return ResourceTypes.SingleOrDefault(x => x.ID == id) ?? ResourceType.UNIDENTIFIED;
+            return ResourceTypes.SingleOrDefault(x => x.ID == id) ?? UNIDENTIFIED;
         }
 
         public static ResourceType ByExtension(string extension)

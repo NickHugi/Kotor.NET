@@ -1,4 +1,4 @@
-﻿using KotorDotNET.Data.FileFormats.Kotor2DA;
+﻿using KotorDotNET.FileFormats.Kotor2DA;
 using System;
 using System.Collections.Generic;
 using System.Linq;

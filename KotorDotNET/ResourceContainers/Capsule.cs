@@ -1,4 +1,4 @@
-﻿using KotorDotNET.Data;
+﻿using KotorDotNET.Common.Data;
 using KotorDotNET.Extensions;
 using System;
 using System.Collections.Generic;

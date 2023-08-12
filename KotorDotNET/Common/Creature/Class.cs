@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KotorDotNET.Data
+namespace KotorDotNET.Common.Creature
 {
     public class Class
     {
         public int ClassID { get; set; }
         public int ClassLevel { get; set; }
-        public List<ForcePower> ForcePower { get; set; }    
+        public List<ForcePower> ForcePower { get; set; }
     }
 }

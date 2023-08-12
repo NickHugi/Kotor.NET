@@ -1,5 +1,6 @@
-﻿using KotorDotNET.Data;
-using KotorDotNET.Data.FileFormats.Kotor2DA;
+﻿using KotorDotNET.Common.Data;
+using KotorDotNET.Common.FileFormats.Kotor2DA;
+using KotorDotNET.FileFormats.Kotor2DA;
 using System;
 using System.Collections.Generic;
 using System.Linq;

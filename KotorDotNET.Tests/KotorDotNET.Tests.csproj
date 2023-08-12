@@ -17,10 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Patching\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\KotorDotNET\KotorDotNET.csproj" />
   </ItemGroup>
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KotorDotNET.Data
+namespace KotorDotNET.Common.Data
 {
     public class ResRef
     {

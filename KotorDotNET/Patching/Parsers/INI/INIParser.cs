@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KotorDotNET.Patching.Parsers.LegacyINI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,12 +12,8 @@ namespace KotorDotNET.Patching.Parsers.INI
     /// Stoffe's TSLPatcher specifications as well as introducing
     /// new some new functionality.
     /// </summary>
-    public class INIParser : IParser
+    public class INIParser : LegacyINIParser
     {
-        public Patcher Read()
-        {
-            // TODO
-            throw new NotImplementedException();
-        }
+        
     }
 }

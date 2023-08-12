@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KotorDotNET.Enums
+namespace KotorDotNET.Common
 {
-    public enum Gender
+    internal interface IReader<T>
     {
-        MALE = 0,
-        FEMALE = 1,
+        T Read();
     }
 }

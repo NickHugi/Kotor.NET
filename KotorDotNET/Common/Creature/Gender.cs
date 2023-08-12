@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KotorDotNET
+namespace KotorDotNET.Common.Creature
 {
-    internal interface IWriter<T>
+    public enum Gender
     {
-        void Write(T value);
+        MALE = 0,
+        FEMALE = 1,
     }
 }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KotorDotNET.Data.FileFormats.Kotor2DA
+namespace KotorDotNET.FileFormats.Kotor2DA
 {
     internal class TwoDABinaryStructure
     {
@@ -49,7 +49,7 @@ namespace KotorDotNET.Data.FileFormats.Kotor2DA
                 for (int i = 0; i < cellCount; i++)
                 {
                     var columnIndex = i % Columns.Count;
-                    var rowIndex = (int)Math.Floor((decimal)i / (decimal)Columns.Count);
+                    var rowIndex = (int)Math.Floor(i / (decimal)Columns.Count);
 
                     reader.BaseStream.Position = cellDataOffset + CellOffsets[i];
                     var cellValue = reader.ReadTerminatedString('\0');

@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KotorDotNET.Data.FileFormats.Kotor2DA
+namespace KotorDotNET.FileFormats.Kotor2DA
 {
     /// <summary>
     /// Represents the table data structure of the 2DA file format.
@@ -49,7 +49,7 @@ namespace KotorDotNET.Data.FileFormats.Kotor2DA
         {
             return Rows().Single(x => x.Header == rowHeader);
         }
-        
+
         /// <summary>
         /// Adds an empty new row to the bottom of the table.
         /// </summary>
@@ -61,7 +61,7 @@ namespace KotorDotNET.Data.FileFormats.Kotor2DA
             _rows.Add(row);
             return row;
         }
-        
+
         /// <summary>
         /// Removes the row at the given index.
         /// </summary>
@@ -92,7 +92,7 @@ namespace KotorDotNET.Data.FileFormats.Kotor2DA
         {
             return _headers.AsReadOnly();
         }
-        
+
         /// <summary>
         /// Adds a new column to the table.
         /// </summary>

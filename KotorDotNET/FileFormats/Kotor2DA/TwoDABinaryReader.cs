@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KotorDotNET.Common;
+using static KotorDotNET.FileFormats.Kotor2DA.TwoDABinaryStructure;
 
-using static KotorDotNET.Data.FileFormats.Kotor2DA.TwoDABinaryStructure;
-
-namespace KotorDotNET.Data.FileFormats.Kotor2DA
+namespace KotorDotNET.FileFormats.Kotor2DA
 {
     public class TwoDABinaryReader : IReader<TwoDA>
     {
@@ -18,7 +18,7 @@ namespace KotorDotNET.Data.FileFormats.Kotor2DA
 
         public TwoDABinaryReader(string filepath)
         {
-            var data = System.IO.File.ReadAllBytes(filepath);
+            var data = File.ReadAllBytes(filepath);
             _binaryReader = new BinaryReader(new MemoryStream(data));
         }
         public TwoDABinaryReader(byte[] data)
@@ -51,7 +51,7 @@ namespace KotorDotNET.Data.FileFormats.Kotor2DA
                 for (int j = 0; j < file.Columns.Count; j++)
                 {
                     var header = file.Columns[j];
-                    var cellIndex = (i * file.RowLabels.Count) + j;
+                    var cellIndex = i * file.RowLabels.Count + j;
                     var cell = file.Cells[cellIndex];
                     row.SetCell(header, cell);
                 }

@@ -1,4 +1,4 @@
-﻿using KotorDotNET.Data.FileFormats.Kotor2DA;
+﻿using KotorDotNET.FileFormats.Kotor2DA;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +13,6 @@ namespace KotorDotNET.Patching.Modifiers.For2DA
     /// </summary>
     public interface IValue
     {
-        public string GetValue(Memory memory, TwoDA twoda, TwoDARow row, string columnHeader);
+        public string GetValue(Memory memory, TwoDA twoda, TwoDARow? row, string? columnHeader);
     }
 }

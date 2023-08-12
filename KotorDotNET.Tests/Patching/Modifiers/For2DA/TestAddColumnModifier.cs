@@ -1,7 +1,7 @@
-﻿using KotorDotNET.Data.FileFormats.Kotor2DA;
+﻿using KotorDotNET.FileFormats.Kotor2DA;
 using KotorDotNET.Patching;
+using KotorDotNET.Patching.Modifiers;
 using KotorDotNET.Patching.Modifiers.For2DA;
-using Microsoft.VisualStudio.TestTools.UnitTesting.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +13,9 @@ namespace KotorDotNET.Tests.Patching.Modifiers.For2DA
     [TestClass]
     public class TestAddColumnModifier
     {
-        Memory memory;
-        ILogger logger;
-        TwoDA twoda;
+        Memory? memory;
+        Logger? logger;
+        TwoDA? twoda;
 
         [TestInitialize]
         public void Init()
@@ -24,7 +24,7 @@ namespace KotorDotNET.Tests.Patching.Modifiers.For2DA
             memory.Set2DAToken(0, "2");
             memory.SetTLKToken(0, 2);
 
-            logger = null; // TODO
+            logger = new();
 
             twoda = new();
             twoda.AddColumn("C1");

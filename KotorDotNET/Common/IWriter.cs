@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KotorDotNET
+namespace KotorDotNET.Common
 {
-    internal interface IReader<T>
+    internal interface IWriter<T>
     {
-        T Read();
+        void Write(T value);
     }
 }

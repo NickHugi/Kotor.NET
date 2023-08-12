@@ -7,8 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Data\GenericTemplates\" />
+    <Folder Include="GenericTemplates\" />
     <Folder Include="Patching\Diff\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ini-parser" Version="2.5.2" />
   </ItemGroup>
 
 </Project>

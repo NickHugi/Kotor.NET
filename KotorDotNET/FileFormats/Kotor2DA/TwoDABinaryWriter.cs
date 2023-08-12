@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KotorDotNET.Common;
 
-namespace KotorDotNET.Data.FileFormats.Kotor2DA
+namespace KotorDotNET.FileFormats.Kotor2DA
 {
     public class TwoDABinaryWriter : IWriter<TwoDA>
     {

@@ -1,11 +1,11 @@
-﻿using KotorDotNET.Enums;
+﻿using KotorDotNET.Common.Creature;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KotorDotNET.Data
+namespace KotorDotNET.Common.Conversation
 {
     public class LocalizedSubstring
     {
