@@ -46,8 +46,9 @@ namespace KotorDotNET.Patching.Parsers.LegacyINI
                 target = new ColumnTarget("label", section["LabelIndex"]);
             }
 
-            EditRowModifier modifier = new(target, data, toStoreInMemory);
-            return modifier;
+            /*EditRowModifier modifier = new(target, data, toStoreInMemory);
+            return modifier;*/
+            return default; // TODO
         }
     }
 }
