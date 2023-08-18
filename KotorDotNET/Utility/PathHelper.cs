@@ -30,16 +30,22 @@ namespace KotorDotNET.Utility
             "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9",
         };
 
-        public static bool IsValidPath( string path)
+        // Checks if the path is valid on running platform, or optionally (default) enforce for all platforms.
+        public static bool IsValidPath( string? path, bool enforceAllPlatforms=true)
         {
-            if ( string.IsNullOrEmpty( path ) )
+            if ( string.IsNullOrWhiteSpace( path ) )
+                return false;
+            if ( path == string.Empty )
                 return false;
 
             try
             {
                 // Check for forbidden printable ASCII characters
-                char[] invalidChars = GetInvalidCharsForPlatform();
-                if (path.IndexOfAny( invalidChars ) >= 0)
+                char[] invalidChars = enforceAllPlatforms
+                    ? s_invalidPathCharsWindows // already contains the unix ones
+                    : GetInvalidCharsForPlatform();
+
+                if ( path.IndexOfAny( invalidChars ) >= 0 )
                     return false;
 
                 // Check for non-printable characters
@@ -47,18 +53,33 @@ namespace KotorDotNET.Utility
                     return false;
 
                 // Check for reserved file names in Windows
-                //if ( RuntimeInformation.IsOSPlatform( OSPlatform.Windows ) )
-                //{
-                if ( IsReservedFileNameWindows(path) )
-                    return false;
-            
-                // Check for invalid filename parts
-                // ReSharper disable once ConvertIfStatementToReturnStatement
-                if ( HasInvalidWindowsFileNameParts(path) )
-                    return false;
-                //}
+                if ( enforceAllPlatforms || RuntimeInformation.IsOSPlatform( OSPlatform.Windows ) )
+                {
+                    if ( IsReservedFileNameWindows(path) )
+                        return false;
+                
+                    // Check for invalid filename parts
+                    // ReSharper disable once ConvertIfStatementToReturnStatement
+                    if ( HasInvalidWindowsFileNameParts(path) )
+                        return false;
+                }
 
-                return true;
+                // double-check
+                try
+                {
+                    FileInfo _ = new(path);
+                    DirectoryInfo __ = new(path);
+                    return true;
+                }
+                catch (ArgumentException)
+                {
+                    return false;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return false;
+                }
             }
             catch ( Exception e )
             {
@@ -112,21 +133,38 @@ namespace KotorDotNET.Utility
                 : filePath;
         }
 
-        public static DirectoryInfo? TryGetValidDirectoryInfo(string? destinationPath)
+        public static DirectoryInfo? TryGetValidDirectoryInfo(string? folderPath)
         {
-            if ( destinationPath is null )
-                return null;
-            if ( destinationPath.IndexOfAny( Path.GetInvalidPathChars() ) >= 0 )
+            string formattedPath = FixPathFormatting(folderPath);
+            if ( PathValidator.IsValidPath(formattedPath) )
                 return null;
 
             try
             {
-                return new DirectoryInfo(destinationPath);
+                return new DirectoryInfo(folderPath!);
             }
             catch (Exception)
             {
-                // In .NET Framework 4.6.2, the DirectoryInfo constructor throws an exception
-                // when the path is invalid. We catch the exception and return null instead.
+                // In .NET Framework 4.6.2 and earlier, the DirectoryInfo constructor throws an exception
+                // when the path is invalid. We catch the exception and return null instead for a unified experience.
+                return null;
+            }
+        }
+
+        public static FileInfo? TryGetValidFileInfo(string? filePath)
+        {
+            string formattedPath = FixPathFormatting(filePath);
+            if ( PathValidator.IsValidPath(formattedPath) )
+                return null;
+
+            try
+            {
+                return new FileInfo(filePath!);
+            }
+            catch (Exception)
+            {
+                // In .NET Framework 4.6.2 and earlier, the FileInfo constructor throws an exception
+                // when the path is invalid. We catch the exception and return null instead for a unified experience.
                 return null;
             }
         }
@@ -134,32 +172,46 @@ namespace KotorDotNET.Utility
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern int GetLongPathName(string shortPath, StringBuilder longPath, int bufferSize);
 
-        public static string ConvertWindowsPathToCaseSensitive( string path )
+        public static string ConvertWindowsPathToCaseSensitive(string path)
         {
-            if ( Environment.OSVersion.Platform != PlatformID.Win32NT )
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException($"'{nameof(path)}' cannot be null or whitespace.", nameof(path));
+            if (!PathValidator.IsValidPath(path))
+                throw new ArgumentException($"{path} is not a valid path!");
+
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
                 return path;
 
-            const int bufferSize = 260; // MAX_PATH on Windows
-            var longPathBuffer = new StringBuilder(bufferSize);
-
-            int result = GetLongPathName(path, longPathBuffer, bufferSize);
-            // ReSharper disable once InvertIf
-            if ( result <= 0 || result >= bufferSize )
+            // Call with zero buffer size to get the required size, including the null-terminating character
+            int requiredSize = GetLongPathName(
+                path,
+                new StringBuilder(""),
+                0
+            );
+            if (requiredSize == 0)
             {
-                // Handle the error, e.g., the function call failed, or the buffer was too small
                 int error = Marshal.GetLastWin32Error();
-                throw new Win32Exception( error );
+                throw new Win32Exception(error);
             }
 
-            // The function succeeded, and the result contains the case-sensitive long path
+            StringBuilder longPathBuffer = new(requiredSize);
+
+            int result = GetLongPathName(path, longPathBuffer, requiredSize);
+            if (result <= 0 || result >= requiredSize)
+            {
+                int error = Marshal.GetLastWin32Error();
+                throw new Win32Exception(error);
+            }
+
             return longPathBuffer.ToString();
         }
         
+        public static string? GetCaseSensitivePath( FileInfo file ) => GetCaseSensitivePath( file.FullName );
+        public static string? GetCaseSensitivePath( DirectoryInfo directory ) => GetCaseSensitivePath( directory.FullName );
         public static string? GetCaseSensitivePath(string path)
         {
             if (string.IsNullOrWhiteSpace(path))
                 throw new ArgumentException($"'{nameof(path)}' cannot be null or whitespace.", nameof(path));
-            
             if (!PathValidator.IsValidPath(path))
                 throw new ArgumentException($"{path} is not a valid path!");
 
@@ -184,10 +236,6 @@ namespace KotorDotNET.Utility
             where item.FullName.Equals( path, StringComparison.OrdinalIgnoreCase )
             select ConvertWindowsPathToCaseSensitive( item.FullName )
         ).FirstOrDefault();
-        
-        public static string? GetCaseSensitivePath( FileInfo file ) => GetCaseSensitivePath( file.FullName );
-        
-        public static string? GetCaseSensitivePath( DirectoryInfo directory ) => GetCaseSensitivePath( directory.FullName );
 
         public static async Task MoveFileAsync( string sourcePath, string destinationPath )
         {
@@ -196,7 +244,7 @@ namespace KotorDotNET.Utility
             if ( destinationPath is null )
                 throw new ArgumentNullException( nameof( destinationPath ) );
 
-            await using ( var sourceStream = new FileStream(
+            await using ( FileStream sourceStream = new(
                     sourcePath,
                     FileMode.Open,
                     FileAccess.Read,
@@ -205,7 +253,7 @@ namespace KotorDotNET.Utility
                     useAsync: true
                 ) )
             {
-                await using ( var destinationStream = new FileStream(
+                await using ( FileStream destinationStream = new(
                         destinationPath,
                         FileMode.CreateNew,
                         FileAccess.Write,
@@ -224,7 +272,7 @@ namespace KotorDotNET.Utility
         
         public static List<string> EnumerateFilesWithWildcards(
             IEnumerable<string> filesAndFolders,
-            bool topLevelOnly = false
+            bool includeSubFolders = true
         )
         {
             if ( filesAndFolders is null )
@@ -233,98 +281,101 @@ namespace KotorDotNET.Utility
             List<string> result = new();
             HashSet<string> uniquePaths = new( filesAndFolders );
 
-            foreach ( string path in uniquePaths.Where( path => !string.IsNullOrEmpty( path ) ) )
+            foreach (string path in uniquePaths)
             {
+                if (string.IsNullOrEmpty(path))
+                    continue;
+
                 try
                 {
-                    string formattedPath = FixPathFormatting( path );
-
-                    if ( !ContainsWildcards( formattedPath ) )
+                    string formattedPath = FixPathFormatting(path);
+                    if (!PathValidator.IsValidPath(formattedPath))
+                        throw new ArgumentException($"Not a valid path: '{path}'");
+                    
+                    if (!ContainsWildcards(formattedPath))
                     {
                         // Handle non-wildcard paths
-                        if ( File.Exists( formattedPath ) )
+                        if (File.Exists(formattedPath))
                         {
-                            result.Add( formattedPath );
-                            continue;
+                            result.Add(formattedPath);
                         }
-
-                        if ( Directory.Exists( formattedPath ) )
+                        else if (Directory.Exists(formattedPath))
                         {
                             IEnumerable<string> matchingFiles = Directory.EnumerateFiles(
                                 formattedPath,
                                 searchPattern: "*",
-                                topLevelOnly
-                                    ? SearchOption.TopDirectoryOnly
-                                    : SearchOption.AllDirectories
+                                includeSubFolders
+                                    ? SearchOption.AllDirectories
+                                    : SearchOption.TopDirectoryOnly
                             );
 
-                            result.AddRange( matchingFiles );
+                            result.AddRange(matchingFiles);
                         }
 
                         continue;
                     }
 
-                    // Handle wildcard paths
-                    string? directory = Path.GetDirectoryName( formattedPath );
-
-                    if ( !string.IsNullOrEmpty( directory )
-                        && directory.IndexOfAny( Path.GetInvalidPathChars() ) != -1
-                        && Directory.Exists( directory ) )
+                    // Handle simple wildcard paths
+                    if (PathValidator.IsValidPath(formattedPath))
                     {
-                        IEnumerable<string> matchingFiles = Directory.EnumerateFiles(
-                            directory,
-                            Path.GetFileName( formattedPath ),
-                            topLevelOnly
-                                ? SearchOption.TopDirectoryOnly
-                                : SearchOption.AllDirectories
-                        );
+                        string? parentDir = Path.GetDirectoryName(formattedPath);
+                        if ( Directory.Exists(parentDir) )
+                        {
+                            IEnumerable<string> matchingFiles = Directory.EnumerateFiles(
+                                parentDir,
+                                Path.GetFileName(formattedPath),
+                                includeSubFolders
+                                    ? SearchOption.AllDirectories
+                                    : SearchOption.TopDirectoryOnly
+                            );
 
-                        result.AddRange( matchingFiles );
-                        continue;
+                            result.AddRange(matchingFiles);
+                            continue;
+                        }
                     }
 
                     // Handle wildcard paths
-                    string currentDirectory = formattedPath;
-
-                    while ( ContainsWildcards( currentDirectory ) )
+                    //
+                    // determine the closest parent folder in hierarchy that doesn't have wildcards
+                    // then wildcard match them all by hierarchy level.
+                    string currentDir = formattedPath;
+                    while (ContainsWildcards(currentDir))
                     {
-                        string? parentDirectory = Path.GetDirectoryName( currentDirectory );
+                        string? parentDirectory = Path.GetDirectoryName(currentDir);
 
                         // Exit the loop if no parent directory is found or if the parent directory is the same as the current directory
-                        if ( string.IsNullOrEmpty( parentDirectory ) || parentDirectory == currentDirectory )
+                        if (string.IsNullOrEmpty(parentDirectory) || parentDirectory == currentDir)
                             break;
 
-                        currentDirectory = parentDirectory;
+                        currentDir = parentDirectory;
                     }
 
-                    if ( string.IsNullOrEmpty( currentDirectory ) || !Directory.Exists( currentDirectory ) )
+                    if (!Directory.Exists(currentDir))
                         continue;
 
+                    // Get all files in the parent directory.
                     IEnumerable<string> checkFiles = Directory.EnumerateFiles(
-                        currentDirectory,
+                        currentDir,
                         searchPattern: "*",
-                        topLevelOnly
-                            ? SearchOption.TopDirectoryOnly
-                            : SearchOption.AllDirectories
+                        includeSubFolders
+                            ? SearchOption.AllDirectories
+                            : SearchOption.TopDirectoryOnly
                     );
 
-                    result.AddRange(
-                        checkFiles.Where(
-                            thisFile => WildcardPathMatch( thisFile, formattedPath )
-                        )
-                    );
+                    // wildcard match them all with WildcardPatchMatch and add to result
+                    result.AddRange(checkFiles.Where(thisFile => WildcardPathMatch(thisFile, formattedPath)));
                 }
-                catch ( Exception ex )
+                catch (Exception ex)
                 {
                     // Handle or log the exception as required
-                    Console.WriteLine( $"An error occurred while processing path '{path}': {ex.Message}" );
+                    Console.WriteLine($"An error occurred while processing path '{path}': {ex.Message}");
                 }
             }
 
             return result;
         }
 
-        private static bool ContainsWildcards( string path ) => path.Contains( '*' ) || path.Contains( '?' );
+        public static bool ContainsWildcards( string path ) => path.Contains( '*' ) || path.Contains( '?' );
 
         public static bool WildcardPathMatch( string input, string patternInput )
         {
@@ -337,7 +388,7 @@ namespace KotorDotNET.Utility
             input = FixPathFormatting( input );
             patternInput = FixPathFormatting( patternInput );
 
-            // Split the input and pattern into directory levels
+            // Split the input and patternInput into directory levels
             string[] inputLevels = input.Split( Path.DirectorySeparatorChar );
             string[] patternLevels = patternInput.Split( Path.DirectorySeparatorChar );
 
@@ -351,8 +402,7 @@ namespace KotorDotNET.Utility
                 string inputLevel = inputLevels[i];
                 string patternLevel = patternLevels[i];
 
-                // Check if the current level is a wildcard
-                if ( patternLevel is "*" or "?" )
+                if (patternLevel is "*")
                     continue;
 
                 // Check if the current level matches the pattern
@@ -364,28 +414,35 @@ namespace KotorDotNET.Utility
         }
 
         // Most end users don't know Regex, this function will convert basic wildcards to regex patterns.
-        private static bool WildcardMatch( string input, string pattern )
+        public static bool WildcardMatch( string input, string patternInput )
         {
             if ( input is null )
                 throw new ArgumentNullException( nameof( input ) );
-            if ( pattern is null )
-                throw new ArgumentNullException( nameof( pattern ) );
+            if ( patternInput is null )
+                throw new ArgumentNullException( nameof( patternInput ) );
 
             // Escape special characters in the pattern
-            pattern = Regex.Escape( pattern );
+            patternInput = Regex.Escape( patternInput );
 
             // Replace * with .* and ? with . in the pattern
-            pattern = pattern.Replace( oldValue: @"\*", newValue: ".*" )
-                .Replace( oldValue: @"\?", newValue: "." );
+            patternInput = patternInput
+                .Replace( oldValue: @"\*", newValue: ".*" )
+                .Replace( oldValue: @"\?", newValue: "."  );
 
             // Use regex to perform the wildcard matching
-            return Regex.IsMatch( input, $"^{pattern}$" );
+            return Regex.IsMatch( input, $"^{patternInput}$" );
         }
         
-        public static string FixPathFormatting( string path )
+        public static string FixPathFormatting( string? path )
         {
-            // Replace backslashes with forward slashes
-            string formattedPath = path.Replace( Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar )
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return string.Empty;
+            }
+
+            // Replace all slashes with the operating system's path separator
+            string formattedPath = path
+                .Replace( Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar )
                 .Replace( oldChar: '\\', Path.DirectorySeparatorChar )
                 .Replace( oldChar: '/', Path.DirectorySeparatorChar );
 
@@ -402,100 +459,117 @@ namespace KotorDotNET.Utility
             return formattedPath;
         }
         
-        public static List<FileSystemInfo> FindCaseInsensitiveDuplicates(DirectoryInfo directory)
+        public static IEnumerable<FileSystemInfo> FindCaseInsensitiveDuplicates(DirectoryInfo dirInfo, bool includeSubFolders=true)
         {
-            if (directory is null)
-                throw new ArgumentNullException(nameof(directory));
-
-            var duplicates = new List<FileSystemInfo>();
-
-            try
-            {
-                FindDuplicatesRecursively(directory, duplicates);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                return duplicates;
-            }
-
-            return duplicates;
+            return FindDuplicatesRecursively(dirInfo.FullName, includeSubFolders, isFile: false);
         }
 
-        private static void FindDuplicatesRecursively(DirectoryInfo directory, List<FileSystemInfo> duplicates)
+        public static IEnumerable<FileSystemInfo> FindCaseInsensitiveDuplicates(FileInfo fileInfo)
         {
-            if (duplicates is null)
-                throw new ArgumentNullException(nameof(duplicates));
+            // assumed Path.GetDirectoryName can't be null when passing a FileInfo's path.
+            return FindDuplicatesRecursively(fileInfo.DirectoryName, isFile: true);
+        }
 
-            // Check if the directory exists and if we have access to it.
-            if (!directory.Exists)
-                throw new DirectoryNotFoundException("Directory not found.");
+        // Finds all duplicate items in a path.
+        public static IEnumerable<FileSystemInfo> FindDuplicatesRecursively(string path, bool includeSubFolders=true, bool? isFile=null)
+        {
+            string formattedPath = FixPathFormatting(path);
+            if (!PathValidator.IsValidPath(formattedPath))
+                throw new ArgumentException( nameof( path ) + " is not a valid path string" );
 
-            var fileList = new Dictionary<string, List<FileSystemInfo>>(StringComparer.OrdinalIgnoreCase);
-            var folderList = new Dictionary<string, List<FileSystemInfo>>(StringComparer.OrdinalIgnoreCase);
-
-            // Search for files and add them to the file dictionary.
-            foreach (FileInfo file in directory.GetFiles())
+            // determine if path arg is a folder or a file.
+            DirectoryInfo? dirInfo;
+            if (isFile == false)
             {
-                if (file.Exists != true)
+                dirInfo = new DirectoryInfo( formattedPath );
+            }
+            else if (isFile == true)
+            {
+                dirInfo = new DirectoryInfo(Path.GetDirectoryName(formattedPath));
+            }
+            else
+            {
+                dirInfo = new DirectoryInfo(formattedPath);
+                if (!dirInfo.Exists)
+                {
+                    string? folderPath = Path.GetDirectoryName(formattedPath);
+                    isFile = true;
+                    if ( folderPath is not null )
+                        dirInfo = new DirectoryInfo(folderPath);
+                }
+            }
+
+            if (!dirInfo.Exists)
+                throw new ArgumentException($"Path item doesn't exist on disk: '{formattedPath}'");
+
+            // build duplicate files/folders list
+            Dictionary<string, List<FileSystemInfo>> fileList = new(StringComparer.OrdinalIgnoreCase);
+            Dictionary<string, List<FileSystemInfo>> folderList = new(StringComparer.OrdinalIgnoreCase);
+            foreach (FileInfo file in dirInfo.GetFiles())
+            {
+                if (!file.Exists)
                     continue;
 
-                string fileNameWithExtension = file.Name;
-                if (!fileList.TryGetValue(fileNameWithExtension, out List<FileSystemInfo>? files))
+                string filePath = file.FullName;
+                if (!fileList.TryGetValue(filePath, out List<FileSystemInfo>? files))
                 {
                     files = new List<FileSystemInfo>();
-                    fileList.Add(fileNameWithExtension, files);
+                    fileList.Add(filePath, files);
                 }
 
                 files.Add(file);
             }
-
-            // Search for subdirectories and add them to the folder dictionary.
-            foreach (DirectoryInfo subdirectory in directory.GetDirectories())
+            
+            foreach (KeyValuePair<string, List<FileSystemInfo>> fileListEntry in fileList)
             {
-                if (subdirectory.Exists != true)
+                List<FileSystemInfo> files = fileListEntry.Value;
+                if (files.Count <= 1)
                     continue;
 
-                if (!folderList.TryGetValue(subdirectory.Name, out List<FileSystemInfo>? folders))
+                foreach (FileSystemInfo duplicate in files)
+                {
+                    yield return duplicate;
+                }
+            }
+
+            // don't iterate folders in the parent folder if original path is a file.
+            if (isFile == true)
+                yield break;
+
+            foreach (DirectoryInfo subDirectory in dirInfo.GetDirectories())
+            {
+                if (!subDirectory.Exists)
+                    continue;
+
+                if (!folderList.TryGetValue(subDirectory.FullName, out List<FileSystemInfo>? folders))
                 {
                     folders = new List<FileSystemInfo>();
-                    folderList.Add(subdirectory.Name, folders);
+                    folderList.Add(subDirectory.FullName, folders);
                 }
+                folders.Add(subDirectory);
 
-                folders.Add(subdirectory);
-
-                // Recursively search the sub-directory.
-                FindDuplicatesRecursively(subdirectory, duplicates);
-
-                // Check for file duplicates within the current sub-directory.
-                foreach (KeyValuePair<string, List<FileSystemInfo>> fileListEntry in fileList)
+                if (includeSubFolders)
                 {
-                    List<FileSystemInfo> files = fileListEntry.Value;
-                    if (files.Count > 1)
-                        duplicates.AddRange(files);
+                    foreach (FileSystemInfo duplicate in FindDuplicatesRecursively(subDirectory.FullName))
+                    {
+                        yield return duplicate;
+                    }
                 }
 
-                // Check for folder duplicates within the current sub-directory.
                 foreach (KeyValuePair<string, List<FileSystemInfo>> folderListEntry in folderList)
                 {
                     List<FileSystemInfo> foldersInCurrentDir = folderListEntry.Value;
-                    if (foldersInCurrentDir.Count > 1)
-                        duplicates.AddRange(foldersInCurrentDir);
-                }
+                    if (foldersInCurrentDir.Count <= 1)
+                        continue;
 
-                // Clear the dictionaries for the next sub-directory.
-                fileList.Clear();
+                    foreach (FileSystemInfo duplicate in foldersInCurrentDir)
+                    {
+                        yield return duplicate;
+                    }
+                }
+                
                 folderList.Clear();
             }
-        }
-
-        public static List<FileSystemInfo> FindCaseInsensitiveDuplicates( string path )
-        {
-            if ( !PathValidator.IsValidPath( path ) )
-                throw new ArgumentException( nameof( path ) + " is not a valid path string" );
-
-            var directory = new DirectoryInfo( path );
-            return FindCaseInsensitiveDuplicates( directory );
         }
 
         public static (FileSystemInfo?, List<string>) GetClosestMatchingEntry( string path )
@@ -503,37 +577,40 @@ namespace KotorDotNET.Utility
             if ( !PathValidator.IsValidPath( path ) )
                 throw new ArgumentException( nameof( path ) + " is not a valid path string" );
 
+            path = FixPathFormatting(path);
+
             string? directoryName = Path.GetDirectoryName( path );
+            if ( string.IsNullOrEmpty(directoryName) )
+            {
+                return ( null, new List<string>() );
+            }
+
             string searchPattern = Path.GetFileName( path );
 
             FileSystemInfo? closestMatch = null;
             int maxMatchingCharacters = -1;
-            var duplicatePaths = new List<string>();
+            List<string> duplicatePaths = new();
 
-            if ( directoryName is null )
-                return ( null, duplicatePaths );
-
-            var directory = new DirectoryInfo( directoryName );
-            foreach ( FileSystemInfo entry in directory.EnumerateFileSystemInfos( searchPattern ) )
+            DirectoryInfo directory = new( directoryName );
+            foreach (FileSystemInfo entry in directory.EnumerateFileSystemInfos(searchPattern, SearchOption.TopDirectoryOnly))
             {
-                if ( string.IsNullOrWhiteSpace( entry.FullName ) )
+                if (string.IsNullOrWhiteSpace(entry.FullName))
                     continue;
 
-                int matchingCharacters = GetMatchingCharactersCount( entry.FullName, path );
-                if ( matchingCharacters == path.Length )
+                int matchingCharacters = GetMatchingCharactersCount(entry.FullName, path);
+                if (matchingCharacters > maxMatchingCharacters)
                 {
-                    // Exact match found
-                    closestMatch = entry;
-                }
-                else if ( matchingCharacters > maxMatchingCharacters )
-                {
+                    if (closestMatch != null)
+                    {
+                        duplicatePaths.Add(closestMatch.FullName);
+                    }
+
                     closestMatch = entry;
                     maxMatchingCharacters = matchingCharacters;
-                    duplicatePaths.Clear();
                 }
-                else if ( matchingCharacters == maxMatchingCharacters )
+                else if (matchingCharacters != 0)
                 {
-                    duplicatePaths.Add( entry.FullName );
+                    duplicatePaths.Add(entry.FullName);
                 }
             }
 
@@ -548,17 +625,19 @@ namespace KotorDotNET.Utility
                 throw new ArgumentException( message: "Value cannot be null or empty.", nameof( str2 ) );
 
             int matchingCount = 0;
-
             for (
                 int i = 0;
                 i < str1.Length && i < str2.Length;
                 i++
             )
             {
-                if ( str1[i] != str2[i] )
-                    break;
+                // don't consider a match if any char in the paths are not case-insensitive matches.
+                if (char.ToLowerInvariant(str1[i]) != char.ToLowerInvariant(str2[i]))
+                    return 0;
 
-                matchingCount++;
+                // increment matching count if case-sensitive match at this char index succeeds
+                if ( str1[i] == str2[i] )
+                    matchingCount++;
             }
 
             return matchingCount;
