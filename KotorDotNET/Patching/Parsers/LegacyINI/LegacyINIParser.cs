@@ -23,18 +23,18 @@ namespace KotorDotNET.Patching.Parsers.LegacyINI
 
         public PatcherData Parse()
         {
-            var twodaList = ini.Sections.SingleOrDefault(x => x.SectionName == "2DAList");
+            //var twodaList = ini.Sections.SingleOrDefault(x => x.SectionName == "2DAList");
 
-            if (twodaList != null)
-            {
-                foreach (var pair in twodaList.Keys)
-                {
-                    var filename = pair.KeyName;
-                    var twodaSection = ini[pair.Value];
-                    var modifiers = new TwoDASectionParser(ini, twodaSection).Parse();
-                    patcherData.TwoDAModifiers[filename] = modifiers;
-                }
-            }
+            //if (twodaList != null)
+            //{
+            //    foreach (var pair in twodaList.Keys)
+            //    {
+            //        var filename = pair.KeyName;
+            //        var twodaSection = ini[pair.Value];
+            //        var modifiers = new TwoDASectionParser(ini, twodaSection).Parse();
+            //        patcherData.TwoDAModifiers[filename] = modifiers;
+            //    }
+            //}
 
             return patcherData;
         }

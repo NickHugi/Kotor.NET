@@ -18,7 +18,6 @@ namespace KotorDotNET.FileFormats.KotorGFF
         public BinaryWriter? _writer;
         public GFF? _gff;
 
-
         public GFFBinaryWriter(string filepath)
         {
             _writer = new BinaryWriter(new FileStream(filepath, FileMode.OpenOrCreate));
@@ -141,7 +140,7 @@ namespace KotorDotNET.FileFormats.KotorGFF
                 }
                 else if (gField.Type == GFFFieldType.ResRef)
                 {
-                    string value = (ResRef)gField.Value;
+                    string value = ((ResRef)gField.Value).Get();
                     bField.DataOrDataOffset = fieldDataOffset;
                     fieldData.Add((byte)value.Length);
                     fieldData.AddRange(Encoding.GetEncoding(1252).GetBytes(value));

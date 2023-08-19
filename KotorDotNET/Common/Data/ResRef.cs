@@ -56,10 +56,5 @@ namespace KotorDotNET.Common.Data
         {
             return new ResRef(value);
         }
-
-        public static implicit operator string(ResRef resref)
-        {
-            return resref._value;
-        }
     }
 }

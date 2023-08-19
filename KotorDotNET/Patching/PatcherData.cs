@@ -1,5 +1,8 @@
 ﻿using KotorDotNET.Common.Data;
 using KotorDotNET.FileFormats.Kotor2DA;
+using KotorDotNET.FileFormats.KotorGFF;
+using KotorDotNET.FileFormats.KotorSSF;
+using KotorDotNET.FileFormats.KotorTLK;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +13,9 @@ namespace KotorDotNET.Patching
 {
     public class PatcherData
     {
-        public Dictionary<string, List<IModifier<TwoDA>>> TwoDAModifiers { get; set; } = new();
-
-        // TODO
-        //public List<FileOperation> FileOperations = new();
-        //public List<IModifier<TLK>> TLKModifiers = new();
-        //public Dictionary<string, IModifier<SSF>> TLKModifiers = new();
-        //public Dictionary<string, IModifier<GFF>> TLKModifiers = new();
+        public ModifyFile<TwoDA> TwoDAFiles { get; set; } = new();
+        public ModifyFile<GFF> GFFFiles { get; set; } = new();
+        public ModifyFile<SSF> SSFFiles { get; set; } = new();
+        public ModifyFile<TLK> TLKFiles { get; set; } = new();
     }
 }

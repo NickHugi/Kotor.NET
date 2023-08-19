@@ -26,20 +26,7 @@ namespace KotorDotNET.Patching
         /// </summary>
         public void Run()
         {
-            foreach (var pair in PatcherData.TwoDAModifiers)
-            {
-                var reference = pair.Key;
-                var modifiers = pair.Value;
-
-                //var twoda = new TwoDABinaryReader(reference.FetchData()).Read();
-
-                //foreach (var modifier in modifiers)
-                //{
-                //    modifier.Apply(twoda, Memory, Logger);
-                //}
-
-                // TODO write output
-            }
+            
         }
     }
 }

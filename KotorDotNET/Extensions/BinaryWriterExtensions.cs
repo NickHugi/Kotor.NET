@@ -37,9 +37,25 @@ namespace KotorDotNET.Extensions
             }
         }
 
-        public static void Write(this BinaryWriter writer, ResRef value)
+        /// <summary>
+        /// Write a ResRef to the stream.
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="value">The ResRef to write to the stream.</param>
+        /// <param name="withPrefix">
+        /// If true inserts a single byte containing the length of the ResRef,
+        /// otherwise the ResRef is padded with null bytes to reach 16 bytes.
+        /// </param>
+        public static void Write(this BinaryWriter writer, ResRef value, bool withPrefix)
         {
-            Write(writer, value.Get().PadRight(16, '\0').Truncate(16), 1);
+            if (withPrefix)
+            {
+                Write(writer, value.Get(), 1);
+            }
+            else
+            {
+                Write(writer, value.Get().PadRight(16, '\0').Truncate(16), 0);
+            }
         }
     }
 }
