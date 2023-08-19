@@ -95,5 +95,10 @@ namespace KotorDotNET.Common.Data
         {
             return ResourceTypes.Single(x => x.Extension == extension);
         }
+
+        public override string ToString()
+        {
+            return Extension.ToUpper();
+        }
     }
 }

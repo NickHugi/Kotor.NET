@@ -15,7 +15,7 @@ namespace KotorDotNET.Common.Data
         public int Size { get; private set; }
         public int Offset { get; private set; }
 
-        public string FileName { get => ResRef.Get() + ResourceType; }
+        public string FileName { get => ResRef.Get() + "." + ResourceType.Extension; }
 
         /// <summary>
         /// Initialize a ResourceReference for a specified file. The file size is will
