@@ -1,4 +1,5 @@
 ﻿using KotorDotNET.FileFormats.Kotor2DA;
+using KotorDotNET.Patching.Modifiers.For2DA.Values;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace KotorDotNET.Patching.Modifiers.For2DA
     /// <summary>
     /// Used to insert a row into a TwoDA instance.
     /// </summary>
-    public class AddRowModifier : IModifier<TwoDA>
+    public class AddRow2DAModifier : IModifier<TwoDA>
     {
         /// <summary>
         /// If assigned a non-null value, a new row will only be inserted if there
@@ -32,7 +33,7 @@ namespace KotorDotNET.Patching.Modifiers.For2DA
         /// </summary>
         public Dictionary<int, IValue> ToStoreInMemory { get; set; }
 
-        public AddRowModifier(string? exclusiveColumn, IValue? rowLabel, Dictionary<string, IValue> data, Dictionary<int, IValue> toStore)
+        public AddRow2DAModifier(string? exclusiveColumn, IValue? rowLabel, Dictionary<string, IValue> data, Dictionary<int, IValue> toStore)
         {
             ExclusiveColumn = exclusiveColumn;
             RowHeader = rowLabel;

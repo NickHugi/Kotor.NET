@@ -20,4 +20,13 @@
     <ProjectReference Include="..\KotorDotNET\KotorDotNET.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Files\test.2da">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\test.gff">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

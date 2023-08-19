@@ -44,8 +44,16 @@ namespace KotorDotNET.Extensions
         /// <returns>The string read from the stream.</returns>
         public static string ReadTerminatedString(this BinaryReader reader, char terminator)
         {
-            // TODO
-            return "";
+            var builder = new StringBuilder();
+
+            while (reader.PeekChar() != terminator)
+            {
+                builder.Append(reader.ReadChar());
+            }
+
+            reader.BaseStream.Position += 1;
+
+            return builder.ToString();
         }
     }
 }

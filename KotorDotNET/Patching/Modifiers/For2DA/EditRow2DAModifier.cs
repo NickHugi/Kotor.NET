@@ -1,4 +1,5 @@
 ﻿using KotorDotNET.FileFormats.Kotor2DA;
+using KotorDotNET.Patching.Modifiers.For2DA.Targets;
 using KotorDotNET.Patching.Modifiers.For2DA.Values;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace KotorDotNET.Patching.Modifiers.For2DA
     /// <summary>
     /// Used to edit a row in a TwoDA instance.
     /// </summary>
-    public class EditRowModifier
+    public class EditRow2DAModifier : IModifier<TwoDA>
     {
         /// <summary>
         /// The target row to copy.
@@ -26,14 +27,14 @@ namespace KotorDotNET.Patching.Modifiers.For2DA
         /// </summary>
         public Dictionary<int, IValue> ToStoreInMemory { get; set; }
 
-        public EditRowModifier(ITarget target, Dictionary<string, IValue> data, Dictionary<int, IValue> toStoreInMemory)
+        public EditRow2DAModifier(ITarget target, Dictionary<string, IValue> data, Dictionary<int, IValue> toStoreInMemory)
         {
             ITarget = target;
             Data = data;
             ToStoreInMemory = toStoreInMemory;
         }
 
-        public void Apply(TwoDA twoda, Memory memory, Logger logger)
+        public void Apply(TwoDA twoda, Memory memory, ILogger logger)
         {
             var source = ITarget.Search(twoda);
 

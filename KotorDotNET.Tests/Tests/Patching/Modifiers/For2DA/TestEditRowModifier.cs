@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using KotorDotNET.Patching.Modifiers.For2DA.Targets;
 using KotorDotNET.FileFormats.Kotor2DA;
 
-namespace KotorDotNET.Tests.Patching.Modifiers.For2DA
+namespace KotorDotNET.Tests.Tests.Patching.Modifiers.For2DA
 {
     [TestClass]
     public class TestEditRowModifier
@@ -47,7 +47,7 @@ namespace KotorDotNET.Tests.Patching.Modifiers.For2DA
             };
             var toStoreInMemory = new Dictionary<int, IValue>();
             var target = new RowIndexTarget(1);
-            var modifier = new EditRowModifier(target, data, toStoreInMemory);
+            var modifier = new EditRow2DAModifier(target, data, toStoreInMemory);
 
             modifier.Apply(twoda, memory, logger);
 
@@ -73,7 +73,7 @@ namespace KotorDotNET.Tests.Patching.Modifiers.For2DA
                 [30] = new RowIndexValue(),
             };
             var target = new RowIndexTarget(1);
-            var modifier = new EditRowModifier(target, data, toStoreInMemory);
+            var modifier = new EditRow2DAModifier(target, data, toStoreInMemory);
 
             modifier.Apply(twoda, memory, logger);
 

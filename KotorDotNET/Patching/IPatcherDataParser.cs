@@ -11,8 +11,8 @@ namespace KotorDotNET.Patching
     /// changes.ini file used by TSLPatcher) and converts it to a 
     /// Patcher instance that can be executed.
     /// </summary>
-    public interface IParser
+    public interface IPatcherDataParser
     {
-        public Patcher Read();
+        PatcherData Parse();
     }
 }

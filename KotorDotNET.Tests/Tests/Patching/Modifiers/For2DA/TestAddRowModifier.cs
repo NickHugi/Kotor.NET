@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KotorDotNET.Tests.Patching.Modifiers.For2DA
+namespace KotorDotNET.Tests.Tests.Patching.Modifiers.For2DA
 {
     [TestClass]
     public class TestAddRowModifierModifier
@@ -45,7 +45,7 @@ namespace KotorDotNET.Tests.Patching.Modifiers.For2DA
                 ["C3"] = new ConstantValue("c"),
             };
             var toStoreInMemory = new Dictionary<int, IValue>();
-            var modifier = new AddRowModifier(null, null, data, toStoreInMemory);
+            var modifier = new AddRow2DAModifier(null, null, data, toStoreInMemory);
 
             modifier.Apply(twoda, memory, logger);
 
@@ -70,7 +70,7 @@ namespace KotorDotNET.Tests.Patching.Modifiers.For2DA
             };
             var toStoreInMemory = new Dictionary<int, IValue>();
             var rowLabel = new ConstantValue("somelabel");
-            var modifier = new AddRowModifier(null, rowLabel, data, toStoreInMemory);
+            var modifier = new AddRow2DAModifier(null, rowLabel, data, toStoreInMemory);
 
             modifier.Apply(twoda, memory, logger);
 
@@ -96,7 +96,7 @@ namespace KotorDotNET.Tests.Patching.Modifiers.For2DA
                 ["C3"] = new ConstantValue("c"),
             };
             var toStoreInMemory = new Dictionary<int, IValue>();
-            var modifier = new AddRowModifier("C1", null, data, toStoreInMemory);
+            var modifier = new AddRow2DAModifier("C1", null, data, toStoreInMemory);
 
             modifier.Apply(twoda, memory, logger);
 
@@ -118,7 +118,7 @@ namespace KotorDotNET.Tests.Patching.Modifiers.For2DA
                 ["C3"] = new ConstantValue("c"),
             };
             var toStoreInMemory = new Dictionary<int, IValue>();
-            var modifier = new AddRowModifier("C1", null, data, toStoreInMemory);
+            var modifier = new AddRow2DAModifier("C1", null, data, toStoreInMemory);
 
             modifier.Apply(twoda, memory, logger);
 
@@ -143,7 +143,7 @@ namespace KotorDotNET.Tests.Patching.Modifiers.For2DA
             {
                 [30] = new RowIndexValue(),
             };
-            var modifier = new AddRowModifier(null, null, data, toStoreInMemory);
+            var modifier = new AddRow2DAModifier(null, null, data, toStoreInMemory);
 
             modifier.Apply(twoda, memory, logger);
 

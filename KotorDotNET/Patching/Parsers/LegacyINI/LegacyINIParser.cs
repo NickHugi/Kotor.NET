@@ -1,7 +1,9 @@
 ﻿using IniParser.Model;
+using KotorDotNET.Exceptions;
 using KotorDotNET.FileFormats.Kotor2DA;
 using KotorDotNET.Patching.Modifiers.For2DA;
 using KotorDotNET.Patching.Modifiers.For2DA.Targets;
+using KotorDotNET.Patching.Modifiers.For2DA.Values;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,40 +16,27 @@ namespace KotorDotNET.Patching.Parsers.LegacyINI
     /// For Parsing changes.ini to a Patcher instance following
     /// Stoffe's TSLPatcher specifications.
     /// </summary>
-    public class LegacyINIParser : IParser
+    public class LegacyINIParser : IPatcherDataParser
     {
-        protected IniData Data { get; set; }
+        protected IniData ini { get; set; } = new();
+        protected PatcherData patcherData { get; set; } = new();
 
-        public Patcher Read()
+        public PatcherData Parse()
         {
-            throw new NotImplementedException();
-        }
+            var twodaList = ini.Sections.SingleOrDefault(x => x.SectionName == "2DAList");
 
-        protected IModifier<TwoDA> ReadEditRowModifier(string sectionKey)
-        {
-            ITarget target;
-            Dictionary<string, IValue> data = null;
-            Dictionary<int, IValue> toStoreInMemory = null;
-
-            var section = Data[sectionKey];
-
-            if (section.ContainsKey("RowIndex"))
+            if (twodaList != null)
             {
-                // TODO exception
-                var rowIndex = int.Parse(section["RowIndex"]);
-                target = new RowIndexTarget(rowIndex);
-            }
-            else if (section.ContainsKey("RowLabel"))
-            {
-                target = new RowHeaderTarget(section["RowLabel"]);
-            }
-            else if (section.ContainsKey("LabelIndex"))
-            {
-                target = new ColumnTarget("label", section["LabelIndex"]);
+                foreach (var pair in twodaList.Keys)
+                {
+                    var filename = pair.KeyName;
+                    var twodaSection = ini[pair.Value];
+                    var modifiers = new TwoDASectionParser(ini, twodaSection).Parse();
+                    patcherData.TwoDAModifiers[filename] = modifiers;
+                }
             }
 
-            EditRowModifier modifier = new(target, data, toStoreInMemory);
-            return modifier;
+            return patcherData;
         }
     }
 }

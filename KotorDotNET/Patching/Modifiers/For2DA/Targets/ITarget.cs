@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KotorDotNET.Patching.Modifiers.For2DA
+namespace KotorDotNET.Patching.Modifiers.For2DA.Targets
 {
     /// <summary>
     /// Gets a TwoDARow from a TwoDA. How which row is determined is up to the

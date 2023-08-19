@@ -10,7 +10,7 @@ using KotorDotNET.Patching.Modifiers.For2DA;
 using KotorDotNET.Patching.Modifiers;
 using KotorDotNET.FileFormats.Kotor2DA;
 
-namespace KotorDotNET.Tests.Patching.Modifiers.For2DA
+namespace KotorDotNET.Tests.Tests.Patching.Modifiers.For2DA
 {
     [TestClass]
     public class TestCopyRowModifier
@@ -45,7 +45,7 @@ namespace KotorDotNET.Tests.Patching.Modifiers.For2DA
                 ["C1"] = new ConstantValue("a"),
             };
             var toStoreInMemory = new Dictionary<int, IValue>();
-            var modifier = new CopyRowModifier(target, null, null, data, toStoreInMemory);
+            var modifier = new CopyRow2DAModifier(target, null, null, data, toStoreInMemory);
 
             modifier.Apply(twoda, memory, logger);
 
@@ -74,7 +74,7 @@ namespace KotorDotNET.Tests.Patching.Modifiers.For2DA
                 ["C2"] = new ConstantValue("00"),
             };
             var toStoreInMemory = new Dictionary<int, IValue>();
-            var modifier = new CopyRowModifier(target, "C1", null, data, toStoreInMemory);
+            var modifier = new CopyRow2DAModifier(target, "C1", null, data, toStoreInMemory);
 
             modifier.Apply(twoda, memory, logger);
 

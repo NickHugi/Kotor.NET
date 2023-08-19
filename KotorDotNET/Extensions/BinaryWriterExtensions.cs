@@ -13,7 +13,7 @@ namespace KotorDotNET.Extensions
         {
             if (prefixSize == 0)
             {
-                writer.Write(value.ToCharArray());
+                writer.Write(Encoding.GetEncoding(1252).GetBytes(value));
             }
             else if (prefixSize == 1)
             {

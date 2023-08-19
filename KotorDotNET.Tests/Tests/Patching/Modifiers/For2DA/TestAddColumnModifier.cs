@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KotorDotNET.Tests.Patching.Modifiers.For2DA
+namespace KotorDotNET.Tests.Tests.Patching.Modifiers.For2DA
 {
     [TestClass]
     public class TestAddColumnModifier
@@ -37,7 +37,7 @@ namespace KotorDotNET.Tests.Patching.Modifiers.For2DA
         [TestMethod]
         public void CorrectColumnHeader()
         {
-            var modifier = new AddColumnModifier("NewColumn", "");
+            var modifier = new AddColumn2DAModifier("NewColumn", "", new(), new());
 
             modifier.Apply(twoda, memory, logger);
 
@@ -50,7 +50,7 @@ namespace KotorDotNET.Tests.Patching.Modifiers.For2DA
         [TestMethod]
         public void CorrectDefaultValue()
         {
-            var modifier = new AddColumnModifier("NewColumn", "xyz");
+            var modifier = new AddColumn2DAModifier("NewColumn", "xyz", new(), new());
 
             modifier.Apply(twoda, memory, logger);
 

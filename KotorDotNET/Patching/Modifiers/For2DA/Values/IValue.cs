@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KotorDotNET.Patching.Modifiers.For2DA
+namespace KotorDotNET.Patching.Modifiers.For2DA.Values
 {
     /// <summary>
     /// Gets a string value intended to be stored inside a TwoDA cell. How the

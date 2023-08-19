@@ -1,4 +1,6 @@
 ﻿using KotorDotNET.FileFormats.Kotor2DA;
+using KotorDotNET.Patching.Modifiers.For2DA.Targets;
+using KotorDotNET.Patching.Modifiers.For2DA.Values;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +12,7 @@ namespace KotorDotNET.Patching.Modifiers.For2DA
     /// <summary>
     /// Used to copy a row in a TwoDA instance.
     /// </summary>
-    public class CopyRowModifier
+    public class CopyRow2DAModifier
     {
         /// <summary>
         /// If assigned a non-null value, a new row will only be inserted if there
@@ -36,7 +38,7 @@ namespace KotorDotNET.Patching.Modifiers.For2DA
         /// </summary>
         public Dictionary<int, IValue> ToStoreInMemory { get; set; }
 
-        public CopyRowModifier(ITarget target, string? exclusiveColumn, IValue? rowLabel, Dictionary<string, IValue> data, Dictionary<int, IValue> toStore)
+        public CopyRow2DAModifier(ITarget target, string? exclusiveColumn, IValue? rowLabel, Dictionary<string, IValue> data, Dictionary<int, IValue> toStore)
         {
             ITarget = target;
             ExclusiveColumn = exclusiveColumn;

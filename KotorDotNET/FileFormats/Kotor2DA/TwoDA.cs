@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 namespace KotorDotNET.FileFormats.Kotor2DA
 {
     /// <summary>
-    /// Represents the table data structure of the 2DA file format.
+    /// Represents the table data structure of the 2DA file format used by
+    /// the KotOR game engine.
     /// </summary>
     public class TwoDA
     {

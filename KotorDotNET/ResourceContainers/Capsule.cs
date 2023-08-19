@@ -13,7 +13,7 @@ namespace KotorDotNET.ResourceContainers
     /// build a list of ResourceReferences but no resource data is actually stored in
     /// memory.
     /// </summary>
-    internal class Capsule : IResourceContainer
+    public class Capsule : IResourceContainer
     {
         /// <summary>
         /// Filepath to the capsule.

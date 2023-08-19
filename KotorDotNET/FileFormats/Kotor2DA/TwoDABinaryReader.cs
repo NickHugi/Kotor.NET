@@ -10,7 +10,7 @@ namespace KotorDotNET.FileFormats.Kotor2DA
 {
     public class TwoDABinaryReader : IReader<TwoDA>
     {
-        private BinaryReader _binaryReader;
+        private BinaryReader _reader;
         private TwoDA? _twoda;
 
         private readonly string[] _validFileTypes = new[] { "2DA ", };
@@ -19,40 +19,40 @@ namespace KotorDotNET.FileFormats.Kotor2DA
         public TwoDABinaryReader(string filepath)
         {
             var data = File.ReadAllBytes(filepath);
-            _binaryReader = new BinaryReader(new MemoryStream(data));
+            _reader = new BinaryReader(new MemoryStream(data));
         }
         public TwoDABinaryReader(byte[] data)
         {
-            _binaryReader = new BinaryReader(new MemoryStream(data));
+            _reader = new BinaryReader(new MemoryStream(data));
         }
 
         public TwoDABinaryReader(Stream stream)
         {
-            _binaryReader = new BinaryReader(stream);
+            _reader = new BinaryReader(stream);
         }
 
         public TwoDA Read()
         {
             _twoda = new TwoDA();
 
-            var file = new FileRoot(_binaryReader);
+            var file = new FileRoot(_reader);
 
-            foreach (var header in file.Columns)
+            foreach (var header in file.ColumnHeaders)
             {
                 _twoda.AddColumn(header);
             }
 
-            var columnCount = file.Columns.Count;
-            for (int i = 0; i < file.RowLabels.Count; i++)
+            var columnCount = file.ColumnHeaders.Count;
+            for (int i = 0; i < file.RowHeaders.Count; i++)
             {
-                var label = file.RowLabels[i];
+                var label = file.RowHeaders[i];
                 var row = _twoda.AddRow(label);
 
-                for (int j = 0; j < file.Columns.Count; j++)
+                for (int j = 0; j < file.ColumnHeaders.Count; j++)
                 {
-                    var header = file.Columns[j];
-                    var cellIndex = i * file.RowLabels.Count + j;
-                    var cell = file.Cells[cellIndex];
+                    var header = file.ColumnHeaders[j];
+                    var cellIndex = i * file.RowHeaders.Count + j;
+                    var cell = file.CellValues[cellIndex];
                     row.SetCell(header, cell);
                 }
             }
