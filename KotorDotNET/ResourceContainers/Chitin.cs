@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,7 +28,13 @@ namespace KotorDotNET.ResourceContainers
         }
 
         public ResourceReference? Locate(ResRef resref, ResourceType resourceType, bool reload = false) => throw new NotImplementedException();
+
         public Resource? Get(ResRef resref, ResourceType resourceType, bool reload = false) => throw new NotImplementedException();
+
+        public IReadOnlyList<ResourceReference> All()
+        {
+            return new ReadOnlyCollection<ResourceReference>(_references);
+        }
 
         public void Reload()
         {
@@ -57,5 +64,6 @@ namespace KotorDotNET.ResourceContainers
                 }
             }
         }
+
     }
 }

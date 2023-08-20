@@ -66,5 +66,7 @@ namespace KotorDotNET.ResourceContainers
                 return new Resource(reference.ResRef, reference.ResourceType, data);
             }
         }
+
+        public IReadOnlyList<ResourceReference> All() => throw new NotImplementedException();
     }
 }

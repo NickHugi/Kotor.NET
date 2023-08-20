@@ -13,9 +13,10 @@ namespace KotorDotNET.Common
     /// </summary>
     public class Installation
     {
-        //public Chitin Chitin { get; private set; }
+        public string GamePath { get; private set; }
+        public Chitin Chitin { get; private set; }
         public string ChitinPath { get; private set; }
-        //public TalkTable TalkTable { get; private set; }
+        public TalkTable TalkTable { get; private set; }
         public string TalkTablePath { get; private set; }
         public CapsuleFolder Modules { get; private set; }
         public string ModulesPath { get; private set; }
@@ -37,10 +38,43 @@ namespace KotorDotNET.Common
         public ResourceFolder Voices { get; private set; }
         public string VoicesPath { get; private set; }
 
-
-        public Installation(string rootPath)
+        public Installation(string gameDirectory)
         {
-            // TODO
+            // TODO - path handling
+            GamePath = gameDirectory;
+
+            ChitinPath = gameDirectory + "/chitin.key";
+            Chitin = new Chitin(gameDirectory);
+
+            TalkTablePath = gameDirectory + "/dialog.tlk";
+            TalkTable = new TalkTable(TalkTablePath);
+
+            ModulesPath = gameDirectory + "/modules";
+            Modules = new CapsuleFolder(ModulesPath);
+
+            RimsPath = gameDirectory + "/rims";
+            Rims = new CapsuleFolder(RimsPath);
+
+            LipsPath = gameDirectory + "lips";
+            Lips = new CapsuleFolder(LipsPath);
+
+            TexturePacksPath = gameDirectory + "TexturePacks/";
+            TexturesLow = new Capsule(TexturePacksPath + "/swpc_tex_tpc.erf");
+            TexturesMed = new Capsule(TexturePacksPath + "/swpc_tex_tpb.erf");
+            TexturesHigh = new Capsule(TexturePacksPath + "/swpc_tex_tpa.erf");
+            TexturesGUI = new Capsule(TexturePacksPath + "/swpc_tex_gui.erf");
+
+            OverridePath = gameDirectory + "/override";
+            Override = new ResourceFolder(OverridePath);
+
+            MusicPath = gameDirectory + "/streammusic";
+            Music = new ResourceFolder(MusicPath);
+
+            SoundsPath = gameDirectory + "/streamsounds";
+            Sounds = new ResourceFolder(SoundsPath);
+
+            VoicesPath = gameDirectory + "/streamwaves";
+            Voices = new ResourceFolder(VoicesPath);
         }
     }
 }
