@@ -28,7 +28,7 @@ namespace KOTORModSync.Tests
         public void GetCaseSensitivePath_ValidFile_ReturnsSamePath()
         {
             // Arrange
-            string testFilePath = Path.Combine(s_testDirectory, "test.txt");
+            string? testFilePath = Path.Combine(s_testDirectory, "test.txt");
             File.Create(testFilePath).Close();
 
             // Act
@@ -42,7 +42,7 @@ namespace KOTORModSync.Tests
         public void GetCaseSensitivePath_ValidDirectory_ReturnsSamePath()
         {
             // Arrange
-            string testDirPath = Path.Combine(s_testDirectory, "testDir");
+            string? testDirPath = Path.Combine(s_testDirectory, "testDir");
             _ = Directory.CreateDirectory( testDirPath );
 
             // Act
@@ -57,8 +57,8 @@ namespace KOTORModSync.Tests
         {
             // Arrange
             string? nullPath = null;
-            string emptyPath = string.Empty;
-            const string whiteSpacePath = "   ";
+            string? emptyPath = string.Empty;
+            const string? whiteSpacePath = "   ";
 
             // Act & Assert
             _ = Assert.Throws<ArgumentException>( () => PathHelper.GetCaseSensitivePath( nullPath ) );
@@ -70,7 +70,7 @@ namespace KOTORModSync.Tests
         public void GetCaseSensitivePath_InvalidCharactersInPath_ThrowsArgumentException()
         {
             // Arrange
-            string invalidPath = Path.Combine(s_testDirectory, "invalid>path");
+            string? invalidPath = Path.Combine(s_testDirectory, "invalid>path");
 
             // Act & Assert
             _ = Assert.Throws<ArgumentException>( () => PathHelper.GetCaseSensitivePath( invalidPath ) );
@@ -82,7 +82,7 @@ namespace KOTORModSync.Tests
             // Arrange
             string testFilePath = Path.Combine(s_testDirectory, "test.txt");
             File.Create(testFilePath).Close();
-            string relativePath = Path.GetRelativePath(Directory.GetCurrentDirectory(), testFilePath);
+            string? relativePath = Path.GetRelativePath(Directory.GetCurrentDirectory(), testFilePath);
 
             // Act
             string? result = PathHelper.GetCaseSensitivePath(relativePath);
@@ -113,7 +113,7 @@ namespace KOTORModSync.Tests
         public void GetCaseSensitivePath_NonExistentFile_ReturnsNull()
         {
             // Arrange
-            string nonExistentFilePath = Path.Combine(s_testDirectory, "non_existent_file.txt");
+            string? nonExistentFilePath = Path.Combine(s_testDirectory, "non_existent_file.txt");
 
             // Act
             string? result = PathHelper.GetCaseSensitivePath(nonExistentFilePath);
@@ -126,7 +126,7 @@ namespace KOTORModSync.Tests
         public void GetCaseSensitivePath_NonExistentDirectory_ReturnsNull()
         {
             // Arrange
-            string nonExistentDirPath = Path.Combine(s_testDirectory, "non_existent_dir");
+            string? nonExistentDirPath = Path.Combine(s_testDirectory, "non_existent_dir");
 
             // Act
             string? result = PathHelper.GetCaseSensitivePath(nonExistentDirPath);
