@@ -158,7 +158,7 @@ namespace KotorDotNET.Utility
         public static FileInfo TryGetValidFileInfo( string filePath)
         {
             string formattedPath = FixPathFormatting(filePath);
-            if ( formattedPath is null || PathValidator.IsValidPath(formattedPath) )
+            if ( PathValidator.IsValidPath(formattedPath) )
                 return null;
 
             try
@@ -220,7 +220,7 @@ namespace KotorDotNET.Utility
                 const string prefix = @"\\?\";
                 if (finalPath.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
                 {
-                    finalPath = finalPath.Substring(prefix.Length);
+                    finalPath = finalPath[prefix.Length..];
                 }
 
                 return finalPath;
@@ -315,15 +315,6 @@ namespace KotorDotNET.Utility
 
             return Path.Combine( parts.ToArray() );
         }
-
-
-        
-        private static string GetCaseSensitiveChildPath( DirectoryInfo parentDir, string path) =>
-        (
-            from item in parentDir?.GetFileSystemInfos(searchPattern: "*", SearchOption.TopDirectoryOnly)
-            where item.FullName.Equals( path, StringComparison.OrdinalIgnoreCase )
-            select ConvertWindowsPathToCaseSensitive( item.FullName )
-        ).FirstOrDefault();
 
 
         public static async Task MoveFileAsync( string sourcePath, string destinationPath )
@@ -431,7 +422,7 @@ namespace KotorDotNET.Utility
                     string currentDir = formattedPath;
                     while (ContainsWildcards(currentDir))
                     {
-                        string parentDirectory = Path.GetDirectoryName(currentDir);
+                        string? parentDirectory = Path.GetDirectoryName(currentDir);
 
                         // Exit the loop if no parent directory is found or if the parent directory is the same as the current directory
                         if (string.IsNullOrEmpty(parentDirectory) || parentDirectory == currentDir)
@@ -481,11 +472,11 @@ namespace KotorDotNET.Utility
             patternInput = FixPathFormatting( patternInput );
 
             // Split the input and patternInput into directory levels
-            string[] inputLevels = input?.Split( Path.DirectorySeparatorChar );
-            string[] patternLevels = patternInput?.Split( Path.DirectorySeparatorChar );
+            string[] inputLevels = input.Split( Path.DirectorySeparatorChar );
+            string[] patternLevels = patternInput.Split( Path.DirectorySeparatorChar );
 
             // Ensure the number of levels match
-            if ( inputLevels?.Length != patternLevels?.Length )
+            if ( inputLevels.Length != patternLevels.Length )
                 return false;
 
             // Iterate over each level and perform wildcard matching
