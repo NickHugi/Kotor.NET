@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="GenericTemplates\" />
-    <Folder Include="Patching\Diff\" />
   </ItemGroup>
 
   <ItemGroup>
