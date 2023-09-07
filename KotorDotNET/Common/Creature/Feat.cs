@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace KotorDotNET.Common.Creature
 {
-    public class Class
+    public class Feat
     {
-        public int ClassID { get; set; }
-        public int ClassLevel { get; set; }
-        public List<ForcePower> ForcePowers { get; set; }
+        public int FeatID { get; set; }
     }
 }

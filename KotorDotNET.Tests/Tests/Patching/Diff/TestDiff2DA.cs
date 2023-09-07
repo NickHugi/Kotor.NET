@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using KotorDotNET.FileFormats.Kotor2DA;
 using KotorDotNET.Patching.Diff;
+using KotorDotNET.Patching.Modifiers.For2DA;
 
 namespace KotorDotNET.Tests.Tests.Patching.Diff
 {
@@ -93,6 +94,70 @@ namespace KotorDotNET.Tests.Tests.Patching.Diff
 
             // One has more rows then the others so the 2DAs are not the same.
             Assert.IsTrue(diff.IsSame());
+        }
+
+        [TestMethod]
+        public void Find_NewColumn()
+        {
+            var older = new TwoDA();
+            older.AddColumn("A");
+            var oRow0 = older.AddRow("0");
+            var oRow1 = older.AddRow("1");
+            oRow0.SetCell("A", "a0");
+            oRow1.SetCell("A", "a1");
+
+            var newer = new TwoDA();
+            newer.AddColumn("A");
+            newer.AddColumn("B");
+            var nRow0 = newer.AddRow("0");
+            var nRow1 = newer.AddRow("1");
+            nRow0.SetCell("A", "a0");
+            nRow1.SetCell("A", "a1");
+            nRow0.SetCell("B", "b1");
+
+            var diff = new Diff2DA(older, newer);
+            var modifiers = diff.Find();
+
+            // Check that only a single modifier was found
+            Assert.AreEqual(1, modifiers.Count);
+            // Check that the modifier is to add a column
+            Assert.IsInstanceOfType(modifiers[0], typeof(AddColumn2DAModifier));
+
+            // Check that the modifier is accurate
+            var modifier = (AddColumn2DAModifier)modifiers[0];
+            Assert.AreEqual("B", modifier.ColumnHeader);
+            Assert.AreEqual("", modifier.DefaultValue);
+            Assert.AreEqual(1, modifier.Values.Count);
+        }
+
+        [TestMethod]
+        public void Find_NewRow()
+        {
+            var older = new TwoDA();
+            older.AddColumn("A");
+            older.AddColumn("B");
+            var oRow0 = older.AddRow("0");
+            var oRow1 = older.AddRow("1");
+            oRow0.SetCell("A", "a0");
+            oRow1.SetCell("A", "a1");
+            oRow1.SetCell("B", "b1");
+
+            var newer = new TwoDA();
+            newer.AddColumn("A");
+            newer.AddColumn("B");
+            var nRow0 = newer.AddRow("0");
+            var nRow1 = newer.AddRow("1");
+            var nRow2 = newer.AddRow("2");
+            nRow0.SetCell("A", "a0");
+            nRow1.SetCell("A", "a1");
+            nRow1.SetCell("B", "b1");
+            nRow2.SetCell("A", "a2");
+            nRow2.SetCell("B", "b2");
+
+            var diff = new Diff2DA(older, newer);
+
+            // Columns do not match so the 2DAs are not the same.
+            diff.Find();
         }
     }
 }

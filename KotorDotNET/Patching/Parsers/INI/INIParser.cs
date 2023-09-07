@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 namespace KotorDotNET.Patching.Parsers.INI
 {
     /// <summary>
-    /// For Parsing changes.ini to a Patcher instance following
+    /// For Parsing changes.ini to a PatcherData instance following
     /// Stoffe's TSLPatcher specifications as well as introducing
     /// new some new functionality.
     /// </summary>
-    public class INIParser : LegacyINIParser
+    public class INIParser : LegacyINIReader
     {
         
     }

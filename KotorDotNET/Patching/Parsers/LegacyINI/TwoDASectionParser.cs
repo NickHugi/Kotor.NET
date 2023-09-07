@@ -256,7 +256,6 @@ namespace KotorDotNET.Patching.Parsers.LegacyINI
                 {
                     throw new PatchingParserException("Invalid row index for 2DAMEMORY.");
                 }
-
             }
             else if (text.StartsWith("L"))
             {

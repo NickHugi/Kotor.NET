@@ -79,7 +79,7 @@ namespace KotorDotNET.FileFormats.KotorGFF
             Fields = new List<GFFField>();
         }
 
-        public T? Get<T>(string label, T? fallback)
+        public T Get<T>(string label, T fallback)
         {
             var field = Fields.SingleOrDefault(x => x.Label == label);
 
@@ -91,6 +91,12 @@ namespace KotorDotNET.FileFormats.KotorGFF
             var field = Fields.SingleOrDefault(x => x.Label == label);
 
             return (T)field!.Value;
+        }
+
+        public void Set<T>(string label, T value)
+        {
+            Fields.RemoveAll(x => x.Label == label);
+            Fields.Add(new GFFField(label, value));
         }
     }
 
@@ -179,6 +185,20 @@ namespace KotorDotNET.FileFormats.KotorGFF
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _list.GetEnumerator();
+        }
+
+        public GFFStruct Get(int index)
+        {
+            var element = _list.ElementAtOrDefault(index);
+
+            if (element == null)
+            {
+                return new();
+            }
+            else
+            {
+                return element;
+            }
         }
     }
 
