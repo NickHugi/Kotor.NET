@@ -263,113 +263,119 @@ namespace KotorDotNET.FileSystemPathing
             return new DirectoryInfo( thisFilePath );
         }
 
-        public static (string, bool?) GetCaseSensitivePath(string path, bool? isFile = null)
-        {
-            if (string.IsNullOrWhiteSpace(path))
-                throw new ArgumentException($"'{nameof(path)}' cannot be null or whitespace.", nameof(path));
 
-            string formattedPath = Path.GetFullPath(FixPathFormatting(path));
+		public static (string, bool?) GetCaseSensitivePath(string path, bool? isFile = null)
+		{
+			if ( string.IsNullOrWhiteSpace(path) )
+				throw new ArgumentException($"'{nameof( path )}' cannot be null or whitespace.", nameof( path ));
 
-            // quick lookup
-            bool fileExists = File.Exists(formattedPath);
-            bool folderExists = Directory.Exists(formattedPath);
-            if (fileExists && (isFile == true || !folderExists)) return (ConvertWindowsPathToCaseSensitive(formattedPath), true);
-            if (folderExists && (isFile == false || !fileExists)) return (ConvertWindowsPathToCaseSensitive(formattedPath), false);
+			string formattedPath = Path.GetFullPath(FixPathFormatting(path));
 
-            string[] parts = formattedPath.Split(new [] {Path.DirectorySeparatorChar}, StringSplitOptions.RemoveEmptyEntries);
+			// quick lookup
+			bool fileExists = File.Exists(formattedPath);
+			bool folderExists = Directory.Exists(formattedPath);
+			if ( fileExists && (isFile == true || !folderExists) )
+				return (ConvertWindowsPathToCaseSensitive(formattedPath), true);
+			if ( folderExists && (isFile == false || !fileExists) )
+				return (ConvertWindowsPathToCaseSensitive(formattedPath), false);
 
-            // no path parts available (no separators found). Maybe it's a file/folder that exists in cur directory.
-            if (parts.Length == 0)
-                parts = new[] { formattedPath };
+			string[] parts = formattedPath.Split(
+				new[] { Path.DirectorySeparatorChar, },
+				StringSplitOptions.RemoveEmptyEntries
+			);
 
-            // insert the root into the list (will be / on unix, and drive name (e.g. C:\\ on windows)
-            string? currentPath = Path.GetPathRoot(formattedPath);
-            if (!string.IsNullOrEmpty(currentPath) && !Path.IsPathRooted(parts[0]))
-                parts = new[] { currentPath }.Concat( parts ).ToArray();
-            // append directory separator to drive roots
-            if (parts[0].EndsWith(":"))
-                parts[0] += Path.DirectorySeparatorChar;
+			// no path parts available (no separators found). Maybe it's a file/folder that exists in cur directory.
+			if ( parts.Length == 0 )
+				parts = new[]{ formattedPath, };
 
-            int largestExistingPathPartsIndex = -1;
-            string? caseSensitiveCurrentPath = null;
-            for (int i = 1; i < parts.Length; i++)
-            {
-                // find the closest matching file/folder in the current path for unix, useful for duplicates.
-                string previousCurrentPath = Path.Combine(parts.Take(i).ToArray());
-                currentPath = Path.Combine(previousCurrentPath, parts[i]);
-                if (Environment.OSVersion.Platform != PlatformID.Win32NT && Directory.Exists(previousCurrentPath))
-                {
-                    int maxMatchingCharacters = -1;
-                    string closestMatch = parts[i];
+			// insert the root into the list (will be / on unix, and drive name (e.g. C:\\ on windows)
+			string currentPath = Path.GetPathRoot(formattedPath);
+			if ( !string.IsNullOrEmpty(currentPath) && !Path.IsPathRooted(parts[0]) )
+				parts = new[] { currentPath, }.Concat(parts).ToArray();
+			// append directory separator to drive roots
+			if ( parts[0].EndsWith(":") )
+				parts[0] += Path.DirectorySeparatorChar;
 
-                    foreach (
-                        FileSystemInfo folderOrFileInfo
-                        in new DirectoryInfo( previousCurrentPath )
-                        .EnumerateFileSystemInfosSafely( searchPattern: "*", SearchOption.TopDirectoryOnly )
-                    )
-                    {
-                        if (folderOrFileInfo is null || !folderOrFileInfo.Exists)
-                            continue;
+			int largestExistingPathPartsIndex = -1;
+			string caseSensitiveCurrentPath = null;
+			for ( int i = 1; i < parts.Length; i++ )
+			{
+				// find the closest matching file/folder in the current path for unix, useful for duplicates.
+				string previousCurrentPath = Path.Combine(parts.Take(i).ToArray());
+				currentPath = Path.Combine(previousCurrentPath, parts[i]);
+				if ( Environment.OSVersion.Platform != PlatformID.Win32NT
+					&& !Directory.Exists(currentPath)
+					&& Directory.Exists(previousCurrentPath) )
+				{
+					int maxMatchingCharacters = -1;
+					string closestMatch = parts[i];
 
-                        int matchingCharacters = GetMatchingCharactersCount(folderOrFileInfo.Name, parts[i]);
-                        if ( matchingCharacters > maxMatchingCharacters )
-                        {
-                            maxMatchingCharacters = matchingCharacters;
-                            closestMatch = folderOrFileInfo.Name;
-                            if ( i == parts.Length )
-                                isFile = folderOrFileInfo is FileInfo;
-                        }
-                    }
+					foreach ( FileSystemInfo folderOrFileInfo in new DirectoryInfo(previousCurrentPath)
+						.EnumerateFileSystemInfosSafely(searchPattern: "*") )
+					{
+						if ( folderOrFileInfo is null || !folderOrFileInfo.Exists )
+							continue;
+						if ( folderOrFileInfo is FileInfo && i < parts.Length - 1 )
+							continue;
 
-                    parts[i] = closestMatch;
-                }
-                // resolve case-sensitive pathing. largestExistingPathPartsIndex determines the largest index of the existing path parts.
+						int matchingCharacters = GetMatchingCharactersCount(folderOrFileInfo.Name, parts[i]);
+						if ( matchingCharacters > maxMatchingCharacters )
+						{
+							maxMatchingCharacters = matchingCharacters;
+							closestMatch = folderOrFileInfo.Name;
+							if ( i == parts.Length - 1 )
+								isFile = folderOrFileInfo is FileInfo;
+						}
+					}
+
+					parts[i] = closestMatch;
+				}
+				// resolve case-sensitive pathing. largestExistingPathPartsIndex determines the largest index of the existing path parts.
 				// todo: check if it's the last part of the path, then conditionally call directory.exists OR file.exists based on isFile.
-                else if ( string.IsNullOrEmpty(caseSensitiveCurrentPath)
-                    && !File.Exists(currentPath)
-                    && !Directory.Exists(currentPath) )
-                {
-                    // Get the case-sensitive path based on the existing parts we've determined.
-                    largestExistingPathPartsIndex = i;
-                    caseSensitiveCurrentPath = ConvertWindowsPathToCaseSensitive(previousCurrentPath);
-                }
-            }
+				else if ( string.IsNullOrEmpty(caseSensitiveCurrentPath)
+					&& !File.Exists(currentPath)
+					&& !Directory.Exists(currentPath) )
+				{
+					// Get the case-sensitive path based on the existing parts we've determined.
+					largestExistingPathPartsIndex = i;
+					caseSensitiveCurrentPath = ConvertWindowsPathToCaseSensitive(previousCurrentPath);
+				}
+			}
 
-            if ( caseSensitiveCurrentPath is null )
-                return ( Path.Combine( parts ), isFile );
+			if ( caseSensitiveCurrentPath is null )
+				return (Path.Combine(parts), isFile);
 
-            string combinedPath = largestExistingPathPartsIndex > -1
-                ? Path.Combine(
-                    caseSensitiveCurrentPath,
-                    Path.Combine( parts.Skip( largestExistingPathPartsIndex ).ToArray() )
-                )
-                : Path.Combine( parts );
+			string combinedPath = largestExistingPathPartsIndex > -1
+				? Path.Combine(
+					caseSensitiveCurrentPath,
+					Path.Combine(parts.Skip(largestExistingPathPartsIndex).ToArray())
+				)
+				: Path.Combine(parts);
 
-            return ( combinedPath, isFile );
-        }
+			return (combinedPath, isFile);
+		}
 
-        private static int GetMatchingCharactersCount(string str1, string str2)
-        {
-            if (string.IsNullOrEmpty(str1))
-                throw new ArgumentException("Value cannot be null or empty.", nameof(str1));
-            if (string.IsNullOrEmpty(str2))
-                throw new ArgumentException("Value cannot be null or empty.", nameof(str2));
+		private static int GetMatchingCharactersCount(string str1, string str2)
+		{
+			if ( string.IsNullOrEmpty(str1) )
+				throw new ArgumentException(message: "Value cannot be null or empty.", nameof( str1 ));
+			if ( string.IsNullOrEmpty(str2) )
+				throw new ArgumentException(message: "Value cannot be null or empty.", nameof( str2 ));
+			
+			// don't consider a match if any char in the paths are not case-insensitive matches.
+			if ( !str1.Equals(str2, StringComparison.OrdinalIgnoreCase) )
+				return -1;
 
-            int matchingCount = 0;
-            for (int i = 0; i < str1.Length && i < str2.Length; i++)
-            {
-                // don't consider a match if any char in the paths are not case-insensitive matches.
-                if (char.ToLowerInvariant(str1[i]) != char.ToLowerInvariant(str2[i]))
-                    return -1;
+			int matchingCount = 0;
+			for ( int i = 0; i < str1.Length && i < str2.Length; i++ )
+			{
+				// increment matching count if case-sensitive match at this char index succeeds
+				if ( str1[i] == str2[i] )
+					matchingCount++;
+			}
 
-                // increment matching count if case-sensitive match at this char index succeeds
-                if (str1[i] == str2[i])
-                    matchingCount++;
-            }
-
-            return matchingCount;
-        }
-
+			return matchingCount;
+		}
 
         public static async Task MoveFileAsync( string sourcePath, string destinationPath )
         {
