@@ -289,7 +289,7 @@ namespace KotorDotNET.FileSystemPathing
 				parts = new[]{ formattedPath, };
 
 			// insert the root into the list (will be / on unix, and drive name (e.g. C:\\ on windows)
-			string currentPath = Path.GetPathRoot(formattedPath);
+			string? currentPath = Path.GetPathRoot(formattedPath);
 			if ( !string.IsNullOrEmpty(currentPath) && !Path.IsPathRooted(parts[0]) )
 				parts = new[] { currentPath, }.Concat(parts).ToArray();
 			// append directory separator to drive roots
@@ -297,7 +297,7 @@ namespace KotorDotNET.FileSystemPathing
 				parts[0] += Path.DirectorySeparatorChar;
 
 			int largestExistingPathPartsIndex = -1;
-			string caseSensitiveCurrentPath = null;
+			string? caseSensitiveCurrentPath = null;
 			for ( int i = 1; i < parts.Length; i++ )
 			{
 				// find the closest matching file/folder in the current path for unix, useful for duplicates.
@@ -585,11 +585,11 @@ namespace KotorDotNET.FileSystemPathing
             if ( string.IsNullOrWhiteSpace( path ) )
                 return path;
 
-            // Replace all slashes with the operating system's path separator
-            string formattedPath = path
-                .Replace( Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar )
-                .Replace( oldChar: '\\', Path.DirectorySeparatorChar )
-                .Replace( oldChar: '/', Path.DirectorySeparatorChar );
+			// Replace all slashes with the operating system's path separator
+			string formattedPath = path.TrimStart('\\')
+				.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar)
+				.Replace(oldChar: '\\', Path.DirectorySeparatorChar)
+                .Replace(oldChar: '/', Path.DirectorySeparatorChar);
 
             // Fix repeated slashes
             formattedPath = Regex.Replace(
@@ -672,7 +672,7 @@ namespace KotorDotNET.FileSystemPathing
 
                         if ( !dirInfo.Exists )
                         {
-                            string folderPath = Path.GetDirectoryName( caseSensitivePath );
+                            string? folderPath = Path.GetDirectoryName( caseSensitivePath );
                             isFile = true;
                             if ( !( folderPath is null ) )
                                 dirInfo = new DirectoryInfo( folderPath );
