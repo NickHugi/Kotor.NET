@@ -30,7 +30,6 @@ namespace KotorDotNET.FileFormats.KotorGFF
         {
             _reader = new BinaryReader(new MemoryStream(data));
         }
-
         public GFFBinaryReader(Stream stream)
         {
             _reader = new BinaryReader(stream);

@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KotorDotNET.Common
+namespace KotorDotNET.FileFormats.KotorMDL
 {
-    public interface IWriter<T>
+    public class MDLBinaryStructure
     {
-        //byte[] Bytes();
-
-        void Write(T value);
     }
 }

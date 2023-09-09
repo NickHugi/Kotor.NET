@@ -149,10 +149,10 @@ namespace KotorDotNET.GenericTemplates.KotorUTC
             }
 
 
-            utc.BodyBagID = gff.Root.Get("BodyBag", 0);
+            utc.BodyBagID = gff.Root.Get("BodyBag", (byte)0);
             utc.Deity = gff.Root.Get("Deity", "");
             utc.Description = gff.Root.Get("Description", new LocalizedString());
-            utc.Lawfulness = gff.Root.Get("LawfulChaotic", 0);
+            utc.Lawfulness = gff.Root.Get("LawfulChaotic", (byte)0);
             utc.PhenotypeID = gff.Root.Get("Phenotype", 0);
             utc.SubraceName = gff.Root.Get("Subrace", "");
 

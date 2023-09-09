@@ -35,7 +35,7 @@ namespace KotorDotNET.Patching.Parsers.LegacyINI
                     var twodaSection = ini[pair.Value];
                     var modifiers = new TwoDASectionParser(ini, twodaSection).Parse();
                     var modifyFile = new ModifyFile<TwoDA>();
-                    patcherData.TwoDAModifiers[filename] = modifiers;
+                    //patcherData.TwoDAModifiers[filename] = modifiers;
                 }
             }
 

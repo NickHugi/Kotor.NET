@@ -35,7 +35,7 @@ namespace KotorDotNET.Patching.Parsers.LegacyINI
             {
                 var sound = GetSoundFromString(section.KeyName);
                 var stringref = GetValueFromString(section.Value);
-                modifiers.Add(new EditEntrySSFModifier(sound, stringref));
+                //modifiers.Add(new EditEntrySSFModifier(sound, stringref)); TODO
             }
 
             return modifiers;

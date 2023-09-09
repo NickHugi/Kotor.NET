@@ -40,6 +40,14 @@ namespace KotorDotNET.Common.Data
             return _value;
         }
 
+        public static bool operator ==(ResRef left, ResRef right)
+        {
+            return left._value == right._value;
+        }
+        public static bool operator !=(ResRef left, ResRef right)
+        {
+            return left._value != right._value;
+        }
         public override bool Equals(object? obj)
         {
             var resref = obj as ResRef;

@@ -24,7 +24,7 @@ namespace KotorDotNET.Patching.Modifiers.ForTLK
         public void Apply(TLK target, Memory memory, ILogger logger)
         {
             target.Add(Text, SoundResRef);
-            memory.SetTLKToken(MemoryTokenID, target.Entries.Count)
+            memory.SetTLKToken(MemoryTokenID, target.Entries.Count);
         }
     }
 }

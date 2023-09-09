@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KotorDotNET.Common
+namespace KotorDotNET.Common.Geometry
 {
-    public interface IWriter<T>
+    public class Color
     {
-        //byte[] Bytes();
-
-        void Write(T value);
     }
 }
