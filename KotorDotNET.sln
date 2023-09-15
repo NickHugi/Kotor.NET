@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolset", "Toolset\Toolset.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolset.Desktop", "Toolset.Desktop\Toolset.Desktop.csproj", "{E4E0CA5F-7EDC-416C-A560-D490D94BF6BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KotorGL", "KotorGL\KotorGL.csproj", "{B23ACA4A-0597-442F-A6FD-D226BB18A05B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KotorGL", "KotorGL\KotorGL.csproj", "{B23ACA4A-0597-442F-A6FD-D226BB18A05B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KotorDotNET.Compiler", "KotorDotNET.Compiler\KotorDotNET.Compiler.csproj", "{832866A5-2F78-4AAF-BBA9-FE914F55CCFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{B23ACA4A-0597-442F-A6FD-D226BB18A05B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B23ACA4A-0597-442F-A6FD-D226BB18A05B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B23ACA4A-0597-442F-A6FD-D226BB18A05B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{832866A5-2F78-4AAF-BBA9-FE914F55CCFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{832866A5-2F78-4AAF-BBA9-FE914F55CCFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{832866A5-2F78-4AAF-BBA9-FE914F55CCFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{832866A5-2F78-4AAF-BBA9-FE914F55CCFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
