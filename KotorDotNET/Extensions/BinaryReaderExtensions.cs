@@ -1,4 +1,5 @@
 ﻿using KotorDotNET.Common.Data;
+using KotorDotNET.Common.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace KotorDotNET.Extensions
         /// <returns>The ResRef read from the stream.</returns>
         public static ResRef ReadResRef(this BinaryReader reader)
         {
-            var text = reader.ReadString(16).Replace("\0", "");
+            var text = reader.ReadString(16).Replace("\0", "").Split('\0').First();
             var resref = new ResRef(text);
             return resref;
         }
@@ -31,7 +32,7 @@ namespace KotorDotNET.Extensions
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             var data = reader.ReadBytes(length);
-            var text = Encoding.GetEncoding(1252).GetString(data).Replace("\0", "");
+            var text = Encoding.GetEncoding(1252).GetString(data).Split('\0').First();
             return text;
         }
 
@@ -54,6 +55,36 @@ namespace KotorDotNET.Extensions
             reader.BaseStream.Position += 1;
 
             return builder.ToString();
+        }
+
+        public static Vector2 ReadVector2(this BinaryReader reader)
+        {
+            return new Vector2
+            {
+                X = reader.ReadSingle(),
+                Y = reader.ReadSingle(),
+            };
+        }
+
+        public static Vector3 ReadVector3(this BinaryReader reader)
+        {
+            return new Vector3
+            {
+                X = reader.ReadSingle(),
+                Y = reader.ReadSingle(),
+                Z = reader.ReadSingle(),
+            };
+        }
+
+        public static Vector4 ReadVector4(this BinaryReader reader)
+        {
+            return new Vector4
+            {
+                X = reader.ReadSingle(),
+                Y = reader.ReadSingle(),
+                Z = reader.ReadSingle(),
+                W = reader.ReadSingle(),
+            };
         }
     }
 }

@@ -9,13 +9,30 @@ namespace KotorDotNET.FileFormats.KotorMDL
 {
     public class MDL
     {
-        public byte ModelType { get; set; } = 0;
-        public bool DisableFog { get; set; } = false;
+        public byte ModelType { get; set; } = 0; // TODO as Classification
+        public bool Fog { get; set; } = false;
         public float AnimationScale { get; set; } = 0;
         public string Supermodel { get; set; } = "";
         public string ModelName { get; set; } = "";
-        public Node Node { get; set; } = new();
+        public Node Root { get; set; } = new();
         public List<Animation> Animations { get; set; } = new();
+
+        public List<Node> Nodes()
+        {
+            var nodes = new List<Node>();
+
+            var next = new List<Node> { Root };
+            while (next.Any())
+            {
+                var visited = next.Take(1).Single();
+                nodes.Add(visited);
+
+                next.RemoveAt(0);
+                next.AddRange(visited.Children);
+            }
+
+            return nodes;
+        }
 
         // BoundingBox
         // Radius
@@ -28,12 +45,21 @@ namespace KotorDotNET.FileFormats.KotorMDL
         public Vector4 Rotation { get; set; } = new();
         public List<Node> Children { get; set; } = new();
         public List<Controller> Controllers { get; set; } = new();
-        public Trimesh Trimesh = new();
+        public Trimesh? Trimesh { get; set; }
+
+        public override string ToString() => Name;
     }
 
     public class Controller
     {
+        public uint ControllerType { get; set; }
+        public List<ControllerRow> Rows { get; set; } = new();
+    }
 
+    public class ControllerRow
+    {
+        public float TimeKey { get; set; }
+        public List<byte[]> Data { get; set; } = new();
     }
 
     public class Trimesh
@@ -49,7 +75,7 @@ namespace KotorDotNET.FileFormats.KotorMDL
 
         public bool Render { get; set; }
         public bool Shadow { get; set; }
-        public bool Beaming { get; set }
+        public bool Beaming { get; set; }
         public bool Lightmap { get; set; }
         public bool RotateTexture { get; set; }
         public bool BackgroundGeometry { get; set; }
@@ -123,7 +149,7 @@ namespace KotorDotNET.FileFormats.KotorMDL
         public int RenderOrder { get; set; } = 0;
         public int FrameBlender { get; set; } = 0;
         public string DepthTexture { get; set; } = "";
-        public int Flags { get; set}
+        public int Flags { get; set; }
     }
 
     public class Reference
@@ -158,12 +184,45 @@ namespace KotorDotNET.FileFormats.KotorMDL
         public float TransitionTime { get; set; } = 0;
         public string AnimationRoot { get; set; } = "";
         public List<Event> Events { get; set; } = new();
-        public Node Node { get; set; } = new();
+        public Node RootNode { get; set; } = new();
+
+        public List<Node> Nodes()
+        {
+            var nodes = new List<Node>();
+
+            var next = new List<Node> { RootNode };
+            while (next.Any())
+            {
+                var visited = next.Take(1).Single();
+                nodes.Add(visited);
+
+                next.RemoveAt(0);
+                next.AddRange(visited.Children);
+            }
+
+            return nodes;
+        }
+
+        public override string ToString() => Name;
     }
 
     public class Event
     {
         public float ActivationTime { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
+
+        public override string ToString() => Name;
+    }
+
+    public enum Classification
+    {
+        Other = 0x00,
+        Effect = 0x01,
+        Tile = 0x02,
+        Character = 0x04,
+        Door = 0x08,
+        Lightsaber = 0x10,
+        Placeable = 0x20,
+        Flyer = 0x40,
     }
 }

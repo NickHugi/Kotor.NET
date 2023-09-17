@@ -1,4 +1,5 @@
 ﻿using KotorDotNET.Common.Data;
+using KotorDotNET.Common.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,6 +57,27 @@ namespace KotorDotNET.Extensions
             {
                 Write(writer, value.Get().PadRight(16, '\0').Truncate(16), 0);
             }
+        }
+
+        public static void Write(this BinaryWriter writer, Vector2 value)
+        {
+            writer.Write(value.X);
+            writer.Write(value.Y);
+        }
+
+        public static void Write(this BinaryWriter writer, Vector3 value)
+        {
+            writer.Write(value.X);
+            writer.Write(value.Y);
+            writer.Write(value.Z);
+        }
+
+        public static void Write(this BinaryWriter writer, Vector4 value)
+        {
+            writer.Write(value.X);
+            writer.Write(value.Y);
+            writer.Write(value.Z);
+            writer.Write(value.W);
         }
     }
 }
