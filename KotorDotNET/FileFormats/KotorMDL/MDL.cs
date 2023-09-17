@@ -65,9 +65,9 @@ namespace KotorDotNET.FileFormats.KotorMDL
     public class Trimesh
     {
         public List<Face> Faces { get; set; } = new();
-        public Color DiffuseColor { get; set; } = new();
-        public Color AmbientColor { get; set; } = new();
-        public uint TransperencyHit { get; set; } = 0;
+        public Vector3 DiffuseColor { get; set; } = new();
+        public Vector3 AmbientColor { get; set; } = new();
+        public uint TransperencyHint { get; set; } = 0;
         public string DiffuseTexture { get; set; } = "";
         public string LightmapTexture { get; set; } = "";
         public int SaberValue1 { get; set; } = 0;
@@ -84,7 +84,6 @@ namespace KotorDotNET.FileFormats.KotorMDL
         public Vector2 UVDirection { get; set; }
         public float UVSpeed { get; set; }
         public float UVJitter { get; set; }
-
 
         // BoundingBox
         // Radius

@@ -1,5 +1,6 @@
 ﻿using KotorDotNET.Common;
 using KotorDotNET.Common.Geometry;
+using KotorDotNET.Extensions;
 using KotorDotNET.FileFormats.KotorRIM;
 using static KotorDotNET.FileFormats.KotorMDL.MDLBinaryStructure;
 
@@ -8,8 +9,10 @@ namespace KotorDotNET.FileFormats.KotorMDL
     public class MDLBinaryWriter : IWriter<MDL>
     {
         public Stream Stream => _writer.BaseStream;
+        public Stream MDXStream => _mdxWriter.BaseStream;
 
         private BinaryWriter _writer;
+        private BinaryWriter _mdxWriter;
         private Stream _stream;
 
         private MDL? _mdl;
@@ -19,18 +22,18 @@ namespace KotorDotNET.FileFormats.KotorMDL
         private List<Node>? _nodes;
         private List<string>? _names;
 
-        public MDLBinaryWriter(string filepath)
+        public MDLBinaryWriter(string filepath, string mdxFilepath)
         {
             _writer = new BinaryWriter(new FileStream(filepath, FileMode.OpenOrCreate));
         }
-        public MDLBinaryWriter(Stream stream)
+        public MDLBinaryWriter(Stream stream, Stream mdxStream)
         {
             _writer = new BinaryWriter(stream);
         }
         public MDLBinaryWriter()
         {
-            var stream = new MemoryStream();
-            _writer = new BinaryWriter(stream);
+            _writer = new BinaryWriter(new MemoryStream());
+            _mdxWriter = new BinaryWriter(new MemoryStream());
         }
 
         public byte[] Bytes(MDL mdl)
@@ -189,22 +192,27 @@ namespace KotorDotNET.FileFormats.KotorMDL
             // [Trimesh]
 
             ushort type = 0;
-            if (binaryNode.NodeHeader is not null)
+            if (true)
             {
                 type += NodeRoot.NodeFlag;
                 offset += NodeHeader.SIZE;
             }
-            if (binaryNode.LightHeader is not null) type += NodeRoot.LightFlag;
-            if (binaryNode.EmitterHeader is not null) type += NodeRoot.EmitterFlag;
-            if (binaryNode.ReferenceHeader is not null) type += NodeRoot.ReferenceFlag;
-            if (binaryNode.TrimeshHeader is not null)
+            //if (binaryNode.LightHeader is not null) type += NodeRoot.LightFlag;
+            //if (binaryNode.EmitterHeader is not null) type += NodeRoot.EmitterFlag;
+            //if (binaryNode.ReferenceHeader is not null) type += NodeRoot.ReferenceFlag;
+            if (node.Trimesh is not null)
             {
-                //type += NodeRoot.MeshFlag;
-                //offset += _tsl ? TrimeshHeader.K2_SIZE : TrimeshHeader.K1_SIZE;
+                type += NodeRoot.TrimeshFlag;
+                offset += _tsl ? TrimeshHeader.K2_SIZE : TrimeshHeader.K1_SIZE;
             }
-            if (binaryNode.SkinmeshHeader is not null) type += NodeRoot.SkinFlag;
-            if (binaryNode.DanglymeshHeader is not null) type += NodeRoot.DanglyFlag;
-            if (binaryNode.SabermeshHeader is not null) type += NodeRoot.SaberFlag;
+            //if (binaryNode.SkinmeshHeader is not null) type += NodeRoot.SkinFlag;
+            //if (binaryNode.DanglymeshHeader is not null) type += NodeRoot.DanglyFlag;
+            //if (binaryNode.SabermeshHeader is not null) type += NodeRoot.SaberFlag;
+
+            if (node.Trimesh is not null)
+            {
+                (offset, binaryNode.TrimeshHeader) = BuildTrimesh(node, binaryNode, offset);
+            }
 
             binaryNode.NodeHeader.NodeType = type;
             binaryNode.NodeHeader.IndexNumber = (ushort)_nodes.FindIndex(x => x.Name == node.Name);
@@ -226,8 +234,9 @@ namespace KotorDotNET.FileFormats.KotorMDL
             binaryNode.NodeHeader.ControllerDataCount = node.Controllers.SelectMany(x => x.Rows).SelectMany(x => x.Data).Count() + node.Controllers.SelectMany(x => x.Rows).Count();
             binaryNode.NodeHeader.ControllerDataCount2 = binaryNode.NodeHeader.ControllerDataCount;
 
+            offset = binaryNode.NodeHeader.OffsetToControllerData + (binaryNode.NodeHeader.ControllerDataCount * 4);
 
-            var childOffset = binaryNode.NodeHeader.OffsetToControllerData + (binaryNode.NodeHeader.ControllerDataCount * 4);
+            var childOffset = offset;
             foreach (var child in node.Children)
             {
                 binaryNode.ChildrenOffsets.Add(childOffset);
@@ -260,7 +269,108 @@ namespace KotorDotNET.FileFormats.KotorMDL
             return (binaryNode, childOffset);
         }
 
+        private (int, TrimeshHeader) BuildTrimesh(Node node, NodeRoot binaryNode, int offset)
+        {
+            var trimeshHeader = binaryNode.TrimeshHeader = new TrimeshHeader();
 
+            trimeshHeader.Diffuse = node.Trimesh.DiffuseColor;
+            trimeshHeader.Ambient = node.Trimesh.AmbientColor;
+            trimeshHeader.TransparencyHint = node.Trimesh.TransperencyHint;
+            trimeshHeader.Texture = node.Trimesh.DiffuseTexture;
+            trimeshHeader.Lightmap = node.Trimesh.LightmapTexture;
+            trimeshHeader.DoesRender = node.Trimesh.Render ? (byte)1 : (byte)0;
+            trimeshHeader.HasShadow = node.Trimesh.Shadow ? (byte)1 : (byte)0;
+            trimeshHeader.Beaming = node.Trimesh.Beaming ? (byte)1 : (byte)0;
+            trimeshHeader.HasLightmap = node.Trimesh.Lightmap ? (byte)1 : (byte)0;
+            trimeshHeader.RotateTexture = node.Trimesh.RotateTexture ? (byte)1 : (byte)0;
+            trimeshHeader.BackgroundGeometry = node.Trimesh.BackgroundGeometry ? (byte)1 : (byte)0;
+            trimeshHeader.AnimateUV = node.Trimesh.AnimateUV ? (byte)1 : (byte)0;
+            trimeshHeader.UVDirection = node.Trimesh.UVDirection;
+            trimeshHeader.UVSpeed = node.Trimesh.UVSpeed;
+            trimeshHeader.UVJitterSpeed = node.Trimesh.UVJitter;
+
+            var vertices = node.Trimesh.Faces.Select(x => x.Vertex1).Concat(node.Trimesh.Faces.Select(x => x.Vertex2)).Concat(node.Trimesh.Faces.Select(x => x.Vertex3)).ToList();
+
+            trimeshHeader.VertexCount = (ushort)vertices.Count();
+            trimeshHeader.MDXOffsetToData = (int)_writer.BaseStream.Position;
+            var hasPositionMDX = vertices.Any(x => x.Position is not null);
+            var hasNormalMDX = vertices.Any(x => x.Normal is not null);
+            var hasTextureMDX = vertices.Any(x => x.DiffuseUV is not null);
+            var hasLightmapMDX = vertices.Any(x => x.LightmapUV is not null);
+
+            if (hasPositionMDX)
+            {
+                trimeshHeader.MDXDataBitmap += NodeRoot.VertexFlag;
+
+                trimeshHeader.MDXPositionStride = trimeshHeader.MDXDataSize;
+                trimeshHeader.MDXDataSize += 12;
+            }
+            if (hasNormalMDX)
+            {
+                trimeshHeader.MDXDataBitmap += NodeRoot.NormalFlag;
+
+                trimeshHeader.MDXNormalStride = trimeshHeader.MDXDataSize;
+                trimeshHeader.MDXDataSize += 12;
+            }
+            if (hasTextureMDX)
+            {
+                trimeshHeader.MDXDataBitmap += NodeRoot.UV1Flag;
+
+                trimeshHeader.MDXTexture1Stride = trimeshHeader.MDXDataSize;
+                trimeshHeader.MDXDataSize += 8;
+            }
+            if (hasLightmapMDX)
+            {
+                trimeshHeader.MDXDataBitmap += NodeRoot.UV2Flag;
+
+                trimeshHeader.MDXTexture2Stride = trimeshHeader.MDXDataSize;
+                trimeshHeader.MDXDataSize += 8;
+            }
+
+            foreach (var vertex in vertices)
+            {
+                if (hasPositionMDX)
+                {
+                    _mdxWriter.Write(vertex.Position ?? new());
+                }
+                if (hasNormalMDX)
+                {
+                    _mdxWriter.Write(vertex.Normal ?? new());
+                }
+                if (hasTextureMDX)
+                {
+                    _mdxWriter.Write(vertex.DiffuseUV ?? new());
+                }
+                if (hasLightmapMDX)
+                {
+                    _mdxWriter.Write(vertex.LightmapUV ?? new());
+                }
+            }
+            // TODO - plus extra block for whatever reason
+
+            trimeshHeader.OffsetToFaceArray = offset;
+            trimeshHeader.FaceArrayCount = trimeshHeader.FaceArrayCount2 = node.Trimesh.Faces.Count;
+
+            foreach (var face in node.Trimesh.Faces)
+            {
+                var binaryFace = new FaceRoot();
+                binaryNode.TrimeshFaces.Add(binaryFace);
+
+                binaryFace.Material = face.MaterialID;
+                binaryFace.PlaneCoefficient = face.PlaneDistance;
+                binaryFace.Normal = face.FaceNormal;
+                binaryFace.Vertex1 = (ushort)vertices.IndexOf(face.Vertex1);
+                binaryFace.Vertex2 = (ushort)vertices.IndexOf(face.Vertex2);
+                binaryFace.Vertex3 = (ushort)vertices.IndexOf(face.Vertex3);
+                binaryFace.FaceAdjacency1 = (face.Adjacent1 is null) ? (ushort)0xFFFF : (ushort)node.Trimesh.Faces.IndexOf(face.Adjacent1);
+                binaryFace.FaceAdjacency2 = (face.Adjacent2 is null) ? (ushort)0xFFFF : (ushort)node.Trimesh.Faces.IndexOf(face.Adjacent2);
+                binaryFace.FaceAdjacency3 = (face.Adjacent3 is null) ? (ushort)0xFFFF : (ushort)node.Trimesh.Faces.IndexOf(face.Adjacent3);
+
+                offset += FaceRoot.SIZE;
+            }
+
+            return (offset, trimeshHeader);
+        }
 
 
 
@@ -279,7 +389,7 @@ namespace KotorDotNET.FileFormats.KotorMDL
             if (binNode.LightHeader is not null) type += NodeRoot.LightFlag;
             if (binNode.EmitterHeader is not null) type += NodeRoot.EmitterFlag;
             if (binNode.ReferenceHeader is not null) type += NodeRoot.ReferenceFlag;
-            if (binNode.TrimeshHeader is not null) type += NodeRoot.MeshFlag;
+            if (binNode.TrimeshHeader is not null) type += NodeRoot.TrimeshFlag;
             if (binNode.SkinmeshHeader is not null) type += NodeRoot.SkinFlag;
             if (binNode.DanglymeshHeader is not null) type += NodeRoot.DanglyFlag;
             if (binNode.SabermeshHeader is not null) type += NodeRoot.SaberFlag;

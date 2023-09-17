@@ -418,12 +418,24 @@ namespace KotorDotNET.FileFormats.KotorMDL
             public static readonly ushort EmitterFlag = 0x00000004;
             public static readonly ushort CameraFlag = 0x00000008;
             public static readonly ushort ReferenceFlag = 0x00000010;
-            public static readonly ushort MeshFlag = 0x00000020;
+            public static readonly ushort TrimeshFlag = 0x00000020;
             public static readonly ushort SkinFlag = 0x00000040;
             public static readonly ushort AnimationFlag = 0x00000080;
             public static readonly ushort DanglyFlag = 0x00000100;
             public static readonly ushort AABBFlag = 0x00000200;
             public static readonly ushort SaberFlag = 0x00000800;
+
+            public static readonly uint VertexFlag = 0x00000001;
+            public static readonly uint NormalFlag = 0x00000002;
+            public static readonly uint UV1Flag = 0x00000004;
+            public static readonly uint UV2Flag = 0x00000008;
+            public static readonly uint UV3Flag = 0x00000010;
+            public static readonly uint UV4Flag = 0x00000020;
+            public static readonly uint ColorsFlag = 0x00000040;
+            public static readonly uint Tangent1Flag = 0x00000080;
+            public static readonly uint Tangent2Flag = 0x00000100;
+            public static readonly uint Tangent3Flag = 0x00000200;
+            public static readonly uint Tangent4Flag = 0x00000400;
 
             public NodeHeader? NodeHeader { get; set; } = new();
             public LightHeader? LightHeader { get; set; }
@@ -442,6 +454,8 @@ namespace KotorDotNET.FileFormats.KotorMDL
             public List<ControllerHeader> Controllers { get; set; } = new();
             public List<byte[]> ControllerData { get; set; } = new();
 
+            public List<FaceRoot> TrimeshFaces { get; set; } = new();
+
             public NodeRoot()
             {
 
@@ -454,10 +468,19 @@ namespace KotorDotNET.FileFormats.KotorMDL
                 if ((NodeHeader.NodeType & LightFlag) != 0) LightHeader = new LightHeader(reader);
                 if ((NodeHeader.NodeType & EmitterFlag) != 0) EmitterHeader = new EmitterHeader(reader);
                 if ((NodeHeader.NodeType & ReferenceFlag) != 0) ReferenceHeader = new ReferenceHeader(reader);
-                if ((NodeHeader.NodeType & MeshFlag) != 0) TrimeshHeader = new TrimeshHeader(reader);
+                if ((NodeHeader.NodeType & TrimeshFlag) != 0) TrimeshHeader = new TrimeshHeader(reader);
                 if ((NodeHeader.NodeType & SkinFlag) != 0) SkinmeshHeader = new SkinmeshHeader(reader);
                 if ((NodeHeader.NodeType & DanglyFlag) != 0) DanglymeshHeader = new DanglymeshHeader(reader);
                 if ((NodeHeader.NodeType & SaberFlag) != 0) SabermeshHeader = new SabermeshHeader(reader);
+
+                if (TrimeshHeader is not null)
+                {
+                    reader.BaseStream.Position = TrimeshHeader.OffsetToFaceArray;
+                    for (int i = 0; i < TrimeshHeader.FaceArrayCount; i++)
+                    {
+                        TrimeshFaces.Add(new FaceRoot(reader));
+                    }
+                }
 
                 reader.BaseStream.Position = NodeHeader.OffsetToChildArray;
                 for (int i = 0; i < NodeHeader.ChildArrayCount; i++)
@@ -494,6 +517,15 @@ namespace KotorDotNET.FileFormats.KotorMDL
                 if (SkinmeshHeader is not null) SkinmeshHeader.Write(writer);
                 if (DanglymeshHeader is not null) DanglymeshHeader.Write(writer);
                 if (SabermeshHeader is not null) SabermeshHeader.Write(writer);
+
+                if (TrimeshHeader is not null)
+                {
+                    writer.BaseStream.Position = TrimeshHeader.OffsetToFaceArray;
+                    foreach (var face in TrimeshFaces)
+                    {
+                        face.Write(writer);
+                    }
+                }
 
                 writer.BaseStream.Position = NodeHeader.OffsetToChildArray;
                 foreach (var childOffset in ChildrenOffsets)
@@ -625,7 +657,7 @@ namespace KotorDotNET.FileFormats.KotorMDL
             public Vector3 AveragePoint { get; set; } = new();
             public Vector3 Diffuse { get; set; } = new();
             public Vector3 Ambient { get; set; } = new();
-            public Single TransparencyHint { get; set; }
+            public UInt32 TransparencyHint { get; set; }
             public String Texture { get; set; } = "";
             public String Lightmap { get; set; } = "";
             public String Unused1 { get; set; } = "";
@@ -697,7 +729,7 @@ namespace KotorDotNET.FileFormats.KotorMDL
                 AveragePoint = reader.ReadVector3();
                 Diffuse = reader.ReadVector3();
                 Ambient = reader.ReadVector3();
-                TransparencyHint = reader.ReadSingle();
+                TransparencyHint = reader.ReadUInt32();
                 Texture = reader.ReadString(32);
                 Lightmap = reader.ReadString(32);
                 Unused1 = reader.ReadString(12);
@@ -774,10 +806,10 @@ namespace KotorDotNET.FileFormats.KotorMDL
                 writer.Write(Diffuse);
                 writer.Write(Ambient);
                 writer.Write(TransparencyHint);
-                writer.Write(Texture, 32);
-                writer.Write(Lightmap, 32);
-                writer.Write(Unused1, 32);
-                writer.Write(Unused2, 32);
+                writer.Write(Texture.Resize(32), 0);
+                writer.Write(Lightmap.Resize(32), 0);
+                writer.Write(Unused1.Resize(12), 0);
+                writer.Write(Unused2.Resize(12), 0);
                 writer.Write(OffsetToVertexIndicesCountArray);
                 writer.Write(VertexIndicesCountArrayCount);
                 writer.Write(VertexIndicesCountArrayCount2);
@@ -791,6 +823,8 @@ namespace KotorDotNET.FileFormats.KotorMDL
                 writer.Write(Unknown2);
                 writer.Write(Unknown3);
                 writer.Write(Unknown4);
+                writer.Write(Unknown8);
+                writer.Write(AnimateUV);
                 writer.Write(UVDirection);
                 writer.Write(UVSpeed);
                 writer.Write(UVJitterSpeed);
@@ -798,6 +832,7 @@ namespace KotorDotNET.FileFormats.KotorMDL
                 writer.Write(MDXDataBitmap);
                 writer.Write(MDXPositionStride);
                 writer.Write(MDXNormalStride);
+                writer.Write(MDXColorStride);
                 writer.Write(MDXTexture1Stride);
                 writer.Write(MDXTexture2Stride);
                 writer.Write(MDXTexture3Stride);
@@ -818,8 +853,11 @@ namespace KotorDotNET.FileFormats.KotorMDL
                 writer.Write(Unknown6);
                 writer.Write(TotalArea);
                 writer.Write(Unknown7);
-                writer.Write(TSLUnknown1);
-                writer.Write(TSLUnknown2);
+                if (IsTSL)
+                {
+                    writer.Write(TSLUnknown1);
+                    writer.Write(TSLUnknown2);
+                }
                 writer.Write(MDXOffsetToData);
                 writer.Write(OffsetToVertexArray);
             }

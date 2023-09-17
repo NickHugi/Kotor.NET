@@ -7,6 +7,7 @@ using KotorDotNET.Common;
 using KotorDotNET.Common.Conversation;
 using KotorDotNET.Common.Creature;
 using KotorDotNET.Common.Data;
+using KotorDotNET.Common.Geometry;
 using static KotorDotNET.FileFormats.KotorMDL.MDLBinaryStructure;
 
 namespace KotorDotNET.FileFormats.KotorMDL
@@ -14,26 +15,34 @@ namespace KotorDotNET.FileFormats.KotorMDL
     public class MDLBinaryReader : IReader<MDL>
     {
         private BinaryReader _reader;
+        private BinaryReader _mdxReader;
         private MDL? _mdl;
         private FileRoot _bin;
 
-        public MDLBinaryReader(string filepath)
+        public MDLBinaryReader(string filepath, string mdxFilepath)
         {
             var data = File.ReadAllBytes(filepath);
             data = data.TakeLast(data.Length - 12).ToArray();
             _reader = new BinaryReader(new MemoryStream(data));
+
+            var mdxData = File.ReadAllBytes(mdxFilepath);
+            _mdxReader = new BinaryReader(new MemoryStream(mdxData));
         }
-        public MDLBinaryReader(byte[] data)
+        public MDLBinaryReader(byte[] data, byte[] mdxData)
         {
             data = data.TakeLast(data.Length - 12).ToArray();
             _reader = new BinaryReader(new MemoryStream(data));
+
+            _mdxReader = new BinaryReader(new MemoryStream(mdxData));
         }
-        public MDLBinaryReader(Stream stream)
+        public MDLBinaryReader(Stream stream, Stream mdxStream)
         {
             _reader = new BinaryReader(stream);
             var length = (int)(stream.Length - stream.Length);
             var data = _reader.ReadBytes(length).TakeLast(length - 12).ToArray();
             _reader = new BinaryReader(new MemoryStream(data));
+
+            _mdxReader = new BinaryReader(mdxStream);
         }
 
         public MDL Read()
@@ -66,18 +75,88 @@ namespace KotorDotNET.FileFormats.KotorMDL
             return _mdl;
         }
 
-        private Node BuildNode(NodeRoot binNode)
+        private Node BuildNode(NodeRoot binaryNode)
         {
             Node node = new Node();
 
-            node.Name = _bin.Names[binNode.NodeHeader!.NodeNumber];
+            node.Name = _bin.Names[binaryNode.NodeHeader!.NodeNumber];
 
-            foreach (var binNodeChild in binNode.Children)
+            if (binaryNode.TrimeshHeader is not null)
+            {
+                node.Trimesh = new();
+                node.Trimesh.DiffuseColor = binaryNode.TrimeshHeader.Diffuse;
+                node.Trimesh.AmbientColor = binaryNode.TrimeshHeader.Ambient;
+                node.Trimesh.TransperencyHint = binaryNode.TrimeshHeader.TransparencyHint;
+                node.Trimesh.DiffuseTexture = binaryNode.TrimeshHeader.Texture;
+                node.Trimesh.LightmapTexture = binaryNode.TrimeshHeader.Lightmap;
+                // node.Trimesh.SaberValue1;
+                // node.Trimesh.SaberValue2;
+                node.Trimesh.Render = binaryNode.TrimeshHeader.DoesRender != 0;
+                node.Trimesh.Shadow = binaryNode.TrimeshHeader.HasShadow != 0;
+                node.Trimesh.Beaming = binaryNode.TrimeshHeader.Beaming != 0;
+                node.Trimesh.Lightmap = binaryNode.TrimeshHeader.HasLightmap != 0;
+                node.Trimesh.RotateTexture = binaryNode.TrimeshHeader.RotateTexture != 0;
+                node.Trimesh.BackgroundGeometry = binaryNode.TrimeshHeader.BackgroundGeometry != 0;
+                node.Trimesh.AnimateUV = binaryNode.TrimeshHeader.AnimateUV != 0;
+
+                node.Trimesh.UVDirection = binaryNode.TrimeshHeader.UVDirection;
+                node.Trimesh.UVSpeed = binaryNode.TrimeshHeader.UVSpeed;
+                node.Trimesh.UVJitter = binaryNode.TrimeshHeader.UVJitterSpeed;
+
+                var vertices = new List<Vertex>();
+                for (int i = 0; i < binaryNode.TrimeshHeader.VertexCount; i++)
+                {
+                    var vertex = new Vertex();
+                    vertices.Add(vertex);
+
+                    if ((binaryNode.TrimeshHeader.MDXDataBitmap & NodeRoot.VertexFlag) != 0)
+                    {
+                        _mdxReader.BaseStream.Position = binaryNode.TrimeshHeader.MDXOffsetToData + binaryNode.TrimeshHeader.MDXPositionStride + (i * binaryNode.TrimeshHeader.MDXDataSize);
+                        vertex.Position = new Vector3(_mdxReader.ReadSingle(), _mdxReader.ReadSingle(), _mdxReader.ReadSingle());
+                    }
+
+                    if ((binaryNode.TrimeshHeader.MDXDataBitmap & NodeRoot.NormalFlag) != 0)
+                    {
+                        _mdxReader.BaseStream.Position = binaryNode.TrimeshHeader.MDXOffsetToData + binaryNode.TrimeshHeader.MDXNormalStride + (i * binaryNode.TrimeshHeader.MDXDataSize);
+                        vertex.Normal = new Vector3(_mdxReader.ReadSingle(), _mdxReader.ReadSingle(), _mdxReader.ReadSingle());
+                    }
+
+                    if ((binaryNode.TrimeshHeader.MDXDataBitmap & NodeRoot.UV1Flag) != 0)
+                    {
+                        _mdxReader.BaseStream.Position = binaryNode.TrimeshHeader.MDXOffsetToData + binaryNode.TrimeshHeader.MDXTexture1Stride + (i * binaryNode.TrimeshHeader.MDXDataSize);
+                        vertex.DiffuseUV = new Vector2(_mdxReader.ReadSingle(), _mdxReader.ReadSingle());
+                    }
+
+                    if ((binaryNode.TrimeshHeader.MDXDataBitmap & NodeRoot.UV2Flag) != 0)
+                    {
+                        _mdxReader.BaseStream.Position = binaryNode.TrimeshHeader.MDXOffsetToData + binaryNode.TrimeshHeader.MDXTexture2Stride + (i * binaryNode.TrimeshHeader.MDXDataSize);
+                        vertex.LightmapUV = new Vector2(_mdxReader.ReadSingle(), _mdxReader.ReadSingle());
+                    }
+                }
+
+                binaryNode.TrimeshFaces.ForEach(x => node.Trimesh.Faces.Add(new Face()));
+                for (int i = 0; i < binaryNode.TrimeshFaces.Count; i++)
+                {
+                    var binaryFace = binaryNode.TrimeshFaces[i];
+                    var face = node.Trimesh.Faces[i];
+                    face.FaceNormal = binaryFace.Normal;
+                    face.PlaneDistance = binaryFace.PlaneCoefficient;
+                    face.MaterialID = binaryFace.Material;
+                    face.Vertex1 = vertices[binaryFace.Vertex1];
+                    face.Vertex2 = vertices[binaryFace.Vertex2];
+                    face.Vertex3 = vertices[binaryFace.Vertex3];
+                    face.Adjacent1 = (binaryFace.FaceAdjacency1 == 0xFFFF) ? null : node.Trimesh.Faces[binaryFace.FaceAdjacency1];
+                    face.Adjacent2 = (binaryFace.FaceAdjacency2 == 0xFFFF) ? null : node.Trimesh.Faces[binaryFace.FaceAdjacency2];
+                    face.Adjacent3 = (binaryFace.FaceAdjacency3 == 0xFFFF) ? null : node.Trimesh.Faces[binaryFace.FaceAdjacency3];
+                }
+            }
+
+            foreach (var binNodeChild in binaryNode.Children)
             {
                 node.Children.Add(BuildNode(binNodeChild));
             }
 
-            foreach (var binController in binNode.Controllers)
+            foreach (var binController in binaryNode.Controllers)
             {
                 var controller = new Controller();
                 controller.ControllerType = binController.ControllerType;
@@ -86,15 +165,15 @@ namespace KotorDotNET.FileFormats.KotorMDL
                     var row = new ControllerRow();
                     controller.Rows.Add(row);
 
-                    row.TimeKey = BitConverter.ToSingle(binNode.ControllerData.ElementAt(binController.FirstKeyOffset));
+                    row.TimeKey = BitConverter.ToSingle(binaryNode.ControllerData.ElementAt(binController.FirstKeyOffset));
 
                     if (controller.ControllerType == 20 && binController.ColumnCount == 2)
                     {
-                        row.Data = binNode.ControllerData.GetRange(binController.FirstDataOffset, 1).ToList();
+                        row.Data = binaryNode.ControllerData.GetRange(binController.FirstDataOffset, 1).ToList();
                     }
                     else
                     {
-                        row.Data = binNode.ControllerData.GetRange(binController.FirstDataOffset, binController.ColumnCount).ToList();
+                        row.Data = binaryNode.ControllerData.GetRange(binController.FirstDataOffset, binController.ColumnCount).ToList();
                     }
 
                     
