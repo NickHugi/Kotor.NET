@@ -344,6 +344,7 @@ namespace KotorDotNET.Patching.Parsers.LegacyINI
         protected IValue TakeRowLabel(KeyDataCollection section, string keyname)
         {
             var pair = section.FirstOrDefault(x => x.KeyName == keyname);
+            section.RemoveKey(keyname);
 
             if (pair != null)
             {

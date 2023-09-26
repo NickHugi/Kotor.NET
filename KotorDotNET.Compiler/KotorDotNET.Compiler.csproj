@@ -17,4 +17,7 @@
       <OutputFile>Calculator\Calculator.Scanner.Generated.cs</OutputFile>
     </LexFile>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Compilation\Expression\" />
+  </ItemGroup>
 </Project>

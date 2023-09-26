@@ -49,7 +49,7 @@ namespace KotorDotNET.FileFormats.KotorMDL
 
         public bool Render { get; set; }
         public bool Shadow { get; set; }
-        public bool Beaming { get; set }
+        public bool Beaming { get; set; }
         public bool Lightmap { get; set; }
         public bool RotateTexture { get; set; }
         public bool BackgroundGeometry { get; set; }
@@ -123,7 +123,7 @@ namespace KotorDotNET.FileFormats.KotorMDL
         public int RenderOrder { get; set; } = 0;
         public int FrameBlender { get; set; } = 0;
         public string DepthTexture { get; set; } = "";
-        public int Flags { get; set}
+        public int Flags { get; set; }
     }
 
     public class Reference

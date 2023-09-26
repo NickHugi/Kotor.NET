@@ -1,4 +1,4 @@
-%namespace KotorDotNET_Compiler.Calculator
+%namespace KotorDotNET.Compiler.Calculator
 %scannertype CalculatorScanner
 %visibility internal
 %tokentype Token
@@ -56,10 +56,10 @@ MultiplyOp          \*
 DivideOp            /
 ModOp               \%
 EqualityOp          \=\=
-InequalityOp        \!=
+InequalityOp        \!\=
 GreaterOrEqualOp    >\=
 GreaterOp           >
-LesserOrEqualOp     \<=
+LesserOrEqualOp     \\<=
 LesserOp            \<
 LogicalAndOp        &&
 LogicalOrOp         \|\|
@@ -70,6 +70,13 @@ BitwiseXorOp        \^
 BitwiseNotOp        \~
 Space               [ \t]
 EOL                 \n
+SEPERATOR           \;
+ASSIGNMENT          \=
+LPAREN              \(
+RPAREN              \)
+LBRACE              \{
+RBRACE              \}
+COMMA               \,
 
 %{
 
@@ -80,6 +87,13 @@ EOL                 \n
 {EOL}+		    /* skip */
 {Space}+		/* skip */
 
+{SEPERATOR}		{ return ';'; }
+{ASSIGNMENT}		{ return '='; }
+{LPAREN}		{ return '('; }
+{RPAREN}		{ return ')'; }
+{LBRACE}		{ return '{'; }
+{RBRACE}		{ return '}'; }
+{COMMA}		{ return ','; }
 {NOP}		{ return (int)Token.NOP; }
 {Comment}		{ return (int)Token.COMMENT_INLINE; }
 {MultilineComment}		{ return (int)Token.COMMENT_MULTILINE; }
@@ -100,23 +114,23 @@ EOL                 \n
 {If}		{ return (int)Token.FLOW_IF; }
 {Return}		{ return (int)Token.FLOW_RETURN; }
 {Struct}		{ return (int)Token.TYPE_STRUCT; }
-{Int}		{ return (int)Token.TYPE_INT; }
-{Float}		{ return (int)Token.TYPE_FLOAT; }
-{Object}		{ return (int)Token.TYPE_OBJECT; }
-{Void}		{ return (int)Token.TYPE_VOID; }
-{Event}		{ return (int)Token.TYPE_EVENT; }
-{Effect}		{ return (int)Token.TYPE_EFFECT; }
-{ItemProperty}		{ return (int)Token.TYPE_ITEM_PROPERTY; }
-{Location}		{ return (int)Token.TYPE_LOCATION; }
-{String}		{ return (int)Token.TYPE_STRING; }
-{Talent}		{ return (int)Token.TYPE_TALENT; }
-{Action}		{ return (int)Token.TYPE_ACTION; }
-{Vector}		{ return (int)Token.TYPE_VECTOR; }
-{Identifier}		{ return (int)Token.IDENTIFIER; }
-{StringLiteral}		{ return (int)Token.LITERAL_STRING; }
-{FloatLiteral}		{ return (int)Token.LITERAL_FLOAT; }
+{Int}		{ yylval.datatype = DataType.Int; return (int)Token.TYPE_INT; }
+{Float}		{ yylval.datatype = DataType.Float; return (int)Token.TYPE_FLOAT; }
+{Object}		{ yylval.datatype = DataType.Object; return (int)Token.TYPE_OBJECT; }
+{Void}		{ yylval.datatype = DataType.Void; return (int)Token.TYPE_VOID; }
+{Event}		{ yylval.datatype = DataType.Event; return (int)Token.TYPE_EVENT; }
+{Effect}		{ yylval.datatype = DataType.Effect; return (int)Token.TYPE_EFFECT; }
+{ItemProperty}		{ yylval.datatype = DataType.ItemProperty; return (int)Token.TYPE_ITEM_PROPERTY; }
+{Location}		{ yylval.datatype = DataType.Location; return (int)Token.TYPE_LOCATION; }
+{String}		{ yylval.datatype = DataType.String; return (int)Token.TYPE_STRING; }
+{Talent}		{ yylval.datatype = DataType.Talent; return (int)Token.TYPE_TALENT; }
+{Action}		{ yylval.datatype = DataType.Action; return (int)Token.TYPE_ACTION; }
+{Vector}		{ yylval.datatype = DataType.Vector; return (int)Token.TYPE_VECTOR; }
+{Identifier}		{ yylval.text=yytext; return (int)Token.IDENTIFIER; }
+{StringLiteral}		{ yylval.text=yytext; return (int)Token.LITERAL_STRING; }
+{FloatLiteral}		{ yylval.numberf=Single.Parse(yytext); return (int)Token.LITERAL_FLOAT; }
 {HexLiteral}		{ return (int)Token.LITERAL_INT_HEX; }
-{IntLiteral}		{ return (int)Token.LITERAL_INT; }
+{IntLiteral}		{ yylval.numberi=Int32.Parse(yytext); return (int)Token.LITERAL_INT; }
 {IncrementOp}		{ return (int)Token.OP_INCREMENT; }
 {DecrementOp}		{ return (int)Token.OP_DECREMENT; }
 {AddAssignment}		{ return (int)Token.ASSIGNMENT_ADD; }

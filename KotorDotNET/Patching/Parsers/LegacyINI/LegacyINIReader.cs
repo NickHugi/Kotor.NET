@@ -1,4 +1,5 @@
 ﻿using IniParser.Model;
+using IniParser.Parser;
 using KotorDotNET.Exceptions;
 using KotorDotNET.FileFormats.Kotor2DA;
 using KotorDotNET.FileFormats.KotorTLK;
@@ -19,13 +20,20 @@ namespace KotorDotNET.Patching.Parsers.LegacyINI
         protected TLK tlk { get; set; } = new();
         protected PatcherData patcherData { get; set; } = new();
 
+        public LegacyINIReader(string iniText)
+        {
+            var iniDataParser = new IniDataParser();
+            ini = iniDataParser.Parse(iniText);
+        }
+
         public PatcherData Parse()
         {
-            var tlkList = ini.Sections.SingleOrDefault(x => x.SectionName == "2DAList");
+            var tlkList = ini.Sections.SingleOrDefault(x => x.SectionName == "TLKList");
+            // TODO: InstallList
             var twodaList = ini.Sections.SingleOrDefault(x => x.SectionName == "2DAList");
-            var gffList = ini.Sections.SingleOrDefault(x => x.SectionName == "2DAList");
-            var compileList = ini.Sections.SingleOrDefault(x => x.SectionName == "2DAList");
-            var ssfList = ini.Sections.SingleOrDefault(x => x.SectionName == "2DAList");
+            var gffList = ini.Sections.SingleOrDefault(x => x.SectionName == "GFFList");
+            var compileList = ini.Sections.SingleOrDefault(x => x.SectionName == "CompileListList");
+            var ssfList = ini.Sections.SingleOrDefault(x => x.SectionName == "SSFList");
 
             if (twodaList != null)
             {
@@ -33,9 +41,11 @@ namespace KotorDotNET.Patching.Parsers.LegacyINI
                 {
                     var filename = pair.KeyName;
                     var twodaSection = ini[pair.Value];
-                    var modifiers = new TwoDASectionParser(ini, twodaSection).Parse();
+
                     var modifyFile = new ModifyFile<TwoDA>();
-                    //patcherData.TwoDAModifiers[filename] = modifiers;
+                    modifyFile.Modifiers = new TwoDASectionParser(ini, twodaSection).Parse();
+
+                    patcherData.TwoDAFiles.Add(modifyFile);
                 }
             }
 

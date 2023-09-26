@@ -1,15 +1,21 @@
-%namespace KotorDotNET_Compiler.Calculator
+%using KotorDotNET.Compilation;
+
+%namespace KotorDotNET.Compiler.Calculator
 %partial
 %parsertype CalculatorParser
 %visibility internal
 %tokentype Token
 
 %union { 
-			public int n; 
-			public string s; 
-	   }
-
+       public List<ASTNode> nodes;
+       public ASTNode node;
+       public string text;
+       public float numberf;
+       public int numberi;
+       public DataType datatype;
+       }
 %start compilation_unit
+
 
 %token EOL, NOP, COMMENT_INLINE, COMMENT_MULTILINE, INCLUDE, VALUE_OBJECT_SELF,
        VALUE_OBJECT_INVALID, VALUE_TRUE, VALUE_FALSE, FLOW_BREAK, FLOW_CONTINUE,
@@ -27,28 +33,29 @@
 
 %%
 
-compilation_unit     : declarations
-                     |
+compilation_unit     : declarations                                         { $$.node = new CompilationUnit($1.nodes); }
+                     |                                                      { $$.node = new CompilationUnit(); }
                      ;
 
-declarations         : declarations declaration
-                     |
+declarations         : declarations declaration                             { $$.nodes.Add($1.node); }
+                     | declaration                                          { $$.nodes = new List<ASTNode>() { $1.node }; }
                      ;
 
-declaration          : script_inclusion                                      { ; }
-                     | function_definition
-                     | function_forward_declaration                          { ; }
-                     | struct_definition                                     { ; }
-                     | global_variable_declaration
-                     | global_variable_initialization
+declaration          : global_variable_declaration                          { $$.node = $1.node; }
+                     | script_inclusion                                     { $$.node = $1.node; }
+                     | global_variable_initialization                       { $$.node = $1.node; }
+                     | function_definition                                  { $$.node = $1.node; }
+                     | function_forward_declaration                         { $$.node = $1.node; }
+                     | struct_definition                                    { $$.node = $1.node; }
                      ;
 
-
-global_variable_initialization     : data_type IDENTIFIER '=' expression ';'
+                     
+global_variable_declaration        : data_type IDENTIFIER ';'                   { $$.node = new GlobalVariableDeclaration($1.datatype, $2.text); }
                                    ;
 
-global_variable_declaration        : data_type IDENTIFIER ';'
+global_variable_initialization     : data_type IDENTIFIER '=' expression ';'    { $$.node = new GlobalVariableInitialization($1.datatype, $2.text, (IExpression)$4.node); }
                                    ;
+
               
 
 script_inclusion     : INCLUDE LITERAL_STRING                                { ; }
@@ -58,16 +65,16 @@ function_definition         : data_type IDENTIFIER '(' function_definition_param
                             ;
 
 
-function_forward_declaration : data_type IDENTIFIER '(' function_definition_params ')' ';'
+function_forward_declaration : data_type IDENTIFIER '(' function_definition_params ')' ';'      { $$.node = new FunctionForwardDeclaration($1.datatype, $2.text, $4.nodes.OfType<FunctionParameter>().ToList()); }
                              ;
 
-function_definition_params  : function_definition_params ',' function_definition_param
-                            | function_definition_param
-                            |
+function_definition_params  : function_definition_params ',' function_definition_param          { $$.nodes = $1.nodes; $$.nodes.Add($3.node); }
+                            | function_definition_param                                         { $$.nodes = new List<ASTNode>() { $1.node }; }
+                            |                                                                   { $$.nodes = new List<ASTNode>(); }
                             ;
 
-function_definition_param   : data_type IDENTIFIER
-                            | data_type IDENTIFIER '=' expression
+function_definition_param   : data_type IDENTIFIER                                              { $$.node = new FunctionParameter($1.datatype, $2.text, null); }
+                            | data_type IDENTIFIER '=' expression                               { $$.node = new FunctionParameter($1.datatype, $2.text, (IExpression)$4.node); }
                             ;
 
 
@@ -193,11 +200,11 @@ assignment           : field_access ASSIGNMENT_ADD expression
                      ;
 
 
-expression           : '(' expression ')'
-                     | assignment
-                     | IDENTIFIER
-                     | function_call
-                     | constant_expression
+expression           : '(' expression ')'                               { ; }
+                     | assignment                                       { ; }
+                     | IDENTIFIER                                       { ; }
+                     | function_call                                    { ; }
+                     | constant_expression                              { $$.node = $1.node; }
                      | expression OP_GREATER_THAN expression
                      | expression OP_GREATER_THAN_OR_EQUAL expression
                      | expression OP_LESS_THAN expression
@@ -226,7 +233,7 @@ expression           : '(' expression ')'
                      | '[' LITERAL_FLOAT ',' LITERAL_FLOAT ',' LITERAL_FLOAT ']'
                      ;
 
-constant_expression  : LITERAL_INT
+constant_expression  : LITERAL_INT                                                  { $$.node = new IntLiteralExpression($1.numberi); }
                      | LITERAL_INT_HEX
                      | LITERAL_FLOAT
                      | LITERAL_STRING

@@ -14,6 +14,9 @@ namespace KotorDotNET.Patching.Parsers.INI
     /// </summary>
     public class INIParser : LegacyINIReader
     {
-        
+        public INIParser(string iniText) : base(iniText)
+        {
+
+        }
     }
 }

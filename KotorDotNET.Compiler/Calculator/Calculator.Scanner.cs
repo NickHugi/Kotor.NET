@@ -2,16 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace KotorDotNET_Compiler.Calculator
+namespace KotorDotNET.Compiler.Calculator
 {
     internal partial class CalculatorScanner
     {
 
-        void GetNumber()
-        {
-            yylval.s = yytext;
-            yylval.n = int.Parse(yytext);
-        }
+        //void GetNumber()
+        //{
+        //    yylval.s = yytext;
+        //}
 
 		public override void yyerror(string format, params object[] args)
 		{

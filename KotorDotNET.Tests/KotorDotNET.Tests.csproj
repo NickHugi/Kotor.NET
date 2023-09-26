@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\KotorDotNET.Compiler\KotorDotNET.Compiler.csproj" />
     <ProjectReference Include="..\KotorDotNET\KotorDotNET.csproj" />
   </ItemGroup>
 

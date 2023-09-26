@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using KotorDotNET_Compiler.Calculator;
+using KotorDotNET.Compiler.Calculator;
 
 namespace KotorDotNET.Compiler
 {
