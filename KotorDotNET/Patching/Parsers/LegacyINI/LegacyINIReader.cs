@@ -2,6 +2,7 @@
 using IniParser.Parser;
 using KotorDotNET.Exceptions;
 using KotorDotNET.FileFormats.Kotor2DA;
+using KotorDotNET.FileFormats.KotorSSF;
 using KotorDotNET.FileFormats.KotorTLK;
 using KotorDotNET.Patching.Modifiers.For2DA;
 using KotorDotNET.Patching.Modifiers.For2DA.Targets;
@@ -35,7 +36,7 @@ namespace KotorDotNET.Patching.Parsers.LegacyINI
             var compileList = ini.Sections.SingleOrDefault(x => x.SectionName == "CompileListList");
             var ssfList = ini.Sections.SingleOrDefault(x => x.SectionName == "SSFList");
 
-            if (twodaList != null)
+            if (twodaList is not null)
             {
                 foreach (var pair in twodaList.Keys)
                 {
@@ -46,6 +47,20 @@ namespace KotorDotNET.Patching.Parsers.LegacyINI
                     modifyFile.Modifiers = new TwoDASectionParser(ini, twodaSection).Parse();
 
                     patcherData.TwoDAFiles.Add(modifyFile);
+                }
+            }
+
+            if (ssfList is not null)
+            {
+                foreach (var pair in ssfList.Keys)
+                {
+                    var filename = pair.KeyName;
+                    var ssfSection = ini[pair.Value];
+
+                    var modifyFile = new ModifyFile<SSF>();
+                    modifyFile.Modifiers = new SSFSectionParser(ini, ssfSection).Parse();
+
+                    patcherData.SSFFiles.Add(modifyFile);
                 }
             }
 

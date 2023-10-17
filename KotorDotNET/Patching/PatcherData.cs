@@ -15,7 +15,7 @@ namespace KotorDotNET.Patching
     {
         public List<ModifyFile<TwoDA>> TwoDAFiles { get; set; } = new();
         public ModifyFile<GFF> GFFFiles { get; set; } = new();
-        public ModifyFile<SSF> SSFFiles { get; set; } = new();
+        public List<ModifyFile<SSF>> SSFFiles { get; set; } = new();
         public ModifyFile<TLK> TLKFiles { get; set; } = new();
     }
 }

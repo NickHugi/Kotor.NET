@@ -12,6 +12,14 @@ namespace KotorDotNET.Patching.Modifiers.ForSSF.Values
     {
         public int StringRef { get; set; }
 
-        public void Apply(Memory memory, SSF ssf, CreatureSound sound) => throw new NotImplementedException();
+        public StringRefValue(int stringRef)
+        {
+            StringRef = stringRef;
+        }
+
+        public int GetValue(IMemory memory, SSF ssf, CreatureSound sound)
+        {
+            return StringRef;
+        }
     }
 }

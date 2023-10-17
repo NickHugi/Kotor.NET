@@ -18,5 +18,10 @@ namespace KotorDotNET.Extensions
         {
             return value.Truncate(32).PadRight(length, padding);
         }
+
+        public static bool EqualsIgnoreCase(this string value1, string value2)
+        {
+            return StringComparer.CurrentCultureIgnoreCase.Equals(value1, value2);
+        }
     }
 }
