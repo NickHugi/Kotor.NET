@@ -9,7 +9,7 @@ namespace KotorDotNET.Patching.Modifiers
 {
     public class Logger : ILogger
     {
-        ObservableCollection<Log> Logs { get; set; } = new();
+        public ObservableCollection<Log> Logs { get; set; } = new();
 
         public void Verbose(string message)
         {

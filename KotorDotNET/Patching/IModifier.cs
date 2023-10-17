@@ -8,6 +8,6 @@ namespace KotorDotNET.Patching
 {
     public interface IModifier<T>
     {
-        void Apply(T target, Memory memory, ILogger logger);
+        void Apply(T target, IMemory memory, ILogger logger);
     }
 }

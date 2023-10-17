@@ -47,7 +47,7 @@ namespace KotorDotNET.Tests.Tests.Patching.Modifiers.For2DA
             };
             var toStoreInMemory = new Dictionary<int, IValue>();
             var target = new RowIndexTarget(1);
-            var modifier = new EditRow2DAModifier(target, data, toStoreInMemory);
+            var modifier = new ChangeRow2DAModifier(target, data, toStoreInMemory);
 
             modifier.Apply(twoda, memory, logger);
 
@@ -73,7 +73,7 @@ namespace KotorDotNET.Tests.Tests.Patching.Modifiers.For2DA
                 [30] = new RowIndexValue(),
             };
             var target = new RowIndexTarget(1);
-            var modifier = new EditRow2DAModifier(target, data, toStoreInMemory);
+            var modifier = new ChangeRow2DAModifier(target, data, toStoreInMemory);
 
             modifier.Apply(twoda, memory, logger);
 

@@ -28,8 +28,7 @@ namespace KotorDotNET.Patching.Modifiers.For2DA
         public Dictionary<int, IValue> ToStoreInMemory { get; set; }
 
 
-        public AddColumn2DAModifier(string header, string defaultValue, Dictionary<ITarget, IValue> values,
-            Dictionary<int, IValue> toStoreInMemory)
+        public AddColumn2DAModifier(string header, string defaultValue, Dictionary<ITarget, IValue> values, Dictionary<int, IValue> toStoreInMemory)
         {
             ColumnHeader = header;
             DefaultValue = defaultValue;
@@ -37,13 +36,40 @@ namespace KotorDotNET.Patching.Modifiers.For2DA
             ToStoreInMemory = toStoreInMemory;
         }
 
-        public void Apply(TwoDA twoda, Memory memory, ILogger logger)
+        public void Apply(TwoDA twoda, IMemory memory, ILogger logger)
         {
-            twoda.AddColumn(ColumnHeader);
-
-            foreach (var row in twoda.Rows())
+            try
             {
-                row.SetCell(ColumnHeader, DefaultValue);
+                twoda.AddColumn(ColumnHeader);
+
+                foreach (var row in twoda.Rows())
+                {
+                    row.SetCell(ColumnHeader, DefaultValue);
+                }
+
+                foreach (var (key, value) in Values)
+                {
+                    var row = key.Search(twoda);
+                    var text = value.GetValue(memory, logger, twoda, row, ColumnHeader);
+
+                    row.SetCell(ColumnHeader, text);
+                }
+
+                foreach (var (tokenID, value) in ToStoreInMemory)
+                {
+                    var text = value.GetValue(memory, logger, twoda, null, ColumnHeader);
+
+                    if (memory.From2DAToken(tokenID) is not null)
+                    {
+                        logger.Warning($"Overriding existing 2DAMEMORY{tokenID} value.");
+                    }
+
+                    memory.Set2DAToken(tokenID, text);
+                }
+            }
+            catch (ApplyModifierException ex)
+            {
+                logger.Error(ex.Message);
             }
         }
     }
