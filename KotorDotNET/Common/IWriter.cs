@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace KotorDotNET.Common
 {
-    internal interface IWriter<T>
+    public interface IWriter<T>
     {
+        //byte[] Bytes();
+
         void Write(T value);
     }
 }

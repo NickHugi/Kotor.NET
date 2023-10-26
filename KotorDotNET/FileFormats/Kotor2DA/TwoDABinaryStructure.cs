@@ -1,4 +1,5 @@
 ﻿using KotorDotNET.Extensions;
+using KotorDotNET.Patching.Modifiers.For2DA.Values;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,10 @@ namespace KotorDotNET.FileFormats.Kotor2DA
     {
         public class FileRoot
         {
-            public FileHeader FileHeader { get; set; }
-            public List<string> Columns { get; set; } = new List<string>();
-            public List<string> RowLabels { get; set; } = new List<string>();
-            public List<int> CellOffsets { get; set; } = new List<int>();
-            public List<string> Cells { get; set; } = new List<string>();
+            public FileHeader FileHeader { get; set; } = new();
+            public List<string> ColumnHeaders { get; set; } = new();
+            public List<string> RowHeaders { get; set; } = new();
+            public List<string> CellValues { get; set; } = new();
 
             public FileRoot(BinaryReader reader)
             {
@@ -24,49 +24,116 @@ namespace KotorDotNET.FileFormats.Kotor2DA
                 while (reader.PeekChar() != '\0')
                 {
                     var header = reader.ReadTerminatedString('\t');
-                    Columns.Add(header);
+                    ColumnHeaders.Add(header);
                 }
 
-                reader.BaseStream.Position += 4;
+                var nullTerminator = reader.ReadString(1);
 
                 var rowCount = reader.ReadInt32();
-                var cellCount = rowCount * Columns.Count;
+                var cellCount = rowCount * ColumnHeaders.Count;
                 for (int i = 0; i < rowCount; i++)
                 {
                     var label = reader.ReadTerminatedString('\t');
-                    RowLabels.Add(label);
+                    RowHeaders.Add(label);
                 }
 
+                var uniqueCellOffsets = new List<int>();
                 for (int i = 0; i < cellCount; i++)
                 {
                     var cellOffset = reader.ReadUInt16();
-                    CellOffsets.Add(cellOffset);
+                    uniqueCellOffsets.Add(cellOffset);
                 }
 
                 var cellDataSize = reader.ReadUInt16();
                 var cellDataOffset = reader.BaseStream.Position;
 
-                for (int i = 0; i < cellCount; i++)
+                var uniqueCellValues = new Dictionary<int, string>();
+                while (reader.BaseStream.Position != reader.BaseStream.Length)
                 {
-                    var columnIndex = i % Columns.Count;
-                    var rowIndex = (int)Math.Floor(i / (decimal)Columns.Count);
+                    var offset = (int)(reader.BaseStream.Position - cellDataOffset);
+                    var value = reader.ReadTerminatedString('\0');
+                    uniqueCellValues.Add(offset, value);
+                }
 
-                    reader.BaseStream.Position = cellDataOffset + CellOffsets[i];
-                    var cellValue = reader.ReadTerminatedString('\0');
+                var columnCount = ColumnHeaders.Count;
+                for (int i = 0; i < rowCount * columnCount; i++)
+                {
+                    var offset = uniqueCellOffsets[i];
+                    CellValues.Add(uniqueCellValues[offset]);
+                }
+            }
+
+            public FileRoot()
+            {
+
+            }
+
+            public void Write(BinaryWriter writer)
+            {
+                FileHeader.Write(writer);
+
+                foreach (var columnHeader in ColumnHeaders)
+                {
+                    writer.Write(columnHeader, 0);
+                    writer.Write("\t", 0);
+                }
+
+                writer.Write("\0", 0);
+
+                writer.Write(RowHeaders.Count);
+                foreach (var rowHeader in RowHeaders)
+                {
+                    writer.Write(rowHeader, 0);
+                    writer.Write("\t", 0);
+                }
+
+                var uniqueCellValues = CellValues.ToHashSet();
+                var uniqueCellOffsets = new Dictionary<string, int>();
+                var uniqueCellOffset = 0;
+                foreach (var cellValue in uniqueCellValues)
+                {
+                    uniqueCellOffsets.Add(cellValue, uniqueCellOffset);
+                    uniqueCellOffset += cellValue.Length + 1;
+                }
+
+                foreach (var cellValue in CellValues)
+                {
+                    var offset = uniqueCellOffsets[cellValue];
+                    writer.Write((ushort)offset);
+                }
+
+                var cellDataSize = uniqueCellOffsets.Sum(x => x.Value);
+                writer.Write((ushort)cellDataSize);
+
+                foreach (var value in uniqueCellOffsets.Keys)
+                {
+                    writer.Write(value + "\0", 0);
                 }
             }
         }
 
         public class FileHeader
         {
-            public string FileType { get; set; }
-            public string FileVersion { get; set; }
+            public string FileType { get; set; } = "2DA ";
+            public string FileVersion { get; set; } = "v2.b";
 
             public FileHeader(BinaryReader reader)
             {
                 FileType = reader.ReadString(4);
                 FileVersion = reader.ReadString(4);
-                reader.BaseStream.Position += 4;
+                var linebreak = reader.ReadString(1);
+            }
+
+            public FileHeader()
+            {
+
+            }
+
+            public void Write(BinaryWriter writer)
+            {
+                writer.Write(FileType.PadRight(4).Truncate(4), 0);
+                writer.Write(FileVersion.PadRight(4).Truncate(4), 0);
+                writer.Write("\n", 0);
             }
         }
     }

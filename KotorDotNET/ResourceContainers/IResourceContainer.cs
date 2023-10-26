@@ -33,5 +33,7 @@ namespace KotorDotNET.ResourceContainers
         /// resource.</param>
         /// <returns></returns>
         public Resource? Get(ResRef resref, ResourceType resourceType, bool reload = false);
+
+        public IReadOnlyList<ResourceReference> All();
     }
 }

@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 namespace KotorDotNET.FileFormats.Kotor2DA
 {
     /// <summary>
-    /// Represents the table data structure of the 2DA file format.
+    /// Represents the table data structure of the 2DA file format used by
+    /// the KotOR game engine.
     /// </summary>
     public class TwoDA
     {
@@ -31,23 +32,23 @@ namespace KotorDotNET.FileFormats.Kotor2DA
         }
 
         /// <summary>
-        /// Returns the row at the given index.
+        /// Returns the row at the given index or null if it does not exist.
         /// </summary>
         /// <param name="rowIndex">The index of the target row.</param>
-        /// <returns>A row at the given index.</returns>
-        public TwoDARow Row(int rowIndex)
+        /// <returns>A row at the given index or null if it does not exist.</returns>
+        public TwoDARow? Row(int rowIndex)
         {
-            return Rows()[rowIndex];
+            return Rows().ElementAtOrDefault(rowIndex);
         }
 
         /// <summary>
-        /// Returns the row at with the given row header.
+        /// Returns the row at with the given row header or null if it could not be found.
         /// </summary>
         /// <param name="rowHeader">The header of the target row.</param>
-        /// <returns>A row with the given header.</returns>
-        public TwoDARow Row(string rowHeader)
+        /// <returns>A row with the given header or null if it could not be found.</returns>
+        public TwoDARow? Row(string rowHeader)
         {
-            return Rows().Single(x => x.Header == rowHeader);
+            return Rows().SingleOrDefault(x => x.Header == rowHeader);
         }
 
         /// <summary>
@@ -185,9 +186,9 @@ namespace KotorDotNET.FileFormats.Kotor2DA
         /// </summary>
         /// <param name="columnHeader">The header of the target column.</param>
         /// <returns>The value of a cell.</returns>
-        public string GetCell(string columnHeader)
+        public string? GetCell(string columnHeader)
         {
-            return _cells.ContainsKey(columnHeader) ? _cells[columnHeader] : "";
+            return _cells.ContainsKey(columnHeader) ? _cells[columnHeader] : null;
         }
 
         /// <summary>

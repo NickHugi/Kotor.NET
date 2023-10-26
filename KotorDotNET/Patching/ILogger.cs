@@ -8,12 +8,12 @@ namespace KotorDotNET.Patching
 {
     public interface ILogger
     {
-        void Verbose();
+        void Verbose(string message);
 
-        void Information();
+        void Information(string message);
         
-        void Warning();
+        void Warning(string message);
 
-        void Error();
+        void Error(string message);
     }
 }

@@ -9,5 +9,10 @@ namespace KotorDotNET.Common.Conversation
     public enum Language
     {
         ENGLISH = 0,
+        FRENCH = 1,
+        GERMAN = 2,
+        ITALIAN = 3,
+        SPANISH = 4,
+        POLISH = 5,
     }
 }

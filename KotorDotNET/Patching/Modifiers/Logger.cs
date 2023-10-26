@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,24 +9,26 @@ namespace KotorDotNET.Patching.Modifiers
 {
     public class Logger : ILogger
     {
-        public void Error()
+        public ObservableCollection<Log> Logs { get; set; } = new();
+
+        public void Verbose(string message)
         {
-            throw new NotImplementedException();
+            Logs.Add(new Log(LogLevel.Verbose, message));
         }
 
-        public void Information()
+        public void Information(string message)
         {
-            throw new NotImplementedException();
+            Logs.Add(new Log(LogLevel.Information, message));
         }
 
-        public void Verbose()
+        public void Warning(string message)
         {
-            throw new NotImplementedException();
+            Logs.Add(new Log(LogLevel.Warning, message));
         }
 
-        public void Warning()
+        public void Error(string message)
         {
-            throw new NotImplementedException();
+            Logs.Add(new Log(LogLevel.Error, message));
         }
     }
 }

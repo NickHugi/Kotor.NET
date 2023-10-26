@@ -26,7 +26,16 @@ namespace KotorDotNET.Patching.Modifiers.For2DA.Targets
 
         public TwoDARow Search(TwoDA twoda)
         {
-            return twoda.Rows().Single(x => x.GetCell(ColumnHeader) == CellValue);
+            var row = twoda.Rows().SingleOrDefault(x => x.GetCell(ColumnHeader) == CellValue);
+
+            if (row is not null)
+            {
+                return row;
+            }
+            else
+            {
+                throw new ApplyModifierException($"Could not find value {CellValue} at under column {ColumnHeader}.");
+            }
         }
     }
 }

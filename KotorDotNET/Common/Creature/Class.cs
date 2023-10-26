@@ -10,6 +10,6 @@ namespace KotorDotNET.Common.Creature
     {
         public int ClassID { get; set; }
         public int ClassLevel { get; set; }
-        public List<ForcePower> ForcePower { get; set; }
+        public List<ForcePower> ForcePowers { get; set; }
     }
 }
