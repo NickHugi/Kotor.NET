@@ -1,32 +1,27 @@
-﻿using KotorDotNET.Common.Data;
-using KotorDotNET.FileFormats.Kotor2DA;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using KotorDotNET.FileFormats.Kotor2DA;
+using KotorDotNET.FileFormats.KotorGFF;
+using KotorDotNET.ResourceContainers;
 
-namespace KotorDotNET.Patching
+namespace KotorDotNET.Patching;
+
+public class Patcher
 {
-    public class Patcher
+    public Patcher(IMemory memory, ILogger logger, PatcherData data)
     {
-        public IMemory Memory { get; set; }
-        public ILogger Logger { get; set; }
-        public PatcherData PatcherData { get; set; }
+        Memory = memory;
+        Logger = logger;
+        PatcherData = data;
+    }
 
-        public Patcher(IMemory memory, ILogger logger, PatcherData data)
-        {
-            Memory = memory;
-            Logger = logger;
-            PatcherData = data;
-        }
-        
-        /// <summary>
-        /// Execute the patcher data to the game files.
-        /// </summary>
-        public void Run()
-        {
-            
-        }
+    public IMemory Memory { get; set; }
+    public ILogger Logger { get; set; }
+    public PatcherData PatcherData { get; set; }
+
+    /// <summary>
+    ///     Execute the patcher data to the game files.
+    /// </summary>
+    public void Run()
+    {
+
     }
 }

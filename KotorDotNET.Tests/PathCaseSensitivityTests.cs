@@ -325,7 +325,7 @@ namespace KotorDotNET.Tests
 			const string whiteSpacePath = "   ";
 
 			// Act & Assert
-			_ = Assert.Throws<ArgumentException>( () => PathHelper.GetCaseSensitivePath( nullPath ) );
+			_ = Assert.Throws<ArgumentException>( () => PathHelper.GetCaseSensitivePath( nullPath! ) );
 			_ = Assert.Throws<ArgumentException>( () => PathHelper.GetCaseSensitivePath( emptyPath ) );
 			_ = Assert.Throws<ArgumentException>( () => PathHelper.GetCaseSensitivePath( whiteSpacePath ) );
 		}
