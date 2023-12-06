@@ -46,6 +46,7 @@ namespace KotorDotNET.FileFormats.KotorMDL
         public List<Node> Children { get; set; } = new();
         public List<Controller> Controllers { get; set; } = new();
         public Trimesh? Trimesh { get; set; }
+        public Light? Light { get; set; }
 
         public override string ToString() => Name;
     }
@@ -54,6 +55,7 @@ namespace KotorDotNET.FileFormats.KotorMDL
     {
         public uint ControllerType { get; set; }
         public List<ControllerRow> Rows { get; set; } = new();
+        public byte Bezier { get; set; }
     }
 
     public class ControllerRow
@@ -111,14 +113,14 @@ namespace KotorDotNET.FileFormats.KotorMDL
     public class Light
     {
         public float FlareRadius { get; set; } = 0;
-        public List<LightLensFlare> FlareLens { get; set; } = new();
-        public int LightPriority { get; set; } = 0;
-        public int AmbientOnly { get; set; } = 0;
-        public int DynamicType { get; set; } = 0;
-        public int AffectDynamic { get; set; } = 0;
-        public int Shadow { get; set; } = 0;
-        public int Flare { get; set; } = 0;
-        public int FadingLight { get; set; } = 0;
+        public List<LightLensFlare> LensFlare { get; set; } = new();
+        public uint LightPriority { get; set; } = 0;
+        public uint AmbientOnly { get; set; } = 0;
+        public uint DynamicType { get; set; } = 0;
+        public uint AffectDynamic { get; set; } = 0;
+        public uint Shadow { get; set; } = 0;
+        public uint Flare { get; set; } = 0;
+        public uint FadingLight { get; set; } = 0;
     }
 
     public class LightLensFlare

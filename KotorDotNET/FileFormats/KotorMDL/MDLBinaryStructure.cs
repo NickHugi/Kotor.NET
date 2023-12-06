@@ -426,11 +426,11 @@ namespace KotorDotNET.FileFormats.KotorMDL
             public static readonly ushort SaberFlag = 0x00000800;
 
             public static readonly uint VertexFlag = 0x00000001;
-            public static readonly uint NormalFlag = 0x00000002;
-            public static readonly uint UV1Flag = 0x00000004;
-            public static readonly uint UV2Flag = 0x00000008;
-            public static readonly uint UV3Flag = 0x00000010;
-            public static readonly uint UV4Flag = 0x00000020;
+            public static readonly uint UV1Flag = 0x00000002;
+            public static readonly uint UV2Flag = 0x00000004;
+            public static readonly uint UV3Flag = 0x00000008;
+            public static readonly uint UV4Flag = 0x00000010;
+            public static readonly uint NormalFlag = 0x00000020;
             public static readonly uint ColorsFlag = 0x00000040;
             public static readonly uint Tangent1Flag = 0x00000080;
             public static readonly uint Tangent2Flag = 0x00000100;
@@ -454,7 +454,13 @@ namespace KotorDotNET.FileFormats.KotorMDL
             public List<ControllerHeader> Controllers { get; set; } = new();
             public List<byte[]> ControllerData { get; set; } = new();
 
+            public List<float> FlareSizes { get; set; } = new();
+            public List<string> FlareTextures { get; set; } = new();
+            public List<float> FlarePositions { get; set; } = new();
+            public List<Common.Geometry.Color> FlareColorShifts { get; set; } = new();
+
             public List<FaceRoot> TrimeshFaces { get; set; } = new();
+            public List<Vector3> TrimeshVertices { get; set; } = new();
 
             public NodeRoot()
             {
@@ -472,6 +478,8 @@ namespace KotorDotNET.FileFormats.KotorMDL
                 if ((NodeHeader.NodeType & SkinFlag) != 0) SkinmeshHeader = new SkinmeshHeader(reader);
                 if ((NodeHeader.NodeType & DanglyFlag) != 0) DanglymeshHeader = new DanglymeshHeader(reader);
                 if ((NodeHeader.NodeType & SaberFlag) != 0) SabermeshHeader = new SabermeshHeader(reader);
+
+                
 
                 if (TrimeshHeader is not null)
                 {
@@ -518,8 +526,41 @@ namespace KotorDotNET.FileFormats.KotorMDL
                 if (DanglymeshHeader is not null) DanglymeshHeader.Write(writer);
                 if (SabermeshHeader is not null) SabermeshHeader.Write(writer);
 
+                if (LightHeader is not null)
+                {
+                    writer.BaseStream.Position = LightHeader.OffsetTosFlareSizeArray;
+                    foreach (var size in FlareSizes)
+                    {
+                        writer.Write(size);
+                    }
+
+                    writer.BaseStream.Position = LightHeader.OffsetToFlarePositionArray;
+                    foreach (var position in FlarePositions)
+                    {
+                        writer.Write(position);
+                    }
+
+                    writer.BaseStream.Position = LightHeader.OffsetToFlareColorShiftArray;
+                    foreach (var shift in FlareColorShifts)
+                    {
+                        writer.Write(shift);
+                    }
+
+                    writer.BaseStream.Position = LightHeader.OffsetToFlareTextureNameArray;
+                    foreach (var texture in FlareTextures)
+                    {
+                        writer.Write(texture.PadRight(12, '\0'), 0);
+                    }
+                }
+
                 if (TrimeshHeader is not null)
                 {
+                    writer.BaseStream.Position = TrimeshHeader.OffsetToVertexArray;
+                    foreach (var vertex in TrimeshVertices)
+                    {
+                        writer.Write(vertex);
+                    }
+
                     writer.BaseStream.Position = TrimeshHeader.OffsetToFaceArray;
                     foreach (var face in TrimeshFaces)
                     {
@@ -955,6 +996,8 @@ namespace KotorDotNET.FileFormats.KotorMDL
 
         public class LightHeader
         {
+            public static readonly int SIZE = 92;
+
             public Int32 OffsetToUnknownArray { get; set; }
             public Int32 UnknownArrayCount { get; set; }
             public Int32 UnknownArrayCount2 { get; set; }
@@ -971,9 +1014,10 @@ namespace KotorDotNET.FileFormats.KotorMDL
             public Int32 FlareTextureNameCount { get; set; }
             public Int32 FlareTextureNameCount2 { get; set; }
             public Single FlareRadius { get; set; }
-            public UInt32 FlarePriority { get; set; }
+            public UInt32 LightPriority { get; set; }
             public UInt32 AmbientOnly { get; set; }
             public UInt32 DynamicType { get; set; }
+            public UInt32 AffectDynamic { get; set; }
             public UInt32 Shadow { get; set; }
             public UInt32 Flare { get; set; }
             public UInt32 FadingLight { get; set; }
@@ -985,6 +1029,7 @@ namespace KotorDotNET.FileFormats.KotorMDL
 
             public LightHeader(BinaryReader reader)
             {
+                FlareRadius = reader.ReadSingle();
                 OffsetToUnknownArray = reader.ReadInt32();
                 UnknownArrayCount = reader.ReadInt32();
                 UnknownArrayCount2 = reader.ReadInt32();
@@ -1000,10 +1045,10 @@ namespace KotorDotNET.FileFormats.KotorMDL
                 OffsetToFlareTextureNameArray = reader.ReadInt32();
                 FlareTextureNameCount = reader.ReadInt32();
                 FlareTextureNameCount2 = reader.ReadInt32();
-                FlareRadius = reader.ReadSingle();
-                FlarePriority = reader.ReadUInt32();
+                LightPriority = reader.ReadUInt32();
                 AmbientOnly = reader.ReadUInt32();
                 DynamicType = reader.ReadUInt32();
+                AffectDynamic = reader.ReadUInt32();
                 Shadow = reader.ReadUInt32();
                 Flare = reader.ReadUInt32();
                 FadingLight = reader.ReadUInt32();
@@ -1011,6 +1056,7 @@ namespace KotorDotNET.FileFormats.KotorMDL
 
             public void Write(BinaryWriter writer)
             {
+                writer.Write(FlareRadius);
                 writer.Write(OffsetToUnknownArray);
                 writer.Write(UnknownArrayCount);
                 writer.Write(UnknownArrayCount2);
@@ -1026,10 +1072,10 @@ namespace KotorDotNET.FileFormats.KotorMDL
                 writer.Write(OffsetToFlareTextureNameArray);
                 writer.Write(FlareTextureNameCount);
                 writer.Write(FlareTextureNameCount2);
-                writer.Write(FlareRadius);
-                writer.Write(FlarePriority);
+                writer.Write(LightPriority);
                 writer.Write(AmbientOnly);
                 writer.Write(DynamicType);
+                writer.Write(AffectDynamic);
                 writer.Write(Shadow);
                 writer.Write(Flare);
                 writer.Write(FadingLight);

@@ -79,5 +79,16 @@ namespace KotorDotNET.Extensions
             writer.Write(value.Z);
             writer.Write(value.W);
         }
+
+        public static void Write(this BinaryWriter writer, Color value, ColorEncoding encoding = ColorEncoding.RGB_Floats)
+        {
+            if (encoding == ColorEncoding.RGB_Floats)
+            {
+                writer.Write(value.Red);
+                writer.Write(value.Green);
+                writer.Write(value.Blue);
+                writer.Write(value.Alpha);
+            }
+        }
     }
 }

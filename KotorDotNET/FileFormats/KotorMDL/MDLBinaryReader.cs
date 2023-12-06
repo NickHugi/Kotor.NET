@@ -81,6 +81,30 @@ namespace KotorDotNET.FileFormats.KotorMDL
 
             node.Name = _bin.Names[binaryNode.NodeHeader!.NodeNumber];
 
+            if (binaryNode.LightHeader is not null)
+            {
+                node.Light = new();
+
+                node.Light.FlareRadius = binaryNode.LightHeader.FlareRadius;
+                node.Light.AmbientOnly = binaryNode.LightHeader.AmbientOnly;
+                node.Light.DynamicType = binaryNode.LightHeader.DynamicType;
+                node.Light.AffectDynamic = binaryNode.LightHeader.AffectDynamic;
+                node.Light.Shadow = binaryNode.LightHeader.Shadow;
+                node.Light.Flare = binaryNode.LightHeader.Flare;
+                node.Light.LightPriority = binaryNode.LightHeader.LightPriority;
+
+                for (int i = 0; i < binaryNode.FlareSizes.Count; i++)
+                {
+                    var flare = new LightLensFlare();
+                    node.Light.LensFlare.Add(flare);
+
+                    flare.Size = binaryNode.FlareSizes[i];
+                    flare.Texture = binaryNode.FlareTextures[i];
+                    flare.Position = binaryNode.FlarePositions[i];
+                    flare.ColorShift = binaryNode.FlareColorShifts[i];
+                }
+            }
+
             if (binaryNode.TrimeshHeader is not null)
             {
                 node.Trimesh = new();
@@ -160,6 +184,7 @@ namespace KotorDotNET.FileFormats.KotorMDL
             {
                 var controller = new Controller();
                 controller.ControllerType = binController.ControllerType;
+                controller.Bezier = binController.Padding1;
                 for (int i = 0; i < binController.DataRowCount; i++)
                 {
                     var row = new ControllerRow();
@@ -170,6 +195,10 @@ namespace KotorDotNET.FileFormats.KotorMDL
                     if (controller.ControllerType == 20 && binController.ColumnCount == 2)
                     {
                         row.Data = binaryNode.ControllerData.GetRange(binController.FirstDataOffset, 1).ToList();
+                    }
+                    else if ((binController.ColumnCount & 0x10) != 0)
+                    {
+                        row.Data = binaryNode.ControllerData.GetRange(binController.FirstDataOffset, (binController.ColumnCount & 0x0F) * 3).ToList();
                     }
                     else
                     {

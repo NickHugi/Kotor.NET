@@ -109,7 +109,7 @@ namespace KotorDotNET.FileFormats.KotorMDL
             foreach (var animation in _mdl.Animations)
             {
                 _binaryMDL.AnimationOffsets.Add(animationOffset);
-                (var binaryAnimation, animationOffset) = BuildAnimation(animation, animationOffset);
+                (var binaryAnimation, animationOffset) = BuildAnimation(animation, animationOffset, _nodes.Count);
                 _binaryMDL.Animations.Add(binaryAnimation);
             }
 
@@ -126,7 +126,7 @@ namespace KotorDotNET.FileFormats.KotorMDL
         /// <param name="animation"></param>
         /// <param name="offset">Offset to the start of the animation data.</param>
         /// <returns>Offset to the end of the animation data.</returns>
-        private (AnimationRoot, int) BuildAnimation(Animation animation, int offset)
+        private (AnimationRoot, int) BuildAnimation(Animation animation, int offset, int totalNumberOfNodes)
         {
             var animationOffset = offset;
             var binaryAnimation = new AnimationRoot();
@@ -143,7 +143,7 @@ namespace KotorDotNET.FileFormats.KotorMDL
             }
 
             binaryAnimation.Header.GeometryHeader.Name = animation.Name;
-            binaryAnimation.Header.GeometryHeader.NodeCount = animation.Nodes().Count;
+            binaryAnimation.Header.GeometryHeader.NodeCount = totalNumberOfNodes;
             binaryAnimation.Header.GeometryHeader.RootNodeOffset = offset + AnimationHeader.SIZE;
             binaryAnimation.Header.GeometryHeader.GeometryType = 5;
             binaryAnimation.Header.AnimationLength = animation.AnimationLength;
@@ -197,7 +197,11 @@ namespace KotorDotNET.FileFormats.KotorMDL
                 type += NodeRoot.NodeFlag;
                 offset += NodeHeader.SIZE;
             }
-            //if (binaryNode.LightHeader is not null) type += NodeRoot.LightFlag;
+            if (node.Light is not null)
+            {
+                type += NodeRoot.LightFlag;
+                offset += LightHeader.SIZE;
+            }
             //if (binaryNode.EmitterHeader is not null) type += NodeRoot.EmitterFlag;
             //if (binaryNode.ReferenceHeader is not null) type += NodeRoot.ReferenceFlag;
             if (node.Trimesh is not null)
@@ -209,6 +213,10 @@ namespace KotorDotNET.FileFormats.KotorMDL
             //if (binaryNode.DanglymeshHeader is not null) type += NodeRoot.DanglyFlag;
             //if (binaryNode.SabermeshHeader is not null) type += NodeRoot.SaberFlag;
 
+            if (node.Light is not null)
+            {
+                (offset, binaryNode.LightHeader) = BuildLight(node, binaryNode, offset);
+            }
             if (node.Trimesh is not null)
             {
                 (offset, binaryNode.TrimeshHeader) = BuildTrimesh(node, binaryNode, offset);
@@ -248,8 +256,11 @@ namespace KotorDotNET.FileFormats.KotorMDL
             foreach (var controller in node.Controllers)
             {
                 var binaryController = new ControllerHeader();
+                binaryNode.Controllers.Add(binaryController);
+
                 binaryController.ControllerType = controller.ControllerType;
                 binaryController.DataRowCount = (short)controller.Rows.Count;
+                binaryController.Padding1 = controller.Bezier;
 
                 binaryController.FirstKeyOffset = dataOffset;
                 var timekeys = controller.Rows.Select(x => BitConverter.GetBytes(x.TimeKey)).ToList();
@@ -262,6 +273,8 @@ namespace KotorDotNET.FileFormats.KotorMDL
                 dataOffset += (short)rows.Count();
 
                 binaryController.ColumnCount = (byte)controller.Rows.First().Data.Count();
+                if (controller.Bezier == 1)
+                    binaryController.ColumnCount = (byte)((binaryController.ColumnCount / 3) | 0x10);
                 if (controller.ControllerType == 20 && binaryController.ColumnCount == 1)
                     binaryController.ColumnCount = 2;
             }
@@ -289,9 +302,18 @@ namespace KotorDotNET.FileFormats.KotorMDL
             trimeshHeader.UVSpeed = node.Trimesh.UVSpeed;
             trimeshHeader.UVJitterSpeed = node.Trimesh.UVJitter;
 
-            var vertices = node.Trimesh.Faces.Select(x => x.Vertex1).Concat(node.Trimesh.Faces.Select(x => x.Vertex2)).Concat(node.Trimesh.Faces.Select(x => x.Vertex3)).ToList();
+            var vertices = node.Trimesh.Faces.SelectMany(x => new[] { x.Vertex1, x.Vertex2, x.Vertex3 }).Distinct().ToList();
+
+            //node.Trimesh.Faces.Select(x => x.Vertex1).Concat(node.Trimesh.Faces.Select(x => x.Vertex2)).Concat(node.Trimesh.Faces.Select(x => x.Vertex3)).Distinct().ToList();
 
             trimeshHeader.VertexCount = (ushort)vertices.Count();
+            trimeshHeader.OffsetToVertexArray = offset;
+            foreach (var vertex in vertices)
+            {
+                binaryNode.TrimeshVertices.Add(vertex.Position ?? new());
+                offset += 12;
+            }
+
             trimeshHeader.MDXOffsetToData = (int)_writer.BaseStream.Position;
             var hasPositionMDX = vertices.Any(x => x.Position is not null);
             var hasNormalMDX = vertices.Any(x => x.Normal is not null);
@@ -372,6 +394,62 @@ namespace KotorDotNET.FileFormats.KotorMDL
             return (offset, trimeshHeader);
         }
 
+        private (int, LightHeader) BuildLight(Node node, NodeRoot binaryNode, int offset)
+        {
+            var lightHeader = binaryNode.LightHeader = new LightHeader();
+
+            lightHeader.FlareRadius = node.Light.FlareRadius;
+
+            lightHeader.OffsetToUnknownArray = offset;
+            lightHeader.UnknownArrayCount = 0;
+            lightHeader.UnknownArrayCount2 = 0;
+
+            lightHeader.OffsetTosFlareSizeArray = offset;
+            lightHeader.FlareSizeArrayCount = node.Light.LensFlare.Count;
+            lightHeader.FlareSizeArrayCount2 = lightHeader.FlareSizeArrayCount;
+            foreach (var flare in node.Light.LensFlare)
+            {
+                binaryNode.FlareSizes.Add(flare.Size);
+                offset += 4;
+            }
+
+            lightHeader.OffsetToFlarePositionArray = offset;
+            lightHeader.FlarePositionArrayCount = node.Light.LensFlare.Count;
+            lightHeader.FlarePositionArrayCount2 = lightHeader.FlarePositionArrayCount;
+            foreach (var flare in node.Light.LensFlare)
+            {
+                binaryNode.FlarePositions.Add(flare.Position);
+                offset += 12;
+            }
+
+            lightHeader.OffsetToFlareColorShiftArray = offset;
+            lightHeader.FlareColorShiftArrayCount = node.Light.LensFlare.Count;
+            lightHeader.FlareColorShiftArrayCount2 = lightHeader.FlareColorShiftArrayCount;
+            foreach (var flare in node.Light.LensFlare)
+            {
+                binaryNode.FlareColorShifts.Add(flare.ColorShift);
+                offset += 4;
+            }
+
+            lightHeader.OffsetToFlareTextureNameArray = offset;
+            lightHeader.FlareTextureNameCount = node.Light.LensFlare.Count;
+            lightHeader.FlareTextureNameCount2 = lightHeader.FlareTextureNameCount;
+            foreach (var flare in node.Light.LensFlare)
+            {
+                binaryNode.FlareTextures.Add(flare.Texture);
+                offset += 12;
+            }
+
+            lightHeader.LightPriority = node.Light.LightPriority;
+            lightHeader.AmbientOnly = node.Light.AmbientOnly;
+            lightHeader.DynamicType = node.Light.DynamicType;
+            lightHeader.AffectDynamic = node.Light.AffectDynamic;
+            lightHeader.Shadow = node.Light.Shadow;
+            lightHeader.Flare = node.Light.Flare;
+            lightHeader.FadingLight = node.Light.FadingLight;
+
+            return (offset, lightHeader);
+        }
 
 
 
