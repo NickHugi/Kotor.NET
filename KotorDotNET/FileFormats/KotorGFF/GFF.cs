@@ -1,10 +1,11 @@
 ﻿using KotorDotNET.Common.Conversation;
 using KotorDotNET.Common.Data;
+using KotorDotNET.Common.Geometry;
+using KotorDotNET.Extensions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -79,6 +80,17 @@ namespace KotorDotNET.FileFormats.KotorGFF
             Fields = new List<GFFField>();
         }
 
+        public GFFStruct(uint id)
+        {
+            ID = id;
+            Fields = new List<GFFField>();
+        }
+
+        public GFFField Get(string label)
+        {
+            return Fields.Single(x => x.Label == label);
+        }
+
         public T Get<T>(string label, T fallback)
         {
             var field = Fields.SingleOrDefault(x => x.Label == label);
@@ -98,20 +110,25 @@ namespace KotorDotNET.FileFormats.KotorGFF
             Fields.RemoveAll(x => x.Label == label);
             Fields.Add(new GFFField(label, value));
         }
+
+        public bool Has(string label)
+        {
+            return (Fields.FirstOrDefault(x => x.Label == label) != null) ? true : false;
+        }
     }
 
     public class GFFField
     {
         public static readonly IReadOnlyDictionary<GFFFieldType, Type> TYPE_MAPPING = new Dictionary<GFFFieldType, Type>()
         {
-            [GFFFieldType.UInt8] = typeof(byte),
-            [GFFFieldType.Int8] = typeof(sbyte),
-            [GFFFieldType.UInt16] = typeof(ushort),
-            [GFFFieldType.Int16] = typeof(short),
-            [GFFFieldType.UInt32] = typeof(uint),
-            [GFFFieldType.Int32] = typeof(int),
-            [GFFFieldType.UInt64] = typeof(ulong),
-            [GFFFieldType.Int64] = typeof(long),
+            [GFFFieldType.UInt8] = typeof(Byte),
+            [GFFFieldType.Int8] = typeof(SByte),
+            [GFFFieldType.UInt16] = typeof(UInt16),
+            [GFFFieldType.Int16] = typeof(Int16),
+            [GFFFieldType.UInt32] = typeof(UInt32),
+            [GFFFieldType.Int32] = typeof(Int32),
+            [GFFFieldType.UInt64] = typeof(UInt64),
+            [GFFFieldType.Int64] = typeof(Int64),
             [GFFFieldType.Single] = typeof(Single),
             [GFFFieldType.Double] = typeof(Double),
             [GFFFieldType.String] = typeof(String),
@@ -135,7 +152,7 @@ namespace KotorDotNET.FileFormats.KotorGFF
                 _value = value;
             }
         }
-        public GFFFieldType Type { get => TYPE_MAPPING.FirstOrDefault(x => x.Value == _value.GetType()).Key; }
+        public GFFFieldType Type { get => TYPE_MAPPING.FirstOrDefault(x => x.Value == Value.GetType()).Key; }
 
         public GFFField(string label, object value)
         {
@@ -222,5 +239,69 @@ namespace KotorDotNET.FileFormats.KotorGFF
         List,
         Vector4,
         Vector3,
+    }
+
+    public class GFFNavigator
+    {
+        private object _position;
+
+        public GFFNavigator(GFF gff)
+        {
+            _position = gff.Root;
+        }
+
+        public GFFNavigator(GFFStruct gffStruct)
+        {
+            _position = gffStruct;
+        }
+
+        public GFFNavigator(GFFList gffList)
+        {
+            _position = gffList;
+        }
+
+        public object Resolve()
+        {
+            return _position;
+        }
+
+        public void NavigateTo(string fieldNameOrListIndex)
+        {
+            if (_position is GFFStruct gffStruct)
+            {
+                if (gffStruct.Has(fieldNameOrListIndex))
+                {
+                    _position = gffStruct.Get<object>(fieldNameOrListIndex)!;
+                }
+                else
+                {
+                    throw new ArgumentException("Trying to navigate to a field that does not exist.");
+                }
+            }
+            else if (_position is GFFList gffList)
+            {
+                if (fieldNameOrListIndex.IsInt32())
+                {
+                    var index = Convert.ToInt32(fieldNameOrListIndex);
+
+                    if (gffList.Count <= index)
+                    {
+                        throw new ArgumentException("The index specified was greater than the number of structs in the list.");
+                    }
+                    else
+                    {
+                        _position = gffList.Get(index);
+                    }
+                }
+                else
+                {
+                    throw new ArgumentException("Trying to navigate through a list, but a non-integer value was given as an index.");
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Cannot navigate any further.");
+            }
+        }
     }
 }

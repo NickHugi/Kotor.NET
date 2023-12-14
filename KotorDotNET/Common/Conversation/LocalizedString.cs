@@ -25,6 +25,21 @@ namespace KotorDotNET.Common.Conversation
         /// </summary>
         public List<LocalizedSubstring> Substrings { get; set; } = new();
 
+        public LocalizedString()
+        {
+            StringRef = -1;
+        }
+
+        public LocalizedString(int stringref)
+        {
+            StringRef = stringref;
+        }
+
+        public LocalizedString(string englishSubstring)
+        {
+            Set(Language.ENGLISH, Gender.MALE, englishSubstring);
+        }
+
         /// <summary>
         /// Returns a substring with the specified language and gender. If it does
         /// not exist then null is returned instead.
@@ -47,6 +62,18 @@ namespace KotorDotNET.Common.Conversation
         /// <param name="text"\>The text of the new substring.</param>
         public void Set(Language language, Gender gender, string text)
         {
+            var substring = new LocalizedSubstring(language, gender, text);
+
+            // Avoid duplicate substrings of the same language/gender
+            Substrings = Substrings.Where(x => x.Language != language && x.Gender != gender).ToList();
+
+            Substrings.Add(substring);
+        }
+
+        public void Set(int substringID, string text)
+        {
+            var language = (Language)(substringID / 2);
+            var gender = (Gender)(substringID % 2);
             var substring = new LocalizedSubstring(language, gender, text);
 
             // Avoid duplicate substrings of the same language/gender

@@ -25,9 +25,10 @@ namespace KotorDotNET.Tests.Tests.FileFormats.KotorMDL
             //binaryWriter.Write((byte)1);
             //var bytes = memoryStream.ToArray();
 
-            var data = File.ReadAllBytes(@"C:\Users\hugin\Desktop\ext\c_dewback.mdl");
-            var mdxData = File.ReadAllBytes(@"C:\Users\hugin\Desktop\ext\c_dewback.mdx");
-            //var data = File.ReadAllBytes("./Files/test.mdl");
+            var path = @"C:\Users\hugin\Desktop\ext\p_t3m3";
+
+            var data = File.ReadAllBytes($"{path}.mdl");
+            var mdxData = File.ReadAllBytes($"{path}.mdx");
             var mdl = AssertRead(data, mdxData);
 
             // Now that it has been confirmed that files are read correctly, the
@@ -41,6 +42,7 @@ namespace KotorDotNET.Tests.Tests.FileFormats.KotorMDL
 
         public MDL AssertRead(byte[] data, byte[] mdxData)
         {
+
             var reader = new MDLBinaryReader(data, mdxData);
             var mdl = reader.Read();
 
@@ -53,9 +55,11 @@ namespace KotorDotNET.Tests.Tests.FileFormats.KotorMDL
                 mdxData = memoryStream.ToArray();
             }
 
+            var path = @"C:\Program Files (x86)\Steam\steamapps\common\swkotor\Override\p_t3m3";
+            File.WriteAllBytes($"{path}.mdl", data);
+            File.WriteAllBytes($"{path}.mdx", mdxData);
             reader = new MDLBinaryReader(data, mdxData);
             mdl = reader.Read();
-            File.WriteAllBytes(@"C:\Users\hugin\Desktop\ext\dooback.mdl", data);
 
             return mdl;
         }

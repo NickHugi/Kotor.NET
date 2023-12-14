@@ -2,6 +2,7 @@
 using IniParser.Parser;
 using KotorDotNET.Exceptions;
 using KotorDotNET.FileFormats.Kotor2DA;
+using KotorDotNET.FileFormats.KotorGFF;
 using KotorDotNET.FileFormats.KotorSSF;
 using KotorDotNET.FileFormats.KotorTLK;
 using KotorDotNET.Patching.Modifiers.For2DA;
@@ -61,6 +62,20 @@ namespace KotorDotNET.Patching.Parsers.LegacyINI
                     modifyFile.Modifiers = new SSFSectionParser(ini, ssfSection).Parse();
 
                     patcherData.SSFFiles.Add(modifyFile);
+                }
+            }
+
+            if (gffList is not null)
+            {
+                foreach (var pair in gffList.Keys)
+                {
+                    var filename = pair.KeyName;
+                    var gffSection = ini[pair.Value];
+
+                    var modifyFile = new ModifyFile<GFF>();
+                    modifyFile.Modifiers = new GFFSectionParser(ini, gffSection).Parse();
+
+                    patcherData.GFFFiles.Add(modifyFile);
                 }
             }
 
