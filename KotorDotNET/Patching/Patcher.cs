@@ -10,11 +10,11 @@ namespace KotorDotNET.Patching
 {
     public class Patcher
     {
-        public Memory Memory { get; set; }
+        public IMemory Memory { get; set; }
         public ILogger Logger { get; set; }
         public PatcherData PatcherData { get; set; }
 
-        public Patcher(Memory memory, ILogger logger, PatcherData data)
+        public Patcher(IMemory memory, ILogger logger, PatcherData data)
         {
             Memory = memory;
             Logger = logger;

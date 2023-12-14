@@ -42,9 +42,9 @@ namespace KotorDotNET.Patching.Parsers.LegacyINI
                     var modifier = ParseAddRowSection(modifierPair);
                     modifiers.Add(modifier);
                 }
-                else if (twodaSection.KeyName.StartsWith("ChangeRow"))
+                else if (twodaSection.KeyName.StartsWith("CopyRow"))
                 {
-                    var modifier = ParseEditRowSection(modifierPair);
+                    var modifier = ParseCopyRowSection(modifierPair);
                     modifiers.Add(modifier);
                 }
                 else if (twodaSection.KeyName.StartsWith("AddColumn"))
@@ -61,7 +61,7 @@ namespace KotorDotNET.Patching.Parsers.LegacyINI
             return modifiers;
         }
 
-        protected EditRow2DAModifier ParseEditRowSection(KeyDataCollection section)
+        protected ChangeRow2DAModifier ParseEditRowSection(KeyDataCollection section)
         {
             ITarget target = TakeTarget(section);
             Dictionary<int, IValue> toStoreInMemory = TakeToStoreInMemory(section);
@@ -107,7 +107,7 @@ namespace KotorDotNET.Patching.Parsers.LegacyINI
         {
             ITarget target = TakeTarget(section);
             string? exclusiveColumn = TakeExclusiveColumn(section);
-            IValue rowLabel = TakeRowLabel(section, "RowLabel");
+            IValue rowLabel = TakeRowLabel(section, "NewRowLabel");
             Dictionary<int, IValue> toStoreInMemory = TakeToStoreInMemory(section);
             Dictionary<string, IValue> data = TakeValues(section);
             return new(target, exclusiveColumn, rowLabel, data, toStoreInMemory);
@@ -193,7 +193,7 @@ namespace KotorDotNET.Patching.Parsers.LegacyINI
                 }
             }
 
-            AddColumn2DAModifier modifier = new(columnHeader, defaultValue, null, null);
+            AddColumn2DAModifier modifier = new(columnHeader, defaultValue, values, toStore);
             return modifier;
         }
 
@@ -230,6 +230,18 @@ namespace KotorDotNET.Patching.Parsers.LegacyINI
                 {
                     return new ConstantValue(text);
                 }
+            }
+            else if (text.StartsWith("high()"))
+            {
+                return new HighestValue();
+            }
+            else if (text.StartsWith("RowIndex"))
+            {
+                return new RowIndexValue();
+            }
+            else if (text.StartsWith("RowLabel"))
+            {
+                return new RowHeaderValue();
             }
             else if (columnInsteadOfConstant)
             {
@@ -285,13 +297,15 @@ namespace KotorDotNET.Patching.Parsers.LegacyINI
             }
             else if (section.ContainsKey("RowLabel"))
             {
+                var rowHeader = section["RowLabel"];
                 section.RemoveKey("RowLabel");
-                return new RowHeaderTarget(section["RowLabel"]);
+                return new RowHeaderTarget(rowHeader);
             }
             else if (section.ContainsKey("LabelIndex"))
             {
+                var labelIndex = section["LabelIndex"];
                 section.RemoveKey("LabelIndex");
-                return new ColumnTarget("label", section["LabelIndex"]);
+                return new ColumnTarget("label", labelIndex);
             }
             else
             {

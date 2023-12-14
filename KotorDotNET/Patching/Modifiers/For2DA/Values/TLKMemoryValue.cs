@@ -1,4 +1,5 @@
 ﻿using KotorDotNET.FileFormats.Kotor2DA;
+using KotorDotNET.Patching.Modifiers.ForSSF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +23,18 @@ namespace KotorDotNET.Patching.Modifiers.For2DA.Values
             TokenID = tokenID;
         }
 
-        public string GetValue(Memory memory, TwoDA twoda, TwoDARow? row, string? columnHeader)
+        public string GetValue(IMemory memory, ILogger logger, TwoDA twoda, TwoDARow? row, string? columnHeader)
         {
-            return memory.FromTLKToken(TokenID).ToString();
+            var value = memory.FromTLKToken(TokenID);
+
+            if (value is not null)
+            {
+                return value.ToString()!;
+            }
+            else
+            {
+                throw new ApplyModifierException($"TLKMemory token {TokenID} does not exist.");
+            }
         }
     }
 }

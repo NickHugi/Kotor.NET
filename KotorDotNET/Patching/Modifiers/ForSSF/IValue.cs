@@ -10,6 +10,6 @@ namespace KotorDotNET.Patching.Modifiers.ForSSF
 {
     public interface IValue
     {
-        public void Apply(Memory memory, SSF ssf, CreatureSound sound);
+        public int GetValue(IMemory memory, SSF ssf, CreatureSound sound);
     }
 }

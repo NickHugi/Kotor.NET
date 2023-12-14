@@ -11,17 +11,25 @@ namespace KotorDotNET.Patching.Modifiers.ForSSF
     public class EditEntrySSFModifier : IModifier<SSF>
     {
         public CreatureSound CreatureSound { get; set; }
-        public int StringRef { get; set; }
+        public IValue StringRef { get; set; }
 
-        public EditEntrySSFModifier(CreatureSound creatureSound, int stringRef)
+        public EditEntrySSFModifier(CreatureSound creatureSound, IValue value)
         {
             CreatureSound = creatureSound;
-            StringRef = stringRef;
+            StringRef = value;
         }
 
-        public void Apply(SSF target, Memory memory, ILogger logger)
+        public void Apply(SSF target, IMemory memory, ILogger logger)
         {
-            target.Set(CreatureSound, StringRef);
+            try
+            {
+                var stringRef = StringRef.GetValue(memory, target, CreatureSound);
+                target.Set(CreatureSound, stringRef);
+            }
+            catch (ApplyModifierException ex)
+            {
+                logger.Warning(ex.Message);
+            }
         }
     }
 }

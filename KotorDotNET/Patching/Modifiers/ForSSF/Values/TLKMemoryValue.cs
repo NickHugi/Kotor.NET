@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using KotorDotNET.Common.Creature;
 using KotorDotNET.FileFormats.KotorSSF;
+using KotorDotNET.Patching.Modifiers.For2DA.Values;
 
 namespace KotorDotNET.Patching.Modifiers.ForSSF.Values
 {
@@ -17,10 +18,18 @@ namespace KotorDotNET.Patching.Modifiers.ForSSF.Values
             TokenID = tokenID;
         }
 
-        public void Apply(Memory memory, SSF ssf, CreatureSound sound)
+        public int GetValue(IMemory memory, SSF ssf, CreatureSound sound)
         {
-            var stringref = memory.FromTLKToken(TokenID);
-            ssf.Set(sound, stringref);
+            var value = memory.FromTLKToken(TokenID);
+
+            if (value is not null)
+            {
+                return value.Value;
+            }
+            else
+            {
+                throw new ApplyModifierException($"TLKMemory token {TokenID} does not exist.");
+            }
         }
     }
 }

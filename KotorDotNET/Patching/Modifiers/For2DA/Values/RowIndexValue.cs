@@ -12,7 +12,7 @@ namespace KotorDotNET.Patching.Modifiers.For2DA.Values
     /// </summary>
     public class RowIndexValue : IValue
     {
-        public string GetValue(Memory memory, TwoDA twoda, TwoDARow? row, string? columnHeader)
+        public string GetValue(IMemory memory, ILogger logger, TwoDA twoda, TwoDARow? row, string? columnHeader)
         {
             if (row == null)
                 throw new ArgumentException("RowIndexValue.GetValue called in an illegal context");

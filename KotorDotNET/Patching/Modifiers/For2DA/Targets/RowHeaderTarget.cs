@@ -24,7 +24,16 @@ namespace KotorDotNET.Patching.Modifiers.For2DA.Targets
 
         public TwoDARow Search(TwoDA twoda)
         {
-            return twoda.Row(RowHeader);
+            var row = twoda.Row(RowHeader);
+
+            if (row is not null)
+            {
+                return row;
+            }
+            else
+            {
+                throw new ApplyModifierException($"Could not find row with header {RowHeader}.");
+            }
         }
     }
 }

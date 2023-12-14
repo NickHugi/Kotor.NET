@@ -1,4 +1,5 @@
 ﻿using KotorDotNET.FileFormats.Kotor2DA;
+using KotorDotNET.Patching.Modifiers.For2DA.Targets;
 using KotorDotNET.Patching.Modifiers.For2DA.Values;
 using System;
 using System.Collections.Generic;
@@ -41,58 +42,84 @@ namespace KotorDotNET.Patching.Modifiers.For2DA
             ToStoreInMemory = toStore;
         }
 
-        public void Apply(TwoDA twoda, Memory memory, ILogger logger)
+        public void Apply(TwoDA twoda, IMemory memory, ILogger logger)
         {
-            TwoDARow row;
-            string RowLabelIfNew = twoda.Rows().Count.ToString();
+            try
+            {
+                TwoDARow row;
+                string RowLabelIfNew = twoda.Rows().Count.ToString();
+                bool isNew = false;
 
-            if (ExclusiveColumn == null)
-            {
-                row = twoda.AddRow(RowLabelIfNew);
-            }
-            else
-            {
-                if (twoda._headers.Contains(ExclusiveColumn) && Data.Keys.Contains(ExclusiveColumn))
+                if (ExclusiveColumn == null)
                 {
-                    var cells = twoda.GetCellsUnderColumn(ExclusiveColumn).ToList();
-                    var exclusiveValue = Data[ExclusiveColumn].GetValue(memory, twoda, null, null);
-
-                    if (cells.Contains(exclusiveValue))
+                    row = twoda.AddRow(RowLabelIfNew);
+                    isNew = true;
+                }
+                else
+                {
+                    if (twoda._headers.Contains(ExclusiveColumn) && Data.Keys.Contains(ExclusiveColumn))
                     {
-                        row = twoda.Rows()[cells.IndexOf(exclusiveValue)];
+                        var cells = twoda.GetCellsUnderColumn(ExclusiveColumn).ToList();
+                        var exclusiveValue = Data[ExclusiveColumn].GetValue(memory, logger, twoda, null, null);
+
+                        if (cells.Contains(exclusiveValue))
+                        {
+                            row = twoda.Rows()[cells.IndexOf(exclusiveValue)];
+                        }
+                        else
+                        {
+                            row = twoda.AddRow(RowLabelIfNew);
+                            isNew = true;
+                        }
                     }
                     else
                     {
                         row = twoda.AddRow(RowLabelIfNew);
+                        isNew = true;
                     }
                 }
-                else
+
+                if (RowHeader != null)
                 {
-                    row = twoda.AddRow(RowLabelIfNew);
+                    row.Header = RowHeader.GetValue(memory, logger, twoda, row, null);
+                }
+
+                if (isNew)
+                {
+                    foreach (var columnHeader in twoda.ColumnHeaders())
+                    {
+                        row.SetCell(columnHeader, "");
+                    }
+                }
+
+                foreach (var pair in Data)
+                {
+                    var columnHeader = pair.Key;
+                    var cellValue = pair.Value;
+
+                    if (twoda.ColumnHeaders().Contains(columnHeader))
+                    {
+                        var value = cellValue.GetValue(memory, logger, twoda, row, columnHeader);
+                        row.SetCell(columnHeader, value);
+                    }
+                }
+
+                foreach (var toStore in ToStoreInMemory)
+                {
+                    var tokenID = toStore.Key;
+
+                    if (memory.From2DAToken(tokenID) is not null)
+                    {
+                        logger.Warning($"Overriding existing 2DAMEMORY{tokenID} value.");
+                    }
+
+                    var value = toStore.Value.GetValue(memory, logger, twoda, row, null);
+                    memory.Set2DAToken(tokenID, value);
                 }
             }
-
-            if (RowHeader != null)
+            catch (ApplyModifierException ex)
             {
-                row.Header = RowHeader.GetValue(memory, twoda, row, null);
-            }
-
-            foreach (var pair in Data)
-            {
-                var columnHeader = pair.Key;
-                var cellValue = pair.Value;
-
-                if (twoda.ColumnHeaders().Contains(columnHeader))
-                {
-                    var value = cellValue.GetValue(memory, twoda, row, columnHeader);
-                    row.SetCell(columnHeader, value);
-                }
-            }
-
-            foreach (var toStore in ToStoreInMemory)
-            {
-                var value = toStore.Value.GetValue(memory, twoda, row, null);
-                memory.Set2DAToken(toStore.Key, value);
+                logger.Error(ex.Message);
             }
         }
     }

@@ -12,7 +12,7 @@ namespace KotorDotNET.Patching.Modifiers.For2DA.Values
     /// </summary>
     public class HighestValue : IValue
     {
-        public string GetValue(Memory memory, TwoDA twoda, TwoDARow? row, string? columnHeader)
+        public string GetValue(IMemory memory, ILogger logger, TwoDA twoda, TwoDARow? row, string? columnHeader)
         {
             if (columnHeader == null)
                 throw new ArgumentException("HighestValue.GetValue called in an illegal context");
