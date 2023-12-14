@@ -1,4 +1,4 @@
-%using KotorDotNET.Compilation;
+%using KotorDotNET.Compiler.Compilation;
 
 %namespace KotorDotNET.Compiler.Calculator
 %partial
@@ -7,8 +7,7 @@
 %tokentype Token
 
 %union { 
-       public List<ASTNode> nodes;
-       public ASTNode node;
+       public object node;
        public string text;
        public float numberf;
        public int numberi;
@@ -33,12 +32,12 @@
 
 %%
 
-compilation_unit     : declarations                                         { $$.node = new CompilationUnit($1.nodes); }
+compilation_unit     : declarations                                         { $$.node = new CompilationUnit((List<ASTNode>)$1.node); }
                      |                                                      { $$.node = new CompilationUnit(); }
                      ;
 
-declarations         : declarations declaration                             { $$.nodes.Add($1.node); }
-                     | declaration                                          { $$.nodes = new List<ASTNode>() { $1.node }; }
+declarations         : declarations declaration                             { $$.node = $1.node; var node = (ASTNode)$1.node; ((List<ASTNode>)$$.node).Add(node); }
+                     | declaration                                          { $$.node = new List<ASTNode>() { (ASTNode)$1.node }; }
                      ;
 
 declaration          : global_variable_declaration                          { $$.node = $1.node; }
@@ -53,7 +52,7 @@ declaration          : global_variable_declaration                          { $$
 global_variable_declaration        : data_type IDENTIFIER ';'                   { $$.node = new GlobalVariableDeclaration($1.datatype, $2.text); }
                                    ;
 
-global_variable_initialization     : data_type IDENTIFIER '=' expression ';'    { $$.node = new GlobalVariableInitialization($1.datatype, $2.text, (IExpression)$4.node); }
+global_variable_initialization     : data_type IDENTIFIER '=' expression ';'    { ; }
                                    ;
 
               
@@ -65,16 +64,16 @@ function_definition         : data_type IDENTIFIER '(' function_definition_param
                             ;
 
 
-function_forward_declaration : data_type IDENTIFIER '(' function_definition_params ')' ';'      { $$.node = new FunctionForwardDeclaration($1.datatype, $2.text, $4.nodes.OfType<FunctionParameter>().ToList()); }
+function_forward_declaration : data_type IDENTIFIER '(' function_definition_params ')' ';'      { ; }
                              ;
 
-function_definition_params  : function_definition_params ',' function_definition_param          { $$.nodes = $1.nodes; $$.nodes.Add($3.node); }
-                            | function_definition_param                                         { $$.nodes = new List<ASTNode>() { $1.node }; }
-                            |                                                                   { $$.nodes = new List<ASTNode>(); }
+function_definition_params  : function_definition_params ',' function_definition_param          { ; }
+                            | function_definition_param                                         { ; }
+                            |                                                                   { ; }
                             ;
 
-function_definition_param   : data_type IDENTIFIER                                              { $$.node = new FunctionParameter($1.datatype, $2.text, null); }
-                            | data_type IDENTIFIER '=' expression                               { $$.node = new FunctionParameter($1.datatype, $2.text, (IExpression)$4.node); }
+function_definition_param   : data_type IDENTIFIER                                              { ; }
+                            | data_type IDENTIFIER '=' expression                               { ; }
                             ;
 
 
@@ -109,8 +108,6 @@ statement            : ';'
                      | continue_statement
                      | scoped_block
                      | expression ';'
-                     | FLOW_RETURN ';'
-                     | FLOW_RETURN expression ';'
                      ;
 
 declaration_statement : data_type variable_declarators ';'
@@ -204,7 +201,7 @@ expression           : '(' expression ')'                               { ; }
                      | assignment                                       { ; }
                      | IDENTIFIER                                       { ; }
                      | function_call                                    { ; }
-                     | constant_expression                              { $$.node = $1.node; }
+                     | constant_expression                              { ; }
                      | expression OP_GREATER_THAN expression
                      | expression OP_GREATER_THAN_OR_EQUAL expression
                      | expression OP_LESS_THAN expression
@@ -231,6 +228,7 @@ expression           : '(' expression ')'                               { ; }
                      | OP_DECREMENT field_access
                      | field_access OP_DECREMENT
                      | '[' LITERAL_FLOAT ',' LITERAL_FLOAT ',' LITERAL_FLOAT ']'
+                     | field_access                                                 
                      ;
 
 constant_expression  : LITERAL_INT                                                  { $$.node = new IntLiteralExpression($1.numberi); }
@@ -258,9 +256,9 @@ data_type            : TYPE_INT                                              { ;
                      | TYPE_STRUCT IDENTIFIER                                { ; }
                      ;
 
-field_access         : IDENTIFIER
-                     | IDENTIFIER '.' IDENTIFIER
-                     | field_access '.' IDENTIFIER
+field_access         : IDENTIFIER                                               { $$.node = new FieldAccess($1.text); }
+                     | IDENTIFIER '.' IDENTIFIER                                { $$.node = new FieldAccess($1.text, $3.text); }
+                     | field_access '.' IDENTIFIER                              { $$.node = new FieldAccess((FieldAccess)$1.node, $3.text) }
                      ;
 
 %%

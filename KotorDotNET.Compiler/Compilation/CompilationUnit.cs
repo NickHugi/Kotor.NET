@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KotorDotNET.Compiler.Calculator;
+using KotorDotNET.FileFormats.KotorNCS;
 
 namespace KotorDotNET.Compiler.Compilation
 {
@@ -26,6 +27,6 @@ namespace KotorDotNET.Compiler.Compilation
             Declarations = new();
         }
 
-        public void Parse(SymbolTable symbolTable) => throw new NotImplementedException();
+        public void Compile(SymbolTable symbolTable, NCS ncs) => throw new NotImplementedException();
     }
 }

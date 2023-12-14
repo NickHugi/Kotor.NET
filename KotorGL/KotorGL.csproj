@@ -7,7 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\kotor.fshader" />
+    <None Remove="Resources\kotor.vshader" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\kotor.fshader" />
+    <EmbeddedResource Include="Resources\kotor.vshader" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="OpenTK" Version="4.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\KotorDotNET\KotorDotNET.csproj" />
   </ItemGroup>
 
 </Project>

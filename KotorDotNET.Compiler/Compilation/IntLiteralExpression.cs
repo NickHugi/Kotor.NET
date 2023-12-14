@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KotorDotNET.FileFormats.KotorNCS;
 
 namespace KotorDotNET.Compiler.Compilation
 {
@@ -16,7 +17,7 @@ namespace KotorDotNET.Compiler.Compilation
         }
 
         public DataType GetDataType() => DataType.Int;
-        public void Parse(SymbolTable symbolTable) => throw new NotImplementedException();
+        public void Compile(SymbolTable symbolTable, NCS ncs) => throw new NotImplementedException();
 
         public override string ToString() => $"{Value}";
     }

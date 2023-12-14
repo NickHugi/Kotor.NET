@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using KotorDotNET.Compiler.Calculator;
+using KotorDotNET.FileFormats.KotorNCS;
 
 namespace KotorDotNET.Compiler.Compilation
 {
@@ -21,7 +22,7 @@ namespace KotorDotNET.Compiler.Compilation
             Expression = expression;
         }
 
-        public void Parse(SymbolTable symbolTable)
+        public void Compile(SymbolTable symbolTable, NCS ncs)
         {
 
         }

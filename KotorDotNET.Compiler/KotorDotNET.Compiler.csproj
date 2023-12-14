@@ -18,6 +18,6 @@
     </LexFile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Compilation\Expression\" />
+    <ProjectReference Include="..\KotorDotNET\KotorDotNET.csproj" />
   </ItemGroup>
 </Project>
