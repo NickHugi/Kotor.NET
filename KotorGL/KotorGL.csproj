@@ -7,10 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\kotor.fshader" />
     <None Remove="Resources\kotor.vshader" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\kotor.fshader" />
     <EmbeddedResource Include="Resources\kotor.vshader" />
   </ItemGroup>
 

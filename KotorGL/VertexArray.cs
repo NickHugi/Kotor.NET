@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using KotorDotNET.Common.Creature;
 using KotorDotNET.FileFormats.KotorMDL;
 using OpenTK.Graphics.OpenGL4;
 
@@ -14,45 +15,73 @@ namespace KotorGL
         public int ID { get; }
         public int FaceCount { get; }
 
-        //public VertexArray(IEnumerable<Vector3> points, IEnumerable<Vector3> normals, IEnumerable<Vector2> uvs, IEnumerable<int> indexes)
-        //{
+        public VertexArray(IEnumerable<Vector3> points, IEnumerable<short> indexes, IEnumerable<Vector3>? normals = null, IEnumerable<Vector2>? uv1s = null, IEnumerable<Vector2>? uv2s = null)
+        {
+            if (points.Count() != normals.Count() && points.Count() != uv1s.Count() && points.Count() != uv2s.Count())
+                throw new NotImplementedException();
 
-        //    GL.GenVertexArrays(1, out int vao);
-        //    GL.GenBuffers(1, out int vbo);
-        //    GL.GenBuffers(1, out int ebo);
+            var flags = 0;
+            var blockSize = 0;
+            var positionStride = 0;
+            var normalStride = 0;
+            var uv1Stride = 0;
+            var uv2Stride = 0;
 
-        //    GL.BindVertexArray(ID)
+            var vertexData = new List<byte>();
+            for (int i = 0; i < points.Count(); i ++)
+            {
+                if (points is not null)
+                {
+                    flags |= 0x0001;
+                    positionStride = blockSize;
+                    blockSize += 12;
+                    vertexData.AddRange(BitConverter.GetBytes(points.ElementAt(i).X));
+                    vertexData.AddRange(BitConverter.GetBytes(points.ElementAt(i).Y));
+                    vertexData.AddRange(BitConverter.GetBytes(points.ElementAt(i).Z));
+                }
+                if (normals is not null)
+                {
+                    //flags |= ;
+                    //vertexData.AddRange(BitConverter.GetBytes(normals.ElementAt(i).X));
+                    //vertexData.AddRange(BitConverter.GetBytes(normals.ElementAt(i).Y));
+                    //vertexData.AddRange(BitConverter.GetBytes(normals.ElementAt(i).Z));
+                }
+                if (uv1s is not null)
+                {
+                    flags |= 0x0020;
+                    uv1Stride = blockSize;
+                    blockSize += 8;
+                    vertexData.AddRange(BitConverter.GetBytes(uv1s.ElementAt(i).X));
+                    vertexData.AddRange(BitConverter.GetBytes(uv1s.ElementAt(i).Y));
+                }
+                if (uv2s is not null)
+                {
+                    flags |= 0x0004;
+                    uv2Stride = blockSize;
+                    blockSize += 8;
+                    vertexData.AddRange(BitConverter.GetBytes(uv2s.ElementAt(i).X));
+                    vertexData.AddRange(BitConverter.GetBytes(uv2s.ElementAt(i).Y));
+                }
+            }
 
-        //    GL.BindBuffer(BufferTarget.ArrayBuffer, vbo)
-        //    GL.BufferData(BufferTarget.ArrayBuffer, len(vertex_data), vertex_data, GL_STATIC_DRAW)
+            var elementData = indexes.SelectMany(x => BitConverter.GetBytes(x));
 
-        //    GL.BindBuffer(BufferTarget.ElementArrayBuffer, self._ebo)
-        //    GL.BufferData(BufferTarget.ElementArrayBuffer, len(element_data), element_data, GL_STATIC_DRAW)
-        //    self._face_count = len(element_data) // 2
-
-        //    if data_bitflags & 0x0001:
-        //        glEnableVertexAttribArray(1)
-        //        glVertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, block_size, ctypes.c_void_p(vertex_offset))
-
-        //    if data_bitflags & 0x0020 and texture != "" and texture != "NULL":
-        //        glEnableVertexAttribArray(3)
-        //        GL.VertexAttribPointer(3, 2, VertexAttribPointerType.Float, false, block_size, ctypes.c_void_p(texture_offset))
-        //        self.texture = texture
-
-        //    if data_bitflags & 0x0004 and lightmap != "" and lightmap != "NULL":
-        //        GL.EnableVertexAttribArray(4)
-        //        GL.VertexAttribPointer(4, 2, VertexAttribPointerType.Float, false, block_size, ctypes.c_void_p(lightmap_offset))
-        //        self.lightmap = lightmap
-
-        //    GL.BindBuffer(BufferTarget.ArrayBuffer, 0)
-        //    GL.BindVertexArray(0);
-
-        //    ID = vao;
-        //}
+            ID = Init(vertexData.ToArray(), elementData.ToArray(), positionStride, normalStride, uv1Stride, uv2Stride, blockSize, flags);
+        }
 
         public VertexArray(byte[] vertexData, byte[] elementData, int positionsOffset, int normalsOffset, int uv1Stride, int uv2Stride, int blockSize, int flags)
         {
+            ID = Init(vertexData, elementData, positionsOffset, normalsOffset, uv1Stride, uv2Stride, blockSize, flags);
+        }
 
+        public void Draw()
+        {
+            GL.BindVertexArray(ID);
+            GL.DrawElements(BeginMode.Triangles, FaceCount, DrawElementsType.UnsignedShort, 0);
+        }
+
+        private int Init(byte[] vertexData, byte[] elementData, int positionsOffset, int normalsOffset, int uv1Stride, int uv2Stride, int blockSize, int flags)
+        {
             GL.GenVertexArrays(1, out int vao);
             GL.GenBuffers(1, out int vbo);
             GL.GenBuffers(1, out int ebo);
@@ -72,7 +101,6 @@ namespace KotorGL
                 GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, blockSize, positionsOffset);
             }
 
-
             if ((flags & 0x0020) > 0)
             {
                 GL.EnableVertexAttribArray(3);
@@ -88,13 +116,7 @@ namespace KotorGL
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GL.BindVertexArray(0);
 
-            ID = vao;
-        }
-
-        public void Draw()
-        {
-            GL.BindVertexArray(ID);
-            GL.DrawElements(BeginMode.Triangles, FaceCount, DrawElementsType.UnsignedShort, 0);
+            return vao;
         }
     }
 }

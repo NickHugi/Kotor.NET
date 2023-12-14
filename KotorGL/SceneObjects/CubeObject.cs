@@ -10,12 +10,13 @@ namespace KotorGL.SceneObjects
     {
         public override List<IRenderable> GetRenderables(Graphics graphics)
         {
-            return new();
+            InitializeVertexArray();
+            return new() { new Renderable(graphics.GetVAO(":cube"), graphics.GetShader("default"), null, null) };
         }
 
         public static void InitializeVertexArray(Graphics graphics)
         {
-            
+            if (graphics.)  
         }
     }
 }

@@ -17,7 +17,7 @@ namespace KotorGL
             var assembly = Assembly.GetExecutingAssembly();
 
             using (var vShaderStream = new StreamReader(assembly.GetManifestResourceStream("KotorGL.Resources.kotor.vshader")!))
-            using (var fShaderStream = new StreamReader(assembly.GetManifestResourceStream("KotorGL.Resources.kotor.vshader")!))
+            using (var fShaderStream = new StreamReader(assembly.GetManifestResourceStream("KotorGL.Resources.kotor.fshader")!))
             {
                 var vShaderSource = vShaderStream.ReadToEnd();
                 var fShaderSource = fShaderStream.ReadToEnd();
