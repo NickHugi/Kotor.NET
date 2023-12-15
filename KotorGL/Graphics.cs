@@ -12,9 +12,9 @@ namespace KotorGL
         public Dictionary<string, Texture> Textures { get; } = new();
         public Dictionary<string, VertexArray> VAOs { get; } = new();
 
-        public VertexArray  GetVertexArray(string name)
+        public Shader GetShader(string name)
         {
-            return VAOs[name];
+            return Shaders[name];
         }
 
         public Texture GetTextures(string name)
@@ -25,6 +25,11 @@ namespace KotorGL
         public VertexArray GetVAO(string name)
         {
             return VAOs[name];
+        }
+
+        public void SetVAO(string name, VertexArray vao)
+        {
+            VAOs.Add(name, vao);
         }
     }
 }

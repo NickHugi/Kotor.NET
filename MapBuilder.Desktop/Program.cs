@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections.ObjectModel;
 using Avalonia;
 using Avalonia.ReactiveUI;
 
@@ -18,6 +18,7 @@ class Program
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
+            .With(new Win32PlatformOptions() { RenderingMode = new Collection<Win32RenderingMode> { Win32RenderingMode.Wgl } })
             .WithInterFont()
             .LogToTrace()
             .UseReactiveUI();
