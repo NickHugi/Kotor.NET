@@ -19,18 +19,19 @@ namespace KotorGL
         public float Near { get; set; } = 0.001f;
         public float Far { get; set; } = 1000;
         public float FieldOfView { get; set; }
+        public float AspectRatio => (float)Width / (float)Height;
 
         public Matrix4x4 GetView()
         {
             var view = Matrix4x4.Identity * Matrix4x4.CreateTranslation(X, Y, Z);
-            //view = view * Matrix4x4.CreateFromYawPitchRoll(Yaw, Pitch, 0);
+            view = view * Matrix4x4.CreateFromYawPitchRoll(Yaw, Pitch, 0);
             //Matrix4x4.Invert(view, out view);
             return view; 
         }
 
         public Matrix4x4 GetProjection()
         {
-            return Matrix4x4.CreatePerspectiveFieldOfView(1.39f, Width/Height, Near, Far);
+            return Matrix4x4.CreatePerspectiveFieldOfView(1.39f, AspectRatio, Near, Far);
         }
     }
 }
