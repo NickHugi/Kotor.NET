@@ -18,7 +18,7 @@ namespace ConsoleApp1
         public Viewer()
         {
             WindowOptions options = WindowOptions.Default;
-            options.Size = new Vector2D<int>(800, 600);
+            options.Size = new Vector2D<int>(1920, 1080);
             options.Title = "My first Silk.NET program!";
 
             _window = Window.Create(options);
@@ -47,7 +47,7 @@ namespace ConsoleApp1
 
         private void OnRender(double deltaTime)
         {
-            _scene.Render();
+            _scene.Render(1920, 1080);
         }
     }
 }

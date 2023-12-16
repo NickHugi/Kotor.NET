@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -23,10 +24,8 @@ namespace KotorGL
 
         public void RenderToView(GL gl, Graphics graphics, Camera camera)
         {
-            gl.Clear(ClearBufferMask.ColorBufferBit);
+            gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.ColorBufferBit);
             gl.ClearColor(0, 0, 0.3f, 1);
-
-            //gl.Disable(EnableCap.CullFace);
 
             var shader = graphics.GetShader("kotor");
             shader.Use();

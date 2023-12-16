@@ -12,8 +12,8 @@ namespace KotorGL
         public float X { get; set; } = 0f;
         public float Y { get; set; } = 0f;
         public float Z { get; set; } = 0f;
-        public int Width { get; set; } = 800;
-        public int Height { get; set; } = 450;
+        public uint Width { get; set; } = 800;
+        public uint Height { get; set; } = 450;
         public float Pitch { get; set; }
         public float Yaw { get; set; }
         public float Near { get; set; } = 0.001f;

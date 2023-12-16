@@ -6,6 +6,7 @@ using Avalonia.OpenGL.Controls;
 using KotorGL;
 using Avalonia.Threading;
 using Silk.NET.OpenGLES;
+using Avalonia;
 
 namespace MapBuilder.Views;
 
@@ -23,6 +24,9 @@ public class KotorGLControl : OpenGlControlBase
 {
     private GL _gl;
     private Scene _scene;
+
+    private uint _width = 0;
+    private uint _height = 0;
 
     public KotorGLControl()
     {
@@ -48,7 +52,9 @@ public class KotorGLControl : OpenGlControlBase
     protected override unsafe void OnOpenGlRender(GlInterface gl, int fb)
     {
         if (init)
-            _scene.Render();
+        {
+            _scene.Render(_width, _height);
+        }
     }
 
     private void OnTimedEvent(Object source, ElapsedEventArgs e)
@@ -57,5 +63,11 @@ public class KotorGLControl : OpenGlControlBase
         {
             RequestNextFrameRendering();
         });
+    }
+
+    protected override void OnSizeChanged(SizeChangedEventArgs e)
+    {
+        _width = (uint)e.NewSize.Width;
+        _height = (uint)e.NewSize.Height;
     }
 }

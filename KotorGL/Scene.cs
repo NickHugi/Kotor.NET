@@ -40,8 +40,15 @@ namespace KotorGL
             _objects.Add(new CubeObject());
         }
 
-        public void Render()
+        public void Render(uint width, uint height)
         {
+            if (width != Camera.Width || height != Camera.Height)
+            {
+                Camera.Width = width;
+                Camera.Height = height;
+                _gl.Viewport(0, 0, width, height);
+            }
+
             foreach (var sceneObject in _objects)
             {
                 sceneObject.GetRenderables(_graphics).ForEach(renderable => _frame.Add(renderable));
