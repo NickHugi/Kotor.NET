@@ -36,8 +36,6 @@ namespace KotorGL
 
             CubeObject.InitializeVertexArray(_gl, _graphics);
             TriangleObject.InitializeVertexArray(_gl, _graphics);
-
-            _objects.Add(new CubeObject());
         }
 
         public void Render(uint width, uint height)
@@ -46,7 +44,7 @@ namespace KotorGL
             {
                 Camera.Width = width;
                 Camera.Height = height;
-                _gl.Viewport(0, 0, width, height);
+                _gl.Viewport(0, 0, width*2, height*2);
             }
 
             foreach (var sceneObject in _objects)
@@ -55,6 +53,11 @@ namespace KotorGL
             }
 
             _frame.RenderToView(_gl, _graphics, Camera);
+        }
+
+        public void AddObject(SceneObject sceneObject)
+        {
+            _objects.Add(sceneObject);
         }
 
         private static DebugProc DebugMessageDelegate = OnDebugMessage;

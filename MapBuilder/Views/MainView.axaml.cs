@@ -7,6 +7,8 @@ using KotorGL;
 using Avalonia.Threading;
 using Silk.NET.OpenGLES;
 using Avalonia;
+using KotorGL.SceneObjects;
+using MapBuilder.Render;
 
 namespace MapBuilder.Views;
 
@@ -37,10 +39,14 @@ public class KotorGLControl : OpenGlControlBase
     }
 
     private bool init = false;
-    protected override unsafe void OnOpenGlInit(GlInterface gl)
+    protected override unsafe void OnOpenGlInit(GlInterface glInterface)
     {
-        _scene = new(GL.GetApi(gl.GetProcAddress), new());
+        Graphics graphics = new();
+        GL gl = GL.GetApi(glInterface.GetProcAddress);
+
+        _scene = new(gl, graphics);
         _scene.Init();
+        _scene.AddObject(new TerrainObject(gl, graphics, new(10, 10)));
         init = true;
     }
 
