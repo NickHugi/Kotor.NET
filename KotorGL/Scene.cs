@@ -5,9 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using KotorGL.SceneObjects;
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
+using Silk.NET.OpenGLES;
 
 namespace KotorGL
 {
@@ -17,33 +15,29 @@ namespace KotorGL
 
         private List<SceneObject> _objects = new();
         private Graphics _graphics;
-        private IBindingsContext _context;
         private Frame _frame = new();
+        private GL _gl;
 
-        public Scene(Graphics graphics, IBindingsContext context)
+        public Scene(GL gl, Graphics graphics)
         {
+            _gl = gl;
             _graphics = graphics;
-            _context = context;
         }
 
         int VertexArrayObject;
         Shader shader;
         public void Init()
         {
-            if (_context is not null)
-                GL.LoadBindings(_context);
+            _gl.DebugMessageCallback(DebugMessageDelegate, IntPtr.Zero);
+            _gl.Enable(EnableCap.DebugOutput);
 
-            GL.DebugMessageCallback(DebugMessageDelegate, IntPtr.Zero);
-            GL.Enable(EnableCap.DebugOutput);
+            _graphics.Shaders.Add("kotor", new Shader(_gl, "kotor"));
+            _graphics.Shaders.Add("test", new Shader(_gl, "test"));
 
-            _graphics.Shaders.Add("kotor", new Shader("kotor"));
-            _graphics.Shaders.Add("test", new Shader("test"));
-
-            CubeObject.InitializeVertexArray(_graphics);
-            TriangleObject.InitializeVertexArray(_graphics);
+            CubeObject.InitializeVertexArray(_gl, _graphics);
+            TriangleObject.InitializeVertexArray(_gl, _graphics);
 
             _objects.Add(new CubeObject());
-            //_objects.Add(new TriangleObject());
         }
 
         public void Render()
@@ -53,15 +47,15 @@ namespace KotorGL
                 sceneObject.GetRenderables(_graphics).ForEach(renderable => _frame.Add(renderable));
             }
 
-            _frame.RenderToView(_graphics, Camera);
+            _frame.RenderToView(_gl, _graphics, Camera);
         }
 
         private static DebugProc DebugMessageDelegate = OnDebugMessage;
-        private static void OnDebugMessage(DebugSource source, DebugType type, int id, DebugSeverity severity, int length, IntPtr pMessage, IntPtr pUserParam)
+        private static void OnDebugMessage(GLEnum source, GLEnum type, int id, GLEnum severity, int length, nint pMessage, nint pUserParam)
         {
             string message = Marshal.PtrToStringAnsi(pMessage, length);
 
-            if (type == DebugType.DebugTypeError)
+            if (type == GLEnum.DebugTypeError)
             {
                 throw new Exception(message);
             }

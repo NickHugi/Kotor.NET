@@ -5,8 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using KotorDotNET.FileFormats.KotorMDL;
 using KotorDotNET.FileFormats.KotorTPC;
-using OpenTK.Graphics.OpenGL;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace KotorGL
 {

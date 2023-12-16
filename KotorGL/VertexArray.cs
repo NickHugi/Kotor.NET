@@ -6,17 +6,21 @@ using System.Text;
 using System.Threading.Tasks;
 using KotorDotNET.Common.Creature;
 using KotorDotNET.FileFormats.KotorMDL;
-using OpenTK.Graphics.OpenGL;
+using Silk.NET.OpenGLES;
 
 namespace KotorGL
 {
     public class VertexArray
     {
-        public int ID { get; }
-        public int FaceCount { get; private set; }
+        public uint ID { get; }
+        public uint FaceCount { get; private set; }
 
-        public VertexArray(IEnumerable<Vector3> points, IEnumerable<short> elements, IEnumerable<Vector3>? normals = null, IEnumerable<Vector2>? uv1s = null, IEnumerable<Vector2>? uv2s = null)
+        private GL _gl;
+
+        public VertexArray(GL gl, IEnumerable<Vector3> points, IEnumerable<short> elements, IEnumerable<Vector3>? normals = null, IEnumerable<Vector2>? uv1s = null, IEnumerable<Vector2>? uv2s = null)
         {
+            _gl = gl;
+
             if (normals is not null && normals.Count() != points.Count())
                 throw new NotImplementedException();
             if (uv1s is not null && uv1s.Count() != points.Count())
@@ -85,61 +89,66 @@ namespace KotorGL
 
             var elementData = elements.SelectMany(x => BitConverter.GetBytes(x));
 
-            ID = Init(vertexData.ToArray(), elementData.ToArray(), positionStride, normalStride, uv1Stride, uv2Stride, blockSize, flags);
+            ID = Init(vertexData.ToArray(), elementData.ToArray(), (uint)positionStride, (uint)normalStride, (uint)uv1Stride, (uint)uv2Stride, (uint)blockSize, flags);
         }
 
-        public VertexArray(byte[] vertexData, byte[] elementData, int positionsOffset, int normalsOffset, int uv1Stride, int uv2Stride, int blockSize, int flags)
+        public VertexArray(GL gl, byte[] vertexData, byte[] elementData, uint positionsOffset, uint normalsOffset, uint uv1Stride, uint uv2Stride, uint blockSize, int flags)
         {
+            _gl = gl;
             ID = Init(vertexData, elementData, positionsOffset, normalsOffset, uv1Stride, uv2Stride, blockSize, flags);
         }
 
-        public VertexArray(int id, int faceCount)
+        public VertexArray(GL gl, uint id, uint faceCount)
         {
+            _gl = gl;
             ID = id;
             FaceCount = faceCount;
         }
 
-        public void Draw()
+        public unsafe void Draw()
         {
-            GL.BindVertexArray(ID);
-            GL.DrawElements(PrimitiveType.Triangles, FaceCount, DrawElementsType.UnsignedShort, 0);
+            _gl.BindVertexArray(ID);
+            //_gl.DrawArrays(GLEnum.Triangles, 0, 3);
+            _gl.DrawElements(PrimitiveType.Triangles, FaceCount, DrawElementsType.UnsignedShort, (void*) 0);
         }
 
-        private int Init(byte[] vertexData, byte[] elementData, int positionsOffset, int normalsOffset, int uv1Stride, int uv2Stride, int blockSize, int flags)
+        private unsafe uint Init(byte[] vertexData, byte[] elementData, uint positionsOffset, uint normalsOffset, uint uv1Stride, uint uv2Stride, uint blockSize, int flags)
         {
-            var vao = GL.GenVertexArray();
-            var vbo = GL.GenBuffer();
-            var ebo = GL.GenBuffer();
+            var vao = _gl.GenVertexArray();
+            var vbo = _gl.GenBuffer();
+            var ebo = _gl.GenBuffer();
 
-            GL.BindVertexArray(vao);
+            _gl.BindVertexArray(vao);
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
-            GL.BufferData(BufferTarget.ArrayBuffer, vertexData.Length, vertexData, BufferUsageHint.StaticDraw);
+            _gl.BindBuffer(BufferTargetARB.ArrayBuffer, vbo);
+            fixed (byte* buf = vertexData)
+                _gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint)vertexData.Length, buf, BufferUsageARB.StaticDraw);
 
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, elementData.Length, elementData, BufferUsageHint.StaticDraw);
-            FaceCount = (int)elementData.Count() / 2;
+            _gl.BindBuffer(BufferTargetARB.ElementArrayBuffer, ebo);
+            fixed (byte* buf = elementData)
+                _gl.BufferData(BufferTargetARB.ElementArrayBuffer, (nuint)elementData.Length, buf, BufferUsageARB.StaticDraw);
+            FaceCount = (uint)elementData.Count() / 2;
 
             if ((flags & 0x0001) > 0)
             {
-                GL.EnableVertexAttribArray(1);
-                GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, blockSize, positionsOffset);
+                _gl.EnableVertexAttribArray(1);
+                _gl.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, blockSize, (void*)positionsOffset);
             }
 
             if ((flags & 0x0020) > 0)
             {
-                GL.EnableVertexAttribArray(3);
-                GL.VertexAttribPointer(3, 2, VertexAttribPointerType.Float, false, blockSize, uv1Stride);
+                _gl.EnableVertexAttribArray(3);
+                _gl.VertexAttribPointer(3, 2, VertexAttribPointerType.Float, false, blockSize, (void*)uv1Stride);
             }
 
             if ((flags & 0x0004) > 0)
             {
-                GL.EnableVertexAttribArray(4);
-                GL.VertexAttribPointer(4, 2, VertexAttribPointerType.Float, false, blockSize, uv2Stride);
+                _gl.EnableVertexAttribArray(4);
+                _gl.VertexAttribPointer(4, 2, VertexAttribPointerType.Float, false, blockSize, (void*)uv2Stride);
             }
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-            GL.BindVertexArray(0);
+            _gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
+            _gl.BindVertexArray(0);
 
             return vao;
         }

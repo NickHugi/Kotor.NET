@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using OpenTK.Graphics.OpenGL;
+using KotorGL.Extensions;
+using Silk.NET.OpenGLES;
 
 namespace KotorGL.SceneObjects
 {
@@ -14,7 +15,7 @@ namespace KotorGL.SceneObjects
             return new() { new Renderable(graphics.GetVAO(":triangle"), graphics.GetShader("test"), null, null) };
         }
 
-        public static void InitializeVertexArray(Graphics graphics)
+        public static unsafe void InitializeVertexArray(GL gl, Graphics graphics)
         {
             float[] vertices =
             {
@@ -23,29 +24,31 @@ namespace KotorGL.SceneObjects
                  0.0f,  0.5f, 0.0f
              };
 
-            short[] indices =
+            ushort[] indices =
             {
                 //0, 1, 3,   // first triangle
                 //1, 2, 3    // second triangle
                 0,1,2
             };
 
-            int VertexArrayObject = GL.GenVertexArray();
-            GL.BindVertexArray(VertexArrayObject);
+            uint vao = gl.GenVertexArray();
+            uint vbo = gl.GenBuffer();
+            uint ebo = gl.GenBuffer();
 
-            int VertexBufferObject = GL.GenBuffer();
-            int ElementBufferObject = GL.GenBuffer();
+            gl.BindVertexArray(vao);
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, VertexBufferObject);
-            GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.StaticDraw);
+            gl.BindBuffer(BufferTargetARB.ArrayBuffer, vbo);
+            fixed (float* buf = vertices)
+                gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint)(vertices.Length * sizeof(float)), buf, BufferUsageARB.StaticDraw);
 
-            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
-            GL.EnableVertexAttribArray(1);
+            gl.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), (void*)0);
+            gl.EnableVertexAttribArray(1);
 
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, ElementBufferObject);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, indices.Length * sizeof(short), indices, BufferUsageHint.StaticDraw);
+            gl.BindBuffer(BufferTargetARB.ElementArrayBuffer, ebo);
+            fixed (ushort* buf = indices)
+                gl.BufferData(BufferTargetARB.ElementArrayBuffer, (nuint)(indices.Length * sizeof(ushort)), buf, BufferUsageARB.StaticDraw);
 
-            graphics.SetVAO(":triangle", new VertexArray(VertexArrayObject, indices.Length));
+            graphics.SetVAO(":triangle", new VertexArray(gl, vao, (uint)indices.Length));
         }
     }
 }

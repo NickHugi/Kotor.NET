@@ -5,7 +5,7 @@ using Avalonia.OpenGL;
 using Avalonia.OpenGL.Controls;
 using KotorGL;
 using Avalonia.Threading;
-//using static MapBuilder.Views.OpenGLControl;
+using Silk.NET.OpenGLES;
 
 namespace MapBuilder.Views;
 
@@ -21,6 +21,7 @@ public partial class MainView : UserControl
 
 public class KotorGLControl : OpenGlControlBase
 {
+    private GL _gl;
     private Scene _scene;
 
     public KotorGLControl()
@@ -31,19 +32,10 @@ public class KotorGLControl : OpenGlControlBase
         timer.Start();
     }
 
-    private static void CheckError(GlInterface gl)
-    {
-        int err;
-        //while ((err = gl.GetError()) != GL_NO_ERROR
-    }
-
     private bool init = false;
     protected override unsafe void OnOpenGlInit(GlInterface gl)
     {
-        
-        var graphics = new Graphics();
-        var context = new BindingsContext(gl);
-        _scene = new(graphics, context);
+        _scene = new(GL.GetApi(gl.GetProcAddress), new());
         _scene.Init();
         init = true;
     }

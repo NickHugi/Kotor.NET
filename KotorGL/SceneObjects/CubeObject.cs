@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using Silk.NET.OpenGLES;
 
 namespace KotorGL.SceneObjects
 {
@@ -15,7 +16,7 @@ namespace KotorGL.SceneObjects
             return new() { new Renderable(graphics.GetVAO(":cube"), graphics.GetShader("test"), null, null) };
         }
 
-        public static void InitializeVertexArray(Graphics graphics)
+        public static void InitializeVertexArray(GL gl, Graphics graphics)
         {
             Vector3[] vertices =
             {
@@ -53,7 +54,7 @@ namespace KotorGL.SceneObjects
                 6, 7, 3
             };
 
-            graphics.SetVAO(":cube", new VertexArray(vertices, elements));
+            graphics.SetVAO(":cube", new VertexArray(gl, vertices, elements));
         }
     }
 }

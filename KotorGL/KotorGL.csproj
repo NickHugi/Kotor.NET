@@ -4,7 +4,12 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Viewer.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove="Resources\kotor.fshader" />
@@ -21,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenTK" Version="4.8.0" />
+    <PackageReference Include="Silk.NET.OpenGLES" Version="2.20.0" />
   </ItemGroup>
 
   <ItemGroup>

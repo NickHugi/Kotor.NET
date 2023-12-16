@@ -1,7 +1,10 @@
-﻿using KotorGL;
+﻿using ConsoleApp1;
+using KotorGL;
+using Silk.NET.Input;
+using Silk.NET.Maths;
+using Silk.NET.OpenGLES;
+using Silk.NET.Windowing;
 
 
-using (Viewer game = new Viewer(800, 600, "LearnOpenTK"))
-{
-    game.Run();
-}
+Viewer viewer = new();
+viewer.Run();

@@ -9,7 +9,7 @@ using OpenTK.Windowing.Desktop;
 
 namespace KotorGL
 {
-    public class Viewer : GameWindow
+    public class Viewer : IWindow
     {
         public Viewer(int width, int height, string title) : base(GameWindowSettings.Default, new NativeWindowSettings() { Size = (width, height), Title = title }) { }
 

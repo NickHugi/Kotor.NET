@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using KotorDotNET.FileFormats.KotorERF;
-using OpenTK.Graphics.OpenGL;
-using OpenTK.Mathematics;
+using Silk.NET.OpenGLES;
 
 namespace KotorGL
 {
@@ -14,24 +14,26 @@ namespace KotorGL
         // list of things to renderss
 
         private IList<IRenderable> _renderables = new List<IRenderable>();
+        private Matrix4x4 _transform = Matrix4x4.Identity;
 
         public void Add(IRenderable renderable)
         {
             _renderables.Add(renderable);
         }
 
-        public void RenderToView(Graphics graphics, Camera camera)
+        public void RenderToView(GL gl, Graphics graphics, Camera camera)
         {
-            GL.Clear(ClearBufferMask.ColorBufferBit);
-            GL.ClearColor(0, 0, 0.3f, 1);
+            gl.Clear(ClearBufferMask.ColorBufferBit);
+            gl.ClearColor(0, 0, 0.3f, 1);
 
-            GL.Disable(EnableCap.CullFace);
+            //gl.Disable(EnableCap.CullFace);
 
             var shader = graphics.GetShader("kotor");
             shader.Use();
+
             shader.SetUniformMatrix4x4("view", camera.GetView());
             shader.SetUniformMatrix4x4("projection", camera.GetProjection());
-            shader.SetUniformMatrix4x4("model", Matrix4.Identity);
+            shader.SetUniformMatrix4x4("model", _transform);
 
             foreach (var renderable in _renderables)
             {
