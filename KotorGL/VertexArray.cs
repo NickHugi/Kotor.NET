@@ -108,7 +108,6 @@ namespace KotorGL
         public unsafe void Draw()
         {
             _gl.BindVertexArray(ID);
-            //_gl.DrawArrays(GLEnum.Triangles, 0, 3);
             _gl.DrawElements(PrimitiveType.Triangles, FaceCount, DrawElementsType.UnsignedShort, (void*) 0);
         }
 

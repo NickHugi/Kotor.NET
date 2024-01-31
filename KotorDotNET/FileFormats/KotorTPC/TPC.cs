@@ -15,6 +15,14 @@ namespace KotorDotNET.FileFormats.KotorTPC
 
         private List<byte[]> _mipmapData = new();
 
+        public TPC(int width, int height, TPCTextureFormat format, byte[] data)
+        {
+            Width = width;
+            Height = height;
+            Format = format;
+            _mipmapData.Add(data);
+        }
+
         public Mipmap GetMipmap(int index)
         {
             return new Mipmap

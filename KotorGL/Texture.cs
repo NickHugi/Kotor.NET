@@ -5,47 +5,52 @@ using System.Text;
 using System.Threading.Tasks;
 using KotorDotNET.FileFormats.KotorMDL;
 using KotorDotNET.FileFormats.KotorTPC;
+using Silk.NET.OpenGLES;
 
 namespace KotorGL
 {
     public class Texture
     {
-        public int ID { get; set; }
+        public uint ID { get; set; }
 
-        public Texture(TPC tpc)
+        public unsafe Texture(GL gl, TPC tpc)
         {
             var mipmap = tpc.GetMipmap(0);
 
-            //ID = GL.GenTexture();
-            //GL.BindTexture(All.Texture2D, ID);
+            ID = gl.GenTexture();
+            gl.BindTexture(GLEnum.Texture2D, ID);
 
-            //if (tpc.Format == TPCTextureFormat.DXT1)
-            //{
-            //    GL.CompressedTexImage2D(All.Texture2D, 0, All.CompressedRgbS3tcDxt1Ext, tpc.Width, tpc.Height, 0, mipmap.Size, mipmap.Data);
-            //}
-            //else if (tpc.Format == TPCTextureFormat.DXT5)
-            //{
-            //    GL.CompressedTexImage2D(All.Texture2D, 0, All.CompressedRgbaS3tcDxt5Ext, tpc.Width, tpc.Height, 0, mipmap.Size, mipmap.Data);
-            //}
-            //else if (tpc.Format == TPCTextureFormat.RGB)
-            //{
-            //    GL.TexImage2D(All.Texture2D, 0, All.Rgb, mipmap.Width, mipmap.Height, 0, All.Rgb, All.UnsignedByte, mipmap.Data);
-            //}
-            //else if (tpc.Format == TPCTextureFormat.RGBA)
-            //{
-            //    GL.TexImage2D(All.Texture2D, 0, All.Rgba, mipmap.Width, mipmap.Height, 0, All.Rgba, All.UnsignedByte, mipmap.Data);
-            //}
+            if (tpc.Format == TPCTextureFormat.DXT1)
+            {
+                fixed (byte* buf = mipmap.Data)
+                    gl.CompressedTexImage2D(GLEnum.Texture2D, 0, InternalFormat.CompressedRgbS3TCDxt1Ext, (uint)tpc.Width, (uint)tpc.Height, 0, (uint)mipmap.Size, buf);
+            }
+            else if (tpc.Format == TPCTextureFormat.DXT5)
+            {
+                fixed (byte* buf = mipmap.Data)
+                    gl.CompressedTexImage2D(GLEnum.Texture2D, 0, InternalFormat.CompressedRgbaS3TCDxt5Ext, (uint)tpc.Width, (uint)tpc.Height, 0, (uint)mipmap.Size, buf);
+            }
+            else if (tpc.Format == TPCTextureFormat.RGB)
+            {
+                fixed (byte* buf = mipmap.Data)
+                    gl.TexImage2D(GLEnum.Texture2D, 0, InternalFormat.Rgb, (uint)mipmap.Width, (uint)mipmap.Height, 0, GLEnum.Rgb, PixelType.UnsignedByte, buf);
+            }
+            else if (tpc.Format == TPCTextureFormat.RGBA)
+            {
+                fixed (byte* buf = mipmap.Data)
+                    gl.TexImage2D(GLEnum.Texture2D, 0, InternalFormat.Rgba, (uint)mipmap.Width, (uint)mipmap.Height, 0, GLEnum.Rgba, PixelType.UnsignedByte, buf);
+            }
 
-            //var textureWrapSFilter = (int)All.Repeat;
-            //GL.TexturePar(ID, TextureParameterName.TextureWrapS, ref textureWrapSFilter);
-            //var textureWrapTFilter = (int)All.Repeat;
-            //GL.TextureParameterI(ID, TextureParameterName.TextureWrapT, ref textureWrapTFilter);
-            //var textureMinFilter = (int)All.NearestMipmapLinear;
-            //GL.TextureParameterI(ID, TextureParameterName.TextureMinFilter, ref textureMinFilter);
-            //var textureMagFilter = (int)All.Linear;
-            //GL.TextureParameterI(ID, TextureParameterName.TextureMagFilter, ref textureMagFilter);
+            var textureWrapSFilter = (int)GLEnum.Repeat;
+            gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapS,  textureWrapSFilter);
+            var textureWrapTFilter = (int)GLEnum.Repeat;
+            gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, textureWrapTFilter);
+            var textureMinFilter = (int)GLEnum.NearestMipmapLinear;
+            gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, textureMinFilter);
+            var textureMagFilter = (int)GLEnum.Linear;
+            gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, textureMagFilter);
 
-            //GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+            gl.GenerateMipmap(TextureTarget.Texture2D);
         }
 
         public void Use()

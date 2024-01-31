@@ -22,10 +22,10 @@ namespace KotorGL
             _renderables.Add(renderable);
         }
 
-        public void RenderToView(GL gl, Graphics graphics, Camera camera)
+        public void RenderToView(Graphics graphics, Camera camera)
         {
-            gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.ColorBufferBit);
-            gl.ClearColor(0, 0, 0.3f, 1);
+            graphics.GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            graphics.GL.ClearColor(0, 0, 0.3f, 1);
 
             var shader = graphics.GetShader("kotor");
             shader.Use();

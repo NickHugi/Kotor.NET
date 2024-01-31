@@ -18,18 +18,20 @@ namespace KotorGL.SceneObjects
 
         public static void InitializeVertexArray(GL gl, Graphics graphics)
         {
+            float scaleFactor = 1f;
+
             Vector3[] vertices =
             {
                 // front
-                new Vector3(-1.0f, -1.0f,  1.0f),
-                new Vector3( 1.0f, -1.0f,  1.0f),
-                new Vector3( 1.0f,  1.0f,  1.0f),
-                new Vector3(-1.0f,  1.0f,  1.0f),
+                new Vector3(-0.5f, -0.5f,  0.5f) * scaleFactor,
+                new Vector3( 0.5f, -0.5f,  0.5f) * scaleFactor,
+                new Vector3( 0.5f,  0.5f,  0.5f) * scaleFactor,
+                new Vector3(-0.5f,  0.5f,  0.5f) * scaleFactor,
                 // back
-                new Vector3(-1.0f, -1.0f, -1.0f),
-                new Vector3( 1.0f, -1.0f, -1.0f),
-                new Vector3( 1.0f,  1.0f, -1.0f),
-                new Vector3(-1.0f,  1.0f, -1.0f)
+                new Vector3(-0.5f, -0.5f, -0.5f) * scaleFactor,
+                new Vector3( 0.5f, -0.5f, -0.5f) * scaleFactor,
+                new Vector3( 0.5f,  0.5f, -0.5f) * scaleFactor,
+                new Vector3(-0.5f,  0.5f, -0.5f) * scaleFactor,
              };
 
             short[] elements =

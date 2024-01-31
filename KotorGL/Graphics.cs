@@ -3,14 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Silk.NET.OpenGLES;
 
 namespace KotorGL
 {
     public class Graphics
     {
+        public GL GL { get; private set; }
+
         public Dictionary<string, Shader> Shaders { get; } = new();
         public Dictionary<string, Texture> Textures { get; } = new();
         public Dictionary<string, VertexArray> VAOs { get; } = new();
+
+        public Graphics(GL gl)
+        {
+            GL = gl;
+        }
 
         public Shader GetShader(string name)
         {

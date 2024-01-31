@@ -9,6 +9,7 @@ layout (location = 4) in vec3 uv2;
 out vec2 diffuse_uv;
 out vec2 lightmap_uv;
 out vec4 pos;
+out vec4 color;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -16,8 +17,10 @@ uniform mat4 projection;
 
 void main()
 {
-    gl_Position = projection * view * model *  vec4(position, 1.0);
+    gl_Position = projection * view * model * vec4(position, 1.0);
     diffuse_uv = vec2(uv.x, uv.y);
     lightmap_uv = vec2(uv2.x, uv2.y);
     pos = gl_Position;
+
+    color = vec4(position, 1.0);
 }

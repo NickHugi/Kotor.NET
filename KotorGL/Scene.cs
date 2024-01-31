@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using KotorDotNET.FileFormats.KotorTPC;
 using KotorGL.SceneObjects;
 using Silk.NET.OpenGLES;
 
@@ -30,12 +31,23 @@ namespace KotorGL
         {
             _gl.DebugMessageCallback(DebugMessageDelegate, IntPtr.Zero);
             _gl.Enable(EnableCap.DebugOutput);
+            _gl.Enable(EnableCap.DepthTest);
 
             _graphics.Shaders.Add("kotor", new Shader(_gl, "kotor"));
             _graphics.Shaders.Add("test", new Shader(_gl, "test"));
 
+            //var testTpcData = File.ReadAllBytes(@"Assets/lda_grass01.tga");
+            //var tpc = new TGABinaryReader(testTpcData).Read();
+            //var texture = new Texture(_gl, tpc);
+            //_graphics.Textures.Add("lda_grass01", texture);
+
+            //var thingy = new KotorModelLoader(File.ReadAllBytes(@"C:\Users\hugin\Desktop\ext\cube.mdl"), File.ReadAllBytes(@"C:\Users\hugin\Desktop\ext\cube.mdx")).Read(_graphics);
+            //_objects.Add(thingy);
+
             CubeObject.InitializeVertexArray(_gl, _graphics);
             TriangleObject.InitializeVertexArray(_gl, _graphics);
+
+            _objects.Add(new CubeObject());
         }
 
         public void Render(uint width, uint height)
@@ -44,7 +56,7 @@ namespace KotorGL
             {
                 Camera.Width = width;
                 Camera.Height = height;
-                _gl.Viewport(0, 0, width*2, height*2);
+                _gl.Viewport(0, 0, width, height);
             }
 
             foreach (var sceneObject in _objects)
@@ -52,7 +64,7 @@ namespace KotorGL
                 sceneObject.GetRenderables(_graphics).ForEach(renderable => _frame.Add(renderable));
             }
 
-            _frame.RenderToView(_gl, _graphics, Camera);
+            _frame.RenderToView(_graphics, Camera);
         }
 
         public void AddObject(SceneObject sceneObject)

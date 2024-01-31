@@ -13,14 +13,12 @@ namespace MapBuilder.Render
 {
     public class TerrainObject : SceneObject
     {
-        private GL _gl;
         private Terrain _terrain;
         private uint _id;
         private Graphics _graphics;
 
-        public TerrainObject(GL gl, Graphics graphics, Terrain terrain)
+        public TerrainObject(Graphics graphics, Terrain terrain)
         {
-            _gl = gl;
             _terrain = terrain;
             _graphics = graphics;
             Gen();
@@ -45,7 +43,7 @@ namespace MapBuilder.Render
                     elements.AddRange(new short[] { i1, i3, i2 });
                 }
 
-            _graphics.SetVAO("terrain", new KotorGL.VertexArray(_gl, vertices, elements));
+            _graphics.SetVAO("terrain", new KotorGL.VertexArray(_graphics.GL, vertices, elements));
         }
 
         public override List<IRenderable> GetRenderables(Graphics graphics)

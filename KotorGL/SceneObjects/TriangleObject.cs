@@ -17,12 +17,18 @@ namespace KotorGL.SceneObjects
 
         public static unsafe void InitializeVertexArray(GL gl, Graphics graphics)
         {
+            //float[] vertices =
+            //{
+            //    -1f, -1f, 0f,
+            //     1f, -1f, 0f,
+            //     0f,  1f, 0f
+            // };
             float[] vertices =
             {
-                -1f, -1f, 0f,
-                 1f, -1f, 0f,
-                 0f,  1f, 0f
-             };
+                 0.0f,  0.0f, 0, // Right onw
+                 0.5f,  1.0f, 0, // Top one
+                 1.0f,  0.0f, 0, // Left one
+            };
 
             ushort[] indices =
             {

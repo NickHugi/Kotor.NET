@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using KotorGL.Extensions;
+using Silk.NET.Maths;
 using Silk.NET.OpenGLES;
 
 namespace KotorGL
@@ -87,6 +88,13 @@ namespace KotorGL
             var location = GetUniformLocation(name);
             var value = matrix.ToFloatSpan();
             _gl.UniformMatrix4(location, false, value);
+        }
+
+        public void SetUniformMatrix4x4(string name, Matrix4X4<float> matrix)
+        {
+            //var location = GetUniformLocation(name);
+            //var value = matrix.ToFloatSpan();
+            //_gl.UniformMatrix4(location, false, matrix);
         }
     }
 }

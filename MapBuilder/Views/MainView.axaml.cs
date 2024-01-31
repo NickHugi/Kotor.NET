@@ -41,13 +41,15 @@ public class KotorGLControl : OpenGlControlBase
     private bool init = false;
     protected override unsafe void OnOpenGlInit(GlInterface glInterface)
     {
-        Graphics graphics = new();
-        GL gl = GL.GetApi(glInterface.GetProcAddress);
+        GL gl = _gl = GL.GetApi(glInterface.GetProcAddress);
+        Graphics graphics = new(gl);
 
         _scene = new(gl, graphics);
         _scene.Init();
-        _scene.AddObject(new TerrainObject(gl, graphics, new(10, 10)));
+        //_scene.AddObject(new TerrainObject(graphics, new(10, 10)));
         init = true;
+
+        _gl.Viewport(0, 0, _width, _height);
     }
 
     protected override unsafe void OnOpenGlDeinit(GlInterface gl)

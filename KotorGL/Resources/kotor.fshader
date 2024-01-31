@@ -4,6 +4,7 @@ precision highp float;
 in vec2 diffuse_uv;
 in vec2 lightmap_uv;
 in vec4 pos;
+in vec4 color;
 
 out vec4 FragColor;
 
@@ -22,5 +23,5 @@ void main()
     //    FragColor = diffuseColor;
     //}
 
-    FragColor = pos;
+    FragColor = color;
 }

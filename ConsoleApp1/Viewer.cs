@@ -36,8 +36,12 @@ namespace ConsoleApp1
 
         private void OnLoad()
         {
-            _scene = new(_window.CreateOpenGLES(), new());
+            var gl = _window.CreateOpenGLES();
+            var graphics = new Graphics(gl);
+            _scene = new(gl, new(gl));
             _scene.Init();
+            _scene.Camera.Width = 1920;
+            _scene.Camera.Height = 1080;
         }
 
         private void OnUpdate(double deltaTime)
