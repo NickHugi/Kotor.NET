@@ -3,8 +3,8 @@
 // (see accompanying GPPGcopyright.rtf)
 
 // GPPG version 1.5.2
-// DateTime: 2/02/2024 11:48:44 PM
-// Input file <Calculator\Calculator.Language.grammar.y - 2/02/2024 11:36:59 PM>
+// DateTime: 3/02/2024 12:04:22 AM
+// Input file <Calculator\Calculator.Language.grammar.y - 2/02/2024 11:51:13 PM>
 
 // options: no-lines gplex
 
@@ -612,7 +612,7 @@ internal partial class CalculatorParser: ShiftReduceParser<ValueType, LexLocatio
 { CurrentSemanticValue.node = new FieldAccess(ValueStack[ValueStack.Depth-3].text, ValueStack[ValueStack.Depth-1].text); }
         break;
       case 134: // field_access -> field_access, '.', IDENTIFIER
-{ CurrentSemanticValue.node = new FieldAccess((FieldAccess)ValueStack[ValueStack.Depth - 3].node, ValueStack[ValueStack.Depth - 1].text); }
+{ CurrentSemanticValue.node = new FieldAccess((FieldAccess)ValueStack[ValueStack.Depth-3].node, ValueStack[ValueStack.Depth-1].text); }
         break;
     }
 #pragma warning restore 162, 1522

@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Kotor.NET\Kotor.NET.csproj" />
+  </ItemGroup>
+
 </Project>

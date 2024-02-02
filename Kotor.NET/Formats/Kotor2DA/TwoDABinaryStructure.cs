@@ -1,5 +1,4 @@
 ﻿using Kotor.NET.Extensions;
-using Kotor.NET.Patching.Modifiers.For2DA.Values;
 using System;
 using System.Collections.Generic;
 using System.Linq;

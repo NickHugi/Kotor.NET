@@ -1,9 +1,9 @@
 
 // ==========================================================================
-//  GPPG error listing for yacc source file <Calculator\Calculator.Language.grammar.y - 2/02/2024 11:36:59 PM>
+//  GPPG error listing for yacc source file <Calculator\Calculator.Language.grammar.y - 2/02/2024 11:51:13 PM>
 // ==========================================================================
 //  Version:  1.5.2
-//  DateTime: 2/02/2024 11:48:44 PM
+//  DateTime: 3/02/2024 12:04:22 AM
 // ==========================================================================
 
 
@@ -269,7 +269,7 @@ data_type            : TYPE_INT                                              { ;
 
 field_access         : IDENTIFIER                                               { $$.node = new FieldAccess($1.text); }
                      | IDENTIFIER '.' IDENTIFIER                                { $$.node = new FieldAccess($1.text, $3.text); }
-                     | field_access '.' IDENTIFIER                              { $$.node = new FieldAccess((FieldAccess)$1.node, $3.text) }
+                     | field_access '.' IDENTIFIER                              { $$.node = new FieldAccess((FieldAccess)$1.node, $3.text); }
                      ;
 
 %%
