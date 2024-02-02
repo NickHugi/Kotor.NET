@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\KotorGL\KotorGL.csproj" />
+    <ProjectReference Include="..\Kotor.NET.Graphics\Kotor.NET.Graphics.csproj" />
   </ItemGroup>
 
 </Project>

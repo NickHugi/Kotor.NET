@@ -9,7 +9,7 @@ using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using DynamicData;
-using KotorDotNET.ResourceContainers;
+using Kotor.NET.ResourceContainers;
 using ReactiveUI;
 
 namespace Toolset.Controls

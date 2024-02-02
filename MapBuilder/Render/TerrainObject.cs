@@ -4,8 +4,8 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using KotorGL;
-using KotorGL.SceneObjects;
+using Kotor.NET.Graphics;
+using Kotor.NET.Graphics.SceneObjects;
 using MapBuilder.Data;
 using Silk.NET.OpenGLES;
 
@@ -43,7 +43,7 @@ namespace MapBuilder.Render
                     elements.AddRange(new short[] { i1, i3, i2 });
                 }
 
-            _graphics.SetVAO("terrain", new KotorGL.VertexArray(_graphics.GL, vertices, elements));
+            _graphics.SetVAO("terrain", new Kotor.NET.Graphics.VertexArray(_graphics.GL, vertices, elements));
         }
 
         public override List<IRenderable> GetRenderables(Graphics graphics)

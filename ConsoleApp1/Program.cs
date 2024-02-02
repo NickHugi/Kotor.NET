@@ -1,5 +1,5 @@
 ﻿using ConsoleApp1;
-using KotorGL;
+using Kotor;
 using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.OpenGLES;

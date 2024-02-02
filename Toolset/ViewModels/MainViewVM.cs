@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls;
-using KotorDotNET.ResourceContainers;
+using Kotor.NET.ResourceContainers;
 using System.Linq;
 using System.Security.AccessControl;
 using DynamicData;

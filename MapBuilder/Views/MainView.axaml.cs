@@ -3,11 +3,11 @@ using System;
 using Avalonia.Controls;
 using Avalonia.OpenGL;
 using Avalonia.OpenGL.Controls;
-using KotorGL;
+using Kotor.NET.Graphics;
 using Avalonia.Threading;
 using Silk.NET.OpenGLES;
 using Avalonia;
-using KotorGL.SceneObjects;
+using Kotor.NET.Graphics.SceneObjects;
 using MapBuilder.Render;
 
 namespace MapBuilder.Views;
