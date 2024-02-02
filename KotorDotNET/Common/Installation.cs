@@ -41,8 +41,7 @@ namespace KotorDotNET.Common
 
         public Installation(string gameDirectory)
         {
-            // TODO - path handling
-            GamePath = gameDirectory;
+            GamePath = new KotorPath(gameDirectory);
 
             ChitinPath = GamePath.Join("chitin.key");
             Chitin = new Chitin(gameDirectory);
@@ -75,6 +74,8 @@ namespace KotorDotNET.Common
             Sounds = new ResourceFolder(SoundsPath);
 
             VoicesPath = GamePath.Join("streamwaves");
+            if (!Directory.Exists(VoicesPath))
+                VoicesPath = GamePath.Join("streamvoice");
             Voices = new ResourceFolder(VoicesPath);
         }
     }

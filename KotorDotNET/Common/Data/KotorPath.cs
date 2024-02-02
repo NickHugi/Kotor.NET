@@ -1,47 +1,77 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
+using KotorDotNET.FileSystemPathing;
 
-namespace KotorDotNET.Common.Data
+namespace KotorDotNET.Common.Data;
+
+/// <summary>
+///     A special class designed to store a path that accounts for the case-sensitivity
+///     on unix-like systems.
+/// </summary>
+public class KotorPath
 {
+    public KotorPath(string path) =>
+        Value = path;
+
     /// <summary>
-    /// A special class designed to store a path that accounts for the case-sensitivity
-    /// on unix-like systems.
+    ///     The stored path.
     /// </summary>
-    public class KotorPath
+    public string Value { get; }
+
+    /// <summary>
+    ///     Returns a new KotorPath instance with the specified path adjoined to
+    ///     the end of the current instance.
+    /// </summary>
+    /// <param name="path">The extra path to add to the end.</param>
+    /// <returns>A new KotorPath instance with the old and new paths joined.</returns>
+    public KotorPath Join(string path) => new(Path.Join(Value, path));
+    public bool Exists() => File.Exists(Value) || Directory.Exists(Value);
+
+    private bool ShouldResolveCase() => !OperatingSystem.IsWindows() && Path.IsPathRooted(Value) && !Exists();
+
+    private string NormalizePath()
     {
-        /// <summary>
-        /// The stored path.
-        /// </summary>
-        public string Value { get; private set; }
+        if (!ShouldResolveCase())
+            return Value;
 
-        public KotorPath(string path)
+        StringBuilder currentPath = new(Path.DirectorySeparatorChar.ToString());
+        foreach (string segment in Value.Split(Path.DirectorySeparatorChar))
         {
-            // TODO - check casing on unix systems
-            Value = path;
+            string? resolvedSegment = ResolveCase(currentPath.ToString(), segment);
+            if (string.IsNullOrEmpty(resolvedSegment))
+                return Value; // Path not resolved, return original value
+
+            currentPath.Append(resolvedSegment);
+            currentPath.Append(Path.DirectorySeparatorChar);
         }
 
-        /// <summary>
-        /// Returns a new KotorPath instance with the specificied path adjoined to
-        /// the end of the current instance.
-        /// </summary>
-        /// <param name="path">The extra path to add to the end.</param>
-        /// <returns>A new KotorPath instance with the old and new paths joined.</returns>
-        public KotorPath Join(string path)
-        {
-            return Path.Join(Value, path);
-        }
-
-        public static implicit operator KotorPath(string path)
-        {
-            return new KotorPath(path);
-        }
-
-        public static implicit operator string(KotorPath path)
-        {
-            return path.Value;
-        }
+        return currentPath.ToString().TrimEnd(Path.DirectorySeparatorChar);
     }
+
+    private static string? ResolveCase(string currentPath, string segment)
+    {
+        try
+        {
+            DirectoryInfo dirInfo = new(currentPath);
+            foreach (FileSystemInfo fsInfo in dirInfo.EnumerateFileSystemInfosSafely())
+            {
+                if (segment.Equals(fsInfo.Name, StringComparison.OrdinalIgnoreCase))
+                    return fsInfo.Name;
+            }
+        }
+        catch (Exception)
+        {
+            return null; // Cannot open directory
+        }
+
+        return null; // Segment not found
+    }
+
+    public static implicit operator string(KotorPath kPath) => kPath.NormalizePath();
+    public static implicit operator KotorPath(string strPath) => new(strPath);
+
+    public static KotorPath operator +(KotorPath a, KotorPath b) =>
+        new(a.Value + b.Value);
+
+    public static KotorPath operator /(KotorPath a, KotorPath b) =>
+        new(Path.Combine(a.Value, b.Value));
 }
