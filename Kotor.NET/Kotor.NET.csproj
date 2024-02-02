@@ -10,4 +10,28 @@
     <PackageReference Include="ini-parser" Version="2.5.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Formats\KotorBWM\" />
+    <Folder Include="Formats\KotorLYT\" />
+    <Folder Include="Formats\KotorVIS\" />
+    <Folder Include="Formats\KotorLIP\" />
+    <Folder Include="Formats\KotorTXI\" />
+    <Folder Include="Resources\KotorUTD\" />
+    <Folder Include="Resources\KotorUTP\" />
+    <Folder Include="Resources\KotorUTI\" />
+    <Folder Include="Resources\KotorUTE\" />
+    <Folder Include="Resources\KotorUTS\" />
+    <Folder Include="Resources\KotorUTT\" />
+    <Folder Include="Resources\KotorUTM\" />
+    <Folder Include="Resources\KotorGUI\" />
+    <Folder Include="Resources\KotorIFO\" />
+    <Folder Include="Resources\KotorARE\" />
+    <Folder Include="Resources\KotorGIT\" />
+    <Folder Include="Resources\KotorDLG\" />
+    <Folder Include="Resources\KotorFAC\" />
+    <Folder Include="Resources\KotorJRL\" />
+    <Folder Include="Resources\KotorUTW\" />
+    <Folder Include="Resources\KotorPTH\" />
+  </ItemGroup>
+
 </Project>
