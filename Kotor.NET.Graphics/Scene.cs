@@ -54,9 +54,10 @@ namespace Kotor.NET.Graphics
         {
             if (width != Camera.Width || height != Camera.Height)
             {
+                var scaling = 1.5f;
                 Camera.Width = width;
                 Camera.Height = height;
-                _gl.Viewport(0, 0, width, height);
+                _gl.Viewport(0, 0, (uint)(width * scaling), (uint)(height * scaling));
             }
 
             foreach (var sceneObject in _objects)
