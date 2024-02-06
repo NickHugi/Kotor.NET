@@ -13,8 +13,12 @@ namespace Kotor.NET.Graphics
     {
         public uint ID { get; set; }
 
+        private GL _gl { get; set; }
+
         public unsafe Texture(GL gl, TPC tpc)
         {
+            _gl = gl;
+
             var mipmap = tpc.GetMipmap(0);
 
             ID = gl.GenTexture();
@@ -55,7 +59,7 @@ namespace Kotor.NET.Graphics
 
         public void Use()
         {
-            //GL.BindTexture(All.Texture2D, ID);
+            _gl.BindTexture(TextureTarget.Texture2D, ID);
         }
     }
 }

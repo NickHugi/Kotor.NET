@@ -15,7 +15,7 @@ namespace Kotor.NET.Graphics
         public float TargetZ { get; set; } = 0.0f;
         public uint Width { get; set; } = 400;
         public uint Height { get; set; } = 400;
-        public float Distance { get; set; } = 2;
+        public float Distance { get; set; } = 10;
         public float Pitch { get; set; } = (float)(Math.PI / 4);
         public float Yaw { get; set; }
         public float Near { get; set; } = 0.001f;

@@ -4,7 +4,6 @@ precision highp float;
 in vec2 diffuse_uv;
 in vec2 lightmap_uv;
 in vec4 pos;
-in vec4 color;
 
 out vec4 FragColor;
 
@@ -14,7 +13,9 @@ uniform int enableLightmap;
 
 void main()
 {
-    //vec4 diffuseColor = texture(diffuse, diffuse_uv);
+    vec4 diffuseColor = texture(diffuse, diffuse_uv);
+    FragColor = diffuseColor;
+
     //vec4 lightmapColor = texture(lightmap, lightmap_uv);
 
     //if (enableLightmap == 1) {
@@ -23,5 +24,5 @@ void main()
     //    FragColor = diffuseColor;
     //}
 
-    FragColor = color;
+    //FragColor = color;
 }

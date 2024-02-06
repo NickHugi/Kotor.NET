@@ -36,10 +36,10 @@ namespace Kotor.NET.Graphics
             _graphics.Shaders.Add("kotor", new Shader(_gl, "kotor"));
             _graphics.Shaders.Add("test", new Shader(_gl, "test"));
 
-            //var testTpcData = File.ReadAllBytes(@"Assets/lda_grass01.tga");
-            //var tpc = new TGABinaryReader(testTpcData).Read();
-            //var texture = new Texture(_gl, tpc);
-            //_graphics.Textures.Add("lda_grass01", texture);
+            var testTpcData = File.ReadAllBytes(@"Assets/lda_grass01.tga");
+            var tpc = new TGABinaryReader(testTpcData).Read();
+            var texture = new Texture(_gl, tpc);
+            _graphics.Textures.Add("lda_grass01", texture);
 
             //var thingy = new KotorModelLoader(File.ReadAllBytes(@"C:\Users\hugin\Desktop\ext\cube.mdl"), File.ReadAllBytes(@"C:\Users\hugin\Desktop\ext\cube.mdx")).Read(_graphics);
             //_objects.Add(thingy);
@@ -47,7 +47,7 @@ namespace Kotor.NET.Graphics
             CubeObject.InitializeVertexArray(_gl, _graphics);
             TriangleObject.InitializeVertexArray(_gl, _graphics);
 
-            _objects.Add(new CubeObject());
+            //_objects.Add(new CubeObject());
         }
 
         public void Render(uint width, uint height)

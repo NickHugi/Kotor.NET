@@ -18,8 +18,7 @@ namespace MapBuilder.Data
                 for (var x = 0; x < Width; x++)
                 for (var y = 0; y < Length; y++)
                 {
-                    var index = y * Width + x;
-                        height[x, y] = 0;// _height[index];
+                    height[x, y] = (float)new Random().NextDouble() / 2;
                 }
                 return height;
             }

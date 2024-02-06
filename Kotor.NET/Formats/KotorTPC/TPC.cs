@@ -27,8 +27,8 @@ namespace Kotor.NET.Formats.KotorTPC
         {
             return new Mipmap
             {
-                Width = (int)Math.Sqrt(Width),
-                Height = (int)Math.Sqrt(Height),
+                Width = (int)Math.Pow(Width, 1 / (index + 1)),
+                Height = (int)Math.Pow(Height, 1 / (index + 1)),
                 Data = _mipmapData[index],
             };
         }
