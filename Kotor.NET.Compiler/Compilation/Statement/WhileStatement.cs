@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kotor.NET.Compiler.Compilation.Statement
+namespace Kotor.NET.Scripting.Compilation.Statement
 {
     public class WhileStatement : IStatement
     {

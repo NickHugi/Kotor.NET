@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kotor.NET.Compiler.Compilation
+namespace Kotor.NET.Scripting.Compilation
 {
     public interface IStatement
     {

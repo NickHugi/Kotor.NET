@@ -4,10 +4,10 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using Kotor.NET.Compiler.Calculator;
+using Kotor.NET.Scripting.Calculator;
 using Kotor.NET.Formats.KotorNCS;
 
-namespace Kotor.NET.Compiler.Compilation
+namespace Kotor.NET.Scripting.Compilation
 {
     public class GlobalVariableInitialization : ASTNode
     {

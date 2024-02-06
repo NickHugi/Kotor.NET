@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Formats.KotorNCS;
 
-namespace Kotor.NET.Compiler.Compilation.Expression.Constant
+namespace Kotor.NET.Scripting.Compilation.Expression.Constant
 {
     public class StringConstantExpression : IExpression
     {

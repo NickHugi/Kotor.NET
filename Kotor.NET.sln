@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolset.Desktop", "Toolset.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kotor.NET.Graphics", "Kotor.NET.Graphics\Kotor.NET.Graphics.csproj", "{B23ACA4A-0597-442F-A6FD-D226BB18A05B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kotor.NET.Compiler", "Kotor.NET.Compiler\Kotor.NET.Compiler.csproj", "{832866A5-2F78-4AAF-BBA9-FE914F55CCFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kotor.NET.Scripting", "Kotor.NET.Compiler\Kotor.NET.Scripting.csproj", "{832866A5-2F78-4AAF-BBA9-FE914F55CCFB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapBuilder", "MapBuilder\MapBuilder.csproj", "{0E2A03D4-6517-46DC-BB38-255DB98B1CA8}"
 EndProject
@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapBuilder.Desktop", "MapBu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{0A939ED9-2124-40DE-8423-6208B20184C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kotor.NET.Patcher", "Kotor.NET.Patcher\Kotor.NET.Patcher.csproj", "{C6F8F5C3-5731-4AF1-9943-806A4DCB957D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kotor.NET.Patcher", "Kotor.NET.Patcher\Kotor.NET.Patcher.csproj", "{C6F8F5C3-5731-4AF1-9943-806A4DCB957D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -14,9 +14,9 @@ using System.CodeDom.Compiler;
 using System.Globalization;
 using System.Text;
 using QUT.Gppg;
-using Kotor.NET.Compiler.Compilation;
+using Kotor.NET.Scripting.Compilation;
 
-namespace Kotor.NET.Compiler.Calculator
+namespace Kotor.NET.Scripting.Calculator
 {
 internal enum Token {
     error=127,EOF=128,EOL=129,NOP=130,COMMENT_INLINE=131,COMMENT_MULTILINE=132,

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Formats.KotorNCS;
 
-namespace Kotor.NET.Compiler.Compilation
+namespace Kotor.NET.Scripting.Compilation
 {
     public class IntLiteralExpression : IExpression
     {

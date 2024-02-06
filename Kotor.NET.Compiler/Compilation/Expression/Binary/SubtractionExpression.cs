@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Formats.KotorNCS;
 
-namespace Kotor.NET.Compiler.Compilation.Expression
+namespace Kotor.NET.Scripting.Compilation.Expression
 {
     public class SubtractionExpression : IExpression
     {

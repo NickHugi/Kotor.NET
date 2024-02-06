@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Kotor.NET.Compiler.Calculator
+namespace Kotor.NET.Scripting.Calculator
 {
     internal partial class CalculatorScanner
     {

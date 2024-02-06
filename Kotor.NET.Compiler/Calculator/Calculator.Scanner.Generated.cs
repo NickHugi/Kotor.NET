@@ -33,7 +33,7 @@ using System.Diagnostics.CodeAnalysis;
 
 using QUT.GplexBuffers;
 
-namespace Kotor.NET.Compiler.Calculator
+namespace Kotor.NET.Scripting.Calculator
 {   
     /// <summary>
     /// Summary Canonical example of GPLEX automaton

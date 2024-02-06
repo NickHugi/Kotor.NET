@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Kotor.NET.Compiler;
-using Kotor.NET.Compiler.Compilation;
+using Kotor.NET.Scripting;
+using Kotor.NET.Scripting.Compilation;
 
-namespace Kotor.NET.Compiler.Calculator
+namespace Kotor.NET.Scripting.Calculator
 {
     internal partial class CalculatorParser
     {
