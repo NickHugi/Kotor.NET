@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kotor.NET.Resources.KotorIFO
 {
-    internal class IFO
+    public class IFO
     {
     }
 }

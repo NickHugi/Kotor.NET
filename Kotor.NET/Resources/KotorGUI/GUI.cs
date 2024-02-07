@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kotor.NET.Resources.KotorGUI
 {
-    internal class GUI
+    public class GUI
     {
     }
 }

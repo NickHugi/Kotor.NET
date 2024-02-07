@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kotor.NET.Resources.KotorUTW
 {
-    internal class UTW
+    public class UTW
     {
     }
 }

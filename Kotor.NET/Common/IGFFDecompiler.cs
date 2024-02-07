@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kotor.NET.Resources.KotorJRL
+namespace Kotor.NET.Common
 {
-    public class JRL
+    public interface IGFFDecompiler<T>
     {
+        T Decompile();
     }
 }

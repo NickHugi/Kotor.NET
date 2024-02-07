@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kotor.NET.Resources.KotorUTP
 {
-    internal class UTP
+    public class UTP
     {
     }
 }

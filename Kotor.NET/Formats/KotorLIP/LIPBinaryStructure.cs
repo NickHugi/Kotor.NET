@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kotor.NET.Resources.KotorJRL
+namespace Kotor.NET.Formats.KotorLIP
 {
-    public class JRL
+    public static class LIPBinaryStructure
     {
     }
 }

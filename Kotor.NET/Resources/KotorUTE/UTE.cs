@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kotor.NET.Resources.KotorUTE
 {
-    internal class UTE
+    public class UTE
     {
     }
 }

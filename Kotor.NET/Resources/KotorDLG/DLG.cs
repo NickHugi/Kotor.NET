@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kotor.NET.Resources.KotorDLG
 {
-    internal class DLG
+    public class DLG
     {
     }
 }
