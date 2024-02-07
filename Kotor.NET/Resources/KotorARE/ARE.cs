@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kotor.NET.Resources.KotorARE
 {
-    internal class ARE
+    public class ARE
     {
     }
 }

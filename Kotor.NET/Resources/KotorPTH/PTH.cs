@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kotor.NET.Resources.KotorPTH
 {
-    internal class PTH
+    public class PTH
     {
     }
 }

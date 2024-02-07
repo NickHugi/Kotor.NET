@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.NET.Formats.KotorGFF;
 
-namespace Kotor.NET.Resources.KotorJRL
+namespace Kotor.NET.Common
 {
-    public class JRL
+    public interface IGFFCompiler
     {
+        GFF CompileGFF();
     }
 }

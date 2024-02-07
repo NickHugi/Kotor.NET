@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kotor.NET.Resources.KotorUTS
 {
-    internal class UTS
+    public class UTS
     {
     }
 }
