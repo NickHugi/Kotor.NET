@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kotor.NET.Exceptions
+namespace Kotor.NET.Patcher.Exceptions
 {
     public class PatchingParserException : Exception
     {
