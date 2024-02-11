@@ -36,18 +36,15 @@ namespace Kotor.NET.Graphics
             _graphics.Shaders.Add("kotor", new Shader(_gl, "kotor"));
             _graphics.Shaders.Add("test", new Shader(_gl, "test"));
 
-            var testTpcData = File.ReadAllBytes(@"Assets/lda_grass01.tga");
-            var tpc = new TGABinaryReader(testTpcData).Read();
-            var texture = new Texture(_gl, tpc);
-            _graphics.Textures.Add("lda_grass01", texture);
+            _graphics.Textures.Add("lda_grass01", new Texture(_gl, new TGABinaryReader(File.ReadAllBytes(@"Assets/lda_grass01.tga")).Read()));
+            _graphics.Textures.Add("plc_jnkspdr1", new Texture(_gl, new TGABinaryReader(File.ReadAllBytes(@"Assets/plc_jnkspdr1.tga")).Read() ));
+            _graphics.Textures.Add("plc_spdrwin01", new Texture(_gl, new TGABinaryReader(File.ReadAllBytes(@"Assets/plc_spdrwin01.tga")).Read() ));
 
-            //var thingy = new KotorModelLoader(File.ReadAllBytes(@"C:\Users\hugin\Desktop\ext\cube.mdl"), File.ReadAllBytes(@"C:\Users\hugin\Desktop\ext\cube.mdx")).Read(_graphics);
-            //_objects.Add(thingy);
+            var thingy = new KotorModelLoader(File.ReadAllBytes(@"Assets\plc_jnkspdr1.mdl"), File.ReadAllBytes(@"Assets\plc_jnkspdr1.mdx")).Read(_graphics);
+            _objects.Add(thingy);
 
             CubeObject.InitializeVertexArray(_gl, _graphics);
             TriangleObject.InitializeVertexArray(_gl, _graphics);
-
-            //_objects.Add(new CubeObject());
         }
 
         public void Render(uint width, uint height)

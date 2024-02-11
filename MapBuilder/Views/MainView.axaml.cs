@@ -9,6 +9,12 @@ using Silk.NET.OpenGLES;
 using Avalonia;
 using Kotor.NET.Graphics.SceneObjects;
 using MapBuilder.Render;
+using Avalonia.Input;
+using Avalonia.Platform;
+using Avalonia.Media;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
 
 namespace MapBuilder.Views;
 
@@ -16,7 +22,6 @@ public partial class MainView : UserControl
 {
     public MainView()
     {
-        
         InitializeComponent();
     }
 }
@@ -29,16 +34,17 @@ public class KotorGLControl : OpenGlControlBase
 
     private uint _width = 0;
     private uint _height = 0;
+    private bool _init = false;
+
+    private HashSet<bool> _mouseButtons = new();
 
     public KotorGLControl()
     {
-        //GlVersion = new GlVersion(GlProfileType.OpenGL, 4, 0);
-        System.Timers.Timer timer = new(33);
+        Timer timer = new(33);
         timer.Elapsed += OnTimedEvent;
         timer.Start();
     }
 
-    private bool init = false;
     protected override unsafe void OnOpenGlInit(GlInterface glInterface)
     {
         GL gl = _gl = GL.GetApi(glInterface.GetProcAddress);
@@ -47,7 +53,7 @@ public class KotorGLControl : OpenGlControlBase
         _scene = new(gl, graphics);
         _scene.Init();
         _scene.AddObject(new TerrainObject(graphics, new(10, 10)));
-        init = true;
+        _init = true;
 
         _gl.Viewport(0, 0, _width, _height);
     }
@@ -59,7 +65,7 @@ public class KotorGLControl : OpenGlControlBase
 
     protected override unsafe void OnOpenGlRender(GlInterface gl, int fb)
     {
-        if (init)
+        if (_init)
         {
             _scene.Render(_width, _height);
         }
@@ -77,5 +83,47 @@ public class KotorGLControl : OpenGlControlBase
     {
         _width = (uint)e.NewSize.Width;
         _height = (uint)e.NewSize.Height;
+    }
+
+    protected override void OnPointerPressed(PointerPressedEventArgs e)
+    {
+        base.OnPointerPressed(e);
+    }
+
+    protected override void OnPointerMoved(PointerEventArgs e)
+    {
+        base.OnPointerMoved(e);
+
+        var camera = _scene.Camera;
+
+        var oldPoint = e.GetIntermediatePoints(this).First();
+        var newPoint = e.GetCurrentPoint(this);
+        var delta = newPoint.Position - oldPoint.Position;
+
+        if (newPoint.Properties.IsMiddleButtonPressed)
+        {
+            camera.Yaw += (float)(Math.PI * -delta.X * 0.001);
+            camera.Pitch += (float)(Math.PI * delta.Y * 0.001);
+        }
+
+        if (newPoint.Properties.IsLeftButtonPressed && e.KeyModifiers == KeyModifiers.Control)
+        {
+            camera.TargetX += (float)(delta.X * 0.01 * MathF.Sin(camera.Yaw)) - (float)(delta.Y * 0.01 * MathF.Cos(camera.Yaw));
+            camera.TargetY -= (float)(delta.X * 0.01 * MathF.Cos(camera.Yaw)) + (float)(delta.Y * 0.01 * MathF.Sin(camera.Yaw));
+        }
+    }
+
+    protected override void OnPointerWheelChanged(PointerWheelEventArgs e)
+    {
+        base.OnPointerWheelChanged(e);
+
+        _scene.Camera.Distance -= (float)(e.Delta.Y * 0.4);
+    }
+
+    public override void Render(DrawingContext context)
+    {
+        context.FillRectangle(Brushes.Red, new Rect(Bounds.Size));
+
+        base.Render(context);
     }
 }

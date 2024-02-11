@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -14,6 +14,10 @@
   
   <ItemGroup>
     <AvaloniaResource Remove="Assets\lda_grass01.tga" />
+    <AvaloniaResource Remove="Assets\plc_jnkspdr1.mdl" />
+    <AvaloniaResource Remove="Assets\plc_jnkspdr1.mdx" />
+    <AvaloniaResource Remove="Assets\plc_jnkspdr1.tga" />
+    <AvaloniaResource Remove="Assets\plc_spdrwin01.tga" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,6 +37,18 @@
 
   <ItemGroup>
     <Content Include="Assets\lda_grass01.tga">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\plc_jnkspdr1.mdl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\plc_jnkspdr1.mdx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\plc_jnkspdr1.tga">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\plc_spdrwin01.tga">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

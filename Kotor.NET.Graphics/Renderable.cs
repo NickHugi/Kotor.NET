@@ -26,7 +26,8 @@ namespace Kotor.NET.Graphics
 
         public void Render()
         {
-            Texture1.Use();
+            if (Texture1 is not null)
+                Texture1.Use();
             VAO.Draw();
         }
     }

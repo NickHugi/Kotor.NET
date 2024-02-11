@@ -27,7 +27,7 @@ namespace Kotor.NET.Graphics
 
         public Texture GetTextures(string name)
         {
-            return Textures[name];
+            return Textures.Single(x => string.Equals(x.Key, name, StringComparison.OrdinalIgnoreCase)).Value;
         }
 
         public VertexArray GetVAO(string name)

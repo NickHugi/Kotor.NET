@@ -10,13 +10,15 @@ namespace Kotor.NET.Graphics.SceneObjects
     {
         public List<KotorObject> Children { get; set; }
         public string VAOKey { get; set; }
+        public string Texture { get; set; }
         public string Name { get; set; }
         public bool Render { get; set; }
 
-        public KotorObject(string vaoKey)
+        public KotorObject(string vaoKey, string texture1)
         {
             Children = new();
             VAOKey = vaoKey;
+            Texture = texture1;
         }
 
         public override List<IRenderable> GetRenderables(Graphics graphics)
@@ -27,7 +29,7 @@ namespace Kotor.NET.Graphics.SceneObjects
             {
                 var vao = graphics.GetVAO(VAOKey);
                 var shader = graphics.GetShader("kotor");
-                Texture texture1 = null;
+                Texture texture1 = graphics.GetTextures(Texture);
                 Texture texture2 = null;
                 renderables.Add(new Renderable(vao, shader, texture1, texture2));
             }

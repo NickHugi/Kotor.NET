@@ -119,7 +119,7 @@ namespace Kotor.NET.Graphics
                 childrenOffsets[i] = mdlReader.ReadInt32();
             }
 
-            var kotorObject = new KotorObject(vao);
+            var kotorObject = new KotorObject(vao, node.Texture);
             for (int i = 0; (i < childrenOffsets.Length); i++)
             {
                 kotorObject.Children.Add(ReadNode(graphics, mdlReader, mdxReader, childrenOffsets[i]));

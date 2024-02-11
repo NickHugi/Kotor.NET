@@ -12,7 +12,7 @@ namespace Kotor.NET.Graphics.SceneObjects
     {
         public override List<IRenderable> GetRenderables(Graphics graphics)
         {
-            return new() { new Renderable(graphics.GetVAO(":triangle"), graphics.GetShader("test"), null, null) };
+            return new() { new Renderable(graphics.GetVAO(":triangle"), graphics.GetShader("kotor"), null, null) };
         }
 
         public static unsafe void InitializeVertexArray(GL gl, Graphics graphics)
