@@ -67,7 +67,7 @@ public class KotorGLControl : OpenGlControlBase
     {
         if (_init)
         {
-            _scene.Render(_width, _height);
+            _scene.Render((uint)(_width * 1.0f), (uint)(_height * 1.0f));
         }
     }
 
@@ -81,8 +81,9 @@ public class KotorGLControl : OpenGlControlBase
 
     protected override void OnSizeChanged(SizeChangedEventArgs e)
     {
-        _width = (uint)e.NewSize.Width;
-        _height = (uint)e.NewSize.Height;
+        var scaling = GetParentWindow().RenderScaling;
+        _width = (uint)(e.NewSize.Width * scaling);
+        _height = (uint)(e.NewSize.Height * scaling);
     }
 
     protected override void OnPointerPressed(PointerPressedEventArgs e)
@@ -125,5 +126,18 @@ public class KotorGLControl : OpenGlControlBase
         context.FillRectangle(Brushes.Red, new Rect(Bounds.Size));
 
         base.Render(context);
+    }
+
+    private Window GetParentWindow()
+    {
+        dynamic node = this;
+
+        while (true)
+        {
+            if (node.Parent is null)
+                return (Window)node;
+
+            node = node.Parent;
+        }
     }
 }

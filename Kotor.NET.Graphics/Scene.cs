@@ -25,8 +25,6 @@ namespace Kotor.NET.Graphics
             _graphics = graphics;
         }
 
-        int VertexArrayObject;
-        Shader shader;
         public void Init()
         {
             _gl.DebugMessageCallback(DebugMessageDelegate, IntPtr.Zero);
@@ -51,10 +49,9 @@ namespace Kotor.NET.Graphics
         {
             if (width != Camera.Width || height != Camera.Height)
             {
-                var scaling = 1.5f;
                 Camera.Width = width;
                 Camera.Height = height;
-                _gl.Viewport(0, 0, (uint)(width * scaling), (uint)(height * scaling));
+                _gl.Viewport(0, 0, width, height);
             }
 
             foreach (var sceneObject in _objects)
