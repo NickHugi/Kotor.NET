@@ -32,6 +32,16 @@ namespace Kotor.NET.Formats.KotorTPC
                 Data = _mipmapData[index],
             };
         }
+
+        //public Mipmap GetMipmap(int index, TPCTextureFormat format)
+        //{
+        //    return Convert(GetMipmap(index), Format, format);
+        //}
+
+        //private Mipmap Convert(Mipmap mipmap, TPCTextureFormat source, TPCTextureFormat target)
+        //{
+            
+        //}
     }
 
     public class Mipmap

@@ -25,11 +25,27 @@ namespace Kotor.NET.Formats.KotorTPC
                 ImageData = reader.ReadBytes(FileHeader.Width * FileHeader.Height * FileHeader.BitsPerPixel / 8);
             }
 
+            public TGA()
+            {
+                FileHeader = new();
+                ID = "";
+                ColourMapData = new byte[0];
+                ImageData = new byte[0];
+            }
+
             public void SanityCheck()
             {
                 Debug.Assert(ColourMapData.Length == FileHeader.ColourMapDepth / 8);
                 Debug.Assert(FileHeader.ColourMapType == 0 && FileHeader.ColourMapDepth > 0);
                 Debug.Assert(ImageData.Length == FileHeader.BitsPerPixel / 8);
+            }
+
+            public void Write(BinaryWriter writer)
+            {
+                FileHeader.Write(writer);
+                writer.Write(ID, 0);
+                writer.Write(ColourMapData);
+                writer.Write(ImageData);
             }
         }
 
@@ -62,6 +78,11 @@ namespace Kotor.NET.Formats.KotorTPC
                 Height = reader.ReadUInt16();
                 BitsPerPixel = reader.ReadByte();
                 ImageDescriptor = reader.ReadByte();
+            }
+
+            public FileHeader()
+            {
+
             }
 
             public void Write(BinaryWriter writer)
