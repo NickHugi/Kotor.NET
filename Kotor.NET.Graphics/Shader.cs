@@ -13,57 +13,23 @@ namespace Kotor.NET.Graphics
 {
     public class Shader
     {
-        public uint ID { get; }
+        public uint ProgramID { init; get; }
+        public uint VertexShaderID { init; get; }
+        public uint FragmentShaderID { init; get; }
 
         private GL _gl;
 
-        public Shader(GL gl, string shaderName)
+        public Shader(GL gl, Stream vertexShaderStream, Stream fragmentShaderStream)
         {
             _gl = gl;
 
-            var assembly = Assembly.GetExecutingAssembly();
+            VertexShaderID = _gl.CreateShader(ShaderType.VertexShader);
+            FragmentShaderID = _gl.CreateShader(ShaderType.FragmentShader);
+            ProgramID = _gl.CreateProgram();
 
-            using (var vShaderStream = new StreamReader(assembly.GetManifestResourceStream($"Kotor.NET.Graphics.Resources.{shaderName}.vshader")!))
-            using (var fShaderStream = new StreamReader(assembly.GetManifestResourceStream($"Kotor.NET.Graphics.Resources.{shaderName}.fshader")!))
-            {
-                int success;
-                var vShaderSource = vShaderStream.ReadToEnd();
-                var fShaderSource = fShaderStream.ReadToEnd();
-
-                var vertexShader = _gl.CreateShader(ShaderType.VertexShader);
-                _gl.ShaderSource(vertexShader, vShaderSource);
-                _gl.CompileShader(vertexShader);
-                _gl.GetShader(vertexShader, GLEnum.CompileStatus, out success);
-                if (success == 0)
-                {
-                    string infoLog = _gl.GetShaderInfoLog(vertexShader);
-                    throw new Exception(infoLog);
-                }
-
-                var fragmentShader = _gl.CreateShader(ShaderType.FragmentShader);
-                _gl.ShaderSource(fragmentShader, fShaderSource);
-                _gl.CompileShader(fragmentShader);
-                _gl.GetShader(fragmentShader, GLEnum.CompileStatus, out success);
-                if (success == 0)
-                {
-                    string infoLog = _gl.GetShaderInfoLog(fragmentShader);
-                    throw new Exception(infoLog);
-                }
-
-                var program = _gl.CreateProgram();
-                _gl.AttachShader(program, vertexShader);
-                _gl.AttachShader(program, fragmentShader);
-                _gl.LinkProgram(program);
-                _gl.GetProgramInfoLog(program, out string info);
-                if (info != "")
-                {
-                    string infoLog = _gl.GetShaderInfoLog(vertexShader);
-                    throw new Exception(infoLog);
-                }
-
-                ID = program;
-            }
+            InitializeShader(vertexShaderStream, fragmentShaderStream);
         }
+
 
         ~Shader()
         {
@@ -75,12 +41,12 @@ namespace Kotor.NET.Graphics
 
         public void Use()
         {
-            _gl.UseProgram(ID);
+            _gl.UseProgram(ProgramID);
         }
 
         public int GetUniformLocation(string name)
         {
-            return _gl.GetUniformLocation(ID, name);
+            return _gl.GetUniformLocation(ProgramID, name);
         }
         
         public void SetUniformMatrix4x4(string name, Matrix4x4 matrix)
@@ -95,6 +61,44 @@ namespace Kotor.NET.Graphics
             //var location = GetUniformLocation(name);
             //var value = matrix.ToFloatSpan();
             //_gl.UniformMatrix4(location, false, matrix);
+        }
+
+        private void InitializeShader(Stream vertexStream, Stream fragmentStream)
+        {
+            var vertexStreamReader = new StreamReader(vertexStream);
+            var fragmentStreamReader = new StreamReader(fragmentStream);
+
+            int success;
+            var vShaderSource = vertexStreamReader.ReadToEnd();
+            var fShaderSource = fragmentStreamReader.ReadToEnd();
+
+            _gl.ShaderSource(VertexShaderID, vShaderSource);
+            _gl.CompileShader(VertexShaderID);
+            _gl.GetShader(VertexShaderID, GLEnum.CompileStatus, out success);
+            if (success == 0)
+            {
+                string infoLog = _gl.GetShaderInfoLog(VertexShaderID);
+                throw new Exception(infoLog);
+            }
+
+            _gl.ShaderSource(FragmentShaderID, fShaderSource);
+            _gl.CompileShader(FragmentShaderID);
+            _gl.GetShader(FragmentShaderID, GLEnum.CompileStatus, out success);
+            if (success == 0)
+            {
+                string infoLog = _gl.GetShaderInfoLog(FragmentShaderID);
+                throw new Exception(infoLog);
+            }
+
+            _gl.AttachShader(ProgramID, VertexShaderID);
+            _gl.AttachShader(ProgramID, FragmentShaderID);
+            _gl.LinkProgram(ProgramID);
+            _gl.GetProgramInfoLog(ProgramID, out string info);
+            if (info != "")
+            {
+                string infoLog = _gl.GetShaderInfoLog(ProgramID);
+                throw new Exception(infoLog);
+            }            
         }
     }
 }

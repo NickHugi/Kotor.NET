@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,8 +32,9 @@ namespace Kotor.NET.Graphics
             _gl.Enable(EnableCap.DebugOutput);
             _gl.Enable(EnableCap.DepthTest);
 
-            _graphics.Shaders.Add("kotor", new Shader(_gl, "kotor"));
-            _graphics.Shaders.Add("test", new Shader(_gl, "test"));
+            var assembly = Assembly.GetExecutingAssembly();
+            _graphics.Shaders.Add("kotor", new(_gl, assembly.GetManifestResourceStream($"Kotor.NET.Graphics.Resources.kotor.vshader")!, assembly.GetManifestResourceStream($"Kotor.NET.Graphics.Resources.kotor.fshader")!));
+            _graphics.Shaders.Add("test", new(_gl, assembly.GetManifestResourceStream($"Kotor.NET.Graphics.Resources.test.vshader")!, assembly.GetManifestResourceStream($"Kotor.NET.Graphics.Resources.test.fshader")!));
 
             _graphics.Textures.Add("lda_grass01", new Texture(_gl, new TGABinaryReader(File.ReadAllBytes(@"Assets/lda_grass01.tga")).Read()));
             _graphics.Textures.Add("plc_jnkspdr1", new Texture(_gl, new TGABinaryReader(File.ReadAllBytes(@"Assets/plc_jnkspdr1.tga")).Read() ));
