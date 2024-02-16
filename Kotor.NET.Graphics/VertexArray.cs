@@ -12,7 +12,10 @@ namespace Kotor.NET.Graphics
 {
     public class VertexArray
     {
-        public uint ID { get; }
+        public uint VAO_ID { init; get; }
+        public uint VBO_ID { get; }
+        public uint EBO_ID { get; }
+
         public uint FaceCount { get; private set; }
 
         private GL _gl;
@@ -21,6 +24,51 @@ namespace Kotor.NET.Graphics
         {
             _gl = gl;
 
+            VAO_ID = _gl.GenVertexArray();
+            VBO_ID = _gl.GenBuffer();
+            EBO_ID = _gl.GenBuffer();
+        }
+
+        public VertexArray(GL gl, byte[] vertexData, byte[] elementData, uint positionsOffset, uint normalsOffset, uint uv1Stride, uint uv2Stride, uint blockSize, int flags)
+        {
+            _gl = gl;
+
+            VAO_ID = _gl.GenVertexArray();
+            VBO_ID = _gl.GenBuffer();
+            EBO_ID = _gl.GenBuffer();
+
+            Assign(vertexData, elementData, positionsOffset, normalsOffset, uv1Stride, uv2Stride, blockSize, flags);
+        }
+
+        public VertexArray(GL gl, uint id, uint faceCount)
+        {
+            _gl = gl;
+
+            VAO_ID = id;
+
+            FaceCount = faceCount;
+        }
+
+        /// <summary>
+        /// Initialize VertexArray with empty buffers.
+        /// </summary>
+        public VertexArray(GL gl)
+        {
+            _gl = gl;
+
+            VAO_ID = _gl.GenVertexArray();
+            VBO_ID = _gl.GenBuffer();
+            EBO_ID = _gl.GenBuffer();
+        }
+
+        public unsafe void Draw()
+        {
+            _gl.BindVertexArray(VAO_ID);
+            _gl.DrawElements(PrimitiveType.Triangles, FaceCount, DrawElementsType.UnsignedShort, (void*) 0);
+        }
+
+        public unsafe void Assign(IEnumerable<Vector3> points, IEnumerable<short> elements, IEnumerable<Vector3>? normals = null, IEnumerable<Vector2>? uv1s = null, IEnumerable<Vector2>? uv2s = null)
+        {
             if (normals is not null && normals.Count() != points.Count())
                 throw new NotImplementedException();
             if (uv1s is not null && uv1s.Count() != points.Count())
@@ -61,7 +109,7 @@ namespace Kotor.NET.Graphics
             }
 
             var vertexData = new List<byte>();
-            for (int i = 0; i < points.Count(); i ++)
+            for (int i = 0; i < points.Count(); i++)
             {
                 if (points is not null)
                 {
@@ -89,41 +137,18 @@ namespace Kotor.NET.Graphics
 
             var elementData = elements.SelectMany(x => BitConverter.GetBytes(x));
 
-            ID = Init(vertexData.ToArray(), elementData.ToArray(), (uint)positionStride, (uint)normalStride, (uint)uv1Stride, (uint)uv2Stride, (uint)blockSize, flags);
+            Assign(vertexData.ToArray(), elementData.ToArray(), (uint)positionStride, (uint)normalStride, (uint)uv1Stride, (uint)uv2Stride, (uint)blockSize, flags);
         }
 
-        public VertexArray(GL gl, byte[] vertexData, byte[] elementData, uint positionsOffset, uint normalsOffset, uint uv1Stride, uint uv2Stride, uint blockSize, int flags)
+        public unsafe void Assign(byte[] vertexData, byte[] elementData, uint positionsOffset, uint normalsOffset, uint uv1Stride, uint uv2Stride, uint blockSize, int flags)
         {
-            _gl = gl;
-            ID = Init(vertexData, elementData, positionsOffset, normalsOffset, uv1Stride, uv2Stride, blockSize, flags);
-        }
+            _gl.BindVertexArray(VAO_ID);
 
-        public VertexArray(GL gl, uint id, uint faceCount)
-        {
-            _gl = gl;
-            ID = id;
-            FaceCount = faceCount;
-        }
-
-        public unsafe void Draw()
-        {
-            _gl.BindVertexArray(ID);
-            _gl.DrawElements(PrimitiveType.Triangles, FaceCount, DrawElementsType.UnsignedShort, (void*) 0);
-        }
-
-        private unsafe uint Init(byte[] vertexData, byte[] elementData, uint positionsOffset, uint normalsOffset, uint uv1Stride, uint uv2Stride, uint blockSize, int flags)
-        {
-            var vao = _gl.GenVertexArray();
-            var vbo = _gl.GenBuffer();
-            var ebo = _gl.GenBuffer();
-
-            _gl.BindVertexArray(vao);
-
-            _gl.BindBuffer(BufferTargetARB.ArrayBuffer, vbo);
+            _gl.BindBuffer(BufferTargetARB.ArrayBuffer, VBO_ID);
             fixed (byte* buf = vertexData)
                 _gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint)vertexData.Length, buf, BufferUsageARB.StaticDraw);
 
-            _gl.BindBuffer(BufferTargetARB.ElementArrayBuffer, ebo);
+            _gl.BindBuffer(BufferTargetARB.ElementArrayBuffer, EBO_ID);
             fixed (byte* buf = elementData)
                 _gl.BufferData(BufferTargetARB.ElementArrayBuffer, (nuint)elementData.Length, buf, BufferUsageARB.StaticDraw);
             FaceCount = (uint)elementData.Count() / 2;
@@ -148,8 +173,6 @@ namespace Kotor.NET.Graphics
 
             _gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
             _gl.BindVertexArray(0);
-
-            return vao;
         }
     }
 }

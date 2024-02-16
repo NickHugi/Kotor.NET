@@ -52,7 +52,7 @@ public class KotorGLControl : OpenGlControlBase
 
         _scene = new(gl, graphics);
         _scene.Init();
-        _scene.AddObject(new TerrainObject(graphics, new(10, 10)));
+        _scene.AddObject(new TerrainObject(graphics, new(50, 50)));
         _init = true;
 
         _gl.Viewport(0, 0, _width, _height);
