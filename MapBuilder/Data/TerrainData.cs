@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MapBuilder.Data
 {
-    public class Terrain
+    public class TerrainData
     {
         public uint Width => _width;
         public uint Length => _length;
@@ -29,7 +29,7 @@ namespace MapBuilder.Data
         private uint _length;
         private float[] _height;
 
-        public Terrain(uint width, uint length)
+        public TerrainData(uint width, uint length)
         {
             _width = width;
             _length = length;
