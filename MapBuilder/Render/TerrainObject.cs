@@ -76,7 +76,7 @@ namespace MapBuilder.Render
             }
 
             var vao = graphics.GetVAO("terrain");
-            var shader = graphics.GetShader("kotor");
+            var shader = graphics.GetShader("terrain");
             var texture1 = graphics.GetTextures("lda_grass01");
 
             return new() { new Renderable(vao, shader, texture1, null) };

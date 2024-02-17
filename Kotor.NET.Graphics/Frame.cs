@@ -27,15 +27,17 @@ namespace Kotor.NET.Graphics
             graphics.GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             graphics.GL.ClearColor(0, 0, 0.3f, 1);
 
-            var shader = graphics.GetShader("kotor");
-            shader.Use();
-
-            shader.SetUniformMatrix4x4("view", camera.GetView());
-            shader.SetUniformMatrix4x4("projection", camera.GetProjection());
-            shader.SetUniformMatrix4x4("model", _transform);
-
             foreach (var renderable in _renderables)
             {
+                var shader = renderable.Shader;
+                shader.Use();
+
+                shader.SetUniformMatrix4x4("view", camera.GetView());
+                shader.SetUniformMatrix4x4("projection", camera.GetProjection());
+                shader.SetUniformMatrix4x4("model", _transform);
+
+                shader.SetUniformVector3("mousePosition", new(camera.MouseX, camera.MouseY, camera.MouseZ));
+
                 renderable.Render();
             }
             _renderables.Clear();

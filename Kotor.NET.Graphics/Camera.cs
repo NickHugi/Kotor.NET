@@ -15,6 +15,10 @@ namespace Kotor.NET.Graphics
         public float TargetY { get; set; } = 3.0f;
         public float TargetZ { get; set; } = 0.5f;
 
+        public float MouseX { get; set; }
+        public float MouseY { get; set; }
+        public float MouseZ { get; set; }
+
         public uint Width { get; set; } = 400;
         public uint Height { get; set; } = 400;
         public float Distance

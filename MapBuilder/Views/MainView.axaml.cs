@@ -15,6 +15,8 @@ using Avalonia.Media;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
+using System.IO;
 
 namespace MapBuilder.Views;
 
@@ -37,6 +39,7 @@ public class KotorGLControl : OpenGlControlBase
     private bool _init = false;
 
     private HashSet<bool> _mouseButtons = new();
+    private Point _mousePosition = new();
 
     public KotorGLControl()
     {
@@ -53,10 +56,12 @@ public class KotorGLControl : OpenGlControlBase
         _scene = new(gl, graphics);
         _scene.Init();
 
+        var assembly = Assembly.GetExecutingAssembly();
+        graphics.Shaders.Add("terrain", new(_gl, assembly.GetManifestResourceStream($"MapBuilder.Resources.terrain.vshader")!, assembly.GetManifestResourceStream($"MapBuilder.Resources.terrain.fshader")!));
+
         _scene.AddObject(new TerrainObject(graphics, new(50, 50)));
 
         _init = true;
-
         _gl.Viewport(0, 0, _width, _height);
     }
 
@@ -69,7 +74,12 @@ public class KotorGLControl : OpenGlControlBase
     {
         if (_init)
         {
-            _scene.Render((uint)(_width * 1.0f), (uint)(_height * 1.0f));
+            _scene.Render((uint)_width, (uint)_height, (uint)(_width * 1.0f), (uint)(_height * 1.0f));
+
+            var mouseInWorld = _scene.FromScreenSpaceToWorldSpace((uint)_mousePosition.X, (uint)_mousePosition.Y);
+            _scene.Camera.MouseX = mouseInWorld.X;
+            _scene.Camera.MouseY = mouseInWorld.Y;
+            _scene.Camera.MouseZ = mouseInWorld.Z;
         }
     }
 
@@ -96,6 +106,7 @@ public class KotorGLControl : OpenGlControlBase
     protected override void OnPointerMoved(PointerEventArgs e)
     {
         base.OnPointerMoved(e);
+        _mousePosition = e.GetPosition(this);
 
         var camera = _scene.Camera;
 

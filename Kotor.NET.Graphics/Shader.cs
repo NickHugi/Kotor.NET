@@ -27,9 +27,25 @@ namespace Kotor.NET.Graphics
             FragmentShaderID = _gl.CreateShader(ShaderType.FragmentShader);
             ProgramID = _gl.CreateProgram();
 
-            InitializeShader(vertexShaderStream, fragmentShaderStream);
+            var vertexStreamReader = new StreamReader(vertexShaderStream);
+            var vertexShaderSource = vertexStreamReader.ReadToEnd();
+
+            var fragmentStreamReader = new StreamReader(fragmentShaderStream);
+            var fragmentShaderSource = fragmentStreamReader.ReadToEnd();
+
+            InitializeShader(vertexShaderSource, fragmentShaderSource);
         }
 
+        public Shader(GL gl, string vertexShaderSource, string fragmentShaderSource)
+        {
+            _gl = gl;
+
+            VertexShaderID = _gl.CreateShader(ShaderType.VertexShader);
+            FragmentShaderID = _gl.CreateShader(ShaderType.FragmentShader);
+            ProgramID = _gl.CreateProgram();
+
+            InitializeShader(vertexShaderSource, fragmentShaderSource);
+        }
 
         ~Shader()
         {
@@ -48,7 +64,19 @@ namespace Kotor.NET.Graphics
         {
             return _gl.GetUniformLocation(ProgramID, name);
         }
-        
+
+        public void SetUniformVector3(string name, Vector3 value)
+        {
+            var location = GetUniformLocation(name);
+            _gl.Uniform3(location, value);
+        }
+
+        public void SetUniformVector4(string name, Vector4 value)
+        {
+            var location = GetUniformLocation(name);
+            _gl.Uniform4(location, value);
+        }
+
         public void SetUniformMatrix4x4(string name, Matrix4x4 matrix)
         {
             var location = GetUniformLocation(name);
@@ -56,23 +84,11 @@ namespace Kotor.NET.Graphics
             _gl.UniformMatrix4(location, false, value);
         }
 
-        public void SetUniformMatrix4x4(string name, Matrix4X4<float> matrix)
+        private void InitializeShader(string vertexShaderSource, string fragmentShaderSource)
         {
-            //var location = GetUniformLocation(name);
-            //var value = matrix.ToFloatSpan();
-            //_gl.UniformMatrix4(location, false, matrix);
-        }
-
-        private void InitializeShader(Stream vertexStream, Stream fragmentStream)
-        {
-            var vertexStreamReader = new StreamReader(vertexStream);
-            var fragmentStreamReader = new StreamReader(fragmentStream);
-
             int success;
-            var vShaderSource = vertexStreamReader.ReadToEnd();
-            var fShaderSource = fragmentStreamReader.ReadToEnd();
 
-            _gl.ShaderSource(VertexShaderID, vShaderSource);
+            _gl.ShaderSource(VertexShaderID, vertexShaderSource);
             _gl.CompileShader(VertexShaderID);
             _gl.GetShader(VertexShaderID, GLEnum.CompileStatus, out success);
             if (success == 0)
@@ -81,7 +97,7 @@ namespace Kotor.NET.Graphics
                 throw new Exception(infoLog);
             }
 
-            _gl.ShaderSource(FragmentShaderID, fShaderSource);
+            _gl.ShaderSource(FragmentShaderID, fragmentShaderSource);
             _gl.CompileShader(FragmentShaderID);
             _gl.GetShader(FragmentShaderID, GLEnum.CompileStatus, out success);
             if (success == 0)
@@ -98,7 +114,7 @@ namespace Kotor.NET.Graphics
             {
                 string infoLog = _gl.GetShaderInfoLog(ProgramID);
                 throw new Exception(infoLog);
-            }            
+            }
         }
     }
 }

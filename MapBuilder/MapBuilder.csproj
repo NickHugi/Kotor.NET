@@ -20,6 +20,12 @@
     <AvaloniaResource Remove="Assets\plc_spdrwin01.tga" />
   </ItemGroup>
 
+  
+  <ItemGroup>
+    <None Remove="Resources\terrain.fshader" />
+    <None Remove="Resources\terrain.vshader" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.0.5" />
     <PackageReference Include="Avalonia.Desktop" Version="11.0.5" />
@@ -51,5 +57,12 @@
     <Content Include="Assets\plc_spdrwin01.tga">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\terrain.fshader">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\terrain.vshader" />
   </ItemGroup>
 </Project>
