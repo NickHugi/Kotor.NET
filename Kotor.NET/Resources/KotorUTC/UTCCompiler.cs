@@ -15,7 +15,7 @@ using Kotor.NET.Formats.KotorGFF;
 
 namespace Kotor.NET.Resources.KotorUTC
 {
-    public class UTCReader
+    public class UTCCompiler
     {
         public UTC Read(GFF gff)
         {
@@ -59,6 +59,7 @@ namespace Kotor.NET.Resources.KotorUTC
             utc.Blindspot = gff.Root.Get("BlindSpot", (byte)0);
             utc.MultiplierSet = gff.Root.Get("MultiplierSet", (byte)0);
 
+            utc.NaturalAC = gff.Root.Get("NaturalAC", (byte)0);
             utc.ReflexBonus = gff.Root.Get("refbonus", (byte)0);
             utc.WillBonus = gff.Root.Get("willbonus", (byte)0);
             utc.FortitudeBonus = gff.Root.Get("fortbonus", (byte)0);

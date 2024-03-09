@@ -27,10 +27,11 @@ namespace MapBuilder.Data
         }
 
         public void AssignRandomElevation()
-        {
-            for (var x = 0; x < Width; x++)
-            for (var y = 0; y < Length; y++)
             {
+                var height = new float[Width, Length];
+                for (var x = 0; x < Width; x++)
+                for (var y = 0; y < Length; y++)
+                {
                 _height[x, y] = (float)new Random().NextDouble() / 2;
             }
         }
@@ -38,12 +39,12 @@ namespace MapBuilder.Data
         public override int GetHashCode()
         {
             int hash = 0;
-
+        
             hash ^= _width.GetHashCode();
             hash ^= _height.GetHashCode();
 
             foreach (var item in _height)
-            {
+        {
                 hash ^= item.GetHashCode();
             }
 

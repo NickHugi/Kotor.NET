@@ -8,5 +8,7 @@ namespace MapBuilder.Data
 {
     public class MapData
     {
+        List<Placement> Placements { get; set; } = new();
+
     }
 }
