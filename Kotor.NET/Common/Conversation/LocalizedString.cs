@@ -1,4 +1,5 @@
 ﻿using Kotor.NET.Common.Creature;
+using Kotor.NET.Common.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -80,6 +81,11 @@ namespace Kotor.NET.Common.Conversation
             Substrings = Substrings.Where(x => x.Language != language && x.Gender != gender).ToList();
 
             Substrings.Add(substring);
+        }
+
+        public static implicit operator LocalizedString(int stringref)
+        {
+            return new LocalizedString(stringref);
         }
     }
 }

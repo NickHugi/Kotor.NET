@@ -74,6 +74,12 @@ namespace Kotor.NET.Formats.KotorGFF
         public uint ID { get; set; }
         public List<GFFField> Fields { get; private set; }
 
+        public object this[string label]
+        {
+            get { return Get(label); }
+            set { Set(label, value); }
+        }
+
         public GFFStruct()
         {
             ID = 0;
@@ -114,6 +120,558 @@ namespace Kotor.NET.Formats.KotorGFF
         public bool Has(string label)
         {
             return (Fields.FirstOrDefault(x => x.Label == label) != null) ? true : false;
+        }
+
+        public Byte GetUInt8(string label)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                throw new ArgumentException("Field with that label does not exist");
+            if (field.Type != GFFFieldType.UInt8)
+                throw new ArgumentException("Field with that label was not of the correct type.");
+
+            return (Byte)field.Value;
+        }
+        public Byte GetUInt8(string label, Byte fallback)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                return fallback;
+            if (field.Type != GFFFieldType.UInt8)
+                return fallback;
+
+            return (Byte)field.Value;
+        }
+        public SByte GetInt8(string label)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                throw new ArgumentException("Field with that label does not exist");
+            if (field.Type != GFFFieldType.Int8)
+                throw new ArgumentException("Field with that label was not of the correct type.");
+
+            return (SByte)field.Value;
+        }
+        public SByte GetInt8(string label, SByte fallback)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                return fallback;
+            if (field.Type != GFFFieldType.Int8)
+                return fallback;
+
+            return (SByte)field.Value;
+        }
+        public UInt16 GetUInt16(string label)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                throw new ArgumentException("Field with that label does not exist");
+            if (field.Type != GFFFieldType.UInt16)
+                throw new ArgumentException("Field with that label was not of the correct type.");
+
+            return (UInt16)field.Value;
+        }
+        public UInt16 GetUInt16(string label, UInt16 fallback)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                return fallback;
+            if (field.Type != GFFFieldType.UInt16)
+                return fallback;
+
+            return (UInt16)field.Value;
+        }
+        public Int16 GetInt16(string label)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                throw new ArgumentException("Field with that label does not exist");
+            if (field.Type != GFFFieldType.Int16)
+                throw new ArgumentException("Field with that label was not of the correct type.");
+
+            return (Int16)field.Value;
+        }
+        public Int16 GetInt16(string label, Int16 fallback)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                return fallback;
+            if (field.Type != GFFFieldType.Int16)
+                return fallback;
+
+            return (Int16)field.Value;
+        }
+        public UInt32 GetUInt32(string label)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                throw new ArgumentException("Field with that label does not exist");
+            if (field.Type != GFFFieldType.UInt32)
+                throw new ArgumentException("Field with that label was not of the correct type.");
+
+            return (UInt32)field.Value;
+        }
+        public UInt32 GetUInt32(string label, UInt32 fallback)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                return fallback;
+            if (field.Type != GFFFieldType.UInt32)
+                return fallback;
+
+            return (UInt32)field.Value;
+        }
+        public Int32 GetInt32(string label)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                throw new ArgumentException("Field with that label does not exist");
+            if (field.Type != GFFFieldType.Int32)
+                throw new ArgumentException("Field with that label was not of the correct type.");
+
+            return (Int32)field.Value;
+        }
+        public Int32 GetInt32(string label, Int32 fallback)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                return fallback;
+            if (field.Type != GFFFieldType.Int32)
+                return fallback;
+
+            return (Int32)field.Value;
+        }
+        public UInt64 GetUInt64(string label)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                throw new ArgumentException("Field with that label does not exist");
+            if (field.Type != GFFFieldType.UInt64)
+                throw new ArgumentException("Field with that label was not of the correct type.");
+
+            return (UInt64)field.Value;
+        }
+        public UInt64 GetUInt64(string label, UInt64 fallback)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                return fallback;
+            if (field.Type != GFFFieldType.UInt64)
+                return fallback;
+
+            return (UInt64)field.Value;
+        }
+        public Int64 GetInt64(string label)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                throw new ArgumentException("Field with that label does not exist");
+            if (field.Type != GFFFieldType.Int64)
+                throw new ArgumentException("Field with that label was not of the correct type.");
+
+            return (Int64)field.Value;
+        }
+        public Int64 GetInt64(string label, Int64 fallback)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                return fallback;
+            if (field.Type != GFFFieldType.Int64)
+                return fallback;
+
+            return (Int64)field.Value;
+        }
+        public Single GetSingle(string label)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                throw new ArgumentException("Field with that label does not exist");
+            if (field.Type != GFFFieldType.Single)
+                throw new ArgumentException("Field with that label was not of the correct type.");
+
+            return (Single)field.Value;
+        }
+        public Single GetSingle(string label, Single fallback)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                return fallback;
+            if (field.Type != GFFFieldType.Single)
+                return fallback;
+
+            return (Single)field.Value;
+        }
+        public Double GetDouble(string label)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                throw new ArgumentException("Field with that label does not exist");
+            if (field.Type != GFFFieldType.Double)
+                throw new ArgumentException("Field with that label was not of the correct type.");
+
+            return (Double)field.Value;
+        }
+        public Double GetDouble(string label, Double fallback)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                return fallback;
+            if (field.Type != GFFFieldType.Double)
+                return fallback;
+
+            return (Double)field.Value;
+        }
+        public String GetString(string label)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                throw new ArgumentException("Field with that label does not exist");
+            if (field.Type != GFFFieldType.String)
+                throw new ArgumentException("Field with that label was not of the correct type.");
+
+            return (String)field.Value;
+        }
+        public String GetString(string label, String fallback)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                return fallback;
+            if (field.Type != GFFFieldType.String)
+                return fallback;
+
+            return (String)field.Value;
+        }
+        public LocalizedString GetLocalizedString(string label)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                throw new ArgumentException("Field with that label does not exist");
+            if (field.Type != GFFFieldType.LocalizedString)
+                throw new ArgumentException("Field with that label was not of the correct type.");
+
+            return (LocalizedString)field.Value;
+        }
+        public LocalizedString GetLocalizedString(string label, LocalizedString fallback)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                return fallback;
+            if (field.Type != GFFFieldType.LocalizedString)
+                return fallback;
+
+            return (LocalizedString)field.Value;
+        }
+        public ResRef GetResRef(string label)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                throw new ArgumentException("Field with that label does not exist");
+            if (field.Type != GFFFieldType.ResRef)
+                throw new ArgumentException("Field with that label was not of the correct type.");
+
+            return (ResRef)field.Value;
+        }
+        public ResRef GetResRef(string label, ResRef fallback)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                return fallback;
+            if (field.Type != GFFFieldType.ResRef)
+                return fallback;
+
+            return (ResRef)field.Value;
+        }
+        public byte[] GetBinary(string label)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                throw new ArgumentException("Field with that label does not exist");
+            if (field.Type != GFFFieldType.Binary)
+                throw new ArgumentException("Field with that label was not of the correct type.");
+
+            return (byte[])field.Value;
+        }
+        public byte[] GetBinary(string label, byte[] fallback)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                return fallback;
+            if (field.Type != GFFFieldType.Binary)
+                return fallback;
+
+            return (byte[])field.Value;
+        }
+        public GFFList GetList(string label)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                throw new ArgumentException("Field with that label does not exist");
+            if (field.Type != GFFFieldType.List)
+                throw new ArgumentException("Field with that label was not of the correct type.");
+
+            return (GFFList)field.Value;
+        }
+        public GFFList GetList(string label, GFFList fallback)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                return fallback;
+            if (field.Type != GFFFieldType.List)
+                return fallback;
+
+            return (GFFList)field.Value;
+        }
+        public GFFStruct GetStruct(string label)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                throw new ArgumentException("Field with that label does not exist");
+            if (field.Type != GFFFieldType.Struct)
+                throw new ArgumentException("Field with that label was not of the correct type.");
+
+            return (GFFStruct)field.Value;
+        }
+        public GFFStruct GetStruct(string label, GFFStruct fallback)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                return fallback;
+            if (field.Type != GFFFieldType.Struct)
+                return fallback;
+
+            return (GFFStruct)field.Value;
+        }
+        public Vector3 GetVector3(string label)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                throw new ArgumentException("Field with that label does not exist");
+            if (field.Type != GFFFieldType.Vector3)
+                throw new ArgumentException("Field with that label was not of the correct type.");
+
+            return (Vector3)field.Value;
+        }
+        public Vector3 GetVector3(string label, Vector3 fallback)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                return fallback;
+            if (field.Type != GFFFieldType.Vector3)
+                return fallback;
+
+            return (Vector3)field.Value;
+        }
+        public Vector4 GetVector4(string label)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                throw new ArgumentException("Field with that label does not exist");
+            if (field.Type != GFFFieldType.Vector3)
+                throw new ArgumentException("Field with that label was not of the correct type.");
+
+            return (Vector4)field.Value;
+        }
+        public Vector4 GetVector4(string label, Vector4 fallback)
+        {
+            var field = Fields.SingleOrDefault(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+
+            if (field == null)
+                return fallback;
+            if (field.Type != GFFFieldType.Vector3)
+                return fallback;
+
+            return (Vector4)field.Value;
+        }
+
+        public void SetUInt8(string label, Byte value)
+        {
+            if (label.Length > 16)
+                throw new ArgumentException("Labels cannot exceed 16 characters");
+
+            Fields.RemoveAll(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+            Fields.Add(new GFFField(label, value));
+        }
+        public void SetInt8(string label, SByte value)
+        {
+            if (label.Length > 16)
+                throw new ArgumentException("Labels cannot exceed 16 characters");
+
+            Fields.RemoveAll(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+            Fields.Add(new GFFField(label, value));
+        }
+        public void SetUInt16(string label, UInt16 value)
+        {
+            if (label.Length > 16)
+                throw new ArgumentException("Labels cannot exceed 16 characters");
+
+            Fields.RemoveAll(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+            Fields.Add(new GFFField(label, value));
+        }
+        public void SetInt16(string label, Int16 value)
+        {
+            if (label.Length > 16)
+                throw new ArgumentException("Labels cannot exceed 16 characters");
+
+            Fields.RemoveAll(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+            Fields.Add(new GFFField(label, value));
+        }
+        public void SetUInt32(string label, UInt32 value)
+        {
+            if (label.Length > 16)
+                throw new ArgumentException("Labels cannot exceed 16 characters");
+
+            Fields.RemoveAll(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+            Fields.Add(new GFFField(label, value));
+        }
+        public void SetInt32(string label, Int32 value)
+        {
+            if (label.Length > 16)
+                throw new ArgumentException("Labels cannot exceed 16 characters");
+
+            Fields.RemoveAll(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+            Fields.Add(new GFFField(label, value));
+        }
+        public void SetUInt64(string label, UInt64 value)
+        {
+            if (label.Length > 16)
+                throw new ArgumentException("Labels cannot exceed 16 characters");
+
+            Fields.RemoveAll(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+            Fields.Add(new GFFField(label, value));
+        }
+        public void SetInt64(string label, Int64 value)
+        {
+            if (label.Length > 16)
+                throw new ArgumentException("Labels cannot exceed 16 characters");
+
+            Fields.RemoveAll(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+            Fields.Add(new GFFField(label, value));
+        }
+        public void SetSingle(string label, Single value)
+        {
+            if (label.Length > 16)
+                throw new ArgumentException("Labels cannot exceed 16 characters");
+
+            Fields.RemoveAll(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+            Fields.Add(new GFFField(label, value));
+        }
+        public void SetDouble(string label, Double value)
+        {
+            if (label.Length > 16)
+                throw new ArgumentException("Labels cannot exceed 16 characters");
+
+            Fields.RemoveAll(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+            Fields.Add(new GFFField(label, value));
+        }
+        public void SetString(string label, String value)
+        {
+            if (label.Length > 16)
+                throw new ArgumentException("Labels cannot exceed 16 characters");
+            if (value is null)
+                throw new ArgumentException("GFF fields cannot have a null value.");
+
+            Fields.RemoveAll(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+            Fields.Add(new GFFField(label, value));
+        }
+        public void SetResRef(string label, ResRef value)
+        {
+            if (label.Length > 16)
+                throw new ArgumentException("Labels cannot exceed 16 characters");
+            if (value is null)
+                throw new ArgumentException("GFF fields cannot have a null value.");
+
+            Fields.RemoveAll(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+            Fields.Add(new GFFField(label, value));
+        }
+        public void SetLocalizedString(string label, LocalizedString value)
+        {
+            if (label.Length > 16)
+                throw new ArgumentException("Labels cannot exceed 16 characters");
+            if (value is null)
+                throw new ArgumentException("GFF fields cannot have a null value.");
+
+            Fields.RemoveAll(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+            Fields.Add(new GFFField(label, value));
+        }
+        public GFFStruct SetStruct(string label, GFFStruct value)
+        {
+            if (label.Length > 16)
+                throw new ArgumentException("Labels cannot exceed 16 characters");
+            if (value is null)
+                throw new ArgumentException("GFF fields cannot have a null value.");
+
+            Fields.RemoveAll(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+            Fields.Add(new GFFField(label, value));
+
+            return value;
+        }
+        public GFFList SetList(string label, GFFList value)
+        {
+            if (label.Length > 16)
+                throw new ArgumentException("Labels cannot exceed 16 characters");
+            if (value is null)
+                throw new ArgumentException("GFF fields cannot have a null value.");
+
+            Fields.RemoveAll(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+            Fields.Add(new GFFField(label, value));
+
+            return value;
+        }
+        public void SetVector3(string label, Vector3 value)
+        {
+            if (label.Length > 16)
+                throw new ArgumentException("Labels cannot exceed 16 characters");
+            if (value is null)
+                throw new ArgumentException("GFF fields cannot have a null value.");
+
+            Fields.RemoveAll(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+            Fields.Add(new GFFField(label, value));
+        }
+        public void SetVector4(string label, Vector4 value)
+        {
+            if (label.Length > 16)
+                throw new ArgumentException("Labels cannot exceed 16 characters");
+            if (value is null)
+                throw new ArgumentException("GFF fields cannot have a null value.");
+
+            Fields.RemoveAll(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+            Fields.Add(new GFFField(label, value));
         }
     }
 
@@ -172,6 +730,12 @@ namespace Kotor.NET.Formats.KotorGFF
         public void Add(GFFStruct item)
         {
             _list.Add(item);
+        }
+        public GFFStruct Add()
+        {
+            var item = new GFFStruct();
+            _list.Add(item);
+            return item;
         }
 
         public void Clear()

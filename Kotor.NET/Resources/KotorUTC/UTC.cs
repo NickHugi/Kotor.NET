@@ -83,6 +83,7 @@ namespace Kotor.NET.Resources.KotorUTC
         public byte Wisdom { get; set; }
         public byte Charisma { get; set; }
 
+
         public ResRef OnEndDialog { get; set; } = "";
         public ResRef OnBlocked { get; set; } = "";
         public ResRef OnHeartbeat { get; set; } = "";

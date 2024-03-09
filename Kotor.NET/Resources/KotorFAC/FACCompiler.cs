@@ -10,9 +10,33 @@ namespace Kotor.NET.Resources.KotorFAC
 {
     public class FACCompiler : IGFFDecompiler<FAC>
     {
+        private GFF _gff;
+
+        public FACCompiler(GFF gff)
+        {
+            _gff = gff;
+        }
+
         public FAC Decompile()
         {
-            throw new NotImplementedException();
+            var fac = new FAC
+            {
+                FactionList = _gff.Root.GetList("FactionList", new()).Select(gffFaction => new Faction
+                {
+                    FactionParentID = gffFaction.GetInt32("FactionParentID", 0),
+                    FactionName = gffFaction.GetString("FactionName", ""),
+                    FactionGlobal = gffFaction.GetUInt8("FactionGlobal", 0) != 0
+                }).ToList(),
+
+                RepList = _gff.Root.GetList("RepList", new()).Select(gffRep => new Reputation
+                {
+                    FactionID1 = gffRep.GetInt32("FactionID1", 0),
+                    FactionID2 = gffRep.GetInt32("FactionID2", 0),
+                    FactionRep = gffRep.GetInt32("FactionRep", 0),
+                }).ToList(),
+            };
+
+            return fac;
         }
     }
 }
