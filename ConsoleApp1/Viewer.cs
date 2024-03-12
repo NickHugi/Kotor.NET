@@ -51,7 +51,7 @@ namespace ConsoleApp1
 
         private void OnRender(double deltaTime)
         {
-            _scene.Render(1920, 1080);
+            _scene.Render(1920, 1080, 1920, 1080);
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IniParser.Model;
 using Kotor.NET.Common.Creature;
-using Kotor.NET.Exceptions;
+using Kotor.NET.Patcher.Exceptions;
 using Kotor.NET.Extensions;
 using Kotor.NET.Formats.KotorSSF;
 using Kotor.NET.Patcher.Modifiers.ForSSF;

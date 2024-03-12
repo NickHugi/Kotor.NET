@@ -1,4 +1,4 @@
-﻿using Kotor.NET.Exceptions;
+﻿using Kotor.NET.Patcher.Exceptions;
 using Kotor.NET.Formats.Kotor2DA;
 using Kotor.NET.Patcher.Modifiers.For2DA.Targets;
 using Kotor.NET.Patcher.Modifiers.For2DA.Values;

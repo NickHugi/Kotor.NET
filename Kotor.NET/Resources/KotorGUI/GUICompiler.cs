@@ -179,7 +179,7 @@ namespace Kotor.NET.Resources.KotorGUI
                             PULSING = gffControl.GetUInt8("PULSING", 0),
                             INNEROFFSETY = gffControl.GetInt32("INNEROFFSETY", 0)
                         },
-                        ISSELECTED = gffControl.GetUInt8("PROTOITEM_ISSELECTED", false)
+                        ISSELECTED = gffControl.GetUInt8("PROTOITEM_ISSELECTED", 0)
                     },
                     SCROLLBAR = new Scrollbar
                     {

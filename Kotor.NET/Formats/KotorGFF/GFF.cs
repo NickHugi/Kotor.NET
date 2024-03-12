@@ -619,6 +619,16 @@ namespace Kotor.NET.Formats.KotorGFF
             Fields.RemoveAll(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
             Fields.Add(new GFFField(label, value));
         }
+        public void SetBinary(string label, byte[] value)
+        {
+            if (label.Length > 16)
+                throw new ArgumentException("Labels cannot exceed 16 characters");
+            if (value is null)
+                throw new ArgumentException("GFF fields cannot have a null value.");
+
+            Fields.RemoveAll(x => string.Equals(x.Label, label, StringComparison.OrdinalIgnoreCase));
+            Fields.Add(new GFFField(label, value));
+        }
         public void SetLocalizedString(string label, LocalizedString value)
         {
             if (label.Length > 16)

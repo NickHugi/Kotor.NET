@@ -11,7 +11,7 @@ namespace Kotor.NET.Resources.KotorUTM
     public class UTM
     {
         public ResRef ResRef { get; set; } = "";
-        public LocalizedString LocName { get; set; } = "";
+        public LocalizedString LocName { get; set; } = -1;
         public string Tag { get; set; } = "";
         public int MarkUp { get; set; }
         public int MarkDown { get; set; }

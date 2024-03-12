@@ -8,11 +8,11 @@ using Kotor.NET.Formats.KotorGFF;
 
 namespace Kotor.NET.Resources.KotorIFO
 {
-    public class IFOCompiler : IGFFCompiler
+    public class IFODecompiler : IGFFCompiler
     {
         private IFO _ifo;
 
-        public IFOCompiler(IFO ifo)
+        public IFODecompiler(IFO ifo)
         {
             _ifo = ifo;
         }
@@ -21,7 +21,7 @@ namespace Kotor.NET.Resources.KotorIFO
         {
             var gff = new GFF();
 
-            gff.Root.SetByteArray("Mod_ID", _ifo.Mod_ID);
+            gff.Root.SetBinary("Mod_ID", _ifo.Mod_ID);
             gff.Root.SetInt32("Mod_Creator_ID", _ifo.Mod_Creator_ID);
             gff.Root.SetUInt32("Mod_Version", _ifo.Mod_Version);
             gff.Root.SetString("Mod_VO_ID", _ifo.Mod_VO_ID);
@@ -32,17 +32,13 @@ namespace Kotor.NET.Resources.KotorIFO
             gff.Root.SetLocalizedString("Mod_Description", _ifo.Mod_Description);
             gff.Root.SetUInt8("Mod_IsSaveGame", _ifo.Mod_IsSaveGame);
             gff.Root.SetResRef("Mod_Entry_Area", _ifo.Mod_Entry_Area);
-            gff.Root.SetFloat32("Mod_Entry_X", _ifo.Mod_Entry_X);
-            gff.Root.SetFloat32("Mod_Entry_Y", _ifo.Mod_Entry_Y);
-            gff.Root.SetFloat32("Mod_Entry_Z", _ifo.Mod_Entry_Z);
-            gff.Root.SetFloat32("Mod_Entry_Dir_X", _ifo.Mod_Entry_Dir_X);
-            gff.Root.SetFloat32("Mod_Entry_Dir_Y", _ifo.Mod_Entry_Dir_Y);
+            gff.Root.SetSingle("Mod_Entry_X", _ifo.Mod_Entry_X);
+            gff.Root.SetSingle("Mod_Entry_Y", _ifo.Mod_Entry_Y);
+            gff.Root.SetSingle("Mod_Entry_Z", _ifo.Mod_Entry_Z);
+            gff.Root.SetSingle("Mod_Entry_Dir_X", _ifo.Mod_Entry_Dir_X);
+            gff.Root.SetSingle("Mod_Entry_Dir_Y", _ifo.Mod_Entry_Dir_Y);
 
             var expanList = gff.Root.SetList("Mod_Expan_List", new());
-            foreach (var item in _ifo.Mod_Expan_List)
-            {
-                expanList.Add().SetString(item);
-            }
 
             gff.Root.SetUInt8("Mod_DawnHour", _ifo.Mod_DawnHour);
             gff.Root.SetUInt8("Mod_DuskHour", _ifo.Mod_DuskHour);

@@ -27,7 +27,7 @@ namespace Kotor.NET.Resources.KotorUTT
             gff.Root.SetUInt8("AutoRemoveKey", _utt.AutoRemoveKey);
             gff.Root.SetUInt32("Faction", _utt.Faction);
             gff.Root.SetUInt8("Cursor", _utt.Cursor);
-            gff.Root.SetFloat("HighlightHeight", _utt.HighlightHeight);
+            gff.Root.SetSingle("HighlightHeight", _utt.HighlightHeight);
             gff.Root.SetString("KeyName", _utt.KeyName);
             gff.Root.SetUInt16("LoadScreenID", _utt.LoadScreenID);
             gff.Root.SetUInt16("PortraitId", _utt.PortraitId);

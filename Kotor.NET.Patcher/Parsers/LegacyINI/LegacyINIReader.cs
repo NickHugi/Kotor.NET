@@ -1,6 +1,6 @@
 ﻿using IniParser.Model;
 using IniParser.Parser;
-using Kotor.NET.Exceptions;
+using Kotor.NET.Patcher.Exceptions;
 using Kotor.NET.Formats.Kotor2DA;
 using Kotor.NET.Formats.KotorGFF;
 using Kotor.NET.Formats.KotorSSF;

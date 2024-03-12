@@ -117,7 +117,7 @@ namespace Kotor.NET.Resources.KotorGUI
         public Hilight HILIGHT { get; set; } = new();
         public Selected SELECTED { get; set; } = new();
         public HilightSelected HILIGHTSELECTED { get; set; }
-        public bool ISSELECTED { get; set; }
+        public byte ISSELECTED { get; set; }
     }
 
     public class Scrollbar

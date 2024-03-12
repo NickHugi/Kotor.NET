@@ -86,9 +86,9 @@ namespace Kotor.NET.Resources.KotorGUI
                 textNode.SetUInt8("PULSING", control.TEXT.PULSING);
 
                 var hilightNode = gffControl.SetStruct("HILIGHT", new());
-                hilightNode.SetString("CORNER", control.HILIGHT.CORNER);
-                hilightNode.SetString("EDGE", control.HILIGHT.EDGE);
-                hilightNode.SetString("FILL", control.HILIGHT.FILL);
+                //hilightNode.SetString("CORNER", control.HILIGHT.CORNER);
+                //hilightNode.SetString("EDGE", control.HILIGHT.EDGE);
+                //hilightNode.SetString("FILL", control.HILIGHT.FILL);
                 hilightNode.SetInt32("FILLSTYLE", control.HILIGHT.FILLSTYLE);
                 hilightNode.SetInt32("DIMENSION", control.HILIGHT.DIMENSION);
                 hilightNode.SetInt32("INNEROFFSET", control.HILIGHT.INNEROFFSET);
@@ -138,9 +138,9 @@ namespace Kotor.NET.Resources.KotorGUI
                 protoItemTextNode.SetUInt8("PULSING", control.PROTOITEM.TEXT.PULSING);
 
                 var protoItemHilightNode = protoItemNode.SetStruct("HILIGHT", new());
-                protoItemHilightNode.SetString("CORNER", control.PROTOITEM.HILIGHT.CORNER);
-                protoItemHilightNode.SetString("EDGE", control.PROTOITEM.HILIGHT.EDGE);
-                protoItemHilightNode.SetString("FILL", control.PROTOITEM.HILIGHT.FILL);
+                //protoItemHilightNode.SetString("CORNER", control.PROTOITEM.HILIGHT.CORNER);
+                //protoItemHilightNode.SetString("EDGE", control.PROTOITEM.HILIGHT.EDGE);
+                //protoItemHilightNode.SetString("FILL", control.PROTOITEM.HILIGHT.FILL);
                 protoItemHilightNode.SetInt32("FILLSTYLE", control.PROTOITEM.HILIGHT.FILLSTYLE);
                 protoItemHilightNode.SetInt32("DIMENSION", control.PROTOITEM.HILIGHT.DIMENSION);
                 protoItemHilightNode.SetInt32("INNEROFFSET", control.PROTOITEM.HILIGHT.INNEROFFSET);

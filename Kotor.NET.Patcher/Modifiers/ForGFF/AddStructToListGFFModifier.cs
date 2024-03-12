@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Kotor.NET.Exceptions;
+using Kotor.NET.Patcher.Exceptions;
 using Kotor.NET.Formats.KotorGFF;
 using Kotor.NET.Patcher.Modifiers.ForGFF.Values;
 

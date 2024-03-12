@@ -52,12 +52,16 @@ namespace Kotor.NET.Common.Data
         {
             var resref = obj as ResRef;
 
-            if (resref == null)
+            if (resref is null)
             {
                 return false;
             }
 
             return _value == resref._value;
+        }
+        public override int GetHashCode()
+        {
+            return _value.GetHashCode();
         }
 
         public static implicit operator ResRef(string value)

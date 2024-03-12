@@ -1,5 +1,4 @@
 ﻿using IniParser.Model;
-using Kotor.NET.Exceptions;
 using Kotor.NET.Formats.Kotor2DA;
 using Kotor.NET.Patcher.Modifiers.For2DA.Targets;
 using Kotor.NET.Patcher.Modifiers.For2DA.Values;
@@ -10,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Kotor.NET.Patcher.Exceptions;
 
 namespace Kotor.NET.Patcher.Parsers.LegacyINI
 {

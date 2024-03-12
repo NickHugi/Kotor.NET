@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Common.Conversation;
 using Kotor.NET.Common.Data;
-using Kotor.NET.Exceptions;
+using Kotor.NET.Patcher.Exceptions;
 using Kotor.NET.Extensions;
 using Kotor.NET.Formats.KotorGFF;
 

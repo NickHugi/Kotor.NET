@@ -8,11 +8,11 @@ using Kotor.NET.Formats.KotorGFF;
 
 namespace Kotor.NET.Resources.KotorUTI
 {
-    public class UTICompiler : IGFFCompiler
+    public class UTIDecompiler : IGFFCompiler
     {
         private UTI _uti;
 
-        public UTICompiler(UTI uti)
+        public UTIDecompiler(UTI uti)
         {
             _uti = uti;
         }
