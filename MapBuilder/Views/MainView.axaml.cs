@@ -59,7 +59,7 @@ public class KotorGLControl : OpenGlControlBase
         var assembly = Assembly.GetExecutingAssembly();
         graphics.Shaders.Add("terrain", new(_gl, assembly.GetManifestResourceStream($"MapBuilder.Resources.terrain.vshader")!, assembly.GetManifestResourceStream($"MapBuilder.Resources.terrain.fshader")!));
 
-        _scene.AddObject(new TerrainObject(graphics, new(50, 50)));
+        _scene.AddObject(new MapObject(graphics));
 
         _init = true;
         _gl.Viewport(0, 0, _width, _height);

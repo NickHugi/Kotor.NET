@@ -1,6 +1,14 @@
-﻿namespace MapBuilder.ViewModels;
+﻿using System.Collections.ObjectModel;
+using MapBuilder.Data;
+
+namespace MapBuilder.ViewModels;
 
 public class MainViewModel : ViewModelBase
 {
-    public string Greeting => "Welcome to Avalonia!";
+    public ObservableCollection<Placement> Placements { get; }
+
+    public MainViewModel(MapData mapData)
+    {
+        Placements = new ObservableCollection<Placement>(mapData.Placements);
+    }
 }

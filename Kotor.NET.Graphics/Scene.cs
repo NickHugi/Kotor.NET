@@ -42,8 +42,8 @@ namespace Kotor.NET.Graphics
             _graphics.Textures.Add("plc_jnkspdr1", new Texture(_gl, new TGABinaryReader(File.ReadAllBytes(@"Assets/plc_jnkspdr1.tga")).Read() ));
             _graphics.Textures.Add("plc_spdrwin01", new Texture(_gl, new TGABinaryReader(File.ReadAllBytes(@"Assets/plc_spdrwin01.tga")).Read() ));
 
-            var thingy = new KotorModelLoader(File.ReadAllBytes(@"Assets\plc_jnkspdr1.mdl"), File.ReadAllBytes(@"Assets\plc_jnkspdr1.mdx")).Read(_graphics);
-            _objects.Add(thingy);
+            //var thingy = new KotorModelLoader(File.ReadAllBytes(@"Assets\plc_jnkspdr1.mdl"), File.ReadAllBytes(@"Assets\plc_jnkspdr1.mdx")).Read(_graphics);
+            //_objects.Add(thingy);
 
             CubeObject.InitializeVertexArray(_gl, _graphics);
             TriangleObject.InitializeVertexArray(_gl, _graphics);

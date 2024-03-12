@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.NET.Graphics.SceneObjects;
+using MapBuilder.Render;
 
 namespace MapBuilder.Data
 {
-    public class TerrainData
+    public class TerrainData : Placement
     {
         public uint Width => _width;
         public uint Length => _length;
         public float[,] Height => _height;
 
-        
         private uint _width;
         private uint _length;
         private float[,] _height;

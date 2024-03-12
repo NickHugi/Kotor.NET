@@ -12,18 +12,17 @@ using VertexArray = Kotor.NET.Graphics.VertexArray;
 
 namespace MapBuilder.Render
 {
-    public class TerrainObject : SceneObject
+    public class TerrainObject : MapChildObject
     {
+        private TerrainData _terrain => (TerrainData)Data;
         private Graphics _graphics;
         private VertexArray _vao;
 
-        private TerrainData _terrain;
         private int _terrainHash;
 
 
-        public TerrainObject(Graphics graphics, TerrainData terrain)
+        public TerrainObject(Graphics graphics, TerrainData _terrain) : base(_terrain)
         {
-            _terrain = terrain;
             _graphics = graphics;
 
             _vao = new VertexArray(_graphics.GL);
@@ -69,10 +68,10 @@ namespace MapBuilder.Render
 
         public override List<IRenderable> GetRenderables(Graphics graphics)
         {
-            // Does the terrain VAO require updating? 
+            // Does the _terrain VAO require updating? 
             if (_terrain.GetHashCode() != _terrainHash)
             {
-                UpdateRenderData();
+                UpdateRender_terrain();
             }
 
             var vao = graphics.GetVAO("terrain");
@@ -82,7 +81,7 @@ namespace MapBuilder.Render
             return new() { new Renderable(vao, shader, texture1, null) };
         }
 
-        public void UpdateRenderData()
+        public void UpdateRender_terrain()
         {
             Gen();
             _terrainHash = _terrain.GetHashCode();
