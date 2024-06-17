@@ -315,6 +315,27 @@ namespace Kotor.NET.Formats.KotorMDL
 
             //node.Trimesh.Faces.Select(x => x.Vertex1).Concat(node.Trimesh.Faces.Select(x => x.Vertex2)).Concat(node.Trimesh.Faces.Select(x => x.Vertex3)).Distinct().ToList();
 
+            trimeshHeader.VertexIndicesCountArrayCount = 1;
+            trimeshHeader.VertexIndicesCountArrayCount2 = 1;
+            trimeshHeader.OffsetToVertexIndicesCountArray = offset;
+            binaryNode.VertexIndicesCounts.Add(node.Trimesh.Faces.Count * 3);
+            offset += 4;
+
+            trimeshHeader.VertexOffsetArrayCount = 1;
+            trimeshHeader.VertexOffsetArrayCount2 = 1;
+            trimeshHeader.OffsetToVertexOffsetArray = offset;
+            offset += 4;
+            binaryNode.VertexIndicesOffsets.Add(offset);
+
+            binaryNode.VertexIndices = new() { new() };
+            foreach (var face in node.Trimesh.Faces)
+            {
+                binaryNode.VertexIndices[0].Add((ushort)vertices.IndexOf(face.Vertex1));
+                binaryNode.VertexIndices[0].Add((ushort)vertices.IndexOf(face.Vertex2));
+                binaryNode.VertexIndices[0].Add((ushort)vertices.IndexOf(face.Vertex3));
+                offset += 12;
+            }
+
             trimeshHeader.VertexCount = (ushort)vertices.Count();
             trimeshHeader.OffsetToVertexArray = offset;
             foreach (var vertex in vertices)

@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Kotor.NET.Common.Geometry;
 using Kotor.NET.Formats.KotorBWM;
 using Kotor.NET.Formats.KotorMDL;
 using Kotor.NET.Graphics.SceneObjects;
+using Kotor.NET.Resources.KotorUTS;
 using MapBuilder.Render;
+using SkiaSharp;
 
 namespace MapBuilder.Data;
 
@@ -88,22 +91,52 @@ public class TerrainData : Placement
         child.Trimesh = new()
         {
             DiffuseTexture = "lda_grass01.tga",
-            Faces = Enumerable.Range(0, (int)_width).SelectMany(x =>
-            {
-                return Enumerable.Range(0, (int)_length).Select(y =>
-                {
-                    return new Face()
-                    {
-                        Vertex1 = new Vertex()
-                        {
-                            Position = new Vector3(x, y, _height[x, y]),
-                            Normal = new Vector3(0, 0, 1),
-                            DiffuseUV = new Vector2(x, y),
-                        }
-                    };
-                });
-            }).ToList(),
+            Faces = new(),
         };
+
+        for (var x = 0; x < _width - 1; x++)
+        { 
+            for (var y = 0; y < _length - 1; y++)
+            {
+                var vertexMinXMinY = new Vertex()
+                {
+                    Position = new Vector3(x, y, _height[x, y]),
+                    Normal = new Vector3(0, 0, 1),
+                    DiffuseUV = new Vector2(0, 0),
+                };
+                var vertexMaxXMinY = new Vertex()
+                {
+                    Position = new Vector3(x+1, y, _height[x+1, y]),
+                    Normal = new Vector3(0, 0, 1),
+                    DiffuseUV = new Vector2(1, 0),
+                };
+                var vertexMinXMaxY = new Vertex()
+                {
+                    Position = new Vector3(x, y+1, _height[x, y+1]),
+                    Normal = new Vector3(0, 0, 1),
+                    DiffuseUV = new Vector2(1, 1),
+                };
+                var vertexMaxXMaxY = new Vertex()
+                {
+                    Position = new Vector3(x+1, y+1, _height[x+1, y+1]),
+                    Normal = new Vector3(0, 0, 1),
+                    DiffuseUV = new Vector2(1, 1),
+                };
+
+                child.Trimesh.Faces.Add(new Face()
+                {
+                    Vertex1 = vertexMinXMinY,
+                    Vertex2 = vertexMaxXMinY,
+                    Vertex3 = vertexMaxXMaxY,
+                });
+                child.Trimesh.Faces.Add(new Face()
+                {
+                    Vertex1 = vertexMinXMinY,
+                    Vertex2 = vertexMaxXMaxY,
+                    Vertex3 = vertexMinXMaxY,
+                });
+            }
+        }
 
         return mdl;
     }

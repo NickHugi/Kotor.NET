@@ -459,6 +459,9 @@ namespace Kotor.NET.Formats.KotorMDL
             public List<float> FlarePositions { get; set; } = new();
             public List<Common.Geometry.Color> FlareColorShifts { get; set; } = new();
 
+            public List<int> VertexIndicesCounts { get; set; } = new();
+            public List<int> VertexIndicesOffsets { get; set; } = new();
+            public List<List<ushort>> VertexIndices { get; set; } = new();
             public List<FaceRoot> TrimeshFaces { get; set; } = new();
             public List<Vector3> TrimeshVertices { get; set; } = new();
 
@@ -555,6 +558,27 @@ namespace Kotor.NET.Formats.KotorMDL
 
                 if (TrimeshHeader is not null)
                 {
+                    writer.BaseStream.Position = TrimeshHeader.OffsetToVertexIndicesCountArray;
+                    foreach (var count in VertexIndicesCounts)
+                    {
+                        writer.Write(count);
+                    }
+
+                    writer.BaseStream.Position = TrimeshHeader.OffsetToVertexOffsetArray;
+                    foreach (var offset in VertexIndicesOffsets)
+                    {
+                        writer.Write(offset);
+                    }
+
+                    for(var i = 0; i < VertexIndices.Count; i++)
+                    {
+                        writer.BaseStream.Position = VertexIndicesOffsets[i];
+                        for (var j = 0; j < VertexIndicesCounts[i]; j++)
+                        {
+                            writer.Write(VertexIndices[i][j]);
+                        }
+                    }
+
                     writer.BaseStream.Position = TrimeshHeader.OffsetToVertexArray;
                     foreach (var vertex in TrimeshVertices)
                     {
