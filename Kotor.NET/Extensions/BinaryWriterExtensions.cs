@@ -14,7 +14,7 @@ namespace Kotor.NET.Extensions
         {
             if (prefixSize == 0)
             {
-                writer.Write(Encoding.GetEncoding(1252).GetBytes(value));
+                writer.Write(Encoding./*GetEncoding(1252)*/ASCII.GetBytes(value));
             }
             else if (prefixSize == 1)
             {

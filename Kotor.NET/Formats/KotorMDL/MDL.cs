@@ -62,20 +62,37 @@ namespace Kotor.NET.Formats.KotorMDL
     {
         public float TimeKey { get; set; }
         public List<byte[]> Data { get; set; } = new();
+
+        public ControllerRow(float timeKey, List<byte[]> data)
+        {
+            TimeKey = timeKey;
+            Data = data;
+        }
+
+        public ControllerRow(float timeKey, params byte[][] data)
+        {
+            TimeKey = timeKey;
+            Data = data.ToList();
+        }
+
+        public ControllerRow()
+        {
+
+        }
     }
 
     public class Trimesh
     {
         public List<Face> Faces { get; set; } = new();
-        public Vector3 DiffuseColor { get; set; } = new();
-        public Vector3 AmbientColor { get; set; } = new();
+        public Vector3 DiffuseColor { get; set; } = new(0.7f, 0.7f, 0.7f);
+        public Vector3 AmbientColor { get; set; } = new(0.7f, 0.7f, 0.7f);
         public uint TransperencyHint { get; set; } = 0;
         public string DiffuseTexture { get; set; } = "";
         public string LightmapTexture { get; set; } = "";
         public int SaberValue1 { get; set; } = 0;
         public int SaberValue2 { get; set; } = 0;
 
-        public bool Render { get; set; }
+        public bool Render { get; set; } = true;
         public bool Shadow { get; set; }
         public bool Beaming { get; set; }
         public bool Lightmap { get; set; }
@@ -83,7 +100,7 @@ namespace Kotor.NET.Formats.KotorMDL
         public bool BackgroundGeometry { get; set; }
         public bool AnimateUV { get; set; }
 
-        public Vector2 UVDirection { get; set; }
+        public Vector2 UVDirection { get; set; } = new();
         public float UVSpeed { get; set; }
         public float UVJitter { get; set; }
 

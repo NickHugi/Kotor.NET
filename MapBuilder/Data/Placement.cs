@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.NET.Formats.KotorBWM;
+using Kotor.NET.Formats.KotorMDL;
 using Kotor.NET.Graphics.SceneObjects;
 
 namespace MapBuilder.Data
@@ -20,5 +22,9 @@ namespace MapBuilder.Data
         public float Roll { get; set; }
 
         public bool CarveWalkmesh { get; set; }
+
+        public abstract BWM GenerateWalkmesh();
+
+        public abstract MDL GenerateModel();
     }
 }

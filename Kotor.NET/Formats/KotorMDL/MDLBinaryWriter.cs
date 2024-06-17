@@ -25,10 +25,12 @@ namespace Kotor.NET.Formats.KotorMDL
         public MDLBinaryWriter(string filepath, string mdxFilepath)
         {
             _writer = new BinaryWriter(new FileStream(filepath, FileMode.OpenOrCreate));
+            _mdxWriter = new BinaryWriter(new FileStream(mdxFilepath, FileMode.OpenOrCreate));
         }
         public MDLBinaryWriter(Stream stream, Stream mdxStream)
         {
             _writer = new BinaryWriter(stream);
+            _mdxWriter = new BinaryWriter(mdxStream);
         }
         public MDLBinaryWriter()
         {
@@ -41,21 +43,26 @@ namespace Kotor.NET.Formats.KotorMDL
             _mdl = mdl;
             var fileSize = Build();
 
-            using (var memoryStream = new MemoryStream(fileSize))
-            using (var binaryWriter = new BinaryWriter(memoryStream))
-            {
-                _binaryMDL.Write(binaryWriter);
-                Stream.CopyTo(memoryStream);
+            using var memoryStream = new MemoryStream(fileSize);
+            using var binaryWriter = new BinaryWriter(memoryStream);
 
-                return new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }.Concat(memoryStream.ToArray()).ToArray();
-            }
+            _binaryMDL.Write(binaryWriter);
+            Stream.CopyTo(memoryStream);
+
+            var mdlSize = BitConverter.GetBytes(fileSize);
+            var mdxSize = BitConverter.GetBytes((uint)_mdxWriter.BaseStream.Length);
+            var mdlBytes = memoryStream.ToArray();
+
+            return new byte[] { 0, 0, 0, 0 }.Concat(mdlSize).Concat(mdxSize).Concat(mdlBytes).ToArray();
         }
 
         public void Write(MDL mdl)
         {
-            
-            //this._mdl = mdl;
-            //file.Write(_writer);
+            _mdl = mdl;
+            var bytes = Bytes(mdl);
+
+            _writer.Write(bytes);
+            _writer.Flush();
         }
 
         private int Build()
@@ -116,6 +123,8 @@ namespace Kotor.NET.Formats.KotorMDL
             _binaryMDL.ModelHeader.OffsetToRootNode = animationOffset;
             _binaryMDL.ModelHeader.GeometryHeader.RootNodeOffset = animationOffset;
             (_binaryMDL.RootNode, var fileSize) = BuildNode(_mdl.Root, animationOffset);
+
+            _binaryMDL.ModelHeader.MDXSize = (int)_mdxWriter.BaseStream.Length;
 
             return fileSize;
         }
@@ -314,7 +323,7 @@ namespace Kotor.NET.Formats.KotorMDL
                 offset += 12;
             }
 
-            trimeshHeader.MDXOffsetToData = (int)_writer.BaseStream.Position;
+            trimeshHeader.MDXOffsetToData = (int)_mdxWriter.BaseStream.Position;
             var hasPositionMDX = vertices.Any(x => x.Position is not null);
             var hasNormalMDX = vertices.Any(x => x.Normal is not null);
             var hasTextureMDX = vertices.Any(x => x.DiffuseUV is not null);
@@ -349,6 +358,9 @@ namespace Kotor.NET.Formats.KotorMDL
                 trimeshHeader.MDXDataSize += 8;
             }
 
+            // extra vertex for some reason
+            vertices.Add(new Vertex());
+
             foreach (var vertex in vertices)
             {
                 if (hasPositionMDX)
@@ -368,7 +380,6 @@ namespace Kotor.NET.Formats.KotorMDL
                     _mdxWriter.Write(vertex.LightmapUV ?? new());
                 }
             }
-            // TODO - plus extra block for whatever reason
 
             trimeshHeader.OffsetToFaceArray = offset;
             trimeshHeader.FaceArrayCount = trimeshHeader.FaceArrayCount2 = node.Trimesh.Faces.Count;

@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Kotor.NET.Graphics\Kotor.NET.Graphics.csproj" />
+    <ProjectReference Include="..\MapBuilder\MapBuilder.csproj" />
   </ItemGroup>
 
 </Project>

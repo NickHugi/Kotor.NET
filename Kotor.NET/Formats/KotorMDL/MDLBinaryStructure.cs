@@ -890,15 +890,21 @@ namespace Kotor.NET.Formats.KotorMDL
                 writer.Write(HasShadow);
                 writer.Write(Beaming);
                 writer.Write(DoesRender);
+                if (IsTSL)
+                {
+                    // Dirt Enabled 8
+                    // Padding 8
+                    // Dirt Texture 16
+                    // Dirt Coord Space 16
+                    // Hide In Holograms 8
+                    // Padding 8
+                    writer.Write(TSLUnknown1);
+                    writer.Write(TSLUnknown2);
+                }
                 writer.Write(Unknown5);
                 writer.Write(Unknown6);
                 writer.Write(TotalArea);
                 writer.Write(Unknown7);
-                if (IsTSL)
-                {
-                    writer.Write(TSLUnknown1);
-                    writer.Write(TSLUnknown2);
-                }
                 writer.Write(MDXOffsetToData);
                 writer.Write(OffsetToVertexArray);
             }
