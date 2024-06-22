@@ -12,7 +12,6 @@
     <Folder Include="Formats\BinaryBWM\" />
     <Folder Include="Formats\BinaryGFF\" />
     <Folder Include="Formats\BinaryKEY\" />
-    <Folder Include="Formats\BinaryLIP\" />
     <Folder Include="Formats\BinaryMDL\" />
     <Folder Include="Formats\BinaryNCS\" />
     <Folder Include="Formats\BinarySFF\" />
