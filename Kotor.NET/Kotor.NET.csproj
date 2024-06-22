@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Formats\BinaryBIF\" />
-    <Folder Include="Formats\BinaryBWM\" />
     <Folder Include="Formats\BinaryGFF\" />
     <Folder Include="Formats\BinaryKEY\" />
     <Folder Include="Formats\BinaryMDL\" />

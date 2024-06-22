@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -58,5 +57,12 @@ public static class BinaryWriterExtensions
         {
             Write(writer, value.Get().PadRight(16, '\0').Truncate(16), 0);
         }
+    }
+
+    public static void Write(this BinaryWriter writer, Vector3 value)
+    {
+        writer.Write(value.X);
+        writer.Write(value.Y);
+        writer.Write(value.Z);
     }
 }

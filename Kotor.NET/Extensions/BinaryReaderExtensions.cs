@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -55,5 +54,15 @@ public static class BinaryReaderExtensions
         reader.BaseStream.Position += 1;
 
         return builder.ToString();
+    }
+
+    public static Vector3 ReadVector3(this BinaryReader reader)
+    {
+        return new Vector3()
+        {
+            X = reader.ReadSingle(),
+            Y = reader.ReadSingle(),
+            Z = reader.ReadSingle()
+        };
     }
 }
