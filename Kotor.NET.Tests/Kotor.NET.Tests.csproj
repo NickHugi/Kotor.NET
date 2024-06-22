@@ -10,6 +10,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Formats\BinaryTwoDA\TestTwoDABinary.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Formats\BinaryTwoDA\file1.2da" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="NUnit" Version="3.14.0" />
@@ -38,6 +46,13 @@
     <None Update="Formats\BinarySSF\file1.ssf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Formats\BinaryTLK\file1.tlk">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Formats\BinaryTwoDA\" />
   </ItemGroup>
 
 </Project>
