@@ -29,6 +29,9 @@
     <None Update="Formats\BinaryERF\file1.erf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Formats\BinaryRIM\file1.rim">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
