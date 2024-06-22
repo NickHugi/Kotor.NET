@@ -35,6 +35,9 @@
     <None Update="Formats\BinaryRIM\file1.rim">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Formats\BinarySSF\file1.ssf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
