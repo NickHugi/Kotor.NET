@@ -35,6 +35,9 @@
     <None Update="Formats\BinaryERF\file1.erf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Formats\BinaryGFF\file1.gff">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Formats\BinaryKEY\file1.key">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
