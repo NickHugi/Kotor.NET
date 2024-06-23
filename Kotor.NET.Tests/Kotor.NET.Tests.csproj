@@ -32,6 +32,9 @@
     <None Update="Formats\BinaryERF\file1.erf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Formats\BinaryKEY\file1.key">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Formats\BinaryLIP\file1.lip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

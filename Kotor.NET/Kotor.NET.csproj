@@ -9,7 +9,6 @@
   <ItemGroup>
     <Folder Include="Formats\BinaryBIF\" />
     <Folder Include="Formats\BinaryGFF\" />
-    <Folder Include="Formats\BinaryKEY\" />
     <Folder Include="Formats\BinaryMDL\" />
     <Folder Include="Formats\BinaryNCS\" />
     <Folder Include="Formats\BinaryTPC\" />

@@ -47,7 +47,7 @@ public static class BinaryWriterExtensions
     /// If true inserts a single byte containing the length of the ResRef,
     /// otherwise the ResRef is padded with null bytes to reach 16 bytes.
     /// </param>
-    public static void Write(this BinaryWriter writer, ResRef value, bool withPrefix)
+    public static void Write(this BinaryWriter writer, ResRef value, bool withPrefix = false)
     {
         if (withPrefix)
         {
