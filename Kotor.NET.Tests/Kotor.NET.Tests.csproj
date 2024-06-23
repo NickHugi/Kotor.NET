@@ -26,6 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Formats\BinaryBIF\file1.bif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Formats\BinaryBWM\file1.bwm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

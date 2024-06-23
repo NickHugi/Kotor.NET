@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Formats\BinaryBIF\" />
     <Folder Include="Formats\BinaryGFF\" />
     <Folder Include="Formats\BinaryMDL\" />
     <Folder Include="Formats\BinaryNCS\" />
