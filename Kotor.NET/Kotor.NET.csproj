@@ -13,7 +13,6 @@
     <Folder Include="Formats\AsciiLYT\" />
     <Folder Include="Formats\AsciiVIS\" />
     <Folder Include="Formats\AsciiTXI\" />
-    <Folder Include="Formats\BinaryLTR\" />
   </ItemGroup>
 
 </Project>
