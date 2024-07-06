@@ -59,10 +59,35 @@ public static class BinaryWriterExtensions
         }
     }
 
+    public static void Write(this BinaryWriter writer, Vector2 value)
+    {
+        writer.Write(value.X);
+        writer.Write(value.Y);
+    }
+
     public static void Write(this BinaryWriter writer, Vector3 value)
     {
         writer.Write(value.X);
         writer.Write(value.Y);
         writer.Write(value.Z);
+    }
+
+    public static void Write(this BinaryWriter writer, Vector4 value, bool startWithWComponent = false)
+    {
+        if (startWithWComponent)
+            writer.Write(value.W);
+
+        writer.Write(value.X);
+        writer.Write(value.Y);
+        writer.Write(value.Z);
+
+        if (!startWithWComponent)
+            writer.Write(value.W);
+    }
+
+    public static void Write(this BinaryWriter writer, BoundingBox value)
+    {
+        writer.Write(value.Min);
+        writer.Write(value.Max);
     }
 }
