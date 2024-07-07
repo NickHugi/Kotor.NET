@@ -11,6 +11,7 @@
     <Folder Include="Formats\AsciiVIS\" />
     <Folder Include="Formats\AsciiTXI\" />
     <Folder Include="Helpers\" />
+    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>
