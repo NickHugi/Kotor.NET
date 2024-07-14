@@ -19,7 +19,7 @@ public enum GFFBinaryFieldType
     Single,
     Double,
     String,
-    LocalizedString,
+    LocalisedString,
     ResRef,
     Binary,
     Struct,

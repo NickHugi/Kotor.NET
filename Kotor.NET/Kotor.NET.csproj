@@ -10,8 +10,10 @@
     <Folder Include="Formats\AsciiLYT\" />
     <Folder Include="Formats\AsciiVIS\" />
     <Folder Include="Formats\AsciiTXI\" />
-    <Folder Include="Helpers\" />
-    <Folder Include="Resources\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.0-preview.6.24327.7" />
   </ItemGroup>
 
 </Project>

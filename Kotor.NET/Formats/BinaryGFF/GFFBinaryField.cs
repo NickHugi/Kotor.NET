@@ -14,6 +14,8 @@ public class GFFBinaryField
     public uint LabelIndex { get; set; }
     public byte[] DataOrDataOffset { get; set; } = new byte[0];
 
+    public int DataOffset => BitConverter.ToInt32(DataOrDataOffset, 0);
+
     public GFFBinaryField()
     {
     }
