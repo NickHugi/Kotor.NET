@@ -17,8 +17,7 @@ public class TestSSFBinary
 
     private SSFBinary GetBinarySSF(byte[] data)
     {
-        var reader = new BinaryReader(new MemoryStream(data));
-        return new SSFBinary(reader);
+        return new SSFBinary(new MemoryStream(data));
     }
    
     [Test]
@@ -48,7 +47,7 @@ public class TestSSFBinary
 
         var stream = new MemoryStream();
         var reader = new BinaryReader(stream);
-        binarySSF.Write(new BinaryWriter(stream));
+        binarySSF.Write(stream);
 
 
         Assert.That(binarySSF.SoundList.Sounds.Length, Is.EqualTo(40));

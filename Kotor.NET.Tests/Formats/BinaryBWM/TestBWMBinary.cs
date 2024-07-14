@@ -18,8 +18,7 @@ public class TestBWMBinary
 
     private BWMBinary GetBinaryBWM(byte[] data)
     {
-        var reader = new BinaryReader(new MemoryStream(data));
-        return new BWMBinary(reader);
+        return new BWMBinary(new MemoryStream(data));
     }
 
     [Test]
@@ -78,51 +77,53 @@ public class TestBWMBinary
 
         var stream = new MemoryStream();
         var reader = new BinaryReader(stream);
-        binaryBWM.Write(new BinaryWriter(stream));
+        binaryBWM.Write(stream);
 
-        Assert.That(binaryBWM.FileHeader.VertexCount, Is.EqualTo(6));
-        Assert.That(binaryBWM.FileHeader.FaceCount, Is.EqualTo(4));
-        Assert.That(binaryBWM.FileHeader.EdgeCount, Is.EqualTo(4));
-        Assert.That(binaryBWM.FileHeader.PerimeterCount, Is.EqualTo(1));
+        stream.Position = 0;
+        var fileHeader = new BWMBinaryFileHeader(reader);
+        Assert.That(fileHeader.VertexCount, Is.EqualTo(6));
+        Assert.That(fileHeader.FaceCount, Is.EqualTo(4));
+        Assert.That(fileHeader.EdgeCount, Is.EqualTo(4));
+        Assert.That(fileHeader.PerimeterCount, Is.EqualTo(1));
 
-        stream.Position = binaryBWM.FileHeader.OffsetToVertices;
+        stream.Position = fileHeader.OffsetToVertices;
         var vertex0 = reader.ReadVector3();
         Assert.That(vertex0.X, Is.EqualTo(0));
         Assert.That(vertex0.Y, Is.EqualTo(0));
         Assert.That(vertex0.Z, Is.EqualTo(0));
 
-        stream.Position = binaryBWM.FileHeader.OffsetToFaceIndices;
+        stream.Position = fileHeader.OffsetToFaceIndices;
         var indices0 = new BWMBinaryFaceIndices(reader);
         Assert.That(indices0.Index1, Is.EqualTo(0));
         Assert.That(indices0.Index2, Is.EqualTo(1));
         Assert.That(indices0.Index3, Is.EqualTo(3));
 
-        stream.Position = binaryBWM.FileHeader.OffsetToFaceMaterials + 4*3;
+        stream.Position = fileHeader.OffsetToFaceMaterials + 4*3;
         var material3 = reader.ReadInt32();
         Assert.That(material3, Is.EqualTo(7));
 
-        stream.Position = binaryBWM.FileHeader.OffsetToFaceNormals;
+        stream.Position = fileHeader.OffsetToFaceNormals;
         var normal0 = reader.ReadVector3();
         Assert.That(normal0.X, Is.EqualTo(0));
         Assert.That(normal0.Y, Is.EqualTo(0));
         Assert.That(normal0.Z, Is.EqualTo(1));
 
-        stream.Position = binaryBWM.FileHeader.OffsetToFaceCoefficients;
+        stream.Position = fileHeader.OffsetToFaceCoefficients;
         var coefficient0 = reader.ReadSingle();
         Assert.That(coefficient0, Is.EqualTo(0));
 
-        stream.Position = binaryBWM.FileHeader.OffsetToAABBs;
+        stream.Position = fileHeader.OffsetToAABBs;
         var aabb0 = new BWMBinaryAABBNode(reader);
         Assert.That(aabb0.FaceIndex, Is.EqualTo(-1));
         Assert.That(aabb0.LeftChildIndex, Is.EqualTo(1));
         Assert.That(aabb0.RightChildIndex, Is.EqualTo(4));
 
-        stream.Position = binaryBWM.FileHeader.OffsetToEdges;
+        stream.Position = fileHeader.OffsetToEdges;
         var edge0 = new BWMBinaryEdge(reader);
         Assert.That(edge0.EdgeIndex, Is.EqualTo(0));
         Assert.That(edge0.Transition, Is.EqualTo(-1));
 
-        stream.Position = binaryBWM.FileHeader.OffsetToPerimeters;
+        stream.Position = fileHeader.OffsetToPerimeters;
         var perimeter0 = reader.ReadInt32();
         Assert.That(perimeter0, Is.EqualTo(4));
     }

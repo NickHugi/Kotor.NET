@@ -17,8 +17,7 @@ public class TestLIPBinary
 
     private LIPBinary GetBinaryLIP(byte[] data)
     {
-        var reader = new BinaryReader(new MemoryStream(data));
-        return new LIPBinary(reader);
+        return new LIPBinary(new MemoryStream(data));
     }
    
     [Test]
@@ -53,10 +52,11 @@ public class TestLIPBinary
 
         var stream = new MemoryStream();
         var reader = new BinaryReader(stream);
-        binaryLIP.Write(new BinaryWriter(stream));
+        binaryLIP.Write(stream);
 
-
-        Assert.That(binaryLIP.FileHeader.KeyFrameCount, Is.EqualTo(3));
+        stream.Position = 0;
+        var fileHeader = new LIPBinaryFileHeader(reader);
+        Assert.That(fileHeader.KeyFrameCount, Is.EqualTo(3));
     }
 
 }

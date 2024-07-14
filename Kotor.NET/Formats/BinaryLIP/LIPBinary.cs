@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,8 +16,10 @@ public class LIPBinary
     {
 
     }
-    public LIPBinary(BinaryReader reader)
+    public LIPBinary(Stream stream)
     {
+        var reader = new BinaryReader(stream);
+
         FileHeader = new LIPBinaryFileHeader(reader);
 
         for (int i = 0; i < FileHeader.KeyFrameCount; i++)
@@ -25,8 +28,10 @@ public class LIPBinary
         }
     }
 
-    public void Write(BinaryWriter writer)
+    public void Write(Stream stream)
     {
+        var writer = new BinaryWriter(stream);
+
         FileHeader.Write(writer);
 
         foreach (var keyFrame in KeyFrames)

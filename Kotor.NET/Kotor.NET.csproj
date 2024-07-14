@@ -7,17 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Formats\BinaryBIF\" />
-    <Folder Include="Formats\BinaryGFF\" />
-    <Folder Include="Formats\BinaryKEY\" />
-    <Folder Include="Formats\BinaryMDL\" />
-    <Folder Include="Formats\BinaryNCS\" />
-    <Folder Include="Formats\BinaryTPC\" />
-    <Folder Include="Formats\BinaryTGA\" />
     <Folder Include="Formats\AsciiLYT\" />
     <Folder Include="Formats\AsciiVIS\" />
     <Folder Include="Formats\AsciiTXI\" />
-    <Folder Include="Formats\BinaryLTR\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.0-preview.6.24327.7" />
   </ItemGroup>
 
 </Project>

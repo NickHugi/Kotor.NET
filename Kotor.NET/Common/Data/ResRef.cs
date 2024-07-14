@@ -35,6 +35,11 @@ public class ResRef
         _value = value.Replace("\0", "");
     }
 
+    public int Length()
+    {
+        return _value.Length;
+    }
+
     public override string ToString()
     {
         return _value;

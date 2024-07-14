@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,16 +16,19 @@ public class SSFBinary
     {
 
     }
-    public SSFBinary(BinaryReader reader)
+    public SSFBinary(Stream stream)
     {
+        var reader = new BinaryReader(stream);
         FileHeader = new SSFBinaryFileHeader(reader);
 
         reader.BaseStream.Position = FileHeader.OffsetToSounds;
         SoundList = new SSFBinarySoundList(reader);
     }
 
-    public void Write(BinaryWriter writer)
+    public void Write(Stream stream)
     {
+        var writer = new BinaryWriter(stream);
+
         FileHeader.Write(writer);
         SoundList.Write(writer);
     }

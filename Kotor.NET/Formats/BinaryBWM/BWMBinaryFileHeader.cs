@@ -70,8 +70,8 @@ public class BWMBinaryFileHeader
 
     public void Write(BinaryWriter writer)
     {
-        writer.Write(FileType);
-        writer.Write(FileVersion);
+        writer.Write(FileType, 0);
+        writer.Write(FileVersion, 0);
         writer.Write(WalkmeshType);
         writer.Write(Reserved, 0, 48);
         writer.Write(Position);

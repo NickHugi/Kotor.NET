@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection.PortableExecutable;
 using System.Text;
@@ -24,11 +25,11 @@ public class BWMBinary
 
     public BWMBinary()
     {
-
     }
-
-    public BWMBinary(BinaryReader reader)
+    public BWMBinary(Stream stream)
     {
+        var reader = new BinaryReader(stream);
+
         FileHeader = new BWMBinaryFileHeader(reader);
 
         reader.BaseStream.Position = FileHeader.OffsetToVertices;
@@ -86,8 +87,10 @@ public class BWMBinary
         }
     }
 
-    public void Write(BinaryWriter writer)
+    public void Write(Stream stream)
     {
+        var writer = new BinaryWriter(stream);
+
         FileHeader.Write(writer);
 
         writer.BaseStream.Position = FileHeader.OffsetToVertices;

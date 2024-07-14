@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,8 +19,10 @@ public class ERFBinary
     {
 
     }
-    public ERFBinary(BinaryReader reader)
+    public ERFBinary(Stream stream)
     {
+        var reader = new BinaryReader(stream);
+
         FileHeader = new ERFBinaryFileHeader(reader);
 
         reader.BaseStream.Position = FileHeader.OffsetToKeyList;
@@ -41,8 +44,10 @@ public class ERFBinary
         }
     }
 
-    public void Write(BinaryWriter writer)
+    public void Write(Stream stream)
     {
+        var writer = new BinaryWriter(stream);
+
         FileHeader.Write(writer);
 
         foreach (var entry in KeyEntries)
