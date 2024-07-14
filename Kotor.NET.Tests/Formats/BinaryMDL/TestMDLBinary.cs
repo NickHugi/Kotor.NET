@@ -4,6 +4,7 @@ using Kotor.NET.Common.Data;
 using Kotor.NET.Extensions;
 using Kotor.NET.Formats.BinaryMDL;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Resources;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Kotor.NET.Tests.Formats.BinaryMDL;
 
@@ -23,10 +24,8 @@ public class TestMDLBinary
     private MDLBinary GetBinaryMDL(string extensionlessPath)
     {
         var mdlData = File.ReadAllBytes(extensionlessPath + ".mdl");
-        var mdlReader = new BinaryReader(new MemoryStream(mdlData));
         var mdxData = File.ReadAllBytes(extensionlessPath + ".mdx");
-        var mdxReader = new BinaryReader(new MemoryStream(mdxData));
-        return new MDLBinary(mdlReader, mdxReader);
+        return new MDLBinary(new MemoryStream(mdlData), new MemoryStream(mdxData));
     }
 
     [Test]
@@ -87,14 +86,14 @@ public class TestMDLBinary
 
         var stream = new MemoryStream();
         var mdxStream = new MemoryStream();
-        binaryMDL.Write(new BinaryWriter(stream), new BinaryWriter(mdxStream));
+        binaryMDL.Write(stream, mdxStream);
 
         var reader = new BinaryReader(stream);
         var mdxReader = new BinaryReader(mdxStream);
         stream.Position = 0;
         mdxStream.Position = 0;
 
-        var newBinaryMDL = new MDLBinary(reader, mdxReader);
+        var newBinaryMDL = new MDLBinary(stream, mdxStream);
         Assert.That(newBinaryMDL.RootNode.NodeHeader.ChildArrayCount, Is.EqualTo(48));
         Assert.That(newBinaryMDL.RootNode.Children.First().ControllerHeaders.Count, Is.EqualTo(2));
         Assert.That(newBinaryMDL.RootNode.Children.First().ControllerData.Count, Is.EqualTo(9));
@@ -109,14 +108,14 @@ public class TestMDLBinary
 
         var stream = new MemoryStream();
         var mdxStream = new MemoryStream();
-        binaryMDL.Write(new BinaryWriter(stream), new BinaryWriter(mdxStream));
+        binaryMDL.Write(stream, mdxStream);
 
         var reader = new BinaryReader(stream);
         var mdxReader = new BinaryReader(mdxStream);
         stream.Position = 0;
         mdxStream.Position = 0;
 
-        var newBinaryMDL = new MDLBinary(reader, mdxReader);
+        var newBinaryMDL = new MDLBinary(stream, mdxStream);
     }
 
     [Test]
@@ -127,14 +126,14 @@ public class TestMDLBinary
 
         var stream = new MemoryStream();
         var mdxStream = new MemoryStream();
-        binaryMDL.Write(new BinaryWriter(stream), new BinaryWriter(mdxStream));
+        binaryMDL.Write(stream, mdxStream);
 
         var reader = new BinaryReader(stream);
         var mdxReader = new BinaryReader(mdxStream);
         stream.Position = 0;
         mdxStream.Position = 0;
 
-        var newBinaryMDL = new MDLBinary(reader, mdxReader);
+        var newBinaryMDL = new MDLBinary(stream, mdxStream);
     }
 
     [Test]
@@ -145,13 +144,11 @@ public class TestMDLBinary
 
         var stream = new MemoryStream();
         var mdxStream = new MemoryStream();
-        binaryMDL.Write(new BinaryWriter(stream), new BinaryWriter(mdxStream));
+        binaryMDL.Write(stream, mdxStream);
 
-        var reader = new BinaryReader(stream);
-        var mdxReader = new BinaryReader(mdxStream);
         stream.Position = 0;
         mdxStream.Position = 0;
 
-        var newBinaryMDL = new MDLBinary(reader, mdxReader);
+        var newBinaryMDL = new MDLBinary(stream, mdxStream);
     }
 }

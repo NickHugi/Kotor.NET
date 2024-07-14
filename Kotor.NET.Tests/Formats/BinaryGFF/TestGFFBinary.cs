@@ -19,8 +19,7 @@ public class TestGFFBinary
 
     private GFFBinary GetBinaryGFF(byte[] data)
     {
-        var reader = new BinaryReader(new MemoryStream(data));
-        return new GFFBinary(reader);
+        return new GFFBinary(new MemoryStream(data));
     }
    
     [Test]
@@ -62,7 +61,7 @@ public class TestGFFBinary
 
         var stream = new MemoryStream();
         var reader = new BinaryReader(stream);
-        binaryGFF.Write(new BinaryWriter(stream));
+        binaryGFF.Write(stream);
 
 
         Assert.That(binaryGFF.FileHeader.StructCount, Is.EqualTo(3));

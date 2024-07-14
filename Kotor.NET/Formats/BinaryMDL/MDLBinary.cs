@@ -23,11 +23,11 @@ public class MDLBinary
     public MDLBinary()
     {
     }
-    public MDLBinary(BinaryReader reader, BinaryReader mdxReader) :this(new(reader.BaseStream), mdxReader)
+    public MDLBinary(Stream stream, Stream mdxStream)
     {
-    }
-    public MDLBinary(MDLBinaryReader reader, BinaryReader mdxReader)
-    {
+        var reader = new MDLBinaryReader(stream);
+        var mdxReader = new BinaryReader(mdxStream);
+
         FileHeader = new(reader);
         ModelHeader = new(reader);
 
@@ -63,13 +63,11 @@ public class MDLBinary
         RootNode = new(reader, mdxReader);
     }
 
-    public void Write(BinaryWriter writer, BinaryWriter mdxWriter)
+    public void Write(Stream stream, Stream mdxStream)
     {
-        writer = new MDLBinaryWriter(writer.BaseStream);
-        Write((MDLBinaryWriter)writer, mdxWriter);
-    }
-    public void Write(MDLBinaryWriter writer, BinaryWriter mdxWriter)
-    {
+        var writer = new MDLBinaryWriter(stream);
+        var mdxWriter = new BinaryWriter(mdxStream);
+
         FileHeader.Write(writer);
         ModelHeader.Write(writer);
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection.PortableExecutable;
 using System.Runtime;
@@ -17,8 +18,10 @@ public class KEYBinary
     public List<string> Filenames { get; set; }
     public List<KEYBinaryKeyEntry> Keys { get; set; }
 
-    public KEYBinary(BinaryReader reader)
+    public KEYBinary(Stream stream)
     {
+        var reader = new BinaryReader(stream);
+
         FileHeader = new KEYBinaryFileHeader(reader);
 
         FileTable = new List<KEYBinaryFileEntry>();
@@ -44,8 +47,10 @@ public class KEYBinary
         }
     }
 
-    public void Write(BinaryWriter writer)
+    public void Write(Stream stream)
     {
+        var writer = new BinaryWriter(stream);
+
         FileHeader.Write(writer);
 
         writer.BaseStream.Position = FileHeader.OffsetToFileEntries;

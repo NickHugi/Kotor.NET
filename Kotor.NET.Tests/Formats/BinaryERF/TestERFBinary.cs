@@ -16,8 +16,7 @@ public class TestERFBinary
 
     private ERFBinary GetBinaryERF(byte[] data)
     {
-        var reader = new BinaryReader(new MemoryStream(data));
-        return new ERFBinary(reader);
+        return new ERFBinary(new MemoryStream(data));
     }
    
     [Test]
@@ -55,7 +54,7 @@ public class TestERFBinary
 
         var stream = new MemoryStream();
         var reader = new BinaryReader(stream);
-        binaryERF.Write(new BinaryWriter(stream));
+        binaryERF.Write(stream);
 
 
         Assert.That(binaryERF.FileHeader.EntryCount, Is.EqualTo(2));

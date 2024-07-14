@@ -17,8 +17,7 @@ public class TestKEYBinary
 
     private KEYBinary GetBinaryKEY(byte[] data)
     {
-        var reader = new BinaryReader(new MemoryStream(data));
-        return new KEYBinary(reader);
+        return new KEYBinary(new MemoryStream(data));
     }
    
     [Test]
@@ -57,7 +56,7 @@ public class TestKEYBinary
 
         var stream = new MemoryStream();
         var reader = new BinaryReader(stream);
-        binaryKEY.Write(new BinaryWriter(stream));
+        binaryKEY.Write(stream);
 
 
         Assert.That(binaryKEY.FileHeader.FileCount, Is.EqualTo(26));

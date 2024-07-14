@@ -16,8 +16,9 @@ public class TPCBinary
     public TPCBinary()
     {
     }
-    public TPCBinary(BinaryReader reader)
+    public TPCBinary(Stream stream)
     {
+        var reader = new BinaryReader(stream);
         FileHeader = new TPCBinaryFileHeader(reader);
 
         var layerCount   = FileHeader.CubeMap ? 6 : 1;
@@ -42,8 +43,10 @@ public class TPCBinary
         TXI = reader.ReadString(txiLength);
     }
 
-    public void Write(BinaryWriter writer)
+    public void Write(Stream stream)
     {
+        var writer = new BinaryWriter(stream);
+
         FileHeader.Write(writer);
 
         for (int i = 0; i < FileHeader.MipmapCount; i++)

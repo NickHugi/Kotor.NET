@@ -18,8 +18,7 @@ public class TestBWMBinary
 
     private BWMBinary GetBinaryBWM(byte[] data)
     {
-        var reader = new BinaryReader(new MemoryStream(data));
-        return new BWMBinary(reader);
+        return new BWMBinary(new MemoryStream(data));
     }
 
     [Test]
@@ -78,7 +77,7 @@ public class TestBWMBinary
 
         var stream = new MemoryStream();
         var reader = new BinaryReader(stream);
-        binaryBWM.Write(new BinaryWriter(stream));
+        binaryBWM.Write(stream);
 
         Assert.That(binaryBWM.FileHeader.VertexCount, Is.EqualTo(6));
         Assert.That(binaryBWM.FileHeader.FaceCount, Is.EqualTo(4));

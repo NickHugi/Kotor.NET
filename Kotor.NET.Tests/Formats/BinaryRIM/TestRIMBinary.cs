@@ -17,8 +17,7 @@ public class TestRIMBinary
 
     private RIMBinary GetBinaryRIM(byte[] data)
     {
-        var reader = new BinaryReader(new MemoryStream(data));
-        return new RIMBinary(reader);
+        return new RIMBinary(new MemoryStream(data));
     }
    
     [Test]
@@ -53,7 +52,7 @@ public class TestRIMBinary
 
         var stream = new MemoryStream();
         var reader = new BinaryReader(stream);
-        binaryRIM.Write(new BinaryWriter(stream));
+        binaryRIM.Write(stream);
 
 
         Assert.That(binaryRIM.FileHeader.ResourceCount, Is.EqualTo(2));

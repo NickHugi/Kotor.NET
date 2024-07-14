@@ -19,8 +19,7 @@ public class TestTPCBinary
 
     private TPCBinary GetBinaryTPC(byte[] data)
     {
-        var reader = new BinaryReader(new MemoryStream(data));
-        return new TPCBinary(reader);
+        return new TPCBinary(new MemoryStream(data));
     }
    
     [Test]
@@ -49,7 +48,7 @@ public class TestTPCBinary
 
         var stream = new MemoryStream();
         var reader = new BinaryReader(stream);
-        binaryTPC.Write(new BinaryWriter(stream));
+        binaryTPC.Write(stream);
 
         Assert.That(binaryTPC.FileHeader.MipmapCount, Is.EqualTo(6));
         Assert.That(binaryTPC.FileHeader.Unused.Count(), Is.EqualTo(114));

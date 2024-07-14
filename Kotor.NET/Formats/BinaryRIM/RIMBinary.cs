@@ -17,8 +17,9 @@ public class RIMBinary
     {
 
     }
-    public RIMBinary(BinaryReader reader)
+    public RIMBinary(Stream stream)
     {
+        var reader = new BinaryReader(stream);
         FileHeader = new RIMBinaryFileHeader(reader);
 
         reader.BaseStream.Position = FileHeader.OffsetToResources;
@@ -34,8 +35,10 @@ public class RIMBinary
         }
     }
 
-    public void Write(BinaryWriter writer)
+    public void Write(Stream stream)
     {
+        var writer = new BinaryWriter(stream);
+
         FileHeader.Write(writer);
 
         foreach (var entry in ResourceEntries)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -24,8 +25,10 @@ public class GFFBinary
     public GFFBinary()
     {
     }
-    public GFFBinary(BinaryReader reader)
+    public GFFBinary(Stream stream)
     {
+        var reader = new BinaryReader(stream);
+
         FileHeader = new GFFBinaryFileHeader(reader);
 
         reader.BaseStream.Position = FileHeader.OffsetToStructs;
@@ -60,8 +63,10 @@ public class GFFBinary
         Unparse(gff);
     }
 
-    public void Write(BinaryWriter writer)
+    public void Write(Stream stream)
     {
+        var writer = new BinaryWriter(stream);
+
         FileHeader.Write(writer);
 
         writer.BaseStream.Position = FileHeader.OffsetToStructs;

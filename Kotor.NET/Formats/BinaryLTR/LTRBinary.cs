@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection.PortableExecutable;
 using System.Text;
@@ -20,8 +21,10 @@ public class LTRBinary
         Doubles = Enumerable.Range(0, size).Select(x => new LTRBinaryBlock(size)).ToArray();
         Triples = Enumerable.Range(0, size).Select(x => Enumerable.Range(0, size).Select(x => new LTRBinaryBlock(size)).ToArray()).ToArray();
     }
-    public LTRBinary(BinaryReader reader)
+    public LTRBinary(Stream stream)
     {
+        var reader = new BinaryReader(stream);
+
         FileHeader = new(reader);
 
         Singles = new(reader, FileHeader.LetterCount);
@@ -43,8 +46,10 @@ public class LTRBinary
         }
     }
 
-    public void Write(BinaryWriter writer)
+    public void Write(Stream stream)
     {
+        var writer = new BinaryWriter(stream);
+
         FileHeader.Write(writer);
 
         Singles.Write(writer);

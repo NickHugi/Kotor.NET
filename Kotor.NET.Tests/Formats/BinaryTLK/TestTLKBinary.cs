@@ -18,8 +18,7 @@ public class TestTLKBinary
 
     private TLKBinary GetBinaryTLK(byte[] data)
     {
-        var reader = new BinaryReader(new MemoryStream(data));
-        return new TLKBinary(reader);
+        return new TLKBinary(new MemoryStream(data));
     }
    
     [Test]

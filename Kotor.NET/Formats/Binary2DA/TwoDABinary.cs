@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,8 +15,13 @@ public class TwoDABinary
     public List<string> RowHeaders { get; set; } = new();
     public List<string> CellValues { get; set; } = new();
 
-    public TwoDABinary(BinaryReader reader)
+    public TwoDABinary()
     {
+    }
+    public TwoDABinary(Stream stream)
+    {
+        var reader = new BinaryReader(stream);
+
         FileHeader = new TwoDABinaryFileHeader(reader);
 
         while (reader.PeekChar() != '\0')
@@ -60,13 +66,10 @@ public class TwoDABinary
         }
     }
 
-    public TwoDABinary()
+    public void Write(Stream stream)
     {
+        var writer = new BinaryWriter(stream);
 
-    }
-
-    public void Write(BinaryWriter writer)
-    {
         FileHeader.Write(writer);
 
         foreach (var columnHeader in ColumnHeaders)

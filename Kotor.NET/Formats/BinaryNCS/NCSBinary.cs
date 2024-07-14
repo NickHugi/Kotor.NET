@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,8 +15,9 @@ public class NCSBinary
     public NCSBinary()
     {
     }
-    public NCSBinary(BinaryReader reader)
+    public NCSBinary(Stream stream)
     {
+        var reader = new BinaryReader(stream);
         FileHeader = new(reader);
 
         while (reader.BaseStream.Position < reader.BaseStream.Length)
@@ -24,8 +26,10 @@ public class NCSBinary
         }
     }
 
-    public void Write(BinaryWriter writer)
+    public void Write(Stream stream)
     {
+        var writer = new BinaryWriter(stream);
+
         FileHeader.Write(writer);
     }
 

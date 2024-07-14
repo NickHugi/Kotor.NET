@@ -18,8 +18,7 @@ public class TestTwoDABinary
 
     private TwoDABinary GetBinaryTwoDA(byte[] data)
     {
-        var reader = new BinaryReader(new MemoryStream(data));
-        return new TwoDABinary(reader);
+        return new TwoDABinary(new MemoryStream(data));
     }
    
     [Test]

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Extensions;
-using Kotor.NET.Formats.BinarySSF;
 
 namespace Kotor.NET.Formats.BinaryTLK;
 
@@ -19,8 +19,11 @@ public class TLKBinary
 
     }
 
-    public TLKBinary(BinaryReader reader)
+    public TLKBinary(Stream stream)
     {
+        var writer = new BinaryWriter(stream);
+
+        var reader = new BinaryReader(stream);
         FileHeader = new TLKBinaryFileHeader(reader);
 
         for (int i = 0; i < FileHeader.EntryCount; i++)

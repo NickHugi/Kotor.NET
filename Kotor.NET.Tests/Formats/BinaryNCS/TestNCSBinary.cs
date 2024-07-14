@@ -19,8 +19,7 @@ public class TestNCSBinary
 
     private NCSBinary GetBinaryNCS(byte[] data)
     {
-        var reader = new BinaryReader(new MemoryStream(data));
-        return new NCSBinary(reader);
+        return new NCSBinary(new MemoryStream(data));
     }
    
     [Test]

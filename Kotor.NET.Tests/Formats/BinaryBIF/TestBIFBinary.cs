@@ -17,8 +17,7 @@ public class TestBIFBinary
 
     private BIFBinary GetBinaryBIF(byte[] data)
     {
-        var reader = new BinaryReader(new MemoryStream(data));
-        return new BIFBinary(reader);
+        return new BIFBinary(new MemoryStream(data));
     }
    
     [Test]
@@ -42,7 +41,7 @@ public class TestBIFBinary
 
         var stream = new MemoryStream();
         var reader = new BinaryReader(stream);
-        binaryBIF.Write(new BinaryWriter(stream));
+        binaryBIF.Write(stream);
 
 
         Assert.That(binaryBIF.FileHeader.ResourceCount, Is.EqualTo(1));

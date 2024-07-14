@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,8 +18,11 @@ public class TGABinary
     public TGABinary()
     {
     }
-    public TGABinary(BinaryReader reader)
+    public TGABinary(Stream stream)
     {
+        var writer = new BinaryWriter(stream);
+
+        var reader = new BinaryReader(stream);
         FileHeader = new(reader);
         ID = reader.ReadString(FileHeader.IDLength);
 

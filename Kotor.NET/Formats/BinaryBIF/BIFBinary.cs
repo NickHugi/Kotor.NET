@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,8 +16,10 @@ public class BIFBinary
     public BIFBinary()
     {
     }
-    public BIFBinary(BinaryReader reader)
+    public BIFBinary(Stream stream)
     {
+        var reader = new BinaryReader(stream);
+
         FileHeader = new BIFBinaryFileHeader(reader);
 
         reader.BaseStream.Position = FileHeader.OffsetToResources;
@@ -34,8 +37,10 @@ public class BIFBinary
         }
     }
 
-    public void Write(BinaryWriter writer)
+    public void Write(Stream stream)
     {
+        var writer = new BinaryWriter(stream);
+
         FileHeader.Write(writer);
 
         writer.BaseStream.Position = FileHeader.OffsetToResources;

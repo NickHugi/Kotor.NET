@@ -20,8 +20,7 @@ public class TestTGABinary
 
     private TGABinary GetBinaryTGA(byte[] data)
     {
-        var reader = new BinaryReader(new MemoryStream(data));
-        return new TGABinary(reader);
+        return new TGABinary(new MemoryStream(data));
     }
 
     [Test]
