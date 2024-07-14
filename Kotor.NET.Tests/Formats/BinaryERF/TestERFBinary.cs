@@ -57,15 +57,17 @@ public class TestERFBinary
         binaryERF.Write(stream);
 
 
-        Assert.That(binaryERF.FileHeader.EntryCount, Is.EqualTo(2));
+        stream.Position = 0;
+        var fileHeader = new ERFBinaryFileHeader(reader);
+        Assert.That(fileHeader.EntryCount, Is.EqualTo(2));
 
-        stream.Position = binaryERF.FileHeader.OffsetToKeyList;
+        stream.Position = fileHeader.OffsetToKeyList;
         var key0 = new ERFBinaryKeyEntry(reader);
         Assert.That(key0.ResID, Is.EqualTo(0));
         Assert.That(key0.ResRef.Get(), Is.EqualTo("test"));
         Assert.That(key0.ResType, Is.EqualTo(ResourceType.MDL.ID));
 
-        stream.Position = binaryERF.FileHeader.OffsetToResourceList;
+        stream.Position = fileHeader.OffsetToResourceList;
         var resource0 = new ERFBinaryResourceEntry(reader);
         Assert.That(resource0.Offset, Is.EqualTo(binaryERF.ResourceEntries[0].Offset));
         Assert.That(resource0.Size, Is.EqualTo(binaryERF.ResourceEntries[0].Size));
