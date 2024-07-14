@@ -64,6 +64,8 @@ public class TestGFFBinary
         binaryGFF.Write(stream);
 
 
+        stream.Position = 0;
+        var fileHeader = new GFFBinaryFileHeader(reader);
         Assert.That(binaryGFF.FileHeader.StructCount, Is.EqualTo(3));
         Assert.That(binaryGFF.FileHeader.FieldCount, Is.EqualTo(4));
         Assert.That(binaryGFF.FileHeader.LabelCount, Is.EqualTo(4));
