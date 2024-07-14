@@ -54,7 +54,7 @@ public class TestLIPBinary
         var reader = new BinaryReader(stream);
         binaryLIP.Write(stream);
 
-
+        stream.Position = 0;
         var fileHeader = new LIPBinaryFileHeader(reader);
         Assert.That(fileHeader.KeyFrameCount, Is.EqualTo(3));
     }
