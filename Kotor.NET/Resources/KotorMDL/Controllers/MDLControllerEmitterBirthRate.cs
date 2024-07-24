@@ -8,7 +8,18 @@ namespace Kotor.NET.Resources.KotorMDL.Controllers;
 
 public class MDLControllerEmitterBirthRate : BaseMDLController
 {
-    public float Red { get; set; }
-    public float Green { get; set; }
-    public float Blue { get; set; }
+    public float Value { get; set; }
+
+    public MDLControllerEmitterBirthRate()
+    {
+    }
+    public MDLControllerEmitterBirthRate(float value)
+    {
+        Value = value;
+    }
+
+    public override string ToString()
+    {
+        return $"Value={Value}";
+    }
 }

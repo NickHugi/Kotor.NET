@@ -11,4 +11,19 @@ public class MDLControllerLightColour : BaseMDLController
     public float Red { get; set; }
     public float Green { get; set; }
     public float Blue { get; set; }
+
+    public MDLControllerLightColour()
+    {
+    }
+    public MDLControllerLightColour(float red, float green, float blue)
+    {
+        Red = red;
+        Green = green;
+        Blue = blue;
+    }
+
+    public override string ToString()
+    {
+        return $"R={Red} G={Green} B={Blue}";
+    }
 }

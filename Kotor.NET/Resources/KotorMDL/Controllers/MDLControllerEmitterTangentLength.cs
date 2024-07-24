@@ -9,4 +9,17 @@ namespace Kotor.NET.Resources.KotorMDL.Controllers;
 public class MDLControllerEmitterTangentLength : BaseMDLController
 {
     public float Value { get; set; }
+
+    public MDLControllerEmitterTangentLength()
+    {
+    }
+    public MDLControllerEmitterTangentLength(float value)
+    {
+        Value = value;
+    }
+
+    public override string ToString()
+    {
+        return $"Value={Value}";
+    }
 }

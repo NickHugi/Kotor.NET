@@ -9,4 +9,17 @@ namespace Kotor.NET.Resources.KotorMDL.Controllers;
 public class MDLControllerEmitterSizeStart : BaseMDLController
 {
     public float Value { get; set; }
+
+    public MDLControllerEmitterSizeStart()
+    {
+    }
+    public MDLControllerEmitterSizeStart(float value)
+    {
+        Value = value;
+    }
+
+    public override string ToString()
+    {
+        return $"Value={Value}";
+    }
 }

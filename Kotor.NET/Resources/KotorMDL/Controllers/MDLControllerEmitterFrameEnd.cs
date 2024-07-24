@@ -9,4 +9,17 @@ namespace Kotor.NET.Resources.KotorMDL.Controllers;
 public class MDLControllerEmitterFrameEnd : BaseMDLController
 {
     public float Value { get; set; }
+
+    public MDLControllerEmitterFrameEnd()
+    {
+    }
+    public MDLControllerEmitterFrameEnd(float value)
+    {
+        Value = value;
+    }
+
+    public override string ToString()
+    {
+        return $"Value={Value}";
+    }
 }

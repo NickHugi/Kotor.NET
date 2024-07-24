@@ -9,4 +9,17 @@ namespace Kotor.NET.Resources.KotorMDL.Controllers;
 public class MDLControllerEmitterLightningZigZag : BaseMDLController
 {
     public float Value { get; set; }
+
+    public MDLControllerEmitterLightningZigZag()
+    {
+    }
+    public MDLControllerEmitterLightningZigZag(float value)
+    {
+        Value = value;
+    }
+
+    public override string ToString()
+    {
+        return $"Value={Value}";
+    }
 }

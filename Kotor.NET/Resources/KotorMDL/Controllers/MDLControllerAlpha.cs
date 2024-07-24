@@ -9,4 +9,17 @@ namespace Kotor.NET.Resources.KotorMDL.Controllers;
 public class MDLControllerAlpha : BaseMDLController
 {
     public float Alpha { get; set; }
+
+    public MDLControllerAlpha()
+    {
+    }
+    public MDLControllerAlpha(float alpha)
+    {
+        Alpha = alpha;
+    }
+
+    public override string ToString()
+    {
+        return $"Alpha={Alpha}";
+    }
 }

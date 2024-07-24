@@ -9,4 +9,17 @@ namespace Kotor.NET.Resources.KotorMDL.Controllers;
 public class MDLControllerScale : BaseMDLController
 {
     public float Scale { get; set; }
+
+    public MDLControllerScale()
+    {
+    }
+    public MDLControllerScale(float scale)
+    {
+        Scale = scale;
+    }
+
+    public override string ToString()
+    {
+        return $"Scale={Scale}";
+    }
 }

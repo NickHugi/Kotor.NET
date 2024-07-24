@@ -9,4 +9,17 @@ namespace Kotor.NET.Resources.KotorMDL.Controllers;
 public class MDLControllerEmitterLightningRadius : BaseMDLController
 {
     public float Value { get; set; }
+
+    public MDLControllerEmitterLightningRadius()
+    {
+    }
+    public MDLControllerEmitterLightningRadius(float value)
+    {
+        Value = value;
+    }
+
+    public override string ToString()
+    {
+        return $"Value={Value}";
+    }
 }

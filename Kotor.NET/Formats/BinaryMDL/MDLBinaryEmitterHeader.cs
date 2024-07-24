@@ -18,6 +18,7 @@ public class MDLBinaryEmitterHeader
     public float ControlPointSmoothing { get; set; }
     public int XGrid { get; set; }
     public int YGrid { get; set; }
+    public int SpawnType { get; set; }
     public string Update { get; set; } = "";
     public string Render { get; set; } = "";
     public string Blend { get; set; } = "";
@@ -25,8 +26,10 @@ public class MDLBinaryEmitterHeader
     public string ChunkName { get; set; } = "";
     public uint TwoSidedTexture { get; set; }
     public uint Loop { get; set; }
-    public uint RenderOrder { get; set; }
+    public ushort RenderOrder { get; set; }
+    public byte FrameBlending { get; set; }
     public string DepthTextureName { get; set; } = "";
+    public byte Padding { get; set; }
     public uint Flags { get; set; }
 
     public MDLBinaryEmitterHeader()
@@ -41,15 +44,18 @@ public class MDLBinaryEmitterHeader
         ControlPointSmoothing = reader.ReadSingle();
         XGrid = reader.ReadInt32();
         YGrid = reader.ReadInt32();
+        SpawnType = reader.ReadInt32();
         Update = reader.ReadString(32);
         Render = reader.ReadString(32);
         Blend = reader.ReadString(32);
         Texture = reader.ReadString(32);
-        ChunkName = reader.ReadString(32);
+        ChunkName = reader.ReadString(16);
         TwoSidedTexture = reader.ReadUInt32();
         Loop = reader.ReadUInt32();
-        RenderOrder = reader.ReadUInt32();
+        RenderOrder = reader.ReadUInt16();
+        FrameBlending = reader.ReadByte();
         DepthTextureName = reader.ReadString(32);
+        Padding = reader.ReadByte();
         Flags = reader.ReadUInt32();
     }
 
@@ -62,15 +68,18 @@ public class MDLBinaryEmitterHeader
         writer.Write(ControlPointSmoothing);
         writer.Write(XGrid);
         writer.Write(YGrid);
+        writer.Write(SpawnType);
         writer.Write(Update.Resize(32), 0);
         writer.Write(Render.Resize(32), 0);
         writer.Write(Blend.Resize(32), 0);
         writer.Write(Texture.Resize(32), 0);
-        writer.Write(ChunkName.Resize(32), 0);
+        writer.Write(ChunkName.Resize(16), 0);
         writer.Write(TwoSidedTexture);
         writer.Write(Loop);
         writer.Write(RenderOrder);
+        writer.Write(FrameBlending);
         writer.Write(DepthTextureName.Resize(32), 0);
+        writer.Write(Padding);
         writer.Write(Flags);
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Kotor.NET.Formats.BinaryMDL;
 
 [Flags]
-public enum MDLBinaryMDXVertexBitmask
+public enum MDLBinaryMDXVertexBitmask : uint
 {
     Vertices    = 0b00000000001,
     UV1         = 0b00000000010,

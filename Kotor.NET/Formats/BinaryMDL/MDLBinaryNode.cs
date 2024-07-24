@@ -213,6 +213,13 @@ public class MDLBinaryNode
                     MDXVertices[i].BoneIndex4 = mdxReader.ReadSingle();
                 }
             }
+
+            reader.SetStreamPosition(TrimeshHeader.OffsetToFaceArray);
+            for (int i = 0; i < TrimeshHeader.FaceArrayCount; i++)
+            {
+                var face = new MDLBinaryTrimeshFace(reader);
+                TrimeshFaces.Add(face);
+            }
         }
     }
 
@@ -383,6 +390,12 @@ public class MDLBinaryNode
                     mdxWriter.Write((float)MDXVertices[i].BoneIndex3!);
                     mdxWriter.Write((float)MDXVertices[i].BoneIndex4!);
                 }
+            }
+
+            writer.SetStreamPosition(TrimeshHeader.OffsetToFaceArray);
+            foreach (var face in TrimeshFaces)
+            {
+                face.Write(writer);
             }
         }
     }

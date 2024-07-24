@@ -9,4 +9,17 @@ namespace Kotor.NET.Resources.KotorMDL.Controllers;
 public class MDLControllerEmitterControlPointsDelay : BaseMDLController
 {
     public float Value { get; set; }
+
+    public MDLControllerEmitterControlPointsDelay()
+    {
+    }
+    public MDLControllerEmitterControlPointsDelay(float value)
+    {
+        Value = value;
+    }
+
+    public override string ToString()
+    {
+        return $"Value={Value}";
+    }
 }

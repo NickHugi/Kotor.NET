@@ -151,4 +151,19 @@ public class TestMDLBinary
 
         var newBinaryMDL = new MDLBinary(stream, mdxStream);
     }
+
+    [Test]
+    public void Test_ParseFile1()
+    {
+        var binaryMDL = GetBinaryMDL(File2Filepath);
+        var mdl = binaryMDL.Parse();
+        var b2 = new MDLBinary();
+        b2.Unparse(mdl);
+
+        b2.Write(File.OpenWrite(@"C:\Users\hugin\Desktop\ext\test.mdl"), File.OpenWrite(@"C:\Users\hugin\Desktop\ext\test.mdx"));
+        //Assert.That(gff.Root.FieldCount(), Is.EqualTo(3));
+        //Assert.That(gff.Root.GetString("Field0"), Is.EqualTo("text"));
+        //Assert.That(gff.Root.GetList("List0")?.ElementAt(0).ID, Is.EqualTo(5));
+        //Assert.That(gff.Root.GetStruct("Struct0")?.GetUInt8("Field1"), Is.EqualTo(123));
+    }
 }

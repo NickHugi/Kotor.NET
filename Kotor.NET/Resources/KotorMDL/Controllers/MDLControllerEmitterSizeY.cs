@@ -6,7 +6,20 @@ using System.Threading.Tasks;
 
 namespace Kotor.NET.Resources.KotorMDL.Controllers;
 
-public class MDLControllerEmitterSizeX : BaseMDLController
+public class MDLControllerEmitterSizeY : BaseMDLController
 {
-    public float SizeX { get; set; }
+    public float SizeY { get; set; }
+
+    public MDLControllerEmitterSizeY()
+    {
+    }
+    public MDLControllerEmitterSizeY(float sizeY)
+    {
+        SizeY = sizeY;
+    }
+
+    public override string ToString()
+    {
+        return $"SizeY={SizeY}";
+    }
 }

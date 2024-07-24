@@ -9,4 +9,17 @@ namespace Kotor.NET.Resources.KotorMDL.Controllers;
 public class MDLControllerEmitterGravity : BaseMDLController
 {
     public float Value { get; set; }
+
+    public MDLControllerEmitterGravity()
+    {
+    }
+    public MDLControllerEmitterGravity(float value)
+    {
+        Value = value;
+    }
+
+    public override string ToString()
+    {
+        return $"Value={Value}";
+    }
 }
