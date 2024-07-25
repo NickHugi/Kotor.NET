@@ -369,7 +369,7 @@ public class MDLBinary
         mdl.AnimationScale = ModelHeader.AnimationScale;
         mdl.Supermodel = ModelHeader.SupermodelName;
 
-        Animations.Select(x => ParseAnimation(x));
+        mdl.Animations = Animations.Select(x => ParseAnimation(x)).ToList();
         mdl.Root = ParseNode(RootNode);
 
         return mdl;
@@ -435,6 +435,7 @@ public class MDLBinary
             node = referenceNode;
 
             referenceNode.ModelResRef = binaryNode.ReferenceHeader.ModelResRef;
+            referenceNode.Reattachable = binaryNode.ReferenceHeader.Reattachable;
         }
         else if (type.HasFlag(MDLBinaryNodeType.EmitterFlag))
         {
@@ -708,16 +709,14 @@ public class MDLBinary
                 _ => throw new ArgumentException("Unknown Controller Type"),
             };
         }
-        else
+        
+        return controllerType switch
         {
-            return controllerType switch
-            {
-                MDLBinaryControllerType.Position => new MDLControllerPosition(floatData[0], floatData[1], floatData[2]),
-                MDLBinaryControllerType.Orientation => new MDLControllerOrientation(floatData[0], floatData[1], floatData[2], floatData[3]),
-                MDLBinaryControllerType.Scale => new MDLControllerScale(floatData[0]),
-                _ => throw new ArgumentException("Unknown Controller Type"),
-            };
-        }
+            MDLBinaryControllerType.Position => new MDLControllerPosition(floatData[0], floatData[1], floatData[2]),
+            MDLBinaryControllerType.Orientation => new MDLControllerOrientation(floatData[0], floatData[1], floatData[2], floatData[3]),
+            MDLBinaryControllerType.Scale => new MDLControllerScale(floatData[0]),
+            _ => throw new ArgumentException("Unknown Controller Type"),
+        };
     }
     private MDLWalkmeshAABBNode ParseAABB(MDLTrimeshNode node, MDLBinaryAABBNode binaryAABB)
     {
@@ -727,6 +726,22 @@ public class MDLBinary
         var rightChild = (binaryAABB.FaceIndex == -1) ? ParseAABB(node, binaryAABB.RightNode) : null;
 
         return new MDLWalkmeshAABBNode(boundingBox, face, leftChild, rightChild);
+    }
+    private MDLControllerOrientation ParseControllerOrientationData(List<float> data)
+    {
+        if (data.Count() == 2)
+        {
+            // mdl/reader.py orientation_controller_to_quaternion
+            return null;
+        }
+        else if (data.Count() == 4)
+        {
+            return new MDLControllerOrientation(data[0], data[1], data[2], data[3]);
+        }
+        else
+        {
+            throw new ArgumentException("Illegal number of columns in orientation controller.");
+        }
     }
 
     public void Unparse(MDL mdl)
@@ -747,7 +762,7 @@ public class MDLBinary
         Names.AddRange(mdl.Animations.Select(x => x.RootNode.Name));
         Names = Names.Distinct().ToList();
 
-        //Animations = mdl.Animations.Select(x => UnparseAnimation(x)).ToList();
+        Animations = mdl.Animations.Select(x => UnparseAnimation(x)).ToList();
 
         RootNode = UnparseNode(mdl.Root);
 
@@ -782,12 +797,83 @@ public class MDLBinary
         binaryNode.NodeHeader.Position = new(positionController?.X ?? 0, positionController?.Y ?? 0, positionController?.Z ?? 0);
         binaryNode.NodeHeader.Rotation = new(orientationController?.X ?? 0, orientationController?.Y ?? 0, orientationController?.Z ?? 0, orientationController?.W ?? 0);
 
+        if (node is MDLTrimeshNode trimeshNode)
+        {
+            //binaryNode.NodeHeader.NodeType |= (ushort)MDLBinaryNodeType.TrimeshFlag;
+        }
+        if (node is MDLDanglyNode danglyNode)
+        {
+            //binaryNode.NodeHeader.NodeType |= (ushort)MDLBinaryNodeType.DanglyFlag;
+        }
+        if (node is MDLEmitterNode emitterNode)
+        {
+            binaryNode.NodeHeader.NodeType |= (ushort)MDLBinaryNodeType.EmitterFlag;
+
+            binaryNode.EmitterHeader = new MDLBinaryEmitterHeader
+            {
+                DeadSpace = emitterNode.DeadSpace,
+                BlastRadius = emitterNode.BlastRadius,
+                BranchCount = emitterNode.BranchCount,
+                ControlPointSmoothing = emitterNode.ControlPointSmoothing,
+                XGrid = emitterNode.XGrid,
+                YGrid = emitterNode.YGrid,
+                SpawnType = emitterNode.SpawnType,
+                Update = emitterNode.Update,
+                Render = emitterNode.Render,
+                Blend = emitterNode.Blend,
+                Texture = emitterNode.Texture,
+                ChunkName = emitterNode.ChunkName,
+                TwoSidedTexture = emitterNode.TwoSidedTexture,
+                Loop = emitterNode.Loop,
+                RenderOrder = emitterNode.RenderOrder,
+                FrameBlending = emitterNode.FrameBlending,
+                DepthTextureName = emitterNode.DepthTextureName,
+            };
+
+            binaryNode.EmitterHeader.Flags |= emitterNode.P2P ? (uint)MDLBinaryEmitterFlags.P2P : 0;
+            binaryNode.EmitterHeader.Flags |= emitterNode.P2P_SEL ? (uint)MDLBinaryEmitterFlags.P2P_SEL : 0;
+            binaryNode.EmitterHeader.Flags |= emitterNode.AffectedByWind ? (uint)MDLBinaryEmitterFlags.AffectedByWind : 0;
+            binaryNode.EmitterHeader.Flags |= emitterNode.Tinted ? (uint)MDLBinaryEmitterFlags.Tinted : 0;
+            binaryNode.EmitterHeader.Flags |= emitterNode.Bounce ? (uint)MDLBinaryEmitterFlags.Bounce : 0;
+            binaryNode.EmitterHeader.Flags |= emitterNode.Random ? (uint)MDLBinaryEmitterFlags.Random : 0;
+            binaryNode.EmitterHeader.Flags |= emitterNode.Inherit ? (uint)MDLBinaryEmitterFlags.Inherit : 0;
+            binaryNode.EmitterHeader.Flags |= emitterNode.InheritVelocity ? (uint)MDLBinaryEmitterFlags.InheritVelocity : 0;
+            binaryNode.EmitterHeader.Flags |= emitterNode.InheritLocal ? (uint)MDLBinaryEmitterFlags.InheritLocal : 0;
+            binaryNode.EmitterHeader.Flags |= emitterNode.Splat ? (uint)MDLBinaryEmitterFlags.Splat : 0;
+            binaryNode.EmitterHeader.Flags |= emitterNode.InheritPart ? (uint)MDLBinaryEmitterFlags.InheritPart : 0;
+            binaryNode.EmitterHeader.Flags |= emitterNode.DepthTexture ? (uint)MDLBinaryEmitterFlags.DepthTexture : 0;
+            binaryNode.EmitterHeader.Flags |= emitterNode.Flag13 ? (uint)MDLBinaryEmitterFlags.Flag13 : 0;
+        }
+        if (node is MDLLightNode lightNode)
+        {
+            binaryNode.NodeHeader.NodeType |= (ushort)MDLBinaryNodeType.LightFlag;
+
+        }
+        if (node is MDLReferenceNode referenceNode)
+        {
+            binaryNode.NodeHeader.NodeType |= (ushort)MDLBinaryNodeType.ReferenceFlag;
+
+            binaryNode.ReferenceHeader = new MDLBinaryReferenceHeader
+            {
+                ModelResRef = referenceNode.ModelResRef,
+                Reattachable = referenceNode.Reattachable,
+            };
+        }
+        if (node is MDLSkinNode skinNode)
+        {
+            //binaryNode.NodeHeader.NodeType |= (ushort)MDLBinaryNodeType.SkinFlag;
+        }
+        if (node is MDLWalkmeshNode walkmeshNode)
+        {
+            //binaryNode.NodeHeader.NodeType |= (ushort)MDLBinaryNodeType.AABBFlag;
+        }
+
         binaryNode.Children = node.Children.Select(UnparseNode).ToList();
-        binaryNode.ControllerHeaders = node.Controllers.GroupBy(x => x.GetType()).Select(x => UnparseController(x.ToList(), binaryNode.ControllerData)).ToList();
+        binaryNode.ControllerHeaders = node.Controllers.GroupBy(x => x.GetType()).Select(x => UnparseController(x.ToList(), binaryNode.ControllerData, false)).ToList();
 
         return binaryNode;
     }
-    private MDLBinaryControllerHeader UnparseController(List<BaseMDLController> controllers, List<byte[]> binaryControllerData)
+    private MDLBinaryControllerHeader UnparseController(List<BaseMDLController> controllers, List<byte[]> binaryControllerData, bool isAnimated)
     {
         var binaryControllerHeader = new MDLBinaryControllerHeader();
         binaryControllerHeader.FirstKeyOffset = (short)binaryControllerData.Count();
@@ -1115,6 +1201,7 @@ public class MDLBinary
             }
             else if (controller is MDLControllerOrientation orientation)
             {
+                binaryControllerHeader.Unknown = isAnimated ? (short)28 : (short)-1;
                 binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Orientation;
                 binaryControllerHeader.ColumnCount = 4;
                 binaryControllerData.Add(BitConverter.GetBytes(orientation.X));
@@ -1124,6 +1211,7 @@ public class MDLBinary
             }
             else if (controller is MDLControllerPosition position)
             {
+                binaryControllerHeader.Unknown = isAnimated ? (short)16 : (short)-1; 
                 binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Position;
                 binaryControllerHeader.ColumnCount = 3;
                 binaryControllerData.Add(BitConverter.GetBytes(position.X));

@@ -9,6 +9,7 @@ namespace Kotor.NET.Resources.KotorMDL.Nodes;
 public class MDLReferenceNode : MDLNode
 {
     public string ModelResRef { get; set; }
+    public uint Reattachable { get; set; }
 
     public MDLReferenceNode(string name) : base(name)
     {
