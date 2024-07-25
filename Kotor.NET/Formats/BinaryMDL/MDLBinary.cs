@@ -11,6 +11,7 @@ using Kotor.NET.Resources.KotorMDL;
 using Kotor.NET.Resources.KotorMDL.Controllers;
 using Kotor.NET.Resources.KotorMDL.Nodes;
 using Kotor.NET.Resources.KotorMDL.VertexData;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Kotor.NET.Formats.BinaryMDL;
 
@@ -599,14 +600,16 @@ public class MDLBinary
             }
         }
 
-        node.Controllers = binaryNode.ControllerHeaders.SelectMany(x => ParseController(binaryNode, x)).ToList();
+        node.Controllers = binaryNode.ControllerHeaders.Select(x => ParseController(binaryNode, x)).ToList();
         node.Children = binaryNode.Children.Select(x => ParseNode(x)).ToList();
         return node;
     }
-    private IEnumerable<BaseMDLController> ParseController(MDLBinaryNode binaryNode, MDLBinaryControllerHeader binaryController)
+    private MDLController<BaseMDLControllerRow<BaseMDLControllerData>> ParseController(MDLBinaryNode binaryNode, MDLBinaryControllerHeader binaryController)
     {
         var nodeType = (MDLBinaryNodeType)binaryNode.NodeHeader.NodeType;
         var controllerType = (MDLBinaryControllerType)binaryController.ControllerType;
+        var columnCount = binaryController.ColumnCount & 0x0F;
+        var bezier = (binaryController.ColumnCount & 0x10) != 0;
 
         var data = binaryNode.ControllerData
             .Skip(binaryController.FirstDataOffset)
@@ -619,22 +622,43 @@ public class MDLBinary
             .Select(x => BitConverter.ToSingle(x))
             .ToList();
 
-        return Enumerable.Range(0, binaryController.RowCount)
-            .Select((x, index) => ParseControllerData(nodeType, controllerType, times, data.Skip(binaryController.RowCount * index).ToList()));
+        var controller = new MDLController<BaseMDLControllerRow<BaseMDLControllerData>>();
+        controller.Rows = Enumerable
+            .Range(0, binaryController.RowCount)
+            .ToList()
+            .Select(x => ParseControllerRow(nodeType, controllerType, columnCount, bezier, times[x], data.Take(columnCount * binaryController.RowCount)))
+            .ToList();
+        return controller;
     }
-    private BaseMDLController ParseControllerData(MDLBinaryNodeType nodeType, MDLBinaryControllerType controllerType, List<float> times, List<byte[]> data)
+    private BaseMDLControllerRow<BaseMDLControllerData> ParseControllerRow(MDLBinaryNodeType nodeType, MDLBinaryControllerType controllerType, int columnCount, bool bezier, float timeStart, IEnumerable<byte[]> data)
     {
+        if (bezier)
+        {
+            var cdata1 = ParseControllerData(nodeType, controllerType, data.Skip(columnCount * 0).Take(columnCount));
+            var cdata2 = ParseControllerData(nodeType, controllerType, data.Skip(columnCount * 1).Take(columnCount));
+            var cdata3 = ParseControllerData(nodeType, controllerType, data.Skip(columnCount * 2).Take(columnCount));
+            return new MDLControllerRowBezier<BaseMDLControllerData>(timeStart, cdata1, cdata2, cdata3);
+        }
+        else
+        {
+            var cdata = ParseControllerData(nodeType, controllerType, data);
+            return new MDLControllerRow<BaseMDLControllerData>(timeStart, cdata);
+        }
+    }
+    private BaseMDLControllerData ParseControllerData(MDLBinaryNodeType nodeType, MDLBinaryControllerType controllerType, IEnumerable<byte[]> data)
+    {
+        var columnCount = data.Count();
         var floatData = data.Select(x => BitConverter.ToSingle(x)).ToList();
 
         if ((nodeType & MDLBinaryNodeType.TrimeshFlag) > 0)
         {
             return controllerType switch
             {
-                MDLBinaryControllerType.Position => new MDLControllerPosition(floatData[0], floatData[1], floatData[2]),
-                MDLBinaryControllerType.Orientation => new MDLControllerOrientation(floatData[0], floatData[1], floatData[2], floatData[3]),
-                MDLBinaryControllerType.Scale => new MDLControllerScale(floatData[0]),
-                MDLBinaryControllerType.SelfIlluminationColour => new MDLControllerSelfIllumination(floatData[0], floatData[1], floatData[2]),
-                MDLBinaryControllerType.Alpha => new MDLControllerAlpha(floatData[0]),
+                MDLBinaryControllerType.Position => new MDLControllerDataPosition(floatData[0], floatData[1], floatData[2]),
+                MDLBinaryControllerType.Orientation => new MDLControllerDataOrientation(floatData[0], floatData[1], floatData[2], floatData[3]),
+                MDLBinaryControllerType.Scale => new MDLControllerDataScale(floatData[0]),
+                MDLBinaryControllerType.SelfIlluminationColour => new MDLControllerDataMeshSelfIllumination(floatData[0], floatData[1], floatData[2]),
+                MDLBinaryControllerType.Alpha => new MDLControllerDataAlpha(floatData[0]),
                 _ => throw new ArgumentException("Unknown Controller Type"),
             };
         }
@@ -642,13 +666,13 @@ public class MDLBinary
         {
             return controllerType switch
             {
-                MDLBinaryControllerType.Position => new MDLControllerPosition(floatData[0], floatData[1], floatData[2]),
-                MDLBinaryControllerType.Orientation => new MDLControllerOrientation(floatData[0], floatData[1], floatData[2], floatData[3]),
-                MDLBinaryControllerType.Colour => new MDLControllerLightColour(floatData[0], floatData[1], floatData[2]),
-                MDLBinaryControllerType.Radius => new MDLControllerLightRadius(floatData[0]),
-                MDLBinaryControllerType.ShadowRadius => new MDLControllerLightShadowRadius(floatData[0]),
-                MDLBinaryControllerType.VerticalDisplacement => new MDLControllerLightVerticalDisplacement(floatData[0]),
-                MDLBinaryControllerType.Multiplier => new MDLControllerLightMultiplier(floatData[0]),
+                MDLBinaryControllerType.Position => new MDLControllerDataPosition(floatData[0], floatData[1], floatData[2]),
+                MDLBinaryControllerType.Orientation => new MDLControllerDataOrientation(floatData[0], floatData[1], floatData[2], floatData[3]),
+                MDLBinaryControllerType.Colour => new MDLControllerDataLightColour(floatData[0], floatData[1], floatData[2]),
+                MDLBinaryControllerType.Radius => new MDLControllerDataLightRadius(floatData[0]),
+                MDLBinaryControllerType.ShadowRadius => new MDLControllerDataLightShadowRadius(floatData[0]),
+                MDLBinaryControllerType.VerticalDisplacement => new MDLControllerDataLightVerticalDisplacement(floatData[0]),
+                MDLBinaryControllerType.Multiplier => new MDLControllerDataLightMultiplier(floatData[0]),
                 _ => throw new ArgumentException("Unknown Controller Type"),
             };
         }
@@ -656,65 +680,65 @@ public class MDLBinary
         {
             return controllerType switch
             {
-                MDLBinaryControllerType.Position => new MDLControllerPosition(floatData[0], floatData[1], floatData[2]),
-                MDLBinaryControllerType.Orientation => new MDLControllerOrientation(floatData[0], floatData[1], floatData[2], floatData[3]),
-                MDLBinaryControllerType.AlphaEnd => new MDLControllerEmitterAlphaEnd(floatData[0]),
-                MDLBinaryControllerType.AlphaMid => new MDLControllerEmitterAlphaMiddle(floatData[0]),
-                MDLBinaryControllerType.AlphaStart => new MDLControllerEmitterAlphaStart(floatData[0]),
-                MDLBinaryControllerType.BirthRate => new MDLControllerEmitterBirthRate(floatData[0]),
-                MDLBinaryControllerType.BounceCo => new MDLControllerEmitterBounceCo(floatData[0]),
-                MDLBinaryControllerType.CombineTime => new MDLControllerEmitterCombineTime(floatData[0]),
-                MDLBinaryControllerType.Drag => new MDLControllerEmitterDrag(floatData[0]),
-                MDLBinaryControllerType.FPS => new MDLControllerEmitterFPS(floatData[0]),
-                MDLBinaryControllerType.FrameStart => new MDLControllerEmitterFrameStart(floatData[0]),
-                MDLBinaryControllerType.FrameEnd => new MDLControllerEmitterFrameEnd(floatData[0]),
-                MDLBinaryControllerType.Gravity => new MDLControllerEmitterGravity(floatData[0]),
-                MDLBinaryControllerType.LifeExpectancy => new MDLControllerEmitterLifeExpectancy(floatData[0]),
-                MDLBinaryControllerType.Mass => new MDLControllerEmitterMass(floatData[0]),
-                MDLBinaryControllerType.P2PBezier2 => new MDLControllerEmitterP2PBezier2(floatData[0]),
-                MDLBinaryControllerType.P2PBezier3 => new MDLControllerEmitterP2PBezier3(floatData[0]),
-                MDLBinaryControllerType.ParticleRotation => new MDLControllerEmitterParticleRotation(floatData[0]),
-                MDLBinaryControllerType.RandomVelocity => new MDLControllerEmitterRandomVelocity(floatData[0]),
-                MDLBinaryControllerType.SizeStart => new MDLControllerEmitterSizeStart(floatData[0]),
+                MDLBinaryControllerType.Position => new MDLControllerDataPosition(floatData[0], floatData[1], floatData[2]),
+                MDLBinaryControllerType.Orientation => new MDLControllerDataOrientation(floatData[0], floatData[1], floatData[2], floatData[3]),
+                MDLBinaryControllerType.AlphaEnd => new MDLControllerDataEmitterAlphaEnd(floatData[0]),
+                MDLBinaryControllerType.AlphaMid => new MDLControllerDataEmitterAlphaMiddle(floatData[0]),
+                MDLBinaryControllerType.AlphaStart => new MDLControllerDataEmitterAlphaStart(floatData[0]),
+                MDLBinaryControllerType.BirthRate => new MDLControllerDataEmitterBirthRate(floatData[0]),
+                MDLBinaryControllerType.BounceCo => new MDLControllerDataEmitterBounceCo(floatData[0]),
+                MDLBinaryControllerType.CombineTime => new MDLControllerDataEmitterCombineTime(floatData[0]),
+                MDLBinaryControllerType.Drag => new MDLControllerDataEmitterDrag(floatData[0]),
+                MDLBinaryControllerType.FPS => new MDLControllerDataEmitterFPS(floatData[0]),
+                MDLBinaryControllerType.FrameStart => new MDLControllerDataEmitterFrameStart(floatData[0]),
+                MDLBinaryControllerType.FrameEnd => new MDLControllerDataEmitterFrameEnd(floatData[0]),
+                MDLBinaryControllerType.Gravity => new MDLControllerDataEmitterGravity(floatData[0]),
+                MDLBinaryControllerType.LifeExpectancy => new MDLControllerDataEmitterLifeExpectancy(floatData[0]),
+                MDLBinaryControllerType.Mass => new MDLControllerDataEmitterMass(floatData[0]),
+                MDLBinaryControllerType.P2PBezier2 => new MDLControllerDataEmitterP2PBezier2(floatData[0]),
+                MDLBinaryControllerType.P2PBezier3 => new MDLControllerDataEmitterP2PBezier3(floatData[0]),
+                MDLBinaryControllerType.ParticleRotation => new MDLControllerDataEmitterParticleRotation(floatData[0]),
+                MDLBinaryControllerType.RandomVelocity => new MDLControllerDataEmitterRandomVelocity(floatData[0]),
+                MDLBinaryControllerType.SizeStart => new MDLControllerDataEmitterSizeStart(floatData[0]),
                 MDLBinaryControllerType.SizeStartY => new MDLControllerEmitterSizeYStart(floatData[0]),
-                MDLBinaryControllerType.SizeMid => new MDLControllerEmitterSizeMiddle(floatData[0]),
-                MDLBinaryControllerType.SizeMidY => new MDLControllerEmitterSizeYMiddle(floatData[0]),
-                MDLBinaryControllerType.SizeEnd => new MDLControllerEmitterSizeEnd(floatData[0]),
-                MDLBinaryControllerType.SizeEndY => new MDLControllerEmitterSizeYEnd(floatData[0]),
-                MDLBinaryControllerType.Spread => new MDLControllerEmitterSpread(floatData[0]),
-                MDLBinaryControllerType.Threshold => new MDLControllerEmitterThreshold(floatData[0]),
-                MDLBinaryControllerType.Velocity => new MDLControllerEmitterVelocity(floatData[0]),
-                MDLBinaryControllerType.XSize => new MDLControllerEmitterSizeX(floatData[0]),
-                MDLBinaryControllerType.YSize => new MDLControllerEmitterSizeY(floatData[0]),
-                MDLBinaryControllerType.BlurLength => new MDLControllerEmitterBlurLength(floatData[0]),
-                MDLBinaryControllerType.LightningDelay => new MDLControllerEmitterLightningDelay(floatData[0]),
-                MDLBinaryControllerType.LightningRadius => new MDLControllerEmitterLightningRadius(floatData[0]),
-                MDLBinaryControllerType.LightningScale => new MDLControllerEmitterLightningScale(floatData[0]),
-                MDLBinaryControllerType.LightningSubdivide => new MDLControllerEmitterLightningSubDiv(floatData[0]),
-                MDLBinaryControllerType.LightningZigZag => new MDLControllerEmitterLightningZigZag(floatData[0]),
+                MDLBinaryControllerType.SizeMid => new MDLControllerDataEmitterSizeMiddle(floatData[0]),
+                MDLBinaryControllerType.SizeMidY => new MDLControllerDataEmitterSizeYMiddle(floatData[0]),
+                MDLBinaryControllerType.SizeEnd => new MDLControllerDataEmitterSizeEnd(floatData[0]),
+                MDLBinaryControllerType.SizeEndY => new MDLControllerDataEmitterSizeYEnd(floatData[0]),
+                MDLBinaryControllerType.Spread => new MDLControllerDataEmitterSpread(floatData[0]),
+                MDLBinaryControllerType.Threshold => new MDLControllerDataEmitterThreshold(floatData[0]),
+                MDLBinaryControllerType.Velocity => new MDLControllerDataEmitterVelocity(floatData[0]),
+                MDLBinaryControllerType.XSize => new MDLControllerDataEmitterSizeX(floatData[0]),
+                MDLBinaryControllerType.YSize => new MDLControllerDataEmitterSizeY(floatData[0]),
+                MDLBinaryControllerType.BlurLength => new MDLControllerDataEmitterBlurLength(floatData[0]),
+                MDLBinaryControllerType.LightningDelay => new MDLControllerDataEmitterLightningDelay(floatData[0]),
+                MDLBinaryControllerType.LightningRadius => new MDLControllerDataEmitterLightningRadius(floatData[0]),
+                MDLBinaryControllerType.LightningScale => new MDLControllerDataEmitterLightningScale(floatData[0]),
+                MDLBinaryControllerType.LightningSubdivide => new MDLControllerDataEmitterLightningSubDiv(floatData[0]),
+                MDLBinaryControllerType.LightningZigZag => new MDLControllerDataEmitterLightningZigZag(floatData[0]),
                 MDLBinaryControllerType.PercentStart => new MDLControllerEmitterPercentStart(floatData[0]),
-                MDLBinaryControllerType.PercentMid => new MDLControllerEmitterPercentMiddle(floatData[0]),
-                MDLBinaryControllerType.PercentEnd => new MDLControllerEmitterPercentEnd(floatData[0]),
-                MDLBinaryControllerType.RandomBirthRate => new MDLControllerEmitterRandomBirthRate(floatData[0]),
-                MDLBinaryControllerType.TargetSize => new MDLControllerEmitterTargetSize(floatData[0]),
-                MDLBinaryControllerType.NumberOfControlPoints => new MDLControllerEmitterControlPointsCount(floatData[0]),
-                MDLBinaryControllerType.ControlPointRadius => new MDLControllerEmitterControlPointsRadius(floatData[0]),
-                MDLBinaryControllerType.ControlPointDelay => new MDLControllerEmitterControlPointsDelay(floatData[0]),
-                MDLBinaryControllerType.TangentSpread => new MDLControllerEmitterTangentSpread(floatData[0]),
-                MDLBinaryControllerType.TangentLength => new MDLControllerEmitterTangentLength(floatData[0]),
-                MDLBinaryControllerType.ColorStart => new MDLControllerEmitterColourStart(floatData[0], floatData[1], floatData[2]),
-                MDLBinaryControllerType.ColorMid => new MDLControllerEmitterColourMiddle(floatData[0], floatData[1], floatData[2]),
-                MDLBinaryControllerType.ColorEnd => new MDLControllerEmitterColourEnd(floatData[0], floatData[1], floatData[2]),
+                MDLBinaryControllerType.PercentMid => new MDLControllerDataEmitterPercentMiddle(floatData[0]),
+                MDLBinaryControllerType.PercentEnd => new MDLControllerDataEmitterPercentEnd(floatData[0]),
+                MDLBinaryControllerType.RandomBirthRate => new MDLControllerDataEmitterRandomBirthRate(floatData[0]),
+                MDLBinaryControllerType.TargetSize => new MDLControllerDataEmitterTargetSize(floatData[0]),
+                MDLBinaryControllerType.NumberOfControlPoints => new MDLControllerDataEmitterControlPointsCount(floatData[0]),
+                MDLBinaryControllerType.ControlPointRadius => new MDLControllerDataEmitterControlPointsRadius(floatData[0]),
+                MDLBinaryControllerType.ControlPointDelay => new MDLControllerDataEmitterControlPointsDelay(floatData[0]),
+                MDLBinaryControllerType.TangentSpread => new MDLControllerDataEmitterTangentSpread(floatData[0]),
+                MDLBinaryControllerType.TangentLength => new MDLControllerDataEmitterTangentLength(floatData[0]),
+                MDLBinaryControllerType.ColorStart => new MDLControllerDataEmitterColourStart(floatData[0], floatData[1], floatData[2]),
+                MDLBinaryControllerType.ColorMid => new MDLControllerDataEmitterColourMiddle(floatData[0], floatData[1], floatData[2]),
+                MDLBinaryControllerType.ColorEnd => new MDLControllerDataEmitterColourEnd(floatData[0], floatData[1], floatData[2]),
                 //MDLBinaryControllerType.EmitterDetonate => new (floatData[0]),
                 _ => throw new ArgumentException("Unknown Controller Type"),
             };
         }
-        
+
         return controllerType switch
         {
-            MDLBinaryControllerType.Position => new MDLControllerPosition(floatData[0], floatData[1], floatData[2]),
-            MDLBinaryControllerType.Orientation => new MDLControllerOrientation(floatData[0], floatData[1], floatData[2], floatData[3]),
-            MDLBinaryControllerType.Scale => new MDLControllerScale(floatData[0]),
+            MDLBinaryControllerType.Position => new MDLControllerDataPosition(floatData[0], floatData[1], floatData[2]),
+            MDLBinaryControllerType.Orientation => ParseControllerOrientationData(data),
+            MDLBinaryControllerType.Scale => new MDLControllerDataScale(floatData[0]),
             _ => throw new ArgumentException("Unknown Controller Type"),
         };
     }
@@ -727,16 +751,27 @@ public class MDLBinary
 
         return new MDLWalkmeshAABBNode(boundingBox, face, leftChild, rightChild);
     }
-    private MDLControllerOrientation ParseControllerOrientationData(List<float> data)
+    private MDLControllerDataOrientation ParseControllerOrientationData(IEnumerable<byte[]> data)
     {
         if (data.Count() == 2)
         {
-            // mdl/reader.py orientation_controller_to_quaternion
-            return null;
+            // TODO - seems to be inverse of actual value eg. x=1 -> x=-1
+            var intData = BitConverter.ToInt32(data.First());
+            var x = ((intData & 0x7FF) / 1023.0f) - 1.0f;
+            var y = (((intData >> 11) & 0x7FF) / 1023.0f) - 1.0f;
+            var z = ((intData >> 22) / 511.0f) - 1.0f;
+            var w = 0f;
+            float mag2 = x * x + y * y + z * z;
+            if (mag2 < 1.0f)
+                w = MathF.Sqrt(1.0f - mag2);
+            else
+                w = 0.0f;
+            return new MDLControllerDataOrientation(x, y, z, w);
         }
         else if (data.Count() == 4)
         {
-            return new MDLControllerOrientation(data[0], data[1], data[2], data[3]);
+            var floatData = data.Select(x => BitConverter.ToSingle(x)).ToList();
+            return new MDLControllerDataOrientation(floatData[0], floatData[1], floatData[2], floatData[3]);
         }
         else
         {
@@ -762,7 +797,7 @@ public class MDLBinary
         Names.AddRange(mdl.Animations.Select(x => x.RootNode.Name));
         Names = Names.Distinct().ToList();
 
-        Animations = mdl.Animations.Select(x => UnparseAnimation(x)).ToList();
+        //Animations = mdl.Animations.Select(x => UnparseAnimation(x)).ToList();
 
         RootNode = UnparseNode(mdl.Root);
 
@@ -788,14 +823,14 @@ public class MDLBinary
     {
         var binaryNode = new MDLBinaryNode();
 
-        var positionController = node.Controllers.OfType<MDLControllerPosition>().OrderBy(x => x.StartTime).FirstOrDefault();
-        var orientationController = node.Controllers.OfType<MDLControllerOrientation>().OrderBy(x => x.StartTime).FirstOrDefault();
+        //var positionController = node.Controllers.OfType<MDLControllerDataPosition>().OrderBy(x => x.StartTime).FirstOrDefault();
+        //var orientationController = node.Controllers.OfType<MDLControllerDataOrientation>().OrderBy(x => x.StartTime).FirstOrDefault();
 
         binaryNode.NodeHeader.NodeType = (ushort)MDLBinaryNodeType.NodeFlag;
         binaryNode.NodeHeader.NodeIndex = (ushort)Names.IndexOf(node.Name); // TODO
         binaryNode.NodeHeader.NameIndex = (ushort)Names.IndexOf(node.Name);
-        binaryNode.NodeHeader.Position = new(positionController?.X ?? 0, positionController?.Y ?? 0, positionController?.Z ?? 0);
-        binaryNode.NodeHeader.Rotation = new(orientationController?.X ?? 0, orientationController?.Y ?? 0, orientationController?.Z ?? 0, orientationController?.W ?? 0);
+        binaryNode.NodeHeader.Position = new();//new(positionController?.X ?? 0, positionController?.Y ?? 0, positionController?.Z ?? 0);
+        binaryNode.NodeHeader.Rotation = new();//new(orientationController?.X ?? 0, orientationController?.Y ?? 0, orientationController?.Z ?? 0, orientationController?.W ?? 0);
 
         if (node is MDLTrimeshNode trimeshNode)
         {
@@ -869,371 +904,555 @@ public class MDLBinary
         }
 
         binaryNode.Children = node.Children.Select(UnparseNode).ToList();
-        binaryNode.ControllerHeaders = node.Controllers.GroupBy(x => x.GetType()).Select(x => UnparseController(x.ToList(), binaryNode.ControllerData, false)).ToList();
+        binaryNode.ControllerHeaders = node.Controllers.Select(x => UnparseController(x, binaryNode.ControllerData)).ToList();
 
         return binaryNode;
     }
-    private MDLBinaryControllerHeader UnparseController(List<BaseMDLController> controllers, List<byte[]> binaryControllerData, bool isAnimated)
+    private MDLBinaryControllerHeader UnparseController(MDLController<BaseMDLControllerRow<BaseMDLControllerData>> controller, List<byte[]> binaryControllerData)
     {
         var binaryControllerHeader = new MDLBinaryControllerHeader();
         binaryControllerHeader.FirstKeyOffset = (short)binaryControllerData.Count();
         binaryControllerHeader.Unknown = -1;
-        binaryControllerHeader.RowCount = (short)controllers.Count();
-
-        binaryControllerData.AddRange(controllers.Select(x => BitConverter.GetBytes(x.StartTime)));
+        binaryControllerHeader.RowCount = (short)controller.Rows.Count();
+        binaryControllerData.AddRange(controller.Rows.Select(x => BitConverter.GetBytes(x.StartTime)));
 
         binaryControllerHeader.FirstDataOffset = (short)binaryControllerData.Count();
-        foreach (var controller in controllers)
+
+        Type dataType = null;
+        bool isAnimated = false;
+
+        foreach (var row in controller.Rows)
         {
-            if (controller is MDLControllerAlpha alpha)
+            if (row is MDLControllerRow<BaseMDLControllerData> notBezier)
             {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Alpha;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(alpha.Alpha));
+                UnparseControllerData(notBezier.Data, binaryControllerData);
+                dataType = notBezier.Data.GetType();
             }
-            else if (controller is MDLControllerEmitterAlphaEnd alphaEnd)
+            else if (row is MDLControllerRowBezier<BaseMDLControllerData> bezier)
             {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.AlphaEnd;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(alphaEnd.Value));
-            }
-            else if (controller is MDLControllerEmitterAlphaMiddle alphaMiddle)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.AlphaMid;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(alphaMiddle.Value));
-            }
-            else if (controller is MDLControllerEmitterAlphaStart alphaStart)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.AlphaStart;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(alphaStart.Value));
-            }
-            else if (controller is MDLControllerEmitterBirthRate birthRate)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.BirthRate;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(birthRate.Value));
-            }
-            else if (controller is MDLControllerEmitterColourEnd colourEnd)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.ColorEnd;
-                binaryControllerHeader.ColumnCount = 3;
-                binaryControllerData.Add(BitConverter.GetBytes(colourEnd.Red));
-                binaryControllerData.Add(BitConverter.GetBytes(colourEnd.Green));
-                binaryControllerData.Add(BitConverter.GetBytes(colourEnd.Blue));
-            }
-            else if (controller is MDLControllerEmitterColourMiddle colourMiddle)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.ColorMid;
-                binaryControllerHeader.ColumnCount = 3;
-                binaryControllerData.Add(BitConverter.GetBytes(colourMiddle.Red));
-                binaryControllerData.Add(BitConverter.GetBytes(colourMiddle.Green));
-                binaryControllerData.Add(BitConverter.GetBytes(colourMiddle.Blue));
-            }
-            else if (controller is MDLControllerEmitterColourStart colourStart)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.ColorStart;
-                binaryControllerHeader.ColumnCount = 3;
-                binaryControllerData.Add(BitConverter.GetBytes(colourStart.Red));
-                binaryControllerData.Add(BitConverter.GetBytes(colourStart.Green));
-                binaryControllerData.Add(BitConverter.GetBytes(colourStart.Blue));
-            }
-            else if (controller is MDLControllerEmitterCombineTime combineTime)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.CombineTime;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(combineTime.Value));
-            }
-            else if (controller is MDLControllerEmitterControlPointsCount controlPointsCount)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.NumberOfControlPoints;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(controlPointsCount.Value));
-            }
-            else if (controller is MDLControllerEmitterControlPointsDelay controlPointsDelay)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.ControlPointDelay;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(controlPointsDelay.Value));
-            }
-            else if (controller is MDLControllerEmitterControlPointsRadius controlPointsRadius)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.ControlPointRadius;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(controlPointsRadius.Value));
-            }
-            else if (controller is MDLControllerEmitterDrag drag)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Drag;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(drag.Value));
-            }
-            else if (controller is MDLControllerEmitterFPS fps)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.FPS;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(fps.FramesPerSecond));
-            }
-            else if (controller is MDLControllerEmitterFrameEnd frameEnd)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.FrameEnd;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(frameEnd.Value));
-            }
-            else if (controller is MDLControllerEmitterFrameStart frameStart)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.FrameStart;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(frameStart.Value));
-            }
-            else if (controller is MDLControllerEmitterGravity gravity)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Gravity;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(gravity.Value));
-            }
-            else if (controller is MDLControllerEmitterLifeExpectancy lifeExpectancy)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.LifeExpectancy;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(lifeExpectancy.Time));
-            }
-            else if (controller is MDLControllerEmitterLightningDelay lightningDelay)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.LightningDelay;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(lightningDelay.Value));
-            }
-            else if (controller is MDLControllerEmitterLightningRadius lightningRadius)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.LightningRadius;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(lightningRadius.Value));
-            }
-            else if (controller is MDLControllerEmitterLightningScale lightningScale)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.LightningScale;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(lightningScale.Value));
-            }
-            else if (controller is MDLControllerEmitterLightningSubDiv lightningSubDiv)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.LightningSubdivide;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(lightningSubDiv.Value));
-            }
-            else if (controller is MDLControllerEmitterLightningZigZag lightningZigZag)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.LightningZigZag;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(lightningZigZag.Value));
-            }
-            else if (controller is MDLControllerEmitterMass mass)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Mass;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(mass.Speed));
-            }
-            else if (controller is MDLControllerEmitterP2PBezier2 bezier2)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.P2PBezier2;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(bezier2.Value));
-            }
-            else if (controller is MDLControllerEmitterP2PBezier3 bezier3)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.P2PBezier3;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(bezier3.Value));
-            }
-            else if (controller is MDLControllerEmitterParticleRotation rotation)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.ParticleRotation;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(rotation.Rotation));
-            }
-            else if (controller is MDLControllerEmitterPercentEnd percentEnd)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.PercentEnd;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(percentEnd.Value));
-            }
-            else if (controller is MDLControllerEmitterPercentMiddle percentMiddle)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.PercentMid;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(percentMiddle.Value));
-            }
-            else if (controller is MDLControllerEmitterPercentStart percentStart)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.PercentStart;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(percentStart.Value));
-            }
-            else if (controller is MDLControllerEmitterRandomBirthRate emitterBirthRate)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.BirthRate;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(emitterBirthRate.Value));
-            }
-            else if (controller is MDLControllerEmitterRandomVelocity emitterRandomVelocity)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.RandomVelocity;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(emitterRandomVelocity.Speed));
-            }
-            else if (controller is MDLControllerEmitterSizeEnd sizeEnd)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.SizeEnd;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(sizeEnd.Value));
-            }
-            else if (controller is MDLControllerEmitterSizeMiddle sizeMiddle)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.SizeMid;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(sizeMiddle.Value));
-            }
-            else if (controller is MDLControllerEmitterSizeStart sizeStart)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.SizeStart;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(sizeStart.Value));
-            }
-            else if (controller is MDLControllerEmitterSizeX sizeX)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.XSize;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(sizeX.SizeX));
-            }
-            else if (controller is MDLControllerEmitterSizeY sizeY)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.YSize;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(sizeY.SizeY));
-            }
-            else if (controller is MDLControllerEmitterSizeYEnd sizeYEnd)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.SizeEndY;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(sizeYEnd.Value));
-            }
-            else if (controller is MDLControllerEmitterSizeYMiddle sizeYMiddle)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.SizeMidY;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(sizeYMiddle.Value));
-            }
-            else if (controller is MDLControllerEmitterSizeYStart sizeYStart)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.SizeStartY;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(sizeYStart.Value));
-            }
-            else if (controller is MDLControllerEmitterSpread spread)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Spread;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(spread.Spread));
-            }
-            else if (controller is MDLControllerEmitterTangentLength tangentLength)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.TangentLength;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(tangentLength.Value));
-            }
-            else if (controller is MDLControllerEmitterTangentSpread tangentSpread)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.TangentSpread;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(tangentSpread.Value));
-            }
-            else if (controller is MDLControllerEmitterTargetSize targetSize)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.TargetSize;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(targetSize.Value));
-            }
-            else if (controller is MDLControllerEmitterThreshold threshold)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Threshold;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(threshold.Value));
-            }
-            else if (controller is MDLControllerEmitterVelocity emitterVelocity)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Velocity;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(emitterVelocity.Speed));
-            }
-            else if (controller is MDLControllerLightColour lightColour)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Colour;
-                binaryControllerHeader.ColumnCount = 3;
-                binaryControllerData.Add(BitConverter.GetBytes(lightColour.Red));
-                binaryControllerData.Add(BitConverter.GetBytes(lightColour.Green));
-                binaryControllerData.Add(BitConverter.GetBytes(lightColour.Blue));
-            }
-            else if (controller is MDLControllerLightMultiplier lightMultiplier)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Multiplier;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(lightMultiplier.Multiplier));
-            }
-            else if (controller is MDLControllerLightRadius lightRadius)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Radius;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(lightRadius.Radius));
-            }
-            else if (controller is MDLControllerLightShadowRadius lightShadowRadius)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.ShadowRadius;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(lightShadowRadius.Radius));
-            }
-            else if (controller is MDLControllerLightVerticalDisplacement lightVerticalDisplacement)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.VerticalDisplacement;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(lightVerticalDisplacement.Displacement));
-            }
-            else if (controller is MDLControllerOrientation orientation)
-            {
-                binaryControllerHeader.Unknown = isAnimated ? (short)28 : (short)-1;
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Orientation;
-                binaryControllerHeader.ColumnCount = 4;
-                binaryControllerData.Add(BitConverter.GetBytes(orientation.X));
-                binaryControllerData.Add(BitConverter.GetBytes(orientation.Y));
-                binaryControllerData.Add(BitConverter.GetBytes(orientation.Z));
-                binaryControllerData.Add(BitConverter.GetBytes(orientation.W));
-            }
-            else if (controller is MDLControllerPosition position)
-            {
-                binaryControllerHeader.Unknown = isAnimated ? (short)16 : (short)-1; 
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Position;
-                binaryControllerHeader.ColumnCount = 3;
-                binaryControllerData.Add(BitConverter.GetBytes(position.X));
-                binaryControllerData.Add(BitConverter.GetBytes(position.Y));
-                binaryControllerData.Add(BitConverter.GetBytes(position.Z));
-            }
-            else if (controller is MDLControllerScale scale)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Scale;
-                binaryControllerHeader.ColumnCount = 1;
-                binaryControllerData.Add(BitConverter.GetBytes(scale.Scale));
-            }
-            else if (controller is MDLControllerSelfIllumination selfIllumination)
-            {
-                binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.SelfIlluminationColour;
-                binaryControllerHeader.ColumnCount = 3;
-                binaryControllerData.Add(BitConverter.GetBytes(selfIllumination.Red));
-                binaryControllerData.Add(BitConverter.GetBytes(selfIllumination.Green));
-                binaryControllerData.Add(BitConverter.GetBytes(selfIllumination.Blue));
+                UnparseControllerData(bezier.Data[0], binaryControllerData);
+                UnparseControllerData(bezier.Data[1], binaryControllerData);
+                UnparseControllerData(bezier.Data[2], binaryControllerData);
+                dataType = bezier.Data[0].GetType();
             }
         }
 
+        if (dataType.IsAssignableFrom(typeof(MDLControllerDataAlpha)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Alpha;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterAlphaEnd)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.AlphaEnd;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterAlphaMiddle)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.AlphaMid;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterAlphaStart)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.AlphaStart;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterBirthRate)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.BirthRate;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterColourEnd)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.ColorEnd;
+            binaryControllerHeader.ColumnCount = 3;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterColourMiddle)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.ColorMid;
+            binaryControllerHeader.ColumnCount = 3;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterColourStart)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.ColorStart;
+            binaryControllerHeader.ColumnCount = 3;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterCombineTime)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.CombineTime;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterControlPointsCount)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.NumberOfControlPoints;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterControlPointsDelay)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.ControlPointDelay;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterControlPointsRadius)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.ControlPointRadius;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterDrag)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Drag;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterFPS)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.FPS;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterFrameEnd)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.FrameEnd;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterFrameStart)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.FrameStart;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterGravity)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Gravity;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterLifeExpectancy)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.LifeExpectancy;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterLightningDelay)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.LightningDelay;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterLightningRadius)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.LightningRadius;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterLightningScale)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.LightningScale;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterLightningSubDiv)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.LightningSubdivide;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterLightningZigZag)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.LightningZigZag;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterMass)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Mass;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterP2PBezier2)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.P2PBezier2;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterP2PBezier3)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.P2PBezier3;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterParticleRotation)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.ParticleRotation;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterPercentEnd)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.PercentEnd;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterPercentMiddle)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.PercentMid;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerEmitterPercentStart)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.PercentStart;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterRandomBirthRate)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.BirthRate;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterRandomVelocity)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.RandomVelocity;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterSizeEnd)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.SizeEnd;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterSizeMiddle)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.SizeMid;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterSizeStart)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.SizeStart;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterSizeX)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.XSize;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterSizeY)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.YSize;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterSizeYEnd)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.SizeEndY;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterSizeYMiddle)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.SizeMidY;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerEmitterSizeYStart)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.SizeStartY;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterSpread)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Spread;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterTangentLength)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.TangentLength;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterTangentSpread)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.TangentSpread;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterTargetSize)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.TargetSize;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterThreshold)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Threshold;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataEmitterVelocity)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Velocity;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataLightColour)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Colour;
+            binaryControllerHeader.ColumnCount = 3;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataLightMultiplier)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Multiplier;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataLightRadius)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Radius;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataLightShadowRadius)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.ShadowRadius;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataLightVerticalDisplacement)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.VerticalDisplacement;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataOrientation)))
+        {
+            binaryControllerHeader.Unknown = isAnimated ? (short)28 : (short)-1;
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Orientation;
+            binaryControllerHeader.ColumnCount = 4;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataPosition)))
+        {
+            binaryControllerHeader.Unknown = isAnimated ? (short)16 : (short)-1;
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Position;
+            binaryControllerHeader.ColumnCount = 3;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataScale)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Scale;
+            binaryControllerHeader.ColumnCount = 1;
+        }
+        else if (dataType.IsAssignableFrom(typeof(MDLControllerDataMeshSelfIllumination)))
+        {
+            binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.SelfIlluminationColour;
+            binaryControllerHeader.ColumnCount = 3;
+        }
+
         return binaryControllerHeader;
+    }
+    private void UnparseControllerData(BaseMDLControllerData data, List<byte[]> binaryControllerData)
+    {
+        if (data is MDLControllerDataAlpha alpha)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(alpha.Alpha));
+        }
+        else if (data is MDLControllerDataEmitterAlphaEnd alphaEnd)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(alphaEnd.Value));
+        }
+        else if (data is MDLControllerDataEmitterAlphaMiddle alphaMiddle)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(alphaMiddle.Value));
+        }
+        else if (data is MDLControllerDataEmitterAlphaStart alphaStart)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(alphaStart.Value));
+        }
+        else if (data is MDLControllerDataEmitterBirthRate birthRate)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(birthRate.Value));
+        }
+        else if (data is MDLControllerDataEmitterColourEnd colourEnd)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(colourEnd.Red));
+            binaryControllerData.Add(BitConverter.GetBytes(colourEnd.Green));
+            binaryControllerData.Add(BitConverter.GetBytes(colourEnd.Blue));
+        }
+        else if (data is MDLControllerDataEmitterColourMiddle colourMiddle)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(colourMiddle.Red));
+            binaryControllerData.Add(BitConverter.GetBytes(colourMiddle.Green));
+            binaryControllerData.Add(BitConverter.GetBytes(colourMiddle.Blue));
+        }
+        else if (data is MDLControllerDataEmitterColourStart colourStart)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(colourStart.Red));
+            binaryControllerData.Add(BitConverter.GetBytes(colourStart.Green));
+            binaryControllerData.Add(BitConverter.GetBytes(colourStart.Blue));
+        }
+        else if (data is MDLControllerDataEmitterCombineTime combineTime)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(combineTime.Value));
+        }
+        else if (data is MDLControllerDataEmitterControlPointsCount controlPointsCount)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(controlPointsCount.Value));
+        }
+        else if (data is MDLControllerDataEmitterControlPointsDelay controlPointsDelay)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(controlPointsDelay.Value));
+        }
+        else if (data is MDLControllerDataEmitterControlPointsRadius controlPointsRadius)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(controlPointsRadius.Value));
+        }
+        else if (data is MDLControllerDataEmitterDrag drag)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(drag.Value));
+        }
+        else if (data is MDLControllerDataEmitterFPS fps)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(fps.FramesPerSecond));
+        }
+        else if (data is MDLControllerDataEmitterFrameEnd frameEnd)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(frameEnd.Value));
+        }
+        else if (data is MDLControllerDataEmitterFrameStart frameStart)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(frameStart.Value));
+        }
+        else if (data is MDLControllerDataEmitterGravity gravity)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(gravity.Value));
+        }
+        else if (data is MDLControllerDataEmitterLifeExpectancy lifeExpectancy)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(lifeExpectancy.Time));
+        }
+        else if (data is MDLControllerDataEmitterLightningDelay lightningDelay)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(lightningDelay.Value));
+        }
+        else if (data is MDLControllerDataEmitterLightningRadius lightningRadius)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(lightningRadius.Value));
+        }
+        else if (data is MDLControllerDataEmitterLightningScale lightningScale)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(lightningScale.Value));
+        }
+        else if (data is MDLControllerDataEmitterLightningSubDiv lightningSubDiv)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(lightningSubDiv.Value));
+        }
+        else if (data is MDLControllerDataEmitterLightningZigZag lightningZigZag)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(lightningZigZag.Value));
+        }
+        else if (data is MDLControllerDataEmitterMass mass)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(mass.Speed));
+        }
+        else if (data is MDLControllerDataEmitterP2PBezier2 bezier2)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(bezier2.Value));
+        }
+        else if (data is MDLControllerDataEmitterP2PBezier3 bezier3)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(bezier3.Value));
+        }
+        else if (data is MDLControllerDataEmitterParticleRotation rotation)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(rotation.Rotation));
+        }
+        else if (data is MDLControllerDataEmitterPercentEnd percentEnd)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(percentEnd.Value));
+        }
+        else if (data is MDLControllerDataEmitterPercentMiddle percentMiddle)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(percentMiddle.Value));
+        }
+        else if (data is MDLControllerEmitterPercentStart percentStart)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(percentStart.Value));
+        }
+        else if (data is MDLControllerDataEmitterRandomBirthRate emitterBirthRate)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(emitterBirthRate.Value));
+        }
+        else if (data is MDLControllerDataEmitterRandomVelocity emitterRandomVelocity)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(emitterRandomVelocity.Speed));
+        }
+        else if (data is MDLControllerDataEmitterSizeEnd sizeEnd)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(sizeEnd.Value));
+        }
+        else if (data is MDLControllerDataEmitterSizeMiddle sizeMiddle)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(sizeMiddle.Value));
+        }
+        else if (data is MDLControllerDataEmitterSizeStart sizeStart)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(sizeStart.Value));
+        }
+        else if (data is MDLControllerDataEmitterSizeX sizeX)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(sizeX.SizeX));
+        }
+        else if (data is MDLControllerDataEmitterSizeY sizeY)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(sizeY.SizeY));
+        }
+        else if (data is MDLControllerDataEmitterSizeYEnd sizeYEnd)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(sizeYEnd.Value));
+        }
+        else if (data is MDLControllerDataEmitterSizeYMiddle sizeYMiddle)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(sizeYMiddle.Value));
+        }
+        else if (data is MDLControllerEmitterSizeYStart sizeYStart)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(sizeYStart.Value));
+        }
+        else if (data is MDLControllerDataEmitterSpread spread)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(spread.Spread));
+        }
+        else if (data is MDLControllerDataEmitterTangentLength tangentLength)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(tangentLength.Value));
+        }
+        else if (data is MDLControllerDataEmitterTangentSpread tangentSpread)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(tangentSpread.Value));
+        }
+        else if (data is MDLControllerDataEmitterTargetSize targetSize)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(targetSize.Value));
+        }
+        else if (data is MDLControllerDataEmitterThreshold threshold)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(threshold.Value));
+        }
+        else if (data is MDLControllerDataEmitterVelocity emitterVelocity)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(emitterVelocity.Speed));
+        }
+        else if (data is MDLControllerDataLightColour lightColour)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(lightColour.Red));
+            binaryControllerData.Add(BitConverter.GetBytes(lightColour.Green));
+            binaryControllerData.Add(BitConverter.GetBytes(lightColour.Blue));
+        }
+        else if (data is MDLControllerDataLightMultiplier lightMultiplier)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(lightMultiplier.Multiplier));
+        }
+        else if (data is MDLControllerDataLightRadius lightRadius)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(lightRadius.Radius));
+        }
+        else if (data is MDLControllerDataLightShadowRadius lightShadowRadius)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(lightShadowRadius.Radius));
+        }
+        else if (data is MDLControllerDataLightVerticalDisplacement lightVerticalDisplacement)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(lightVerticalDisplacement.Displacement));
+        }
+        else if (data is MDLControllerDataOrientation orientation)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(orientation.X));
+            binaryControllerData.Add(BitConverter.GetBytes(orientation.Y));
+            binaryControllerData.Add(BitConverter.GetBytes(orientation.Z));
+            binaryControllerData.Add(BitConverter.GetBytes(orientation.W));
+        }
+        else if (data is MDLControllerDataPosition position)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(position.X));
+            binaryControllerData.Add(BitConverter.GetBytes(position.Y));
+            binaryControllerData.Add(BitConverter.GetBytes(position.Z));
+        }
+        else if (data is MDLControllerDataScale scale)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(scale.Scale));
+        }
+        else if (data is MDLControllerDataMeshSelfIllumination selfIllumination)
+        {
+            binaryControllerData.Add(BitConverter.GetBytes(selfIllumination.Red));
+            binaryControllerData.Add(BitConverter.GetBytes(selfIllumination.Green));
+            binaryControllerData.Add(BitConverter.GetBytes(selfIllumination.Blue));
+        }
     }
 }
