@@ -10,6 +10,7 @@ namespace Kotor.NET.Resources.KotorMDL.Nodes;
 public class MDLNode
 {
     public string Name { get; set; }
+    public ushort NodeIndex { get; set; }
     public List<MDLController<BaseMDLControllerRow<BaseMDLControllerData>>> Controllers { get; set; }
     public List<MDLNode> Children { get; set; }
 

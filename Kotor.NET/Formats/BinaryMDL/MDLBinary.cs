@@ -602,6 +602,7 @@ public class MDLBinary
 
         node.Controllers = binaryNode.ControllerHeaders.Select(x => ParseController(binaryNode, x)).ToList();
         node.Children = binaryNode.Children.Select(x => ParseNode(x)).ToList();
+        node.NodeIndex = binaryNode.NodeHeader.NodeIndex;
         return node;
     }
     private MDLController<BaseMDLControllerRow<BaseMDLControllerData>> ParseController(MDLBinaryNode binaryNode, MDLBinaryControllerHeader binaryController)
@@ -791,10 +792,13 @@ public class MDLBinary
         ModelHeader.AnimationScale = mdl.AnimationScale;
         ModelHeader.SupermodelName = mdl.Supermodel;
 
-        Names = mdl.Root.GetAllAncestors().Select(x => x.Name).ToList();
-        Names.Add(mdl.Root.Name);
-        Names.AddRange(mdl.Animations.SelectMany(x => x.RootNode.GetAllAncestors().Select(x => x.Name)));
-        Names.AddRange(mdl.Animations.Select(x => x.RootNode.Name));
+        Names =
+        [
+            mdl.Root.Name,
+            .. mdl.Root.GetAllAncestors().Select(x => x.Name).ToList(),
+            .. mdl.Animations.SelectMany(x => x.RootNode.GetAllAncestors().Select(x => x.Name)),
+            .. mdl.Animations.Select(x => x.RootNode.Name),
+        ];
         Names = Names.Distinct().ToList();
 
         //Animations = mdl.Animations.Select(x => UnparseAnimation(x)).ToList();
@@ -827,7 +831,7 @@ public class MDLBinary
         //var orientationController = node.Controllers.OfType<MDLControllerDataOrientation>().OrderBy(x => x.StartTime).FirstOrDefault();
 
         binaryNode.NodeHeader.NodeType = (ushort)MDLBinaryNodeType.NodeFlag;
-        binaryNode.NodeHeader.NodeIndex = (ushort)Names.IndexOf(node.Name); // TODO
+        binaryNode.NodeHeader.NodeIndex = node.NodeIndex;
         binaryNode.NodeHeader.NameIndex = (ushort)Names.IndexOf(node.Name);
         binaryNode.NodeHeader.Position = new();//new(positionController?.X ?? 0, positionController?.Y ?? 0, positionController?.Z ?? 0);
         binaryNode.NodeHeader.Rotation = new();//new(orientationController?.X ?? 0, orientationController?.Y ?? 0, orientationController?.Z ?? 0, orientationController?.W ?? 0);

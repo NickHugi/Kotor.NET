@@ -36,8 +36,8 @@ public class MDLBinaryNodeHeader
     public MDLBinaryNodeHeader(MDLBinaryReader reader)
     {
         NodeType = reader.ReadUInt16();
-        NameIndex = reader.ReadUInt16();
         NodeIndex = reader.ReadUInt16();
+        NameIndex = reader.ReadUInt16();
         Padding = reader.ReadUInt16();
         OffsetToRootNode = reader.ReadInt32();
         OffsetToParentNode = reader.ReadInt32();
@@ -57,8 +57,8 @@ public class MDLBinaryNodeHeader
     public void Write(MDLBinaryWriter writer)
     {
         writer.Write(NodeType);
-        writer.Write(NameIndex);
         writer.Write(NodeIndex);
+        writer.Write(NameIndex);
         writer.Write(Padding);
         writer.Write(OffsetToRootNode);
         writer.Write(OffsetToParentNode);
