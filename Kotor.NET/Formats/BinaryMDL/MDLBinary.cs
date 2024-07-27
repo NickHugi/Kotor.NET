@@ -83,7 +83,6 @@ public class MDLBinary
         {
             writer.Write(nameOffset);
         }
-
         for (int i = 0; i < Names.Count(); i++)
         {
             writer.SetStreamPosition(NamesOffset[i]);
@@ -114,11 +113,11 @@ public class MDLBinary
         ModelHeader.GeometryHeader.FunctionPointer2 = IsTSL ? MDLBinaryGeometryHeader.K2_NORMAL_FP2 : MDLBinaryGeometryHeader.K1_NORMAL_FP2;
         ModelHeader.GeometryHeader.NodeCount = RecalculateNodeCount(RootNode);
         ModelHeader.GeometryHeader.GeometryType = 2;
-        ModelHeader.ChildModelCount = ModelHeader.GeometryHeader.NodeCount; // TODO - plus supermodel?
+        //ModelHeader.ChildModelCount = ModelHeader.GeometryHeader.NodeCount; // TODO - plus supermodel?
         ModelHeader.NamesArrayCount = Names.Count();
         ModelHeader.NamesArrayCount2 = Names.Count();
-        //ModelHeader.AnimationCount = Animations.Count();
-        //ModelHeader.AnimationCount2 = Animations.Count();
+        ModelHeader.AnimationCount = Animations.Count();
+        ModelHeader.AnimationCount2 = Animations.Count();
 
         var mdxOffset = 0;
 
@@ -135,7 +134,7 @@ public class MDLBinary
 
         ModelHeader.AnimationOffsetArrayOffset = offset;
 
-        offset += 4 * AnimationOffsets.Count();
+        offset += 4 * Animations.Count();
         AnimationOffsets = new();
         foreach (var animation in Animations)
         {
@@ -152,15 +151,19 @@ public class MDLBinary
     }
     private void Recalculate(MDLBinaryAnimation animation, ref int offset, ref int mdxOffset)
     {
-        var animationOffset = offset;
         animation.AnimationHeader.EventCount = animation.Events.Count;
         animation.AnimationHeader.EventCount2 = animation.Events.Count;
+        animation.AnimationHeader.GeometryHeader.NodeCount = RecalculateNodeCount(animation.RootNode);
+        animation.AnimationHeader.GeometryHeader.FunctionPointer1 = IsTSL ? MDLBinaryGeometryHeader.K2_ANIM_FP1 : MDLBinaryGeometryHeader.K1_ANIM_FP1;
+        animation.AnimationHeader.GeometryHeader.FunctionPointer2 = IsTSL ? MDLBinaryGeometryHeader.K2_ANIM_FP1 : MDLBinaryGeometryHeader.K1_ANIM_FP1;
+
+        var animationOffset = offset;
 
         offset += MDLBinaryAnimationHeader.SIZE;
         animation.AnimationHeader.GeometryHeader.RootNodeOffset = offset;
 
         Recalculate(animation.RootNode, ref offset, ref mdxOffset, animationOffset, 0);
-        animation.AnimationHeader.OffsetToEventArray = offset;
+        animation.AnimationHeader.OffsetToEventArray = (animation.Events.Count() == 0) ? 0 : offset;
 
         offset += MDLBinaryAnimationEvent.SIZE * animation.Events.Count;
     }
@@ -801,7 +804,7 @@ public class MDLBinary
         ];
         Names = Names.Distinct().ToList();
 
-        //Animations = mdl.Animations.Select(x => UnparseAnimation(x)).ToList();
+        Animations = mdl.Animations.Select(x => UnparseAnimation(x)).ToList();
 
         RootNode = UnparseNode(mdl.Root);
 
@@ -815,7 +818,7 @@ public class MDLBinary
         binaryAnimation.AnimationHeader.AnimationLength = animation.AnimationLength;
         binaryAnimation.AnimationHeader.TransitionTime = animation.TransitionTime;
         binaryAnimation.AnimationHeader.AnimationRoot = animation.AnimationRoot;
-        binaryAnimation.RootNode = UnparseNode(animation.RootNode);
+        binaryAnimation.RootNode = UnparseNode(animation.RootNode, true);
         binaryAnimation.Events = animation.Events.Select(x => new MDLBinaryAnimationEvent
         {
             ActivationTime = x.ActivationTime,
@@ -823,7 +826,7 @@ public class MDLBinary
         }).ToList();
         return binaryAnimation;
     }
-    private MDLBinaryNode UnparseNode(MDLNode node)
+    private MDLBinaryNode UnparseNode(MDLNode node, bool animation = false)
     {
         var binaryNode = new MDLBinaryNode();
 
@@ -907,12 +910,12 @@ public class MDLBinary
             //binaryNode.NodeHeader.NodeType |= (ushort)MDLBinaryNodeType.AABBFlag;
         }
 
-        binaryNode.Children = node.Children.Select(UnparseNode).ToList();
-        binaryNode.ControllerHeaders = node.Controllers.Select(x => UnparseController(x, binaryNode.ControllerData)).ToList();
+        binaryNode.Children = node.Children.Select(x => UnparseNode(x, animation)).ToList();
+        binaryNode.ControllerHeaders = node.Controllers.Select(x => UnparseController(x, binaryNode.ControllerData, animation)).ToList();
 
         return binaryNode;
     }
-    private MDLBinaryControllerHeader UnparseController(MDLController<BaseMDLControllerRow<BaseMDLControllerData>> controller, List<byte[]> binaryControllerData)
+    private MDLBinaryControllerHeader UnparseController(MDLController<BaseMDLControllerRow<BaseMDLControllerData>> controller, List<byte[]> binaryControllerData, bool animation)
     {
         var binaryControllerHeader = new MDLBinaryControllerHeader();
         binaryControllerHeader.FirstKeyOffset = (short)binaryControllerData.Count();
@@ -923,7 +926,6 @@ public class MDLBinary
         binaryControllerHeader.FirstDataOffset = (short)binaryControllerData.Count();
 
         Type dataType = null;
-        bool isAnimated = false;
 
         foreach (var row in controller.Rows)
         {
@@ -1198,13 +1200,13 @@ public class MDLBinary
         }
         else if (dataType.IsAssignableFrom(typeof(MDLControllerDataOrientation)))
         {
-            binaryControllerHeader.Unknown = isAnimated ? (short)28 : (short)-1;
+            binaryControllerHeader.Unknown = animation ? (short)28 : (short)-1;
             binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Orientation;
             binaryControllerHeader.ColumnCount = 4;
         }
         else if (dataType.IsAssignableFrom(typeof(MDLControllerDataPosition)))
         {
-            binaryControllerHeader.Unknown = isAnimated ? (short)16 : (short)-1;
+            binaryControllerHeader.Unknown = animation ? (short)16 : (short)-1;
             binaryControllerHeader.ControllerType = (int)MDLBinaryControllerType.Position;
             binaryControllerHeader.ColumnCount = 3;
         }
