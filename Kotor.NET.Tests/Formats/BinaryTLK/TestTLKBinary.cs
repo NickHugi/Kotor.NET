@@ -3,6 +3,7 @@ using Kotor.NET.Common.Data;
 using Kotor.NET.Extensions;
 using Kotor.NET.Formats.BinaryTLK;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Resources;
+using Xunit;
 
 namespace Kotor.NET.Tests.Formats.BinaryTLK;
 
@@ -10,42 +11,36 @@ public class TestTLKBinary
 {
     public static readonly string File1Filepath = "Formats/BinaryTLK/file1.tlk";
 
-    [SetUp]
-    public void Setup()
-    {
-        
-    }
-
     private TLKBinary GetBinaryTLK(byte[] data)
     {
         return new TLKBinary(new MemoryStream(data));
     }
    
-    [Test]
+    [Fact]
     public void Test_ReadFile1()
     {
         var binaryTLK = GetBinaryTLK(File.ReadAllBytes(File1Filepath));
 
-        Assert.That(binaryTLK.FileHeader.FileType, Is.EqualTo("TLK "));
-        Assert.That(binaryTLK.FileHeader.FileVersion, Is.EqualTo("V3.0"));
+        Assert.Equal("TLK ", binaryTLK.FileHeader.FileType);
+        Assert.Equal("V3.0", binaryTLK.FileHeader.FileVersion);
 
-        Assert.That(binaryTLK.Entries.Count(), Is.EqualTo(3));
+        Assert.Equal(3, binaryTLK.Entries.Count());
 
         var entry0 = binaryTLK.Entries[0];
-        Assert.That(entry0.SoundResRef.Get(), Is.EqualTo("resref01"));
+        Assert.Equal("resref01", entry0.SoundResRef.Get());
 
         var entry1 = binaryTLK.Entries[1];
-        Assert.That(entry1.SoundResRef.Get(), Is.EqualTo("resref02"));
+        Assert.Equal("resref02", entry1.SoundResRef.Get());
 
         var entry2 = binaryTLK.Entries[2];
-        Assert.That(entry2.SoundResRef.Get(), Is.EqualTo(""));
+        Assert.Equal("", entry2.SoundResRef.Get());
 
-        Assert.That(binaryTLK.Strings[0], Is.EqualTo("abcdef"));
-        Assert.That(binaryTLK.Strings[1], Is.EqualTo("ghijklmnop"));
-        Assert.That(binaryTLK.Strings[2], Is.EqualTo("qrstuvwxyz"));
+        Assert.Equal("abcdef", binaryTLK.Strings[0]);
+        Assert.Equal("ghijklmnop", binaryTLK.Strings[1]);
+        Assert.Equal("qrstuvwxyz", binaryTLK.Strings[2]);
     }
 
-    [Test]
+    [Fact]
     public void Test_RecalculateFile1()
     {
         var binaryTLK = GetBinaryTLK(File.ReadAllBytes(File1Filepath));
@@ -60,11 +55,11 @@ public class TestTLKBinary
         binaryTLK.Write(new BinaryWriter(stream));
 
 
-        Assert.That(binaryTLK.Entries[0].StringSize, Is.EqualTo("abcdef".Length));
+        Assert.Equal(binaryTLK.Entries[0].StringSize, "abcdef".Length);
 
         stream.Position = binaryTLK.FileHeader.OffsetToEntries;
         var entry0 = new TLKBinaryEntry(reader);
-        Assert.That(entry0.SoundResRef.Get(), Is.EqualTo("resref01"));
+        Assert.Equal("resref01", entry0.SoundResRef.Get());
 
         stream.Position = binaryTLK.Entries[0].OffsetToString;
         var string0 = reader.ReadString(entry0.StringSize);

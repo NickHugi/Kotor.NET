@@ -3,6 +3,7 @@ using Kotor.NET.Common.Data;
 using Kotor.NET.Extensions;
 using Kotor.NET.Formats.Binary2DA;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Resources;
+using Xunit;
 
 namespace Kotor.NET.Tests.Formats.BinaryTwoDA;
 
@@ -10,44 +11,38 @@ public class TestTwoDABinary
 {
     public static readonly string File1Filepath = "Formats/BinaryTwoDA/file1.2da";
 
-    [SetUp]
-    public void Setup()
-    {
-        
-    }
-
     private TwoDABinary GetBinaryTwoDA(byte[] data)
     {
         return new TwoDABinary(new MemoryStream(data));
     }
    
-    [Test]
+    [Fact]
     public void Test_ReadFile1()
     {
         var binaryTwoDA = GetBinaryTwoDA(File.ReadAllBytes(File1Filepath));
 
-        Assert.That(binaryTwoDA.FileHeader.FileType, Is.EqualTo("2DA "));
-        Assert.That(binaryTwoDA.FileHeader.FileVersion, Is.EqualTo("V2.b"));
+        Assert.Equal("2DA ", binaryTwoDA.FileHeader.FileType);
+        Assert.Equal("V2.b", binaryTwoDA.FileHeader.FileVersion);
 
-        Assert.That(binaryTwoDA.ColumnHeaders.Count(), Is.EqualTo(3));
-        Assert.That(binaryTwoDA.CellValues.Count(), Is.EqualTo(9));
+        Assert.Equal(3, binaryTwoDA.ColumnHeaders.Count());
+        Assert.Equal(9, binaryTwoDA.CellValues.Count());
 
-        Assert.That(binaryTwoDA.ColumnHeaders[0], Is.EqualTo("col3"));
-        Assert.That(binaryTwoDA.ColumnHeaders[1], Is.EqualTo("col2"));
-        Assert.That(binaryTwoDA.ColumnHeaders[2], Is.EqualTo("col1"));
+        Assert.Equal("col3", binaryTwoDA.ColumnHeaders[0]);
+        Assert.Equal("col2", binaryTwoDA.ColumnHeaders[1]);
+        Assert.Equal("col1", binaryTwoDA.ColumnHeaders[2]);
 
-        Assert.That(binaryTwoDA.RowHeaders[0], Is.EqualTo("10"));
-        Assert.That(binaryTwoDA.RowHeaders[1], Is.EqualTo("1"));
-        Assert.That(binaryTwoDA.RowHeaders[2], Is.EqualTo("2"));
+        Assert.Equal("10", binaryTwoDA.RowHeaders[0]);
+        Assert.Equal("1", binaryTwoDA.RowHeaders[1]);
+        Assert.Equal("2", binaryTwoDA.RowHeaders[2]);
 
-        Assert.That(binaryTwoDA.CellValues[0], Is.EqualTo("ghi"));
-        Assert.That(binaryTwoDA.CellValues[1], Is.EqualTo("def"));
-        Assert.That(binaryTwoDA.CellValues[2], Is.EqualTo("abc"));
-        Assert.That(binaryTwoDA.CellValues[3], Is.EqualTo("123"));
-        Assert.That(binaryTwoDA.CellValues[4], Is.EqualTo("ghi"));
-        Assert.That(binaryTwoDA.CellValues[5], Is.EqualTo("def"));
-        Assert.That(binaryTwoDA.CellValues[6], Is.EqualTo("abc"));
-        Assert.That(binaryTwoDA.CellValues[7], Is.EqualTo(""));
-        Assert.That(binaryTwoDA.CellValues[8], Is.EqualTo("123"));
+        Assert.Equal("ghi", binaryTwoDA.CellValues[0]);
+        Assert.Equal("def", binaryTwoDA.CellValues[1]);
+        Assert.Equal("abc", binaryTwoDA.CellValues[2]);
+        Assert.Equal("123", binaryTwoDA.CellValues[3]);
+        Assert.Equal("ghi", binaryTwoDA.CellValues[4]);
+        Assert.Equal("def", binaryTwoDA.CellValues[5]);
+        Assert.Equal("abc", binaryTwoDA.CellValues[6]);
+        Assert.Equal("", binaryTwoDA.CellValues[7]);
+        Assert.Equal("123", binaryTwoDA.CellValues[8]);
     }
 }
