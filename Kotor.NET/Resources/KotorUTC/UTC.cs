@@ -1224,14 +1224,16 @@ public class UTCItem
     public void Remove()
     {
         var index = Index;
-        _source.Root.GetList("ItemList")!.Skip(index).ToList().ForEach(x =>
-        {
-            x.ID = (uint)(index - 1);
-            x.SetUInt16("Repos_PosX", index - 1);
-        });
 
         RaiseIfDoesNotExist();
         _itemList!.Remove(_itemSource);
+
+        _source.Root.GetList("ItemList")!.Skip(index).ToList().ForEach(x =>
+        {
+            x.ID = (uint)(index);
+            x.SetUInt16("Repos_PosX", (ushort)index);
+            index--;
+        });
     }
 
     /// <summary>
@@ -1280,15 +1282,14 @@ public class UTCFeatCollection : IEnumerable<UTCFeat>
     /// <summary>
     /// Adds a new class of the specified ID and level to the creature.
     /// </summary>
-    public UTCItem Add(ResRef resref, bool droppable)
+    public UTCFeat Add(ushort featID)
     {
         var itemList = CreateListIfItDoesNotExist();
         var itemStruct = itemList.Add((uint)itemList.Count);
 
-        return new UTCItem(_source, itemStruct)
+        return new UTCFeat(_source, itemStruct)
         {
-            ResRef = resref,
-            Droppable = droppable,
+            FeatID = featID
         };
     }
 
@@ -1386,19 +1387,19 @@ public class UTCEquipment
         _source = source;
     }
 
-    public UTCEquippedItem HeadGear => CreateStructIfItDoesNotExist(1);
-    public UTCEquippedItem Armor => CreateStructIfItDoesNotExist(2);
-    public UTCEquippedItem Gauntlet => CreateStructIfItDoesNotExist(4);
-    public UTCEquippedItem RightHand => CreateStructIfItDoesNotExist(16);
-    public UTCEquippedItem LeftHand => CreateStructIfItDoesNotExist(32);
-    public UTCEquippedItem RightArm => CreateStructIfItDoesNotExist(128);
-    public UTCEquippedItem LeftArm => CreateStructIfItDoesNotExist(256);
-    public UTCEquippedItem Implant => CreateStructIfItDoesNotExist(512);
-    public UTCEquippedItem Belt => CreateStructIfItDoesNotExist(1024);
-    public UTCEquippedItem Claw1 => CreateStructIfItDoesNotExist(16384);
-    public UTCEquippedItem Claw2 => CreateStructIfItDoesNotExist(32768);
-    public UTCEquippedItem Claw3 => CreateStructIfItDoesNotExist(65536);
-    public UTCEquippedItem Hide => CreateStructIfItDoesNotExist(131072);
+    public UTCEquippedItem HeadGear => new(_source, 1);
+    public UTCEquippedItem Armor => new(_source, 2);
+    public UTCEquippedItem Gauntlet => new(_source, 4);
+    public UTCEquippedItem RightHand => new(_source, 16);
+    public UTCEquippedItem LeftHand => new(_source, 32);
+    public UTCEquippedItem RightArm => new(_source, 128);
+    public UTCEquippedItem LeftArm => new(_source, 256);
+    public UTCEquippedItem Implant => new(_source, 512);
+    public UTCEquippedItem Belt => new(_source, 1024);
+    public UTCEquippedItem Claw1 => new(_source, 16384);
+    public UTCEquippedItem Claw2 => new(_source, 32768);
+    public UTCEquippedItem Claw3 => new(_source, 65536);
+    public UTCEquippedItem Hide => new(_source, 131072);
 
     public void Clear()
     {
@@ -1409,38 +1410,18 @@ public class UTCEquipment
     {
         return _itemList ?? _source.Root.SetList("Equip_ItemList");
     }
-    private UTCEquippedItem CreateStructIfItDoesNotExist(uint structID)
-    {
-        var itemList = CreateListIfItDoesNotExist();
-        var itemSource = itemList.OfStructID(structID).FirstOrDefault() ?? itemList.Add(structID);
-        if (itemSource.GetResRef("EquippedRes") is null)
-            itemSource.SetResRef("EquippedRes", "");
-        return new(_source, itemSource);
-    }
 }
 
 public class UTCEquippedItem
 {
     private GFF _source { get; }
-    private GFFStruct _itemSource { get; }
+    private uint _structID { get; }
     private GFFList? _itemList => _source.Root.GetList("Equip_ItemList");
 
-    internal UTCEquippedItem(GFF source, GFFStruct itemSource)
+    internal UTCEquippedItem(GFF source, uint structID)
     {
         _source = source;
-        _itemSource = itemSource;
-    }
-
-    /// <summary>
-    /// Index of the feat on the assigned creature.
-    /// </summary>
-    public int Index
-    {
-        get
-        {
-            RaiseIfDoesNotExist();
-            return _itemList!.IndexOf(_itemSource);
-        }
+        _structID = structID;
     }
 
     /// <summary>
@@ -1472,8 +1453,6 @@ public class UTCEquippedItem
     /// </summary>
     public void Remove()
     {
-        var index = Index;
-
         RaiseIfDoesNotExist();
         _itemList!.Remove(_itemSource);
     }
@@ -1483,15 +1462,26 @@ public class UTCEquippedItem
     /// </summary>
     public bool Exists()
     {
-        var featList = _itemList;
-        return featList is null || !featList.Contains(_itemSource);
+        return _itemList is not null && _itemList.OfStructID(_structID).Any();
+    }
+
+    internal GFFStruct _itemSource
+    {
+        get
+        {
+            var itemList = _itemList ?? _source.Root.SetList("Equip_ItemList");
+            var itemStruct = itemList.OfStructID(_structID).FirstOrDefault() ?? itemList.Add(_structID);
+            if (itemStruct.GetResRef("EquippedRes") is null)
+                itemStruct.SetResRef("EquippedRes", "");
+            return itemStruct;
+        }
     }
 
     private void RaiseIfDoesNotExist()
     {
-        if (Exists())
+        if (!Exists())
         {
-            throw new ArgumentException("This feat no longer exists.");
+            throw new ArgumentException("This item no longer exists.");
         }
     }
 }

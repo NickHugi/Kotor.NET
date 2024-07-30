@@ -225,6 +225,4 @@ public class GFFStruct
         }
         return fieldNames;
     }
-
-    internal void SetUInt16(string v1, int v2) => throw new NotImplementedException();
 }
