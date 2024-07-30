@@ -2,9 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Common.Data;
+using Kotor.NET.Formats.BinaryGFF;
 using Kotor.NET.Resources.KotorGFF;
 using static Kotor.NET.Resources.KotorUTC.UTCClassCollection;
 
@@ -21,6 +23,18 @@ public class UTC
     public UTC(GFF source)
     {
         Source = source;
+    }
+    public static UTC FromFile(string filepath)
+    {
+        return new(GFF.FromFile(filepath));
+    }
+    public static UTC FromBytes(byte[] bytes)
+    {
+        return new(GFF.FromBytes(bytes));
+    }
+    public static UTC FromStream(Stream stream)
+    {
+        return new(GFF.FromStream(stream));
     }
 
     /// <summary>
@@ -236,10 +250,34 @@ public class UTC
     /// <remarks>
     /// This is the value stored in the <c>GoodEvil</c> field in the UTC.
     /// </remarks>
-    public ushort Alignment
+    public byte Alignment
     {
-        get => Source.Root.GetUInt16("GoodEvil") ?? 0;
-        set => Source.Root.SetUInt16("GoodEvil", value);
+        get => Source.Root.GetUInt8("GoodEvil") ?? 0;
+        set => Source.Root.SetUInt8("GoodEvil", value);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>
+    /// This is the value stored in the <c>HitPoints</c> field in the UTC.
+    /// </remarks>
+    public short HitPoints
+    {
+        get => Source.Root.GetInt16("HitPoints") ?? 0;
+        set => Source.Root.SetInt16("HitPoints", value);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>
+    /// This is the value stored in the <c>Int</c> field in the UTC.
+    /// </remarks>
+    public byte Intelligence
+    {
+        get => Source.Root.GetUInt8("Int") ?? 0;
+        set => Source.Root.SetUInt8("Int", value);
     }
 
     /// <summary>
@@ -366,7 +404,7 @@ public class UTC
     /// 
     /// </summary>
     /// <remarks>
-    /// This is the value stored in the <c>NotReorienting</c> field in the UTC. Only supported by KotOR 2.
+    /// This is the value stored in the <c>NotReorienting</c> field in the UTC.
     /// </remarks>
     public bool NotReorienting
     {
@@ -849,6 +887,11 @@ public class UTCClassCollection : IEnumerable<UTCClass>
         _source = source;
     }
 
+    public UTCClass this[int index]
+    {
+        get => All().ElementAt(index);
+    }
+
     public int Count => _source.Root.GetList("ClassList")?.Count() ?? 0;
     public IEnumerator<UTCClass> GetEnumerator() => All().GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => All().GetEnumerator();
@@ -976,6 +1019,11 @@ public class UTCForcePowerCollection : IEnumerable<UTCForcePower>
         _classSource = classSource;
     }
 
+    public UTCForcePower this[int index]
+    {
+        get => All().ElementAt(index);
+    }
+
     public int Count => _classSource.GetList("KnownList0")?.Count() ?? 0;
     public IEnumerator<UTCForcePower> GetEnumerator() => All().GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => All().GetEnumerator();
@@ -1078,6 +1126,11 @@ public class UTCItemCollection : IEnumerable<UTCItem>
         _source = source;
     }
 
+    public UTCItem this[int index]
+    {
+        get => All().ElementAt(index);
+    }
+
     public int Count => _itemList?.Count() ?? 0;
     public IEnumerator<UTCItem> GetEnumerator() => All().GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => All().GetEnumerator();
@@ -1161,7 +1214,7 @@ public class UTCItem
     /// </remarks>
     public bool Droppable
     {
-        get => _itemSource.GetUInt8("Dropable") != 0;
+        get => (_itemSource.GetUInt8("Dropable") ?? 0) != 0;
         set => _itemSource.SetUInt8("Dropable", Convert.ToByte(value));
     }
 
@@ -1190,6 +1243,12 @@ public class UTCItem
         return classList is null || !classList.Contains(_itemSource);
     }
 
+    internal ushort Repos_PosX
+    {
+        get => _itemSource.GetUInt16("Repos_PosX") ?? 0;
+        set => _itemSource.SetUInt16("Repos_PosX", value);
+    }
+
     private void RaiseIfDoesNotExist()
     {
         if (Exists())
@@ -1202,11 +1261,16 @@ public class UTCItem
 public class UTCFeatCollection : IEnumerable<UTCFeat>
 {
     private GFF _source;
-    private GFFList? _featList => _source.Root.GetList("ItemList");
+    private GFFList? _featList => _source.Root.GetList("FeatList");
 
     public UTCFeatCollection(GFF source)
     {
         _source = source;
+    }
+
+    public UTCFeat this[int index]
+    {
+        get => All().ElementAt(index);
     }
 
     public int Count => _featList?.Count() ?? 0;
@@ -1338,18 +1402,19 @@ public class UTCEquipment
 
     public void Clear()
     {
-        _itemList.Clear();
+        CreateListIfItDoesNotExist().Clear();
     }
 
     private GFFList CreateListIfItDoesNotExist()
     {
         return _itemList ?? _source.Root.SetList("Equip_ItemList");
     }
-    private UTCEquippedItem CreateStructIfItDoesNotExist(int structID)
+    private UTCEquippedItem CreateStructIfItDoesNotExist(uint structID)
     {
         var itemList = CreateListIfItDoesNotExist();
         var itemSource = itemList.OfStructID(structID).FirstOrDefault() ?? itemList.Add(structID);
-        itemSource.SetResRef("EquippedRes", "");
+        if (itemSource.GetResRef("EquippedRes") is null)
+            itemSource.SetResRef("EquippedRes", "");
         return new(_source, itemSource);
     }
 }
