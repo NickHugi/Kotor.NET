@@ -2,6 +2,7 @@ using System.Reflection.PortableExecutable;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Extensions;
 using Kotor.NET.Formats.BinaryKEY;
+using Xunit;
 
 namespace Kotor.NET.Tests.Formats.BinaryKEY;
 
@@ -9,40 +10,34 @@ public class TestKEYBinary
 {
     public static readonly string File1Filepath = "Formats/BinaryKEY/file1.key";
 
-    [SetUp]
-    public void Setup()
-    {
-        
-    }
-
     private KEYBinary GetBinaryKEY(byte[] data)
     {
         return new KEYBinary(new MemoryStream(data));
     }
    
-    [Test]
+    [Fact]
     public void Test_ReadFile1()
     {
         var binaryKEY = GetBinaryKEY(File.ReadAllBytes(File1Filepath));
 
-        Assert.That(binaryKEY.FileHeader.FileType, Is.EqualTo("KEY "));
-        Assert.That(binaryKEY.FileHeader.FileVersion, Is.EqualTo("V1  "));
-        Assert.That(binaryKEY.FileHeader.FileCount, Is.EqualTo(26));
-        Assert.That(binaryKEY.FileHeader.KeyCount, Is.EqualTo(25836));
+        Assert.Equal("KEY ", binaryKEY.FileHeader.FileType);
+        Assert.Equal("V1  ", binaryKEY.FileHeader.FileVersion);
+        Assert.Equal(26, binaryKEY.FileHeader.FileCount);
+        Assert.Equal(25836, binaryKEY.FileHeader.KeyCount);
 
-        Assert.That(binaryKEY.FileTable.Count, Is.EqualTo(26));
-        Assert.That(binaryKEY.Filenames.Count, Is.EqualTo(26));
-        Assert.That(binaryKEY.Keys.Count, Is.EqualTo(25836));
+        Assert.Equal(26, binaryKEY.FileTable.Count);
+        Assert.Equal(26, binaryKEY.Filenames.Count);
+        Assert.Equal(25836, binaryKEY.Keys.Count);
 
-        Assert.That(binaryKEY.FileTable[0].Drives, Is.EqualTo(1));
-        Assert.That(binaryKEY.Filenames[0], Is.EqualTo(@"data\2da.bif"));
+        Assert.Equal(1, binaryKEY.FileTable[0].Drives);
+        Assert.Equal(@"data\2da.bif", binaryKEY.Filenames[0]);
 
-        Assert.That(binaryKEY.Keys[0].ResourceID, Is.EqualTo(0));
-        Assert.That(binaryKEY.Keys[0].ResRef.Get(), Is.EqualTo("acbonus"));
-        Assert.That(binaryKEY.Keys[0].ResourceType, Is.EqualTo(ResourceType.TWODA.ID));
+        Assert.Equal<uint>(0, binaryKEY.Keys[0].ResourceID);
+        Assert.Equal("acbonus", binaryKEY.Keys[0].ResRef.Get());
+        Assert.Equal(binaryKEY.Keys[0].ResourceType, ResourceType.TWODA.ID);
     }
 
-    [Test]
+    [Fact]
     public void Test_RecalculateFile1()
     {
         var binaryKEY = GetBinaryKEY(File.ReadAllBytes(File1Filepath));
@@ -59,21 +54,21 @@ public class TestKEYBinary
         binaryKEY.Write(stream);
 
 
-        Assert.That(binaryKEY.FileHeader.FileCount, Is.EqualTo(26));
-        Assert.That(binaryKEY.FileHeader.KeyCount, Is.EqualTo(25836));
+        Assert.Equal(26, binaryKEY.FileHeader.FileCount);
+        Assert.Equal(25836, binaryKEY.FileHeader.KeyCount);
 
         stream.Position = binaryKEY.FileHeader.OffsetToFileEntries;
         var file0 = new KEYBinaryFileEntry(reader);
-        Assert.That(file0.Drives, Is.EqualTo(1));
+        Assert.Equal(1, file0.Drives);
 
         stream.Position = binaryKEY.FileTable[0].FilenameOffset;
         var filename1 = reader.ReadString(binaryKEY.FileTable[0].FilenameLength);
-        Assert.That(filename1, Is.EqualTo(@"data\2da.bif"));
+        Assert.Equal(@"data\2da.bif", filename1);
 
         stream.Position = binaryKEY.FileHeader.OffsetToKeyEntries;
         var key0 = new KEYBinaryKeyEntry(reader);
-        Assert.That(key0.ResourceID, Is.EqualTo(0));
-        Assert.That(key0.ResRef.Get(), Is.EqualTo("acbonus"));
-        Assert.That(key0.ResourceType, Is.EqualTo(ResourceType.TWODA.ID));
+        Assert.Equal<uint>(0, key0.ResourceID);
+        Assert.Equal("acbonus", key0.ResRef.Get());
+        Assert.Equal(key0.ResourceType, ResourceType.TWODA.ID);
     }
 }

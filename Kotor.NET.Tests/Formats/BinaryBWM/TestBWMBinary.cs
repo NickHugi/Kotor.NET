@@ -3,6 +3,7 @@ using Kotor.NET.Common.Data;
 using Kotor.NET.Extensions;
 using Kotor.NET.Formats.BinaryBWM;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Resources;
+using Xunit;
 
 namespace Kotor.NET.Tests.Formats.BinaryBWM;
 
@@ -10,52 +11,46 @@ public class TestBWMBinary
 {
     public static readonly string File1Filepath = "Formats/BinaryBWM/file1.bwm";
 
-    [SetUp]
-    public void Setup()
-    {
-
-    }
-
     private BWMBinary GetBinaryBWM(byte[] data)
     {
         return new BWMBinary(new MemoryStream(data));
     }
 
-    [Test]
+    [Fact]
     public void Test_ReadFile1()
     {
         var binaryBWM = GetBinaryBWM(File.ReadAllBytes(File1Filepath));
 
-        Assert.That(binaryBWM.FileHeader.FileType, Is.EqualTo("BWM "));
-        Assert.That(binaryBWM.FileHeader.FileVersion, Is.EqualTo("V1.0"));
-        Assert.That(binaryBWM.FileHeader.VertexCount, Is.EqualTo(6));
-        Assert.That(binaryBWM.FileHeader.FaceCount, Is.EqualTo(4));
-        Assert.That(binaryBWM.FileHeader.EdgeCount, Is.EqualTo(4));
-        Assert.That(binaryBWM.FileHeader.PerimeterCount, Is.EqualTo(1));
+        Assert.Equal("BWM ", binaryBWM.FileHeader.FileType);
+        Assert.Equal("V1.0", binaryBWM.FileHeader.FileVersion);
+        Assert.Equal(6, binaryBWM.FileHeader.VertexCount);
+        Assert.Equal(4, binaryBWM.FileHeader.FaceCount);
+        Assert.Equal(4, binaryBWM.FileHeader.EdgeCount);
+        Assert.Equal(1, binaryBWM.FileHeader.PerimeterCount);
 
-        Assert.That(binaryBWM.Vertices.Count, Is.EqualTo(6));
-        Assert.That(binaryBWM.FaceIndices.Count, Is.EqualTo(4));
-        Assert.That(binaryBWM.FaceMaterials.Count, Is.EqualTo(4));
-        Assert.That(binaryBWM.FaceNormals.Count, Is.EqualTo(4));
-        Assert.That(binaryBWM.FacePlaneCoefficients.Count, Is.EqualTo(4));
-        Assert.That(binaryBWM.Edges.Count, Is.EqualTo(4));
-        Assert.That(binaryBWM.Perimeters.Count, Is.EqualTo(1));
+        Assert.Equal(6, binaryBWM.Vertices.Count);
+        Assert.Equal(4, binaryBWM.FaceIndices.Count);
+        Assert.Equal(4, binaryBWM.FaceMaterials.Count);
+        Assert.Equal(4, binaryBWM.FaceNormals.Count);
+        Assert.Equal(4, binaryBWM.FacePlaneCoefficients.Count);
+        Assert.Equal(4, binaryBWM.Edges.Count);
+        Assert.Single(binaryBWM.Perimeters);
 
-        Assert.That(binaryBWM.Vertices[0].X, Is.EqualTo(0));
-        Assert.That(binaryBWM.Vertices[0].Y, Is.EqualTo(0));
-        Assert.That(binaryBWM.Vertices[0].Z, Is.EqualTo(0));
+        Assert.Equal(0, binaryBWM.Vertices[0].X);
+        Assert.Equal(0, binaryBWM.Vertices[0].Y);
+        Assert.Equal(0, binaryBWM.Vertices[0].Z);
 
-        Assert.That(binaryBWM.FaceMaterials[0], Is.EqualTo(0));
-        Assert.That(binaryBWM.FaceMaterials[3], Is.EqualTo(7));
+        Assert.Equal(0, binaryBWM.FaceMaterials[0]);
+        Assert.Equal(7, binaryBWM.FaceMaterials[3]);
 
-        Assert.That(binaryBWM.FaceNormals[3].X, Is.EqualTo(0));
-        Assert.That(binaryBWM.FaceNormals[3].Y, Is.EqualTo(0));
-        Assert.That(binaryBWM.FaceNormals[3].Z, Is.EqualTo(1));
+        Assert.Equal(0, binaryBWM.FaceNormals[3].X);
+        Assert.Equal(0, binaryBWM.FaceNormals[3].Y);
+        Assert.Equal(1, binaryBWM.FaceNormals[3].Z);
 
-        Assert.That(binaryBWM.Perimeters[0], Is.EqualTo(4));
+        Assert.Equal(4, binaryBWM.Perimeters[0]);
     }
 
-    [Test]
+    [Fact]
     public void Test_RecalculateFile1()
     {
         var binaryBWM = GetBinaryBWM(File.ReadAllBytes(File1Filepath));
@@ -81,50 +76,50 @@ public class TestBWMBinary
 
         stream.Position = 0;
         var fileHeader = new BWMBinaryFileHeader(reader);
-        Assert.That(fileHeader.VertexCount, Is.EqualTo(6));
-        Assert.That(fileHeader.FaceCount, Is.EqualTo(4));
-        Assert.That(fileHeader.EdgeCount, Is.EqualTo(4));
-        Assert.That(fileHeader.PerimeterCount, Is.EqualTo(1));
+        Assert.Equal(6, fileHeader.VertexCount);
+        Assert.Equal(4, fileHeader.FaceCount);
+        Assert.Equal(4, fileHeader.EdgeCount);
+        Assert.Equal(1, fileHeader.PerimeterCount);
 
         stream.Position = fileHeader.OffsetToVertices;
         var vertex0 = reader.ReadVector3();
-        Assert.That(vertex0.X, Is.EqualTo(0));
-        Assert.That(vertex0.Y, Is.EqualTo(0));
-        Assert.That(vertex0.Z, Is.EqualTo(0));
+        Assert.Equal(0, vertex0.X);
+        Assert.Equal(0, vertex0.Y);
+        Assert.Equal(0, vertex0.Z);
 
         stream.Position = fileHeader.OffsetToFaceIndices;
         var indices0 = new BWMBinaryFaceIndices(reader);
-        Assert.That(indices0.Index1, Is.EqualTo(0));
-        Assert.That(indices0.Index2, Is.EqualTo(1));
-        Assert.That(indices0.Index3, Is.EqualTo(3));
+        Assert.Equal(0, indices0.Index1);
+        Assert.Equal(1, indices0.Index2);
+        Assert.Equal(3, indices0.Index3);
 
         stream.Position = fileHeader.OffsetToFaceMaterials + 4*3;
         var material3 = reader.ReadInt32();
-        Assert.That(material3, Is.EqualTo(7));
+        Assert.Equal(7, material3);
 
         stream.Position = fileHeader.OffsetToFaceNormals;
         var normal0 = reader.ReadVector3();
-        Assert.That(normal0.X, Is.EqualTo(0));
-        Assert.That(normal0.Y, Is.EqualTo(0));
-        Assert.That(normal0.Z, Is.EqualTo(1));
+        Assert.Equal(0, normal0.X);
+        Assert.Equal(0, normal0.Y);
+        Assert.Equal(1, normal0.Z);
 
         stream.Position = fileHeader.OffsetToFaceCoefficients;
         var coefficient0 = reader.ReadSingle();
-        Assert.That(coefficient0, Is.EqualTo(0));
+        Assert.Equal(0, coefficient0);
 
         stream.Position = fileHeader.OffsetToAABBs;
         var aabb0 = new BWMBinaryAABBNode(reader);
-        Assert.That(aabb0.FaceIndex, Is.EqualTo(-1));
-        Assert.That(aabb0.LeftChildIndex, Is.EqualTo(1));
-        Assert.That(aabb0.RightChildIndex, Is.EqualTo(4));
+        Assert.Equal(-1, aabb0.FaceIndex);
+        Assert.Equal(1, aabb0.LeftChildIndex);
+        Assert.Equal(4, aabb0.RightChildIndex);
 
         stream.Position = fileHeader.OffsetToEdges;
         var edge0 = new BWMBinaryEdge(reader);
-        Assert.That(edge0.EdgeIndex, Is.EqualTo(0));
-        Assert.That(edge0.Transition, Is.EqualTo(-1));
+        Assert.Equal(0, edge0.EdgeIndex);
+        Assert.Equal(-1, edge0.Transition);
 
         stream.Position = fileHeader.OffsetToPerimeters;
         var perimeter0 = reader.ReadInt32();
-        Assert.That(perimeter0, Is.EqualTo(4));
+        Assert.Equal(4, perimeter0);
     }
 }

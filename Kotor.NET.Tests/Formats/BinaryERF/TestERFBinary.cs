@@ -1,6 +1,7 @@
 using System.Reflection.PortableExecutable;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Formats.BinaryERF;
+using Xunit;
 
 namespace Kotor.NET.Tests.Formats.BinaryERF;
 
@@ -8,41 +9,35 @@ public class TestERFBinary
 {
     public static readonly string File1Filepath = "Formats/BinaryERF/file1.erf";
 
-    [SetUp]
-    public void Setup()
-    {
-        
-    }
-
     private ERFBinary GetBinaryERF(byte[] data)
     {
         return new ERFBinary(new MemoryStream(data));
     }
    
-    [Test]
+    [Fact]
     public void Test_ReadFile1()
     {
         var binaryERF = GetBinaryERF(File.ReadAllBytes(File1Filepath));
 
-        Assert.That(binaryERF.FileHeader.FileType, Is.EqualTo("ERF "), "File type was not read correctly.");
-        Assert.That(binaryERF.FileHeader.FileVersion, Is.EqualTo("V1.0"), "File version was not read correctly.");
-        Assert.That(binaryERF.FileHeader.EntryCount, Is.EqualTo(2), "Entry count was not read correctly.");
+        Assert.Equal("ERF ", binaryERF.FileHeader.FileType);
+        Assert.Equal("V1.0", binaryERF.FileHeader.FileVersion);
+        Assert.Equal(2, binaryERF.FileHeader.EntryCount);
 
-        Assert.That(binaryERF.KeyEntries.Count, Is.EqualTo(2), "Key entries list did not build correctly.");
-        Assert.That(binaryERF.ResourceEntries.Count, Is.EqualTo(2), "Resource entries list did not build correctly.");
+        Assert.Equal(2, binaryERF.KeyEntries.Count);
+        Assert.Equal(2, binaryERF.ResourceEntries.Count);
 
         var key0 = binaryERF.KeyEntries.ElementAt(0);
-        Assert.That(key0.ResID, Is.EqualTo(0));
-        Assert.That(key0.ResRef.Get(), Is.EqualTo("test"));
-        Assert.That(key0.ResType, Is.EqualTo(ResourceType.MDL.ID));
+        Assert.Equal<uint>(0, key0.ResID);
+        Assert.Equal("test", key0.ResRef.Get());
+        Assert.Equal(key0.ResType, ResourceType.MDL.ID);
 
         var key1 = binaryERF.KeyEntries.ElementAt(1);
-        Assert.That(key1.ResID, Is.EqualTo(1));
-        Assert.That(key1.ResRef.Get(), Is.EqualTo("test"));
-        Assert.That(key1.ResType, Is.EqualTo(ResourceType.MDX.ID));
+        Assert.Equal<uint>(1, key1.ResID);
+        Assert.Equal("test", key1.ResRef.Get());
+        Assert.Equal(key1.ResType, ResourceType.MDX.ID);
     }
 
-    [Test]
+    [Fact]
     public void Test_RecalculateFile1()
     {
         var binaryERF = GetBinaryERF(File.ReadAllBytes(File1Filepath));
@@ -59,18 +54,18 @@ public class TestERFBinary
 
         stream.Position = 0;
         var fileHeader = new ERFBinaryFileHeader(reader);
-        Assert.That(fileHeader.EntryCount, Is.EqualTo(2));
+        Assert.Equal(2, fileHeader.EntryCount);
 
         stream.Position = fileHeader.OffsetToKeyList;
         var key0 = new ERFBinaryKeyEntry(reader);
-        Assert.That(key0.ResID, Is.EqualTo(0));
-        Assert.That(key0.ResRef.Get(), Is.EqualTo("test"));
-        Assert.That(key0.ResType, Is.EqualTo(ResourceType.MDL.ID));
+        Assert.Equal<uint>(0, key0.ResID);
+        Assert.Equal("test", key0.ResRef.Get());
+        Assert.Equal(key0.ResType, ResourceType.MDL.ID);
 
         stream.Position = fileHeader.OffsetToResourceList;
         var resource0 = new ERFBinaryResourceEntry(reader);
-        Assert.That(resource0.Offset, Is.EqualTo(binaryERF.ResourceEntries[0].Offset));
-        Assert.That(resource0.Size, Is.EqualTo(binaryERF.ResourceEntries[0].Size));
+        Assert.Equal(resource0.Offset, binaryERF.ResourceEntries[0].Offset);
+        Assert.Equal(resource0.Size, binaryERF.ResourceEntries[0].Size);
     }
 
 }

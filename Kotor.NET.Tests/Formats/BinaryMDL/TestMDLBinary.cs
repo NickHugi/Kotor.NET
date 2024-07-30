@@ -4,6 +4,7 @@ using Kotor.NET.Common.Data;
 using Kotor.NET.Extensions;
 using Kotor.NET.Formats.BinaryMDL;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Resources;
+using Xunit;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Kotor.NET.Tests.Formats.BinaryMDL;
@@ -15,12 +16,6 @@ public class TestMDLBinary
     public static readonly string File3Filepath = "Formats/BinaryMDL/file3";
     public static readonly string File4Filepath = "Formats/BinaryMDL/file4";
 
-    [SetUp]
-    public void Setup()
-    {
-        
-    }
-
     private MDLBinary GetBinaryMDL(string extensionlessPath)
     {
         var mdlData = File.ReadAllBytes(extensionlessPath + ".mdl");
@@ -28,57 +23,57 @@ public class TestMDLBinary
         return new MDLBinary(new MemoryStream(mdlData), new MemoryStream(mdxData));
     }
 
-    [Test]
+    [Fact]
     public void Test_ReadFile1()
     {
         var binaryMDL = GetBinaryMDL(File1Filepath);
 
-        Assert.That(binaryMDL.ModelHeader.GeometryHeader.NodeCount, Is.EqualTo(134));
-        Assert.That(binaryMDL.ModelHeader.GeometryHeader.Name, Is.EqualTo("m14aa_01c"));
-        Assert.That(binaryMDL.ModelHeader.GeometryHeader.GeometryType, Is.EqualTo(2));
-        Assert.That(binaryMDL.ModelHeader.ModelType, Is.EqualTo(0));
-        Assert.That(binaryMDL.ModelHeader.Radius, Is.EqualTo(7));
-        Assert.That(binaryMDL.ModelHeader.AnimationScale, Is.EqualTo(1));
-        Assert.That(binaryMDL.ModelHeader.SupermodelName, Is.EqualTo("NULL"));
-        Assert.That(binaryMDL.Names.First(), Is.EqualTo("m14aa_01c"));
-        Assert.That(binaryMDL.Names.Last(), Is.EqualTo("brglight04"));
-        Assert.That(binaryMDL.RootNode.NodeHeader.ChildArrayCount, Is.EqualTo(48));
-        Assert.That(binaryMDL.RootNode.Children.First().ControllerHeaders.Count, Is.EqualTo(2));
-        Assert.That(binaryMDL.RootNode.Children.First().ControllerData.Count, Is.EqualTo(9));
-        Assert.That(binaryMDL.RootNode.Children.First().NodeHeader.ControllerArrayCount, Is.EqualTo(2));
+        Assert.Equal(134, binaryMDL.ModelHeader.GeometryHeader.NodeCount);
+        Assert.Equal("m14aa_01c", binaryMDL.ModelHeader.GeometryHeader.Name);
+        Assert.Equal(2, binaryMDL.ModelHeader.GeometryHeader.GeometryType);
+        Assert.Equal(0, binaryMDL.ModelHeader.ModelType);
+        Assert.Equal(7, binaryMDL.ModelHeader.Radius);
+        Assert.Equal(1, binaryMDL.ModelHeader.AnimationScale);
+        Assert.Equal("NULL", binaryMDL.ModelHeader.SupermodelName);
+        Assert.Equal("m14aa_01c", binaryMDL.Names.First());
+        Assert.Equal("brglight04", binaryMDL.Names.Last());
+        Assert.Equal(48, binaryMDL.RootNode.NodeHeader.ChildArrayCount);
+        Assert.Equal(2, binaryMDL.RootNode.Children.First().ControllerHeaders.Count);
+        Assert.Equal(9, binaryMDL.RootNode.Children.First().ControllerData.Count);
+        Assert.Equal(2, binaryMDL.RootNode.Children.First().NodeHeader.ControllerArrayCount);
     }
 
-    [Test]
+    [Fact]
     public void Test_ReadFile2()
     {
         var binaryMDL = GetBinaryMDL(File2Filepath);
 
-        Assert.That(binaryMDL.ModelHeader.GeometryHeader.Name, Is.EqualTo("m14aa_01f"));
+        Assert.Equal("m14aa_01f", binaryMDL.ModelHeader.GeometryHeader.Name);
     }
 
-    [Test]
+    [Fact]
     public void Test_ReadFile3()
     {
         var binaryMDL = GetBinaryMDL(File3Filepath);
 
-        Assert.That(binaryMDL.ModelHeader.GeometryHeader.Name, Is.EqualTo("P_Zaalbar"));
-        Assert.That(binaryMDL.Animations.Count, Is.EqualTo(1));
-        Assert.That(binaryMDL.Animations.First().AnimationHeader.AnimationLength, Is.EqualTo(1.43333).Within(0.1));
-        Assert.That(binaryMDL.Animations.First().AnimationHeader.TransitionTime, Is.EqualTo(0.25));
-        Assert.That(binaryMDL.Animations.First().AnimationHeader.AnimationRoot, Is.EqualTo("P_Zaalbar"));
-        Assert.That(binaryMDL.Animations.First().AnimationHeader.EventCount, Is.EqualTo(0));
-        Assert.That(binaryMDL.Animations.First().Events.Count(), Is.EqualTo(0));
+        Assert.Equal("P_Zaalbar", binaryMDL.ModelHeader.GeometryHeader.Name);
+        Assert.Single(binaryMDL.Animations);
+        Assert.Equal(1.43333, binaryMDL.Animations.First().AnimationHeader.AnimationLength, 0.1);
+        Assert.Equal(0.25, binaryMDL.Animations.First().AnimationHeader.TransitionTime);
+        Assert.Equal("P_Zaalbar", binaryMDL.Animations.First().AnimationHeader.AnimationRoot);
+        Assert.Equal(0, binaryMDL.Animations.First().AnimationHeader.EventCount);
+        Assert.Empty(binaryMDL.Animations.First().Events);
     }
 
-    [Test]
+    [Fact]
     public void Test_ReadFile4()
     {
         var binaryMDL = GetBinaryMDL(File4Filepath);
 
-        Assert.That(binaryMDL.ModelHeader.GeometryHeader.Name, Is.EqualTo("w_ShortSbr_001"));
+        Assert.Equal("w_ShortSbr_001", binaryMDL.ModelHeader.GeometryHeader.Name);
     }
 
-    [Test]
+    [Fact]
     public void Test_RecalculateFile1()
     {
         var binaryMDL = GetBinaryMDL(File1Filepath);
@@ -94,13 +89,13 @@ public class TestMDLBinary
         mdxStream.Position = 0;
 
         var newBinaryMDL = new MDLBinary(stream, mdxStream);
-        Assert.That(newBinaryMDL.RootNode.NodeHeader.ChildArrayCount, Is.EqualTo(48));
-        Assert.That(newBinaryMDL.RootNode.Children.First().ControllerHeaders.Count, Is.EqualTo(2));
-        Assert.That(newBinaryMDL.RootNode.Children.First().ControllerData.Count, Is.EqualTo(9));
-        Assert.That(newBinaryMDL.RootNode.Children.First().NodeHeader.ControllerArrayCount, Is.EqualTo(2));
+        Assert.Equal(48, newBinaryMDL.RootNode.NodeHeader.ChildArrayCount);
+        Assert.Equal(2, newBinaryMDL.RootNode.Children.First().ControllerHeaders.Count);
+        Assert.Equal(9, newBinaryMDL.RootNode.Children.First().ControllerData.Count);
+        Assert.Equal(2, newBinaryMDL.RootNode.Children.First().NodeHeader.ControllerArrayCount);
     }
 
-    [Test]
+    [Fact]
     public void Test_RecalculateFile2()
     {
         var binaryMDL = GetBinaryMDL(File2Filepath);
@@ -118,7 +113,7 @@ public class TestMDLBinary
         var newBinaryMDL = new MDLBinary(stream, mdxStream);
     }
 
-    [Test]
+    [Fact]
     public void Test_RecalculateFile3()
     {
         var binaryMDL = GetBinaryMDL(File3Filepath);
@@ -136,7 +131,7 @@ public class TestMDLBinary
         var newBinaryMDL = new MDLBinary(stream, mdxStream);
     }
 
-    [Test]
+    [Fact]
     public void Test_RecalculateFile4()
     {
         var binaryMDL = GetBinaryMDL(File4Filepath);

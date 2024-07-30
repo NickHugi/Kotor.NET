@@ -2,6 +2,7 @@ using System.Reflection.PortableExecutable;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Formats.BinaryLIP;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Resources;
+using Xunit;
 
 namespace Kotor.NET.Tests.Formats.BinaryLIP;
 
@@ -9,41 +10,35 @@ public class TestLIPBinary
 {
     public static readonly string File1Filepath = "Formats/BinaryLIP/file1.lip";
 
-    [SetUp]
-    public void Setup()
-    {
-        
-    }
-
     private LIPBinary GetBinaryLIP(byte[] data)
     {
         return new LIPBinary(new MemoryStream(data));
     }
    
-    [Test]
+    [Fact]
     public void Test_ReadFile1()
     {
         var binaryLIP = GetBinaryLIP(File.ReadAllBytes(File1Filepath));
 
-        Assert.That(binaryLIP.FileHeader.FileType, Is.EqualTo("LIP "), "File type was not read correctly.");
-        Assert.That(binaryLIP.FileHeader.FileVersion, Is.EqualTo("V1.0"), "File version was not read correctly.");
+        Assert.Equal("LIP ", binaryLIP.FileHeader.FileType);
+        Assert.Equal("V1.0", binaryLIP.FileHeader.FileVersion);
 
-        Assert.That(binaryLIP.KeyFrames.Count, Is.EqualTo(3), "Key frame list did not build correctly.");
+        Assert.Equal(3, binaryLIP.KeyFrames.Count);
 
         var key0 = binaryLIP.KeyFrames.ElementAt(0);
-        Assert.That(key0.Time, Is.EqualTo(0).Within(0.1));
-        Assert.That(key0.Shape, Is.EqualTo(0));
+        Assert.Equal(0, key0.Time, 0.1);
+        Assert.Equal(0, key0.Shape);
 
         var key1 = binaryLIP.KeyFrames.ElementAt(1);
-        Assert.That(key1.Time, Is.EqualTo(0.77).Within(0.1));
-        Assert.That(key1.Shape, Is.EqualTo(5));
+        Assert.Equal(0.77, key1.Time, 0.1);
+        Assert.Equal(5, key1.Shape);
 
         var key2 = binaryLIP.KeyFrames.ElementAt(2);
-        Assert.That(key2.Time, Is.EqualTo(1.25).Within(0.1));
-        Assert.That(key2.Shape, Is.EqualTo(10));
+        Assert.Equal(1.25, key2.Time, 0.1);
+        Assert.Equal(10, key2.Shape);
     }
 
-    [Test]
+    [Fact]
     public void Test_RecalculateFile1()
     {
         var binaryLIP = GetBinaryLIP(File.ReadAllBytes(File1Filepath));
@@ -56,7 +51,7 @@ public class TestLIPBinary
 
         stream.Position = 0;
         var fileHeader = new LIPBinaryFileHeader(reader);
-        Assert.That(fileHeader.KeyFrameCount, Is.EqualTo(3));
+        Assert.Equal(3, fileHeader.KeyFrameCount);
     }
 
 }
