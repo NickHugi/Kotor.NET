@@ -32,7 +32,6 @@ public class MDLBinaryNode
     public MDLBinaryDanglymesh? Danglymesh { get; set; }
     public MDLBinarySabermesh? Sabermesh { get; set; }
     public MDLBinaryAABBNode? RootAABBNode { get; set; }
-    public List<MDLBinaryTrimeshFace> TrimeshFaces { get; set; } = new();
 
     public List<MDXBinaryVertex> MDXVertices { get; set; } = new();
 
@@ -213,13 +212,6 @@ public class MDLBinaryNode
                     MDXVertices[i].BoneIndex4 = mdxReader.ReadSingle();
                 }
             }
-
-            reader.SetStreamPosition(TrimeshHeader.OffsetToFaceArray);
-            for (int i = 0; i < TrimeshHeader.FaceArrayCount; i++)
-            {
-                var face = new MDLBinaryTrimeshFace(reader);
-                TrimeshFaces.Add(face);
-            }
         }
     }
 
@@ -393,7 +385,7 @@ public class MDLBinaryNode
             }
 
             writer.SetStreamPosition(TrimeshHeader.OffsetToFaceArray);
-            foreach (var face in TrimeshFaces)
+            foreach (var face in Trimesh.Faces)
             {
                 face.Write(writer);
             }

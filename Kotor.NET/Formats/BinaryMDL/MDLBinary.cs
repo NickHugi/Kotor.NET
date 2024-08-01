@@ -245,16 +245,16 @@ public class MDLBinary
 
         if (node.TrimeshHeader is not null)
         {
+            node.Trimesh.VertexIndiciesCounts = node.Trimesh.VertexIndices.Select(x => x.Count()).ToList();
             node.TrimeshHeader.FaceArrayCount = node.Trimesh.Faces.Count;
             node.TrimeshHeader.FaceArrayCount2 = node.Trimesh.Faces.Count;
             node.TrimeshHeader.InvertedCounterArrayCount = node.Trimesh.InvertedCounters.Count;
             node.TrimeshHeader.InvertedCounterArrayCount2 = node.Trimesh.InvertedCounters.Count;
             node.TrimeshHeader.VertexIndicesCountArrayCount = node.Trimesh.VertexIndiciesCounts.Count;
             node.TrimeshHeader.VertexIndicesCountArrayCount2 = node.Trimesh.VertexIndiciesCounts.Count;
-            node.TrimeshHeader.VertexIndicesOffsetArrayCount = node.Trimesh.VertexIndicesOffsets.Count;
-            node.TrimeshHeader.VertexIndicesOffsetArrayCount2 = node.Trimesh.VertexIndicesOffsets.Count;
+            node.TrimeshHeader.VertexIndicesOffsetArrayCount = node.Trimesh.VertexIndiciesCounts.Count;
+            node.TrimeshHeader.VertexIndicesOffsetArrayCount2 = node.Trimesh.VertexIndiciesCounts.Count;
             node.TrimeshHeader.VertexCount = (ushort)node.Trimesh.Vertices.Count;
-            node.Trimesh.VertexIndiciesCounts = node.Trimesh.VertexIndices.Select(x => x.Count()).ToList();
 
             node.TrimeshHeader.OffsetToFaceArray = offset;
 
@@ -267,10 +267,11 @@ public class MDLBinary
             offset += 4 * node.Trimesh.VertexIndiciesCounts.Count;
             node.TrimeshHeader.OffsetToVertexIndicesOffsetArray = offset;
 
-            offset += 4 * node.Trimesh.VertexIndicesOffsets.Count;
+            offset += 4 * node.Trimesh.VertexIndiciesCounts.Count;
             node.TrimeshHeader.OffsetToVertexArray = offset;
 
             offset += 12 * node.Trimesh.Vertices.Count;
+            node.Trimesh.VertexIndicesOffsets = Enumerable.Range(0, node.Trimesh.VertexIndiciesCounts.Count).ToList();
             for (int i = 0; i < node.Trimesh.VertexIndicesOffsets.Count; i++)
             {
                 node.Trimesh.VertexIndicesOffsets[i] = offset;
@@ -515,6 +516,11 @@ public class MDLBinary
 
         if (node is MDLTrimeshNode trimeshNode)
         {
+            trimeshNode.TotalArea = binaryNode.TrimeshHeader.TotalArea;
+            trimeshNode.Radius = binaryNode.TrimeshHeader.Radius;
+            trimeshNode.BoundingBox = new(binaryNode.TrimeshHeader.BoundingBoxMin, binaryNode.TrimeshHeader.BoundingBoxMax);
+            trimeshNode.AveragePoint = binaryNode.TrimeshHeader.AveragePoint;
+            trimeshNode.IsBackgroundGeometry = binaryNode.TrimeshHeader.BackgroundGeometry > 0;
             trimeshNode.DiffuseTexture = binaryNode.TrimeshHeader.Texture;
             trimeshNode.LightmapTexture = binaryNode.TrimeshHeader.Lightmap;
             trimeshNode.Renders = binaryNode.TrimeshHeader.DoesRender > 0;
@@ -589,7 +595,7 @@ public class MDLBinary
                 },
             }).ToList();
 
-            binaryNode.TrimeshFaces.ForEach(x =>
+            binaryNode.Trimesh.Faces.ForEach(x =>
             {
                 var vertex1 = vertices[x.Vertex1];
                 var vertex2 = vertices[x.Vertex2];
@@ -841,7 +847,80 @@ public class MDLBinary
 
         if (node is MDLTrimeshNode trimeshNode)
         {
-            //binaryNode.NodeHeader.NodeType |= (ushort)MDLBinaryNodeType.TrimeshFlag;
+            binaryNode.NodeHeader.NodeType |= (ushort)MDLBinaryNodeType.TrimeshFlag;
+
+            var vertices = trimeshNode.AllVertices().ToList();
+
+            binaryNode.Trimesh = new()
+            {
+                Faces = trimeshNode.Faces.Select(x => new MDLBinaryTrimeshFace
+                {
+                    Vertex1 = (short)vertices.IndexOf(x.Vertex1),
+                    Vertex2 = (short)vertices.IndexOf(x.Vertex2),
+                    Vertex3 = (short)vertices.IndexOf(x.Vertex3),
+                }).ToList(),
+                VertexIndices = new()
+                {
+                    trimeshNode.Faces.SelectMany(x => new List<ushort>()
+                    {
+                        (ushort)vertices.IndexOf(x.Vertex1),
+                        (ushort)vertices.IndexOf(x.Vertex2),
+                        (ushort)vertices.IndexOf(x.Vertex3),
+                    }).ToList(),
+                },
+                Vertices = vertices.Select(x => x.Position ?? new()).ToList(),
+            };
+
+            binaryNode.TrimeshHeader = new()
+            {
+                FunctionPointer1 = IsTSL ? MDLBinaryTrimeshHeader.K2_NORMAL_FP1 : MDLBinaryTrimeshHeader.K1_NORMAL_FP1,
+                FunctionPointer2 = IsTSL ? MDLBinaryTrimeshHeader.K2_NORMAL_FP2 : MDLBinaryTrimeshHeader.K1_NORMAL_FP2,
+                BoundingBoxMin = trimeshNode.BoundingBox.Min,
+                BoundingBoxMax = trimeshNode.BoundingBox.Max,
+                Radius = trimeshNode.Radius,
+                AveragePoint = trimeshNode.AveragePoint,
+                Diffuse = trimeshNode.Diffuse,
+                Ambient = trimeshNode.Ambient,
+                TransparencyHint = trimeshNode.TransparencyHint,
+                Texture = trimeshNode.DiffuseTexture ?? "",
+                Lightmap = trimeshNode.LightmapTexture ?? "",
+                AnimateUV = Convert.ToByte(trimeshNode.UVSpeed == 0),
+                UVSpeed = trimeshNode.UVSpeed,
+                UVJitterSpeed = trimeshNode.UVJitterSpeed,
+                UVDirection = trimeshNode.UVDirection,
+                VertexCount = (ushort)vertices.Count(),
+                TextureCount = (ushort)(Convert.ToUInt16(trimeshNode.DiffuseTexture != "") + Convert.ToUInt16(trimeshNode.LightmapTexture != "")),
+                HasLightmap = Convert.ToByte(trimeshNode.LightmapTexture != ""),
+                RotateTexture = Convert.ToByte(trimeshNode.RotateTexture),
+                BackgroundGeometry = Convert.ToByte(trimeshNode.IsBackgroundGeometry),
+                HasShadow = Convert.ToByte(trimeshNode.CastsShadow),
+                DoesRender = Convert.ToByte(trimeshNode.Renders),
+                TotalArea = trimeshNode.TotalArea,
+                DirtEnabled = Convert.ToByte(trimeshNode.DirtEnabled),
+                DirtTexture = trimeshNode.DirtTexture,
+                DirtCoordinateSpace = trimeshNode.DirtCoordinateSpace,
+                HideInHolograms = Convert.ToByte(trimeshNode.HideInHologram),
+            };
+
+            binaryNode.MDXVertices = vertices.Select(x => new MDXBinaryVertex
+            {
+                Position = x.Position,
+                Normal = x.Normal,
+                UV1 = x.DiffuseUV,
+                UV2 = x.LightmapUV,
+                Tangent1 = x.Tangent1,
+                Tangent2 = x.Tangent2,
+                Tangent3 = x.Tangent3,
+                Tangent4 = x.Tangent4,
+                BoneIndex1 = x.Skin?.WeightIndex1,
+                BoneIndex2 = x.Skin?.WeightIndex2,
+                BoneIndex3 = x.Skin?.WeightIndex3,
+                BoneIndex4 = x.Skin?.WeightIndex4,
+                BoneWeight1 = x.Skin?.WeightValue1,
+                BoneWeight2 = x.Skin?.WeightValue2,
+                BoneWeight3 = x.Skin?.WeightValue3,
+                BoneWeight4 = x.Skin?.WeightValue4,
+            }).ToList();
         }
         if (node is MDLDanglyNode danglyNode)
         {

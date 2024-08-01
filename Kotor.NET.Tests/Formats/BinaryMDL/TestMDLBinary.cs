@@ -3,6 +3,7 @@ using System.Reflection.PortableExecutable;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Extensions;
 using Kotor.NET.Formats.BinaryMDL;
+using Kotor.NET.Resources.KotorMDL;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Resources;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -158,12 +159,22 @@ public class TestMDLBinary
         var binaryMDL = GetBinaryMDL(File1Filepath);
         var mdl = binaryMDL.Parse();
         var b2 = new MDLBinary();
+        //b2.Unparse(mdl);
+
+        //var c = mdl.Root.Children.ElementAt(8);
+        //mdl.Root.Children.Clear();
+        //mdl.Root.Children.Add(c);
         b2.Unparse(mdl);
 
-        b2.Write(File.OpenWrite(@"C:\Users\hugin\Desktop\ext\test.mdl"), File.OpenWrite(@"C:\Users\hugin\Desktop\ext\test.mdx"));
-        //Assert.That(gff.Root.FieldCount(), Is.EqualTo(3));
-        //Assert.That(gff.Root.GetString("Field0"), Is.EqualTo("text"));
-        //Assert.That(gff.Root.GetList("List0")?.ElementAt(0).ID, Is.EqualTo(5));
-        //Assert.That(gff.Root.GetStruct("Struct0")?.GetUInt8("Field1"), Is.EqualTo(123));
+        var mdlstream = File.OpenWrite(@"C:\Users\hugin\Desktop\ext\test.mdl");
+        var mdxstream = File.OpenWrite(@"C:\Users\hugin\Desktop\ext\test.mdx");
+        b2.Write(mdlstream, mdxstream);
+        mdlstream.Close();
+        mdxstream.Close();
+
+        var abc = GetBinaryMDL(@"C:\Users\hugin\Desktop\ext\test");
+        var remdl = abc.Parse();
+
+
     }
 }

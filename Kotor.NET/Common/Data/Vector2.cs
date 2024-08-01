@@ -21,4 +21,14 @@ public class Vector2
         X = x;
         Y = y;
     }
+
+    public override bool Equals(object? obj)
+    {
+        var vector2 = obj as Vector2;
+
+        if (vector2 is null)
+            return false;
+
+        return vector2.X == X && vector2.Y == Y;
+    }
 }

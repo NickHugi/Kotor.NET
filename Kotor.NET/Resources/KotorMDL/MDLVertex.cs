@@ -52,4 +52,24 @@ public class MDLVertex
             _skin = Skin,
         };
     }
+
+    public override bool Equals(object? obj)
+    {
+        var vertex = obj as MDLVertex;
+
+        if (vertex is null)
+            return false;
+
+        return ((Position is null && vertex.Position is null) || (Position?.Equals(vertex.Position) ?? false))
+            && ((Normal is null && vertex.Normal is null) || (Normal?.Equals(vertex.Normal) ?? false))
+            && ((DiffuseUV is null && vertex.DiffuseUV is null) || (DiffuseUV?.Equals(vertex.DiffuseUV) ?? false))
+            && ((LightmapUV is null && vertex.LightmapUV is null) || (LightmapUV?.Equals(vertex.LightmapUV) ?? false))
+            && ((Tangent1 is null && vertex.Tangent1 is null) || (Tangent1?.Equals(vertex.Tangent1) ?? false))
+            && ((Tangent2 is null && vertex.Tangent2 is null) || (Tangent2?.Equals(vertex.Tangent2) ?? false))
+            && ((Tangent3 is null && vertex.Tangent3 is null) || (Tangent3?.Equals(vertex.Tangent3) ?? false))
+            && ((Tangent4 is null && vertex.Tangent4 is null) || (Tangent4?.Equals(vertex.Tangent4) ?? false));
+            //&& vertex.Saber.Equals(Saber)
+            //&& vertex.Dangly.Equals(Dangly)
+            //&& vertex.Skin.Equals(Skin);
+    }
 }

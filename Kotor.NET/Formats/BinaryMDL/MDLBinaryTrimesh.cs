@@ -33,8 +33,8 @@ public class MDLBinaryTrimesh
         reader.SetStreamPosition(trimeshHeader.OffsetToVertexIndicesCountArray);
         for (int i = 0; i < trimeshHeader.VertexIndicesCountArrayCount; i++)
         {
-            var index = reader.ReadInt32();
-            VertexIndiciesCounts.Add(index);
+            var count = reader.ReadInt32();
+            VertexIndiciesCounts.Add(count);
         }
 
         reader.SetStreamPosition(trimeshHeader.OffsetToVertexIndicesOffsetArray);

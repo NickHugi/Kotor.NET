@@ -23,4 +23,14 @@ public class Vector3
         Y = y;
         Z = z;
     }
+
+    public override bool Equals(object? obj)
+    {
+        var vector3 = obj as Vector3;
+
+        if (vector3 is null)
+            return false;
+
+        return vector3.X == X && vector3.Y == Y && vector3.Z == Z;
+    }
 }

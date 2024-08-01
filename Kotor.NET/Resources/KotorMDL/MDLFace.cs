@@ -13,4 +13,8 @@ public class MDLFace
     public MDLVertex Vertex1 { get; set; } = new();
     public MDLVertex Vertex2 { get; set; } = new();
     public MDLVertex Vertex3 { get; set; } = new();
+
+    public int PlaneCoefficient => throw new NotImplementedException();
+    public int Material => throw new NotImplementedException();
+    public Vector3 Normal => throw new NotImplementedException();
 }

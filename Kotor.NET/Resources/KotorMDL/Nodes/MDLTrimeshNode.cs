@@ -11,6 +11,11 @@ public class MDLTrimeshNode : MDLNode
 {
     public MDLFaceCollection Faces { get; }
 
+    public float TotalArea { get; set; }
+    public float Radius { get; set; }
+    public Vector3 AveragePoint { get; set; }
+    public BoundingBox BoundingBox { get; set; }
+
     public string? DiffuseTexture { get; set; }
     public string? LightmapTexture { get; set; }
 
@@ -18,6 +23,7 @@ public class MDLTrimeshNode : MDLNode
     public bool CastsShadow { get; set; }
     public bool Beaming { get; set; }
     public bool RotateTexture { get; set; }
+    public bool IsBackgroundGeometry { get; set; }
 
     public Vector3 Diffuse { get; set; } = new();
     public Vector3 Ambient { get; set; } = new();
@@ -163,7 +169,14 @@ public class MDLTrimeshNode : MDLNode
 
     public IEnumerable<MDLVertex> AllVertices()
     {
-        return Faces.SelectMany(x => new[] { x.Vertex1, x.Vertex2, x.Vertex3 });
+        var vertices = Faces.SelectMany(x => new[] { x.Vertex1, x.Vertex2, x.Vertex3 });
+        var x = new List<MDLVertex>();
+        foreach (var vertex in vertices)
+        {
+            if (!x.Contains(vertex))
+                x.Add(vertex);
+        }
+        return x;
     }
 
     public override string ToString()
