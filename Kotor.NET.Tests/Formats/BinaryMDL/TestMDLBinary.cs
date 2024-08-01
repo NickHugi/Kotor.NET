@@ -155,7 +155,7 @@ public class TestMDLBinary
     [Test]
     public void Test_ParseFile1()
     {
-        var binaryMDL = GetBinaryMDL(File2Filepath);
+        var binaryMDL = GetBinaryMDL(File1Filepath);
         var mdl = binaryMDL.Parse();
         var b2 = new MDLBinary();
         b2.Unparse(mdl);

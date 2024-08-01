@@ -219,7 +219,7 @@ public class MDLBinary
             node.LightHeader.FlareSizeArrayCount = node.Light.FlareSizes.Count;
             node.LightHeader.FlarePositionArrayCount = node.Light.FlarePositions.Count;
             node.LightHeader.FlareColorShiftArrayCount = node.Light.FlareColourShifts.Count;
-            node.LightHeader.FlareTextureNameCount = node.Light.FlareTextureOffsets.Count;
+            node.LightHeader.FlareTextureNameCount = node.Light.FlareTextureNameOffsets.Count;
 
             node.LightHeader.OffsetToUnknownArray = offset;
 
@@ -238,7 +238,7 @@ public class MDLBinary
             offset += 4 * node.Light.FlareTextures.Count;
             foreach (var name in node.Light.FlareTextures)
             {
-                node.Light.FlareTextureOffsets.Add(offset);
+                node.Light.FlareTextureNameOffsets.Add(offset);
                 offset += name.Length + 1;
             }
         }
@@ -889,7 +889,26 @@ public class MDLBinary
         if (node is MDLLightNode lightNode)
         {
             binaryNode.NodeHeader.NodeType |= (ushort)MDLBinaryNodeType.LightFlag;
+            binaryNode.LightHeader = new()
+            {
+                FlareRadius = lightNode.FlareRadius,
+                LightPriority = lightNode.LightPriority,
+                AmbientOnly = lightNode.AmbientOnly,
+                DynamicType = lightNode.DynamicType,
+                AffectDynamic = lightNode.AffectDynamic,
+                Shadow = lightNode.Shadow,
+                Flare = lightNode.Flare,
+                FadingLight = lightNode.FadingLight,
+            };
 
+            binaryNode.Light = new();
+            lightNode.Flares.ForEach(x =>
+            {
+                binaryNode.Light.FlareSizes.Add(x.Size);
+                binaryNode.Light.FlarePositions.Add(x.Position);
+                binaryNode.Light.FlareColourShifts.Add(x.ColourShift);
+                binaryNode.Light.FlareTextures.Add(x.TextureName);
+            });
         }
         if (node is MDLReferenceNode referenceNode)
         {
