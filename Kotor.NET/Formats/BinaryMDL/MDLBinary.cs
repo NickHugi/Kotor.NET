@@ -148,6 +148,7 @@ public class MDLBinary
 
         FileHeader.MDLSize = offset;
         FileHeader.MDXSize = mdxOffset;
+        ModelHeader.MDXSize = mdxOffset;
     }
     private void Recalculate(MDLBinaryAnimation animation, ref int offset, ref int mdxOffset)
     {
@@ -245,6 +246,48 @@ public class MDLBinary
 
         if (node.TrimeshHeader is not null)
         {
+            // MDX
+            node.TrimeshHeader.MDXDataSize = 0;
+            var hasTangent1 = node.MDXVertices.ElementAtOrDefault(0)?.Tangent1 is not null;
+            var hasTangent2 = node.MDXVertices.ElementAtOrDefault(0)?.Tangent2 is not null;
+            var hasTangent3 = node.MDXVertices.ElementAtOrDefault(0)?.Tangent3 is not null;
+            var hasTangent4 = node.MDXVertices.ElementAtOrDefault(0)?.Tangent4 is not null;
+
+            node.TrimeshHeader.MDXOffsetToData = mdxOffset;
+
+            var hasPosition = node.MDXVertices.ElementAtOrDefault(0)?.Position is not null;
+            node.TrimeshHeader.MDXDataSize += hasPosition ? 12 : 0;
+            node.TrimeshHeader.MDXPositionStride = hasPosition ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataBitmap |= hasPosition ? (uint)MDLBinaryMDXVertexBitmask.Position : 0;
+
+            var hasNormal = node.MDXVertices.ElementAtOrDefault(0)?.Normal is not null;
+            node.TrimeshHeader.MDXDataSize += hasNormal ? 12 : 0;
+            node.TrimeshHeader.MDXNormalStride = hasNormal ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataBitmap |= hasNormal ? (uint)MDLBinaryMDXVertexBitmask.Normals : 0;
+
+            var hasUV1 = node.MDXVertices.ElementAtOrDefault(0)?.UV1 is not null;
+            node.TrimeshHeader.MDXDataSize += hasUV1 ? 8 : 0;
+            node.TrimeshHeader.MDXTexture1Stride = hasUV1 ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataBitmap |= hasUV1 ? (uint)MDLBinaryMDXVertexBitmask.UV1 : 0;
+
+            var hasUV2 = node.MDXVertices.ElementAtOrDefault(0)?.UV2 is not null;
+            node.TrimeshHeader.MDXDataSize += hasUV2 ? 8 : 0;
+            node.TrimeshHeader.MDXTexture2Stride = hasUV2 ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataBitmap |= hasUV2 ? (uint)MDLBinaryMDXVertexBitmask.UV2 : 0;
+
+            var hasUV3 = node.MDXVertices.ElementAtOrDefault(0)?.UV3 is not null;
+            node.TrimeshHeader.MDXDataSize += hasUV3 ? 8 : 0;
+            node.TrimeshHeader.MDXTexture3Stride = hasUV3 ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataBitmap |= hasUV3 ? (uint)MDLBinaryMDXVertexBitmask.UV3 : 0;
+
+            var hasUV4 = node.MDXVertices.ElementAtOrDefault(0)?.UV4 is not null;
+            node.TrimeshHeader.MDXDataSize += hasUV4 ? 8 : 0;
+            node.TrimeshHeader.MDXTexture4Stride = hasUV4 ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataBitmap |= hasUV4 ? (uint)MDLBinaryMDXVertexBitmask.UV4 : 0;
+
+            mdxOffset += node.TrimeshHeader.MDXDataSize * node.MDXVertices.Count();
+
+            // MDL
             node.Trimesh.VertexIndiciesCounts = node.Trimesh.VertexIndices.Select(x => x.Count()).ToList();
             node.TrimeshHeader.FaceArrayCount = node.Trimesh.Faces.Count;
             node.TrimeshHeader.FaceArrayCount2 = node.Trimesh.Faces.Count;
@@ -278,9 +321,6 @@ public class MDLBinary
 
                 offset += 2 * node.Trimesh.VertexIndiciesCounts[i];
             }
-
-            node.TrimeshHeader.MDXOffsetToData = mdxOffset;
-            mdxOffset += node.TrimeshHeader.MDXDataSize * (node.Trimesh.Vertices.Count() + 1);
         }
 
         if (node.SkinmeshHeader is not null)
@@ -372,7 +412,7 @@ public class MDLBinary
         mdl.ModelType = ModelHeader.ModelType;
         mdl.AffectedByFog = ModelHeader.Fog > 0;
         mdl.AnimationScale = ModelHeader.AnimationScale;
-        mdl.Supermodel = ModelHeader.SupermodelName;
+        mdl.SupermodelName = ModelHeader.SupermodelName;
 
         mdl.Animations = Animations.Select(x => ParseAnimation(x)).ToList();
         mdl.Root = ParseNode(RootNode);
@@ -540,7 +580,7 @@ public class MDLBinary
 
             var vertexBitmap = (MDLBinaryMDXVertexBitmask)binaryNode.TrimeshHeader.MDXDataBitmap;
 
-            if (vertexBitmap.HasFlag(MDLBinaryMDXVertexBitmask.Vertices))
+            if (vertexBitmap.HasFlag(MDLBinaryMDXVertexBitmask.Position))
             {
                 trimeshNode.EnableVertices();
             }
@@ -799,7 +839,7 @@ public class MDLBinary
         ModelHeader.BoundingBoxMax = mdl.BoundingBox.Max;
         ModelHeader.Radius = mdl.Radius;
         ModelHeader.AnimationScale = mdl.AnimationScale;
-        ModelHeader.SupermodelName = mdl.Supermodel;
+        ModelHeader.SupermodelName = mdl.SupermodelName;
 
         Names =
         [
@@ -921,6 +961,26 @@ public class MDLBinary
                 BoneWeight3 = x.Skin?.WeightValue3,
                 BoneWeight4 = x.Skin?.WeightValue4,
             }).ToList();
+
+            binaryNode.MDXVertices.Add(new()
+            {
+                Position = trimeshNode.HasPositions() ? new() : null,
+                Normal = trimeshNode.HasNormals() ? new() : null,
+                UV1 = trimeshNode.HasDiffuseUVs() ? new() : null,
+                UV2 = trimeshNode.HasLightmapUVs() ? new() : null,
+                Tangent1 = trimeshNode.HasTangents() ? new() : null,
+                Tangent2 = trimeshNode.HasTangents() ? new() : null,
+                Tangent3 = trimeshNode.HasTangents() ? new() : null,
+                Tangent4 = trimeshNode.HasTangents() ? new() : null,
+                BoneIndex1 = (node is MDLSkinNode) ? new() : null,
+                BoneIndex2 = (node is MDLSkinNode) ? new() : null,
+                BoneIndex3 = (node is MDLSkinNode) ? new() : null,
+                BoneIndex4 = (node is MDLSkinNode) ? new() : null,
+                BoneWeight1 = (node is MDLSkinNode) ? new() : null,
+                BoneWeight2 = (node is MDLSkinNode) ? new() : null,
+                BoneWeight3 = (node is MDLSkinNode) ? new() : null,
+                BoneWeight4 = (node is MDLSkinNode) ? new() : null,
+            });
         }
         if (node is MDLDanglyNode danglyNode)
         {

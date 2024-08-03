@@ -9,7 +9,7 @@ namespace Kotor.NET.Formats.BinaryMDL;
 [Flags]
 public enum MDLBinaryMDXVertexBitmask : uint
 {
-    Vertices    = 0b00000000001,
+    Position    = 0b00000000001,
     UV1         = 0b00000000010,
     UV2         = 0b00000000100,
     UV3         = 0b00000001000,

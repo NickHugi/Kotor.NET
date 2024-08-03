@@ -141,7 +141,7 @@ public class MDLBinaryNode
             {
                 MDXVertices.Add(new());
 
-                if ((TrimeshHeader.MDXDataBitmap & (uint)MDLBinaryMDXVertexBitmask.Vertices) != 0)
+                if ((TrimeshHeader.MDXDataBitmap & (uint)MDLBinaryMDXVertexBitmask.Position) != 0)
                 {
                     mdxReader.BaseStream.Position = TrimeshHeader.MDXOffsetToData + TrimeshHeader.MDXDataSize * i + TrimeshHeader.MDXPositionStride;
                     MDXVertices[i].Position = mdxReader.ReadVector3();
@@ -312,7 +312,7 @@ public class MDLBinaryNode
         {
             for (int i = 0; i < MDXVertices.Count; i++)
             {
-                if ((TrimeshHeader.MDXDataBitmap & (uint)MDLBinaryMDXVertexBitmask.Vertices) != 0)
+                if ((TrimeshHeader.MDXDataBitmap & (uint)MDLBinaryMDXVertexBitmask.Position) != 0)
                 {
                     mdxWriter.BaseStream.Position = TrimeshHeader.MDXOffsetToData + TrimeshHeader.MDXDataSize * i + TrimeshHeader.MDXPositionStride;
                     mdxWriter.Write(MDXVertices[i].Position!);

@@ -12,12 +12,13 @@ public class MDL
 {
     public List<MDLAnimation> Animations = new();
 
+    public MDL? Supermodel { get; set; }
     public MDLNode Root { get; set; } = new MDLNode("root");
 
     public byte ModelType { get; set; }
     public bool AffectedByFog { get; set; }
     public float AnimationScale { get; set; } = 1;
-    public string Supermodel { get; set; } = "NULL";
+    public string SupermodelName { get; set; } = "NULL";
     public string Name { get; set; } = "model";
 
     public BoundingBox BoundingBox { get; set; } = new();
