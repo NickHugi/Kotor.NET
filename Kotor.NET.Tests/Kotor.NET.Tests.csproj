@@ -111,6 +111,9 @@
     <None Update="Resources\KotorUTE\file1.ute">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\KotorUTI\file1.uti">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\KotorUTM\test1.utm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
