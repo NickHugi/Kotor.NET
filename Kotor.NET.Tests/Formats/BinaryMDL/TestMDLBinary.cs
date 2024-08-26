@@ -4,6 +4,7 @@ using Kotor.NET.Common.Data;
 using Kotor.NET.Extensions;
 using Kotor.NET.Formats.BinaryMDL;
 using Kotor.NET.Resources.KotorMDL;
+using Kotor.NET.Resources.KotorMDL.Nodes;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Resources;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -158,6 +159,18 @@ public class TestMDLBinary
     {
         var binaryMDL = GetBinaryMDL(File1Filepath);
         var mdl = binaryMDL.Parse();
+        mdl.Root.Children.RemoveRange(10, mdl.Root.Children.Count-10);
+        mdl.Root.Children = mdl.Root.Children.Where(x => x is not MDLWalkmeshNode).ToList();
+        mdl.Root.Children = mdl.Root.Children.Where(x => x is not MDLLightNode).ToList();
+        foreach (var item in mdl.Root.GetAllAncestors())
+        {
+            if (mdl.Root.Children.Contains(item))
+                item.Children.Clear();
+            //item.Children = item.Children.Where(x => x is not MDLDanglyNode).ToList();
+            //item.Children = item.Children.Where(x => x is not MDLWalkmeshNode).ToList();
+            //item.Children = item.Children.Where(x => x is not MDLLightNode).ToList();
+        }
+
         var b2 = new MDLBinary();
         //b2.Unparse(mdl);
 

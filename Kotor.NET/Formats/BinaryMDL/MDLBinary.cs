@@ -146,7 +146,7 @@ public class MDLBinary
         ModelHeader.GeometryHeader.RootNodeOffset = offset;
         Recalculate(RootNode, ref offset, ref mdxOffset, 0, 0);
 
-        FileHeader.MDLSize = offset;
+        FileHeader.MDLSize = offset+12;
         FileHeader.MDXSize = mdxOffset;
         ModelHeader.MDXSize = mdxOffset;
     }
@@ -248,42 +248,60 @@ public class MDLBinary
         {
             // MDX
             node.TrimeshHeader.MDXDataSize = 0;
-            var hasTangent1 = node.MDXVertices.ElementAtOrDefault(0)?.Tangent1 is not null;
-            var hasTangent2 = node.MDXVertices.ElementAtOrDefault(0)?.Tangent2 is not null;
-            var hasTangent3 = node.MDXVertices.ElementAtOrDefault(0)?.Tangent3 is not null;
-            var hasTangent4 = node.MDXVertices.ElementAtOrDefault(0)?.Tangent4 is not null;
 
             node.TrimeshHeader.MDXOffsetToData = mdxOffset;
 
             var hasPosition = node.MDXVertices.ElementAtOrDefault(0)?.Position is not null;
-            node.TrimeshHeader.MDXDataSize += hasPosition ? 12 : 0;
             node.TrimeshHeader.MDXPositionStride = hasPosition ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataSize += hasPosition ? 12 : 0;
             node.TrimeshHeader.MDXDataBitmap |= hasPosition ? (uint)MDLBinaryMDXVertexBitmask.Position : 0;
 
             var hasNormal = node.MDXVertices.ElementAtOrDefault(0)?.Normal is not null;
-            node.TrimeshHeader.MDXDataSize += hasNormal ? 12 : 0;
             node.TrimeshHeader.MDXNormalStride = hasNormal ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataSize += hasNormal ? 12 : 0;
             node.TrimeshHeader.MDXDataBitmap |= hasNormal ? (uint)MDLBinaryMDXVertexBitmask.Normals : 0;
 
+            node.TrimeshHeader.MDXColourStride = -1;
+
             var hasUV1 = node.MDXVertices.ElementAtOrDefault(0)?.UV1 is not null;
-            node.TrimeshHeader.MDXDataSize += hasUV1 ? 8 : 0;
             node.TrimeshHeader.MDXTexture1Stride = hasUV1 ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataSize += hasUV1 ? 8 : 0;
             node.TrimeshHeader.MDXDataBitmap |= hasUV1 ? (uint)MDLBinaryMDXVertexBitmask.UV1 : 0;
 
             var hasUV2 = node.MDXVertices.ElementAtOrDefault(0)?.UV2 is not null;
-            node.TrimeshHeader.MDXDataSize += hasUV2 ? 8 : 0;
             node.TrimeshHeader.MDXTexture2Stride = hasUV2 ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataSize += hasUV2 ? 8 : 0;
             node.TrimeshHeader.MDXDataBitmap |= hasUV2 ? (uint)MDLBinaryMDXVertexBitmask.UV2 : 0;
 
             var hasUV3 = node.MDXVertices.ElementAtOrDefault(0)?.UV3 is not null;
-            node.TrimeshHeader.MDXDataSize += hasUV3 ? 8 : 0;
             node.TrimeshHeader.MDXTexture3Stride = hasUV3 ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataSize += hasUV3 ? 8 : 0;
             node.TrimeshHeader.MDXDataBitmap |= hasUV3 ? (uint)MDLBinaryMDXVertexBitmask.UV3 : 0;
 
             var hasUV4 = node.MDXVertices.ElementAtOrDefault(0)?.UV4 is not null;
-            node.TrimeshHeader.MDXDataSize += hasUV4 ? 8 : 0;
             node.TrimeshHeader.MDXTexture4Stride = hasUV4 ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataSize += hasUV4 ? 8 : 0;
             node.TrimeshHeader.MDXDataBitmap |= hasUV4 ? (uint)MDLBinaryMDXVertexBitmask.UV4 : 0;
+
+            var hasTangent1 = node.MDXVertices.ElementAtOrDefault(0)?.Tangent1 is not null;
+            node.TrimeshHeader.MDXTangent1Stride = hasTangent1 ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataSize += hasTangent1 ? 8 : 0;
+            node.TrimeshHeader.MDXDataBitmap |= hasTangent1 ? (uint)MDLBinaryMDXVertexBitmask.Tangent1 : 0;
+
+            var hasTangent2 = node.MDXVertices.ElementAtOrDefault(0)?.Tangent2 is not null;
+            node.TrimeshHeader.MDXTangent2Stride = hasTangent2 ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataSize += hasTangent2 ? 8 : 0;
+            node.TrimeshHeader.MDXDataBitmap |= hasTangent2 ? (uint)MDLBinaryMDXVertexBitmask.Tangent2 : 0;
+
+            var hasTangent3 = node.MDXVertices.ElementAtOrDefault(0)?.Tangent3 is not null;
+            node.TrimeshHeader.MDXTangent3Stride = hasTangent3 ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataSize += hasTangent3 ? 8 : 0;
+            node.TrimeshHeader.MDXDataBitmap |= hasTangent3 ? (uint)MDLBinaryMDXVertexBitmask.Tangent3 : 0;
+
+            var hasTangent4 = node.MDXVertices.ElementAtOrDefault(0)?.Tangent4 is not null;
+            node.TrimeshHeader.MDXTangent4Stride = hasTangent4 ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataSize += hasTangent4 ? 8 : 0;
+            node.TrimeshHeader.MDXDataBitmap |= hasTangent4 ? (uint)MDLBinaryMDXVertexBitmask.Tangent4 : 0;
 
             mdxOffset += node.TrimeshHeader.MDXDataSize * node.MDXVertices.Count();
 
@@ -962,6 +980,7 @@ public class MDLBinary
                 BoneWeight4 = x.Skin?.WeightValue4,
             }).ToList();
 
+            // TODO - accurate mdx
             binaryNode.MDXVertices.Add(new()
             {
                 Position = trimeshNode.HasPositions() ? new() : null,
