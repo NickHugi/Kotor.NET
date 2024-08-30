@@ -96,6 +96,9 @@
     <None Update="Formats\BinaryTwoDA\file1.2da">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\KotorARE\file1.are">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\KotorIFO\file1.ifo">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
