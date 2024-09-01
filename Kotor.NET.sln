@@ -11,6 +11,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{04B783EF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kotor.NET.Tests", "Kotor.NET.Tests\Kotor.NET.Tests.csproj", "{2FC92864-5298-4B55-90D7-A35C2D51345A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kotor.NET.Graphics", "Kotor.NET.Graphics\Kotor.NET.Graphics.csproj", "{D7B54ADE-8F66-4C42-8980-10E1C49F4A55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kotor.NET.Graphics.OpenGL", "Kotor.NET.Graphics.OpenGL\Kotor.NET.Graphics.OpenGL.csproj", "{32559C1E-FA8B-4383-A046-E6D9834F91C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +29,14 @@ Global
 		{2FC92864-5298-4B55-90D7-A35C2D51345A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FC92864-5298-4B55-90D7-A35C2D51345A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FC92864-5298-4B55-90D7-A35C2D51345A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7B54ADE-8F66-4C42-8980-10E1C49F4A55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7B54ADE-8F66-4C42-8980-10E1C49F4A55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7B54ADE-8F66-4C42-8980-10E1C49F4A55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7B54ADE-8F66-4C42-8980-10E1C49F4A55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32559C1E-FA8B-4383-A046-E6D9834F91C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32559C1E-FA8B-4383-A046-E6D9834F91C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32559C1E-FA8B-4383-A046-E6D9834F91C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32559C1E-FA8B-4383-A046-E6D9834F91C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +44,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{B6AE5212-B5E3-45FD-BA25-E6DC00CBE79D} = {5A80EBC7-36DC-4E56-A52B-3C3547E0F912}
 		{2FC92864-5298-4B55-90D7-A35C2D51345A} = {04B783EF-93EC-4A15-ADD4-0BF8C60EDA75}
+		{D7B54ADE-8F66-4C42-8980-10E1C49F4A55} = {5A80EBC7-36DC-4E56-A52B-3C3547E0F912}
+		{32559C1E-FA8B-4383-A046-E6D9834F91C5} = {5A80EBC7-36DC-4E56-A52B-3C3547E0F912}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C3B4FE44-EA0E-476F-8106-438E6CC691A7}
