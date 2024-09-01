@@ -138,4 +138,8 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resources\KotorSSF\" />
+  </ItemGroup>
+
 </Project>
