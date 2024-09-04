@@ -140,6 +140,7 @@
 
   <ItemGroup>
     <Folder Include="Resources\KotorSSF\" />
+    <Folder Include="Resources\KotorTLK\" />
   </ItemGroup>
 
 </Project>
