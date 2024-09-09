@@ -44,7 +44,7 @@ public class TestERFBinary
         binaryERF.FileHeader.EntryCount = Int32.MinValue;
         binaryERF.FileHeader.OffsetToKeyList = Int32.MinValue;
         binaryERF.FileHeader.OffsetToResourceList = Int32.MinValue;
-        binaryERF.ResourceEntries.ForEach(x => x.Offset = Int32.MinValue);
+        binaryERF.ResourceEntries.Clear();
         binaryERF.Recalculate();
 
         var stream = new MemoryStream();
