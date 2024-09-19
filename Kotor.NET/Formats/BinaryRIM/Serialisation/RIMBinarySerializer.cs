@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Resources.KotorRIM;
 
-namespace Kotor.NET.Formats.BinaryRIM;
+namespace Kotor.NET.Formats.BinaryRIM.Serialisation;
 
 public class RIMBinarySerializer
 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.NET.Formats.BinarySFF.Serialisation;
 using Kotor.NET.Formats.BinarySSF;
 
 namespace Kotor.NET.Resources.KotorSSF;

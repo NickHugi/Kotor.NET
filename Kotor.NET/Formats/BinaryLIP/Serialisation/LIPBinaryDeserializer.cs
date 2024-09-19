@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Resources.KotorLIP;
 
-namespace Kotor.NET.Formats.BinaryLIP;
+namespace Kotor.NET.Formats.BinaryLIP.Serialisation;
 
 public class LIPBinaryDeserializer
 {

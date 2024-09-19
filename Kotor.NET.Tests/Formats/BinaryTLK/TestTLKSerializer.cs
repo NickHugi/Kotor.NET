@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Formats.BinaryTLK;
+using Kotor.NET.Formats.BinaryTLK.Serialisation;
 using Kotor.NET.Resources.KotorTLK;
 
 namespace Kotor.NET.Tests.Formats.BinaryTLK;

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Resources.KotorLYT;
 
-namespace Kotor.NET.Formats.AsciiLYT;
+namespace Kotor.NET.Formats.AsciiLYT.Serialisation;
 
 public class LYTAsciiDeserializer
 {

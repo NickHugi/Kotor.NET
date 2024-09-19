@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Kotor.NET.Formats.BinarySSF;
 using Kotor.NET.Resources.KotorSSF;
 
-namespace Kotor.NET.Formats.BinarySSF;
+namespace Kotor.NET.Formats.BinarySFF.Serialisation;
 
 public class SSFBinarySerializer
 {
@@ -54,7 +54,7 @@ public class SSFBinarySerializer
         binary.SoundList.Sounds[SSFBinarySoundIndex.Poisoned] = _ssf.Poisoned;
 
         binary.Recalculate();
-        
+
         return binary;
     }
 }

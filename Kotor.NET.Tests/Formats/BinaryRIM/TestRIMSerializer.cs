@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Formats.BinaryRIM;
+using Kotor.NET.Formats.BinaryRIM.Serialisation;
 using Kotor.NET.Resources.KotorRIM;
 
 namespace Kotor.NET.Tests.Formats.BinaryRIM;

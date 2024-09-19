@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Formats.BinaryLIP;
+using Kotor.NET.Formats.BinaryLIP.Serialisation;
 using Kotor.NET.Resources.KotorLIP;
 
 namespace Kotor.NET.Tests.Formats.BinaryLIP;

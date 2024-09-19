@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Resources.KotorTLK;
 
-namespace Kotor.NET.Formats.BinaryTLK;
+namespace Kotor.NET.Formats.BinaryTLK.Serialisation;
 
 public class TLKBinarySerializer
 {

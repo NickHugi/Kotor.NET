@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Formats.AsciiLYT;
+using Kotor.NET.Formats.AsciiLYT.Serialisation;
 using Kotor.NET.Resources.KotorLYT;
 
 namespace Kotor.NET.Tests.Formats.AsciiLYT;

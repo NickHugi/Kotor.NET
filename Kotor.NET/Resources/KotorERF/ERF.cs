@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Formats.BinaryERF;
+using Kotor.NET.Formats.BinaryERF.Serialisation;
 
 namespace Kotor.NET.Resources.KotorERF;
 

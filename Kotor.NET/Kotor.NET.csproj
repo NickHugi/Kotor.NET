@@ -7,8 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Formats\AsciiVIS\" />
     <Folder Include="Formats\AsciiTXI\" />
+    <Folder Include="Formats\Binary2DA\Serialisation\" />
+    <Folder Include="Formats\BinaryBIF\Serialisation\" />
+    <Folder Include="Formats\BinaryBWM\Serialisation\" />
+    <Folder Include="Formats\BinaryGFF\Serialisation\" />
+    <Folder Include="Formats\BinaryKEY\Serialisation\" />
+    <Folder Include="Formats\BinaryLTR\Serialisation\" />
+    <Folder Include="Formats\BinaryMDL\Serialisation\" />
+    <Folder Include="Formats\BinaryNCS\Serialisation\" />
+    <Folder Include="Formats\BinaryTGA\Serialisation\" />
+    <Folder Include="Formats\BinaryTPC\Serialisation\" />
   </ItemGroup>
 
   <ItemGroup>

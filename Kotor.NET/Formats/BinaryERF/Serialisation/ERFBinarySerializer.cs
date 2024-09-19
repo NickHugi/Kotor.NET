@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Resources.KotorERF;
 
-namespace Kotor.NET.Formats.BinaryERF;
+namespace Kotor.NET.Formats.BinaryERF.Serialisation;
 
 public class ERFBinarySerializer
 {
