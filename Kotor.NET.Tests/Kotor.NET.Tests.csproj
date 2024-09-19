@@ -24,6 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Formats\AsciiLYT\file1.lyt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Formats\BinaryBIF\file1.bif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
