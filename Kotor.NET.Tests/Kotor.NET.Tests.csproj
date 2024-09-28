@@ -28,6 +28,18 @@
     <None Update="Formats\AsciiLYT\file1.lyt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Formats\AsciiTXI\arturo.txi">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Formats\AsciiTXI\font.txi">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Formats\AsciiTXI\lightmap.txi">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Formats\AsciiTXI\normalmap.txi">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Formats\AsciiVIS\file1.vis">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Formats\AsciiTXI\" />
     <Folder Include="Formats\Binary2DA\Serialisation\" />
     <Folder Include="Formats\BinaryBIF\Serialisation\" />
     <Folder Include="Formats\BinaryBWM\Serialisation\" />
