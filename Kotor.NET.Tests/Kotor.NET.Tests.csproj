@@ -43,6 +43,9 @@
     <None Update="Formats\AsciiVIS\file1.vis">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Formats\Binary2DA\file1.2da">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Formats\BinaryBIF\file1.bif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
