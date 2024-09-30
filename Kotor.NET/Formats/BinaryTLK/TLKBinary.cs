@@ -21,8 +21,6 @@ public class TLKBinary
 
     public TLKBinary(Stream stream)
     {
-        var writer = new BinaryWriter(stream);
-
         var reader = new BinaryReader(stream);
         FileHeader = new TLKBinaryFileHeader(reader);
 
@@ -39,8 +37,10 @@ public class TLKBinary
         }
     }
 
-    public void Write(BinaryWriter writer)
+    public void Write(Stream stream)
     {
+        var writer = new BinaryWriter(stream);
+
         FileHeader.Write(writer);
 
         foreach (var stringData in Entries)
@@ -58,15 +58,15 @@ public class TLKBinary
     {
         FileHeader.EntryCount = Entries.Count;
 
-        var offset = TLKBinaryFileHeader.SIZE;
+        var offset = TLKBinaryFileHeader.SIZE + (TLKBinaryEntry.SIZE * Entries.Count());
         FileHeader.OffsetToEntries = offset;
 
-        offset += TLKBinaryFileHeader.SIZE * Entries.Count();
+        var offsetToString = 0;
         for (int i = 0; i < Entries.Count; i++)
         {
             Entries[i].StringSize = Strings[i].Length;
-            Entries[i].OffsetToString = offset;
-            offset += Strings[i].Length;
+            Entries[i].OffsetToString = offsetToString;
+            offsetToString += Strings[i].Length;
         }
     }
 }

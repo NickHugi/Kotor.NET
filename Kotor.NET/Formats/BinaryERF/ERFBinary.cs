@@ -76,11 +76,15 @@ public class ERFBinary
         offset += KeyEntries.Count * ERFBinaryKeyEntry.SIZE;
         FileHeader.OffsetToResourceList = offset;
 
-        offset += ResourceEntries.Count * ERFBinaryResourceEntry.SIZE;
+        offset += KeyEntries.Count * ERFBinaryResourceEntry.SIZE;
+        ResourceEntries.Clear();
         for (int i = 0; i < ResourceData.Count; i++)
         {
-            ResourceEntries[i].Offset = offset;
-            ResourceEntries[i].Size = ResourceData[i].Length;
+            ResourceEntries.Add(new ERFBinaryResourceEntry
+            {
+                Offset = offset,
+                Size = ResourceData[i].Length,
+            });
             offset += ResourceData[i].Length;
         }
     }

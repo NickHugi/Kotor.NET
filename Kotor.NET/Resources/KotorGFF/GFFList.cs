@@ -32,6 +32,11 @@ public class GFFList : IList<GFFStruct>
     public void RemoveAt(int index) => _structs.RemoveAt(index);
     IEnumerator IEnumerable.GetEnumerator() => _structs.GetEnumerator();
 
+    public IEnumerable<GFFStruct> OfStructID(uint structID)
+    {
+        return _structs.Where(x => x.ID == structID);
+    }
+
     public override string ToString()
     {
         return "Count=" + _structs.Count();

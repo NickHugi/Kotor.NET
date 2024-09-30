@@ -2,6 +2,7 @@ using System.Reflection.PortableExecutable;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Formats.BinaryRIM;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Resources;
+using Xunit;
 
 namespace Kotor.NET.Tests.Formats.BinaryRIM;
 
@@ -9,39 +10,33 @@ public class TestRIMBinary
 {
     public static readonly string File1Filepath = "Formats/BinaryRIM/file1.rim";
 
-    [SetUp]
-    public void Setup()
-    {
-        
-    }
-
     private RIMBinary GetBinaryRIM(byte[] data)
     {
         return new RIMBinary(new MemoryStream(data));
     }
    
-    [Test]
+    [Fact]
     public void Test_ReadFile1()
     {
         var binaryRIM = GetBinaryRIM(File.ReadAllBytes(File1Filepath));
 
-        Assert.That(binaryRIM.FileHeader.FileType, Is.EqualTo("RIM "), "File type was not read correctly.");
-        Assert.That(binaryRIM.FileHeader.FileVersion, Is.EqualTo("V1.0"), "File version was not read correctly.");
+        Assert.Equal("RIM ", binaryRIM.FileHeader.FileType);
+        Assert.Equal("V1.0", binaryRIM.FileHeader.FileVersion);
 
-        Assert.That(binaryRIM.ResourceEntries.Count, Is.EqualTo(2), "Resource entries list did not build correctly.");
+        Assert.Equal(2, binaryRIM.ResourceEntries.Count);
 
-        var key0 = binaryRIM.ResourceEntries.ElementAt(0);
-        Assert.That(key0.ResourceID, Is.EqualTo(0));
-        Assert.That(key0.ResourceTypeID, Is.EqualTo(ResourceType.MDL.ID));
-        Assert.That(key0.ResRef.Get(), Is.EqualTo("test"));
+        var resource0 = binaryRIM.ResourceEntries.ElementAt(0);
+        Assert.Equal(0, resource0.ResourceID);
+        Assert.Equal(resource0.ResourceTypeID, ResourceType.MDL.ID);
+        Assert.Equal("test", resource0.ResRef.Get());
 
-        var key1 = binaryRIM.ResourceEntries.ElementAt(1);
-        Assert.That(key1.ResourceID, Is.EqualTo(1));
-        Assert.That(key1.ResourceTypeID, Is.EqualTo(ResourceType.MDX.ID));
-        Assert.That(key1.ResRef.Get(), Is.EqualTo("test"));
+        var resource1 = binaryRIM.ResourceEntries.ElementAt(1);
+        Assert.Equal(1, resource1.ResourceID);
+        Assert.Equal(resource1.ResourceTypeID, ResourceType.MDX.ID);
+        Assert.Equal("test", resource1.ResRef.Get());
     }
 
-    [Test]
+    [Fact]
     public void Test_RecalculateFile1()
     {
         var binaryRIM = GetBinaryRIM(File.ReadAllBytes(File1Filepath));
@@ -55,15 +50,15 @@ public class TestRIMBinary
         binaryRIM.Write(stream);
 
 
-        Assert.That(binaryRIM.FileHeader.ResourceCount, Is.EqualTo(2));
+        Assert.Equal(2, binaryRIM.FileHeader.ResourceCount);
 
         stream.Position = binaryRIM.FileHeader.OffsetToResources;
         var resource0 = new RIMBinaryResourceEntry(reader);
-        Assert.That(resource0.ResourceID, Is.EqualTo(0));
-        Assert.That(resource0.ResourceTypeID, Is.EqualTo(ResourceType.MDL.ID));
-        Assert.That(resource0.ResRef.Get(), Is.EqualTo("test"));
-        Assert.That(resource0.Offset, Is.EqualTo(binaryRIM.ResourceEntries[0].Offset));
-        Assert.That(resource0.Size, Is.EqualTo(binaryRIM.ResourceEntries[0].Size));
+        Assert.Equal(0, resource0.ResourceID);
+        Assert.Equal(resource0.ResourceTypeID, ResourceType.MDL.ID);
+        Assert.Equal("test", resource0.ResRef.Get());
+        Assert.Equal(resource0.Offset, binaryRIM.ResourceEntries[0].Offset);
+        Assert.Equal(resource0.Size, binaryRIM.ResourceEntries[0].Size);
     }
 
 }

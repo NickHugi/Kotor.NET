@@ -2,6 +2,7 @@ using System.Reflection.PortableExecutable;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Formats.BinarySSF;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Resources;
+using Xunit;
 
 namespace Kotor.NET.Tests.Formats.BinarySSF;
 
@@ -9,35 +10,29 @@ public class TestSSFBinary
 {
     public static readonly string File1Filepath = "Formats/BinarySSF/file1.ssf";
 
-    [SetUp]
-    public void Setup()
-    {
-        
-    }
-
     private SSFBinary GetBinarySSF(byte[] data)
     {
         return new SSFBinary(new MemoryStream(data));
     }
    
-    [Test]
+    [Fact]
     public void Test_ReadFile1()
     {
         var binarySSF = GetBinarySSF(File.ReadAllBytes(File1Filepath));
 
-        Assert.That(binarySSF.FileHeader.FileType, Is.EqualTo("SSF "));
-        Assert.That(binarySSF.FileHeader.FileVersion, Is.EqualTo("V1.1"));
+        Assert.Equal("SSF ", binarySSF.FileHeader.FileType);
+        Assert.Equal("V1.1", binarySSF.FileHeader.FileVersion);
 
-        Assert.That(binarySSF.SoundList.Sounds.Length, Is.EqualTo(40), "Key frame list did not build correctly.");
+        Assert.Equal(40, binarySSF.SoundList.Sounds.Length);
 
         for (int i = 0; i < 28; i ++)
         {
             var strref = 123075 - i;
-            Assert.That(binarySSF.SoundList.Sounds[i], Is.EqualTo(strref));
+            Assert.Equal((int)binarySSF.SoundList.Sounds.ElementAt(i), strref);
         }
     }
 
-    [Test]
+    [Fact]
     public void Test_RecalculateFile1()
     {
         var binarySSF = GetBinarySSF(File.ReadAllBytes(File1Filepath));
@@ -50,11 +45,11 @@ public class TestSSFBinary
         binarySSF.Write(stream);
 
 
-        Assert.That(binarySSF.SoundList.Sounds.Length, Is.EqualTo(40));
+        Assert.Equal(40, binarySSF.SoundList.Sounds.Length);
 
         stream.Position = binarySSF.FileHeader.OffsetToSounds;
         var soundList = new SSFBinarySoundList(reader);
-        Assert.That(soundList.Sounds[0], Is.EqualTo(4294967295));
+        Assert.Equal(4294967295, soundList.Sounds[0]);
     }
 
 }

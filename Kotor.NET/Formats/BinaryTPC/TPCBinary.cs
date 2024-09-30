@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Extensions;
+using Kotor.NET.Resources.KotorTPC;
 
 namespace Kotor.NET.Formats.BinaryTPC;
 
@@ -21,7 +22,7 @@ public class TPCBinary
         var reader = new BinaryReader(stream);
         FileHeader = new TPCBinaryFileHeader(reader);
 
-        var layerCount   = FileHeader.CubeMap ? 6 : 1;
+        var layerCount = FileHeader.CubeMap ? 6 : 1;
         Layers = Enumerable.Range(0, layerCount).Select(x => new TPCBinaryLayer()).ToList();
 
         var mipmapHeight = FileHeader.CubeMap ? FileHeader.Width : FileHeader.Height;
