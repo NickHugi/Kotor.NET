@@ -988,7 +988,7 @@ public class MDLBinary
             // TODO - accurate mdx
             binaryNode.MDXVertices.Add(new()
             {
-                Position = trimeshNode.HasPositions() ? new() : null,
+                Position = trimeshNode.HasPositions() ? new(1e7f, 1e7f, 1e7f) : null,
                 Normal = trimeshNode.HasNormals() ? new() : null,
                 UV1 = trimeshNode.HasDiffuseUVs() ? new() : null,
                 UV2 = trimeshNode.HasLightmapUVs() ? new() : null,
