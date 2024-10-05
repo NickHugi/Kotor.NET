@@ -17,12 +17,12 @@ public class MDLControllerDataOrientation : BaseMDLControllerData
     public MDLControllerDataOrientation()
     {
     }
-    public MDLControllerDataOrientation(float w, float x, float y, float z)
+    public MDLControllerDataOrientation(float x, float y, float z, float w)
     {
-        W = w;
         X = x;
         Y = y;
         Z = z;
+        W = w;
     }
     public MDLControllerDataOrientation(Vector4 vector4)
     {

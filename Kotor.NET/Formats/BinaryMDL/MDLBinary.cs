@@ -905,7 +905,7 @@ public class MDLBinary
         binaryNode.NodeHeader.NodeIndex = node.NodeIndex;
         binaryNode.NodeHeader.NameIndex = (ushort)Names.IndexOf(node.Name);
         binaryNode.NodeHeader.Position = positionController.IsEmpty ? new() : positionController.First().Data[0].ToVector3();
-        binaryNode.NodeHeader.Orientation = orientationController.IsEmpty ? new() : orientationController.First().Data[0].ToVector4();
+        binaryNode.NodeHeader.Orientation = orientationController.IsEmpty ? new(0, 0, 0, 1) : orientationController.First().Data[0].ToVector4();
 
         if (node is MDLTrimeshNode trimeshNode)
         {

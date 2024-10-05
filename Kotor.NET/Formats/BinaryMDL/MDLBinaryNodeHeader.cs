@@ -63,7 +63,7 @@ public class MDLBinaryNodeHeader
         writer.Write(OffsetToRootNode);
         writer.Write(OffsetToParentNode);
         writer.Write(Position);
-        writer.Write(Orientation);
+        writer.Write(Orientation, true);
         writer.Write(OffsetToChildOffsetArray);
         writer.Write(ChildArrayCount);
         writer.Write(ChildArrayCount2);
