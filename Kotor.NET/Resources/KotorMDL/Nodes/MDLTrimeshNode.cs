@@ -33,6 +33,8 @@ public class MDLTrimeshNode : MDLNode
     public float UVJitterSpeed { get; set; }
     public Vector2 UVDirection { get; set; } = new();
 
+    public int InvertedCounter = 0;
+
     // K2 Only
     public bool HideInHologram { get; set; }
     public bool DirtEnabled { get; set; }

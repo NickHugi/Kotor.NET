@@ -597,6 +597,7 @@ public class MDLBinary
             trimeshNode.DirtEnabled = binaryNode.TrimeshHeader.DirtEnabled > 0;
             trimeshNode.DirtTexture = binaryNode.TrimeshHeader.DirtTexture;
             trimeshNode.DirtCoordinateSpace = binaryNode.TrimeshHeader.DirtCoordinateSpace;
+            trimeshNode.InvertedCounter = binaryNode.Trimesh.InvertedCounters.FirstOrDefault();
 
             var vertexBitmap = (MDLBinaryMDXVertexBitmask)binaryNode.TrimeshHeader.MDXDataBitmap;
 
@@ -930,6 +931,7 @@ public class MDLBinary
                     }).ToList(),
                 },
                 Vertices = vertices.Select(x => x.Position ?? new()).ToList(),
+                InvertedCounters = [trimeshNode.InvertedCounter],
             };
 
             binaryNode.TrimeshHeader = new()
