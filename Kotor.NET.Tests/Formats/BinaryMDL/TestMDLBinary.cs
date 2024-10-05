@@ -174,8 +174,8 @@ public class TestMDLBinary
         //mdl.Root.Children.Add(c);
         b2.Unparse(mdl);
 
-        var mdlstream = File.OpenWrite(@"C:\Users\hugin\Desktop\ext\test.mdl");
-        var mdxstream = File.OpenWrite(@"C:\Users\hugin\Desktop\ext\test.mdx");
+        var mdlstream = File.OpenWrite(@"C:\Program Files (x86)\Steam\steamapps\common\swkotor\Override\m14aa_01c.mdl");
+        var mdxstream = File.OpenWrite(@"C:\Program Files (x86)\Steam\steamapps\common\swkotor\Override\m14aa_01c.mdx");
         b2.Write(mdlstream, mdxstream);
         mdlstream.Close();
         mdxstream.Close();

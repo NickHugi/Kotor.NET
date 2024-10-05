@@ -12,7 +12,6 @@ public class MDLNode
 {
     public string Name { get; set; }
     public ushort NodeIndex { get; set; }
-    //public List<MDLController<BaseMDLControllerData>> Controllers { get; set; }
     public List<MDLNode> Children { get; set; }
 
     internal List<IMDLControllerRow<BaseMDLControllerData>> _controllerRows { get; }
@@ -27,6 +26,12 @@ public class MDLNode
     public MDLController<TData> GetController<TData>() where TData : BaseMDLControllerData
     {
         return new MDLController<TData>(_controllerRows);
+    }
+    public List<MDLController> GetControllers()
+    {
+        var typesControllerData = _controllerRows.Select(x => x.Data.First().GetType()).ToList();
+        var controllers = typesControllerData.Select(x => new MDLController(x, _controllerRows)).ToList();
+        return controllers;
     }
 
     public IEnumerable<MDLNode> GetAllAncestors()

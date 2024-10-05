@@ -897,19 +897,14 @@ public class MDLBinary
     {
         var binaryNode = new MDLBinaryNode();
 
-        //var positionController = node.Controllers.OfType<MDLControllerDataPosition>().OrderBy(x => x.StartTime).FirstOrDefault();
-        //var orientationController = node.Controllers.OfType<MDLControllerDataOrientation>().OrderBy(x => x.StartTime).FirstOrDefault();
-
-        //var zxcv = node._controllerRows.ToLookup(x => x.Data.First().GetType());
-        //var abc = zxcv.FirstOrDefault();
-
-        var abc = node.GetController<MDLControllerDataPosition>();
+        var positionController = node.GetController<MDLControllerDataPosition>();
+        var orientationController = node.GetController<MDLControllerDataOrientation>();
 
         binaryNode.NodeHeader.NodeType = (ushort)MDLBinaryNodeType.NodeFlag;
         binaryNode.NodeHeader.NodeIndex = node.NodeIndex;
         binaryNode.NodeHeader.NameIndex = (ushort)Names.IndexOf(node.Name);
-        binaryNode.NodeHeader.Position = new();//new(positionController?.X ?? 0, positionController?.Y ?? 0, positionController?.Z ?? 0);
-        binaryNode.NodeHeader.Rotation = new();//new(orientationController?.X ?? 0, orientationController?.Y ?? 0, orientationController?.Z ?? 0, orientationController?.W ?? 0);
+        binaryNode.NodeHeader.Position = positionController.IsEmpty ? new() : positionController.First().Data[0].ToVector3();
+        binaryNode.NodeHeader.Orientation = orientationController.IsEmpty ? new() : orientationController.First().Data[0].ToVector4();
 
         if (node is MDLTrimeshNode trimeshNode)
         {
@@ -1096,11 +1091,11 @@ public class MDLBinary
         }
 
         binaryNode.Children = node.Children.Select(x => UnparseNode(x, animation)).ToList();
-        //binaryNode.ControllerHeaders = node.Controllers.Select(x => UnparseController(x, binaryNode.ControllerData, animation)).ToList();
+        binaryNode.ControllerHeaders = node.GetControllers().Select(x => UnparseController(x, binaryNode.ControllerData, animation)).ToList();
 
         return binaryNode;
     }
-    private MDLBinaryControllerHeader UnparseController(MDLController<BaseMDLControllerData> controller, List<byte[]> binaryControllerData, bool animation)
+    private MDLBinaryControllerHeader UnparseController(MDLController controller, List<byte[]> binaryControllerData, bool animation)
     {
         var binaryControllerHeader = new MDLBinaryControllerHeader();
         binaryControllerHeader.FirstKeyOffset = (short)binaryControllerData.Count();
@@ -1117,14 +1112,14 @@ public class MDLBinary
             if (row.IsLinear)
             {
                 UnparseControllerData(row.Data.First(), binaryControllerData);
-                dataType = row.Data.GetType();
+                dataType = controller.Type;
             }
             else if (row.IsBezier)
             {
                 UnparseControllerData(row.Data[0], binaryControllerData);
                 UnparseControllerData(row.Data[1], binaryControllerData);
                 UnparseControllerData(row.Data[2], binaryControllerData);
-                dataType = row.Data[0].GetType();
+                dataType = controller.Type;
             }
         }
 

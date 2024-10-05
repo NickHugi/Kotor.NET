@@ -19,7 +19,7 @@ public class MDLBinaryNodeHeader
     public int OffsetToRootNode { get; set; }
     public int OffsetToParentNode { get; set; }
     public Vector3 Position { get; set; } = new();
-    public Vector4 Rotation { get; set; } = new();
+    public Vector4 Orientation { get; set; } = new();
     public int OffsetToChildOffsetArray { get; set; }
     public int ChildArrayCount { get; set; }
     public int ChildArrayCount2 { get; set; }
@@ -42,7 +42,7 @@ public class MDLBinaryNodeHeader
         OffsetToRootNode = reader.ReadInt32();
         OffsetToParentNode = reader.ReadInt32();
         Position = reader.ReadVector3();
-        Rotation = reader.ReadVector4();
+        Orientation = reader.ReadVector4();
         OffsetToChildOffsetArray = reader.ReadInt32();
         ChildArrayCount = reader.ReadInt32();
         ChildArrayCount2 = reader.ReadInt32();
@@ -63,7 +63,7 @@ public class MDLBinaryNodeHeader
         writer.Write(OffsetToRootNode);
         writer.Write(OffsetToParentNode);
         writer.Write(Position);
-        writer.Write(Rotation);
+        writer.Write(Orientation);
         writer.Write(OffsetToChildOffsetArray);
         writer.Write(ChildArrayCount);
         writer.Write(ChildArrayCount2);
