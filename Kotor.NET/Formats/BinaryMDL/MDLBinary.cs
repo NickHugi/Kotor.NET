@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.PortableExecutable;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Extensions;
 using Kotor.NET.Resources.KotorMDL;
@@ -667,12 +669,12 @@ public class MDLBinary
             }
         }
 
-        node.Controllers = binaryNode.ControllerHeaders.Select(x => ParseController(binaryNode, x)).ToList();
+        node._controllerRows.AddRange(binaryNode.ControllerHeaders.SelectMany(x => ParseController(binaryNode, x)).ToList());
         node.Children = binaryNode.Children.Select(x => ParseNode(x)).ToList();
         node.NodeIndex = binaryNode.NodeHeader.NodeIndex;
         return node;
     }
-    private MDLController<BaseMDLControllerRow<BaseMDLControllerData>> ParseController(MDLBinaryNode binaryNode, MDLBinaryControllerHeader binaryController)
+    private List<IMDLControllerRow<BaseMDLControllerData>> ParseController(MDLBinaryNode binaryNode, MDLBinaryControllerHeader binaryController)
     {
         var nodeType = (MDLBinaryNodeType)binaryNode.NodeHeader.NodeType;
         var controllerType = (MDLBinaryControllerType)binaryController.ControllerType;
@@ -690,27 +692,28 @@ public class MDLBinary
             .Select(x => BitConverter.ToSingle(x))
             .ToList();
 
-        var controller = new MDLController<BaseMDLControllerRow<BaseMDLControllerData>>();
-        controller.Rows = Enumerable
+        return Enumerable
             .Range(0, binaryController.RowCount)
-            .ToList()
             .Select(x => ParseControllerRow(nodeType, controllerType, columnCount, bezier, times[x], data.Take(columnCount * binaryController.RowCount)))
             .ToList();
-        return controller;
     }
-    private BaseMDLControllerRow<BaseMDLControllerData> ParseControllerRow(MDLBinaryNodeType nodeType, MDLBinaryControllerType controllerType, int columnCount, bool bezier, float timeStart, IEnumerable<byte[]> data)
+    private IMDLControllerRow<BaseMDLControllerData> ParseControllerRow(MDLBinaryNodeType nodeType, MDLBinaryControllerType controllerType, int columnCount, bool bezier, float timeStart, IEnumerable<byte[]> data)
     {
         if (bezier)
         {
             var cdata1 = ParseControllerData(nodeType, controllerType, data.Skip(columnCount * 0).Take(columnCount));
             var cdata2 = ParseControllerData(nodeType, controllerType, data.Skip(columnCount * 1).Take(columnCount));
             var cdata3 = ParseControllerData(nodeType, controllerType, data.Skip(columnCount * 2).Take(columnCount));
-            return new MDLControllerRowBezier<BaseMDLControllerData>(timeStart, cdata1, cdata2, cdata3);
+            var rowType = typeof(MDLControllerRow<>).MakeGenericType(cdata1.GetType());
+            var factoryMethod = rowType.GetMethod(nameof(MDLControllerRow<BaseMDLControllerData>.CreateBezier))!;
+            return (IMDLControllerRow<BaseMDLControllerData>)factoryMethod.Invoke(null, [timeStart, cdata1, cdata2, cdata3])!;
         }
         else
         {
             var cdata = ParseControllerData(nodeType, controllerType, data);
-            return new MDLControllerRow<BaseMDLControllerData>(timeStart, cdata);
+            var rowType = typeof(MDLControllerRow<>).MakeGenericType(cdata.GetType());
+            var factoryMethod = rowType.GetMethod(nameof(MDLControllerRow<BaseMDLControllerData>.CreateLinear))!;
+            return (IMDLControllerRow<BaseMDLControllerData>)factoryMethod.Invoke(null, [timeStart, cdata])!;
         }
     }
     private BaseMDLControllerData ParseControllerData(MDLBinaryNodeType nodeType, MDLBinaryControllerType controllerType, IEnumerable<byte[]> data)
@@ -896,6 +899,11 @@ public class MDLBinary
 
         //var positionController = node.Controllers.OfType<MDLControllerDataPosition>().OrderBy(x => x.StartTime).FirstOrDefault();
         //var orientationController = node.Controllers.OfType<MDLControllerDataOrientation>().OrderBy(x => x.StartTime).FirstOrDefault();
+
+        //var zxcv = node._controllerRows.ToLookup(x => x.Data.First().GetType());
+        //var abc = zxcv.FirstOrDefault();
+
+        var abc = node.GetController<MDLControllerDataPosition>();
 
         binaryNode.NodeHeader.NodeType = (ushort)MDLBinaryNodeType.NodeFlag;
         binaryNode.NodeHeader.NodeIndex = node.NodeIndex;
@@ -1088,11 +1096,11 @@ public class MDLBinary
         }
 
         binaryNode.Children = node.Children.Select(x => UnparseNode(x, animation)).ToList();
-        binaryNode.ControllerHeaders = node.Controllers.Select(x => UnparseController(x, binaryNode.ControllerData, animation)).ToList();
+        //binaryNode.ControllerHeaders = node.Controllers.Select(x => UnparseController(x, binaryNode.ControllerData, animation)).ToList();
 
         return binaryNode;
     }
-    private MDLBinaryControllerHeader UnparseController(MDLController<BaseMDLControllerRow<BaseMDLControllerData>> controller, List<byte[]> binaryControllerData, bool animation)
+    private MDLBinaryControllerHeader UnparseController(MDLController<BaseMDLControllerData> controller, List<byte[]> binaryControllerData, bool animation)
     {
         var binaryControllerHeader = new MDLBinaryControllerHeader();
         binaryControllerHeader.FirstKeyOffset = (short)binaryControllerData.Count();
@@ -1106,17 +1114,17 @@ public class MDLBinary
 
         foreach (var row in controller.Rows)
         {
-            if (row is MDLControllerRow<BaseMDLControllerData> notBezier)
+            if (row.IsLinear)
             {
-                UnparseControllerData(notBezier.Data, binaryControllerData);
-                dataType = notBezier.Data.GetType();
+                UnparseControllerData(row.Data.First(), binaryControllerData);
+                dataType = row.Data.GetType();
             }
-            else if (row is MDLControllerRowBezier<BaseMDLControllerData> bezier)
+            else if (row.IsBezier)
             {
-                UnparseControllerData(bezier.Data[0], binaryControllerData);
-                UnparseControllerData(bezier.Data[1], binaryControllerData);
-                UnparseControllerData(bezier.Data[2], binaryControllerData);
-                dataType = bezier.Data[0].GetType();
+                UnparseControllerData(row.Data[0], binaryControllerData);
+                UnparseControllerData(row.Data[1], binaryControllerData);
+                UnparseControllerData(row.Data[2], binaryControllerData);
+                dataType = row.Data[0].GetType();
             }
         }
 

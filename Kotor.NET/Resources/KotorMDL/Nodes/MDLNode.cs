@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Kotor.NET.Resources.KotorMDL.Controllers;
 
 namespace Kotor.NET.Resources.KotorMDL.Nodes;
@@ -11,14 +12,21 @@ public class MDLNode
 {
     public string Name { get; set; }
     public ushort NodeIndex { get; set; }
-    public List<MDLController<BaseMDLControllerRow<BaseMDLControllerData>>> Controllers { get; set; }
+    //public List<MDLController<BaseMDLControllerData>> Controllers { get; set; }
     public List<MDLNode> Children { get; set; }
+
+    internal List<IMDLControllerRow<BaseMDLControllerData>> _controllerRows { get; }
 
     public MDLNode(string name)
     {
         Name = name;
-        Controllers = new();
         Children = new();
+        _controllerRows = new();
+    }
+
+    public MDLController<TData> GetController<TData>() where TData : BaseMDLControllerData
+    {
+        return new MDLController<TData>(_controllerRows);
     }
 
     public IEnumerable<MDLNode> GetAllAncestors()

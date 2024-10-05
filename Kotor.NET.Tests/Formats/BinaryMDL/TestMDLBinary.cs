@@ -149,7 +149,7 @@ public class TestMDLBinary
         var newBinaryMDL = new MDLBinary(stream, mdxStream);
     }
 
-    [Test]
+    [Fact]
     public void Test_ParseFile1()
     {
         var binaryMDL = GetBinaryMDL(File1Filepath);

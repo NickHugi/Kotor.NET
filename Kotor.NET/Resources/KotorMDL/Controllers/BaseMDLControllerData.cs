@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace Kotor.NET.Resources.KotorMDL.Controllers;
 
-public abstract class BaseMDLControllerData
+public  class BaseMDLControllerData
 {
 }
