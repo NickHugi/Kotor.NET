@@ -281,7 +281,9 @@ public class MDLBinarySerializer
         }
         if (node is MDLWalkmeshNode walkmeshNode)
         {
-            //binaryNode.NodeHeader.NodeType |= (ushort)MDLBinaryNodeType.AABBFlag;
+            binaryNode.NodeHeader.NodeType |= (ushort)MDLBinaryNodeType.AABBFlag;
+            binaryNode.WalkmeshHeader = new();
+            binaryNode.RootAABBNode = SerializeAABBNode(walkmeshNode, walkmeshNode.RootNode);
         }
 
         binaryNode.Children = node.Children.Select(x => SerializeNode(x, animation)).ToList();
@@ -834,5 +836,16 @@ public class MDLBinarySerializer
             binaryControllerData.Add(BitConverter.GetBytes(selfIllumination.Green));
             binaryControllerData.Add(BitConverter.GetBytes(selfIllumination.Blue));
         }
+    }
+    private MDLBinaryAABBNode SerializeAABBNode(MDLWalkmeshNode walkmeshNode, MDLWalkmeshAABBNode aabbNode)
+    {
+        return new MDLBinaryAABBNode()
+        {
+            BoundingBox = aabbNode.BoundingBox,
+            FaceIndex = (aabbNode.Face is null) ? -1 : walkmeshNode.Faces.IndexOf(aabbNode.Face),
+            MostSiginificantPlane = (int)aabbNode.MostSignificantPlane,
+            LeftNode = (aabbNode.LeftChild is null) ? null : SerializeAABBNode(walkmeshNode, aabbNode.LeftChild),
+            RightNode = (aabbNode.RightChild is null) ? null : SerializeAABBNode(walkmeshNode, aabbNode.RightChild),
+        };
     }
 }

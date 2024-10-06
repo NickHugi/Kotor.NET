@@ -35,6 +35,10 @@ public class MDLFaceCollection(MDLTrimeshNode node) : ICollection<MDLFace>
     {
         _faces.RemoveAt(index);
     }
+    public int IndexOf(MDLFace face)
+    {
+        return _faces.IndexOf(face);
+    }
 
     #region ICollection
     public int Count => _faces.Count();

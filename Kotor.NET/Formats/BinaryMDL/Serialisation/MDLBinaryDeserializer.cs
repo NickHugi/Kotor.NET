@@ -28,6 +28,7 @@ public class MDLBinaryDeserializer
         mdl.AffectedByFog = _binary.ModelHeader.Fog > 0;
         mdl.AnimationScale = _binary.ModelHeader.AnimationScale;
         mdl.SupermodelName = _binary.ModelHeader.SupermodelName;
+        mdl.BoundingBox = new(_binary.ModelHeader.BoundingBoxMin, _binary.ModelHeader.BoundingBoxMax);
 
         mdl.Animations = _binary.Animations.Select(x => DeserializeAnimation(x)).ToList();
         mdl.Root = DeserializeNode(_binary.RootNode);
@@ -413,12 +414,13 @@ public class MDLBinaryDeserializer
     }
     private MDLWalkmeshAABBNode DeserializeAABB(MDLTrimeshNode node, MDLBinaryAABBNode binaryAABB)
     {
-        var boundingBox = binaryAABB.BoundingBox; ;
+        var boundingBox = binaryAABB.BoundingBox;
         var face = node.Faces.ElementAtOrDefault(binaryAABB.FaceIndex);
+        var mostSignificantPlane = (MDLWalkmeshAABBNodeMostSignificantPlane)binaryAABB.MostSiginificantPlane;
         var leftChild = (binaryAABB.FaceIndex == -1) ? DeserializeAABB(node, binaryAABB.LeftNode) : null;
         var rightChild = (binaryAABB.FaceIndex == -1) ? DeserializeAABB(node, binaryAABB.RightNode) : null;
 
-        return new MDLWalkmeshAABBNode(boundingBox, face, leftChild, rightChild);
+        return new MDLWalkmeshAABBNode(boundingBox, face, leftChild, rightChild, mostSignificantPlane);
     }
     private MDLControllerDataOrientation DeserializeControllerOrientationData(IEnumerable<byte[]> data)
     {
