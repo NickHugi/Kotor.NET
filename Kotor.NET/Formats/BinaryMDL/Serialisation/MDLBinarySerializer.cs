@@ -308,6 +308,7 @@ public class MDLBinarySerializer
                 Bonemap = skinNode.BoneMap.Select(x => (float)x.Bonemap).ToList(),
                 QBones = skinNode.BoneMap.Select(x => x.QBone).ToList(),
                 TBones = skinNode.BoneMap.Select(x => x.TBone).ToList(),
+                Array8 = skinNode.BoneMap.Select(x => 0.0f).ToList(),
             };
         }
         if (node is MDLWalkmeshNode walkmeshNode)
