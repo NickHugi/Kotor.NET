@@ -270,7 +270,6 @@ public class MDLBinarySerializer
         if (node is MDLReferenceNode referenceNode)
         {
             binaryNode.NodeHeader.NodeType |= (ushort)MDLBinaryNodeType.ReferenceFlag;
-
             binaryNode.ReferenceHeader = new MDLBinaryReferenceHeader
             {
                 ModelResRef = referenceNode.ModelResRef,

@@ -219,24 +219,30 @@ public class MDLBinary
         if (node.LightHeader is not null)
         {
             node.LightHeader.UnknownArrayCount = 0;
+            node.LightHeader.UnknownArrayCount2 = 0;
             node.LightHeader.FlareSizeArrayCount = node.Light.FlareSizes.Count;
+            node.LightHeader.FlareSizeArrayCount2 = node.Light.FlareSizes.Count;
             node.LightHeader.FlarePositionArrayCount = node.Light.FlarePositions.Count;
+            node.LightHeader.FlarePositionArrayCount2 = node.Light.FlarePositions.Count;
             node.LightHeader.FlareColorShiftArrayCount = node.Light.FlareColourShifts.Count;
+            node.LightHeader.FlareColorShiftArrayCount2 = node.Light.FlareColourShifts.Count;
             node.LightHeader.FlareTextureNameCount = node.Light.FlareTextureNameOffsets.Count;
+            node.LightHeader.FlareTextureNameCount2 = node.Light.FlareTextureNameOffsets.Count;
 
-            node.LightHeader.OffsetToUnknownArray = offset;
+            var hasFlares = node.Light.FlareSizes.Any();
+            node.LightHeader.OffsetToUnknownArray = hasFlares ? offset : 0;
 
             offset += 0;
-            node.LightHeader.OffsetToFlareSizeArray = offset;
+            node.LightHeader.OffsetToFlareSizeArray = hasFlares ? offset : 0; ;
 
             offset += 4 * node.Light.FlareSizes.Count;
-            node.LightHeader.OffsetToFlarePositionArray = offset;
+            node.LightHeader.OffsetToFlarePositionArray = hasFlares ? offset : 0; ;
 
             offset += 4 * node.Light.FlarePositions.Count;
-            node.LightHeader.OffsetToFlareColorShiftArray = offset;
+            node.LightHeader.OffsetToFlareColorShiftArray = hasFlares ? offset : 0; ;
 
             offset += 12 * node.Light.FlareColourShifts.Count;
-            node.LightHeader.OffsetToFlareTextureNameOffsetsArray = offset;
+            node.LightHeader.OffsetToFlareTextureNameOffsetsArray = hasFlares ? offset : 0; ;
 
             offset += 4 * node.Light.FlareTextures.Count;
             foreach (var name in node.Light.FlareTextures)
