@@ -46,16 +46,16 @@ public class MDLBinarySerializer
         ];
         binary.Names = names.Distinct().ToList();
 
-        binary.Animations = _mdl.Animations.Select(UnparseAnimation).ToList();
+        binary.Animations = _mdl.Animations.Select(SerializeAnimation).ToList();
 
-        binary.RootNode = UnparseNode(_mdl.Root);
+        binary.RootNode = SerializeNode(_mdl.Root);
 
         binary.Recalculate();
 
         return binary;
     }
 
-    private MDLBinaryAnimation UnparseAnimation(MDLAnimation animation)
+    private MDLBinaryAnimation SerializeAnimation(MDLAnimation animation)
     {
         var binaryAnimation = new MDLBinaryAnimation();
         binaryAnimation.AnimationHeader.GeometryHeader.Name = animation.Name;
@@ -63,7 +63,7 @@ public class MDLBinarySerializer
         binaryAnimation.AnimationHeader.AnimationLength = animation.AnimationLength;
         binaryAnimation.AnimationHeader.TransitionTime = animation.TransitionTime;
         binaryAnimation.AnimationHeader.AnimationRoot = animation.AnimationRoot;
-        binaryAnimation.RootNode = UnparseNode(animation.RootNode, true);
+        binaryAnimation.RootNode = SerializeNode(animation.RootNode, true);
         binaryAnimation.Events = animation.Events.Select(x => new MDLBinaryAnimationEvent
         {
             ActivationTime = x.ActivationTime,
@@ -71,7 +71,7 @@ public class MDLBinarySerializer
         }).ToList();
         return binaryAnimation;
     }
-    private MDLBinaryNode UnparseNode(MDLNode node, bool animation = false)
+    private MDLBinaryNode SerializeNode(MDLNode node, bool animation = false)
     {
         var binaryNode = new MDLBinaryNode();
 
@@ -284,12 +284,12 @@ public class MDLBinarySerializer
             //binaryNode.NodeHeader.NodeType |= (ushort)MDLBinaryNodeType.AABBFlag;
         }
 
-        binaryNode.Children = node.Children.Select(x => UnparseNode(x, animation)).ToList();
-        binaryNode.ControllerHeaders = node.GetControllers().Select(x => UnparseController(x, binaryNode.ControllerData, animation)).ToList();
+        binaryNode.Children = node.Children.Select(x => SerializeNode(x, animation)).ToList();
+        binaryNode.ControllerHeaders = node.GetControllers().Select(x => SerializeController(x, binaryNode.ControllerData, animation)).ToList();
 
         return binaryNode;
     }
-    private MDLBinaryControllerHeader UnparseController(MDLController controller, List<byte[]> binaryControllerData, bool animation)
+    private MDLBinaryControllerHeader SerializeController(MDLController controller, List<byte[]> binaryControllerData, bool animation)
     {
         var binaryControllerHeader = new MDLBinaryControllerHeader();
         binaryControllerHeader.FirstKeyOffset = (short)binaryControllerData.Count();
@@ -305,14 +305,14 @@ public class MDLBinarySerializer
         {
             if (row.IsLinear)
             {
-                UnparseControllerData(row.Data.First(), binaryControllerData);
+                SerializeControllerData(row.Data.First(), binaryControllerData);
                 dataType = controller.Type;
             }
             else if (row.IsBezier)
             {
-                UnparseControllerData(row.Data[0], binaryControllerData);
-                UnparseControllerData(row.Data[1], binaryControllerData);
-                UnparseControllerData(row.Data[2], binaryControllerData);
+                SerializeControllerData(row.Data[0], binaryControllerData);
+                SerializeControllerData(row.Data[1], binaryControllerData);
+                SerializeControllerData(row.Data[2], binaryControllerData);
                 dataType = controller.Type;
             }
         }
@@ -597,7 +597,7 @@ public class MDLBinarySerializer
 
         return binaryControllerHeader;
     }
-    private void UnparseControllerData(BaseMDLControllerData data, List<byte[]> binaryControllerData)
+    private void SerializeControllerData(BaseMDLControllerData data, List<byte[]> binaryControllerData)
     {
         if (data is MDLControllerDataAlpha alpha)
         {

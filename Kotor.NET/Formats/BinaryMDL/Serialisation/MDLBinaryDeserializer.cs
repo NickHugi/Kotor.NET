@@ -29,20 +29,20 @@ public class MDLBinaryDeserializer
         mdl.AnimationScale = _binary.ModelHeader.AnimationScale;
         mdl.SupermodelName = _binary.ModelHeader.SupermodelName;
 
-        mdl.Animations = _binary.Animations.Select(x => ParseAnimation(x)).ToList();
-        mdl.Root = ParseNode(_binary.RootNode);
+        mdl.Animations = _binary.Animations.Select(x => DeserializeAnimation(x)).ToList();
+        mdl.Root = DeserializeNode(_binary.RootNode);
 
         return mdl;
     }
 
-    private MDLAnimation ParseAnimation(MDLBinaryAnimation binaryAnim)
+    private MDLAnimation DeserializeAnimation(MDLBinaryAnimation binaryAnim)
     {
         var animation = new MDLAnimation();
         animation.Name = binaryAnim.AnimationHeader.GeometryHeader.Name;
         animation.AnimationRoot = binaryAnim.AnimationHeader.AnimationRoot;
         animation.AnimationLength = binaryAnim.AnimationHeader.AnimationLength;
         animation.TransitionTime = binaryAnim.AnimationHeader.TransitionTime;
-        animation.RootNode = ParseNode(binaryAnim.RootNode);
+        animation.RootNode = DeserializeNode(binaryAnim.RootNode);
         animation.Events = binaryAnim.Events.Select(x => new MDLAnimationEvent()
         {
             Name = x.Name,
@@ -50,7 +50,7 @@ public class MDLBinaryDeserializer
         }).ToList();
         return animation;
     }
-    private MDLNode ParseNode(MDLBinaryNode binaryNode)
+    private MDLNode DeserializeNode(MDLBinaryNode binaryNode)
     {
         var name = _binary.Names[binaryNode.NodeHeader.NameIndex];
         var type = (MDLBinaryNodeType)binaryNode.NodeHeader.NodeType;
@@ -263,16 +263,16 @@ public class MDLBinaryDeserializer
 
             if (trimeshNode is MDLWalkmeshNode walkmeshNode)
             {
-                walkmeshNode.RootNode = ParseAABB(walkmeshNode, binaryNode.RootAABBNode);
+                walkmeshNode.RootNode = DeserializeAABB(walkmeshNode, binaryNode.RootAABBNode);
             }
         }
 
-        node._controllerRows.AddRange(binaryNode.ControllerHeaders.SelectMany(x => ParseController(binaryNode, x)).ToList());
-        node.Children = binaryNode.Children.Select(x => ParseNode(x)).ToList();
+        node._controllerRows.AddRange(binaryNode.ControllerHeaders.SelectMany(x => DeserializeController(binaryNode, x)).ToList());
+        node.Children = binaryNode.Children.Select(x => DeserializeNode(x)).ToList();
         node.NodeIndex = binaryNode.NodeHeader.NodeIndex;
         return node;
     }
-    private List<IMDLControllerRow<BaseMDLControllerData>> ParseController(MDLBinaryNode binaryNode, MDLBinaryControllerHeader binaryController)
+    private List<IMDLControllerRow<BaseMDLControllerData>> DeserializeController(MDLBinaryNode binaryNode, MDLBinaryControllerHeader binaryController)
     {
         var nodeType = (MDLBinaryNodeType)binaryNode.NodeHeader.NodeType;
         var controllerType = (MDLBinaryControllerType)binaryController.ControllerType;
@@ -292,29 +292,29 @@ public class MDLBinaryDeserializer
 
         return Enumerable
             .Range(0, binaryController.RowCount)
-            .Select(x => ParseControllerRow(nodeType, controllerType, columnCount, bezier, times[x], data.Take(columnCount * binaryController.RowCount)))
+            .Select(x => DeserializeControllerRow(nodeType, controllerType, columnCount, bezier, times[x], data.Take(columnCount * binaryController.RowCount)))
             .ToList();
     }
-    private IMDLControllerRow<BaseMDLControllerData> ParseControllerRow(MDLBinaryNodeType nodeType, MDLBinaryControllerType controllerType, int columnCount, bool bezier, float timeStart, IEnumerable<byte[]> data)
+    private IMDLControllerRow<BaseMDLControllerData> DeserializeControllerRow(MDLBinaryNodeType nodeType, MDLBinaryControllerType controllerType, int columnCount, bool bezier, float timeStart, IEnumerable<byte[]> data)
     {
         if (bezier)
         {
-            var cdata1 = ParseControllerData(nodeType, controllerType, data.Skip(columnCount * 0).Take(columnCount));
-            var cdata2 = ParseControllerData(nodeType, controllerType, data.Skip(columnCount * 1).Take(columnCount));
-            var cdata3 = ParseControllerData(nodeType, controllerType, data.Skip(columnCount * 2).Take(columnCount));
+            var cdata1 = DeserializeControllerData(nodeType, controllerType, data.Skip(columnCount * 0).Take(columnCount));
+            var cdata2 = DeserializeControllerData(nodeType, controllerType, data.Skip(columnCount * 1).Take(columnCount));
+            var cdata3 = DeserializeControllerData(nodeType, controllerType, data.Skip(columnCount * 2).Take(columnCount));
             var rowType = typeof(MDLControllerRow<>).MakeGenericType(cdata1.GetType());
             var factoryMethod = rowType.GetMethod(nameof(MDLControllerRow<BaseMDLControllerData>.CreateBezier))!;
             return (IMDLControllerRow<BaseMDLControllerData>)factoryMethod.Invoke(null, [timeStart, cdata1, cdata2, cdata3])!;
         }
         else
         {
-            var cdata = ParseControllerData(nodeType, controllerType, data);
+            var cdata = DeserializeControllerData(nodeType, controllerType, data);
             var rowType = typeof(MDLControllerRow<>).MakeGenericType(cdata.GetType());
             var factoryMethod = rowType.GetMethod(nameof(MDLControllerRow<BaseMDLControllerData>.CreateLinear))!;
             return (IMDLControllerRow<BaseMDLControllerData>)factoryMethod.Invoke(null, [timeStart, cdata])!;
         }
     }
-    private BaseMDLControllerData ParseControllerData(MDLBinaryNodeType nodeType, MDLBinaryControllerType controllerType, IEnumerable<byte[]> data)
+    private BaseMDLControllerData DeserializeControllerData(MDLBinaryNodeType nodeType, MDLBinaryControllerType controllerType, IEnumerable<byte[]> data)
     {
         var columnCount = data.Count();
         var floatData = data.Select(x => BitConverter.ToSingle(x)).ToList();
@@ -406,21 +406,21 @@ public class MDLBinaryDeserializer
         return controllerType switch
         {
             MDLBinaryControllerType.Position => new MDLControllerDataPosition(floatData[0], floatData[1], floatData[2]),
-            MDLBinaryControllerType.Orientation => ParseControllerOrientationData(data),
+            MDLBinaryControllerType.Orientation => DeserializeControllerOrientationData(data),
             MDLBinaryControllerType.Scale => new MDLControllerDataScale(floatData[0]),
             _ => throw new ArgumentException("Unknown Controller Type"),
         };
     }
-    private MDLWalkmeshAABBNode ParseAABB(MDLTrimeshNode node, MDLBinaryAABBNode binaryAABB)
+    private MDLWalkmeshAABBNode DeserializeAABB(MDLTrimeshNode node, MDLBinaryAABBNode binaryAABB)
     {
         var boundingBox = binaryAABB.BoundingBox; ;
         var face = node.Faces.ElementAtOrDefault(binaryAABB.FaceIndex);
-        var leftChild = (binaryAABB.FaceIndex == -1) ? ParseAABB(node, binaryAABB.LeftNode) : null;
-        var rightChild = (binaryAABB.FaceIndex == -1) ? ParseAABB(node, binaryAABB.RightNode) : null;
+        var leftChild = (binaryAABB.FaceIndex == -1) ? DeserializeAABB(node, binaryAABB.LeftNode) : null;
+        var rightChild = (binaryAABB.FaceIndex == -1) ? DeserializeAABB(node, binaryAABB.RightNode) : null;
 
         return new MDLWalkmeshAABBNode(boundingBox, face, leftChild, rightChild);
     }
-    private MDLControllerDataOrientation ParseControllerOrientationData(IEnumerable<byte[]> data)
+    private MDLControllerDataOrientation DeserializeControllerOrientationData(IEnumerable<byte[]> data)
     {
         if (data.Count() == 2)
         {
