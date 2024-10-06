@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.NET.Common;
+using Kotor.NET.Common.Data;
 using Kotor.NET.Resources.KotorMDL.Nodes;
 
 namespace Kotor.NET.Resources.KotorMDL;
@@ -22,6 +24,21 @@ public class MDLFaceCollection(MDLTrimeshNode node) : ICollection<MDLFace>
             Vertex1 = SanitizeVertex(vertex1),
             Vertex2 = SanitizeVertex(vertex2),
             Vertex3 = SanitizeVertex(vertex3),
+            Material = SurfaceMaterial.Undefined,
+            Normal = new(0, 0, 1),
+            PlaneDistance = 0,
+        });
+    }
+    public void Add(MDLVertex vertex1, MDLVertex vertex2, MDLVertex vertex3, Vector3 normal, SurfaceMaterial material, float planeDistance)
+    {
+        _faces.Add(new()
+        {
+            Vertex1 = SanitizeVertex(vertex1),
+            Vertex2 = SanitizeVertex(vertex2),
+            Vertex3 = SanitizeVertex(vertex3),
+            Normal = normal,
+            Material = material,
+            PlaneDistance = planeDistance,
         });
     }
     public void AddRange(IEnumerable<MDLFace> faces)

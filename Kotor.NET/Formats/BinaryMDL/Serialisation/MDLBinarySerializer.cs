@@ -97,6 +97,9 @@ public class MDLBinarySerializer
                     Vertex1 = (short)vertices.IndexOf(x.Vertex1),
                     Vertex2 = (short)vertices.IndexOf(x.Vertex2),
                     Vertex3 = (short)vertices.IndexOf(x.Vertex3),
+                    Material = (int)x.Material,
+                    Normal  = x.Normal,
+                    PlaneDistance = x.PlaneDistance,
                 }).ToList(),
                 VertexIndices = new()
                 {

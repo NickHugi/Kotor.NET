@@ -13,7 +13,7 @@ public class MDLBinaryTrimeshFace
     public static int SIZE = 32;
 
     public Vector3 Normal { get; set; } = new();
-    public float PlaneCoefficient { get; set; }
+    public float PlaneDistance { get; set; }
     public int Material { get; set; }
     public short FaceAdjacency1 { get; set; }
     public short FaceAdjacency2 { get; set; }
@@ -28,7 +28,7 @@ public class MDLBinaryTrimeshFace
     public MDLBinaryTrimeshFace(MDLBinaryReader reader)
     {
         Normal = reader.ReadVector3();
-        PlaneCoefficient = reader.ReadSingle();
+        PlaneDistance = reader.ReadSingle();
         Material = reader.ReadInt32();
         FaceAdjacency1 = reader.ReadInt16();
         FaceAdjacency2 = reader.ReadInt16();
@@ -41,7 +41,7 @@ public class MDLBinaryTrimeshFace
     public void Write(MDLBinaryWriter writer)
     {
         writer.Write(Normal);
-        writer.Write(PlaneCoefficient);
+        writer.Write(PlaneDistance);
         writer.Write(Material);
         writer.Write(FaceAdjacency1);
         writer.Write(FaceAdjacency2);

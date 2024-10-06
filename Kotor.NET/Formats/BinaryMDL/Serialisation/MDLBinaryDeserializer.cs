@@ -7,6 +7,7 @@ using Kotor.NET.Resources.KotorMDL.Controllers;
 using Kotor.NET.Resources.KotorMDL.Nodes;
 using Kotor.NET.Resources.KotorMDL.VertexData;
 using Kotor.NET.Resources.KotorMDL;
+using Kotor.NET.Common;
 
 namespace Kotor.NET.Formats.BinaryMDL.Serialisation;
 
@@ -259,7 +260,7 @@ public class MDLBinaryDeserializer
                 var vertex1 = vertices[x.Vertex1];
                 var vertex2 = vertices[x.Vertex2];
                 var vertex3 = vertices[x.Vertex3];
-                trimeshNode.Faces.Add(vertex1, vertex2, vertex3);
+                trimeshNode.Faces.Add(vertex1, vertex2, vertex3, x.Normal, (SurfaceMaterial)x.Material, x.PlaneDistance);
             });
 
             if (trimeshNode is MDLWalkmeshNode walkmeshNode)

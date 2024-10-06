@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.NET.Common;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Resources.KotorMDL.Nodes;
 
@@ -14,7 +15,9 @@ public class MDLFace
     public MDLVertex Vertex2 { get; set; } = new();
     public MDLVertex Vertex3 { get; set; } = new();
 
-    public int PlaneCoefficient => throw new NotImplementedException();
-    public int Material => throw new NotImplementedException();
-    public Vector3 Normal => throw new NotImplementedException();
+    public float PlaneDistance { get; set; }
+    public SurfaceMaterial Material { get; set; }
+    public Vector3 Normal { get; set; } = new();
+
+    // TODO - Adjacent Faces
 }
