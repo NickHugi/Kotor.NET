@@ -186,7 +186,21 @@ public class MDLBinarySerializer
         }
         if (node is MDLDanglyNode danglyNode)
         {
-            //binaryNode.NodeHeader.NodeType |= (ushort)MDLBinaryNodeType.DanglyFlag;
+            var vertices = danglyNode.AllVertices().ToList();
+
+            binaryNode.NodeHeader.NodeType |= (ushort)MDLBinaryNodeType.DanglyFlag;
+
+            binaryNode.DanglymeshHeader = new()
+            {
+                Period = danglyNode.Period,
+                Tightness = danglyNode.Tightness,
+                Displacement = danglyNode.Displacement,
+            };
+            binaryNode.Danglymesh = new()
+            {
+                Constraints = vertices.Select(x => x.Dangly.Constraint).ToList(),
+                Data = vertices.Select(x => x.Dangly.Unknown).ToList(),
+            };
         }
         if (node is MDLEmitterNode emitterNode)
         {

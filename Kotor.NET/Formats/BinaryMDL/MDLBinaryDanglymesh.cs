@@ -13,6 +13,9 @@ public class MDLBinaryDanglymesh
     public List<float> Constraints { get; set; } = new();
     public List<Vector3> Data { get; set; } = new();
 
+    public MDLBinaryDanglymesh()
+    {
+    }
     public MDLBinaryDanglymesh(MDLBinaryDanglyHeader danglymeshHeader, MDLBinaryReader reader)
     {
         reader.SetStreamPosition(danglymeshHeader.OffsetToContraintArray);
