@@ -598,6 +598,7 @@ public class MDLBinary
             trimeshNode.DirtTexture = binaryNode.TrimeshHeader.DirtTexture;
             trimeshNode.DirtCoordinateSpace = binaryNode.TrimeshHeader.DirtCoordinateSpace;
             trimeshNode.InvertedCounter = binaryNode.Trimesh.InvertedCounters.FirstOrDefault();
+            binaryNode.TrimeshHeader.UnknownSaberValues.CopyTo(trimeshNode.SaberValues, 0);
 
             var vertexBitmap = (MDLBinaryMDXVertexBitmask)binaryNode.TrimeshHeader.MDXDataBitmap;
 
@@ -964,6 +965,7 @@ public class MDLBinary
                 DirtCoordinateSpace = trimeshNode.DirtCoordinateSpace,
                 HideInHolograms = Convert.ToByte(trimeshNode.HideInHologram),
             };
+            trimeshNode.SaberValues.CopyTo(binaryNode.TrimeshHeader.UnknownSaberValues, 0);
 
             binaryNode.MDXVertices = vertices.Select(x => new MDXBinaryVertex
             {

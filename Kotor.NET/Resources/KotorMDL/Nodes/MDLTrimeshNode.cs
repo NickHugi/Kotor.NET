@@ -13,8 +13,8 @@ public class MDLTrimeshNode : MDLNode
 
     public float TotalArea { get; set; }
     public float Radius { get; set; }
-    public Vector3 AveragePoint { get; set; }
-    public BoundingBox BoundingBox { get; set; }
+    public Vector3 AveragePoint { get; set; } = new();
+    public BoundingBox BoundingBox { get; set; } = new();
 
     public string? DiffuseTexture { get; set; }
     public string? LightmapTexture { get; set; }
@@ -34,6 +34,8 @@ public class MDLTrimeshNode : MDLNode
     public Vector2 UVDirection { get; set; } = new();
 
     public int InvertedCounter = 0;
+
+    public byte[] SaberValues { get; } = new byte[8];
 
     // K2 Only
     public bool HideInHologram { get; set; }

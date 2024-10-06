@@ -57,8 +57,7 @@ public class MDLBinaryTrimeshHeader
     public int Unknown1 { get; set; } = -1;
     public int Unknown2 { get; set; } = -1;
     public int Unknown3 { get; set; } = 0;
-    public int Unknown4 { get; set; }
-    public int Unknown8 { get; set; }
+    public byte[] UnknownSaberValues { get; } = new byte[8];
     public int AnimateUV { get; set; }
     public Vector2 UVDirection { get; set; } = new();
     public float UVSpeed { get; set; }
@@ -133,8 +132,7 @@ public class MDLBinaryTrimeshHeader
         Unknown1 = reader.ReadInt32();
         Unknown2 = reader.ReadInt32();
         Unknown3 = reader.ReadInt32();
-        Unknown4 = reader.ReadInt32();
-        Unknown8 = reader.ReadInt32();
+        UnknownSaberValues = reader.ReadBytes(8);
         AnimateUV = reader.ReadInt32();
         UVDirection = reader.ReadVector2();
         UVSpeed = reader.ReadSingle();
@@ -207,8 +205,7 @@ public class MDLBinaryTrimeshHeader
         writer.Write(Unknown1);
         writer.Write(Unknown2);
         writer.Write(Unknown3);
-        writer.Write(Unknown4);
-        writer.Write(Unknown8);
+        writer.Write(UnknownSaberValues);
         writer.Write(AnimateUV);
         writer.Write(UVDirection);
         writer.Write(UVSpeed);
