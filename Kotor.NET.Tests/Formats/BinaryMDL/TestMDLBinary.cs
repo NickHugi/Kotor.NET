@@ -1,8 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.Reflection.PortableExecutable;
+using System.Security.Cryptography;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Extensions;
 using Kotor.NET.Formats.BinaryMDL;
+using Kotor.NET.Formats.BinaryMDL.Serialisation;
 using Kotor.NET.Resources.KotorMDL;
 using Kotor.NET.Resources.KotorMDL.Nodes;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Resources;
@@ -152,27 +154,16 @@ public class TestMDLBinary
     [Fact]
     public void Test_ParseFile1()
     {
+        //var binaryMDL = GetBinaryMDL(@"C:\Users\hugin\Desktop\ext\p_bastilaba");
+        //var binaryMDL = GetBinaryMDL(@"C:\Program Files (x86)\Steam\steamapps\common\swkotor\Override\m14aa_01c");
         var binaryMDL = GetBinaryMDL(File1Filepath);
-        var mdl = binaryMDL.Parse();
-        mdl.Root.Children.RemoveRange(10, mdl.Root.Children.Count-10);
-        mdl.Root.Children = mdl.Root.Children.Where(x => x is not MDLWalkmeshNode).ToList();
-        mdl.Root.Children = mdl.Root.Children.Where(x => x is not MDLLightNode).ToList();
-        foreach (var item in mdl.Root.GetAllAncestors())
-        {
-            if (mdl.Root.Children.Contains(item))
-                item.Children.Clear();
-            //item.Children = item.Children.Where(x => x is not MDLDanglyNode).ToList();
-            //item.Children = item.Children.Where(x => x is not MDLWalkmeshNode).ToList();
-            //item.Children = item.Children.Where(x => x is not MDLLightNode).ToList();
-        }
+        var deserializer = new MDLBinaryDeserializer(binaryMDL);
+        var mdl = deserializer.Deserialize();
 
-        var b2 = new MDLBinary();
-        //b2.Unparse(mdl);
+        //eliminate(mdl.Root);
 
-        //var c = mdl.Root.Children.ElementAt(8);
-        //mdl.Root.Children.Clear();
-        //mdl.Root.Children.Add(c);
-        b2.Unparse(mdl);
+        var serializer = new MDLBinarySerializer(mdl);
+        var b2 = serializer.Serialize(false);
 
         var mdlstream = File.OpenWrite(@"C:\Program Files (x86)\Steam\steamapps\common\swkotor\Override\m14aa_01c.mdl");
         var mdxstream = File.OpenWrite(@"C:\Program Files (x86)\Steam\steamapps\common\swkotor\Override\m14aa_01c.mdx");
@@ -180,9 +171,13 @@ public class TestMDLBinary
         mdlstream.Close();
         mdxstream.Close();
 
-        var abc = GetBinaryMDL(@"C:\Users\hugin\Desktop\ext\test");
-        var remdl = abc.Parse();
+        var deserializer2 = new MDLBinaryDeserializer(b2);
+        deserializer2.Deserialize();
+    }
 
-
+    private void eliminate(MDLNode node)
+    {
+        node.Children = node.Children.Where(x => x is not MDLLightNode).ToList();
+        node.Children.ForEach(x => eliminate(x));
     }
 }
