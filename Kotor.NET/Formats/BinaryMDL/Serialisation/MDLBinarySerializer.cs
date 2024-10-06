@@ -165,8 +165,6 @@ public class MDLBinarySerializer
                 BoneWeight3 = x.Skin?.WeightValue3,
                 BoneWeight4 = x.Skin?.WeightValue4,
             }).ToList();
-
-            // TODO - accurate mdx
             binaryNode.MDXVertices.Add(new()
             {
                 Position = trimeshNode.HasPositions() ? new(1e7f, 1e7f, 1e7f) : null,
@@ -192,7 +190,8 @@ public class MDLBinarySerializer
             var vertices = danglyNode.AllVertices().ToList();
 
             binaryNode.NodeHeader.NodeType |= (ushort)MDLBinaryNodeType.DanglyFlag;
-
+            binaryNode.TrimeshHeader.FunctionPointer1 = _isTSL ? MDLBinaryTrimeshHeader.K2_DANGLY_FP1 : MDLBinaryTrimeshHeader.K1_DANGLY_FP1;
+            binaryNode.TrimeshHeader.FunctionPointer2 = _isTSL ? MDLBinaryTrimeshHeader.K2_DANGLY_FP2 : MDLBinaryTrimeshHeader.K1_DANGLY_FP2;
             binaryNode.DanglymeshHeader = new()
             {
                 Period = danglyNode.Period,
@@ -280,7 +279,36 @@ public class MDLBinarySerializer
         }
         if (node is MDLSkinNode skinNode)
         {
-            //binaryNode.NodeHeader.NodeType |= (ushort)MDLBinaryNodeType.SkinFlag;
+            var vertices = skinNode.AllVertices().ToList();
+
+            binaryNode.NodeHeader.NodeType |= (ushort)MDLBinaryNodeType.SkinFlag;
+            binaryNode.TrimeshHeader.FunctionPointer1 = _isTSL ? MDLBinaryTrimeshHeader.K2_SKIN_FP1 : MDLBinaryTrimeshHeader.K1_SKIN_FP1;
+            binaryNode.TrimeshHeader.FunctionPointer2 = _isTSL ? MDLBinaryTrimeshHeader.K2_SKIN_FP2 : MDLBinaryTrimeshHeader.K1_SKIN_FP2;
+            binaryNode.SkinmeshHeader = new()
+            {
+                BoneIndex1 = (ushort)(skinNode.BoneIndices.ElementAtOrDefault(0)),
+                BoneIndex2 = (ushort)(skinNode.BoneIndices.ElementAtOrDefault(1)),
+                BoneIndex3 = (ushort)(skinNode.BoneIndices.ElementAtOrDefault(2)),
+                BoneIndex4 = (ushort)(skinNode.BoneIndices.ElementAtOrDefault(3)),
+                BoneIndex5 = (ushort)(skinNode.BoneIndices.ElementAtOrDefault(4)),
+                BoneIndex6 = (ushort)(skinNode.BoneIndices.ElementAtOrDefault(5)),
+                BoneIndex7 = (ushort)(skinNode.BoneIndices.ElementAtOrDefault(6)),
+                BoneIndex8 = (ushort)(skinNode.BoneIndices.ElementAtOrDefault(7)),
+                BoneIndex9 = (ushort)(skinNode.BoneIndices.ElementAtOrDefault(8)),
+                BoneIndex10 = (ushort)(skinNode.BoneIndices.ElementAtOrDefault(9)),
+                BoneIndex11 = (ushort)(skinNode.BoneIndices.ElementAtOrDefault(10)),
+                BoneIndex12 = (ushort)(skinNode.BoneIndices.ElementAtOrDefault(11)),
+                BoneIndex13 = (ushort)(skinNode.BoneIndices.ElementAtOrDefault(12)),
+                BoneIndex14 = (ushort)(skinNode.BoneIndices.ElementAtOrDefault(13)),
+                BoneIndex15 = (ushort)(skinNode.BoneIndices.ElementAtOrDefault(14)),
+                BoneIndex16 = (ushort)(skinNode.BoneIndices.ElementAtOrDefault(15)),
+            };
+            binaryNode.Skinmesh = new()
+            {
+                Bonemap = skinNode.BoneMap.Select(x => (float)x.Bonemap).ToList(),
+                QBones = skinNode.BoneMap.Select(x => x.QBone).ToList(),
+                TBones = skinNode.BoneMap.Select(x => x.TBone).ToList(),
+            };
         }
         if (node is MDLWalkmeshNode walkmeshNode)
         {

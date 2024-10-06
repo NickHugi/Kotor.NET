@@ -148,7 +148,7 @@ public class MDLBinary
         ModelHeader.GeometryHeader.RootNodeOffset = offset;
         Recalculate(RootNode, ref offset, ref mdxOffset, 0, 0);
 
-        FileHeader.MDLSize = offset+12;
+        FileHeader.MDLSize = offset;
         FileHeader.MDXSize = mdxOffset;
         ModelHeader.MDXSize = mdxOffset;
     }
@@ -304,6 +304,15 @@ public class MDLBinary
             node.TrimeshHeader.MDXTangent4Stride = hasTangent4 ? node.TrimeshHeader.MDXDataSize : -1;
             node.TrimeshHeader.MDXDataSize += hasTangent4 ? 8 : 0;
             node.TrimeshHeader.MDXDataBitmap |= hasTangent4 ? (uint)MDLBinaryMDXVertexBitmask.Tangent4 : 0;
+
+            if (node.SkinmeshHeader is not null)
+            {
+                node.SkinmeshHeader.MDXWeightValueStride = node.TrimeshHeader.MDXDataSize;
+                node.TrimeshHeader.MDXDataSize += 16;
+
+                node.SkinmeshHeader.MDXWeightIndexStride = node.TrimeshHeader.MDXDataSize;
+                node.TrimeshHeader.MDXDataSize += 16;
+            }
 
             mdxOffset += node.TrimeshHeader.MDXDataSize * node.MDXVertices.Count();
 

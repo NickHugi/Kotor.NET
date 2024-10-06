@@ -8,6 +8,7 @@ namespace Kotor.NET.Resources.KotorMDL.Nodes;
 
 public class MDLSkinNode : MDLTrimeshNode
 {
+    public int[] BoneIndices { get; } = new int[16];
     public List<MDLBone> BoneMap { get; set; }
 
     public MDLSkinNode(string name) : base(name)

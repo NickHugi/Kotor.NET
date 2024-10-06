@@ -85,9 +85,25 @@ public class MDLBinaryDeserializer
             var skinNode = new MDLSkinNode(name);
             node = skinNode;
 
+            skinNode.BoneIndices[0] = binaryNode.SkinmeshHeader.BoneIndex1;
+            skinNode.BoneIndices[1] = binaryNode.SkinmeshHeader.BoneIndex2;
+            skinNode.BoneIndices[2] = binaryNode.SkinmeshHeader.BoneIndex3;
+            skinNode.BoneIndices[3] = binaryNode.SkinmeshHeader.BoneIndex4;
+            skinNode.BoneIndices[4] = binaryNode.SkinmeshHeader.BoneIndex5;
+            skinNode.BoneIndices[5] = binaryNode.SkinmeshHeader.BoneIndex6;
+            skinNode.BoneIndices[6] = binaryNode.SkinmeshHeader.BoneIndex7;
+            skinNode.BoneIndices[7] = binaryNode.SkinmeshHeader.BoneIndex8;
+            skinNode.BoneIndices[8] = binaryNode.SkinmeshHeader.BoneIndex9;
+            skinNode.BoneIndices[9] = binaryNode.SkinmeshHeader.BoneIndex10;
+            skinNode.BoneIndices[10] = binaryNode.SkinmeshHeader.BoneIndex11;
+            skinNode.BoneIndices[11] = binaryNode.SkinmeshHeader.BoneIndex12;
+            skinNode.BoneIndices[12] = binaryNode.SkinmeshHeader.BoneIndex13;
+            skinNode.BoneIndices[13] = binaryNode.SkinmeshHeader.BoneIndex14;
+            skinNode.BoneIndices[14] = binaryNode.SkinmeshHeader.BoneIndex15;
+            skinNode.BoneIndices[15] = binaryNode.SkinmeshHeader.BoneIndex16;
             skinNode.BoneMap = Enumerable.Range(0, binaryNode.Skinmesh.Bonemap.Count()).Select((x, index) => new MDLBone
             {
-                Bonemap = x,
+                Bonemap = (int)binaryNode.Skinmesh.Bonemap[index],
                 TBone = binaryNode.Skinmesh.TBones[index],
                 QBone = binaryNode.Skinmesh.QBones[index],
             }).ToList();
