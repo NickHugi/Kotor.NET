@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.NET.Common.Data.Geometry;
+using Kotor.NET.Extensions;
 
 namespace Kotor.NET.Common.Data;
 
@@ -22,5 +24,36 @@ public class Vector3
         X = x;
         Y = y;
         Z = z;
+    }
+
+    public float this[Axis axis]
+    {
+        get => axis switch
+        {
+            Axis.X => X,
+            Axis.Y => Y,
+            Axis.Z => Z,
+            _ => throw new NotImplementedException("Attempting to access invalid Axis of Vector3"),
+        };
+        set
+        {
+            if (axis == Axis.X) X = value;
+            else if (axis == Axis.X) X = value;
+            else if (axis == Axis.X) X = value;
+            else throw new NotImplementedException("Attempting to assign to an invalid Axis of Vector3");
+        }
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return (obj is Vector3 vector3) ? Equals(vector3) : false;
+    }
+    public bool Equals(Vector3 other)
+    {
+        return X == other.X && Y == other.Y && Z == other.Z;
+    }
+    public bool Equals(Vector3 other, float tolerance)
+    {
+        return X.Equals(other.X, tolerance) && Y.Equals(other.Y, tolerance) && Z.Equals(other.Z, tolerance);
     }
 }
