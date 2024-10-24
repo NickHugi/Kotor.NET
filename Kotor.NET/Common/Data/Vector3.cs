@@ -18,7 +18,6 @@ public class Vector3
     {
 
     }
-
     public Vector3(float x, float y, float z)
     {
         X = x;
@@ -44,6 +43,16 @@ public class Vector3
         }
     }
 
+    public float Dot(Vector3 other)
+    {
+        return (X * other.X) + (Y * other.Y) + (Z * other.Z);
+    }
+
+    public Vector3 Clone()
+    {
+        return new(X, Y, Z);
+    }
+
     public override bool Equals(object? obj)
     {
         return (obj is Vector3 vector3) ? Equals(vector3) : false;
@@ -55,5 +64,10 @@ public class Vector3
     public bool Equals(Vector3 other, float tolerance)
     {
         return X.Equals(other.X, tolerance) && Y.Equals(other.Y, tolerance) && Z.Equals(other.Z, tolerance);
+    }
+
+    public static Vector3 operator *(float scale, Vector3 vector)
+    {
+        return new(scale*vector.X, scale*vector.Y, scale*vector.Z);
     }
 }

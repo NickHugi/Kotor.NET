@@ -32,7 +32,7 @@ public class TestBWMBinary
         Assert.Equal(4, binaryBWM.FaceIndices.Count);
         Assert.Equal(4, binaryBWM.FaceMaterials.Count);
         Assert.Equal(4, binaryBWM.FaceNormals.Count);
-        Assert.Equal(4, binaryBWM.FacePlaneCoefficients.Count);
+        Assert.Equal(4, binaryBWM.FacePlaneDistances.Count);
         Assert.Equal(4, binaryBWM.Edges.Count);
         Assert.Single(binaryBWM.Perimeters);
 

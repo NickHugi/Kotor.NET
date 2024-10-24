@@ -17,7 +17,7 @@ public class BWMBinary
     public List<BWMBinaryFaceIndices> FaceIndices { get; set; } = new();
     public List<int> FaceMaterials { get; set;} = new();
     public List<Vector3> FaceNormals { get; set;} = new();
-    public List<float> FacePlaneCoefficients { get; set; } = new();
+    public List<float> FacePlaneDistances { get; set; } = new();
     public List<BWMBinaryAABBNode> AABBs { get; set; } = new();
     public List<BWMBinaryAdjacency> Adjacencies { get; set; } = new();
     public List<BWMBinaryEdge> Edges { get; set; } = new();
@@ -59,7 +59,7 @@ public class BWMBinary
         reader.BaseStream.Position = FileHeader.OffsetToFaceCoefficients;
         for (int i = 0; i < FileHeader.FaceCount; i++)
         {
-            FacePlaneCoefficients.Add(reader.ReadSingle());
+            FacePlaneDistances.Add(reader.ReadSingle());
         }
 
         reader.BaseStream.Position = FileHeader.OffsetToAABBs;
@@ -118,7 +118,7 @@ public class BWMBinary
         }
 
         writer.BaseStream.Position = FileHeader.OffsetToFaceCoefficients;
-        foreach (var coeff in FacePlaneCoefficients)
+        foreach (var coeff in FacePlaneDistances)
         {
             writer.Write(coeff);
         }
@@ -172,7 +172,7 @@ public class BWMBinary
         offset += FaceNormals.Count * 12;
         FileHeader.OffsetToFaceCoefficients = offset;
 
-        offset += FacePlaneCoefficients.Count * 4;
+        offset += FacePlaneDistances.Count * 4;
         FileHeader.OffsetToAABBs = offset;
 
         offset += AABBs.Count * BWMBinaryAABBNode.SIZE;
