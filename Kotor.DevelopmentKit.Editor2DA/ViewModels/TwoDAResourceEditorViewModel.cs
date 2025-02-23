@@ -35,8 +35,15 @@ public class TwoDAResourceEditorViewModel : ResourceEditorViewModelBase<TwoDAVie
     private int _selectedRowIndex;
     public int SelectedRowIndex
     {
-        get => _selectedRowIndex;
-        set => this.RaiseAndSetIfChanged(ref _selectedRowIndex, value);
+        get
+        {
+            return Resource.Rows.IndexOf(SelectedRow);
+        }
+        set
+        {
+            var row = Resource.Rows.ElementAt(value);
+            SelectedRow = row;
+        }
     }
 
     private int _selectedColumnIndex;
@@ -45,6 +52,15 @@ public class TwoDAResourceEditorViewModel : ResourceEditorViewModelBase<TwoDAVie
         get => _selectedColumnIndex;
         set => this.RaiseAndSetIfChanged(ref _selectedColumnIndex, value);
     }
+
+    private IReadOnlyList<string> _selectedRow;
+    public IReadOnlyList<string> SelectedRow
+    {
+        get => _selectedRow;
+        set => this.RaiseAndSetIfChanged(ref _selectedRow, value);
+    }
+
+    public List<List<string>> SelectedRows { get; }
 
     private readonly ActionHistory<TwoDAResourceEditorViewModel> _history;
     public ActionHistory<TwoDAResourceEditorViewModel> History
