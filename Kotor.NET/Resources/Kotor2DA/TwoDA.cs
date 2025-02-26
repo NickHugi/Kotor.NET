@@ -127,6 +127,49 @@ public class TwoDA
     }
 
     /// <summary>
+    /// Adds a new row into the table with the specified row header and copies
+    /// cells from the existing specified row.
+    /// </summary>
+    /// <param name="header">The header to be assigned for the new row.</param>
+    /// <param name="sourceRow">The row to copy existing values from.</param>
+    /// <returns>The new row added to the table.</returns>
+    public TwoDARow AddRow(string header, TwoDARow sourceRow)
+    {
+        var row = new TwoDARow(this);
+        row.RowHeader = header;
+
+        GetColumns().ToList().ForEach(columnHeader =>
+        {
+            var value = sourceRow.GetCell(columnHeader).AsString();
+            row.GetCell(columnHeader).SetString(value);
+        });
+
+        _rows.Add(row);
+        return row;
+    }
+
+    /// <summary>
+    /// Adds a new row into the table with the specified row header and copies
+    /// cells from the existing specified row.
+    /// </summary>
+    /// <param name="header">The header to be assigned for the new row.</param>
+    /// <param name="sourceRow">The row to copy existing values from.</param>
+    /// <returns>The new row added to the table.</returns>
+    public TwoDARow AddRow(string header, IDictionary<string, string> cells)
+    {
+        var row = new TwoDARow(this);
+        row.RowHeader = header;
+
+        cells.ToList().ForEach(data =>
+        {
+            row.GetCell(data.Key).SetString(data.Value);
+        });
+
+        _rows.Add(row);
+        return row;
+    }
+
+    /// <summary>
     /// Removes the row from the table at the specified index.
     /// </summary>
     /// <param name="index">The index into the table to remove.</param>
@@ -169,6 +212,18 @@ public class TwoDA
         }
 
         _columnHeaders.Add(header);
+    }
+    /// <summary>
+    /// Adds a new column into the table with the specified column header.
+    /// </summary>
+    /// <param name="header">The header to be assigned to the new column.</param>
+    /// <param name="defaultValue">Default value to be assigned to all rows for the new column.</param>
+    /// <exception cref="ArgumentException">Thrown if a column with the same header already exists.</exception>
+    public void AddColumn(string header, string defaultValue)
+    {
+        _columnHeaders.Add(header);
+
+        _rows.ForEach(row => row.GetCell(header).SetString(defaultValue));
     }
 
     /// <summary>
