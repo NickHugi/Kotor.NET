@@ -26,7 +26,7 @@ public class ResetRowHeadersAction : IAction<TwoDAResourceEditorViewModel>
     {
         for (int i = 0; i < _oldRowHeaders.Count; i++)
         {
-            data.Resource.SetCellText(i, "Row Header", _oldRowHeaders[i]);
+            data.Resource.SetRowCell(i, "Row Header", _oldRowHeaders[i]);
         }
     }
 }

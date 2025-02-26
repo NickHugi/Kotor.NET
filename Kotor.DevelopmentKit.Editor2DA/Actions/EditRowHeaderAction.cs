@@ -8,32 +8,31 @@ using Kotor.DevelopmentKit.Editor2DA.ViewModels;
 
 namespace Kotor.DevelopmentKit.Editor2DA.Actions;
 
-public class EditCellAction : IAction<TwoDAResourceEditorViewModel>
+public class EditRowHeaderAction : IAction<TwoDAResourceEditorViewModel>
 {
     public int RowID { get; }
-    public string ColumnHeader { get; }
     public string NewValue { get; }
     public string OldValue { get; }
 
-    public EditCellAction(int rowID, string columnHeader, string newValue, string oldValue)
+    public EditRowHeaderAction(int rowID, string newValue, string oldValue)
     {
         RowID = rowID;
-        ColumnHeader = columnHeader;
         NewValue = newValue;
         OldValue = oldValue;
     }
 
     public void Apply(TwoDAResourceEditorViewModel data)
     {
-        data.Resource.SetCellText(RowID, ColumnHeader, NewValue);
-        data.SelectedColumnIndex = data.Resource.GetColumnIndex(ColumnHeader);
-        data.SelectedRowIndex = data.Resource.GetRowIndex(RowID);
+        data.Resource.SetRowHeader(RowID, NewValue);
+        data.SelectedColumnIndex = 0;
+        var rowIndex = data.Resource.GetRowIndex(RowID);
+        data.SelectedRowIndex = rowIndex;
     }
 
     public void Undo(TwoDAResourceEditorViewModel data)
     {
-        data.Resource.SetCellText(RowID, ColumnHeader, OldValue);
-        data.SelectedColumnIndex = data.Resource.GetColumnIndex(ColumnHeader);
+        data.Resource.SetRowHeader(RowID, OldValue);
+        data.SelectedColumnIndex = 0;
         data.SelectedRowIndex = RowID;
     }
 }

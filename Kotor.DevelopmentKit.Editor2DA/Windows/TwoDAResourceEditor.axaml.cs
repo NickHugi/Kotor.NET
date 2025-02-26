@@ -54,18 +54,21 @@ public partial class TwoDAResourceEditor : ResourceEditorBase
     {
         TwodaDataGrid.Columns.Clear();
 
-        for (int i = 0; i < Context.Resource.Columns.Count(); i++)
+        TwodaDataGrid.Columns.Add(new DataGridTextColumn()
+        {
+            Header = "Row Header",
+            Binding = new Binding($"RowHeader"),
+            IsReadOnly = false,
+        });
+
+        for (int i = 1; i < Context.Resource.Columns.Count(); i++)
         {
             var columnHeader = Context.Resource.Columns.ElementAt(i);
             var column = new DataGridTextColumn()
             {
                 Header = columnHeader,
-                Binding = new Binding($"[{i}]"),
+                Binding = new Binding($"Cells[{columnHeader}]"),
                 IsReadOnly = false,
-            };
-            column.HeaderPointerReleased += (e, a) =>
-            {
-
             };
 
             TwodaDataGrid.Columns.Add(column);
@@ -79,8 +82,7 @@ public partial class TwoDAResourceEditor : ResourceEditorBase
 
         var rowIndex = TwodaDataGrid.SelectedIndex;
         var columnHeader = ((ColumnViewModel)TwodaDataGrid.CurrentColumn.Header).Header;
-        var columnIndex = Context.Resource.GetColumnIndex(columnHeader);
-        var text = Context.Resource.Rows[rowIndex][columnIndex];
+        var text = Context.Resource.Rows[rowIndex].Cells[columnHeader];
         await Clipboard.SetTextAsync(text);
     }
 
@@ -95,7 +97,7 @@ public partial class TwoDAResourceEditor : ResourceEditorBase
         var columnHeader = ((ColumnViewModel)TwodaDataGrid.CurrentColumn.Header).Header;
         var newValue = await Clipboard.GetTextAsync() ?? "";
 
-        Context.EditCell(rowID, columnHeader, newValue);
+        Context.SetRowCell(rowID, columnHeader, newValue);
         TwodaDataGrid.CurrentColumn = currentColumn;
         TwodaDataGrid.SelectedIndex = rowIndex;
     }
@@ -194,7 +196,6 @@ public partial class TwoDAResourceEditor : ResourceEditorBase
         Context.RenameColumn(targetColumnHeader, newColumnHeader);
     }
 
-
     protected override void OnDataContextChanged(EventArgs e)
     {
         base.OnDataContextChanged(e);
@@ -215,7 +216,26 @@ public partial class TwoDAResourceEditor : ResourceEditorBase
             RefreshColumns();
         });
     }
-    
+
+
+    private string GetValueFromCell(RowViewModel row, int columnIndex)
+    {
+        var columnHeader = Context.Resource.Columns.ElementAt(columnIndex).Header;
+        return (columnIndex == 0) ? row.RowHeader : row.Cells[columnHeader];
+    }
+
+    private void SetValueToCell(DataGridTextColumn column, int rowID, string value)
+    {
+        if (((Binding)column.Binding).Path == "RowHeader")
+        {
+            Context.SetRowHeader(rowID, value, _originalCellValue);
+        }
+        else
+        {
+            Context.SetRowCell(rowID, (column.Header as ColumnViewModel)!.Header, value, _originalCellValue);
+        }
+    }
+
 
     private async void DataGrid_KeyUp(object? sender, Avalonia.Input.KeyEventArgs e)
     {
@@ -236,15 +256,18 @@ public partial class TwoDAResourceEditor : ResourceEditorBase
 
     private void DataGrid_BeginningEdit(object? sender, Avalonia.Controls.DataGridBeginningEditEventArgs e)
     {
-        _originalCellValue = ((IEnumerable<string>)e.Row.DataContext!).ElementAt(e.Column.DisplayIndex);
+        var row = ((RowViewModel)e.Row.DataContext!);
+        _originalCellValue = GetValueFromCell(row, e.Column.DisplayIndex);
     }
 
     private void DataGrid_CellEditEnded(object? sender, Avalonia.Controls.DataGridCellEditEndedEventArgs e)
     {
+        var row = ((RowViewModel)e.Row.DataContext!);
+        var newValue = GetValueFromCell(row, e.Column.DisplayIndex); 
+
         var rowID = Context.Resource.GetRowID(Context.SelectedRowIndex);
-        var newValue = ((IEnumerable<string>)e.Row.DataContext!).ElementAt(e.Column.DisplayIndex);
-        var columnHeader = ((ColumnViewModel)e.Column.Header).Header;
-        Context.EditCell(rowID, columnHeader, newValue, _originalCellValue);
+
+        SetValueToCell((DataGridTextColumn)e.Column, rowID, newValue);
     }
 
     private void DataGrid_PointerReleased(object? sender, Avalonia.Input.PointerReleasedEventArgs e)
