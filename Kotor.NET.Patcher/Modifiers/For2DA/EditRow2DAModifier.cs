@@ -16,15 +16,15 @@ public class EditRow2DAModifier
     public required ICellValue? RowHeader { get; init; }
     public required List<IAssignment> Assignments { get; init; }
 
-    public void Apply(TwoDA twoda, Memory2DA memory2DA, MemoryTLK memoryTLK, PatchLogger log)
+    public void Apply(TwoDA twoda, Memory memory2DA, PatchLogger log)
     {
         var row = TargetRowLocator.Locate(twoda);
 
         if (RowHeader is not null)
         {
-            row.RowHeader = RowHeader.Resolve(twoda, row, memory2DA, memoryTLK);
+            row.RowHeader = RowHeader.Resolve(twoda, row, memory2DA);
         }
 
-        Assignments.ForEach(x => x.Assign(twoda, row, memory2DA, memoryTLK));
+        Assignments.ForEach(x => x.Assign(twoda, row, memory2DA));
     }
 }

@@ -13,9 +13,9 @@ public class RowCellAssignment : IAssignment
     public required string ColumnHeader { get; init; }
     public required ICellValue Value { get; init; }
 
-    public void Assign(TwoDA twoda, TwoDARow row, Memory2DA memory2DA, MemoryTLK memoryTLK)
+    public void Assign(TwoDA twoda, TwoDARow row, Memory memory)
     {
-        var value = Value.Resolve(twoda, row, memory2DA, memoryTLK);
+        var value = Value.Resolve(twoda, row, memory);
         row.GetCell(ColumnHeader).SetString(value);
     }
 }

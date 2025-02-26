@@ -66,7 +66,7 @@ public class ParseChangeRow
 
                 if (entry.KeyName.StartsWith("2DAMEMORY"))
                 {
-                    return new Memory2DAAssignment() { Key = entry.KeyName, Value = value };
+                    return new MemoryAssignment() { Key = entry.KeyName, Value = value };
                 }
                 else if (entry.KeyName.StartsWith("StrRef"))
                 {

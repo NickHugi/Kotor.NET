@@ -9,12 +9,12 @@ namespace Kotor.NET.Patcher.Modifiers.For2DA.CellValues;
 
 public interface ICellValue
 {
-    public string Resolve(TwoDA twoda, TwoDARow? row, Memory2DA memory2DA, MemoryTLK memoryTLK);
-    public string? TryResolve(TwoDA twoda, TwoDARow row, Memory2DA memory2DA, MemoryTLK memoryTLK)
+    public string Resolve(TwoDA twoda, TwoDARow? row, Memory memory);
+    public string? TryResolve(TwoDA twoda, TwoDARow row, Memory memory)
     {
         try
         {
-            return Resolve(twoda, row, memory2DA, memoryTLK);
+            return Resolve(twoda, row, memory);
         }
         catch (PatchingException)
         {

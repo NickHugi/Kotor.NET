@@ -11,7 +11,7 @@ public class CellValueHighest : ICellValue
 {
     public required string ColumnHeader { get; init; }
 
-    public string Resolve(TwoDA twoda, TwoDARow row, Memory2DA memory2DA, MemoryTLK memoryTLK)
+    public string Resolve(TwoDA twoda, TwoDARow row, Memory memory)
     {
         if (row is null)
         {

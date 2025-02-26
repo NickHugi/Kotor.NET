@@ -60,7 +60,7 @@ public class ParseChangeRowTest
             {
                 Key = "2DAMEMORY1",
                 Value = new CellValueRowIndex()
-            }).Subject.Should().BeOfType<Memory2DAAssignment>();
+            }).Subject.Should().BeOfType<MemoryAssignment>();
         }
     }
 }

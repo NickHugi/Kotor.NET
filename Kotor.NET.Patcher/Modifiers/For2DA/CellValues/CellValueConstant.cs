@@ -11,7 +11,7 @@ public class CellValueConstant : ICellValue
 {
     public required string Value { get; init; }
 
-    public string Resolve(TwoDA twoda, TwoDARow row, Memory2DA memory2DA, MemoryTLK memoryTLK)
+    public string Resolve(TwoDA twoda, TwoDARow row, Memory memory)
     {
         return Value;
     }

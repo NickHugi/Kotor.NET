@@ -11,7 +11,7 @@ public class CellValueTLKMemory : ICellValue
 {
     public required string Key { get; init; }
 
-    public string Resolve(TwoDA twoda, TwoDARow row, Memory2DA memory2DA, MemoryTLK memoryTLK)
+    public string Resolve(TwoDA twoda, TwoDARow row, Memory memory)
     {
         return memoryTLK.Get(Key).ToString();
     }

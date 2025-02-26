@@ -14,7 +14,7 @@ public class AddColumn2DAModifier
     public required string DefaultValue { get; init; }
     public required List<IAssignment> Assignments { get; init; }
 
-    public void Apply(TwoDA twoda, Memory2DA memory2DA, MemoryTLK memoryTLK, PatchLogger log)
+    public void Apply(TwoDA twoda, Memory memory2DA, MemoryTLK memoryTLK, PatchLogger log)
     {
         twoda.AddColumn(ColumnHeader, DefaultValue);
 

@@ -9,5 +9,5 @@ namespace Kotor.NET.Patcher.Modifiers.For2DA.Assignments;
 
 public interface IAssignment
 {
-    public void Assign(TwoDA twoda, TwoDARow row, Memory2DA memory2DA, MemoryTLK memoryTLK);
+    public void Assign(TwoDA twoda, TwoDARow row, Memory memory);
 }

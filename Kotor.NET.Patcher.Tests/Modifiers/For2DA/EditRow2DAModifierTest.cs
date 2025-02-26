@@ -47,8 +47,10 @@ public class EditRow2DAModifierTest
             ]
         };
 
-        var memory = new Memory2DA();
+        var memory = new Memory();
 
-        modifier.Apply(twoda, memory, null, null);
+        modifier.Apply(twoda, memory, null);
+
+        using new 
     }
 }

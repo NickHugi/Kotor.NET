@@ -17,33 +17,33 @@ public class AddRow2DAModifier
     public required Dictionary<string, ICellValue> AssignTo2DAMemory { get; init; }
     public required Dictionary<string, ICellValue> AssignToTLKMemory { get; init; }
 
-    public void Apply(TwoDA twoda, Memory2DA memory2DA, MemoryTLK memoryTLK, PatchLogger log)
+    public void Apply(TwoDA twoda, Memory memory, PatchLogger log)
     {
         var row = OverrideRowLocator?.TryLocate(twoda);
 
         if (row is null)
         {
-            var header = RowHeader.Resolve(twoda, null, memory2DA, memoryTLK);
+            var header = RowHeader.Resolve(twoda, null, memory);
             row = twoda.AddRow(header);
         }
         else
         {
-            var header = RowHeader.Resolve(twoda, row, memory2DA, memoryTLK);
+            var header = RowHeader.Resolve(twoda, row, memory);
             row.RowHeader = header;
         }
 
         Values.ToList().ForEach(x =>
         {
             var header = x.Key;
-            var value = x.Value.Resolve(twoda, row, memory2DA, memoryTLK);
+            var value = x.Value.Resolve(twoda, row, memory);
             row.GetCell(header).SetString(value);
         });
 
         AssignTo2DAMemory.ToList().ForEach(x =>
         {
             string key = x.Key;
-            string value = x.Value.Resolve(twoda, row, memory2DA, memoryTLK);
-            memory2DA.Set(key, value);
+            string value = x.Value.Resolve(twoda, row, memory);
+            memory.Set(key, value);
         });
     }
 }
