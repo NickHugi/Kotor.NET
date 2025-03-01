@@ -13,18 +13,19 @@ using Kotor.NET.Patcher.Modifiers.For2DA.RowLocators;
 
 namespace Kotor.NET.Patcher.Parsers.LegacyINI.For2DA;
 
-public class ParseChangeRow
+public class ParseCopyRow
 {
-    public EditRow2DAModifier Parse(KeyDataCollection section)
+    public CopyRow2DAModifier Parse(KeyDataCollection section)
     {
         return new()
         {
-            TargetRowLocator = ParseTargetRowLocator(section),
+            OverrideRowLocator = ParseOverrideRowLocator(section),
+            BlueprintRowLocator = ParseBlueprintRowLocator(section),
             Assignments = ParseAssignments(section),
         };
     }
 
-    private IRowLocator ParseTargetRowLocator(KeyDataCollection section)
+    private IRowLocator ParseBlueprintRowLocator(KeyDataCollection section)
     {
         if (section.TryGetInt32("RowIndex", out var rowIndex))
         {
@@ -34,13 +35,32 @@ public class ParseChangeRow
         {
             return new RowLocatorByRowHeader { RowHeader = rowHeader };
         }
-        else if (section.TryGetString("LabelIndex", out var columnHeader))
+        else if (section.TryGetString("LabelIndex", out var cellValue))
         {
-            return new RowLocatorByColumn { ColumnHeader = "label", Value = columnHeader };
+            return new RowLocatorByColumn { ColumnHeader = "label", Value = cellValue };
         }
         else
         {
-            throw new ParsingException($"Did not specify which column to edit.");
+            throw new ParsingException($"Did not specify a row to copy.");
+        }
+    }
+
+    public IRowLocator? ParseOverrideRowLocator(KeyDataCollection section)
+    {
+        if (section.TryGetString("ExclusiveColumn", out var columnHeader))
+        {
+            if (section.TryGetString(columnHeader, out var value))
+            {
+                return new RowLocatorByColumn { ColumnHeader = columnHeader, Value = value };
+            }
+            else
+            {
+                throw new ParsingException($"The specified unqiue column '{columnHeader}' did not have a value specified for the row.");
+            }
+        }
+        else
+        {
+            return null;
         }
     }
 
@@ -61,6 +81,10 @@ public class ParseChangeRow
                 else if (entry.KeyName.StartsWith("StrRef"))
                 {
                     return new MemoryAssignment() { Key = entry.KeyName, Value = value };
+                }
+                else if (entry.KeyName == "NewRowLabel")
+                {
+                    return new RowHeaderAssignment() { Value = value };
                 }
                 else
                 {

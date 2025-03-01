@@ -3,47 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.NET.Patcher.Modifiers.For2DA.Assignments;
 using Kotor.NET.Patcher.Modifiers.For2DA.CellValues;
 using Kotor.NET.Patcher.Modifiers.For2DA.RowLocators;
 using Kotor.NET.Resources.Kotor2DA;
 
 namespace Kotor.NET.Patcher.Modifiers.For2DA;
 
-public class AddRow2DAModifier
+public class AddRow2DAModifier : I2DAModifier
 {
+    /// <summary>
+    /// If not null, if the locator finds a row, that row will be edited rather than a new row being added.
+    /// </summary>
     public required IRowLocator? OverrideRowLocator { get; init; }
-    public required ICellValue RowHeader { get; init; }
-    public required Dictionary<string, ICellValue> Values { get; init; }
-    public required Dictionary<string, ICellValue> AssignTo2DAMemory { get; init; }
-    public required Dictionary<string, ICellValue> AssignToTLKMemory { get; init; }
+    /// <summary>
+    /// A list of actions to apply after the row has been found or added.
+    /// </summary>
+    public required List<IAssignment> Assignments { get; init; }
 
-    public void Apply(TwoDA twoda, Memory memory, PatchLogger log)
+    public void Apply(TwoDA twoda, PatcherMemory memory, PatcherLogger log)
     {
-        var row = OverrideRowLocator?.TryLocate(twoda);
+        TwoDARow? row = null;
+
+        if (OverrideRowLocator is not null)
+        {
+            OverrideRowLocator.TryLocate(twoda, out row);
+        }
 
         if (row is null)
         {
-            var header = RowHeader.Resolve(twoda, null, memory);
-            row = twoda.AddRow(header);
-        }
-        else
-        {
-            var header = RowHeader.Resolve(twoda, row, memory);
-            row.RowHeader = header;
+            row = twoda.AddRow("");
         }
 
-        Values.ToList().ForEach(x =>
-        {
-            var header = x.Key;
-            var value = x.Value.Resolve(twoda, row, memory);
-            row.GetCell(header).SetString(value);
-        });
-
-        AssignTo2DAMemory.ToList().ForEach(x =>
-        {
-            string key = x.Key;
-            string value = x.Value.Resolve(twoda, row, memory);
-            memory.Set(key, value);
-        });
+        Assignments.ForEach(x => x.Assign(twoda, row, memory));
     }
 }

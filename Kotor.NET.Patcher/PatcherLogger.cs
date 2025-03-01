@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kotor.NET.Patcher;
 
-public class PatchLogger
+public class PatcherLogger
 {
     public void Debug(string message)
     {

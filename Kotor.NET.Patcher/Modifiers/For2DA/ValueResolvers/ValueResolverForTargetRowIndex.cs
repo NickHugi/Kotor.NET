@@ -8,9 +8,9 @@ using Kotor.NET.Resources.Kotor2DA;
 
 namespace Kotor.NET.Patcher.Modifiers.For2DA.CellValues;
 
-public class CellValueRowIndex : ICellValue
+public class ValueResolverForTargetRowIndex : BaseValueResolver
 {
-    public string Resolve(TwoDA twoda, TwoDARow row, Memory memory)
+    public override string Resolve(TwoDA twoda, TwoDARow? row, PatcherMemory memory)
     {
         return row.Index.ToString();
     }

@@ -10,15 +10,5 @@ namespace Kotor.NET.Patcher.Modifiers.For2DA.RowLocators;
 public interface IRowLocator
 {
     public TwoDARow Locate(TwoDA twoda);
-    public TwoDARow? TryLocate(TwoDA twoda)
-    {
-        try
-        {
-            return Locate(twoda);
-        }
-        catch (PatchingException)
-        {
-            return null;
-        }
-    }
+    public bool TryLocate(TwoDA twoda, out TwoDARow? row);
 }

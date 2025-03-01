@@ -11,9 +11,9 @@ namespace Kotor.NET.Patcher.Modifiers.For2DA.Assignments;
 public class MemoryAssignment : IAssignment
 {
     public required string Key { get; init; }
-    public required ICellValue Value { get; init; }
+    public required BaseValueResolver Value { get; init; }
 
-    public void Assign(TwoDA twoda, TwoDARow row, Memory memory)
+    public void Assign(TwoDA twoda, TwoDARow row, PatcherMemory memory)
     {
         var value = Value.Resolve(twoda, row, memory);
         memory.Set(Key, value);

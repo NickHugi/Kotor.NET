@@ -36,8 +36,6 @@ public class ParseChangeRowTest
 
         using (new AssertionScope())
         {
-            modifier.RowHeader.Should().BeNull();
-
             modifier.TargetRowLocator
                 .Should().BeOfType<RowLocatorByRowIndex>()
                 .And.Subject.Should().Match<RowLocatorByRowIndex>(x => x.Index == 1);
@@ -47,19 +45,19 @@ public class ParseChangeRowTest
             modifier.Assignments.Should().ContainEquivalentOf(new
             {
                 ColumnHeader = "Column1",
-                Value = new CellValueConstant() { Value = "hello" }
+                Value = new ValueResolverForConstant() { Value = "hello" }
             }).Subject.Should().BeOfType<RowCellAssignment>();
 
             modifier.Assignments.Should().ContainEquivalentOf(new
             {
                 ColumnHeader = "Column2",
-                Value = new CellValueConstant() { Value = "world!" }
+                Value = new ValueResolverForConstant() { Value = "world!" }
             }).Subject.Should().BeOfType<RowCellAssignment>();
 
             modifier.Assignments.Should().ContainEquivalentOf(new
             {
                 Key = "2DAMEMORY1",
-                Value = new CellValueRowIndex()
+                Value = new ValueResolverForTargetRowIndex()
             }).Subject.Should().BeOfType<MemoryAssignment>();
         }
     }

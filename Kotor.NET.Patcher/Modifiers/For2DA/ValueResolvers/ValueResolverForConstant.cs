@@ -7,12 +7,12 @@ using Kotor.NET.Resources.Kotor2DA;
 
 namespace Kotor.NET.Patcher.Modifiers.For2DA.CellValues;
 
-public class CellValueTLKMemory : ICellValue
+public class ValueResolverForConstant : BaseValueResolver
 {
-    public required string Key { get; init; }
+    public required string Value { get; init; }
 
-    public string Resolve(TwoDA twoda, TwoDARow row, Memory memory)
+    public override string Resolve(TwoDA twoda, TwoDARow row, PatcherMemory memory)
     {
-        return memoryTLK.Get(Key).ToString();
+        return Value;
     }
 }

@@ -8,5 +8,7 @@ namespace Kotor.NET.Patcher.Modifiers;
 
 public class PatchingException : Exception
 {
-
+    public PatchingException(string message) : base(message)
+    {
+    }
 }

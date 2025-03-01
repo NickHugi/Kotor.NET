@@ -20,15 +20,29 @@ public class RowLocatorByRowHeader : IRowLocator
 
         if (rows.Count == 0)
         {
-            throw new PatchingException();
+            throw new PatchingException($"Could not find a row with the header '{RowHeader}'.");
         }
         else if (rows.Count > 1)
         {
-            throw new PatchingException();
+            throw new PatchingException($"Found multiple rows matching the header '{RowHeader}'.");
         }
         else
         {
             return rows.Single();
+        }
+    }
+
+    public bool TryLocate(TwoDA twoda, out TwoDARow? row)
+    {
+        try
+        {
+            row = Locate(twoda);
+            return true;
+        }
+        catch (PatchingException)
+        {
+            row = null;
+            return false;
         }
     }
 }

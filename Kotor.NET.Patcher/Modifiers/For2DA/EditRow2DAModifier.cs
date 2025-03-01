@@ -10,21 +10,15 @@ using Kotor.NET.Resources.Kotor2DA;
 
 namespace Kotor.NET.Patcher.Modifiers.For2DA;
 
-public class EditRow2DAModifier
+public class EditRow2DAModifier : I2DAModifier
 {
     public required IRowLocator TargetRowLocator { get; init; }
-    public required ICellValue? RowHeader { get; init; }
     public required List<IAssignment> Assignments { get; init; }
 
-    public void Apply(TwoDA twoda, Memory memory2DA, PatchLogger log)
+    public void Apply(TwoDA twoda, PatcherMemory memory, PatcherLogger log)
     {
         var row = TargetRowLocator.Locate(twoda);
 
-        if (RowHeader is not null)
-        {
-            row.RowHeader = RowHeader.Resolve(twoda, row, memory2DA);
-        }
-
-        Assignments.ForEach(x => x.Assign(twoda, row, memory2DA));
+        Assignments.ForEach(x => x.Assign(twoda, row, memory));
     }
 }

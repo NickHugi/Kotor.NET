@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Resources.Kotor2DA;
 
-namespace Kotor.NET.Patcher.Modifiers.For2DA.Assignments;
+namespace Kotor.NET.Patcher.Modifiers.For2DA;
 
-public interface IAssignment
+public interface I2DAModifier
 {
-    public void Assign(TwoDA twoda, TwoDARow row, PatcherMemory memory);
+    public void Apply(TwoDA twoda, PatcherMemory memory, PatcherLogger log);
 }

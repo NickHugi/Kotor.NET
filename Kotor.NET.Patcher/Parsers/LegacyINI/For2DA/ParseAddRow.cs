@@ -13,37 +13,40 @@ using Kotor.NET.Patcher.Modifiers.For2DA.RowLocators;
 
 namespace Kotor.NET.Patcher.Parsers.LegacyINI.For2DA;
 
-public class ParseChangeRow
+public class ParseAddRow
 {
-    public EditRow2DAModifier Parse(KeyDataCollection section)
+    public AddRow2DAModifier Parse(KeyDataCollection section)
     {
         return new()
         {
-            TargetRowLocator = ParseTargetRowLocator(section),
+            OverrideRowLocator = ParseOverrideRowLocator(section),
             Assignments = ParseAssignments(section),
         };
     }
 
-    private IRowLocator ParseTargetRowLocator(KeyDataCollection section)
+    private IRowLocator? ParseOverrideRowLocator(KeyDataCollection section)
     {
         if (section.TryGetInt32("RowIndex", out var rowIndex))
         {
-            return new RowLocatorByRowIndex { Index = rowIndex };
+            return new RowLocatorByRowIndex() { Index = rowIndex };
         }
         else if (section.TryGetString("RowLabel", out var rowHeader))
         {
-            return new RowLocatorByRowHeader { RowHeader = rowHeader };
+            return new RowLocatorByRowHeader() { RowHeader = rowHeader };
         }
-        else if (section.TryGetString("LabelIndex", out var columnHeader))
+        else if (section.TryGetString("LabelIndex", out var cellValue))
         {
-            return new RowLocatorByColumn { ColumnHeader = "label", Value = columnHeader };
+            return new RowLocatorByColumn()
+            {
+                ColumnHeader = "label",
+                Value = cellValue,
+            };
         }
         else
         {
-            throw new ParsingException($"Did not specify which column to edit.");
+            return null;
         }
     }
-
     private List<IAssignment> ParseAssignments(KeyDataCollection section)
     {
         return section

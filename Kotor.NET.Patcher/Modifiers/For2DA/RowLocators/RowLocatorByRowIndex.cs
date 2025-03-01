@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Resources.Kotor2DA;
@@ -16,6 +17,29 @@ public class RowLocatorByRowIndex : IRowLocator
 
     public TwoDARow Locate(TwoDA twoda)
     {
-        return twoda.GetRows().ElementAtOrDefault(Index) ?? throw new PatchingException();
+        var row = twoda.GetRows().ElementAtOrDefault(Index);
+
+        if (row is null)
+        {
+            throw new PatchingException($"No row exists at index {Index}.");
+        }
+        else
+        {
+            return row;
+        }
+    }
+
+    public bool TryLocate(TwoDA twoda, out TwoDARow? row)
+    {
+        try
+        {
+            row = Locate(twoda);
+            return true;
+        }
+        catch (PatchingException)
+        {
+            row = null;
+            return false;
+        }
     }
 }

@@ -10,31 +10,31 @@ namespace Kotor.NET.Patcher.Extensions;
 
 public static class KeyDataExtension
 {
-    public static ICellValue GetCellValue(this KeyData entry)
+    public static BaseValueResolver GetValueResolver(this KeyData entry)
     {
         if (entry.Value == "high()")
         {
-            return new CellValueHighest() { ColumnHeader = entry.KeyName };
+            return new ValueResolverForHighestUnderColumn() { ColumnHeader = entry.KeyName };
         }
         else if (entry.Value == "RowIndex")
         {
-            return new CellValueRowIndex();
+            return new ValueResolverForTargetRowIndex();
         }
         else if (entry.Value == "RowLabel")
         {
-            return new CellValueRowHeader();
+            return new ValueResolverForTargetRowHeader();
         }
         else if (entry.Value == "2DAMEMORY")
         {
-            return new CellValue2DAMemory() { Key = entry.KeyName };
+            return new ValueResolverForPatcherMemory() { Key = entry.KeyName };
         }
         else if (entry.Value == "StrRef")
         {
-            return new CellValueTLKMemory() { Key = entry.KeyName };
+            return new ValueResolverForPatcherMemory() { Key = entry.KeyName };
         }
         else
         {
-            return new CellValueConstant() { Value = entry.Value };
+            return new ValueResolverForConstant() { Value = entry.Value };
         }
     }
 }

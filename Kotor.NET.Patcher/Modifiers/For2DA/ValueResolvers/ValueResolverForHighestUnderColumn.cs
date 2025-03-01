@@ -7,20 +7,20 @@ using Kotor.NET.Resources.Kotor2DA;
 
 namespace Kotor.NET.Patcher.Modifiers.For2DA.CellValues;
 
-public class CellValueHighest : ICellValue
+public class ValueResolverForHighestUnderColumn : BaseValueResolver
 {
     public required string ColumnHeader { get; init; }
 
-    public string Resolve(TwoDA twoda, TwoDARow row, Memory memory)
+    public override string Resolve(TwoDA twoda, TwoDARow? row, PatcherMemory memory)
     {
         if (row is null)
         {
-            throw new PatchingException();
+            throw new PatchingException($"Try to get value for column '{ColumnHeader}' in an invalid context.");
         }
 
         if (!twoda.GetColumns().Contains(ColumnHeader))
         {
-            throw new PatchingException();
+            throw new PatchingException($"Could not find column '{ColumnHeader}'.");
         }
 
         return twoda.GetRows().Select(x => int.TryParse(x.GetCell(ColumnHeader).AsString(), out int value) ? value : 0).Max().ToString();

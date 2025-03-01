@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kotor.NET.Patcher.Modifiers;
 
-public class Memory
+public class PatcherMemory
 {
     private Dictionary<string, string> _values = new();
 
