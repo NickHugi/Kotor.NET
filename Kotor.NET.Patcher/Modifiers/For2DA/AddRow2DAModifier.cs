@@ -27,7 +27,7 @@ public class AddRow2DAModifier : I2DAModifier
 
         if (OverrideRowLocator is not null)
         {
-            OverrideRowLocator.TryLocate(twoda, out row);
+            OverrideRowLocator.TryLocate(twoda, out row, memory);
         }
 
         if (row is null)

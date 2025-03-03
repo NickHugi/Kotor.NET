@@ -25,33 +25,13 @@ public class ParseCopyRow
         };
     }
 
-    private IRowLocator ParseBlueprintRowLocator(KeyDataCollection section)
-    {
-        if (section.TryGetInt32("RowIndex", out var rowIndex))
-        {
-            return new RowLocatorByRowIndex { Index = rowIndex };
-        }
-        else if (section.TryGetString("RowLabel", out var rowHeader))
-        {
-            return new RowLocatorByRowHeader { RowHeader = rowHeader };
-        }
-        else if (section.TryGetString("LabelIndex", out var cellValue))
-        {
-            return new RowLocatorByColumn { ColumnHeader = "label", Value = cellValue };
-        }
-        else
-        {
-            throw new ParsingException($"Did not specify a row to copy.");
-        }
-    }
-
     public IRowLocator? ParseOverrideRowLocator(KeyDataCollection section)
     {
         if (section.TryGetString("ExclusiveColumn", out var columnHeader))
         {
-            if (section.TryGetString(columnHeader, out var value))
+            if (section.TryGetString(columnHeader, out var cellValue))
             {
-                return new RowLocatorByColumn { ColumnHeader = columnHeader, Value = value };
+                return new RowLocatorByColumn { ColumnHeader = columnHeader, Value = new ValueResolverForConstant { Value = cellValue } };
             }
             else
             {
@@ -64,12 +44,33 @@ public class ParseCopyRow
         }
     }
 
+    private IRowLocator ParseBlueprintRowLocator(KeyDataCollection section)
+    {
+        if (section.TryGetInt32("RowIndex", out var rowIndex))
+        {
+            return new RowLocatorByRowIndex { Index = rowIndex };
+        }
+        else if (section.TryGetString("RowLabel", out var rowHeader))
+        {
+            return new RowLocatorByRowHeader { RowHeader = rowHeader };
+        }
+        else if (section.TryGetString("LabelIndex", out var cellValue))
+        {
+            return new RowLocatorByColumn { ColumnHeader = "label", Value = new ValueResolverForConstant { Value = cellValue } };
+        }
+        else
+        {
+            throw new ParsingException($"Did not specify a row to copy.");
+        }
+    }
+
     private List<IAssignment> ParseAssignments(KeyDataCollection section)
     {
         return section
             .Where(x => x.KeyName != "RowIndex")
             .Where(x => x.KeyName != "RowLabel")
             .Where(x => x.KeyName != "LabelIndex")
+            .Where(x => x.KeyName != "ExclusiveColumn")
             .Select<KeyData, IAssignment>(entry =>
             {
                 var value = entry.GetValueResolver();

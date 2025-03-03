@@ -34,9 +34,9 @@ public class ParseChangeRow
         {
             return new RowLocatorByRowHeader { RowHeader = rowHeader };
         }
-        else if (section.TryGetString("LabelIndex", out var columnHeader))
+        else if (section.TryGetString("LabelIndex", out var cellValue))
         {
-            return new RowLocatorByColumn { ColumnHeader = "label", Value = columnHeader };
+            return new RowLocatorByColumn { ColumnHeader = "label", Value = new ValueResolverForConstant { Value = cellValue } };
         }
         else
         {

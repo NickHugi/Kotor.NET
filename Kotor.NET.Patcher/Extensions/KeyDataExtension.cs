@@ -14,7 +14,9 @@ public static class KeyDataExtension
     {
         if (entry.Value == "high()")
         {
-            return new ValueResolverForHighestUnderColumn() { ColumnHeader = entry.KeyName };
+            return (entry.KeyName == "")
+                ? new ValueResolverForHighestUnderColumnHeader()
+                : new ValueResolverForHighestUnderColumn() { ColumnHeader = entry.KeyName };
         }
         else if (entry.Value == "RowIndex")
         {
@@ -24,13 +26,13 @@ public static class KeyDataExtension
         {
             return new ValueResolverForTargetRowHeader();
         }
-        else if (entry.Value == "2DAMEMORY")
+        else if (entry.Value.StartsWith("2DAMEMORY"))
         {
-            return new ValueResolverForPatcherMemory() { Key = entry.KeyName };
+            return new ValueResolverForPatcherMemory() { Key = entry.Value };
         }
-        else if (entry.Value == "StrRef")
+        else if (entry.Value.StartsWith("StrRef"))
         {
-            return new ValueResolverForPatcherMemory() { Key = entry.KeyName };
+            return new ValueResolverForPatcherMemory() { Key = entry.Value };
         }
         else
         {

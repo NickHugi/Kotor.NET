@@ -26,9 +26,7 @@ public class ParseChangeRowTest
             """
                 [change_row_2da]
                 RowIndex=1
-                Column1=hello
-                Column2=world!
-                2DAMEMORY1=RowIndex
+                Column0=2DAMEMORY0
             """);
 
         var parser = new ParseChangeRow();
@@ -36,29 +34,18 @@ public class ParseChangeRowTest
 
         using (new AssertionScope())
         {
-            modifier.TargetRowLocator
-                .Should().BeOfType<RowLocatorByRowIndex>()
-                .And.Subject.Should().Match<RowLocatorByRowIndex>(x => x.Index == 1);
-
-            modifier.Assignments.Should().HaveCount(3);
-
-            modifier.Assignments.Should().ContainEquivalentOf(new
+            modifier.TargetRowLocator.Should().BeEquivalentTo(new RowLocatorByRowIndex
             {
-                ColumnHeader = "Column1",
-                Value = new ValueResolverForConstant() { Value = "hello" }
-            }).Subject.Should().BeOfType<RowCellAssignment>();
+                Index = 1
+            });
 
-            modifier.Assignments.Should().ContainEquivalentOf(new
-            {
-                ColumnHeader = "Column2",
-                Value = new ValueResolverForConstant() { Value = "world!" }
-            }).Subject.Should().BeOfType<RowCellAssignment>();
+            modifier.Assignments.Should().HaveCount(1);
 
-            modifier.Assignments.Should().ContainEquivalentOf(new
+            modifier.Assignments.Should().ContainEquivalentOf(new RowCellAssignment
             {
-                Key = "2DAMEMORY1",
-                Value = new ValueResolverForTargetRowIndex()
-            }).Subject.Should().BeOfType<MemoryAssignment>();
+                ColumnHeader = "Column0",
+                Value = new ValueResolverForPatcherMemory { Key = "2DAMEMORY0" }
+            }, config => config.IncludingAllRuntimeProperties());
         }
     }
 }

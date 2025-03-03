@@ -17,7 +17,7 @@ public class EditRow2DAModifier : I2DAModifier
 
     public void Apply(TwoDA twoda, PatcherMemory memory, PatcherLogger log)
     {
-        var row = TargetRowLocator.Locate(twoda);
+        var row = TargetRowLocator.Locate(twoda, memory);
 
         Assignments.ForEach(x => x.Assign(twoda, row, memory));
     }

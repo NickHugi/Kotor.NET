@@ -15,7 +15,7 @@ public class RowLocatorByRowIndex : IRowLocator
 {
     public required int Index { get; init; }
 
-    public TwoDARow Locate(TwoDA twoda)
+    public TwoDARow Locate(TwoDA twoda, PatcherMemory memory)
     {
         var row = twoda.GetRows().ElementAtOrDefault(Index);
 
@@ -29,11 +29,11 @@ public class RowLocatorByRowIndex : IRowLocator
         }
     }
 
-    public bool TryLocate(TwoDA twoda, out TwoDARow? row)
+    public bool TryLocate(TwoDA twoda, out TwoDARow? row, PatcherMemory memory)
     {
         try
         {
-            row = Locate(twoda);
+            row = Locate(twoda, memory);
             return true;
         }
         catch (PatchingException)

@@ -18,12 +18,12 @@ public class CopyRow2DAModifier : I2DAModifier
 
     public void Apply(TwoDA twoda, PatcherMemory memory, PatcherLogger log)
     {
-        var source = BlueprintRowLocator.Locate(twoda);
+        var source = BlueprintRowLocator.Locate(twoda, memory);
         TwoDARow? target = null;
 
         if (OverrideRowLocator is not null)
         {
-            OverrideRowLocator.TryLocate(twoda, out target);
+            OverrideRowLocator.TryLocate(twoda, out target, memory);
         }
         if (target is null)
         {

@@ -17,53 +17,47 @@ using FluentAssertions.Equivalency;
 
 namespace Kotor.NET.Patcher.Tests.Parsers.LegacyINI.For2DA;
 
-public class ParseCopyRowTest
+public class ParseAddRowTest
 {
     [Fact]
     public void Parse()
     {
         var ini = new IniDataParser().Parse(
             """
-                [copy_row_2da]
-                RowIndex=1
-                ExclusiveColumn=Column1
-                NewRowLabel=high()
-                Column1=hello
-                2DAMEMORY1=RowIndex
+                [add_row_2da]
+                ExclusiveColumn=Column0
+                RowLabel=rowheader
+                Column0=2DAMEMORY1
+                2DAMEMORY2=RowIndex
             """);
 
-        var parser = new ParseCopyRow();
-        var modifier = parser.Parse(ini["copy_row_2da"]);
+        var parser = new ParseAddRow();
+        var modifier = parser.Parse(ini["add_row_2da"]);
 
         using (new AssertionScope())
         {
-            modifier.BlueprintRowLocator.Should().BeEquivalentTo(new RowLocatorByRowIndex
-            {
-                Index = 1
-            }, config => config.IncludingAllRuntimeProperties());
-
             modifier.OverrideRowLocator.Should().BeEquivalentTo(new RowLocatorByColumn
             {
-                ColumnHeader = "Column1",
-                Value = new ValueResolverForConstant { Value = "hello" }
-            }, config => config.IncludingAllRuntimeProperties());
+                ColumnHeader = "Column0",
+                Value = new ValueResolverForPatcherMemory { Key = "2DAMEMORY1" },
+            });
 
             modifier.Assignments.Should().HaveCount(3);
 
             modifier.Assignments.Should().ContainEquivalentOf(new RowHeaderAssignment
             {
-                Value = new ValueResolverForHighestUnderColumnHeader()
+                Value = new ValueResolverForConstant { Value = "rowheader" },
             }, config => config.IncludingAllRuntimeProperties());
 
             modifier.Assignments.Should().ContainEquivalentOf(new RowCellAssignment
             {
-                ColumnHeader = "Column1",
-                Value = new ValueResolverForConstant { Value = "hello" }
+                ColumnHeader = "Column0",
+                Value = new ValueResolverForPatcherMemory { Key = "2DAMEMORY1" },
             }, config => config.IncludingAllRuntimeProperties());
 
             modifier.Assignments.Should().ContainEquivalentOf(new MemoryAssignment
             {
-                Key = "2DAMEMORY1",
+                Key = "2DAMEMORY2",
                 Value = new ValueResolverForTargetRowIndex()
             }, config => config.IncludingAllRuntimeProperties());
         }

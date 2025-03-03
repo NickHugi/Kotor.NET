@@ -15,7 +15,7 @@ public class ValueResolverForExistingCell : BaseValueResolver
 
     public override string Resolve(TwoDA twoda, TwoDARow? _, PatcherMemory memory)
     {
-        var row = RowLocator.Locate(twoda);
+        var row = RowLocator.Locate(twoda, memory);
         var value = row.GetCell(ColumnHeader).AsString();
         return value;
     }

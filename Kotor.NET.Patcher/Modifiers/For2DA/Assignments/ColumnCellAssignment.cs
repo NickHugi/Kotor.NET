@@ -17,7 +17,7 @@ public class ColumnCellAssignment : IAssignment
 
     public void Assign(TwoDA twoda, TwoDARow _, PatcherMemory memory)
     {
-        var row = RowLocator.Locate(twoda);
+        var row = RowLocator.Locate(twoda, memory);
         var value = Value.Resolve(twoda, row, memory);
         row.GetCell(ColumnHeader).SetString(value);
     }

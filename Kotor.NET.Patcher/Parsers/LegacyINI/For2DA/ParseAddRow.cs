@@ -26,33 +26,20 @@ public class ParseAddRow
 
     private IRowLocator? ParseOverrideRowLocator(KeyDataCollection section)
     {
-        if (section.TryGetInt32("RowIndex", out var rowIndex))
+        if (section.TryGetString("ExclusiveColumn", out var rowHeader))
         {
-            return new RowLocatorByRowIndex() { Index = rowIndex };
-        }
-        else if (section.TryGetString("RowLabel", out var rowHeader))
-        {
-            return new RowLocatorByRowHeader() { RowHeader = rowHeader };
-        }
-        else if (section.TryGetString("LabelIndex", out var cellValue))
-        {
-            return new RowLocatorByColumn()
-            {
-                ColumnHeader = "label",
-                Value = cellValue,
-            };
+            return new RowLocatorByColumn { ColumnHeader = rowHeader, Value = section.Single(x => x.KeyName == rowHeader).GetValueResolver() };
         }
         else
         {
             return null;
         }
     }
+
     private List<IAssignment> ParseAssignments(KeyDataCollection section)
     {
         return section
-            .Where(x => x.KeyName != "RowIndex")
-            .Where(x => x.KeyName != "RowLabel")
-            .Where(x => x.KeyName != "LabelIndex")
+            .Where(x => x.KeyName != "ExclusiveColumn")
             .Select<KeyData, IAssignment>(entry =>
             {
                 var value = entry.GetValueResolver();
@@ -64,6 +51,10 @@ public class ParseAddRow
                 else if (entry.KeyName.StartsWith("StrRef"))
                 {
                     return new MemoryAssignment() { Key = entry.KeyName, Value = value };
+                }
+                else if (entry.KeyName.StartsWith("RowLabel"))
+                {
+                    return new RowHeaderAssignment() { Value = value };
                 }
                 else
                 {

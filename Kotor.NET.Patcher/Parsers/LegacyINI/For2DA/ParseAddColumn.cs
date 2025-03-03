@@ -69,7 +69,7 @@ public class ParseAddColumn
 
     private IRowLocator GetRowLocator(string text)
     {
-        if (text.StartsWith("I") && int.TryParse(text, out var rowIndex))
+        if (text.StartsWith("I") && int.TryParse(text.Substring(1), out var rowIndex))
         {
             return new RowLocatorByRowIndex { Index = rowIndex };
         }
@@ -86,7 +86,7 @@ public class ParseAddColumn
 
     private BaseValueResolver GetValueResolverForMemory(string text, string columnHeader)
     {
-        if (text.StartsWith("I") && int.TryParse(text, out var rowIndex))
+        if (text.StartsWith("I") && int.TryParse(text.Substring(1), out var rowIndex))
         {
             var rowLocator = new RowLocatorByRowIndex { Index = rowIndex };
             return new ValueResolverForExistingCell { ColumnHeader = columnHeader, RowLocator = rowLocator };
