@@ -11,7 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Parsers\LegacyINI\ForGFF\" />
     <Folder Include="Parsers\LegacyINI\ForTLK\" />
     <Folder Include="Parsers\LegacyINI\ForSSF\" />
   </ItemGroup>

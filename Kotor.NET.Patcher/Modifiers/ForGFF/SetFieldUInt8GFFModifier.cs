@@ -11,22 +11,18 @@ namespace Kotor.NET.Patcher.Modifiers.ForGFF;
 public class SetFieldUInt8GFFModifier
 {
     public required string Label { get; set; }
-    public required Path Path { get; set; }
+    public required BindingPath Path { get; set; }
     public required BaseValue Value { get; set; }
     public required bool MustAlreadyExist { get; set; }
 
-    public void Apply(GFF gff)
+    public void Apply(GFFStruct @struct)
     {
-        var @struct = Path.ResolveStruct();
+        @struct = Path.ResolveStruct(@struct);
         var value = Value.AsUInt8();
 
-        if (@struct is null)
-            throw new NotImplementedException(); // TODO
-        if (value is null)
-            throw new NotImplementedException(); // TODO
         if (MustAlreadyExist && !@struct.GetUInt8(Label).HasValue)
-            throw new NotImplementedException(); // TODO
+            throw new PatchingException($"The field '{Label}' must exist before assigning a value to it.");
 
-        @struct.SetUInt8(Label, value.Value);
+        @struct.SetUInt8(Label, value);
     }
 }

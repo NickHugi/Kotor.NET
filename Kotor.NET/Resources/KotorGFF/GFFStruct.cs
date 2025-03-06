@@ -89,6 +89,79 @@ public class GFFStruct
         return GetValue<Vector4?>(fieldName);
     }
 
+    public bool HasUInt8(string fieldName)
+    {
+        return HasValue<byte>(fieldName);
+    }
+    public bool HasInt8(string fieldName)
+    {
+        return HasValue<byte>(fieldName);
+    }
+    public bool HasUInt16(string fieldName)
+    {
+        return HasValue<byte>(fieldName);
+    }
+    public bool HasInt16(string fieldName)
+    {
+        return HasValue<byte>(fieldName);
+    }
+    public bool HasUInt32(string fieldName)
+    {
+        return HasValue<byte>(fieldName);
+    }
+    public bool HasInt32(string fieldName)
+    {
+        return HasValue<byte>(fieldName);
+    }
+    public bool HasUInt64(string fieldName)
+    {
+        return HasValue<byte>(fieldName);
+    }
+    public bool HasInt64(string fieldName)
+    {
+        return HasValue<byte>(fieldName);
+    }
+    public bool HasSingle(string fieldName)
+    {
+        return HasValue<float>(fieldName);
+    }
+    public bool HasDouble(string fieldName)
+    {
+        return HasValue<double>(fieldName);
+    }
+    public bool HasString(string fieldName)
+    {
+        return HasValue<string>(fieldName);
+    }
+    public bool HasResRef(string fieldName)
+    {
+        return HasValue<ResRef>(fieldName);
+    }
+    public bool HasLocalizedString(string fieldName)
+    {
+        return HasValue<LocalisedString>(fieldName);
+    }
+    public bool HasBinary(string fieldName)
+    {
+        return HasValue<byte[]>(fieldName);
+    }
+    public bool HasStruct(string fieldName)
+    {
+        return HasValue<GFFStruct>(fieldName);
+    }
+    public bool HasList(string fieldName)
+    {
+        return HasValue<GFFList>(fieldName);
+    }
+    public bool HasVector3(string fieldName)
+    {
+        return HasValue<Vector3>(fieldName);
+    }
+    public bool HasVector4(string fieldName)
+    {
+        return HasValue<Vector4>(fieldName);
+    }
+
     public void SetUInt8(string fieldName, byte value)
     {
         SetValue<byte>(fieldName, value);
@@ -210,6 +283,11 @@ public class GFFStruct
     {
         var hasField = _data.TryGetValue(fieldName, out var value);
         return (hasField && value is T) ? (T)value : default(T);
+    }
+    private bool HasValue<T>(string fieldName)
+    {
+        var hasField = _data.TryGetValue(fieldName, out var value);
+        return hasField && value is T;
     }
     private void SetValue<T>(string fieldName, T value)
     {
