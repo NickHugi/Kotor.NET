@@ -107,7 +107,7 @@ public partial class TwoDAResourceEditor : ResourceEditorBase
 
     public async Task OpenFile()
     {
-        var resource = await SaveResourcePicker();
+        var resource = await OpenResourcePicker();
 
         if (resource is not null)
         {
