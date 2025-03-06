@@ -35,8 +35,15 @@ public class TwoDAResourceEditorViewModel : ResourceEditorViewModelBase<TwoDAVie
     private int _selectedRowIndex;
     public int SelectedRowIndex
     {
-        get => _selectedRowIndex;
-        set => this.RaiseAndSetIfChanged(ref _selectedRowIndex, value);
+        get
+        {
+            return Resource.Rows.IndexOf(SelectedRow);
+        }
+        set
+        {
+            var row = Resource.Rows.ElementAt(value);
+            SelectedRow = row;
+        }
     }
 
     private int _selectedColumnIndex;
@@ -45,6 +52,15 @@ public class TwoDAResourceEditorViewModel : ResourceEditorViewModelBase<TwoDAVie
         get => _selectedColumnIndex;
         set => this.RaiseAndSetIfChanged(ref _selectedColumnIndex, value);
     }
+
+    private RowViewModel _selectedRow;
+    public RowViewModel SelectedRow
+    {
+        get => _selectedRow;
+        set => this.RaiseAndSetIfChanged(ref _selectedRow, value);
+    }
+
+    public List<List<string>> SelectedRows { get; }
 
     private readonly ActionHistory<TwoDAResourceEditorViewModel> _history;
     public ActionHistory<TwoDAResourceEditorViewModel> History
@@ -109,18 +125,33 @@ public class TwoDAResourceEditorViewModel : ResourceEditorViewModelBase<TwoDAVie
         _history.Redo();
     }
 
-    public void EditCell(int rowID, string columnHeader, string newValue)
+    public void SetRowCell(int rowID, string columnHeader, string newValue)
     {
-        var oldValue = Resource.GetCellText(rowID, columnHeader);
-        var action = new EditCellAction(rowID, columnHeader, newValue, oldValue);
+        var oldValue = Resource.GetRowCell(rowID, columnHeader);
+        var action = new EditRowCellAction(rowID, columnHeader, newValue, oldValue);
         _history.Apply(action);
     }
-    public void EditCell(int rowID, string columnHeader, string newValue, string oldValue)
+    public void SetRowCell(int rowID, string columnHeader, string newValue, string oldValue)
     {
         if (oldValue == newValue)
             return;
 
-        var action = new EditCellAction(rowID, columnHeader, newValue, oldValue);
+        var action = new EditRowCellAction(rowID, columnHeader, newValue, oldValue);
+        History.Apply(action);
+    }
+
+    public void SetRowHeader(int rowID, string newValue)
+    {
+        var oldValue = Resource.GetRowHeader(rowID);
+        var action = new EditRowHeaderAction(rowID, newValue, oldValue);
+        History.Apply(action);
+    }
+    public void SetRowHeader(int rowID, string newValue, string oldValue)
+    {
+        if (oldValue == newValue)
+            return;
+
+        var action = new EditRowHeaderAction(rowID, newValue, oldValue);
         History.Apply(action);
     }
 
@@ -139,7 +170,7 @@ public class TwoDAResourceEditorViewModel : ResourceEditorViewModelBase<TwoDAVie
     public void RemoveColumn(string columnHeader)
     {
         var columnIndex = Resource.GetColumnIndex(columnHeader);
-        var cells = Resource.Rows.Select(x => x.ElementAt(columnIndex));
+        var cells = Resource.Rows.Select(x => x.Cells.TryGetValue(columnHeader, out var cells) ? cells : throw new Exception());
         var action = new RemoveColumnAction(columnHeader, columnIndex, cells);
         History.Apply(action);
     }
@@ -152,7 +183,7 @@ public class TwoDAResourceEditorViewModel : ResourceEditorViewModelBase<TwoDAVie
 
     public void ResetRowHeaders()
     {
-        var action = new ResetRowHeadersAction(Resource.Rows.Select(x => x[0]));
+        var action = new ResetRowHeadersAction(Resource.Rows.Select(x => x.RowHeader));
         History.Apply(action);
     }
 }

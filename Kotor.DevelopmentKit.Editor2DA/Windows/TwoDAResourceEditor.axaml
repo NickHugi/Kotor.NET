@@ -43,7 +43,7 @@
         <DataGrid
             Margin="20"
             ItemsSource="{Binding Resource.Rows, Mode=TwoWay}"
-            SelectedIndex="{Binding SelectedRowIndex}"
+            SelectedItem="{Binding SelectedRow, Mode=TwoWay}"
             Name="TwodaDataGrid"
             AutoGenerateColumns="False"
             IsReadOnly="False"
