@@ -37,7 +37,7 @@ public class ERFEncapsulation : IEncapsulation
         {
             FilePath = Path,
             ResRef = key.ResRef.Get(),
-            Type = ResourceType.ByID((int)key.ResID),
+            Type = ResourceType.ByID((int)key.ResType),
             Offset = file.ElementAt(index).Offset,
             Size = file.ElementAt(index).Size,
         }).ToList();

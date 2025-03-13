@@ -50,19 +50,22 @@ public class ERFBinary
 
         FileHeader.Write(writer);
 
+        writer.BaseStream.Position = FileHeader.OffsetToKeyList;
         foreach (var entry in KeyEntries)
         {
             entry.Write(writer);
         }
 
+        writer.BaseStream.Position = FileHeader.OffsetToResourceList;
         foreach (var entry in ResourceEntries)
         {
             entry.Write(writer);
         }
 
-        foreach (var data in ResourceData)
+        for (int i = 0; i < ResourceData.Count; i++)
         {
-            writer.Write(data);
+            writer.BaseStream.Position = ResourceEntries[i].Offset;
+            writer.Write(ResourceData[i]);
         }
     }
 
