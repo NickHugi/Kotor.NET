@@ -7,7 +7,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.Base.ViewModels;
 
-public abstract class ResourceEditorViewModelBase<T, U> : ReactiveObject where U : new()
+public abstract class ResourceEditorViewModelBase<TViewModel, TModel> : ReactiveObject where TModel : new()
 {
     /// <summary>
     /// The path only including either the last directory leading up to the file, or if the file
@@ -61,8 +61,8 @@ public abstract class ResourceEditorViewModelBase<T, U> : ReactiveObject where U
         set => this.RaiseAndSetIfChanged(ref _resourceType, value);
     }
 
-    private T _resource = default!;
-    public T Resource
+    private TViewModel _resource = default!;
+    public TViewModel Resource
     {
         get => _resource;
         set => this.RaiseAndSetIfChanged(ref _resource, value);
@@ -140,11 +140,11 @@ public abstract class ResourceEditorViewModelBase<T, U> : ReactiveObject where U
         }
     }
 
-    public abstract void LoadModel(U model);
-    public abstract U BuildModel();
+    public abstract void LoadModel(TModel model);
+    public abstract TModel BuildModel();
 
-    public abstract U DeserializeModel(byte[] bytes);
-    public abstract U DeserializeModel(string path);
+    public abstract TModel DeserializeModel(byte[] bytes);
+    public abstract TModel DeserializeModel(string path);
 
     public abstract byte[] SerializeModelToBytes();
     public abstract void SerializeModelToFile();
