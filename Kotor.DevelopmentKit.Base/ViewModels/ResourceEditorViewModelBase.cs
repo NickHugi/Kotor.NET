@@ -7,7 +7,18 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.Base.ViewModels;
 
-public abstract class ResourceEditorViewModelBase<TViewModel, TModel> : ReactiveObject where TModel : new()
+public interface IResourceEditorViewModel<TViewModel, TModel>
+    where TViewModel : ReactiveObject
+    where TModel : new()
+{
+    public void LoadModel(TModel model);
+    public TModel BuildModel();
+}
+
+public abstract class ResourceEditorViewModelBase<TViewModel, TModel>
+    : ReactiveObject, IResourceEditorViewModel<TViewModel, TModel>
+    where TViewModel : ReactiveObject
+    where TModel : new()
 {
     /// <summary>
     /// The path only including either the last directory leading up to the file, or if the file

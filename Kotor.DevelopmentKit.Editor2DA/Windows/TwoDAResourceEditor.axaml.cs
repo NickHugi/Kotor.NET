@@ -27,7 +27,7 @@ using Kotor.NET.Resources.Kotor2DA;
 
 namespace Kotor.DevelopmentKit.Editor2DA;
 
-public partial class TwoDAResourceEditor : ResourceEditorBase
+public partial class TwoDAResourceEditor : ResourceEditorBase<TwoDAResourceEditorViewModel, TwoDAViewModel, TwoDA>
 {
     public TwoDAResourceEditorViewModel Context => (TwoDAResourceEditorViewModel)DataContext!;
 

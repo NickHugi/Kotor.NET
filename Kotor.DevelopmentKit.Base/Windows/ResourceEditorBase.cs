@@ -11,14 +11,20 @@ using Kotor.DevelopmentKit.Base.DialogResults;
 using Kotor.DevelopmentKit.Base.ViewModels;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Encapsulations;
+using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.Base.Windows;
 
-public abstract class ResourceEditorBase : Window
+public abstract class ResourceEditorBase<TEditorViewModel, TResourceViewModel, TResourceModel> : Window
+    where TEditorViewModel : IResourceEditorViewModel<TResourceViewModel, TResourceModel>
+    where TResourceViewModel : ReactiveObject
+    where TResourceModel : new()
 {
     public abstract FilePickerOpenOptions FilePickerOpenOptions { get; }
     public abstract FilePickerSaveOptions FilePickerSaveOptions { get; }
     public abstract List<ResourceType> ResourceTypes { get; }
+
+    public TEditorViewModel Context;
 
 
     protected async Task<SaveToERFWindowDialogResult?> SaveResourcePicker()
