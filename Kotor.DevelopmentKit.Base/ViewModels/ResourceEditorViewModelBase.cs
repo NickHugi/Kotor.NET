@@ -11,8 +11,19 @@ public interface IResourceEditorViewModel<TViewModel, TModel>
     where TViewModel : ReactiveObject
     where TModel : new()
 {
+    public string FilePath { get; set; }
+    public ResourceType ResourceType { get; set; }
+    public TViewModel Resource { get; set; }
+    public string ResRef { get; set; }
+
     public void LoadModel(TModel model);
     public TModel BuildModel();
+
+    public void SaveToFile(string filepath, ResRef resref, ResourceType resourceType);
+    public void SaveToFile(string filepath);
+    public void SaveToFile();
+
+    public byte[] SerializeModelToBytes();
 }
 
 public abstract class ResourceEditorViewModelBase<TViewModel, TModel>
