@@ -17,6 +17,13 @@ using Kotor.DevelopmentKit.Editor2DA.Windows;
 using Kotor.NET.Common.Data;
 using ReactiveUI;
 using DynamicData;
+using Kotor.DevelopmentKit.Base;
+using Kotor.DevelopmentKit.Base.ViewModels;
+using Kotor.DevelopmentKit.Base.DialogResults;
+using Kotor.NET.Resources.KotorERF;
+using System.IO;
+using Kotor.NET.Resources.KotorRIM;
+using Kotor.NET.Resources.Kotor2DA;
 
 namespace Kotor.DevelopmentKit.Editor2DA;
 
@@ -117,9 +124,70 @@ public partial class TwoDAResourceEditor : ResourceEditorBase
         }
     }
 
-    public void SaveFile()
+    public async void SaveFile()
     {
-        Context.SaveToFile();
+        SaveFileAlternativesDialogResult alternativeSave = SaveFileAlternativesDialogResult.ToCurrent;
+
+        if (Context.FilePath is null)
+        {
+            return;
+        }
+        else if (ResourceType.FromFilepath(Context.FilePath) == ResourceType.KEY)
+        {
+            // You cannot save directly to the KEY/BIF files. Consider saving into the override folder instead.
+            var context = new SaveFileAlternativesDialogViewModel() { FilePath = Context.FilePath };
+            alternativeSave = await new SaveFileAlternativesDialog() { Context = context }.ShowDialog<SaveFileAlternativesDialogResult>(this);
+        }
+        else if (ResourceType.FromFilepath(Context.FilePath) == ResourceType.RIM)
+        {
+            // You cannot save directly to a RIM file. Did you want to save to a corresponding MOD file or the override instead?
+            var context = new SaveFileAlternativesDialogViewModel() { FilePath = Context.FilePath };
+            alternativeSave = await new SaveFileAlternativesDialog() { Context = context }.ShowDialog<SaveFileAlternativesDialogResult>(this);
+        }
+
+        if (alternativeSave == SaveFileAlternativesDialogResult.ToOverride)
+        {
+            // TODO - requires kotor game setup
+            // TODO - save file in override folder
+        }
+        else if (alternativeSave == SaveFileAlternativesDialogResult.ToFile)
+        {
+            await SaveFileAs();
+        }
+        else if (alternativeSave == SaveFileAlternativesDialogResult.ToMOD)
+        {
+            if (ResourceType.RIM.IsFileSameType(Context.FilePath))
+            {
+                var modFilepath = Context.FilePath.Replace(".rim", ".mod");
+                var data = TwoDA.ToBytes(Context.BuildModel());
+
+                if (File.Exists(modFilepath))
+                {
+                    var erf = ERF.FromFile(modFilepath);
+                    erf.AddOrReplace(Context.ResRef, Context.ResourceType, data);
+                }
+                else
+                {
+                    var erf = ERF.FromRIM(RIM.FromFile(Context.FilePath));
+                    erf.AddOrReplace(Context.ResRef, Context.ResourceType, data);
+                    ERF.ToFile(erf, modFilepath);
+                }
+
+                Context.FilePath = modFilepath;
+            }
+            else
+            {
+                throw new NotImplementedException(); // TODO
+            }
+        }
+        else if (alternativeSave == SaveFileAlternativesDialogResult.ToCurrent)
+        {
+            Context.SaveToFile();
+        }
+        else if (alternativeSave == SaveFileAlternativesDialogResult.None)
+        {
+            return;
+        }
     }
 
     public async Task SaveFileAs()
@@ -203,7 +271,7 @@ public partial class TwoDAResourceEditor : ResourceEditorBase
         Context.WhenAnyValue(x => x.SelectedColumnIndex).Subscribe(x =>
         {
             var column = TwodaDataGrid.Columns.SingleOrDefault(x => x.DisplayIndex == Context.SelectedColumnIndex);
-            if (column is not null)
+            if (column is not null && TwodaDataGrid.CurrentColumn is not null)
                 TwodaDataGrid.CurrentColumn = column;
         });
 

@@ -25,12 +25,20 @@ public class LoadFromERFWindowViewModel : ReactiveObject
         private set => this.RaiseAndSetIfChanged(ref _resourceList, value);
     }
 
+    private string _filepath;
+    public string FilePath
+    {
+        get => _filepath;
+        set => this.RaiseAndSetIfChanged(ref _filepath, value);
+    }
+
     public LoadFromERFWindowViewModel()
     {
     }
 
     public LoadFromERFWindowViewModel LoadModel(string filepath, IEnumerable<ResourceType> resourceTypeFilter)
     {
+        FilePath = filepath;
         ResourceList = new();
 
         Task.Run(() =>

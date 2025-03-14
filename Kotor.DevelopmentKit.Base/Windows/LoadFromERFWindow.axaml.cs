@@ -30,9 +30,12 @@ public partial class LoadFromERFWindow : Window
 
     private void Load_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
+        if (Context.ResourceList.SelectedItem is null)
+            return;
+
         Close(new LoadFromERFWindowDialogResult
         {
-            FilePath = Context.ResourceList.SelectedItem.Filepath,
+            FilePath = ResourceType.KEY.IsFileSameType(Context.FilePath) ? Context.FilePath : Context.ResourceList.SelectedItem.Filepath,
             ResRef = Context.ResourceList.SelectedItem.ResRef,
             ResourceType = Context.ResourceList.SelectedItem.Type,
         });
