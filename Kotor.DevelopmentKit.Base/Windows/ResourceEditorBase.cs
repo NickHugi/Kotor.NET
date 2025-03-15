@@ -98,6 +98,21 @@ public abstract class ResourceEditorBase<TEditorViewModel, TResourceViewModel, T
     }
 
 
+    public void NewFile()
+    {
+        Context.NewFile();
+    }
+
+    public async Task OpenFile()
+    {
+        var resource = await OpenResourcePicker();
+
+        if (resource is not null)
+        {
+            Context.LoadFromFile(resource.FilePath, resource.ResRef, resource.ResourceType);
+        }
+    }
+
     public async void SaveFile()
     {
         SaveFileAlternativesDialogResult alternativeSave = SaveFileAlternativesDialogResult.ToCurrent;
@@ -174,4 +189,10 @@ public abstract class ResourceEditorBase<TEditorViewModel, TResourceViewModel, T
             Context.SaveToFile(resource.FilePath, resource.ResRef, resource.ResourceType);
         }
     }
+
+    public void ResetFile()
+    {
+        Context.LoadFromFile();
+    }
+
 }

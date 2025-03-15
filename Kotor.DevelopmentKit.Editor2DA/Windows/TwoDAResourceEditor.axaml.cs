@@ -108,26 +108,6 @@ public partial class TwoDAResourceEditor : ResourceEditorBase<TwoDAResourceEdito
         TwodaDataGrid.SelectedIndex = rowIndex;
     }
 
-    public void NewFile()
-    {
-        Context.NewFile();
-    }
-
-    public async Task OpenFile()
-    {
-        var resource = await OpenResourcePicker();
-
-        if (resource is not null)
-        {
-            Context.LoadFromFile(resource.FilePath, resource.ResRef, resource.ResourceType);
-        }
-    }
-
-    public void ResetFile()
-    {
-        Context.LoadFromFile();
-    }
-
     public void ToggleFilter()
     {
         Context.ToggleFilter();

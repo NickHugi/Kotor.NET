@@ -19,6 +19,12 @@ public interface IResourceEditorViewModel<TViewModel, TModel>
     public void LoadModel(TModel model);
     public TModel BuildModel();
 
+    public void NewFile();
+
+    public void LoadFromFile(string filepath, ResRef resref, ResourceType resourceType);
+    public void LoadFromFile(string filepath);
+    public void LoadFromFile();
+
     public void SaveToFile(string filepath, ResRef resref, ResourceType resourceType);
     public void SaveToFile(string filepath);
     public void SaveToFile();
