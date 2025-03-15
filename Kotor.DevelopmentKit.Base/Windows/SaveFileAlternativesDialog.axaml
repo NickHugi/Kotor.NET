@@ -12,10 +12,10 @@
     <StackPanel Orientation="Vertical" Margin="5" Spacing="5">
         <TextBlock Text="{Binding Message}" />
         <StackPanel Orientation="Horizontal" Spacing="5">
-            <Button Command="{Binding #Window.Cancel}">Cancel"</Button>
+            <Button Command="{Binding #Window.Cancel}">Cancel</Button>
             <Button Command="{Binding #Window.SaveToMOD}" IsVisible="{Binding ShowOptionForMOD}">Save to MOD</Button>
-            <Button Command="{Binding #Window.SaveToOverride}">Save to Override"</Button>
-            <Button Command="{Binding #Window.SaveToFile}">Save to File"</Button>
+            <Button Command="{Binding #Window.SaveToOverride}">Save to Override</Button>
+            <Button Command="{Binding #Window.SaveToFile}">Save to File</Button>
         </StackPanel>
     </StackPanel>
 </Window>
