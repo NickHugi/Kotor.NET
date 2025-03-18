@@ -17,6 +17,13 @@ public class SaveFileAlternativesDialogViewModel : ReactiveObject
         init => this.RaiseAndSetIfChanged(ref _filepath, value);
     }
 
+    private string? _overrideFolder = null;
+    public string? OverrideFolder
+    {
+        get => _overrideFolder;
+        init => this.RaiseAndSetIfChanged(ref _overrideFolder, value);
+    }
+
     public string Message
     {
         get => ResourceType.FromFilepath(_filepath) == ResourceType.KEY
@@ -27,5 +34,10 @@ public class SaveFileAlternativesDialogViewModel : ReactiveObject
     public bool ShowOptionForMOD
     {
         get => ResourceType.FromFilepath(_filepath) == ResourceType.RIM;
+    }
+
+    public bool ShowOptionForOverride
+    {
+        get => _overrideFolder is not null;
     }
 }
