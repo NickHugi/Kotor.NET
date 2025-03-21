@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Text;
@@ -25,12 +26,15 @@ public class LoadFromERFWindowViewModel : ReactiveObject
         private set => this.RaiseAndSetIfChanged(ref _resourceList, value);
     }
 
-    private string _filepath;
+    private string _filepath = "";
     public string FilePath
     {
         get => _filepath;
         set => this.RaiseAndSetIfChanged(ref _filepath, value);
     }
+
+    private readonly Interaction<Exception, Unit> _loadingError = new();
+    public Interaction<Exception, Unit> LoadingError => this._loadingError;
 
     public LoadFromERFWindowViewModel()
     {
@@ -43,8 +47,24 @@ public class LoadFromERFWindowViewModel : ReactiveObject
 
         Task.Run(() =>
         {
-            var encapsulator = Encapsulation.LoadFromPath(filepath);
-            AvaloniaScheduler.Instance.Schedule(() => ResourceList.LoadModel(encapsulator, resourceTypeFilter));
+            try
+            {
+                var encapsulator = Encapsulation.LoadFromPath(filepath);
+                AvaloniaScheduler.Instance.Schedule(() => ResourceList.LoadModel(encapsulator, resourceTypeFilter));
+            }
+            catch (Exception ex)
+            {
+                //AvaloniaScheduler.Instance.Schedule(() => _loadingError.Handle(ex));
+                //_loadingError.Handle(ex);
+                try
+                {
+                    _loadingError.Handle(ex);
+                }
+                catch
+                {
+
+                }
+            }
         });
 
         return this;

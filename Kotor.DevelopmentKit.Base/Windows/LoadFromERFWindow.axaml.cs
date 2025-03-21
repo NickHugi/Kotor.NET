@@ -21,6 +21,20 @@ public partial class LoadFromERFWindow : Window
     public LoadFromERFWindow()
     {
         InitializeComponent();
+
+        //Context.ThrownExceptions
+    }
+
+    protected override void OnDataContextChanged(EventArgs e)
+    {
+        Context.LoadingError.RegisterHandler(async interaction =>
+        {
+            var dialog = new ExceptionDialog()
+            {
+                DataContext = new ExceptionDialogViewModel { Exception = interaction.Input, Message = interaction.Input.Message }
+            };
+            await dialog.ShowDialog(this);
+        });
     }
 
     private void Cancel_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)

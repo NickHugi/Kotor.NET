@@ -64,7 +64,7 @@ public abstract class ResourceEditorBase<TEditorViewModel, TResourceViewModel, T
 
     protected async Task<LoadFromERFWindowDialogResult> OpenResourcePicker()
     {
-        var files = await TopLevel.GetTopLevel(this)!.StorageProvider.OpenFilePickerAsync(FilePickerOpenOptions);
+        var files = await GetTopLevel(this)!.StorageProvider.OpenFilePickerAsync(FilePickerOpenOptions);
 
         var file = files.FirstOrDefault();
 

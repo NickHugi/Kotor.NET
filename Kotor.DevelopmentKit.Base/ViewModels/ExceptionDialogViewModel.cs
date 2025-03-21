@@ -22,4 +22,6 @@ public class ExceptionDialogViewModel : ReactiveObject
         get => _message;
         init => this.RaiseAndSetIfChanged(ref _message, value);
     }
+
+    public string StackTrace => Exception.StackTrace ?? "";
 }
