@@ -34,7 +34,7 @@ public class LoadFromERFWindowViewModel : ReactiveObject
     }
 
     private readonly Interaction<Exception, Unit> _loadingError = new();
-    public Interaction<Exception, Unit> LoadingError => this._loadingError;
+    public Interaction<Exception, Unit> ExceptionEvent => this._loadingError;
 
     public LoadFromERFWindowViewModel()
     {
@@ -54,16 +54,7 @@ public class LoadFromERFWindowViewModel : ReactiveObject
             }
             catch (Exception ex)
             {
-                //AvaloniaScheduler.Instance.Schedule(() => _loadingError.Handle(ex));
-                //_loadingError.Handle(ex);
-                try
-                {
-                    _loadingError.Handle(ex);
-                }
-                catch
-                {
-
-                }
+                AvaloniaScheduler.Instance.Schedule(async () => await _loadingError.Handle(ex));
             }
         });
 

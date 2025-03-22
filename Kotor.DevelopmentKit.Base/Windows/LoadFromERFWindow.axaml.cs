@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
@@ -21,19 +22,21 @@ public partial class LoadFromERFWindow : Window
     public LoadFromERFWindow()
     {
         InitializeComponent();
-
-        //Context.ThrownExceptions
     }
 
     protected override void OnDataContextChanged(EventArgs e)
     {
-        Context.LoadingError.RegisterHandler(async interaction =>
+        base.OnDataContextChanged(e);
+
+        Context.ExceptionEvent.RegisterHandler(async interaction =>
         {
-            var dialog = new ExceptionDialog()
+            await new ExceptionDialog()
             {
                 DataContext = new ExceptionDialogViewModel { Exception = interaction.Input, Message = interaction.Input.Message }
-            };
-            await dialog.ShowDialog(this);
+            }.ShowDialog(this);
+
+            Close();
+            interaction.SetOutput(Unit.Default);
         });
     }
 

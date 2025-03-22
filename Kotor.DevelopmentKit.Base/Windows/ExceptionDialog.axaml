@@ -6,10 +6,10 @@
         x:Class="Kotor.DevelopmentKit.Base.ExceptionDialog"
         x:DataType="vm:ExceptionDialogViewModel"
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
-        Width="400" SizeToContent="Height"
+        Width="400" SizeToContent="Height" MaxHeight="400"
         Title="An error occured">
     <Grid RowDefinitions="*,5,*,5,Auto" Margin="5">
-        <TextBlock Grid.Row="0" Text="{Binding Message}" Width="400" TextWrapping="Wrap"/>
+        <TextBlock Grid.Row="0" Text="{Binding Message}" TextWrapping="Wrap"/>
         <TextBox Grid.Row="2" IsReadOnly="True" Text="{Binding StackTrace}" TextWrapping="Wrap"/>
         <StackPanel Grid.Row="4" Orientation="Horizontal" Spacing="5">
             <Button>Ok</Button>
