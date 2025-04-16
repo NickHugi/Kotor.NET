@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Controls;
@@ -195,4 +196,15 @@ public abstract class ResourceEditorBase<TEditorViewModel, TResourceViewModel, T
         Context.LoadFromFile();
     }
 
+
+    protected override void OnDataContextChanged(EventArgs e)
+    {
+        base.OnDataContextChanged(e);
+
+        Context.ExceptionInteraction.RegisterHandler(async interaction =>
+        {
+            await ExceptionDialog.ShowDilaog(this, interaction.Input);
+            interaction.SetOutput(Unit.Default);
+        });
+    }
 }

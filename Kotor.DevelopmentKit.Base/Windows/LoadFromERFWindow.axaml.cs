@@ -30,11 +30,7 @@ public partial class LoadFromERFWindow : Window
 
         Context.ExceptionEvent.RegisterHandler(async interaction =>
         {
-            await new ExceptionDialog()
-            {
-                DataContext = new ExceptionDialogViewModel { Exception = interaction.Input, Message = interaction.Input.Message }
-            }.ShowDialog(this);
-
+            await ExceptionDialog.ShowDilaog(this, interaction.Input);
             Close();
             interaction.SetOutput(Unit.Default);
         });

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Encapsulations;
 using ReactiveUI;
@@ -16,18 +19,20 @@ public interface IResourceEditorViewModel<TViewModel, TModel>
     public TViewModel Resource { get; set; }
     public string ResRef { get; set; }
 
+    public Interaction<Exception, Unit> ExceptionInteraction { get; }
+
     public void LoadModel(TModel model);
     public TModel BuildModel();
 
     public void NewFile();
 
-    public void LoadFromFile(string filepath, ResRef resref, ResourceType resourceType);
-    public void LoadFromFile(string filepath);
-    public void LoadFromFile();
+    public Task LoadFromFile(string filepath, ResRef resref, ResourceType resourceType);
+    public Task LoadFromFile(string filepath);
+    public Task LoadFromFile();
 
-    public void SaveToFile(string filepath, ResRef resref, ResourceType resourceType);
-    public void SaveToFile(string filepath);
-    public void SaveToFile();
+    public Task SaveToFile(string filepath, ResRef resref, ResourceType resourceType);
+    public Task SaveToFile(string filepath);
+    public Task SaveToFile();
 
     public byte[] SerializeModelToBytes();
 }
@@ -96,7 +101,10 @@ public abstract class ResourceEditorViewModelBase<TViewModel, TModel>
         set => this.RaiseAndSetIfChanged(ref _resource, value);
     }
 
+    private readonly Interaction<Exception, Unit> _loadingError = new();
+    public Interaction<Exception, Unit> ExceptionInteraction => this._loadingError;
 
+    
     public ResourceEditorViewModelBase()
     {
         this.ObservableForProperty(x => x.FilePath)
@@ -113,58 +121,73 @@ public abstract class ResourceEditorViewModelBase<TViewModel, TModel>
         LoadModel(new());
     }
 
-    public void LoadFromFile(string filepath, ResRef resref, ResourceType resourceType)
+    public async Task LoadFromFile(string filepath, ResRef resref, ResourceType resourceType)
     {
         FilePath = filepath;
         ResRef = resref.Get();
         ResourceType = resourceType;
-        LoadFromFile();
+        await LoadFromFile();
     }
-    public void LoadFromFile(string filepath)
+    public async Task LoadFromFile(string filepath)
     {
         FilePath = filepath;
         ResRef = Path.GetFileNameWithoutExtension(filepath);
         ResourceType = ResourceType.ByExtension(Path.GetExtension(filepath).Replace(".", ""));
-        LoadFromFile();
+        await LoadFromFile();
     }
-    public void LoadFromFile()
+    public async Task LoadFromFile()
     {
-        if (Encapsulation.IsPathEncapsulation(FilePath))
+        try
         {
-            var capsule = Encapsulation.LoadFromPath(FilePath);
-            var data = capsule.Read(ResRef, ResourceType);
-            var model = DeserializeModel(data);
-            LoadModel(model);
+            if (Encapsulation.IsPathEncapsulation(FilePath))
+            {
+                var capsule = Encapsulation.LoadFromPath(FilePath);
+                var data = capsule.Read(ResRef, ResourceType);
+                var model = DeserializeModel(data);
+                LoadModel(model);
+            }
+            else
+            {
+                var twoda = DeserializeModel(FilePath);
+                LoadModel(twoda);
+            }
         }
-        else
+        catch (Exception ex)
         {
-            var twoda = DeserializeModel(FilePath);
-            LoadModel(twoda);
+            NewFile();
+            await _loadingError.Handle(ex);
         }
     }
 
-    public void SaveToFile(string filepath, ResRef resref, ResourceType resourceType)
+    public async Task SaveToFile(string filepath, ResRef resref, ResourceType resourceType)
     {
         FilePath = filepath;
         ResRef = resref.Get();
         ResourceType = resourceType;
-        SaveToFile();
+        await SaveToFile();
     }
-    public void SaveToFile(string filepath)
+    public async Task SaveToFile(string filepath)
     {
         FilePath = filepath;
-        SaveToFile();
+        await SaveToFile();
     }
-    public void SaveToFile()
+    public async Task SaveToFile()
     {
-        if (Encapsulation.IsPathEncapsulation(FilePath!))
+        try
         {
-            var capsule = Encapsulation.LoadFromPath(FilePath);
-            capsule.Write(ResRef, ResourceType, SerializeModelToBytes());
+            if (Encapsulation.IsPathEncapsulation(FilePath!))
+            {
+                var capsule = Encapsulation.LoadFromPath(FilePath);
+                capsule.Write(ResRef, ResourceType, SerializeModelToBytes());
+            }
+            else
+            {
+                SerializeModelToFile();
+            }
         }
-        else
+        catch (Exception ex)
         {
-            SerializeModelToFile();
+            await _loadingError.Handle(ex);
         }
     }
 
