@@ -19,36 +19,50 @@ public class RIMBinary
     }
     public RIMBinary(Stream stream)
     {
-        var reader = new BinaryReader(stream);
-        FileHeader = new RIMBinaryFileHeader(reader);
-
-        reader.BaseStream.Position = FileHeader.OffsetToResources;
-        for (int i = 0; i < FileHeader.ResourceCount; i++)
+        try
         {
-            ResourceEntries.Add(new RIMBinaryResourceEntry(reader));
+            var reader = new BinaryReader(stream);
+            FileHeader = new RIMBinaryFileHeader(reader);
+
+            reader.BaseStream.Position = FileHeader.OffsetToResources;
+            for (int i = 0; i < FileHeader.ResourceCount; i++)
+            {
+                ResourceEntries.Add(new RIMBinaryResourceEntry(reader));
+            }
+
+            foreach (var entry in ResourceEntries)
+            {
+                reader.BaseStream.Position = entry.Offset;
+                ResourceData.Add(reader.ReadBytes(entry.Size));
+            }
         }
-
-        foreach (var entry in ResourceEntries)
+        catch (Exception ex)
         {
-            reader.BaseStream.Position = entry.Offset;
-            ResourceData.Add(reader.ReadBytes(entry.Size));
+            throw new IOException("Failed to read the 2DA data.", ex);
         }
     }
 
     public void Write(Stream stream)
     {
-        var writer = new BinaryWriter(stream);
-
-        FileHeader.Write(writer);
-
-        foreach (var entry in ResourceEntries)
+        try
         {
-            entry.Write(writer);
+            var writer = new BinaryWriter(stream);
+
+            FileHeader.Write(writer);
+
+            foreach (var entry in ResourceEntries)
+            {
+                entry.Write(writer);
+            }
+
+            foreach (var data in ResourceData)
+            {
+                writer.Write(data);
+            }
         }
-
-        foreach (var data in ResourceData)
+        catch (Exception ex)
         {
-            writer.Write(data);
+            throw new IOException("Failed to write the 2DA data.", ex);
         }
     }
 

@@ -16,28 +16,42 @@ public class TXIAscii
     }
     public TXIAscii(Stream stream)
     {
-        var reader = new StreamReader(stream);
-
-        while (true)
+        try
         {
-            var line = reader.ReadLine();
+            var reader = new StreamReader(stream);
 
-            if (line is null)
-                break;
+            while (true)
+            {
+                var line = reader.ReadLine();
 
-            var tokens = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                if (line is null)
+                    break;
 
-            if (tokens.Count() == 0)
-                continue;
+                var tokens = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-            Fields.Add(new TXIAsciiField(reader, tokens));
+                if (tokens.Count() == 0)
+                    continue;
+
+                Fields.Add(new TXIAsciiField(reader, tokens));
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new IOException("Failed to read the 2DA data.", ex);
         }
     }
 
     public void Write(Stream stream)
     {
-        var writer = new StreamWriter(stream);
+        try
+        {
+            var writer = new StreamWriter(stream);
 
-        Fields.ForEach(x => x.Write(writer));
+            Fields.ForEach(x => x.Write(writer));
+        }
+        catch (Exception ex)
+        {
+            throw new IOException("Failed to write the 2DA data.", ex);
+        }
     }
 }

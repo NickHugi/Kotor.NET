@@ -27,70 +27,84 @@ public class GFFBinary
     }
     public GFFBinary(Stream stream)
     {
-        var reader = new BinaryReader(stream);
-
-        FileHeader = new GFFBinaryFileHeader(reader);
-
-        reader.BaseStream.Position = FileHeader.OffsetToStructs;
-        for (int i = 0; i < FileHeader.StructCount; i++)
+        try
         {
-            Structs.Add(new GFFBinaryStruct(reader));
-        }
+            var reader = new BinaryReader(stream);
 
-        reader.BaseStream.Position = FileHeader.OffsetToFields;
-        for (int i = 0; i < FileHeader.FieldCount; i++)
+            FileHeader = new GFFBinaryFileHeader(reader);
+
+            reader.BaseStream.Position = FileHeader.OffsetToStructs;
+            for (int i = 0; i < FileHeader.StructCount; i++)
+            {
+                Structs.Add(new GFFBinaryStruct(reader));
+            }
+
+            reader.BaseStream.Position = FileHeader.OffsetToFields;
+            for (int i = 0; i < FileHeader.FieldCount; i++)
+            {
+                Fields.Add(new GFFBinaryField(reader));
+            }
+
+            reader.BaseStream.Position = FileHeader.OffsetToLabels;
+            for (int i = 0; i < FileHeader.LabelCount; i++)
+            {
+                Labels.Add(reader.ReadString(16));
+            }
+
+            reader.BaseStream.Position = FileHeader.OffsetToFieldData;
+            FieldData = reader.ReadBytes((int)FileHeader.FieldDataLength);
+
+            reader.BaseStream.Position = FileHeader.OffsetToFieldIndices;
+            FieldIndices = reader.ReadBytes((int)FileHeader.FieldIndiciesLength);
+
+            reader.BaseStream.Position = FileHeader.OffsetToListIndicies;
+            ListIndices = reader.ReadBytes((int)FileHeader.ListIndiciesLength);
+        }
+        catch (Exception ex)
         {
-            Fields.Add(new GFFBinaryField(reader));
+            throw new IOException("Failed to read the 2DA data.", ex);
         }
-
-        reader.BaseStream.Position = FileHeader.OffsetToLabels;
-        for (int i = 0; i < FileHeader.LabelCount; i++)
-        {
-            Labels.Add(reader.ReadString(16));
-        }
-
-        reader.BaseStream.Position = FileHeader.OffsetToFieldData;
-        FieldData = reader.ReadBytes((int)FileHeader.FieldDataLength);
-
-        reader.BaseStream.Position = FileHeader.OffsetToFieldIndices;
-        FieldIndices = reader.ReadBytes((int)FileHeader.FieldIndiciesLength);
-
-        reader.BaseStream.Position = FileHeader.OffsetToListIndicies;
-        ListIndices = reader.ReadBytes((int)FileHeader.ListIndiciesLength);
     }
 
     public void Write(Stream stream)
     {
-        var writer = new BinaryWriter(stream);
-
-        FileHeader.Write(writer);
-
-        writer.BaseStream.Position = FileHeader.OffsetToStructs;
-        foreach (var @struct in Structs)
+        try
         {
-            @struct.Write(writer);
-        }
+            var writer = new BinaryWriter(stream);
 
-        writer.BaseStream.Position = FileHeader.OffsetToFields;
-        foreach (var field in Fields)
+            FileHeader.Write(writer);
+
+            writer.BaseStream.Position = FileHeader.OffsetToStructs;
+            foreach (var @struct in Structs)
+            {
+                @struct.Write(writer);
+            }
+
+            writer.BaseStream.Position = FileHeader.OffsetToFields;
+            foreach (var field in Fields)
+            {
+                field.Write(writer);
+            }
+
+            writer.BaseStream.Position = FileHeader.OffsetToLabels;
+            foreach (var label in Labels)
+            {
+                writer.Write(label.Truncate(16).PadRight(16, '\0'), 0);
+            }
+
+            writer.BaseStream.Position = FileHeader.OffsetToFieldData;
+            writer.Write(FieldData);
+
+            writer.BaseStream.Position = FileHeader.OffsetToFieldIndices;
+            writer.Write(FieldIndices);
+
+            writer.BaseStream.Position = FileHeader.OffsetToListIndicies;
+            writer.Write(ListIndices);
+        }
+        catch (Exception ex)
         {
-            field.Write(writer);
+            throw new IOException("Failed to write the 2DA data.", ex);
         }
-
-        writer.BaseStream.Position = FileHeader.OffsetToLabels;
-        foreach (var label in Labels)
-        {
-            writer.Write(label.Truncate(16).PadRight(16, '\0'), 0);
-        }
-
-        writer.BaseStream.Position = FileHeader.OffsetToFieldData;
-        writer.Write(FieldData);
-
-        writer.BaseStream.Position = FileHeader.OffsetToFieldIndices;
-        writer.Write(FieldIndices);
-
-        writer.BaseStream.Position = FileHeader.OffsetToListIndicies;
-        writer.Write(ListIndices);
     }
 
     public void Recalculate()

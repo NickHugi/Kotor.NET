@@ -25,77 +25,91 @@ public class MDLBinary
     }
     public MDLBinary(Stream stream, Stream mdxStream)
     {
-        var reader = new MDLBinaryReader(stream);
-        var mdxReader = new BinaryReader(mdxStream);
-
-        FileHeader = new(reader);
-        ModelHeader = new(reader);
-
-        reader.SetStreamPosition(ModelHeader.OffsetToNameOffsetArray);
-        for (int i = 0; i < ModelHeader.NamesArrayCount; i++)
+        try
         {
-            var offset = reader.ReadInt32();
-            NamesOffset.Add(offset);
-        }
+            var reader = new MDLBinaryReader(stream);
+            var mdxReader = new BinaryReader(mdxStream);
 
-        foreach (var nameOffset in NamesOffset)
+            FileHeader = new(reader);
+            ModelHeader = new(reader);
+
+            reader.SetStreamPosition(ModelHeader.OffsetToNameOffsetArray);
+            for (int i = 0; i < ModelHeader.NamesArrayCount; i++)
+            {
+                var offset = reader.ReadInt32();
+                NamesOffset.Add(offset);
+            }
+
+            foreach (var nameOffset in NamesOffset)
+            {
+                reader.SetStreamPosition(nameOffset);
+                var name = reader.ReadTerminatedString('\0');
+                Names.Add(name);
+            }
+
+            reader.SetStreamPosition(ModelHeader.AnimationOffsetArrayOffset);
+            for (int i = 0; i < ModelHeader.AnimationCount; i++)
+            {
+                var offset = reader.ReadInt32();
+                AnimationOffsets.Add(offset);
+            }
+
+            foreach (var offset in AnimationOffsets)
+            {
+                reader.SetStreamPosition(offset);
+                var animation = new MDLBinaryAnimation(reader, mdxReader);
+                Animations.Add(animation);
+            }
+
+            reader.SetStreamPosition(ModelHeader.OffsetToRootNode);
+            RootNode = new(reader, mdxReader);
+        }
+        catch (Exception ex)
         {
-            reader.SetStreamPosition(nameOffset);
-            var name = reader.ReadTerminatedString('\0');
-            Names.Add(name);
+            throw new IOException("Failed to read the 2DA data.", ex);
         }
-
-        reader.SetStreamPosition(ModelHeader.AnimationOffsetArrayOffset);
-        for (int i = 0; i < ModelHeader.AnimationCount; i++)
-        {
-            var offset = reader.ReadInt32();
-            AnimationOffsets.Add(offset);
-        }
-
-        foreach (var offset in AnimationOffsets)
-        {
-            reader.SetStreamPosition(offset);
-            var animation = new MDLBinaryAnimation(reader, mdxReader);
-            Animations.Add(animation);
-        }
-
-        reader.SetStreamPosition(ModelHeader.OffsetToRootNode);
-        RootNode = new(reader, mdxReader);
     }
 
     public void Write(Stream stream, Stream mdxStream)
     {
-        var writer = new MDLBinaryWriter(stream);
-        var mdxWriter = new BinaryWriter(mdxStream);
-
-        FileHeader.Write(writer);
-        ModelHeader.Write(writer);
-
-        writer.SetStreamPosition(ModelHeader.OffsetToNameOffsetArray);
-        foreach (var nameOffset in NamesOffset)
+        try
         {
-            writer.Write(nameOffset);
-        }
+            var writer = new MDLBinaryWriter(stream);
+            var mdxWriter = new BinaryWriter(mdxStream);
 
-        for (int i = 0; i < Names.Count(); i ++)
-        {
-            writer.SetStreamPosition(NamesOffset[i]);
-            writer.Write(Names[i] + "\0", 0);
-        }
+            FileHeader.Write(writer);
+            ModelHeader.Write(writer);
 
-        writer.SetStreamPosition(ModelHeader.AnimationOffsetArrayOffset);
-        foreach (var animationOffset in AnimationOffsets)
-        {
-            writer.Write(animationOffset);
-        }
-        for (int i = 0; i < AnimationOffsets.Count(); i ++)
-        {
-            writer.SetStreamPosition(AnimationOffsets[i]);
-            Animations[i].Write(writer, mdxWriter);
-        }
+            writer.SetStreamPosition(ModelHeader.OffsetToNameOffsetArray);
+            foreach (var nameOffset in NamesOffset)
+            {
+                writer.Write(nameOffset);
+            }
 
-        writer.SetStreamPosition(ModelHeader.OffsetToRootNode);
-        RootNode.Write(writer, mdxWriter);
+            for (int i = 0; i < Names.Count(); i++)
+            {
+                writer.SetStreamPosition(NamesOffset[i]);
+                writer.Write(Names[i] + "\0", 0);
+            }
+
+            writer.SetStreamPosition(ModelHeader.AnimationOffsetArrayOffset);
+            foreach (var animationOffset in AnimationOffsets)
+            {
+                writer.Write(animationOffset);
+            }
+            for (int i = 0; i < AnimationOffsets.Count(); i++)
+            {
+                writer.SetStreamPosition(AnimationOffsets[i]);
+                Animations[i].Write(writer, mdxWriter);
+            }
+
+            writer.SetStreamPosition(ModelHeader.OffsetToRootNode);
+            RootNode.Write(writer, mdxWriter);
+        }
+        catch (Exception ex)
+        {
+            throw new IOException("Failed to write the 2DA data.", ex);
+        }
     }
 
     public void Recalculate()

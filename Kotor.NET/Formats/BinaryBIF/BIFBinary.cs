@@ -18,41 +18,55 @@ public class BIFBinary
     }
     public BIFBinary(Stream stream)
     {
-        var reader = new BinaryReader(stream);
-
-        FileHeader = new BIFBinaryFileHeader(reader);
-
-        reader.BaseStream.Position = FileHeader.OffsetToResources;
-        for (int i = 0; i < FileHeader.ResourceCount; i++)
+        try
         {
-            var resource = new BIFBinaryVariableResource(reader);
-            Resources.Add(resource);
+            var reader = new BinaryReader(stream);
+
+            FileHeader = new BIFBinaryFileHeader(reader);
+
+            reader.BaseStream.Position = FileHeader.OffsetToResources;
+            for (int i = 0; i < FileHeader.ResourceCount; i++)
+            {
+                var resource = new BIFBinaryVariableResource(reader);
+                Resources.Add(resource);
+            }
+
+            for (int i = 0; i < FileHeader.ResourceCount; i++)
+            {
+                reader.BaseStream.Position = Resources[i].Offset;
+                var data = reader.ReadBytes(Resources[i].FileSize);
+                ResourceData.Add(data);
+            }
         }
-
-        for (int i = 0; i < FileHeader.ResourceCount; i++)
+        catch (Exception ex)
         {
-            reader.BaseStream.Position = Resources[i].Offset;
-            var data = reader.ReadBytes(Resources[i].FileSize);
-            ResourceData.Add(data);
+            throw new IOException("Failed to read the 2DA data.", ex);
         }
     }
 
     public void Write(Stream stream)
     {
-        var writer = new BinaryWriter(stream);
-
-        FileHeader.Write(writer);
-
-        writer.BaseStream.Position = FileHeader.OffsetToResources;
-        for (int i = 0; i < Resources.Count; i++)
+        try
         {
-            Resources[i].Write(writer);
+            var writer = new BinaryWriter(stream);
+
+            FileHeader.Write(writer);
+
+            writer.BaseStream.Position = FileHeader.OffsetToResources;
+            for (int i = 0; i < Resources.Count; i++)
+            {
+                Resources[i].Write(writer);
+            }
+
+            for (int i = 0; i < Resources.Count; i++)
+            {
+                writer.BaseStream.Position = Resources[i].Offset;
+                Resources[i].Write(writer);
+            }
         }
-
-        for (int i = 0; i < Resources.Count; i++)
+        catch (Exception ex)
         {
-            writer.BaseStream.Position = Resources[i].Offset;
-            Resources[i].Write(writer);
+            throw new IOException("Failed to write the 2DA data.", ex);
         }
     }
 
