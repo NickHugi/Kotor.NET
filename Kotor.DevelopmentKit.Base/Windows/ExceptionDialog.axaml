@@ -5,6 +5,7 @@
         xmlns:vm="using:Kotor.DevelopmentKit.Base.ViewModels"
         x:Class="Kotor.DevelopmentKit.Base.ExceptionDialog"
         x:DataType="vm:ExceptionDialogViewModel"
+        x:Name="Window"
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
         Width="400" SizeToContent="Height" MaxHeight="400"
         Title="An error occured">
@@ -12,8 +13,8 @@
         <TextBlock Grid.Row="0" Text="{Binding Message}" TextWrapping="Wrap"/>
         <TextBox Grid.Row="2" IsReadOnly="True" Text="{Binding StackTrace}" TextWrapping="Wrap"/>
         <StackPanel Grid.Row="4" Orientation="Horizontal" Spacing="5">
-            <Button>Ok</Button>
-            <Button>Copy</Button>
+            <Button Command="{Binding #Window.Ok}">Ok</Button>
+            <Button Command="{Binding #Window.Copy}">Copy</Button>
         </StackPanel>
     </Grid>
 </Window>
