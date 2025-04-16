@@ -45,9 +45,9 @@ public class TwoDABinaryDeserializer
 
             return twoda;
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            throw new DeserializationException("Failed to deserialize the 2DA data.", e);
+            throw new DeserializationException("Failed to deserialize the 2DA data.", ex);
         }
     }
 }
