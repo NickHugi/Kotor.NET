@@ -18,19 +18,33 @@ public class SSFBinary
     }
     public SSFBinary(Stream stream)
     {
-        var reader = new BinaryReader(stream);
-        FileHeader = new SSFBinaryFileHeader(reader);
+        try
+        {
+            var reader = new BinaryReader(stream);
+            FileHeader = new SSFBinaryFileHeader(reader);
 
-        reader.BaseStream.Position = FileHeader.OffsetToSounds;
-        SoundList = new SSFBinarySoundList(reader);
+            reader.BaseStream.Position = FileHeader.OffsetToSounds;
+            SoundList = new SSFBinarySoundList(reader);
+        }
+        catch (Exception ex)
+        {
+            throw new IOException("Failed to read the 2DA data.", ex);
+        }
     }
 
     public void Write(Stream stream)
     {
-        var writer = new BinaryWriter(stream);
+        try
+        {
+            var writer = new BinaryWriter(stream);
 
-        FileHeader.Write(writer);
-        SoundList.Write(writer);
+            FileHeader.Write(writer);
+            SoundList.Write(writer);
+        }
+        catch (Exception ex)
+        {
+            throw new IOException("Failed to write the 2DA data.", ex);
+        }
     }
 
     public void Recalculate()

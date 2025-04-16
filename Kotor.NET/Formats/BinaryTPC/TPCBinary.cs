@@ -19,46 +19,60 @@ public class TPCBinary
     }
     public TPCBinary(Stream stream)
     {
-        var reader = new BinaryReader(stream);
-        FileHeader = new TPCBinaryFileHeader(reader);
-
-        var layerCount = FileHeader.CubeMap ? 6 : 1;
-        Layers = Enumerable.Range(0, layerCount).Select(x => new TPCBinaryLayer()).ToList();
-
-        var mipmapHeight = FileHeader.CubeMap ? FileHeader.Width : FileHeader.Height;
-        var mipmapWidth = FileHeader.Width;
-        for (int i = 0; i < FileHeader.MipmapCount; i++)
+        try
         {
-            foreach (var layer in Layers)
+            var reader = new BinaryReader(stream);
+            FileHeader = new TPCBinaryFileHeader(reader);
+
+            var layerCount = FileHeader.CubeMap ? 6 : 1;
+            Layers = Enumerable.Range(0, layerCount).Select(x => new TPCBinaryLayer()).ToList();
+
+            var mipmapHeight = FileHeader.CubeMap ? FileHeader.Width : FileHeader.Height;
+            var mipmapWidth = FileHeader.Width;
+            for (int i = 0; i < FileHeader.MipmapCount; i++)
             {
-                var size = GetMipmapDataSize(mipmapWidth, mipmapHeight, FileHeader.Encoding, FileHeader.Compressed);
-                var mipmap = reader.ReadBytes(size);
-                layer.Mipmaps.Add(mipmap);
+                foreach (var layer in Layers)
+                {
+                    var size = GetMipmapDataSize(mipmapWidth, mipmapHeight, FileHeader.Encoding, FileHeader.Compressed);
+                    var mipmap = reader.ReadBytes(size);
+                    layer.Mipmaps.Add(mipmap);
+                }
+
+                mipmapWidth = (ushort)Math.Max(1, mipmapWidth >> 1);
+                mipmapHeight = (ushort)Math.Max(1, mipmapHeight >> 1);
             }
 
-            mipmapWidth = (ushort)Math.Max(1, mipmapWidth >> 1);
-            mipmapHeight = (ushort)Math.Max(1, mipmapHeight >> 1);
+            var txiLength = (int)(reader.BaseStream.Length - reader.BaseStream.Position);
+            TXI = reader.ReadString(txiLength);
         }
-
-        var txiLength = (int)(reader.BaseStream.Length - reader.BaseStream.Position);
-        TXI = reader.ReadString(txiLength);
+        catch (Exception ex)
+        {
+            throw new IOException("Failed to read the 2DA data.", ex);
+        }
     }
 
     public void Write(Stream stream)
     {
-        var writer = new BinaryWriter(stream);
-
-        FileHeader.Write(writer);
-
-        for (int i = 0; i < FileHeader.MipmapCount; i++)
+        try
         {
-            foreach (var layer in Layers)
-            {
-                writer.Write(layer.Mipmaps[i]);
-            }
-        }
+            var writer = new BinaryWriter(stream);
 
-        writer.Write(TXI);
+            FileHeader.Write(writer);
+
+            for (int i = 0; i < FileHeader.MipmapCount; i++)
+            {
+                foreach (var layer in Layers)
+                {
+                    writer.Write(layer.Mipmaps[i]);
+                }
+            }
+
+            writer.Write(TXI);
+        }
+        catch (Exception ex)
+        {
+            throw new IOException("Failed to write the 2DA data.", ex);
+        }
     }
 
     public void Recalculate()
