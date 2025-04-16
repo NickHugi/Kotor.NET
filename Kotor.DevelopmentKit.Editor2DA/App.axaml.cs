@@ -51,7 +51,7 @@ namespace Kotor.DevelopmentKit.Editor2DA
         }
         private void OnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
         {
-            HandleException(e.Exception);
+            HandleException(e.Exception.InnerException);
             e.SetObserved(); // Prevents application crash
         }
 
