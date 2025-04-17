@@ -33,7 +33,7 @@ public class TwoDAViewModel : ReactiveObject
     public TwoDAViewModel()
     {
         _rowsSource = new();
-        var sorter = new SourceListIndexComperer<RowViewModel>(_rowsSource);
+        var sorter = new SourceListIndexComparer<RowViewModel>(_rowsSource);
         _rowsSource.Connect()
             .ObserveOn(AvaloniaScheduler.Instance)
             .AutoRefreshOnObservable(x => this.ObservableForProperty(x => x.Filter))

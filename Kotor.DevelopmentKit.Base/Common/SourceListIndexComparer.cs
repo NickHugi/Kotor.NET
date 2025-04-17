@@ -4,11 +4,15 @@ using DynamicData;
 
 namespace Kotor.DevelopmentKit.Base;
 
-public class SourceListIndexComperer<T> : IComparer<T> where T : notnull
+/// <summary>
+/// Represents a index-based comparison on a SourceList object.
+/// </summary>
+/// <typeparam name="T">The type of elements within the source list.</typeparam>
+public class SourceListIndexComparer<T> : IComparer<T> where T : notnull
 {
     private SourceList<T> _source;
 
-    public SourceListIndexComperer(SourceList<T> sauce)
+    public SourceListIndexComparer(SourceList<T> sauce)
     {
         _source = sauce;
     }
