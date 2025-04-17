@@ -29,18 +29,21 @@ namespace Kotor.DevelopmentKit.Editor2DA;
 
 public partial class TwoDAResourceEditor : ResourceEditorBase<TwoDAResourceEditorViewModel, TwoDAViewModel, TwoDA>
 {
-
+    public override FilePickerFileType AllValidFilePickerFileTypes => new FilePickerFileType("All Valid Options")
+    {
+        Patterns = [..FilePickerTypes.TwoDA.Patterns!, ..FilePickerTypes.Encapsulated.Patterns!],
+    };
     public override FilePickerOpenOptions FilePickerOpenOptions => new()
     {
         Title = "Open 2DA File",
         AllowMultiple = false,
-        FileTypeFilter = [FilePickerTypes.TwoDA, FilePickerTypes.Encapsulator],
+        FileTypeFilter = [FilePickerTypes.TwoDA, FilePickerTypes.Encapsulated, AllValidFilePickerFileTypes, FilePickerTypes.All],
     };
     public override FilePickerSaveOptions FilePickerSaveOptions => new()
     {
         Title = "Save 2DA File",
         ShowOverwritePrompt = false,
-        FileTypeChoices = [FilePickerTypes.TwoDA, FilePickerTypes.Encapsulator],
+        FileTypeChoices = [FilePickerTypes.TwoDA, FilePickerTypes.Encapsulated, AllValidFilePickerFileTypes, FilePickerTypes.All],
     };
     public override List<ResourceType> ResourceTypes => [ResourceType.TWODA];
 

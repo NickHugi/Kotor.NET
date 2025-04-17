@@ -23,6 +23,7 @@ public abstract class ResourceEditorBase<TEditorViewModel, TResourceViewModel, T
     where TResourceViewModel : ReactiveObject
     where TResourceModel : new()
 {
+    public abstract FilePickerFileType AllValidFilePickerFileTypes { get; }
     public abstract FilePickerOpenOptions FilePickerOpenOptions { get; }
     public abstract FilePickerSaveOptions FilePickerSaveOptions { get; }
     public abstract List<ResourceType> ResourceTypes { get; }
