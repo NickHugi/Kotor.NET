@@ -14,11 +14,11 @@ using Kotor.NET.Tests.Encapsulation;
 
 namespace Kotor.DevelopmentKit.Base.Windows;
 
-public partial class SaveToERFWindow : Window
+public partial class EncapsulatedResourceSaverDialog : Window
 {
     public SaveToERFWindowViewModel Context => (SaveToERFWindowViewModel)DataContext!;
 
-    public SaveToERFWindow()
+    public EncapsulatedResourceSaverDialog()
     {
         InitializeComponent();
     }

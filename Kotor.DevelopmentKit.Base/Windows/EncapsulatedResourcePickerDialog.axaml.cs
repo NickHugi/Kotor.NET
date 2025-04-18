@@ -15,11 +15,11 @@ using Kotor.NET.Tests.Encapsulation;
 
 namespace Kotor.DevelopmentKit.Base.Windows;
 
-public partial class LoadFromERFWindow : Window
+public partial class EncapsulatedResourcePickerDialog : Window
 {
     public LoadFromERFWindowViewModel Context => (LoadFromERFWindowViewModel)DataContext!;
 
-    public LoadFromERFWindow()
+    public EncapsulatedResourcePickerDialog()
     {
         InitializeComponent();
     }
