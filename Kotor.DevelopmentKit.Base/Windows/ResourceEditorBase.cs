@@ -42,7 +42,7 @@ public abstract class ResourceEditorBase<TEditorViewModel, TResourceViewModel, T
         else if (Encapsulation.IsPathEncapsulation(file.Path.LocalPath))
         {
             var encapsulatorPicker = new EncapsulatedResourceSaverDialog();
-            encapsulatorPicker.DataContext = new SaveToERFWindowViewModel().LoadModel(file.Path.LocalPath, ResourceTypes);
+            encapsulatorPicker.DataContext = new EncapsulatedResourceSaverViewModel().LoadModel(file.Path.LocalPath, ResourceTypes);
 
             return await encapsulatorPicker.ShowDialog<SaveToERFWindowDialogResult>(this);
         }
@@ -77,7 +77,7 @@ public abstract class ResourceEditorBase<TEditorViewModel, TResourceViewModel, T
         else if (Encapsulation.IsPathEncapsulation(file.Path.LocalPath))
         {
             var encapsulatorPicker = new EncapsulatedResourcePickerDialog();
-            encapsulatorPicker.DataContext = new LoadFromERFWindowViewModel().LoadModel(file.Path.LocalPath, ResourceTypes);
+            encapsulatorPicker.DataContext = new EncapsulatedResourcePickerDialogViewModel().LoadModel(file.Path.LocalPath, ResourceTypes);
 
             return await encapsulatorPicker.ShowDialog<LoadFromERFWindowDialogResult>(this);
         }

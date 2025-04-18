@@ -17,7 +17,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.Base.ViewModels;
 
-public class LoadFromERFWindowViewModel : ReactiveObject
+public class EncapsulatedResourcePickerDialogViewModel : ReactiveObject
 {
     private ERFResourceListViewModel _resourceList = default!;
     public ERFResourceListViewModel ResourceList
@@ -36,11 +36,11 @@ public class LoadFromERFWindowViewModel : ReactiveObject
     private readonly Interaction<Exception, Unit> _loadingError = new();
     public Interaction<Exception, Unit> ExceptionEvent => this._loadingError;
 
-    public LoadFromERFWindowViewModel()
+    public EncapsulatedResourcePickerDialogViewModel()
     {
     }
 
-    public LoadFromERFWindowViewModel LoadModel(string filepath, IEnumerable<ResourceType> resourceTypeFilter)
+    public EncapsulatedResourcePickerDialogViewModel LoadModel(string filepath, IEnumerable<ResourceType> resourceTypeFilter)
     {
         FilePath = filepath;
         ResourceList = new();

@@ -37,7 +37,7 @@ public interface IResourceEditorViewModel<TViewModel, TModel>
     public byte[] SerializeModelToBytes();
 }
 
-public abstract class ResourceEditorViewModelBase<TViewModel, TModel>
+public abstract class BaseResourceEditorViewModel<TViewModel, TModel>
     : ReactiveObject, IResourceEditorViewModel<TViewModel, TModel>
     where TViewModel : ReactiveObject
     where TModel : new()
@@ -105,7 +105,7 @@ public abstract class ResourceEditorViewModelBase<TViewModel, TModel>
     public Interaction<Exception, Unit> ExceptionInteraction => this._loadingError;
 
     
-    public ResourceEditorViewModelBase()
+    public BaseResourceEditorViewModel()
     {
         this.ObservableForProperty(x => x.FilePath)
             .Subscribe(x => this.RaisePropertyChanged(nameof(FilePathAssigned)));

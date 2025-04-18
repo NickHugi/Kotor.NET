@@ -16,7 +16,7 @@ namespace Kotor.DevelopmentKit.Base.Windows;
 
 public partial class EncapsulatedResourceSaverDialog : Window
 {
-    public SaveToERFWindowViewModel Context => (SaveToERFWindowViewModel)DataContext!;
+    public EncapsulatedResourceSaverViewModel Context => (EncapsulatedResourceSaverViewModel)DataContext!;
 
     public EncapsulatedResourceSaverDialog()
     {

@@ -21,7 +21,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Kotor.DevelopmentKit.Editor2DA.ViewModels;
 
-public class TwoDAResourceEditorViewModel : ResourceEditorViewModelBase<TwoDAViewModel, TwoDA>
+public class TwoDAResourceEditorViewModel : BaseResourceEditorViewModel<TwoDAViewModel, TwoDA>
 {
     public override string WindowTitlePrefix => "2DA Editor";
 

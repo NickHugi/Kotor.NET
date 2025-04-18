@@ -17,7 +17,7 @@ namespace Kotor.DevelopmentKit.Base.Windows;
 
 public partial class EncapsulatedResourcePickerDialog : Window
 {
-    public LoadFromERFWindowViewModel Context => (LoadFromERFWindowViewModel)DataContext!;
+    public EncapsulatedResourcePickerDialogViewModel Context => (EncapsulatedResourcePickerDialogViewModel)DataContext!;
 
     public EncapsulatedResourcePickerDialog()
     {
