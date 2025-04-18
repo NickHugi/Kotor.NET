@@ -5,7 +5,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:vm="using:Kotor.DevelopmentKit.Base.ViewModels"
              x:DataType="vm:ERFResourceListViewModel"
-             x:Class="Kotor.DevelopmentKit.Base.Controls.ERFResourceList">
+             x:Class="Kotor.DevelopmentKit.Base.Views.ERFResourceList">
     <DataGrid
         Grid.Row="0"
         ItemsSource="{Binding Resources}"

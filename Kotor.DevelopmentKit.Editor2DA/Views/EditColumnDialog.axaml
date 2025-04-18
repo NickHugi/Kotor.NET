@@ -5,7 +5,7 @@
         xmlns:vm="using:Kotor.DevelopmentKit.Editor2DA.ViewModels"
         mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="100"
         x:DataType="vm:EditColumnDialogViewModel"
-        x:Class="Kotor.DevelopmentKit.Editor2DA.Windows.EditColumnDialog"
+        x:Class="Kotor.DevelopmentKit.Editor2DA.Views.EditColumnDialog"
         x:Name="Window"
         SizeToContent="Height" Width="350"
         Title="EditColumnDialog">

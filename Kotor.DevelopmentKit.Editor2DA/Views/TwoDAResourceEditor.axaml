@@ -6,7 +6,7 @@
         Width="1200" Height="600"
         xmlns:vm="using:Kotor.DevelopmentKit.Editor2DA.ViewModels"
         x:DataType="vm:TwoDAResourceEditorViewModel"
-        x:Class="Kotor.DevelopmentKit.Editor2DA.TwoDAResourceEditor"
+        x:Class="Kotor.DevelopmentKit.Editor2DA.Views.TwoDAResourceEditor"
         x:Name="Window"
         Title="{Binding WindowTitle}">    
     <DockPanel>

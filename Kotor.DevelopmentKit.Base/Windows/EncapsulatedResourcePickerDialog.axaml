@@ -5,7 +5,7 @@
         mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="400"
         Width="350" Height="400"
         xmlns:vm="using:Kotor.DevelopmentKit.Base.ViewModels"
-        xmlns:controls="using:Kotor.DevelopmentKit.Base.Controls"
+        xmlns:controls="using:Kotor.DevelopmentKit.Base.Views"
         x:DataType="vm:LoadFromERFWindowViewModel"
         x:Class="Kotor.DevelopmentKit.Base.Windows.EncapsulatedResourcePickerDialog"
         Title="Select a resource to load from">

@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Kotor.DevelopmentKit.Editor2DA.ViewModels;
 
-namespace Kotor.DevelopmentKit.Editor2DA.Windows;
+namespace Kotor.DevelopmentKit.Editor2DA.Views;
 
 public partial class EditColumnDialog : Window
 {

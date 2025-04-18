@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Kotor.DevelopmentKit.Base.ViewModels;
 
-namespace Kotor.DevelopmentKit.Base.Controls;
+namespace Kotor.DevelopmentKit.Base.Views;
 
 public partial class ERFResourceList : UserControl
 {

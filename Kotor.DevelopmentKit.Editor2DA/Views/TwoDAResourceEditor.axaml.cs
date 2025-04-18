@@ -13,7 +13,6 @@ using DynamicData.Binding;
 using Kotor.DevelopmentKit.Base.Common;
 using Kotor.DevelopmentKit.Base.Windows;
 using Kotor.DevelopmentKit.Editor2DA.ViewModels;
-using Kotor.DevelopmentKit.Editor2DA.Windows;
 using Kotor.NET.Common.Data;
 using ReactiveUI;
 using DynamicData;
@@ -25,7 +24,7 @@ using System.IO;
 using Kotor.NET.Resources.KotorRIM;
 using Kotor.NET.Resources.Kotor2DA;
 
-namespace Kotor.DevelopmentKit.Editor2DA;
+namespace Kotor.DevelopmentKit.Editor2DA.Views;
 
 public partial class TwoDAResourceEditor : ResourceEditorBase<TwoDAResourceEditorViewModel, TwoDAViewModel, TwoDA>
 {

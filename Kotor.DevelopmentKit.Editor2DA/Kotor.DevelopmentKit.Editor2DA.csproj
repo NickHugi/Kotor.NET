@@ -34,10 +34,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Windows\EditColumnDialog.axaml.cs">
+    <Compile Update="Views\EditColumnDialog.axaml.cs">
       <DependentUpon>EditColumnDialog.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Windows\TwoDAResourceEditor.axaml.cs">
+    <Compile Update="Views\TwoDAResourceEditor.axaml.cs">
       <DependentUpon>TwoDAResourceEditor.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
