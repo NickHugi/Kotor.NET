@@ -19,16 +19,18 @@ public partial class EncapsulatedResourcePickerDialog : Window
 {
     public EncapsulatedResourcePickerDialogViewModel Context => (EncapsulatedResourcePickerDialogViewModel)DataContext!;
 
+
     public EncapsulatedResourcePickerDialog()
     {
         InitializeComponent();
     }
 
+
     protected override void OnDataContextChanged(EventArgs e)
     {
         base.OnDataContextChanged(e);
 
-        Context.ExceptionEvent.RegisterHandler(async interaction =>
+        Context.ExceptionThrown.RegisterHandler(async interaction =>
         {
             await ExceptionDialog.ShowDilaog(this, interaction.Input);
             Close();

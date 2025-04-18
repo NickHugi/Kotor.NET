@@ -47,8 +47,8 @@ public class EncapsulatedResourcePickerDialogViewModel : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref _filepath, value);
     }
 
-    private readonly Interaction<Exception, Unit> _loadingError = new();
-    public Interaction<Exception, Unit> ExceptionEvent => this._loadingError;
+    private readonly Interaction<Exception, Unit> _exceptionThrown = new();
+    public Interaction<Exception, Unit> ExceptionThrown => this._exceptionThrown;
 
 
     public EncapsulatedResourcePickerDialogViewModel()
@@ -80,7 +80,7 @@ public class EncapsulatedResourcePickerDialogViewModel : ReactiveObject
             }
             catch (Exception ex)
             {
-                AvaloniaScheduler.Instance.Schedule(async () => await _loadingError.Handle(ex));
+                AvaloniaScheduler.Instance.Schedule(async () => await _exceptionThrown.Handle(ex));
             }
         });
 

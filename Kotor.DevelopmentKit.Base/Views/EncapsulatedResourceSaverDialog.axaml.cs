@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
@@ -18,9 +19,23 @@ public partial class EncapsulatedResourceSaverDialog : Window
 {
     public EncapsulatedResourceSaverDialogViewModel Context => (EncapsulatedResourceSaverDialogViewModel)DataContext!;
 
+
     public EncapsulatedResourceSaverDialog()
     {
         InitializeComponent();
+    }
+
+
+    protected override void OnDataContextChanged(EventArgs e)
+    {
+        base.OnDataContextChanged(e);
+
+        Context.ExceptionThrown.RegisterHandler(async interaction =>
+        {
+            await ExceptionDialog.ShowDilaog(this, interaction.Input);
+            Close();
+            interaction.SetOutput(Unit.Default);
+        });
     }
 
     private void Cancel_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)

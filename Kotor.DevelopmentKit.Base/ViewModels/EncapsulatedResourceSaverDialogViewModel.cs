@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Avalonia.ReactiveUI;
@@ -48,6 +50,9 @@ public class EncapsulatedResourceSaverDialogViewModel : ReactiveObject
         private set => this.RaiseAndSetIfChanged(ref _resourceTypeOptions, value);
     }
 
+    private readonly Interaction<Exception, Unit> _exceptionThrown = new();
+    public Interaction<Exception, Unit> ExceptionThrown => this._exceptionThrown;
+
 
     public EncapsulatedResourceSaverDialogViewModel()
     {
@@ -80,8 +85,15 @@ public class EncapsulatedResourceSaverDialogViewModel : ReactiveObject
 
         Task.Run(() =>
         {
-            var encapsulator = Encapsulation.LoadFromPath(filepath);
-            AvaloniaScheduler.Instance.Schedule(() => ResourceList.LoadModel(encapsulator, null));
+            try
+            {
+                var encapsulator = Encapsulation.LoadFromPath(filepath);
+                AvaloniaScheduler.Instance.Schedule(() => ResourceList.LoadModel(encapsulator, null));
+            }
+            catch (Exception ex)
+            {
+                AvaloniaScheduler.Instance.Schedule(async () => await _exceptionThrown.Handle(ex));
+            }
         });
 
         return this;
