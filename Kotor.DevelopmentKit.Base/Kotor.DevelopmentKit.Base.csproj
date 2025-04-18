@@ -33,10 +33,10 @@
     <Compile Update="MainWindow.axaml.cs">
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
-    <Compile Update="Windows\EncapsulatedResourcePickerDialog.axaml.cs">
+    <Compile Update="Views\EncapsulatedResourcePickerDialog.axaml.cs">
       <DependentUpon>EncapsulatedResourcePickerDialog.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Windows\EncapsulatedResourceSaverDialog.axaml.cs">
+    <Compile Update="Views\EncapsulatedResourceSaverDialog.axaml.cs">
       <DependentUpon>EncapsulatedResourceSaverDialog.axaml</DependentUpon>
     </Compile>
   </ItemGroup>

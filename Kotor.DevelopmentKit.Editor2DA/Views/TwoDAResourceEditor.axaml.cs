@@ -11,7 +11,6 @@ using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using DynamicData.Binding;
 using Kotor.DevelopmentKit.Base.Common;
-using Kotor.DevelopmentKit.Base.Windows;
 using Kotor.DevelopmentKit.Editor2DA.ViewModels;
 using Kotor.NET.Common.Data;
 using ReactiveUI;
@@ -23,6 +22,7 @@ using Kotor.NET.Resources.KotorERF;
 using System.IO;
 using Kotor.NET.Resources.KotorRIM;
 using Kotor.NET.Resources.Kotor2DA;
+using Kotor.DevelopmentKit.Base.Views;
 
 namespace Kotor.DevelopmentKit.Editor2DA.Views;
 

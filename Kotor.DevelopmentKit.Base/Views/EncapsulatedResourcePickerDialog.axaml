@@ -6,7 +6,7 @@
         Width="350" Height="400"
         xmlns:vm="using:Kotor.DevelopmentKit.Base.ViewModels"
         xmlns:controls="using:Kotor.DevelopmentKit.Base.Views"
-        x:DataType="vm:LoadFromERFWindowViewModel"
+        x:DataType="vm:EncapsulatedResourcePickerDialogViewModel"
         x:Class="Kotor.DevelopmentKit.Base.Windows.EncapsulatedResourcePickerDialog"
         Title="Select a resource to load from">
     <Grid RowDefinitions="Auto, *, 25, 35" Margin="10">

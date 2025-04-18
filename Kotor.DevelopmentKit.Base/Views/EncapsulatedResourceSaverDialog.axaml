@@ -6,7 +6,7 @@
         Width="350" Height="400"
         xmlns:vm="using:Kotor.DevelopmentKit.Base.ViewModels"
         xmlns:controls="using:Kotor.DevelopmentKit.Base.Views"
-        x:DataType="vm:SaveToERFWindowViewModel"
+        x:DataType="vm:EncapsulatedResourceSaverDialogViewModel"
         x:Class="Kotor.DevelopmentKit.Base.Windows.EncapsulatedResourceSaverDialog"
         Title="Select a resource to save as">
     <Grid RowDefinitions="Auto, *, 40, 35" Margin="10">

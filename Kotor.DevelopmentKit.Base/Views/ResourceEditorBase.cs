@@ -10,13 +10,14 @@ using Avalonia.Platform.Storage;
 using Kotor.DevelopmentKit.Base.Common;
 using Kotor.DevelopmentKit.Base.DialogResults;
 using Kotor.DevelopmentKit.Base.ViewModels;
+using Kotor.DevelopmentKit.Base.Windows;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Encapsulations;
 using Kotor.NET.Resources.KotorERF;
 using Kotor.NET.Resources.KotorRIM;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.Base.Windows;
+namespace Kotor.DevelopmentKit.Base.Views;
 
 public abstract class ResourceEditorBase<TEditorViewModel, TResourceViewModel, TResourceModel> : Window
     where TEditorViewModel : IResourceEditorViewModel<TResourceViewModel, TResourceModel>
@@ -33,7 +34,7 @@ public abstract class ResourceEditorBase<TEditorViewModel, TResourceViewModel, T
 
     protected async Task<SaveToERFWindowDialogResult?> SaveResourcePicker()
     {
-        var file = await TopLevel.GetTopLevel(this)!.StorageProvider.SaveFilePickerAsync(FilePickerSaveOptions);
+        var file = await GetTopLevel(this)!.StorageProvider.SaveFilePickerAsync(FilePickerSaveOptions);
 
         if (file is null)
         {
@@ -42,7 +43,7 @@ public abstract class ResourceEditorBase<TEditorViewModel, TResourceViewModel, T
         else if (Encapsulation.IsPathEncapsulation(file.Path.LocalPath))
         {
             var encapsulatorPicker = new EncapsulatedResourceSaverDialog();
-            encapsulatorPicker.DataContext = new EncapsulatedResourceSaverViewModel().LoadModel(file.Path.LocalPath, ResourceTypes);
+            encapsulatorPicker.DataContext = new EncapsulatedResourceSaverDialogViewModel().LoadModel(file.Path.LocalPath, ResourceTypes);
 
             return await encapsulatorPicker.ShowDialog<SaveToERFWindowDialogResult>(this);
         }

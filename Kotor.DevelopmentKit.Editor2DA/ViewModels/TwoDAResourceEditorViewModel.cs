@@ -17,7 +17,6 @@ using Kotor.NET.Formats.Binary2DA.Serialisation;
 using Kotor.NET.Resources.Kotor2DA;
 using Kotor.NET.Tests.Encapsulation;
 using ReactiveUI;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Kotor.DevelopmentKit.Editor2DA.ViewModels;
 

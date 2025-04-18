@@ -12,7 +12,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.Base.ViewModels;
 
-public class EncapsulatedResourceSaverViewModel : ReactiveObject
+public class EncapsulatedResourceSaverDialogViewModel : ReactiveObject
 {
     private ERFResourceListViewModel _resourceList = default!;
     public ERFResourceListViewModel ResourceList
@@ -49,7 +49,7 @@ public class EncapsulatedResourceSaverViewModel : ReactiveObject
     }
 
 
-    public EncapsulatedResourceSaverViewModel()
+    public EncapsulatedResourceSaverDialogViewModel()
     {
         this.ObservableForProperty(x => x.ResRef)
             .Subscribe(x =>
@@ -71,7 +71,7 @@ public class EncapsulatedResourceSaverViewModel : ReactiveObject
     }
 
 
-    public EncapsulatedResourceSaverViewModel LoadModel(string filepath, IEnumerable<ResourceType> resourceTypeOptions)
+    public EncapsulatedResourceSaverDialogViewModel LoadModel(string filepath, IEnumerable<ResourceType> resourceTypeOptions)
     {
         ResourceTypeOptions = resourceTypeOptions.ToArray();
         ResourceType = _resourceTypeOptions.First();
