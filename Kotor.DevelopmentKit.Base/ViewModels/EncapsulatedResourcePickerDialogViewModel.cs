@@ -19,8 +19,8 @@ namespace Kotor.DevelopmentKit.Base.ViewModels;
 
 public class EncapsulatedResourcePickerDialogViewModel : ReactiveObject
 {
-    private ERFResourceListViewModel _resourceList = default!;
-    public ERFResourceListViewModel ResourceList
+    private EncapsulatedResourceListViewModel _resourceList = default!;
+    public EncapsulatedResourceListViewModel ResourceList
     {
         get => _resourceList;
         private set => this.RaiseAndSetIfChanged(ref _resourceList, value);

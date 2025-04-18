@@ -5,11 +5,11 @@ using Kotor.DevelopmentKit.Base.ViewModels;
 
 namespace Kotor.DevelopmentKit.Base.Views;
 
-public partial class ERFResourceList : UserControl
+public partial class EncapsulatedResourceList : UserControl
 {
-    public ERFResourceListViewModel Context => (ERFResourceListViewModel)DataContext!;
+    public EncapsulatedResourceListViewModel Context => (EncapsulatedResourceListViewModel)DataContext!;
 
-    public ERFResourceList()
+    public EncapsulatedResourceList()
     {
         InitializeComponent();
     }

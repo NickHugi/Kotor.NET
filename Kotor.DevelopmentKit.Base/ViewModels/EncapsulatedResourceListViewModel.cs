@@ -19,7 +19,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.Base.ViewModels;
 
-public class ERFResourceListViewModel : ReactiveObject
+public class EncapsulatedResourceListViewModel : ReactiveObject
 {
     public IEncapsulation Encapsulator { get; private set; }
 
@@ -55,7 +55,7 @@ public class ERFResourceListViewModel : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref _loading, value);
     }
 
-    public ERFResourceListViewModel()
+    public EncapsulatedResourceListViewModel()
     {
         Encapsulator = default!;
         _resources = default!;
@@ -75,7 +75,7 @@ public class ERFResourceListViewModel : ReactiveObject
             .Subscribe();
     }
 
-    public ERFResourceListViewModel LoadModel(IEncapsulation encapsulator, IEnumerable<ResourceType>? resourceTypeFilter)
+    public EncapsulatedResourceListViewModel LoadModel(IEncapsulation encapsulator, IEnumerable<ResourceType>? resourceTypeFilter)
     {
         Encapsulator = encapsulator;
 

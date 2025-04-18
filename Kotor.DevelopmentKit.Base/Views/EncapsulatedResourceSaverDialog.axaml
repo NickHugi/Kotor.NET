@@ -18,7 +18,7 @@
             IsIndeterminate="True"
         />
 
-        <controls:ERFResourceList
+        <controls:EncapsulatedResourceList
             Grid.Row="1"
             Margin="0 0 0 10"
             DataContext="{Binding ResourceList}"
