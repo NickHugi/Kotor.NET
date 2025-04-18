@@ -21,9 +21,15 @@ public static class FilePickerTypes
     {
         Patterns = ["*.rim"],
     };
+
+
+    public static readonly FilePickerFileType EncapsulatedWriteable = new FilePickerFileType("Encapsulated Resource")
+    {
+        Patterns = ["*.erf", "*.mod", "*.rim"],
+    };
     public static readonly FilePickerFileType Encapsulated = new FilePickerFileType("Encapsulated Resource")
     {
-        Patterns = ["*.erf", "*.mod", "*.rim", "*.key"],
+        Patterns = ["*.key", ..EncapsulatedWriteable.Patterns],
     };
 
     public static readonly FilePickerFileType All = new FilePickerFileType("All")
