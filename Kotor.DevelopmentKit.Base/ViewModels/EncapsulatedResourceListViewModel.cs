@@ -41,11 +41,11 @@ public class EncapsulatedResourceListViewModel : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref _resrefFilter, value);
     }
 
-    public ResourceType[]? _typeFilter = null;
+    public ResourceType[]? _resourceTypeFiler = null;
     public ResourceType[]? ResourceTypeFilter
     {
-        get => _typeFilter;
-        set => this.RaiseAndSetIfChanged(ref _typeFilter, value);
+        get => _resourceTypeFiler;
+        set => this.RaiseAndSetIfChanged(ref _resourceTypeFiler, value);
     }
 
     private bool _loading = true;
@@ -79,7 +79,7 @@ public class EncapsulatedResourceListViewModel : ReactiveObject
     {
         Encapsulator = encapsulator;
 
-        _typeFilter = resourceTypeFilter?.ToArray();
+        _resourceTypeFiler = resourceTypeFilter?.ToArray();
 
         _resourcesSource.Clear();
         _resourcesSource.AddRange(Encapsulator.Select(x => new EncapsulatedResourceViewModel

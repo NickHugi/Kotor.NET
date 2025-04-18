@@ -9,7 +9,7 @@
         x:DataType="vm:EncapsulatedResourcePickerDialogViewModel"
         x:Class="Kotor.DevelopmentKit.Base.Windows.EncapsulatedResourcePickerDialog"
         Title="Select a resource to load from">
-    <Grid RowDefinitions="Auto, *, 25, 35" Margin="10">
+    <Grid RowDefinitions="Auto, *, 40, 35" Margin="10">
 
         <ProgressBar
             Grid.Row="0"
@@ -24,12 +24,26 @@
             DataContext="{Binding ResourceList}"
         />
 
-        <TextBox
+        <Grid
             Grid.Row="2"
             Margin="0 0 0 10"
-            Text="{Binding ResourceList.ResRefFilter, Mode=TwoWay}"
-            Height="20"
-        />
+            ColumnDefinitions="*, 100"
+        >
+            <TextBox
+                Grid.Column="0"
+                Margin="0 0 10 0"
+                Text="{Binding ResourceList.ResRefFilter, Mode=TwoWay}"
+                Height="20"
+            />
+            
+            <ComboBox
+                Grid.Column="1"
+                ItemsSource="{Binding ResourceTypeOptions}"
+                SelectedItem="{Binding ResourceType, Mode=TwoWay}"
+                HorizontalAlignment="Stretch"
+                Height="10"
+            />
+        </Grid>
         
         <StackPanel
             Grid.Row="3"

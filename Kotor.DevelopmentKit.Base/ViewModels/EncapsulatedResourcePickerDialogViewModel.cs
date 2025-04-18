@@ -26,6 +26,20 @@ public class EncapsulatedResourcePickerDialogViewModel : ReactiveObject
         private set => this.RaiseAndSetIfChanged(ref _resourceList, value);
     }
 
+    private ResourceType[] _resourceTypeOptions = default!;
+    public ResourceType[] ResourceTypeOptions
+    {
+        get => _resourceTypeOptions;
+        private set => this.RaiseAndSetIfChanged(ref _resourceTypeOptions, value);
+    }
+
+    private ResourceType _resourceType = default!;
+    public ResourceType ResourceType
+    {
+        get => _resourceType;
+        set => this.RaiseAndSetIfChanged(ref _resourceType, value);
+    }
+
     private string _filepath = "";
     public string FilePath
     {
@@ -36,21 +50,33 @@ public class EncapsulatedResourcePickerDialogViewModel : ReactiveObject
     private readonly Interaction<Exception, Unit> _loadingError = new();
     public Interaction<Exception, Unit> ExceptionEvent => this._loadingError;
 
+
     public EncapsulatedResourcePickerDialogViewModel()
     {
+        this.ObservableForProperty(x => x.ResourceType)
+            .Subscribe(x =>
+            {
+                if (ResourceList is not null)
+                {
+                    ResourceList.ResourceTypeFilter = [x.Value];
+                }
+            });
     }
 
-    public EncapsulatedResourcePickerDialogViewModel LoadModel(string filepath, IEnumerable<ResourceType> resourceTypeFilter)
+
+    public EncapsulatedResourcePickerDialogViewModel LoadModel(string filepath, IEnumerable<ResourceType> resourceTypeOptions)
     {
         FilePath = filepath;
         ResourceList = new();
+        ResourceTypeOptions = resourceTypeOptions.ToArray();
+        ResourceType = _resourceTypeOptions.First();
 
         Task.Run(() =>
         {
             try
             {
                 var encapsulator = Encapsulation.LoadFromPath(filepath);
-                AvaloniaScheduler.Instance.Schedule(() => ResourceList.LoadModel(encapsulator, resourceTypeFilter));
+                AvaloniaScheduler.Instance.Schedule(() => ResourceList.LoadModel(encapsulator, null));
             }
             catch (Exception ex)
             {
