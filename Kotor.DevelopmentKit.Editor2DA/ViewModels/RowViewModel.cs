@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Avalonia.Collections;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.Editor2DA.ViewModels;
@@ -16,10 +17,10 @@ public class RowViewModel : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref _rowHeader, value);
     }
 
-    private readonly Dictionary<string, string> _cells = new();
-    public Dictionary<string, string> Cells
+    private readonly AvaloniaDictionary<string, string> _cells = new();
+    public AvaloniaDictionary<string, string> Cells
     {
         get => _cells;
-        init => _cells = value;
+        init => this.RaiseAndSetIfChanged(ref _cells, value);
     }
 }

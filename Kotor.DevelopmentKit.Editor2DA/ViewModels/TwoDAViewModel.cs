@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 using Avalonia.ReactiveUI;
 using DynamicData;
 using Kotor.DevelopmentKit.Base;
+using Kotor.DevelopmentKit.Base.Extensions;
 using Kotor.NET.Resources.Kotor2DA;
 using ReactiveUI;
 
@@ -54,7 +54,7 @@ public class TwoDAViewModel : ReactiveObject
             return new RowViewModel()
             {
                 RowHeader = row.RowHeader,
-                Cells = columnHeaders.ToDictionary(x => x, x => row.GetCell(x).AsString())
+                Cells = columnHeaders.ToAvaloniaDictionary(x => x, x => row.GetCell(x).AsString())
             };
         });
 
@@ -119,7 +119,6 @@ public class TwoDAViewModel : ReactiveObject
         {
             var row = rows[rowID];
             row.Cells[columnHeader] = value;
-            rows.Replace(rows[rowID], row);
         });
     }
 
@@ -142,7 +141,7 @@ public class TwoDAViewModel : ReactiveObject
             rows.Add(new()
             {
                 RowHeader = rowHeader,
-                Cells = Columns.Skip(1).ToDictionary(x => x.Header, x => "")
+                Cells = Columns.Skip(1).ToAvaloniaDictionary(x => x.Header, x => "")
             });
         });
     }
@@ -154,7 +153,7 @@ public class TwoDAViewModel : ReactiveObject
             rows.Insert(rowID, new()
             {
                 RowHeader = rowHeader,
-                Cells = Columns.Skip(1).ToDictionary(x => x.Header, x => "")
+                Cells = Columns.Skip(1).ToAvaloniaDictionary(x => x.Header, x => "")
             });
         });
     }
