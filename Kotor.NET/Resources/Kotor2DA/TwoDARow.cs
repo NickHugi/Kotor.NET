@@ -1,4 +1,7 @@
-﻿namespace Kotor.NET.Resources.Kotor2DA;
+﻿using System.Data.Common;
+using Kotor.NET.Resources.Kotor2DA.Events;
+
+namespace Kotor.NET.Resources.Kotor2DA;
 
 /// <summary>
 /// Represents a row contained within a 2DA table. 

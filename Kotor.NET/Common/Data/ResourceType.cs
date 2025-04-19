@@ -89,6 +89,11 @@ public class ResourceType
         Category = category;
     }
 
+    public bool IsFileSameType(string filepath)
+    {
+        return filepath.ToLower().EndsWith(Extension);
+    } 
+
     public static ResourceType ByID(int id)
     {
         return All.SingleOrDefault(x => x.ID == id) ?? UNIDENTIFIED;
@@ -97,6 +102,11 @@ public class ResourceType
     public static ResourceType ByExtension(string extension)
     {
         return All.Single(x => x.Extension == extension);
+    }
+
+    public static ResourceType FromFilepath(string filepath)
+    {
+        return All.Single(x => filepath.ToLower().EndsWith(x.Extension));
     }
 
     public override string ToString()
