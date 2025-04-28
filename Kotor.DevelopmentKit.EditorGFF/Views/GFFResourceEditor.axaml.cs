@@ -1,0 +1,156 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Input;
+using Avalonia.VisualTree;
+using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
+using Microsoft.VisualBasic;
+using ReactiveUI;
+
+namespace Kotor.DevelopmentKit.EditorGFF.Views;
+
+public partial class MainWindow : Window
+{
+    public MainWindow()
+    {
+        InitializeComponent();
+    }
+
+    private void TreeDataGrid_PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
+    {
+        if (e.GetCurrentPoint(this).Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed)
+        {
+            var position = e.GetPosition(TreeDataGrid);
+            var visual = (Visual?)TreeDataGrid.InputHitTest(position);
+            var row = visual?.FindAncestorOfType<TreeDataGridRow>();
+            var data = (IGFFTreeNodeViewModel)TreeDataGrid?.RowSelection?.SelectedItem!;
+
+            if (row != null)
+            {
+                var menu = GetStructContextMenu(data);
+
+                menu.Open(row);
+            }
+        }
+    }
+
+    private ContextMenu GetStructContextMenu(IGFFTreeNodeViewModel data)
+    {
+        var menu = new ContextMenu();
+
+        if (data is IStructGFFTreeNodeViewModel dataAsStruct)
+        {
+            menu.Items.Add(new MenuItem() { Header = "Add UInt8", Command = ReactiveCommand.Create(() => AddUInt8(dataAsStruct)) });
+            menu.Items.Add(new MenuItem() { Header = "Add Int8", Command = ReactiveCommand.Create(() => AddInt8(dataAsStruct)) });
+            menu.Items.Add(new MenuItem() { Header = "Add UInt16", Command = ReactiveCommand.Create(() => AddUInt16(dataAsStruct)) });
+            menu.Items.Add(new MenuItem() { Header = "Add Int16", Command = ReactiveCommand.Create(() => AddInt16(dataAsStruct)) });
+            menu.Items.Add(new MenuItem() { Header = "Add UInt32", Command = ReactiveCommand.Create(() => AddUInt32(dataAsStruct)) });
+            menu.Items.Add(new MenuItem() { Header = "Add Int32", Command = ReactiveCommand.Create(() => AddInt32(dataAsStruct)) });
+            menu.Items.Add(new MenuItem() { Header = "Add UInt64", Command = ReactiveCommand.Create(() => AddUInt64(dataAsStruct)) });
+            menu.Items.Add(new MenuItem() { Header = "Add Int64", Command = ReactiveCommand.Create(() => AddInt64(dataAsStruct)) });
+            menu.Items.Add(new MenuItem() { Header = "Add Single", Command = ReactiveCommand.Create(() => AddSingle(dataAsStruct)) });
+            menu.Items.Add(new MenuItem() { Header = "Add Double", Command = ReactiveCommand.Create(() => AddDouble(dataAsStruct)) });
+            menu.Items.Add(new MenuItem() { Header = "Add ResRef", Command = ReactiveCommand.Create(() => AddResRef(dataAsStruct)) });
+            menu.Items.Add(new MenuItem() { Header = "Add String", Command = ReactiveCommand.Create(() => AddString(dataAsStruct)) });
+            menu.Items.Add(new MenuItem() { Header = "Add Binary", Command = ReactiveCommand.Create(() => AddBinary(dataAsStruct)) });
+            menu.Items.Add(new MenuItem() { Header = "Add Vector3", Command = ReactiveCommand.Create(() => AddVector3(dataAsStruct)) });
+            menu.Items.Add(new MenuItem() { Header = "Add Vector4", Command = ReactiveCommand.Create(() => AddVector4(dataAsStruct)) });
+            menu.Items.Add(new MenuItem() { Header = "Add Struct", Command = ReactiveCommand.Create(() => AddStruct(dataAsStruct)) });
+            menu.Items.Add(new MenuItem() { Header = "Add List", Command = ReactiveCommand.Create(() => AddList(dataAsStruct)) });
+        }
+        else if (data is ListGFFTreeNodeViewModel dataAsList)
+        {
+            menu.Items.Add(new MenuItem() { Header = "Add Struct", Command = ReactiveCommand.Create(() => dataAsList.AddStruct()) });
+        }
+
+        if (menu.Items.Count > 0)
+            menu.Items.Add(new Separator());
+
+        if (data is StructInListGFFTreeNodeViewModel dataAsStructInList)
+        {
+            menu.Items.Add(new MenuItem() { Header = "Copy Struct", Command = ReactiveCommand.Create(() => { }) });
+            menu.Items.Add(new MenuItem() { Header = "Cut Struct", Command = ReactiveCommand.Create(() => { }) });
+            menu.Items.Add(new MenuItem() { Header = "Delete Struct", Command = ReactiveCommand.Create(() => data.Delete()) });
+        }
+        else if (data is IFieldGFFTreeNodeViewModel)
+        {
+            menu.Items.Add(new MenuItem() { Header = "Copy Field", Command = ReactiveCommand.Create(() => { }) });
+            menu.Items.Add(new MenuItem() { Header = "Cut Field", Command = ReactiveCommand.Create(() => { }) });
+            menu.Items.Add(new MenuItem() { Header = "Delete Field", Command = ReactiveCommand.Create(() => data.Delete()) });
+        }
+
+        return menu;
+    }
+
+    private void AddUInt8(IStructGFFTreeNodeViewModel parent)
+    {
+        parent.AddField(new UInt8GFFTreeNodeViewModel(parent, "New UInt8"));
+    }
+    private void AddInt8(IStructGFFTreeNodeViewModel parent)
+    {
+        parent.AddField(new Int8GFFTreeNodeViewModel(parent, "New Int8"));
+    }
+    private void AddUInt16(IStructGFFTreeNodeViewModel parent)
+    {
+        parent.AddField(new UInt16GFFTreeNodeViewModel(parent, "New UInt16"));
+    }
+    private void AddInt16(IStructGFFTreeNodeViewModel parent)
+    {
+        parent.AddField(new Int16GFFTreeNodeViewModel(parent, "New Int16"));
+    }
+    private void AddUInt32(IStructGFFTreeNodeViewModel parent)
+    {
+        parent.AddField(new UInt32GFFTreeNodeViewModel(parent, "New UInt32"));
+    }
+    private void AddInt32(IStructGFFTreeNodeViewModel parent)
+    {
+        parent.AddField(new Int32GFFTreeNodeViewModel(parent, "New Int32"));
+    }
+    private void AddUInt64(IStructGFFTreeNodeViewModel parent)
+    {
+        parent.AddField(new UInt64GFFTreeNodeViewModel(parent, "New UInt64"));
+    }
+    private void AddInt64(IStructGFFTreeNodeViewModel parent)
+    {
+        parent.AddField(new Int64GFFTreeNodeViewModel(parent, "New UInt64"));
+    }
+    private void AddSingle(IStructGFFTreeNodeViewModel parent)
+    {
+        parent.AddField(new SingleGFFTreeNodeViewModel(parent, "New Single"));
+    }
+    private void AddDouble(IStructGFFTreeNodeViewModel parent)
+    {
+        parent.AddField(new DoubleGFFTreeNodeViewModel(parent, "New Double"));
+    }
+    private void AddResRef(IStructGFFTreeNodeViewModel parent)
+    {
+        parent.AddField(new ResRefGFFTreeNodeViewModel(parent, "New ResRef"));
+    }
+    private void AddString(IStructGFFTreeNodeViewModel parent)
+    {
+        parent.AddField(new StringGFFTreeNodeViewModel(parent, "New String"));
+    }
+    private void AddBinary(IStructGFFTreeNodeViewModel parent)
+    {
+        parent.AddField(new BinaryGFFTreeNodeViewModel(parent, "New Binary"));
+    }
+    private void AddVector3(IStructGFFTreeNodeViewModel parent)
+    {
+        parent.AddField(new Vector3GFFTreeNodeViewModel(parent, "New Vector3"));
+    }
+    private void AddVector4(IStructGFFTreeNodeViewModel parent)
+    {
+        parent.AddField(new Vector4GFFTreeNodeViewModel(parent, "New Vector4"));
+    }
+    private void AddStruct(IStructGFFTreeNodeViewModel parent)
+    {
+        parent.AddField(new StructGFFTreeNodeViewModel(parent, "New Struct"));
+    }
+    private void AddList(IStructGFFTreeNodeViewModel parent)
+    {
+        parent.AddField(new ListGFFTreeNodeViewModel(parent, "New List"));
+    }
+}
