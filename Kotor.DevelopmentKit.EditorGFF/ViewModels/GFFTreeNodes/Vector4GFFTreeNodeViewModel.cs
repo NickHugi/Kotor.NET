@@ -52,7 +52,7 @@ public class Vector4GFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeView
         this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Name)));
         this.ObservableForProperty(x => x.FieldValue).Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
     }
-    public Vector4GFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, Vector4 value) : this(parent, label)
+    public Vector4GFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, Vector4ViewModel value) : this(parent, label)
     {
         FieldValue = value;
     }

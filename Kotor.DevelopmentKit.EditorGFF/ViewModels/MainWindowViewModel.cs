@@ -2,12 +2,26 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
+using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        public StructInListGFFTreeNodeViewModel RootNode { get; }
+        private IGFFTreeNodeViewModel _selectedNode;
+        public IGFFTreeNodeViewModel SelectedNode
+        {
+            get => _selectedNode;
+            set => this.RaiseAndSetIfChanged(ref _selectedNode, value);
+        }
+
+        private StructInListGFFTreeNodeViewModel _rootNode = new StructInListGFFTreeNodeViewModel(null);
+        public StructInListGFFTreeNodeViewModel RootNode
+        {
+            get => _rootNode;
+            set => this.RaiseAndSetIfChanged(ref _rootNode, value);
+        }
+
         public HierarchicalTreeDataGridSource<IGFFTreeNodeViewModel> TreeData { get; }
 
         public MainWindowViewModel()

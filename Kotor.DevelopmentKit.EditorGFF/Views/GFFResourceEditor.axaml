@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Kotor.DevelopmentKit.EditorGFF.ViewModels"
+        xmlns:local="clr-namespace:Kotor.DevelopmentKit.Base.Extensions;assembly=Kotor.DevelopmentKit.Base"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -17,8 +18,9 @@
         <TreeDataGrid Name="TreeDataGrid"
                       Source="{Binding TreeData}"
                       PointerPressed="TreeDataGrid_PointerPressed"
+                      local:TreeDataGridExtensions.SelectedItem="{Binding SelectedNode, Mode=TwoWay}"
                       Grid.Column="0"
-                      />
+                      ></TreeDataGrid>
 
         <StackPanel Orientation="Vertical" Spacing="5" Grid.Column="1" Margin="10 0 0 0">
             <StackPanel Orientation="Vertical">
