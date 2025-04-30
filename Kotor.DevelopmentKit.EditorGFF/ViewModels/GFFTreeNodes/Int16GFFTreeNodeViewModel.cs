@@ -18,6 +18,8 @@ public class Int16GFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewMo
         set => this.RaiseAndSetIfChanged(ref _label, value);
     }
 
+    public bool CanEditLabel => true;
+
     private short _fieldValue;
     public short FieldValue
     {
@@ -37,7 +39,6 @@ public class Int16GFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewMo
     private ReadOnlyObservableCollection<IGFFTreeNodeViewModel> _children = new([]);
     public ReadOnlyObservableCollection<IGFFTreeNodeViewModel> Children => _children;
 
-    public string Name => Label;
     public string Type => "Int16";
     public string Value => FieldValue.ToString();
 
@@ -47,7 +48,7 @@ public class Int16GFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewMo
         Label = label;
         FieldValue = value;
 
-        this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Name)));
+        this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
         this.ObservableForProperty(x => x.FieldValue).Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
     }
 

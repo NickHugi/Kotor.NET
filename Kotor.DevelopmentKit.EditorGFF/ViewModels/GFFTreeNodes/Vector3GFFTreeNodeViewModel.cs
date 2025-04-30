@@ -20,6 +20,8 @@ public class Vector3GFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeView
         set => this.RaiseAndSetIfChanged(ref _label, value);
     }
 
+    public bool CanEditLabel => true;
+
     private Vector3ViewModel _fieldValue;
     public Vector3ViewModel FieldValue
     {
@@ -39,7 +41,6 @@ public class Vector3GFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeView
     private ReadOnlyObservableCollection<IGFFTreeNodeViewModel> _children = new([]);
     public ReadOnlyObservableCollection<IGFFTreeNodeViewModel> Children => _children;
 
-    public string Name => Label;
     public string Type => "Vector3";
     public string Value => $"{FieldValue.X}, {FieldValue.Y}, {FieldValue.Z}";
 
@@ -49,7 +50,7 @@ public class Vector3GFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeView
         Label = label;
         _fieldValue = new();
 
-        this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Name)));
+        this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
         this.ObservableForProperty(x => x.FieldValue).Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
     }
     public Vector3GFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, Vector3ViewModel value) : this(parent, label)

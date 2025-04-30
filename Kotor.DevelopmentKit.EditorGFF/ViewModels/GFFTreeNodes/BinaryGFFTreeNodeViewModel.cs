@@ -18,6 +18,8 @@ public class BinaryGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewM
         set => this.RaiseAndSetIfChanged(ref _label, value);
     }
 
+    public bool CanEditLabel => true;
+
     private byte[] _fieldValue;
     public byte[] FieldValue
     {
@@ -37,7 +39,6 @@ public class BinaryGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewM
     private ReadOnlyObservableCollection<IGFFTreeNodeViewModel> _children = new([]);
     public ReadOnlyObservableCollection<IGFFTreeNodeViewModel> Children => _children;
 
-    public string Name => Label;
     public string Type => "Binary";
     public string Value => $"";
 
@@ -47,7 +48,7 @@ public class BinaryGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewM
         Label = label;
         _fieldValue = [];
 
-        this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Name)));
+        this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
         this.ObservableForProperty(x => x.FieldValue).Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
     }
     public BinaryGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, byte[] value) : this(parent, label)

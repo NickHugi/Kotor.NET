@@ -1,7 +1,10 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Kotor.DevelopmentKit.EditorGFF.ViewModels"
-        xmlns:local="clr-namespace:Kotor.DevelopmentKit.Base.Extensions;assembly=Kotor.DevelopmentKit.Base"
+        xmlns:views="clr-namespace:Kotor.DevelopmentKit.EditorGFF.Views"
+        xmlns:extensions="clr-namespace:Kotor.DevelopmentKit.Base.Extensions;assembly=Kotor.DevelopmentKit.Base"
+        xmlns:base-converters="clr-namespace:Kotor.DevelopmentKit.Base.ValueConverters;assembly=Kotor.DevelopmentKit.Base"
+        xmlns:converters="clr-namespace:Kotor.DevelopmentKit.EditorGFF.ValueConverters"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -14,26 +17,44 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
+    <Window.Resources>
+        <base-converters:EqualsConverter x:Key="EqualsConverter"/>
+        <converters:CastToGFFFieldTypeConverter x:Key="CastToGFFFieldTypeConverter"/>
+    </Window.Resources>
+
     <Grid Margin="10" ColumnDefinitions="*, 300">
         <TreeDataGrid Name="TreeDataGrid"
                       Source="{Binding TreeData}"
                       PointerPressed="TreeDataGrid_PointerPressed"
-                      local:TreeDataGridExtensions.SelectedItem="{Binding SelectedNode, Mode=TwoWay}"
+                      extensions:TreeDataGridExtensions.SelectedItem="{Binding SelectedNode, Mode=TwoWay}"
                       Grid.Column="0"
                       ></TreeDataGrid>
 
         <StackPanel Orientation="Vertical" Spacing="5" Grid.Column="1" Margin="10 0 0 0">
-            <StackPanel Orientation="Vertical">
-                <TextBlock Foreground="Gray">Type</TextBlock>
-                <TextBox />
-            </StackPanel>
-            <StackPanel Orientation="Vertical">
-                <TextBlock Foreground="Gray">Label</TextBlock>
-                <TextBox />
-            </StackPanel>
+            
+            <Border Background="#eee" BorderBrush="#ddd" BorderThickness="1" CornerRadius="4" Padding="10">
+                <StackPanel>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Foreground="Gray">Type</TextBlock>
+                        <views:FieldTypeComboBox FieldType="{Binding SelectedNode.Type}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Foreground="Gray">Label</TextBlock>
+                        <TextBox Text="{Binding SelectedNode.Label, Mode=TwoWay}" IsEnabled="{Binding SelectedNode.CanEditLabel}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+
+            <Border Background="#eee" BorderBrush="#ddd" BorderThickness="1" CornerRadius="4" Padding="10">
+                <StackPanel IsVisible="{Binding SelectedNode.Type, FallbackValue={x:Null}, Converter={StaticResource EqualsConverter}, ConverterParameter=UInt8}">
+                    <TextBox/>
+                    <!--<NumericUpDown Value="{Binding SelectedNode, Converter={StaticResource CastToGFFFieldTypeConverter}}.FieldValue" />-->
+                </StackPanel>
+            </Border>
             
         </StackPanel>
-        
+      
     </Grid>
 
 </Window>

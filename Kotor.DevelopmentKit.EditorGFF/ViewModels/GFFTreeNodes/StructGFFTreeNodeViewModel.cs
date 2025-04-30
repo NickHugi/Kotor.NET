@@ -20,6 +20,8 @@ public class StructGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewM
         set => this.RaiseAndSetIfChanged(ref _label, value);
     }
 
+    public bool CanEditLabel => true;
+
     private bool _expanded;
     public bool Expanded
     {
@@ -32,7 +34,6 @@ public class StructGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewM
     private ObservableCollection<IGFFTreeNodeViewModel> _children = new();
     public ReadOnlyObservableCollection<IGFFTreeNodeViewModel> Children => new(_children);
 
-    public string Name => Label;
     public string Type => "Struct";
     public string Value => $"";
 
@@ -41,7 +42,7 @@ public class StructGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewM
         Parent = parent;
         Label = label;
 
-        this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Name)));
+        this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
     }
 
     public void AddField(IFieldGFFTreeNodeViewModel field)

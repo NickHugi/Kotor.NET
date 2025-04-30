@@ -18,6 +18,8 @@ public class DoubleGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewM
         set => this.RaiseAndSetIfChanged(ref _label, value);
     }
 
+    public bool CanEditLabel => true;
+
     private double _fieldValue;
     public double FieldValue
     {
@@ -37,7 +39,6 @@ public class DoubleGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewM
     private ReadOnlyObservableCollection<IGFFTreeNodeViewModel> _children = new([]);
     public ReadOnlyObservableCollection<IGFFTreeNodeViewModel> Children => _children;
 
-    public string Name => Label;
     public string Type => "Double";
     public string Value => FieldValue.ToString();
 
@@ -47,7 +48,7 @@ public class DoubleGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewM
         Label = label;
         FieldValue = value;
 
-        this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Name)));
+        this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
         this.ObservableForProperty(x => x.FieldValue).Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
     }
 

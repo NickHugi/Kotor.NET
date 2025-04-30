@@ -11,6 +11,13 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 public class StructInListGFFTreeNodeViewModel : ReactiveObject, IGFFTreeNodeViewModel, IStructGFFTreeNodeViewModel
 {
+    public string Label
+    {
+        get => (Parent is null) ? "[Root]" : $"[{Parent.Children.IndexOf(this).ToString()}]";
+        set => throw new NotImplementedException();
+    }
+    public bool CanEditLabel => false;
+
     public uint StructID { get; }
 
     private bool _expanded;
@@ -20,8 +27,6 @@ public class StructInListGFFTreeNodeViewModel : ReactiveObject, IGFFTreeNodeView
         set => this.RaiseAndSetIfChanged(ref _expanded, value);
     }
 
-
-    public string Name => (Parent is null) ? "[Root]" : $"[{Parent.Children.IndexOf(this).ToString()}]";
     public string Type => "Struct";
     public string Value => StructID.ToString();
     

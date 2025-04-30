@@ -10,7 +10,9 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 public interface IGFFTreeNodeViewModel
 {
-    public string Name { get; }
+    public string Label { get; set; }
+    public bool CanEditLabel { get; }
+
     public string Type { get; }
     public string Value { get; }
     public bool Expanded { get; set; }

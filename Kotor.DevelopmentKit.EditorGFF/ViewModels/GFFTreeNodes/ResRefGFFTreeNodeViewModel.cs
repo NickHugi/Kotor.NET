@@ -19,6 +19,8 @@ public class ResRefGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewM
         set => this.RaiseAndSetIfChanged(ref _label, value);
     }
 
+    public bool CanEditLabel => true;
+
     private ResRef _fieldValue;
     public ResRef FieldValue
     {
@@ -38,7 +40,6 @@ public class ResRefGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewM
     private ReadOnlyObservableCollection<IGFFTreeNodeViewModel> _children = new([]);
     public ReadOnlyObservableCollection<IGFFTreeNodeViewModel> Children => _children;
 
-    public string Name => Label;
     public string Type => "ResRef";
     public string Value => FieldValue.ToString();
 
@@ -48,7 +49,7 @@ public class ResRefGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewM
         Label = label;
         _fieldValue = "";
 
-        this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Name)));
+        this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
         this.ObservableForProperty(x => x.FieldValue).Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
     }
     public ResRefGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, ResRef value) : this(parent, label)
