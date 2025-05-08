@@ -5,12 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DynamicData;
+using Kotor.DevelopmentKit.Base.ViewModels;
 using Kotor.NET.Common.Data;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public class ResRefGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewModel<ResRef>
+public class ResRefGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewModel<ResRefViewModel>
 {
     private string _label = "";
     public string Label
@@ -21,8 +22,8 @@ public class ResRefGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewM
 
     public bool CanEditLabel => true;
 
-    private ResRef _fieldValue;
-    public ResRef FieldValue
+    private ResRefViewModel _fieldValue;
+    public ResRefViewModel FieldValue
     {
         get => _fieldValue;
         set => this.RaiseAndSetIfChanged(ref _fieldValue, value);
@@ -41,18 +42,18 @@ public class ResRefGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewM
     public ReadOnlyObservableCollection<IGFFTreeNodeViewModel> Children => _children;
 
     public string Type => "ResRef";
-    public string Value => FieldValue.ToString();
+    public string Value => FieldValue.Value.ToString();
 
     public ResRefGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label)
     {
         Parent = parent;
         Label = label;
-        _fieldValue = "";
+        _fieldValue = new();
 
         this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
         this.ObservableForProperty(x => x.FieldValue).Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
     }
-    public ResRefGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, ResRef value) : this(parent, label)
+    public ResRefGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, ResRefViewModel value) : this(parent, label)
     {
         FieldValue = value;
     }

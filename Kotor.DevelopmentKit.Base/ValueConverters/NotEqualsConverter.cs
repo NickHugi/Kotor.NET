@@ -5,26 +5,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Data.Converters;
-using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
+using Avalonia;
 
-namespace Kotor.DevelopmentKit.EditorGFF.ValueConverters;
+namespace Kotor.DevelopmentKit.Base.ValueConverters;
 
-public class CastToGFFFieldTypeConverter : IValueConverter
+public class NotEqualsConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is IFieldGFFTreeNodeViewModel field)
-        {
-            return field;
-        }
-        else
-        {
-            return null;
-        }
+        return value?.ToString() != parameter?.ToString();
     }
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        return value;
+        if (value is bool b && b)
+            return parameter;
+
+        return AvaloniaProperty.UnsetValue;
     }
 }

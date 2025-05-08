@@ -39,7 +39,7 @@ public class StringGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewM
     private ReadOnlyObservableCollection<IGFFTreeNodeViewModel> _children = new([]);
     public ReadOnlyObservableCollection<IGFFTreeNodeViewModel> Children => _children;
 
-    public string Type => "Int8";
+    public string Type => "String";
     public string Value => FieldValue.ToString();
 
     public StringGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, string value = "")

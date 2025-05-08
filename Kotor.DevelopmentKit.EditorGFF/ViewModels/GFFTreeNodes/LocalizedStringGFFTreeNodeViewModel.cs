@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 using DynamicData;
 using DynamicData.Binding;
 using Kotor.DevelopmentKit.Base.ViewModels;
+using Kotor.NET.Common;
 using Kotor.NET.Common.Data;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public class Vector3GFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewModel<Vector3ViewModel>
+public class LocalizedStringGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewModel<LocalizedStringViewModel>
 {
     private string _label = "";
     public string Label
@@ -23,8 +24,8 @@ public class Vector3GFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeView
 
     public bool CanEditLabel => true;
 
-    private Vector3ViewModel _fieldValue;
-    public Vector3ViewModel FieldValue
+    private LocalizedStringViewModel _fieldValue;
+    public LocalizedStringViewModel FieldValue
     {
         get => _fieldValue;
         set => this.RaiseAndSetIfChanged(ref _fieldValue, value);
@@ -42,10 +43,12 @@ public class Vector3GFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeView
     private ReadOnlyObservableCollection<IGFFTreeNodeViewModel> _children = new([]);
     public ReadOnlyObservableCollection<IGFFTreeNodeViewModel> Children => _children;
 
-    public string Type => "Vector3";
-    public string Value => $"{FieldValue.X}, {FieldValue.Y}, {FieldValue.Z}";
+    public string Type => "Localized String";
+    public string Value => FieldValue.StringRef == -1
+        ? $"[{FieldValue.StringRef}]"
+        : FieldValue.SubStrings.FirstOrDefault(x => x.Language == Language.English)?.Text?.ToString() ?? "";
 
-    public Vector3GFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label)
+    public LocalizedStringGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label)
     {
         Parent = parent;
         Label = label;
@@ -54,8 +57,9 @@ public class Vector3GFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeView
         this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
         this.ObservableForProperty(x => x.FieldValue).Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
         FieldValue.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
+        FieldValue.SubStrings.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
     }
-    public Vector3GFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, Vector3ViewModel value) : this(parent, label)
+    public LocalizedStringGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, LocalizedStringViewModel value) : this(parent, label)
     {
         FieldValue = value;
     }

@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.VisualTree;
+using Kotor.DevelopmentKit.EditorGFF.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 using Microsoft.VisualBasic;
 using ReactiveUI;
@@ -14,9 +15,26 @@ namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
 public partial class MainWindow : Window
 {
+    public MainWindowViewModel Context => (MainWindowViewModel)DataContext!;
+
     public MainWindow()
     {
         InitializeComponent();
+    }
+
+    public void AddSubString()
+    {
+        if (Context.SelectedNode is LocalizedStringGFFTreeNodeViewModel localizedString)
+        {
+            localizedString.FieldValue.AddSubString();
+        }
+    }
+    public void RemoveSelectedSubString()
+    {
+        if (Context.SelectedNode is LocalizedStringGFFTreeNodeViewModel localizedString)
+        {
+            localizedString.FieldValue.RemoveSelectedSubString();
+        }
     }
 
     private void TreeDataGrid_PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
@@ -55,6 +73,7 @@ public partial class MainWindow : Window
             menu.Items.Add(new MenuItem() { Header = "Add Double", Command = ReactiveCommand.Create(() => AddDouble(dataAsStruct)) });
             menu.Items.Add(new MenuItem() { Header = "Add ResRef", Command = ReactiveCommand.Create(() => AddResRef(dataAsStruct)) });
             menu.Items.Add(new MenuItem() { Header = "Add String", Command = ReactiveCommand.Create(() => AddString(dataAsStruct)) });
+            menu.Items.Add(new MenuItem() { Header = "Add Localized String", Command = ReactiveCommand.Create(() => AddLocalizedString(dataAsStruct)) });
             menu.Items.Add(new MenuItem() { Header = "Add Binary", Command = ReactiveCommand.Create(() => AddBinary(dataAsStruct)) });
             menu.Items.Add(new MenuItem() { Header = "Add Vector3", Command = ReactiveCommand.Create(() => AddVector3(dataAsStruct)) });
             menu.Items.Add(new MenuItem() { Header = "Add Vector4", Command = ReactiveCommand.Create(() => AddVector4(dataAsStruct)) });
@@ -132,6 +151,10 @@ public partial class MainWindow : Window
     private void AddString(IStructGFFTreeNodeViewModel parent)
     {
         parent.AddField(new StringGFFTreeNodeViewModel(parent, "New String"));
+    }
+    private void AddLocalizedString(IStructGFFTreeNodeViewModel parent)
+    {
+        parent.AddField(new LocalizedStringGFFTreeNodeViewModel(parent, "New Localized String"));
     }
     private void AddBinary(IStructGFFTreeNodeViewModel parent)
     {

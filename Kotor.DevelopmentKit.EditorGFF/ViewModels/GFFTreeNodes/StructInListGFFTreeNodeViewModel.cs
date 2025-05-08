@@ -18,7 +18,12 @@ public class StructInListGFFTreeNodeViewModel : ReactiveObject, IGFFTreeNodeView
     }
     public bool CanEditLabel => false;
 
-    public uint StructID { get; }
+    public int _structID;
+    public int StructID
+    {
+        get => _structID;
+        set => this.RaiseAndSetIfChanged(ref _structID, value);
+    }
 
     private bool _expanded;
     public bool Expanded

@@ -1,6 +1,7 @@
 ﻿using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
+using DynamicData.Binding;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 using ReactiveUI;
 
@@ -22,6 +23,11 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels
             set => this.RaiseAndSetIfChanged(ref _rootNode, value);
         }
 
+        public string? SelectedNodeType
+        {
+            get => _selectedNode?.Type;
+        }
+
         public HierarchicalTreeDataGridSource<IGFFTreeNodeViewModel> TreeData { get; }
 
         public MainWindowViewModel()
@@ -37,6 +43,9 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels
                     new TextColumn<IGFFTreeNodeViewModel, string>("Value", x => x.Value, GridLength.Parse("150")),
                 },
             };
+
+            this.WhenPropertyChanged(x => x.SelectedNode).Subscribe(x => this.RaisePropertyChanged(nameof(SelectedNodeType)));
         }
+       
     }
 }

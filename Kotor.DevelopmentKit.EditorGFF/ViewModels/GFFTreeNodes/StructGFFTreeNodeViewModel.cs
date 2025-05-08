@@ -20,6 +20,13 @@ public class StructGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewM
         set => this.RaiseAndSetIfChanged(ref _label, value);
     }
 
+    public int _structID;
+    public int StructID
+    {
+        get => _structID;
+        set => this.RaiseAndSetIfChanged(ref _structID, value);
+    }
+
     public bool CanEditLabel => true;
 
     private bool _expanded;
