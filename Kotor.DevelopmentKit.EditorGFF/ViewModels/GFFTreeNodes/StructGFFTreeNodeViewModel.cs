@@ -35,6 +35,10 @@ public class StructGFFTreeNodeViewModel : BaseStructGFFTreeNodeViewModel, IField
     {
         StructID = structID;
     }
+    public StructGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, GFFStruct gffStruct) : this(parent, label)
+    {
+        PopulateStruct(gffStruct);
+    }
 
     public override void Delete()
     {

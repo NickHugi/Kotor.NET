@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DynamicData;
+using Kotor.NET.Resources.KotorGFF;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
@@ -20,6 +21,10 @@ public class StructInListGFFTreeNodeViewModel : BaseStructGFFTreeNodeViewModel
     
     public StructInListGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent) : base(parent)
     {
+    }
+    public StructInListGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, GFFStruct gffStruct) : this(parent)
+    {
+        PopulateStruct(gffStruct);
     }
 
     public override void Delete()

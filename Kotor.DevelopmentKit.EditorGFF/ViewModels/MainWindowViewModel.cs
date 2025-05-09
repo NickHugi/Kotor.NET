@@ -97,53 +97,8 @@ public class MainWindowViewModel : BaseResourceEditorViewModel<StructInListGFFTr
 
     public override void LoadModel(GFF model)
     {
-        var rootNode = new StructInListGFFTreeNodeViewModel(null);
-        PopulateStruct(model.Root, rootNode);
+        var rootNode = new StructInListGFFTreeNodeViewModel(null, model.Root);
         LoadTree(rootNode);
-    }
-    private void PopulateStruct(GFFStruct gffStruct, BaseStructGFFTreeNodeViewModel vmStruct)
-    {
-        foreach (var (label, value) in gffStruct.GetFields())
-        {
-            IFieldGFFTreeNodeViewModel vmNode = value switch
-            {
-                Byte asUInt8 => new UInt8GFFTreeNodeViewModel(vmStruct, label, asUInt8),
-                SByte asInt8 => new Int8GFFTreeNodeViewModel(vmStruct, label, asInt8),
-                UInt16 asUInt16 => new UInt16GFFTreeNodeViewModel(vmStruct, label, asUInt16),
-                Int16 asInt16 => new Int16GFFTreeNodeViewModel(vmStruct, label, asInt16),
-                UInt32 asUInt32 => new UInt32GFFTreeNodeViewModel(vmStruct, label, asUInt32),
-                Int32 asInt32 => new Int32GFFTreeNodeViewModel(vmStruct, label, asInt32),
-                UInt64 asUInt64 => new UInt64GFFTreeNodeViewModel(vmStruct, label, asUInt64),
-                Int64 asInt64 => new Int64GFFTreeNodeViewModel(vmStruct, label, asInt64),
-                Single asSingle => new SingleGFFTreeNodeViewModel(vmStruct, label, asSingle),
-                Double asDouble => new DoubleGFFTreeNodeViewModel(vmStruct, label, asDouble),
-                ResRef asResRef => new ResRefGFFTreeNodeViewModel(vmStruct, label, asResRef),
-                String asString => new StringGFFTreeNodeViewModel(vmStruct, label, asString),
-                LocalisedString asLocalizedString => new LocalizedStringGFFTreeNodeViewModel(vmStruct, label, asLocalizedString),
-                byte[] asBinary => new BinaryGFFTreeNodeViewModel(vmStruct, label, asBinary),
-                Vector3 asVector3 => new Vector3GFFTreeNodeViewModel(vmStruct, label, asVector3),
-                Vector4 asVector4 => new Vector4GFFTreeNodeViewModel(vmStruct, label, asVector4),
-                GFFStruct asStruct => new StructGFFTreeNodeViewModel(vmStruct, label, (int)asStruct.ID), // TODO standardize as either int or uint
-                GFFList asList => new ListGFFTreeNodeViewModel(vmStruct, label),
-            };
-
-            if (vmNode is BaseStructGFFTreeNodeViewModel vmStructField)
-            {
-                PopulateStruct(value as GFFStruct, vmStructField);
-            }
-            if (vmNode is ListGFFTreeNodeViewModel vmListField)
-            {
-                var list = value as GFFList;
-                list.ToList().ForEach(x =>
-                {
-                    var vmChildStruct = vmListField.AddStruct();
-                    vmChildStruct.StructID = (int)x.ID; // TODO
-                    PopulateStruct(x, vmChildStruct);
-                });
-            }
-
-            vmStruct.AddField(vmNode);
-        }
     }
 
     public override GFF BuildModel() => throw new NotImplementedException();
