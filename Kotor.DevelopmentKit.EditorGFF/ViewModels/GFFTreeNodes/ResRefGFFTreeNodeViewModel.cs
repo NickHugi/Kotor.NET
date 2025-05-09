@@ -66,7 +66,7 @@ public class ResRefGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewM
 
     public void Delete()
     {
-        ((IStructGFFTreeNodeViewModel)Parent).DeleteField(this);
+        ((BaseStructGFFTreeNodeViewModel)Parent).DeleteField(this);
     }
 }
 

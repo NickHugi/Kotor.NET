@@ -9,7 +9,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public class StructInListGFFTreeNodeViewModel : BaseStructGFFTreeNodeViewModel
+public class RootStructGFFTreeNodeViewModel : BaseStructGFFTreeNodeViewModel
 {
     public override string Label
     {
@@ -17,8 +17,8 @@ public class StructInListGFFTreeNodeViewModel : BaseStructGFFTreeNodeViewModel
         set => throw new NotImplementedException();
     }
     public override bool CanEditLabel => false;
-    
-    public StructInListGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent) : base(parent)
+
+    public RootStructGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent) : base(parent)
     {
     }
 

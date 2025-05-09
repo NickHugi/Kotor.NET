@@ -79,7 +79,7 @@ public class LocalizedStringGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTree
 
     public void Delete()
     {
-        ((IStructGFFTreeNodeViewModel)Parent).DeleteField(this);
+        ((BaseStructGFFTreeNodeViewModel)Parent).DeleteField(this);
     }
 }
 

@@ -7,7 +7,7 @@
              
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="300"
              x:Class="Kotor.DevelopmentKit.EditorGFF.Views.FieldStructPanel"
-             x:DataType="vm:IStructGFFTreeNodeViewModel">
+             x:DataType="vm:BaseStructGFFTreeNodeViewModel">
     <StackPanel>
         <TextBlock Foreground="Gray">Value</TextBlock>
         <NumericUpDown Value="{Binding StructID, Mode=TwoWay}" Minimum="0" Maximum="255" FormatString="N0" ParsingNumberStyle="Integer" />

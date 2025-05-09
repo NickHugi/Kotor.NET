@@ -54,7 +54,7 @@ public class Int8GFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewMod
 
     public void Delete()
     {
-        ((IStructGFFTreeNodeViewModel)Parent).DeleteField(this);
+        ((BaseStructGFFTreeNodeViewModel)Parent).DeleteField(this);
     }
 }
 

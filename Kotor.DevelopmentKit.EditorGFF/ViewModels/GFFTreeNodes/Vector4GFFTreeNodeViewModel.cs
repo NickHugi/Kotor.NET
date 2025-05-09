@@ -72,7 +72,7 @@ public class Vector4GFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeView
 
     public void Delete()
     {
-        ((IStructGFFTreeNodeViewModel)Parent).DeleteField(this);
+        ((BaseStructGFFTreeNodeViewModel)Parent).DeleteField(this);
     }
 }
 

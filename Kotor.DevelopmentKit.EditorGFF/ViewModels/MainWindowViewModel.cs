@@ -46,7 +46,7 @@ public class MainWindowViewModel : BaseResourceEditorViewModel<StructInListGFFTr
     public bool IsSelectedNodeBinary => _selectedNode is BinaryGFFTreeNodeViewModel;
     public bool IsSelectedNodeVector3 => _selectedNode is Vector3GFFTreeNodeViewModel;
     public bool IsSelectedNodeVector4 => _selectedNode is Vector4GFFTreeNodeViewModel;
-    public bool IsSelectedNodeStruct => _selectedNode is IStructGFFTreeNodeViewModel;
+    public bool IsSelectedNodeStruct => _selectedNode is BaseStructGFFTreeNodeViewModel;
     public bool IsSelectedNodeList => _selectedNode is ListGFFTreeNodeViewModel;
 
 
@@ -101,7 +101,7 @@ public class MainWindowViewModel : BaseResourceEditorViewModel<StructInListGFFTr
         PopulateStruct(model.Root, rootNode);
         LoadTree(rootNode);
     }
-    private void PopulateStruct(GFFStruct gffStruct, IStructGFFTreeNodeViewModel vmStruct)
+    private void PopulateStruct(GFFStruct gffStruct, BaseStructGFFTreeNodeViewModel vmStruct)
     {
         foreach (var (label, value) in gffStruct.GetFields())
         {
@@ -127,7 +127,7 @@ public class MainWindowViewModel : BaseResourceEditorViewModel<StructInListGFFTr
                 GFFList asList => new ListGFFTreeNodeViewModel(vmStruct, label),
             };
 
-            if (vmNode is IStructGFFTreeNodeViewModel vmStructField)
+            if (vmNode is BaseStructGFFTreeNodeViewModel vmStructField)
             {
                 PopulateStruct(value as GFFStruct, vmStructField);
             }
