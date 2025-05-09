@@ -191,6 +191,13 @@ public class GFFStruct
         if (_data.ContainsKey(fieldName))
             _data.Remove(fieldName);
     }
+    public IEnumerable<(string Label, object value)> GetFields()
+    {
+        foreach (var entry in _data)
+        {
+            yield return (entry.Key, entry.Value);
+        }
+    }
 
     public override string ToString()
     {

@@ -52,6 +52,11 @@ public class StructGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewM
         this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
     }
 
+    public StructGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, int structID) : this(parent, label) 
+    {
+        StructID = structID;
+    }
+
     public void AddField(IFieldGFFTreeNodeViewModel field)
     {
         _children.Add(field);

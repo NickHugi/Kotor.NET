@@ -27,89 +27,98 @@
         <base-converters:NotEqualsConverter x:Key="NotEqualsConverter"/>
     </Window.Resources>
 
-    <Grid Margin="10" ColumnDefinitions="*, 320">
-        <TreeDataGrid Name="TreeDataGrid"
-                      Source="{Binding TreeData}"
-                      PointerPressed="TreeDataGrid_PointerPressed"
-                      base-extensions:TreeDataGridExtensions.SelectedItem="{Binding SelectedNode, Mode=TwoWay}"
-                      Grid.Column="0"
-                      />
+    <DockPanel>
 
-        <StackPanel Orientation="Vertical" Spacing="5" Grid.Column="1" Margin="10 0 0 0">
-            
-            <Border Background="#eee" BorderBrush="#ddd" BorderThickness="1" CornerRadius="4" Padding="10">
-                <StackPanel>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Foreground="Gray">Type</TextBlock>
-                        <editor-views:FieldTypeComboBox FieldType="{Binding SelectedNode.Type}" />
+        <Menu DockPanel.Dock="Top" BorderThickness="0 0 0 1" BorderBrush="LightGray">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New" Command="{Binding #Window.NewFile}" InputGesture="Ctrl+N" HotKey="Ctrl+N"/>
+                <MenuItem Header="_Open" Command="{Binding #Window.OpenFile}" InputGesture="Ctrl+O" HotKey="Ctrl+O"/>
+                <MenuItem Header="_Save" Command="{Binding #Window.SaveFile}" InputGesture="Ctrl+S" HotKey="Ctrl+S" IsEnabled="{Binding FilePathAssigned}"/>
+                <MenuItem Header="_Save As" Command="{Binding #Window.SaveFileAs}" InputGesture="Ctrl+Shift+S" HotKey="Ctrl+Shift+S" />
+                <MenuItem Header="_Reset" Command="{Binding #Window.ResetFile}" InputGesture="Ctrl+R" HotKey="Ctrl+R" />
+            </MenuItem>
+        </Menu>
+
+        <Grid Margin="10" ColumnDefinitions="*, 320">
+            <TreeDataGrid Name="TreeDataGrid"
+                          Source="{Binding TreeData}"
+                          PointerPressed="TreeDataGrid_PointerPressed"
+                          base-extensions:TreeDataGridExtensions.SelectedItem="{Binding SelectedNode, Mode=TwoWay}"
+                          Grid.Column="0"
+                          />
+
+            <StackPanel Orientation="Vertical" Spacing="5" Grid.Column="1" Margin="10 0 0 0">            
+                <Border Background="#eee" BorderBrush="#ddd" BorderThickness="1" CornerRadius="4" Padding="10">
+                    <StackPanel>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Foreground="Gray">Type</TextBlock>
+                            <editor-views:FieldTypeComboBox FieldType="{Binding SelectedNode.Type}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Foreground="Gray">Label</TextBlock>
+                            <TextBox Text="{Binding SelectedNode.Label, Mode=TwoWay}" IsEnabled="{Binding SelectedNode.CanEditLabel}" />
+                        </StackPanel>
                     </StackPanel>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Foreground="Gray">Label</TextBlock>
-                        <TextBox Text="{Binding SelectedNode.Label, Mode=TwoWay}" IsEnabled="{Binding SelectedNode.CanEditLabel}" />
-                    </StackPanel>
-                </StackPanel>
-            </Border>
-
-
-            <Border Background="#eee" BorderBrush="#ddd" BorderThickness="1" CornerRadius="4" Padding="10"
-                    IsVisible="{Binding SelectedNode, Converter={StaticResource NotEqualsConverter}, ConverterParameter={x:Null}}">
-                <Panel> 
-                    <base-views:Conditional Load="{Binding IsSelectedNodeUInt8}">
-                        <editor-views:FieldUInt8Panel DataContext="{Binding SelectedNode}" />
-                    </base-views:Conditional>
-                    <base-views:Conditional Load="{Binding IsSelectedNodeInt8}">
-                        <editor-views:FieldInt8Panel DataContext="{Binding SelectedNode}" />
-                    </base-views:Conditional>
-                    <base-views:Conditional Load="{Binding IsSelectedNodeUInt16}">
-                        <editor-views:FieldUInt16Panel DataContext="{Binding SelectedNode}" />
-                    </base-views:Conditional>
-                    <base-views:Conditional Load="{Binding IsSelectedNodeInt16}">
-                        <editor-views:FieldInt16Panel DataContext="{Binding SelectedNode}" />
-                    </base-views:Conditional>
-                    <base-views:Conditional Load="{Binding IsSelectedNodeUInt32}">
-                        <editor-views:FieldUInt32Panel DataContext="{Binding SelectedNode}" />
-                    </base-views:Conditional>
-                    <base-views:Conditional Load="{Binding IsSelectedNodeInt32}">
-                        <editor-views:FieldInt32Panel DataContext="{Binding SelectedNode}" />
-                    </base-views:Conditional>
-                    <base-views:Conditional Load="{Binding IsSelectedNodeUInt64}">
-                        <editor-views:FieldUInt64Panel DataContext="{Binding SelectedNode}" />
-                    </base-views:Conditional>
-                    <base-views:Conditional Load="{Binding IsSelectedNodeInt64}">
-                        <editor-views:FieldInt64Panel DataContext="{Binding SelectedNode}" />
-                    </base-views:Conditional>
-                    <base-views:Conditional Load="{Binding IsSelectedNodeSingle}">
-                        <editor-views:FieldSinglePanel DataContext="{Binding SelectedNode}" />
-                    </base-views:Conditional>
-                    <base-views:Conditional Load="{Binding IsSelectedNodeDouble}">
-                        <editor-views:FieldDoublePanel DataContext="{Binding SelectedNode}" />
-                    </base-views:Conditional>
-                    <base-views:Conditional Load="{Binding IsSelectedNodeResRef}">
-                        <editor-views:FieldResRefPanel DataContext="{Binding SelectedNode}" />
-                    </base-views:Conditional>
-                    <base-views:Conditional Load="{Binding IsSelectedNodeString}">
-                        <editor-views:FieldStringPanel DataContext="{Binding SelectedNode}" />
-                    </base-views:Conditional>
-                    <base-views:Conditional Load="{Binding IsSelectedNodeLocalizedString}">
-                        <editor-views:FieldLocalizedStringPanel DataContext="{Binding SelectedNode}" />
-                    </base-views:Conditional>
-                    <base-views:Conditional Load="{Binding IsSelectedNodeBinary}">
-                        <editor-views:FieldBinaryPanel DataContext="{Binding SelectedNode}" />
-                    </base-views:Conditional>
-                    <base-views:Conditional Load="{Binding IsSelectedNodeVector3}">
-                        <editor-views:FieldVector3Panel DataContext="{Binding SelectedNode}" />
-                    </base-views:Conditional>
-                    <base-views:Conditional Load="{Binding IsSelectedNodeVector4}">
-                        <editor-views:FieldVector4Panel DataContext="{Binding SelectedNode}" />
-                    </base-views:Conditional>
-                    <base-views:Conditional Load="{Binding IsSelectedNodeStruct}">
-                        <editor-views:FieldStructPanel DataContext="{Binding SelectedNode}" />
-                    </base-views:Conditional>
-                </Panel>
-            </Border>
-            
-        </StackPanel>
-      
-    </Grid>
+                </Border>
+                <Border Background="#eee" BorderBrush="#ddd" BorderThickness="1" CornerRadius="4" Padding="10"
+                        IsVisible="{Binding SelectedNode, Converter={StaticResource NotEqualsConverter}, ConverterParameter={x:Null}}">
+                    <Panel> 
+                        <base-views:Conditional Load="{Binding IsSelectedNodeUInt8}">
+                            <editor-views:FieldUInt8Panel DataContext="{Binding SelectedNode}" />
+                        </base-views:Conditional>
+                        <base-views:Conditional Load="{Binding IsSelectedNodeInt8}">
+                            <editor-views:FieldInt8Panel DataContext="{Binding SelectedNode}" />
+                        </base-views:Conditional>
+                        <base-views:Conditional Load="{Binding IsSelectedNodeUInt16}">
+                            <editor-views:FieldUInt16Panel DataContext="{Binding SelectedNode}" />
+                        </base-views:Conditional>
+                        <base-views:Conditional Load="{Binding IsSelectedNodeInt16}">
+                            <editor-views:FieldInt16Panel DataContext="{Binding SelectedNode}" />
+                        </base-views:Conditional>
+                        <base-views:Conditional Load="{Binding IsSelectedNodeUInt32}">
+                            <editor-views:FieldUInt32Panel DataContext="{Binding SelectedNode}" />
+                        </base-views:Conditional>
+                        <base-views:Conditional Load="{Binding IsSelectedNodeInt32}">
+                            <editor-views:FieldInt32Panel DataContext="{Binding SelectedNode}" />
+                        </base-views:Conditional>
+                        <base-views:Conditional Load="{Binding IsSelectedNodeUInt64}">
+                            <editor-views:FieldUInt64Panel DataContext="{Binding SelectedNode}" />
+                        </base-views:Conditional>
+                        <base-views:Conditional Load="{Binding IsSelectedNodeInt64}">
+                            <editor-views:FieldInt64Panel DataContext="{Binding SelectedNode}" />
+                        </base-views:Conditional>
+                        <base-views:Conditional Load="{Binding IsSelectedNodeSingle}">
+                            <editor-views:FieldSinglePanel DataContext="{Binding SelectedNode}" />
+                        </base-views:Conditional>
+                        <base-views:Conditional Load="{Binding IsSelectedNodeDouble}">
+                            <editor-views:FieldDoublePanel DataContext="{Binding SelectedNode}" />
+                        </base-views:Conditional>
+                        <base-views:Conditional Load="{Binding IsSelectedNodeResRef}">
+                            <editor-views:FieldResRefPanel DataContext="{Binding SelectedNode}" />
+                        </base-views:Conditional>
+                        <base-views:Conditional Load="{Binding IsSelectedNodeString}">
+                            <editor-views:FieldStringPanel DataContext="{Binding SelectedNode}" />
+                        </base-views:Conditional>
+                        <base-views:Conditional Load="{Binding IsSelectedNodeLocalizedString}">
+                            <editor-views:FieldLocalizedStringPanel DataContext="{Binding SelectedNode}" />
+                        </base-views:Conditional>
+                        <base-views:Conditional Load="{Binding IsSelectedNodeBinary}">
+                            <editor-views:FieldBinaryPanel DataContext="{Binding SelectedNode}" />
+                        </base-views:Conditional>
+                        <base-views:Conditional Load="{Binding IsSelectedNodeVector3}">
+                            <editor-views:FieldVector3Panel DataContext="{Binding SelectedNode}" />
+                        </base-views:Conditional>
+                        <base-views:Conditional Load="{Binding IsSelectedNodeVector4}">
+                            <editor-views:FieldVector4Panel DataContext="{Binding SelectedNode}" />
+                        </base-views:Conditional>
+                        <base-views:Conditional Load="{Binding IsSelectedNodeStruct}">
+                            <editor-views:FieldStructPanel DataContext="{Binding SelectedNode}" />
+                        </base-views:Conditional>
+                    </Panel>
+                </Border> 
+            </StackPanel>
+        </Grid>
+    
+    </DockPanel>
 
 </Window>

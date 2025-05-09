@@ -59,6 +59,16 @@ public class Vector4GFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeView
     {
         FieldValue = value;
     }
+    public Vector4GFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, Vector4 value) : this(parent, label)
+    {
+        FieldValue = new()
+        {
+            X = value.X,
+            Y = value.Y,
+            Z = value.Z,
+            W = value.W
+        };
+    }
 
     public void Delete()
     {

@@ -8,6 +8,10 @@ public static class FilePickerTypes
     {
         Patterns = ["*.2da"],
     };
+    public static readonly FilePickerFileType GFF = new FilePickerFileType("GFF File")
+    {
+        Patterns = ["*.gff"],
+    };
 
     public static readonly FilePickerFileType ERF = new FilePickerFileType("ERF File")
     {

@@ -45,10 +45,12 @@ public class ListGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewMod
         this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
     }
 
-    public void AddStruct()
+    public StructInListGFFTreeNodeViewModel AddStruct()
     {
-        _children.Add(new StructInListGFFTreeNodeViewModel(this));
+        var childStruct = new StructInListGFFTreeNodeViewModel(this);
+        _children.Add(childStruct);
         Expanded = true;
+        return childStruct;
     }
     public void DeleteStruct(StructInListGFFTreeNodeViewModel @struct)
     {

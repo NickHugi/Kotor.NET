@@ -63,6 +63,19 @@ public class LocalizedStringGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTree
     {
         FieldValue = value;
     }
+    public LocalizedStringGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, LocalisedString value) : this(parent, label)
+    {
+        FieldValue = new()
+        {
+            StringRef = value.StringRef,
+            SubStrings = new(value.AllSubstrings().Select(x => new LocalizedSubStringViewModel()
+            {
+                Language = x.Language,
+                Gender = x.Gender,
+                Text = x.Text
+            }))
+        };
+    }
 
     public void Delete()
     {

@@ -22,6 +22,7 @@ public class LocalizedStringViewModel : ReactiveObject
     public AvaloniaList<LocalizedSubStringViewModel> SubStrings
     {
         get => _substrings;
+        init => _substrings = value;
     }
 
     private LocalizedSubStringViewModel? _selectedSubstring;

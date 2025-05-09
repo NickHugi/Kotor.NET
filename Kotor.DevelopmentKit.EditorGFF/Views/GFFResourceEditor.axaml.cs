@@ -5,23 +5,47 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
+using Kotor.DevelopmentKit.Base.Common;
+using Kotor.DevelopmentKit.Base.Views;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
+using Kotor.NET.Common.Data;
+using Kotor.NET.Resources.Kotor2DA;
+using Kotor.NET.Resources.KotorGFF;
 using Microsoft.VisualBasic;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class MainWindow : Window
+public partial class MainWindow : ResourceEditorBase<MainWindowViewModel, StructInListGFFTreeNodeViewModel, GFF>
 {
     public MainWindowViewModel Context => (MainWindowViewModel)DataContext!;
+
+    public override FilePickerFileType AllValidFilePickerFileTypes => new FilePickerFileType("All Valid Options")
+    {
+        Patterns = [.. FilePickerTypes.GFF.Patterns!, .. FilePickerTypes.Encapsulated.Patterns!],
+    };
+    public override FilePickerOpenOptions FilePickerOpenOptions => new()
+    {
+        Title = "Open GFF File",
+        AllowMultiple = false,
+        FileTypeFilter = [FilePickerTypes.GFF, FilePickerTypes.Encapsulated, AllValidFilePickerFileTypes, FilePickerTypes.All],
+    };
+    public override FilePickerSaveOptions FilePickerSaveOptions => new()
+    {
+        Title = "Save GFF File",
+        ShowOverwritePrompt = false,
+        FileTypeChoices = [FilePickerTypes.GFF, FilePickerTypes.Encapsulated, AllValidFilePickerFileTypes, FilePickerTypes.All],
+    };
+    public override List<ResourceType> ResourceTypes => [ResourceType.GFF];
 
     public MainWindow()
     {
         InitializeComponent();
     }
-
+    
     private void TreeDataGrid_PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
     {
         if (e.GetCurrentPoint(this).Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed)

@@ -59,6 +59,10 @@ public class ResRefGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewM
     {
         FieldValue = value;
     }
+    public ResRefGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, ResRef value) : this(parent, label)
+    {
+        FieldValue = new() { Value = value.Get() }; 
+    }
 
     public void Delete()
     {
