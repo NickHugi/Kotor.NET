@@ -1,0 +1,15 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+
+             xmlns:vm="using:Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes"
+             
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="300"
+             x:Class="Kotor.DevelopmentKit.EditorGFF.Views.FieldDoublePanel"
+             x:DataType="vm:DoubleGFFTreeNodeViewModel">
+    <StackPanel>
+        <TextBlock Foreground="Gray">Value</TextBlock>
+        <NumericUpDown Value="{Binding FieldValue, Mode=TwoWay}" ParsingNumberStyle="Float" />
+    </StackPanel>
+</UserControl>

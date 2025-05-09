@@ -22,21 +22,6 @@ public partial class MainWindow : Window
         InitializeComponent();
     }
 
-    public void AddSubString()
-    {
-        if (Context.SelectedNode is LocalizedStringGFFTreeNodeViewModel localizedString)
-        {
-            localizedString.FieldValue.AddSubString();
-        }
-    }
-    public void RemoveSelectedSubString()
-    {
-        if (Context.SelectedNode is LocalizedStringGFFTreeNodeViewModel localizedString)
-        {
-            localizedString.FieldValue.RemoveSelectedSubString();
-        }
-    }
-
     private void TreeDataGrid_PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
     {
         if (e.GetCurrentPoint(this).Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed)

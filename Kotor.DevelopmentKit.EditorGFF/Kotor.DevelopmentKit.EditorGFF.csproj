@@ -28,6 +28,54 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\FieldVector4Panel.axaml.cs">
+      <DependentUpon>FieldVector4Panel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldVector3Panel.axaml.cs">
+      <DependentUpon>FieldVector3Panel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldStructPanel.axaml.cs">
+      <DependentUpon>FieldStructPanel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldLocalizedStringPanel.axaml.cs">
+      <DependentUpon>FieldLocalizedStringPanel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldBinaryPanel.axaml.cs">
+      <DependentUpon>FieldBinaryPanel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldStringPanel.axaml.cs">
+      <DependentUpon>FieldStringPanel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldResRefPanel.axaml.cs">
+      <DependentUpon>FieldResRefPanel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldInt64Panel.axaml.cs">
+      <DependentUpon>FieldInt64Panel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldDoublePanel.axaml.cs">
+      <DependentUpon>FieldDoublePanel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldSinglePanel.axaml.cs">
+      <DependentUpon>FieldSinglePanel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldUInt32Panel.axaml.cs">
+      <DependentUpon>FieldUInt32Panel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldInt32Panel.axaml.cs">
+      <DependentUpon>FieldInt32Panel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldInt8Panel.axaml.cs">
+      <DependentUpon>FieldInt8Panel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldInt16Panel.axaml.cs">
+      <DependentUpon>FieldInt16Panel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldUInt16Panel.axaml.cs">
+      <DependentUpon>FieldUInt16Panel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldUInt64Panel.axaml.cs">
+      <DependentUpon>FieldUInt64Panel.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\GFFResourceEditor.axaml.cs">
       <DependentUpon>GFFResourceEditor.axaml</DependentUpon>
     </Compile>

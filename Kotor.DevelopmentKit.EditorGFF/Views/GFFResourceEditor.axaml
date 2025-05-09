@@ -1,5 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         
         xmlns:base-views="clr-namespace:Kotor.DevelopmentKit.Base.Views;assembly=Kotor.DevelopmentKit.Base"
         xmlns:base-converters="clr-namespace:Kotor.DevelopmentKit.Base.ValueConverters;assembly=Kotor.DevelopmentKit.Base"
@@ -9,8 +11,6 @@
         xmlns:editor-views="clr-namespace:Kotor.DevelopmentKit.EditorGFF.Views"
         xmlns:xyz="using:Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes"
         
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         Width="800" Height="450"
         x:Name="Window"
@@ -33,7 +33,7 @@
                       PointerPressed="TreeDataGrid_PointerPressed"
                       base-extensions:TreeDataGridExtensions.SelectedItem="{Binding SelectedNode, Mode=TwoWay}"
                       Grid.Column="0"
-                      ></TreeDataGrid>
+                      />
 
         <StackPanel Orientation="Vertical" Spacing="5" Grid.Column="1" Margin="10 0 0 0">
             
@@ -54,160 +54,58 @@
             <Border Background="#eee" BorderBrush="#ddd" BorderThickness="1" CornerRadius="4" Padding="10"
                     IsVisible="{Binding SelectedNode, Converter={StaticResource NotEqualsConverter}, ConverterParameter={x:Null}}">
                 <Panel> 
-                
-                <StackPanel DataContext="{Binding SelectedNode}" IsVisible="{Binding Type, Converter={StaticResource EqualsConverter}, ConverterParameter=UInt8}">
-                    <!--<TextBlock Padding="0 0 0 12" FontSize="10" TextWrapping="Wrap">UInt8 type supports a range of integers between 0 to 255.</TextBlock>-->
-                    <TextBlock Foreground="Gray">Value</TextBlock>
-                    <NumericUpDown Value="{Binding $parent.((xyz:UInt8GFFTreeNodeViewModel)DataContext).FieldValue, Mode=TwoWay}" Minimum="0" Maximum="255" FormatString="N0" ParsingNumberStyle="Integer" />
-                </StackPanel>
-                
-                <StackPanel DataContext="{Binding SelectedNode}" IsVisible="{Binding Type, Converter={StaticResource EqualsConverter}, ConverterParameter=Int8}">
-                    <!--<TextBlock Padding="0 0 0 12" FontSize="10" TextWrapping="Wrap">Int8 type supports a range of integers between -128 to 127.</TextBlock>-->
-                    <TextBlock Foreground="Gray">Value</TextBlock>
-                    <NumericUpDown Value="{Binding $parent.((xyz:Int8GFFTreeNodeViewModel)DataContext).FieldValue, Mode=TwoWay}" Minimum="-128" Maximum="127" FormatString="N0" ParsingNumberStyle="Integer" />
-                </StackPanel>
-                
-                <StackPanel DataContext="{Binding SelectedNode}" IsVisible="{Binding Type, Converter={StaticResource EqualsConverter}, ConverterParameter=UInt16}">
-                    <!--<TextBlock Padding="0 0 0 12" FontSize="10" TextWrapping="Wrap">UInt16 type supports a range of integers between 0 to 65,535.</TextBlock>-->
-                    <TextBlock Foreground="Gray">Value</TextBlock>
-                    <NumericUpDown Value="{Binding $parent.((xyz:UInt16GFFTreeNodeViewModel)DataContext).FieldValue, Mode=TwoWay}" Minimum="0" Maximum="65535" FormatString="N0" ParsingNumberStyle="Integer" />
-                </StackPanel>
-                
-                <StackPanel DataContext="{Binding SelectedNode}" IsVisible="{Binding Type, Converter={StaticResource EqualsConverter}, ConverterParameter=Int16}">
-                    <!--<TextBlock Padding="0 0 0 12" FontSize="10" TextWrapping="Wrap">Int16 type supports a range of integers between -32,768 to 32,767.</TextBlock>-->
-                    <TextBlock Foreground="Gray">Value</TextBlock>
-                    <NumericUpDown Value="{Binding $parent.((xyz:Int16GFFTreeNodeViewModel)DataContext).FieldValue, Mode=TwoWay}" Minimum="-32768" Maximum="32767" FormatString="N0" ParsingNumberStyle="Integer" />
-                </StackPanel>
-                
-                <StackPanel DataContext="{Binding SelectedNode}" IsVisible="{Binding Type, Converter={StaticResource EqualsConverter}, ConverterParameter=UInt32}">
-                    <!--<TextBlock Padding="0 0 0 12" FontSize="10" TextWrapping="Wrap">UInt32 type supports a range of integers between 0 to 4294967295.</TextBlock>-->
-                    <TextBlock Foreground="Gray">Value</TextBlock>
-                    <NumericUpDown Value="{Binding $parent.((xyz:UInt32GFFTreeNodeViewModel)DataContext).FieldValue, Mode=TwoWay}" Minimum="0" Maximum="4294967295" FormatString="N0" ParsingNumberStyle="Integer" />
-                </StackPanel>
-                
-                <StackPanel DataContext="{Binding SelectedNode}" IsVisible="{Binding Type, Converter={StaticResource EqualsConverter}, ConverterParameter=Int32}">
-                    <!--<TextBlock Padding="0 0 0 12" FontSize="10" TextWrapping="Wrap">Int32 type supports a range of integers between -2,147,483,648 to 2,147,483,648.</TextBlock>-->
-                    <TextBlock Foreground="Gray">Value</TextBlock>
-                    <NumericUpDown Value="{Binding $parent.((xyz:Int32GFFTreeNodeViewModel)DataContext).FieldValue, Mode=TwoWay}" Minimum="-2147483648" Maximum="2147483647" FormatString="N0" ParsingNumberStyle="Integer" />
-                </StackPanel>
-                
-                <StackPanel DataContext="{Binding SelectedNode}" IsVisible="{Binding Type, Converter={StaticResource EqualsConverter}, ConverterParameter=UInt64}">
-                    <!--<TextBlock Padding="0 0 0 12" FontSize="10" TextWrapping="Wrap">UInt64 type supports a range of integers between 0 to 18446744073709551615.</TextBlock>-->
-                    <TextBlock Foreground="Gray">Value</TextBlock>
-                    <NumericUpDown Value="{Binding $parent.((xyz:UInt64GFFTreeNodeViewModel)DataContext).FieldValue, Mode=TwoWay}" Minimum="0" Maximum="18446744073709551615" FormatString="N0" ParsingNumberStyle="Integer" />
-                </StackPanel>
-                
-                <StackPanel DataContext="{Binding SelectedNode}" IsVisible="{Binding Type, Converter={StaticResource EqualsConverter}, ConverterParameter=Int64}">
-                    <!--<TextBlock Padding="0 0 0 12" FontSize="10" TextWrapping="Wrap">Int64 type supports a range of integers between -9,223,372,036,854,775,808 to 9,223,372,036,854,775,808.</TextBlock>-->
-                    <TextBlock Foreground="Gray">Value</TextBlock>
-                    <NumericUpDown Value="{Binding $parent.((xyz:Int64GFFTreeNodeViewModel)DataContext).FieldValue, Mode=TwoWay}" Minimum="-9223372036854775808" Maximum="9223372036854775807" FormatString="N0" ParsingNumberStyle="Integer" />
-                </StackPanel>
-                
-                <StackPanel DataContext="{Binding SelectedNode}" IsVisible="{Binding Type, Converter={StaticResource EqualsConverter}, ConverterParameter=Single}">
-                    <!--<TextBlock Padding="0 0 0 12" FontSize="10" TextWrapping="Wrap">Single type supports a range of numbers with approximately 7 digits of precision.</TextBlock>-->
-                    <TextBlock Foreground="Gray">Value</TextBlock>
-                    <NumericUpDown Value="{Binding $parent.((xyz:SingleGFFTreeNodeViewModel)DataContext).FieldValue, Mode=TwoWay}" ParsingNumberStyle="Float" />
-                </StackPanel>
-                
-                <StackPanel DataContext="{Binding SelectedNode}" IsVisible="{Binding Type, Converter={StaticResource EqualsConverter}, ConverterParameter=Double}">
-                    <!--<TextBlock Padding="0 0 0 12" FontSize="10" TextWrapping="Wrap">Double type supports a range of numbers with approximately 16 digits of precision.</TextBlock>--> 
-                    <TextBlock Foreground="Gray">Value</TextBlock>
-                    <NumericUpDown Value="{Binding $parent.((xyz:DoubleGFFTreeNodeViewModel)DataContext).FieldValue, Mode=TwoWay}" ParsingNumberStyle="Float" />
-                </StackPanel>
-                    
-                <StackPanel DataContext="{Binding SelectedNode}" IsVisible="{Binding Type, Converter={StaticResource EqualsConverter}, ConverterParameter=ResRef}">
-                    <!--<TextBlock Padding="0 0 0 12" FontSize="10" TextWrapping="Wrap">ResRef type is a string with a maximum length of 16 characters.</TextBlock>--> 
-                    <TextBlock Foreground="Gray">Value</TextBlock>
-                    <TextBox Text="{Binding $parent.((xyz:ResRefGFFTreeNodeViewModel)DataContext).FieldValue.Value, Mode=TwoWay}" />
-                </StackPanel>
-                    
-                <StackPanel DataContext="{Binding SelectedNode}" IsVisible="{Binding Type, Converter={StaticResource EqualsConverter}, ConverterParameter=String}">
-                    <TextBlock Foreground="Gray">Value</TextBlock>
-                    <TextBox Text="{Binding $parent.((xyz:StringGFFTreeNodeViewModel)DataContext).FieldValue, Mode=TwoWay}" />
-                </StackPanel>
-                    
-                <StackPanel DataContext="{Binding SelectedNode}" IsVisible="{Binding Type, Converter={StaticResource EqualsConverter}, ConverterParameter=Binary}">
-                    <TextBlock>Size: </TextBlock> <TextBlock Text="{Binding FieldValue.Length}" />
-                </StackPanel>
-                    
-                <StackPanel DataContext="{Binding SelectedNode}" IsVisible="{Binding Type, Converter={StaticResource EqualsConverter}, ConverterParameter=Localized String}" Height="1000">
-                    <StackPanel Orientation="Vertical" DataContext="{Binding $parent.((xyz:LocalizedStringGFFTreeNodeViewModel)DataContext)}">
-                        
-                        <TextBlock Foreground="Gray">StringRef</TextBlock>
-                        <TextBox Text="{Binding FieldValue.StringRef, Mode=TwoWay}" />
-                            
-                        <TextBlock Foreground="Gray">SubString</TextBlock>
-                        <Grid ColumnDefinitions="*, 4, Auto, 4, Auto">
-                            <ComboBox Grid.Column="0" ItemsSource="{Binding FieldValue.SubStrings}" SelectedItem="{Binding FieldValue.SelectedSubstring, Mode=TwoWay}" HorizontalAlignment="Stretch">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Label}"/>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                            <Button Grid.Column="2" Command="{Binding #Window.AddSubString}">Add</Button>
-                            <Button Grid.Column="4" Command="{Binding #Window.RemoveSelectedSubString}">Remove</Button>
-                        </Grid>
-                        
-                        <Rectangle Fill="Gray" HorizontalAlignment="Stretch" />
-                        
-                        <Grid ColumnDefinitions="*, 4, *">
-                            <StackPanel Grid.Column="0" Orientation="Vertical">
-                                <TextBlock Foreground="Gray">Language</TextBlock>
-                                <base-views:LanguageComboBox HorizontalAlignment="Stretch" SelectedLanguage="{Binding FieldValue.SelectedSubstring.Language, Mode=TwoWay}" />
-                            </StackPanel>
-                            
-                            <StackPanel Grid.Column="2" Orientation="Vertical">
-                                <TextBlock Foreground="Gray">Gender</TextBlock>
-                                <base-views:GenderComboBox HorizontalAlignment="Stretch" SelectedGender="{Binding FieldValue.SelectedSubstring.Gender, Mode=TwoWay}" />
-                            </StackPanel>
-                        </Grid>
-
-                        <TextBlock Foreground="Gray">Text</TextBlock>
-                        <TextBox Height="100" Text="{Binding FieldValue.SelectedSubstring.Text, Mode=TwoWay}" AcceptsReturn="True" TextWrapping="Wrap" />
-                        
-                    </StackPanel>
-
-                </StackPanel>
-                    
-                <StackPanel DataContext="{Binding SelectedNode}" IsVisible="{Binding Type, Converter={StaticResource EqualsConverter}, ConverterParameter=LocalizedString}">
-                    <TextBlock Foreground="Gray">Value</TextBlock>
-                </StackPanel>
-                    
-                <StackPanel DataContext="{Binding SelectedNode}" IsVisible="{Binding Type, Converter={StaticResource EqualsConverter}, ConverterParameter=Binary}">
-                    <TextBlock Foreground="Gray">Value</TextBlock>
-                </StackPanel>
-                    
-                <StackPanel DataContext="{Binding SelectedNode}" IsVisible="{Binding Type, Converter={StaticResource EqualsConverter}, ConverterParameter=Vector3}">
-                    <TextBlock Foreground="Gray">X</TextBlock>
-                    <NumericUpDown Value="{Binding $parent.((xyz:Vector3GFFTreeNodeViewModel)DataContext).FieldValue.X, Mode=TwoWay}" ParsingNumberStyle="Float" />
-                    
-                    <TextBlock Foreground="Gray">Y</TextBlock>
-                    <NumericUpDown Value="{Binding $parent.((xyz:Vector3GFFTreeNodeViewModel)DataContext).FieldValue.Y, Mode=TwoWay}" ParsingNumberStyle="Float" />
-                    
-                    <TextBlock Foreground="Gray">Z</TextBlock>
-                    <NumericUpDown Value="{Binding $parent.((xyz:Vector3GFFTreeNodeViewModel)DataContext).FieldValue.Z, Mode=TwoWay}" ParsingNumberStyle="Float" />
-                </StackPanel>
-                    
-                <StackPanel DataContext="{Binding SelectedNode}" IsVisible="{Binding Type, Converter={StaticResource EqualsConverter}, ConverterParameter=Vector4}">
-                    <TextBlock Foreground="Gray">X</TextBlock>
-                    <NumericUpDown Value="{Binding $parent.((xyz:Vector4GFFTreeNodeViewModel)DataContext).FieldValue.X, Mode=TwoWay}" ParsingNumberStyle="Float" />
-                    
-                    <TextBlock Foreground="Gray">Y</TextBlock>
-                    <NumericUpDown Value="{Binding $parent.((xyz:Vector4GFFTreeNodeViewModel)DataContext).FieldValue.Y, Mode=TwoWay}" ParsingNumberStyle="Float" />
-                    
-                    <TextBlock Foreground="Gray">Z</TextBlock>
-                    <NumericUpDown Value="{Binding $parent.((xyz:Vector4GFFTreeNodeViewModel)DataContext).FieldValue.Z, Mode=TwoWay}" ParsingNumberStyle="Float" />
-                    
-                    <TextBlock Foreground="Gray">W</TextBlock>
-                    <NumericUpDown Value="{Binding $parent.((xyz:Vector4GFFTreeNodeViewModel)DataContext).FieldValue.W, Mode=TwoWay}" ParsingNumberStyle="Float" />
-                </StackPanel>
-            
-                <StackPanel DataContext="{Binding SelectedNode}" IsVisible="{Binding Type, Converter={StaticResource EqualsConverter}, ConverterParameter=Struct}">
-                    <TextBlock Foreground="Gray">Struct ID</TextBlock>
-                    <NumericUpDown Value="{Binding $parent.((xyz:StructGFFTreeNodeViewModel)DataContext).StructID, Mode=TwoWay}" Minimum="-2147483648" Maximum="2147483647" FormatString="N0" ParsingNumberStyle="Integer" />
-                </StackPanel>
-            </Panel>
+                    <base-views:Conditional Load="{Binding IsSelectedNodeUInt8}">
+                        <editor-views:FieldUInt8Panel DataContext="{Binding SelectedNode}" />
+                    </base-views:Conditional>
+                    <base-views:Conditional Load="{Binding IsSelectedNodeInt8}">
+                        <editor-views:FieldInt8Panel DataContext="{Binding SelectedNode}" />
+                    </base-views:Conditional>
+                    <base-views:Conditional Load="{Binding IsSelectedNodeUInt16}">
+                        <editor-views:FieldUInt16Panel DataContext="{Binding SelectedNode}" />
+                    </base-views:Conditional>
+                    <base-views:Conditional Load="{Binding IsSelectedNodeInt16}">
+                        <editor-views:FieldInt16Panel DataContext="{Binding SelectedNode}" />
+                    </base-views:Conditional>
+                    <base-views:Conditional Load="{Binding IsSelectedNodeUInt32}">
+                        <editor-views:FieldUInt32Panel DataContext="{Binding SelectedNode}" />
+                    </base-views:Conditional>
+                    <base-views:Conditional Load="{Binding IsSelectedNodeInt32}">
+                        <editor-views:FieldInt32Panel DataContext="{Binding SelectedNode}" />
+                    </base-views:Conditional>
+                    <base-views:Conditional Load="{Binding IsSelectedNodeUInt64}">
+                        <editor-views:FieldUInt64Panel DataContext="{Binding SelectedNode}" />
+                    </base-views:Conditional>
+                    <base-views:Conditional Load="{Binding IsSelectedNodeInt64}">
+                        <editor-views:FieldInt64Panel DataContext="{Binding SelectedNode}" />
+                    </base-views:Conditional>
+                    <base-views:Conditional Load="{Binding IsSelectedNodeSingle}">
+                        <editor-views:FieldSinglePanel DataContext="{Binding SelectedNode}" />
+                    </base-views:Conditional>
+                    <base-views:Conditional Load="{Binding IsSelectedNodeDouble}">
+                        <editor-views:FieldDoublePanel DataContext="{Binding SelectedNode}" />
+                    </base-views:Conditional>
+                    <base-views:Conditional Load="{Binding IsSelectedNodeResRef}">
+                        <editor-views:FieldResRefPanel DataContext="{Binding SelectedNode}" />
+                    </base-views:Conditional>
+                    <base-views:Conditional Load="{Binding IsSelectedNodeString}">
+                        <editor-views:FieldStringPanel DataContext="{Binding SelectedNode}" />
+                    </base-views:Conditional>
+                    <base-views:Conditional Load="{Binding IsSelectedNodeLocalizedString}">
+                        <editor-views:FieldLocalizedStringPanel DataContext="{Binding SelectedNode}" />
+                    </base-views:Conditional>
+                    <base-views:Conditional Load="{Binding IsSelectedNodeBinary}">
+                        <editor-views:FieldBinaryPanel DataContext="{Binding SelectedNode}" />
+                    </base-views:Conditional>
+                    <base-views:Conditional Load="{Binding IsSelectedNodeVector3}">
+                        <editor-views:FieldVector3Panel DataContext="{Binding SelectedNode}" />
+                    </base-views:Conditional>
+                    <base-views:Conditional Load="{Binding IsSelectedNodeVector4}">
+                        <editor-views:FieldVector4Panel DataContext="{Binding SelectedNode}" />
+                    </base-views:Conditional>
+                    <base-views:Conditional Load="{Binding IsSelectedNodeStruct}">
+                        <editor-views:FieldStructPanel DataContext="{Binding SelectedNode}" />
+                    </base-views:Conditional>
+                </Panel>
             </Border>
             
         </StackPanel>

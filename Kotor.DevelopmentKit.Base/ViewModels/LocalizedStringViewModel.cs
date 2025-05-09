@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Collections;
+using DynamicData.Binding;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.Base.ViewModels;
@@ -28,6 +29,13 @@ public class LocalizedStringViewModel : ReactiveObject
     {
         get => _selectedSubstring;
         set => this.RaiseAndSetIfChanged(ref _selectedSubstring, value);
+    }
+
+    public bool IsSubStringSelected => _selectedSubstring is not null;
+
+    public LocalizedStringViewModel()
+    {
+        this.WhenPropertyChanged(x => x.SelectedSubstring).Subscribe(x => this.RaisePropertyChanged(nameof(IsSubStringSelected)));
     }
 
     public void AddSubString()

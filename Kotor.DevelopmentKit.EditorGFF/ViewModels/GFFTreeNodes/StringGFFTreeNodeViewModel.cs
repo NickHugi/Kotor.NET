@@ -40,7 +40,7 @@ public class StringGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewM
     public ReadOnlyObservableCollection<IGFFTreeNodeViewModel> Children => _children;
 
     public string Type => "String";
-    public string Value => FieldValue.ToString();
+    public string Value => FieldValue.Replace("\n", "").Replace("\r", "").ToString();
 
     public StringGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, string value = "")
     {
