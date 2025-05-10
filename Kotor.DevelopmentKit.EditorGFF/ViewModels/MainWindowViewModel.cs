@@ -11,7 +11,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels;
 
-public class MainWindowViewModel : BaseResourceEditorViewModel<StructInListGFFTreeNodeViewModel, GFF>
+public class MainWindowViewModel : BaseResourceEditorViewModel<RootStructGFFTreeNodeViewModel, GFF>
 {
     private IGFFTreeNodeViewModel _selectedNode;
     public IGFFTreeNodeViewModel SelectedNode
@@ -20,8 +20,7 @@ public class MainWindowViewModel : BaseResourceEditorViewModel<StructInListGFFTr
         set => this.RaiseAndSetIfChanged(ref _selectedNode, value);
     }
 
-    private StructInListGFFTreeNodeViewModel _rootNode = new StructInListGFFTreeNodeViewModel(null);
-    public StructInListGFFTreeNodeViewModel RootNode => _rootNode;
+    private RootStructGFFTreeNodeViewModel _rootNode = new RootStructGFFTreeNodeViewModel(null);
 
     private HierarchicalTreeDataGridSource<IGFFTreeNodeViewModel> _treeData;
     public HierarchicalTreeDataGridSource<IGFFTreeNodeViewModel> TreeData
@@ -54,8 +53,7 @@ public class MainWindowViewModel : BaseResourceEditorViewModel<StructInListGFFTr
 
     public MainWindowViewModel()
     {
-        var rootNode = new StructInListGFFTreeNodeViewModel(null);
-        LoadTree(rootNode);
+        CreateNewTree(new());
 
         this.WhenPropertyChanged(x => x.SelectedNode).Subscribe(x =>
         {
@@ -80,7 +78,7 @@ public class MainWindowViewModel : BaseResourceEditorViewModel<StructInListGFFTr
         });
     }
 
-    private void LoadTree(StructInListGFFTreeNodeViewModel rootNode)
+    private void CreateNewTree(RootStructGFFTreeNodeViewModel rootNode)
     {
         _rootNode = rootNode;
         TreeData = new(_rootNode)
@@ -97,8 +95,7 @@ public class MainWindowViewModel : BaseResourceEditorViewModel<StructInListGFFTr
 
     public override void LoadModel(GFF model)
     {
-        var rootNode = new StructInListGFFTreeNodeViewModel(null, model.Root);
-        LoadTree(rootNode);
+        CreateNewTree(new(model.Root));
     }
 
     public override GFF BuildModel() => throw new NotImplementedException();

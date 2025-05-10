@@ -19,10 +19,10 @@ public class RootStructGFFTreeNodeViewModel : BaseStructGFFTreeNodeViewModel
     }
     public override bool CanEditLabel => false;
 
-    public RootStructGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent) : base(parent)
+    public RootStructGFFTreeNodeViewModel() : base(null)
     {
     }
-    public RootStructGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, GFFStruct gffStruct) : this(parent)
+    public RootStructGFFTreeNodeViewModel(GFFStruct gffStruct) : this()
     {
         PopulateStruct(gffStruct);
     }

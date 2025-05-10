@@ -19,7 +19,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class MainWindow : ResourceEditorBase<MainWindowViewModel, StructInListGFFTreeNodeViewModel, GFF>
+public partial class MainWindow : ResourceEditorBase<MainWindowViewModel, RootStructGFFTreeNodeViewModel, GFF>
 {
     public MainWindowViewModel Context => (MainWindowViewModel)DataContext!;
 
