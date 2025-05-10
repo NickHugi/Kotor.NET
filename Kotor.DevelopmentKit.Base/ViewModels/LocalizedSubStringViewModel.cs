@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DynamicData.Binding;
 using Kotor.NET.Common;
+using Kotor.NET.Common.Data;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.Base.ViewModels;
@@ -34,9 +35,16 @@ public class LocalizedSubStringViewModel : ReactiveObject
 
     public string Label => $"{Gender.ToString()} {Language.ToString()}";
 
+
     public LocalizedSubStringViewModel()
     {
         this.WhenPropertyChanged(x => x.Gender).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
         this.WhenPropertyChanged(x => x.Language).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
+    }
+
+
+    public LocalisedSubstring AsModel()
+    {
+        return new(Language, Gender, Text);
     }
 }

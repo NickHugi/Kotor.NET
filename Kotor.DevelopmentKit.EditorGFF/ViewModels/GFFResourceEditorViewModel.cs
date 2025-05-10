@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
@@ -6,12 +7,13 @@ using DynamicData.Binding;
 using Kotor.DevelopmentKit.Base.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 using Kotor.NET.Common.Data;
+using Kotor.NET.Formats.Binary2DA.Serialisation;
 using Kotor.NET.Resources.KotorGFF;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels;
 
-public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<RootStructGFFTreeNodeViewModel, GFF>
+public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewModel, GFF>
 {
     private IGFFTreeNodeViewModel _selectedNode;
     public IGFFTreeNodeViewModel SelectedNode
@@ -53,7 +55,12 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<RootStruct
 
     public GFFResourceEditorViewModel()
     {
-        CreateNewTree(new());
+        Resource = new();
+
+        this.WhenPropertyChanged(x => x.Resource.RootNode).Subscribe(x =>
+        {
+            CreateNewTree(Resource.RootNode);
+        });
 
         this.WhenPropertyChanged(x => x.SelectedNode).Subscribe(x =>
         {
@@ -95,10 +102,13 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<RootStruct
 
     public override void LoadModel(GFF model)
     {
-        CreateNewTree(new(model.Root));
+        Resource.Load(model);
     }
 
-    public override GFF BuildModel() => throw new NotImplementedException();
+    public override GFF BuildModel()
+    {
+        return Resource.Build();
+    }
     public override GFF DeserializeModel(byte[] bytes)
     {
         return GFF.FromBytes(bytes);
@@ -107,6 +117,17 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<RootStruct
     {
         return GFF.FromFile(path);
     }
-    public override byte[] SerializeModelToBytes() => throw new NotImplementedException();
-    public override void SerializeModelToFile() => throw new NotImplementedException();
+    public override byte[] SerializeModelToBytes()
+    {
+        var gff = BuildModel();
+        using var memoryStream = new MemoryStream();
+        new GFFBinarySerializer(gff).Serialize().Write(memoryStream);
+        return memoryStream.ToArray();
+    }
+    public override void SerializeModelToFile()
+    {
+        var gff = BuildModel();
+        using var fileStream = File.OpenWrite(FilePath);
+        new GFFBinarySerializer(gff).Serialize().Write(fileStream);
+    }
 }

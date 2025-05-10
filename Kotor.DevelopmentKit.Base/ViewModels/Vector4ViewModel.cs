@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.NET.Common.Data;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.Base.ViewModels;
@@ -28,5 +29,10 @@ public class Vector3ViewModel : ReactiveObject
     {
         get => _z;
         set => this.RaiseAndSetIfChanged(ref _z, value);
+    }
+
+    public Vector3 AsModel()
+    {
+        return new(X, Y, Z);
     }
 }
