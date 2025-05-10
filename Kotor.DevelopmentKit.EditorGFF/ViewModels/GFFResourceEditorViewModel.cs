@@ -11,7 +11,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels;
 
-public class MainWindowViewModel : BaseResourceEditorViewModel<RootStructGFFTreeNodeViewModel, GFF>
+public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<RootStructGFFTreeNodeViewModel, GFF>
 {
     private IGFFTreeNodeViewModel _selectedNode;
     public IGFFTreeNodeViewModel SelectedNode
@@ -20,7 +20,7 @@ public class MainWindowViewModel : BaseResourceEditorViewModel<RootStructGFFTree
         set => this.RaiseAndSetIfChanged(ref _selectedNode, value);
     }
 
-    private RootStructGFFTreeNodeViewModel _rootNode = new RootStructGFFTreeNodeViewModel(null);
+    private RootStructGFFTreeNodeViewModel _rootNode = new RootStructGFFTreeNodeViewModel();
 
     private HierarchicalTreeDataGridSource<IGFFTreeNodeViewModel> _treeData;
     public HierarchicalTreeDataGridSource<IGFFTreeNodeViewModel> TreeData
@@ -51,7 +51,7 @@ public class MainWindowViewModel : BaseResourceEditorViewModel<RootStructGFFTree
 
     public override string WindowTitlePrefix => throw new NotImplementedException();
 
-    public MainWindowViewModel()
+    public GFFResourceEditorViewModel()
     {
         CreateNewTree(new());
 

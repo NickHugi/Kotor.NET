@@ -19,9 +19,9 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class MainWindow : ResourceEditorBase<MainWindowViewModel, RootStructGFFTreeNodeViewModel, GFF>
+public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel, RootStructGFFTreeNodeViewModel, GFF>
 {
-    public MainWindowViewModel Context => (MainWindowViewModel)DataContext!;
+    public GFFResourceEditorViewModel Context => (GFFResourceEditorViewModel)DataContext!;
 
     public override FilePickerFileType AllValidFilePickerFileTypes => new FilePickerFileType("All Valid Options")
     {

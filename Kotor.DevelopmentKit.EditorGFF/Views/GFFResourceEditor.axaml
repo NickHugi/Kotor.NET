@@ -15,7 +15,7 @@
         Width="800" Height="450"
         x:Name="Window"
         x:Class="Kotor.DevelopmentKit.EditorGFF.Views.MainWindow"
-        x:DataType="vm:MainWindowViewModel"
+        x:DataType="vm:GFFResourceEditorViewModel"
         Title="Kotor.DevelopmentKit.EditorGFF">
 
     <Design.DataContext>

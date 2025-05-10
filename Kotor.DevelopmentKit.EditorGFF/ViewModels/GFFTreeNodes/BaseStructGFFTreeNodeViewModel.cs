@@ -93,7 +93,6 @@ public abstract class BaseStructGFFTreeNodeViewModel : ReactiveObject, IGFFTreeN
                 list.ToList().ForEach(x =>
                 {
                     var vmChildStruct = vmListField.AddStruct();
-                    vmChildStruct.StructID = (int)x.ID; // TODO
                     vmChildStruct.PopulateStruct(x);
                 });
             }
