@@ -22,13 +22,15 @@ public class StructInListGFFTreeNodeViewModel : BaseStructGFFTreeNodeViewModel
     public StructInListGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent) : base(parent)
     {
     }
-    public StructInListGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, GFFStruct gffStruct) : this(parent)
+    public StructInListGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, GFFStruct gffStruct) : base(parent, gffStruct)
     {
-        PopulateStruct(gffStruct);
     }
 
     public override void Delete()
     {
-        ((ListGFFTreeNodeViewModel)Parent).DeleteStruct(this);
+        if (Parent is ListGFFTreeNodeViewModel vmList)
+        {
+            vmList.DeleteStruct(this);
+        }
     }
 }

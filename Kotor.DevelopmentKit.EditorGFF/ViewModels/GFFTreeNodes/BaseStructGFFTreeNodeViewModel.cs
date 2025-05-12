@@ -38,9 +38,14 @@ public abstract class BaseStructGFFTreeNodeViewModel : ReactiveObject, IGFFTreeN
     private ObservableCollection<IGFFTreeNodeViewModel> _children = new([]);
     public ReadOnlyObservableCollection<IGFFTreeNodeViewModel> Children => new(_children);
 
-    public BaseStructGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent)
+
+    public BaseStructGFFTreeNodeViewModel(IGFFTreeNodeViewModel? parent)
     {
         Parent = parent;
+    }
+    public BaseStructGFFTreeNodeViewModel(IGFFTreeNodeViewModel? parent, GFFStruct gffStruct) : this(parent)
+    {
+        PopulateStruct(gffStruct);
     }
 
     public void AddField(IFieldGFFTreeNodeViewModel field)

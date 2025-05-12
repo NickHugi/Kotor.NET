@@ -28,21 +28,29 @@ public class StructGFFTreeNodeViewModel : BaseStructGFFTreeNodeViewModel, IField
     public StructGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label) : base(parent)
     {
         Label = label;
-
         this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
     }
-    public StructGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, int structID) : this(parent, label) 
+    public StructGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, int structID) : base(parent) 
     {
         StructID = structID;
+
+        Label = label;
+        this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
     }
-    public StructGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, GFFStruct gffStruct) : this(parent, label)
+    public StructGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, GFFStruct gffStruct) : base(parent)
     {
         PopulateStruct(gffStruct);
+
+        Label = label;
+        this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
     }
 
     public override void Delete()
     {
-        ((BaseStructGFFTreeNodeViewModel)Parent).DeleteField(this);
+        if (Parent is BaseStructGFFTreeNodeViewModel vmStruct)
+        {
+            vmStruct.DeleteField(this);
+        }
     }
 }
 

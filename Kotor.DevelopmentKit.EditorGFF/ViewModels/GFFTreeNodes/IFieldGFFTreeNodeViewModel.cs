@@ -8,8 +8,6 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 public interface IFieldGFFTreeNodeViewModel : IGFFTreeNodeViewModel
 {
-    public string Label { get; set; }
-    //public void Delete();
 }
 
 public interface IFieldGFFTreeNodeViewModel<T> : IFieldGFFTreeNodeViewModel

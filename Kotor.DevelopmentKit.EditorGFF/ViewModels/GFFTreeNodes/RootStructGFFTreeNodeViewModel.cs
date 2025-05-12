@@ -22,9 +22,8 @@ public class RootStructGFFTreeNodeViewModel : BaseStructGFFTreeNodeViewModel
     public RootStructGFFTreeNodeViewModel() : base(null)
     {
     }
-    public RootStructGFFTreeNodeViewModel(GFFStruct gffStruct) : this()
+    public RootStructGFFTreeNodeViewModel(GFFStruct gffStruct) : base(null, gffStruct)
     {
-        PopulateStruct(gffStruct);
     }
 
     public override void Delete()
