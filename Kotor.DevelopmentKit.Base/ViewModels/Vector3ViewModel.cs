@@ -42,4 +42,8 @@ public class Vector4ViewModel : ReactiveObject
     {
         return new(X, Y, Z, W);
     }
+    public Vector4ViewModel Clone()
+    {
+        return new() { X = _x, Y = _y, Z = _z, W = _w };
+    }
 }

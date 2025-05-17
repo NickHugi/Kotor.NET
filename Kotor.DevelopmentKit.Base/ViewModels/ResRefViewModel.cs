@@ -27,4 +27,8 @@ public class ResRefViewModel : ReactiveObject
     {
         return new(Value);
     }
+    public ResRefViewModel Clone()
+    {
+        return new() { Value = _value }; 
+    }
 }

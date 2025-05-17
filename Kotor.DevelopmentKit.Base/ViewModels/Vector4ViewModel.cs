@@ -35,4 +35,8 @@ public class Vector3ViewModel : ReactiveObject
     {
         return new(X, Y, Z);
     }
+    public Vector3ViewModel Clone()
+    {
+        return new() { X = _x, Y = _y, Z = _z };
+    }
 }

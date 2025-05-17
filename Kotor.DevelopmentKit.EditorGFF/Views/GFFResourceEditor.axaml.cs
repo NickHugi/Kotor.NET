@@ -5,10 +5,14 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 using Kotor.DevelopmentKit.Base.Common;
 using Kotor.DevelopmentKit.Base.Views;
+using Kotor.DevelopmentKit.EditorGFF.Actions;
+using Kotor.DevelopmentKit.EditorGFF.EventArgs;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 using Kotor.NET.Common.Data;
@@ -63,6 +67,91 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
             }
         }
     }
+    private void FieldUInt8Panel_FinishedEditing(object? sender, UInt8EditedEventArgs e)
+    {
+        var action = new SetUInt8Action(e.ViewModel, e.OldValue, e.NewValue);
+        Context.History.Apply(action);
+    }
+    private void FieldInt8Panel_FinishedEditing(object? sender, Int8EditedEventArgs e)
+    {
+        var action = new SetInt8Action(e.ViewModel, e.OldValue, e.NewValue);
+        Context.History.Apply(action);
+    }
+    private void FieldUInt16Panel_FinishedEditing(object? sender, UInt16EditedEventArgs e)
+    {
+        var action = new SetUInt16Action(e.ViewModel, e.OldValue, e.NewValue);
+        Context.History.Apply(action);
+    }
+    private void FieldInt16Panel_FinishedEditing(object? sender, Int16EditedEventArgs e)
+    {
+        var action = new SetInt16Action(e.ViewModel, e.OldValue, e.NewValue);
+        Context.History.Apply(action);
+    }
+    private void FieldUInt32Panel_FinishedEditing(object? sender, UInt32EditedEventArgs e)
+    {
+        var action = new SetUInt32Action(e.ViewModel, e.OldValue, e.NewValue);
+        Context.History.Apply(action);
+    }
+    private void FieldInt32Panel_FinishedEditing(object? sender, Int32EditedEventArgs e)
+    {
+        var action = new SetInt32Action(e.ViewModel, e.OldValue, e.NewValue);
+        Context.History.Apply(action);
+    }
+    private void FieldUInt64Panel_FinishedEditing(object? sender, UInt64EditedEventArgs e)
+    {
+        var action = new SetUInt64Action(e.ViewModel, e.OldValue, e.NewValue);
+        Context.History.Apply(action);
+    }
+    private void FieldInt64Panel_FinishedEditing(object? sender, Int64EditedEventArgs e)
+    {
+        var action = new SetInt64Action(e.ViewModel, e.OldValue, e.NewValue);
+        Context.History.Apply(action);
+    }
+    private void FieldSinglePanel_FinishedEditing(object? sender, SingleEditedEventArgs e)
+    {
+        var action = new SetSingleAction(e.ViewModel, e.OldValue, e.NewValue);
+        Context.History.Apply(action);
+    }
+    private void FieldDoublePanel_FinishedEditing(object? sender, DoubleEditedEventArgs e)
+    {
+        var action = new SetDoubleAction(e.ViewModel, e.OldValue, e.NewValue);
+        Context.History.Apply(action);
+    }
+    private void FieldStringPanel_FinishedEditing(object? sender, StringEditedEventArgs e)
+    {
+        var action = new SetStringAction(e.ViewModel, e.OldValue, e.NewValue);
+        Context.History.Apply(action);
+    }
+    private void FieldResRefPanel_FinishedEditing(object? sender, ResRefEditedEventArgs e)
+    {
+        var action = new SetResRefAction(e.ViewModel, e.OldValue, e.NewValue);
+        Context.History.Apply(action);
+    }
+    private void FieldLocalizedStringPanel_FinishedEditing(object? sender, LocalizedStringEditedEventArgs e)
+    {
+        var action = new SetLocalizedStringAction(e.ViewModel, e.OldValue, e.NewValue);
+        Context.History.Apply(action);
+    }
+    private void FieldBinaryPanel_FinishedEditing(object? sender, BinaryEditedEventArgs e)
+    {
+        var action = new SetBinaryAction(e.ViewModel, e.OldValue, e.NewValue);
+        Context.History.Apply(action);
+    }
+    private void FieldVector3Panel_FinishedEditing(object? sender, Vector3EditedEventArgs e)
+    {
+        var action = new SetVector3Action(e.ViewModel, e.OldValue, e.NewValue);
+        Context.History.Apply(action);
+    }
+    private void FieldVector4Panel_FinishedEditing(object? sender, Vector4EditedEventArgs e)
+    {
+        var action = new SetVector4Action(e.ViewModel, e.OldValue, e.NewValue);
+        Context.History.Apply(action);
+    }
+    private void FieldStructPanel_FinishedEditing(object? sender, StructEditedEventArgs e)
+    {
+        var action = new SetStructAction(e.ViewModel, e.OldValue, e.NewValue);
+        Context.History.Apply(action);
+    }
 
     private ContextMenu GetStructContextMenu(IGFFTreeNodeViewModel data)
     {
@@ -103,11 +192,11 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
             menu.Items.Add(new MenuItem() { Header = "Cut Struct", Command = ReactiveCommand.Create(() => { }) });
             menu.Items.Add(new MenuItem() { Header = "Delete Struct", Command = ReactiveCommand.Create(() => data.Delete()) });
         }
-        else if (data is IFieldGFFTreeNodeViewModel)
+        else if (data is IFieldGFFTreeNodeViewModel field)
         {
             menu.Items.Add(new MenuItem() { Header = "Copy Field", Command = ReactiveCommand.Create(() => { }) });
             menu.Items.Add(new MenuItem() { Header = "Cut Field", Command = ReactiveCommand.Create(() => { }) });
-            menu.Items.Add(new MenuItem() { Header = "Delete Field", Command = ReactiveCommand.Create(() => data.Delete()) });
+            menu.Items.Add(new MenuItem() { Header = "Delete Field", Command = ReactiveCommand.Create(() => Context.DeleteField(field)) });
         }
 
         return menu;
@@ -184,5 +273,17 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
     private void AddList(BaseStructGFFTreeNodeViewModel parent)
     {
         parent.AddField(new ListGFFTreeNodeViewModel(parent, "New List"));
+    }
+
+
+
+    public void Undo()
+    {
+        Dispatcher.UIThread.Post(() => Context.Undo(), DispatcherPriority.Default);
+    }
+
+    public void Redo()
+    {
+        Dispatcher.UIThread.Post(() => Context.Redo(), DispatcherPriority.Default);
     }
 }

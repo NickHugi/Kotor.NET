@@ -61,4 +61,12 @@ public class LocalizedStringViewModel : ReactiveObject
             StringRef = StringRef
         };
     }
+    public LocalizedStringViewModel Clone()
+    {
+        return new()
+        {
+            StringRef = _stringref,
+            SubStrings = [.. _substrings.Select(x => x.Clone())],
+        };
+    }
 }

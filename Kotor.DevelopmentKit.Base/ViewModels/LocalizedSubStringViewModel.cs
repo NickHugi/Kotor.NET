@@ -47,4 +47,8 @@ public class LocalizedSubStringViewModel : ReactiveObject
     {
         return new(Language, Gender, Text);
     }
+    public LocalizedSubStringViewModel Clone()
+    {
+        return new() { Language = _language, Gender = _gender, Text = _text };
+    }
 }

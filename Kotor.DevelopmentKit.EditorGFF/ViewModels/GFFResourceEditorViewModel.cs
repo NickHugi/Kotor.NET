@@ -3,8 +3,11 @@ using System.IO;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
+using Avalonia.Threading;
 using DynamicData.Binding;
+using Kotor.DevelopmentKit.Base.Common;
 using Kotor.DevelopmentKit.Base.ViewModels;
+using Kotor.DevelopmentKit.EditorGFF.Actions;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Formats.Binary2DA.Serialisation;
@@ -31,6 +34,12 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         set => this.RaiseAndSetIfChanged(ref _treeData, value);
     }
 
+    private readonly ActionHistory<GFFResourceEditorViewModel> _history;
+    public ActionHistory<GFFResourceEditorViewModel> History
+    {
+        get => _history;
+    }
+
     public bool IsSelectedNodeUInt8 => _selectedNode is UInt8GFFTreeNodeViewModel;
     public bool IsSelectedNodeInt8 => _selectedNode is Int8GFFTreeNodeViewModel;
     public bool IsSelectedNodeUInt16 => _selectedNode is UInt16GFFTreeNodeViewModel;
@@ -55,6 +64,7 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
 
     public GFFResourceEditorViewModel()
     {
+        _history = new(this);
         Resource = new();
 
         this.WhenPropertyChanged(x => x.Resource.RootNode).Subscribe(x =>
@@ -129,5 +139,22 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         var gff = BuildModel();
         using var fileStream = File.OpenWrite(FilePath);
         new GFFBinarySerializer(gff).Serialize().Write(fileStream);
+    }
+
+    public void DeleteField(IFieldGFFTreeNodeViewModel field)
+    {
+        var action = new DeleteFieldAction(field);
+        History.Apply(action);
+    }
+
+
+    public void Undo()
+    {
+        History.Undo();
+    }
+
+    public void Redo()
+    {
+        History.Redo();
     }
 }

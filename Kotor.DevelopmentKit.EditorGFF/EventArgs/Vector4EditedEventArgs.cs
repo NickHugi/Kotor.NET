@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Avalonia.Interactivity;
+using Kotor.DevelopmentKit.Base.ViewModels;
+using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
+
+namespace Kotor.DevelopmentKit.EditorGFF.EventArgs;
+
+public class Vector4EditedEventArgs : RoutedEventArgs
+{
+    public Vector4GFFTreeNodeViewModel ViewModel { get; }
+    public Vector4ViewModel NewValue { get; }
+    public Vector4ViewModel OldValue { get; }
+
+    public Vector4EditedEventArgs(RoutedEvent routedEvent, object source, Vector4GFFTreeNodeViewModel viewModel, Vector4ViewModel newValue, Vector4ViewModel oldValue)
+        : base(routedEvent, source)
+    {
+        ViewModel = viewModel;
+        NewValue = newValue;
+        OldValue = oldValue;
+    }
+}

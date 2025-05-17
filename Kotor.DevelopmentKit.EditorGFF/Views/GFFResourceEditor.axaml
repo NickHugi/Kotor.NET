@@ -37,6 +37,10 @@
                 <MenuItem Header="_Save As" Command="{Binding #Window.SaveFileAs}" InputGesture="Ctrl+Shift+S" HotKey="Ctrl+Shift+S" />
                 <MenuItem Header="_Reset" Command="{Binding #Window.ResetFile}" InputGesture="Ctrl+R" HotKey="Ctrl+R" />
             </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="_Undo" Command="{Binding #Window.Undo}"></MenuItem>
+                <MenuItem Header="_Redo" Command="{Binding #Window.Redo}"></MenuItem>
+            </MenuItem>
         </Menu>
 
         <Grid Margin="10" ColumnDefinitions="*, 320">
@@ -64,55 +68,55 @@
                         IsVisible="{Binding SelectedNode, Converter={StaticResource NotEqualsConverter}, ConverterParameter={x:Null}}">
                     <Panel> 
                         <base-views:Conditional Load="{Binding IsSelectedNodeUInt8}">
-                            <editor-views:FieldUInt8Panel DataContext="{Binding SelectedNode}" />
+                            <editor-views:FieldUInt8Panel DataContext="{Binding SelectedNode}" FinishedEditing="FieldUInt8Panel_FinishedEditing" />
                         </base-views:Conditional>
                         <base-views:Conditional Load="{Binding IsSelectedNodeInt8}">
-                            <editor-views:FieldInt8Panel DataContext="{Binding SelectedNode}" />
+                            <editor-views:FieldInt8Panel DataContext="{Binding SelectedNode}" FinishedEditing="FieldInt8Panel_FinishedEditing" />
                         </base-views:Conditional>
                         <base-views:Conditional Load="{Binding IsSelectedNodeUInt16}">
-                            <editor-views:FieldUInt16Panel DataContext="{Binding SelectedNode}" />
+                            <editor-views:FieldUInt16Panel DataContext="{Binding SelectedNode}" FinishedEditing="FieldUInt16Panel_FinishedEditing" />
                         </base-views:Conditional>
                         <base-views:Conditional Load="{Binding IsSelectedNodeInt16}">
-                            <editor-views:FieldInt16Panel DataContext="{Binding SelectedNode}" />
+                            <editor-views:FieldInt16Panel DataContext="{Binding SelectedNode}" FinishedEditing="FieldInt16Panel_FinishedEditing" />
                         </base-views:Conditional>
                         <base-views:Conditional Load="{Binding IsSelectedNodeUInt32}">
-                            <editor-views:FieldUInt32Panel DataContext="{Binding SelectedNode}" />
+                            <editor-views:FieldUInt32Panel DataContext="{Binding SelectedNode}" FinishedEditing="FieldUInt32Panel_FinishedEditing" />
                         </base-views:Conditional>
                         <base-views:Conditional Load="{Binding IsSelectedNodeInt32}">
-                            <editor-views:FieldInt32Panel DataContext="{Binding SelectedNode}" />
+                            <editor-views:FieldInt32Panel DataContext="{Binding SelectedNode}" FinishedEditing="FieldInt32Panel_FinishedEditing" />
                         </base-views:Conditional>
                         <base-views:Conditional Load="{Binding IsSelectedNodeUInt64}">
-                            <editor-views:FieldUInt64Panel DataContext="{Binding SelectedNode}" />
+                            <editor-views:FieldUInt64Panel DataContext="{Binding SelectedNode}" FinishedEditing="FieldUInt64Panel_FinishedEditing" />
                         </base-views:Conditional>
                         <base-views:Conditional Load="{Binding IsSelectedNodeInt64}">
-                            <editor-views:FieldInt64Panel DataContext="{Binding SelectedNode}" />
+                            <editor-views:FieldInt64Panel DataContext="{Binding SelectedNode}" FinishedEditing="FieldInt64Panel_FinishedEditing" />
                         </base-views:Conditional>
                         <base-views:Conditional Load="{Binding IsSelectedNodeSingle}">
-                            <editor-views:FieldSinglePanel DataContext="{Binding SelectedNode}" />
+                            <editor-views:FieldSinglePanel DataContext="{Binding SelectedNode}" FinishedEditing="FieldSinglePanel_FinishedEditing" />
                         </base-views:Conditional>
                         <base-views:Conditional Load="{Binding IsSelectedNodeDouble}">
-                            <editor-views:FieldDoublePanel DataContext="{Binding SelectedNode}" />
+                            <editor-views:FieldDoublePanel DataContext="{Binding SelectedNode}" FinishedEditing="FieldDoublePanel_FinishedEditing" />
                         </base-views:Conditional>
                         <base-views:Conditional Load="{Binding IsSelectedNodeResRef}">
-                            <editor-views:FieldResRefPanel DataContext="{Binding SelectedNode}" />
+                            <editor-views:FieldResRefPanel DataContext="{Binding SelectedNode}" FinishedEditing="FieldResRefPanel_FinishedEditing" />
                         </base-views:Conditional>
                         <base-views:Conditional Load="{Binding IsSelectedNodeString}">
-                            <editor-views:FieldStringPanel DataContext="{Binding SelectedNode}" />
+                            <editor-views:FieldStringPanel DataContext="{Binding SelectedNode}" FinishedEditing="FieldStringPanel_FinishedEditing" />
                         </base-views:Conditional>
                         <base-views:Conditional Load="{Binding IsSelectedNodeLocalizedString}">
-                            <editor-views:FieldLocalizedStringPanel DataContext="{Binding SelectedNode}" />
+                            <editor-views:FieldLocalizedStringPanel DataContext="{Binding SelectedNode}" FinishedEditing="FieldLocalizedStringPanel_FinishedEditing" />
                         </base-views:Conditional>
                         <base-views:Conditional Load="{Binding IsSelectedNodeBinary}">
-                            <editor-views:FieldBinaryPanel DataContext="{Binding SelectedNode}" />
+                            <editor-views:FieldBinaryPanel DataContext="{Binding SelectedNode}" FinishedEditing="FieldBinaryPanel_FinishedEditing" />
                         </base-views:Conditional>
                         <base-views:Conditional Load="{Binding IsSelectedNodeVector3}">
-                            <editor-views:FieldVector3Panel DataContext="{Binding SelectedNode}" />
+                            <editor-views:FieldVector3Panel DataContext="{Binding SelectedNode}" FinishedEditing="FieldVector3Panel_FinishedEditing" />
                         </base-views:Conditional>
                         <base-views:Conditional Load="{Binding IsSelectedNodeVector4}">
-                            <editor-views:FieldVector4Panel DataContext="{Binding SelectedNode}" />
+                            <editor-views:FieldVector4Panel DataContext="{Binding SelectedNode}" FinishedEditing="FieldVector4Panel_FinishedEditing" />
                         </base-views:Conditional>
                         <base-views:Conditional Load="{Binding IsSelectedNodeStruct}">
-                            <editor-views:FieldStructPanel DataContext="{Binding SelectedNode}" />
+                            <editor-views:FieldStructPanel DataContext="{Binding SelectedNode}" FinishedEditing="FieldStructPanel_FinishedEditing" />
                         </base-views:Conditional>
                     </Panel>
                 </Border> 
