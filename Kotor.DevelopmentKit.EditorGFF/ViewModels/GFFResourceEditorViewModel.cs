@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Threading;
+using DynamicData;
 using DynamicData.Binding;
 using Kotor.DevelopmentKit.Base.Common;
 using Kotor.DevelopmentKit.Base.ViewModels;
@@ -147,6 +149,100 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         History.Apply(action);
     }
 
+    public TTargetNode? NavigateTo<TTargetNode>(IEnumerable<object> path) where TTargetNode : IGFFTreeNodeViewModel
+    {
+        IGFFTreeNodeViewModel? node = _rootNode;
+
+        foreach (var step in path)
+        {
+            if (step is int listIndex)
+            {
+                if (node is ListGFFTreeNodeViewModel listNode)
+                {
+                    node = listNode.Children[listIndex];
+                }
+                else
+                {
+                    throw new ArgumentException();
+                }
+            }
+            else if (step is string fieldLabel)
+            {
+                if (node is BaseStructGFFTreeNodeViewModel structNode)
+                {
+                    node = structNode.Children.OfType<IFieldGFFTreeNodeViewModel>().FirstOrDefault(x => x.Label == fieldLabel);
+                }
+                else
+                {
+                    throw new ArgumentException();
+                }
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
+        }
+
+        if (node is null)
+        {
+            return default;
+        }
+        else if (node is TTargetNode targetNode)
+        {
+            return targetNode;
+        }
+        else
+        {
+            throw new ArgumentException();
+        }
+    }
+    public IEnumerable<object> GetPathOf(IGFFTreeNodeViewModel node)
+    {
+        var next = node;
+        var path = new List<object>();
+
+        while (next is not null)
+        {
+            if (next is IFieldGFFTreeNodeViewModel fieldNode)
+            {
+                path.Add(next.Label);
+            }
+            else if (next is StructInListGFFTreeNodeViewModel structInList)
+            {
+                var listNode = (ListGFFTreeNodeViewModel)structInList.Parent;
+                path.Add(listNode.Children.IndexOf(structInList));
+            }
+
+            next = next.Parent;
+        }
+
+        path.Reverse();
+
+        return path;
+    }
+    public IGFFTreeNodeViewModel FillPath(IEnumerable<object> path)
+    {
+        IGFFTreeNodeViewModel node = _rootNode;
+
+        foreach (var step in path)
+        {
+            if (node is BaseStructGFFTreeNodeViewModel structNode && step is string fieldLabel)
+            {
+                var nextNode = structNode.GetField(fieldLabel);
+                if (nextNode is null)
+                {
+                    structNode.AddField(new StructGFFTreeNodeViewModel(structNode, fieldLabel)); // TODO
+                    node = structNode.GetField(fieldLabel);
+                }
+                else
+                {
+                    node = nextNode;
+                }
+            }
+        }
+
+        return node;
+    }
 
     public void Undo()
     {

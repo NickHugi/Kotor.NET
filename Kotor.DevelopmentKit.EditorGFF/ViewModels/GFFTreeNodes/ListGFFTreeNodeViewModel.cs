@@ -52,6 +52,13 @@ public class ListGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewMod
         Expanded = true;
         return childStruct;
     }
+    public StructInListGFFTreeNodeViewModel AddStruct(StructInListGFFTreeNodeViewModel childStruct)
+    {
+        _children.Add(childStruct);
+        Expanded = true;
+        return childStruct;
+    }
+
     public void DeleteStruct(BaseStructGFFTreeNodeViewModel @struct)
     {
         _children.Remove(@struct);

@@ -48,14 +48,19 @@ public abstract class BaseStructGFFTreeNodeViewModel : ReactiveObject, IGFFTreeN
         PopulateStruct(gffStruct);
     }
 
-    public void AddField(IFieldGFFTreeNodeViewModel field)
+    public T AddField<T>(T field) where T : IFieldGFFTreeNodeViewModel
     {
         _children.Add(field);
         Expanded = true;
+        return field;
     }
     public void DeleteField(IFieldGFFTreeNodeViewModel field)
     {
         _children.Remove(field);
+    }
+    public IFieldGFFTreeNodeViewModel? GetField(string label)
+    {
+        return (IFieldGFFTreeNodeViewModel)Children.FirstOrDefault(x => x.Label == label);
     }
 
     public abstract void Delete();

@@ -9,26 +9,19 @@ using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
-public class SetUInt8Action : IAction<GFFResourceEditorViewModel>
+public class SetUInt8Action : BaseSetNodeAction<UInt8GFFTreeNodeViewModel, byte?>
 {
-    public UInt8GFFTreeNodeViewModel Node { get; }
-    public byte OldValue { get; }
-    public byte NewValue { get; }
-
-    public SetUInt8Action(UInt8GFFTreeNodeViewModel node, byte oldValue, byte newValue)
+    public SetUInt8Action(IEnumerable<object> path, byte? oldValue, byte? newValue)
+        : base(path, oldValue, newValue)
     {
-        Node = node;
-        OldValue = oldValue;
-        NewValue = newValue;
     }
 
-    public void Apply(GFFResourceEditorViewModel data)
-    {
-        Node.FieldValue = NewValue;
-    }
+    protected override UInt8GFFTreeNodeViewModel InstantiateNode(IGFFTreeNodeViewModel parentNode, byte? value)
+        => new UInt8GFFTreeNodeViewModel((BaseStructGFFTreeNodeViewModel)parentNode, _name, (byte)value);
 
-    public void Undo(GFFResourceEditorViewModel data)
-    {
-        Node.FieldValue = OldValue;
-    }
+    protected override void SetNewValue(UInt8GFFTreeNodeViewModel node)
+        => node.FieldValue = NewValue!.Value;
+
+    protected override void SetOldValue(UInt8GFFTreeNodeViewModel node)
+        => node.FieldValue = OldValue!.Value;
 }

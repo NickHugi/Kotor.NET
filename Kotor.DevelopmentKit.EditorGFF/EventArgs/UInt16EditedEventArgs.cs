@@ -14,10 +14,10 @@ public class UInt16EditedEventArgs : RoutedEventArgs
     public UInt16 NewValue { get; }
     public UInt16 OldValue { get; }
 
-    public UInt16EditedEventArgs(RoutedEvent routedEvent, object source, UInt16GFFTreeNodeViewModel viewModel, UInt16 newValue, UInt16 oldValue)
+    public UInt16EditedEventArgs(RoutedEvent routedEvent, object source, UInt16GFFTreeNodeViewModel node, UInt16 newValue, UInt16 oldValue)
         : base(routedEvent, source)
     {
-        ViewModel = viewModel;
+        ViewModel = node;
         NewValue = newValue;
         OldValue = oldValue;
     }

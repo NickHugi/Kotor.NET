@@ -24,7 +24,7 @@ public partial class FieldUInt8Panel : UserControl
             RoutedEvent.Register<FieldUInt8Panel, UInt8EditedEventArgs>(nameof(FinishedEditing), RoutingStrategies.Bubble);
 
     private byte _originalValue;
-    private UInt8GFFTreeNodeViewModel? _contextTransition = default!;
+    private UInt8GFFTreeNodeViewModel? _contextTransition;
 
     public FieldUInt8Panel()
     {
@@ -33,15 +33,20 @@ public partial class FieldUInt8Panel : UserControl
 
     protected override void OnDataContextBeginUpdate()
     {
-        if (Context is null)
+        if (_contextTransition is not null)
         {
-            RoutedEventArgs args = new UInt8EditedEventArgs(FinishedEditingEvent, this, _contextTransition, _contextTransition.FieldValue, _originalValue);
-            RaiseEvent(args);
+            if (Context != _contextTransition && _contextTransition.FieldValue.Equals(_originalValue) is not true)
+            {
+                RoutedEventArgs args = new UInt8EditedEventArgs(FinishedEditingEvent, this, _contextTransition, _contextTransition.FieldValue, _originalValue);
+                RaiseEvent(args);
+            }
         }
-        else
+
+        if (Context is not null)
         {
-            _contextTransition = Context;
             _originalValue = Context.FieldValue;
         }
+
+        _contextTransition = Context;
     }
 }

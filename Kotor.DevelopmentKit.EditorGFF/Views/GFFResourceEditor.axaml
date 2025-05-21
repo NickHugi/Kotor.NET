@@ -19,7 +19,7 @@
         Title="Kotor.DevelopmentKit.EditorGFF">
 
     <Design.DataContext>
-        <vm:MainWindowViewModel/>
+        <vm:GFFResourceEditorViewModel/>
     </Design.DataContext>
 
     <Window.Resources>
@@ -74,7 +74,7 @@
                             <editor-views:FieldInt8Panel DataContext="{Binding SelectedNode}" FinishedEditing="FieldInt8Panel_FinishedEditing" />
                         </base-views:Conditional>
                         <base-views:Conditional Load="{Binding IsSelectedNodeUInt16}">
-                            <editor-views:FieldUInt16Panel DataContext="{Binding SelectedNode}" FinishedEditing="FieldUInt16Panel_FinishedEditing" />
+                            <editor-views:FieldUInt16Panel SourceNode="{Binding SelectedNode}" FinishedEditing="FieldUInt16Panel_FinishedEditing" />
                         </base-views:Conditional>
                         <base-views:Conditional Load="{Binding IsSelectedNodeInt16}">
                             <editor-views:FieldInt16Panel DataContext="{Binding SelectedNode}" FinishedEditing="FieldInt16Panel_FinishedEditing" />

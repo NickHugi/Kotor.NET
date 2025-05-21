@@ -30,5 +30,10 @@ public class SetBinaryAction : IAction<GFFResourceEditorViewModel>
     public void Undo(GFFResourceEditorViewModel data)
     {
         Node.FieldValue = OldValue;
+
+        if (OldValue is null)
+        {
+            Node.Delete();
+        }
     }
 }

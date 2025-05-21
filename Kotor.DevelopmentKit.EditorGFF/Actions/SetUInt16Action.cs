@@ -11,24 +11,24 @@ namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
 public class SetUInt16Action : IAction<GFFResourceEditorViewModel>
 {
-    public UInt16GFFTreeNodeViewModel Node { get; }
+    public IEnumerable<object> Path { get; }
     public UInt16 OldValue { get; }
     public UInt16 NewValue { get; }
 
-    public SetUInt16Action(UInt16GFFTreeNodeViewModel node, UInt16 oldValue, UInt16 newValue)
+    public SetUInt16Action(IEnumerable<object> path, UInt16 oldValue, UInt16 newValue)
     {
-        Node = node;
+        Path = path;
         OldValue = oldValue;
         NewValue = newValue;
     }
 
     public void Apply(GFFResourceEditorViewModel data)
     {
-        Node.FieldValue = NewValue;
+        data.NavigateTo<UInt16GFFTreeNodeViewModel>(Path)!.FieldValue = NewValue;
     }
 
     public void Undo(GFFResourceEditorViewModel data)
     {
-        Node.FieldValue = OldValue;
+        data.NavigateTo<UInt16GFFTreeNodeViewModel>(Path)!.FieldValue = NewValue;
     }
 }

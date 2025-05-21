@@ -69,7 +69,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
     }
     private void FieldUInt8Panel_FinishedEditing(object? sender, UInt8EditedEventArgs e)
     {
-        var action = new SetUInt8Action(e.ViewModel, e.OldValue, e.NewValue);
+        var action = new SetUInt8Action(Context.GetPathOf(e.ViewModel), e.OldValue, e.NewValue);
         Context.History.Apply(action);
     }
     private void FieldInt8Panel_FinishedEditing(object? sender, Int8EditedEventArgs e)
@@ -79,7 +79,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
     }
     private void FieldUInt16Panel_FinishedEditing(object? sender, UInt16EditedEventArgs e)
     {
-        var action = new SetUInt16Action(e.ViewModel, e.OldValue, e.NewValue);
+        var action = new SetUInt16Action(Context.GetPathOf(e.ViewModel), e.OldValue, e.NewValue);
         Context.History.Apply(action);
     }
     private void FieldInt16Panel_FinishedEditing(object? sender, Int16EditedEventArgs e)
@@ -204,7 +204,9 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
 
     private void AddUInt8(BaseStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new UInt8GFFTreeNodeViewModel(parent, "New UInt8"));
+        object[] path = [.. Context.GetPathOf(parent), "New UInt8"];
+        var action = new SetUInt8Action(path, null, 0);
+        Context.History.Apply(action);
     }
     private void AddInt8(BaseStructGFFTreeNodeViewModel parent)
     {
