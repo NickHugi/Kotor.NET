@@ -23,7 +23,7 @@ public class StructGFFTreeNodeViewModel : BaseStructGFFTreeNodeViewModel, IField
     public override bool CanEditLabel => true;
 
     public string Type => "Struct";
-    public string Value => $"";
+    public string Value => $"{StructID}";
 
     public StructGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label) : base(parent)
     {

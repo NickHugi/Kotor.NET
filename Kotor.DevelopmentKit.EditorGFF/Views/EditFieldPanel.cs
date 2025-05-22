@@ -29,8 +29,8 @@ public abstract class EditFieldPanel<TNodeViewModel, TValueViewModel, TEventArgs
         add => AddHandler(FinishedEditingEvent, value);
         remove => RemoveHandler(FinishedEditingEvent, value);
     }
-    public static readonly RoutedEvent<UInt16EditedEventArgs> FinishedEditingEvent =
-            RoutedEvent.Register<EditFieldPanel, UInt16EditedEventArgs>(nameof(FinishedEditing), RoutingStrategies.Bubble);
+    public static readonly RoutedEvent<TEventArgs> FinishedEditingEvent =
+            RoutedEvent.Register<EditFieldPanel, TEventArgs>(nameof(FinishedEditing), RoutingStrategies.Bubble);
 
     public GFFViewModel GFF
     {
@@ -68,7 +68,7 @@ public abstract class EditFieldPanel<TNodeViewModel, TValueViewModel, TEventArgs
             }
             else
             {
-                CurrentValue = GetDefault();
+                CurrentValue = GetCurrentValue();
             }
 
             _transitoryNode = newNode;
@@ -77,5 +77,5 @@ public abstract class EditFieldPanel<TNodeViewModel, TValueViewModel, TEventArgs
 
     protected abstract void RaiseFinishedEditing();
 
-    protected abstract TValueViewModel GetDefault();
+    protected abstract TValueViewModel GetCurrentValue();
 }

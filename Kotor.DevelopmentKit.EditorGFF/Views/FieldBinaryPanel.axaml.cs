@@ -8,37 +8,21 @@ using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldBinaryPanel : UserControl
+public partial class FieldBinaryPanel : EditFieldPanel<BinaryGFFTreeNodeViewModel, byte[], BinaryEditedEventArgs>
 {
-    public BinaryGFFTreeNodeViewModel Context => (BinaryGFFTreeNodeViewModel)DataContext!;
-
-    public event EventHandler<BinaryEditedEventArgs>? FinishedEditing
-    {
-        add => AddHandler(FinishedEditingEvent, value);
-        remove => RemoveHandler(FinishedEditingEvent, value);
-    }
-    public static readonly RoutedEvent<BinaryEditedEventArgs> FinishedEditingEvent =
-            RoutedEvent.Register<FieldBinaryPanel, BinaryEditedEventArgs>(nameof(FinishedEditing), RoutingStrategies.Bubble);
-
-    private byte[] _originalValue = default!;
-    private BinaryGFFTreeNodeViewModel? _contextTransition = default!;
-
-    public FieldBinaryPanel()
+    public FieldBinaryPanel() : base()
     {
         InitializeComponent();
     }
 
-    protected override void OnDataContextBeginUpdate()
+    protected override void RaiseFinishedEditing()
     {
-        if (Context is null)
-        {
-            RoutedEventArgs args = new BinaryEditedEventArgs(FinishedEditingEvent, this, _contextTransition, _contextTransition.FieldValue, _originalValue);
-            RaiseEvent(args);
-        }
-        else
-        {
-            _contextTransition = Context;
-            _originalValue = Context.FieldValue;
-        }
+        RoutedEventArgs args = new BinaryEditedEventArgs(FinishedEditingEvent, this, _transitoryNode, CurrentValue, _transitoryNode.FieldValue);
+        RaiseEvent(args);
+    }
+
+    protected override byte[] GetCurrentValue()
+    {
+        return SourceNode?.FieldValue ?? [];
     }
 }

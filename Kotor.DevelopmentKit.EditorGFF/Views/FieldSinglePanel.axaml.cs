@@ -8,37 +8,21 @@ using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldSinglePanel : UserControl
+public partial class FieldSinglePanel : EditFieldPanel<SingleGFFTreeNodeViewModel, Single, SingleEditedEventArgs>
 {
-    public SingleGFFTreeNodeViewModel Context => (SingleGFFTreeNodeViewModel)DataContext!;
-
-    public event EventHandler<SingleEditedEventArgs>? FinishedEditing
-    {
-        add => AddHandler(FinishedEditingEvent, value);
-        remove => RemoveHandler(FinishedEditingEvent, value);
-    }
-    public static readonly RoutedEvent<SingleEditedEventArgs> FinishedEditingEvent =
-            RoutedEvent.Register<FieldSinglePanel, SingleEditedEventArgs>(nameof(FinishedEditing), RoutingStrategies.Bubble);
-
-    private Single _originalValue;
-    private SingleGFFTreeNodeViewModel? _contextTransition = default!;
-
-    public FieldSinglePanel()
+    public FieldSinglePanel() : base()
     {
         InitializeComponent();
     }
 
-    protected override void OnDataContextBeginUpdate()
+    protected override void RaiseFinishedEditing()
     {
-        if (Context is null)
-        {
-            RoutedEventArgs args = new SingleEditedEventArgs(FinishedEditingEvent, this, _contextTransition, _contextTransition.FieldValue, _originalValue);
-            RaiseEvent(args);
-        }
-        else
-        {
-            _contextTransition = Context;
-            _originalValue = Context.FieldValue;
-        }
+        RoutedEventArgs args = new SingleEditedEventArgs(FinishedEditingEvent, this, _transitoryNode, CurrentValue, _transitoryNode.FieldValue);
+        RaiseEvent(args);
+    }
+
+    protected override Single GetCurrentValue()
+    {
+        return SourceNode?.FieldValue ?? 0;
     }
 }

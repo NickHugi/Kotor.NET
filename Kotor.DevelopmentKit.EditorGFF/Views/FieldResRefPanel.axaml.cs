@@ -9,37 +9,21 @@ using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldResRefPanel : UserControl
+public partial class FieldResRefPanel : EditFieldPanel<ResRefGFFTreeNodeViewModel, ResRefViewModel, ResRefEditedEventArgs>
 {
-    public ResRefGFFTreeNodeViewModel Context => (ResRefGFFTreeNodeViewModel)DataContext!;
-
-    public event EventHandler<ResRefEditedEventArgs>? FinishedEditing
-    {
-        add => AddHandler(FinishedEditingEvent, value);
-        remove => RemoveHandler(FinishedEditingEvent, value);
-    }
-    public static readonly RoutedEvent<ResRefEditedEventArgs> FinishedEditingEvent =
-            RoutedEvent.Register<FieldResRefPanel, ResRefEditedEventArgs>(nameof(FinishedEditing), RoutingStrategies.Bubble);
-
-    private ResRefViewModel _originalValue;
-    private ResRefGFFTreeNodeViewModel? _contextTransition;
-
-    public FieldResRefPanel()
+    public FieldResRefPanel() : base()
     {
         InitializeComponent();
     }
 
-    protected override void OnDataContextBeginUpdate()
+    protected override void RaiseFinishedEditing()
     {
-        if (Context is null)
-        {
-            RoutedEventArgs args = new ResRefEditedEventArgs(FinishedEditingEvent, this, _contextTransition, _contextTransition.FieldValue.Clone(), _originalValue.Clone());
-            RaiseEvent(args);
-        }
-        else
-        {
-            _contextTransition = Context;
-            _originalValue = Context.FieldValue;
-        }
+        RoutedEventArgs args = new ResRefEditedEventArgs(FinishedEditingEvent, this, _transitoryNode, CurrentValue, _transitoryNode.FieldValue);
+        RaiseEvent(args);
+    }
+
+    protected override ResRefViewModel GetCurrentValue()
+    {
+        return SourceNode?.FieldValue.Clone() ?? new();
     }
 }

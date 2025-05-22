@@ -2,14 +2,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-
-             xmlns:vm="using:Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes"
              
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="300"
              x:Class="Kotor.DevelopmentKit.EditorGFF.Views.FieldStructPanel"
-             x:DataType="vm:BaseStructGFFTreeNodeViewModel">
+             x:Name="Control">
     <StackPanel>
         <TextBlock Foreground="Gray">Value</TextBlock>
-        <NumericUpDown Value="{Binding StructID, Mode=TwoWay}" Minimum="0" Maximum="255" FormatString="N0" ParsingNumberStyle="Integer" />
+        <NumericUpDown Value="{Binding #Control.CurrentValue, Mode=TwoWay}" Minimum="0" Maximum="255" FormatString="N0" ParsingNumberStyle="Integer" />
     </StackPanel>
 </UserControl>

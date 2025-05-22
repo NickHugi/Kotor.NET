@@ -19,7 +19,7 @@ public class Vector3EditedEventArgs : RoutedEventArgs
         : base(routedEvent, source)
     {
         ViewModel = viewModel;
-        NewValue = newValue;
-        OldValue = oldValue;
+        NewValue = newValue.Clone();
+        OldValue = oldValue.Clone();
     }
 }

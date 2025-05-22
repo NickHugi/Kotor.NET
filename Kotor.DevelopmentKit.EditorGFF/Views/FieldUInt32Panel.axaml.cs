@@ -8,37 +8,21 @@ using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldUInt32Panel : UserControl
+public partial class FieldUInt32Panel : EditFieldPanel<UInt32GFFTreeNodeViewModel, UInt32, UInt32EditedEventArgs>
 {
-    public UInt32GFFTreeNodeViewModel Context => (UInt32GFFTreeNodeViewModel)DataContext!;
-
-    public event EventHandler<UInt32EditedEventArgs>? FinishedEditing
-    {
-        add => AddHandler(FinishedEditingEvent, value);
-        remove => RemoveHandler(FinishedEditingEvent, value);
-    }
-    public static readonly RoutedEvent<UInt32EditedEventArgs> FinishedEditingEvent =
-            RoutedEvent.Register<FieldUInt32Panel, UInt32EditedEventArgs>(nameof(FinishedEditing), RoutingStrategies.Bubble);
-
-    private UInt32 _originalValue;
-    private UInt32GFFTreeNodeViewModel? _contextTransition = default!;
-
-    public FieldUInt32Panel()
+    public FieldUInt32Panel() : base()
     {
         InitializeComponent();
     }
 
-    protected override void OnDataContextBeginUpdate()
+    protected override void RaiseFinishedEditing()
     {
-        if (Context is null)
-        {
-            RoutedEventArgs args = new UInt32EditedEventArgs(FinishedEditingEvent, this, _contextTransition, _contextTransition.FieldValue, _originalValue);
-            RaiseEvent(args);
-        }
-        else
-        {
-            _contextTransition = Context;
-            _originalValue = Context.FieldValue;
-        }
+        RoutedEventArgs args = new UInt32EditedEventArgs(FinishedEditingEvent, this, _transitoryNode, CurrentValue, _transitoryNode.FieldValue);
+        RaiseEvent(args);
+    }
+
+    protected override UInt32 GetCurrentValue()
+    {
+        return SourceNode?.FieldValue ?? 0;
     }
 }

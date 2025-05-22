@@ -149,7 +149,12 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
     }
     private void FieldStructPanel_FinishedEditing(object? sender, StructEditedEventArgs e)
     {
-        var action = new SetStructAction(e.ViewModel, e.OldValue, e.NewValue);
+        var action = new SetStructAction(Context.GetPathOf(e.ViewModel), e.OldValue, e.NewValue);
+        Context.History.Apply(action);
+    }
+    private void LabelInput_LostFocus(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var action = new SetFieldLabel(Context.GetPathOf(Context.SelectedNode), ((IFieldGFFTreeNodeViewModel)Context.SelectedNode).Label, ((TextBox)sender).Text);
         Context.History.Apply(action);
     }
 

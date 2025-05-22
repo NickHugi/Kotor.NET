@@ -9,37 +9,21 @@ using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldVector3Panel : UserControl
+public partial class FieldVector3Panel : EditFieldPanel<Vector3GFFTreeNodeViewModel, Vector3ViewModel, Vector3EditedEventArgs>
 {
-    public Vector3GFFTreeNodeViewModel Context => (Vector3GFFTreeNodeViewModel)DataContext!;
-
-    public event EventHandler<Vector3EditedEventArgs>? FinishedEditing
-    {
-        add => AddHandler(FinishedEditingEvent, value);
-        remove => RemoveHandler(FinishedEditingEvent, value);
-    }
-    public static readonly RoutedEvent<Vector3EditedEventArgs> FinishedEditingEvent =
-            RoutedEvent.Register<FieldVector3Panel, Vector3EditedEventArgs>(nameof(FinishedEditing), RoutingStrategies.Bubble);
-
-    private Vector3ViewModel _originalValue;
-    private Vector3GFFTreeNodeViewModel? _contextTransition;
-
-    public FieldVector3Panel()
+    public FieldVector3Panel() : base()
     {
         InitializeComponent();
     }
 
-    protected override void OnDataContextBeginUpdate()
+    protected override void RaiseFinishedEditing()
     {
-        if (Context is null)
-        {
-            RoutedEventArgs args = new Vector3EditedEventArgs(FinishedEditingEvent, this, _contextTransition, _contextTransition.FieldValue.Clone(), _originalValue.Clone());
-            RaiseEvent(args);
-        }
-        else
-        {
-            _contextTransition = Context;
-            _originalValue = Context.FieldValue.Clone();
-        }
+        RoutedEventArgs args = new Vector3EditedEventArgs(FinishedEditingEvent, this, _transitoryNode, CurrentValue, _transitoryNode.FieldValue);
+        RaiseEvent(args);
+    }
+
+    protected override Vector3ViewModel GetCurrentValue()
+    {
+        return SourceNode?.FieldValue.Clone() ?? new();
     }
 }

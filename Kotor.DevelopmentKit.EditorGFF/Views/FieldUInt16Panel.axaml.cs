@@ -13,69 +13,21 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldUInt16Panel : UserControl //: EditFieldPanel<UInt16GFFTreeNodeViewModel, UInt16, UInt16EditedEventArgs>
+public partial class FieldUInt16Panel : EditFieldPanel<UInt16GFFTreeNodeViewModel, UInt16, UInt16EditedEventArgs>
 {
-    public event EventHandler<UInt16EditedEventArgs>? FinishedEditing
-    {
-        add => AddHandler(FinishedEditingEvent, value);
-        remove => RemoveHandler(FinishedEditingEvent, value);
-    }
-    public static readonly RoutedEvent<UInt16EditedEventArgs> FinishedEditingEvent =
-            RoutedEvent.Register<FieldUInt16Panel, UInt16EditedEventArgs>(nameof(FinishedEditing), RoutingStrategies.Bubble);
-
-    public GFFViewModel GFF
-    {
-        get => GetValue(GFFProperty);
-        set => SetValue(GFFProperty, value);
-    }
-    public static readonly StyledProperty<GFFViewModel> GFFProperty =
-        AvaloniaProperty.Register<FieldUInt16Panel, GFFViewModel>(nameof(GFF));
-
-    public UInt16GFFTreeNodeViewModel SourceNode
-    {
-        get => GetValue(SourceNodeProperty);
-        set => SetValue(SourceNodeProperty, value);
-    }
-    public static readonly StyledProperty<UInt16GFFTreeNodeViewModel> SourceNodeProperty =
-        AvaloniaProperty.Register<FieldUInt16Panel, UInt16GFFTreeNodeViewModel>(nameof(SourceNode));
-
-    public UInt16 CurrentValue
-    {
-        get => GetValue(CurrentValueProperty);
-        set => SetValue(CurrentValueProperty, value);
-    }
-    public static readonly StyledProperty<UInt16> CurrentValueProperty =
-        AvaloniaProperty.Register<FieldUInt16Panel, UInt16>(nameof(CurrentValue));
-
-    protected UInt16GFFTreeNodeViewModel? _transitoryNode;
-
-    public FieldUInt16Panel()
+    public FieldUInt16Panel() : base()
     {
         InitializeComponent();
-
-        this.GetObservable(SourceNodeProperty).Subscribe(newNode =>
-        {
-            if (_transitoryNode is not null)
-            {
-                RaiseFinishedEditing();
-            }
-            else
-            {
-                CurrentValue = GetDefault();
-            }
-
-            _transitoryNode = newNode;
-        });
     }
 
-    protected void RaiseFinishedEditing()
+    protected override void RaiseFinishedEditing()
     {
         RoutedEventArgs args = new UInt16EditedEventArgs(FinishedEditingEvent, this, _transitoryNode, CurrentValue, _transitoryNode.FieldValue);
         RaiseEvent(args);
     }
 
-    protected UInt16 GetDefault()
+    protected override UInt16 GetCurrentValue()
     {
-        return 0;
+        return SourceNode?.FieldValue ?? 0;
     }
 }

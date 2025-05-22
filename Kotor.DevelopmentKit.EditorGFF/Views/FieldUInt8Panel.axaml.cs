@@ -11,42 +11,21 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldUInt8Panel : UserControl
+public partial class FieldUInt8Panel : EditFieldPanel<UInt8GFFTreeNodeViewModel, Byte, UInt8EditedEventArgs>
 {
-    public UInt8GFFTreeNodeViewModel Context => (UInt8GFFTreeNodeViewModel)DataContext!;
-
-    public event EventHandler<UInt8EditedEventArgs>? FinishedEditing
-    {
-        add => AddHandler(FinishedEditingEvent, value);
-        remove => RemoveHandler(FinishedEditingEvent, value);
-    }
-    public static readonly RoutedEvent<UInt8EditedEventArgs> FinishedEditingEvent =
-            RoutedEvent.Register<FieldUInt8Panel, UInt8EditedEventArgs>(nameof(FinishedEditing), RoutingStrategies.Bubble);
-
-    private byte _originalValue;
-    private UInt8GFFTreeNodeViewModel? _contextTransition;
-
-    public FieldUInt8Panel()
+    public FieldUInt8Panel() : base()
     {
         InitializeComponent();
     }
 
-    protected override void OnDataContextBeginUpdate()
+    protected override void RaiseFinishedEditing()
     {
-        if (_contextTransition is not null)
-        {
-            if (Context != _contextTransition && _contextTransition.FieldValue.Equals(_originalValue) is not true)
-            {
-                RoutedEventArgs args = new UInt8EditedEventArgs(FinishedEditingEvent, this, _contextTransition, _contextTransition.FieldValue, _originalValue);
-                RaiseEvent(args);
-            }
-        }
+        RoutedEventArgs args = new UInt8EditedEventArgs(FinishedEditingEvent, this, _transitoryNode, CurrentValue, _transitoryNode.FieldValue);
+        RaiseEvent(args);
+    }
 
-        if (Context is not null)
-        {
-            _originalValue = Context.FieldValue;
-        }
-
-        _contextTransition = Context;
+    protected override Byte GetCurrentValue()
+    {
+        return SourceNode?.FieldValue ?? 0;
     }
 }

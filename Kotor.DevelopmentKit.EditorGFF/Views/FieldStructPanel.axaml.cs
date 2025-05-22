@@ -8,37 +8,21 @@ using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldStructPanel : UserControl
+public partial class FieldStructPanel : EditFieldPanel<StructGFFTreeNodeViewModel, Int32, StructEditedEventArgs>
 {
-    public BaseStructGFFTreeNodeViewModel Context => (BaseStructGFFTreeNodeViewModel)DataContext!;
-
-    public event EventHandler<StructEditedEventArgs>? FinishedEditing
-    {
-        add => AddHandler(FinishedEditingEvent, value);
-        remove => RemoveHandler(FinishedEditingEvent, value);
-    }
-    public static readonly RoutedEvent<StructEditedEventArgs> FinishedEditingEvent =
-            RoutedEvent.Register<FieldStructPanel, StructEditedEventArgs>(nameof(FinishedEditing), RoutingStrategies.Bubble);
-
-    private Int32 _originalValue;
-    private BaseStructGFFTreeNodeViewModel? _contextTransition = default!;
-
-    public FieldStructPanel()
+    public FieldStructPanel() : base()
     {
         InitializeComponent();
     }
 
-    protected override void OnDataContextBeginUpdate()
+    protected override void RaiseFinishedEditing()
     {
-        if (Context is null)
-        {
-            RoutedEventArgs args = new StructEditedEventArgs(FinishedEditingEvent, this, _contextTransition, _contextTransition.StructID, _originalValue);
-            RaiseEvent(args);
-        }
-        else
-        {
-            _contextTransition = Context;
-            _originalValue = Context.StructID;
-        }
+        RoutedEventArgs args = new StructEditedEventArgs(FinishedEditingEvent, this, _transitoryNode, CurrentValue, _transitoryNode.StructID);
+        RaiseEvent(args);
+    }
+
+    protected override Int32 GetCurrentValue()
+    {
+        return SourceNode?.StructID ?? 0;
     }
 }

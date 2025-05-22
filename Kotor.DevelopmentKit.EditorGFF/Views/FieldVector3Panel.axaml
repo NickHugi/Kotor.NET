@@ -2,20 +2,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-
-             xmlns:vm="using:Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes"
              
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="300"
              x:Class="Kotor.DevelopmentKit.EditorGFF.Views.FieldVector3Panel"
-             x:DataType="vm:Vector3GFFTreeNodeViewModel">
+             x:Name="Control">
     <StackPanel>
         <TextBlock Foreground="Gray">X</TextBlock>
-        <NumericUpDown Value="{Binding FieldValue.X, Mode=TwoWay}" ParsingNumberStyle="Float" />
+        <NumericUpDown Value="{Binding #Control.CurrentValue.X, Mode=TwoWay}" ParsingNumberStyle="Float" />
 
         <TextBlock Foreground="Gray">Y</TextBlock>
-        <NumericUpDown Value="{Binding FieldValue.Y, Mode=TwoWay}" ParsingNumberStyle="Float" />
+        <NumericUpDown Value="{Binding #Control.CurrentValue.Y, Mode=TwoWay}" ParsingNumberStyle="Float" />
 
         <TextBlock Foreground="Gray">Z</TextBlock>
-        <NumericUpDown Value="{Binding FieldValue.Z, Mode=TwoWay}" ParsingNumberStyle="Float" />
+        <NumericUpDown Value="{Binding #Control.CurrentValue.Z, Mode=TwoWay}" ParsingNumberStyle="Float" />
     </StackPanel>
 </UserControl>
