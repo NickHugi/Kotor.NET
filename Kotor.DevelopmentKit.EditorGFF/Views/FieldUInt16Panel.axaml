@@ -9,6 +9,6 @@
     <StackPanel Focusable="True">
         <Border Name="FocusDummy" IsHitTestVisible="False" Focusable="True" />
         <TextBlock Foreground="Gray">Value</TextBlock>
-        <NumericUpDown Value="{Binding #Control.CurrentValue}" Minimum="0" Maximum="65535" FormatString="N0" ParsingNumberStyle="Integer" />
+        <NumericUpDown Value="{Binding #Control.CurrentValue}" Minimum="0" Maximum="65535" FormatString="N0" ParsingNumberStyle="Integer" LostFocus="NumericUpDown_LostFocus" />
     </StackPanel>
 </UserControl>

@@ -8,6 +8,6 @@
              x:Name="Control">
     <StackPanel>
         <TextBlock Foreground="Gray">Value</TextBlock>
-        <NumericUpDown Value="{Binding #Control.CurrentValue, Mode=TwoWay}" Minimum="-32768" Maximum="32767" FormatString="N0" ParsingNumberStyle="Integer" />
+        <NumericUpDown Value="{Binding #Control.CurrentValue}" Minimum="-32768" Maximum="32767" FormatString="N0" ParsingNumberStyle="Integer" LostFocus="NumericUpDown_LostFocus" />
     </StackPanel>
 </UserControl>

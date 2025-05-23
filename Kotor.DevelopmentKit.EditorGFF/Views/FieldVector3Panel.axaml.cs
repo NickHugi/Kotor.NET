@@ -26,4 +26,9 @@ public partial class FieldVector3Panel : EditFieldPanel<Vector3GFFTreeNodeViewMo
     {
         return SourceNode?.FieldValue.Clone() ?? new();
     }
+
+    private void NumericUpDown_LostFocus(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        RaiseFinishedEditing();
+    }
 }

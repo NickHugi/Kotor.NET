@@ -8,12 +8,12 @@
              x:Name="Control">
     <StackPanel>
         <TextBlock Foreground="Gray">X</TextBlock>
-        <NumericUpDown Value="{Binding #Control.CurrentValue.X, Mode=TwoWay}" ParsingNumberStyle="Float" />
+        <NumericUpDown Value="{Binding #Control.CurrentValue.X}" ParsingNumberStyle="Float" LostFocus="NumericUpDown_LostFocus" />
 
         <TextBlock Foreground="Gray">Y</TextBlock>
-        <NumericUpDown Value="{Binding #Control.CurrentValue.Y, Mode=TwoWay}" ParsingNumberStyle="Float" />
+        <NumericUpDown Value="{Binding #Control.CurrentValue.Y}" ParsingNumberStyle="Float" LostFocus="NumericUpDown_LostFocus" />
 
         <TextBlock Foreground="Gray">Z</TextBlock>
-        <NumericUpDown Value="{Binding #Control.CurrentValue.Z, Mode=TwoWay}" ParsingNumberStyle="Float" />
+        <NumericUpDown Value="{Binding #Control.CurrentValue.Z}" ParsingNumberStyle="Float" LostFocus="NumericUpDown_LostFocus" />
     </StackPanel>
 </UserControl>

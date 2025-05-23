@@ -25,4 +25,10 @@ public partial class FieldDoublePanel : EditFieldPanel<DoubleGFFTreeNodeViewMode
     {
         return SourceNode?.FieldValue ?? 0;
     }
+
+
+    private void NumericUpDown_LostFocus(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        RaiseFinishedEditing();
+    }
 }

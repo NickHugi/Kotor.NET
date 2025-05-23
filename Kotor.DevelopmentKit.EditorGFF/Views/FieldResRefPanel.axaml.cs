@@ -26,4 +26,9 @@ public partial class FieldResRefPanel : EditFieldPanel<ResRefGFFTreeNodeViewMode
     {
         return SourceNode?.FieldValue.Clone() ?? new();
     }
+
+    private void TextBox_LostFocus(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        RaiseFinishedEditing();
+    }
 }

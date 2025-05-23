@@ -25,4 +25,9 @@ public partial class FieldStringPanel : EditFieldPanel<StringGFFTreeNodeViewMode
     {
         return SourceNode?.FieldValue ?? "";
     }
+
+    private void TextBox_LostFocus(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        RaiseFinishedEditing();
+    }
 }

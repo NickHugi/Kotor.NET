@@ -8,6 +8,6 @@
              x:Name="Control">
     <StackPanel>
         <TextBlock Foreground="Gray">Value</TextBlock>
-        <TextBox Text="{Binding #Control.CurrentValue.Value, Mode=TwoWay}" MaxLength="16" />
+        <TextBox Text="{Binding #Control.CurrentValue.Value, Mode=TwoWay}" MaxLength="16" LostFocus="TextBox_LostFocus" />
     </StackPanel>
 </UserControl>

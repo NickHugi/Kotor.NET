@@ -25,4 +25,9 @@ public partial class FieldInt32Panel : EditFieldPanel<Int32GFFTreeNodeViewModel,
     {
         return SourceNode?.FieldValue ?? 0;
     }
+
+    private void NumericUpDown_LostFocus(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        RaiseFinishedEditing();
+    }
 }

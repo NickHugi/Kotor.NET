@@ -25,4 +25,9 @@ public partial class FieldStructPanel : EditFieldPanel<StructGFFTreeNodeViewMode
     {
         return SourceNode?.StructID ?? 0;
     }
+
+    private void NumericUpDown_LostFocus(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        RaiseFinishedEditing();
+    }
 }

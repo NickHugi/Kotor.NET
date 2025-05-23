@@ -16,8 +16,11 @@ public interface IGFFTreeNodeViewModel
     public string Type { get; }
     public string Value { get; }
     public bool Expanded { get; set; }
+    //public bool EditedSinceLastSave { get; set; }
+
     public IGFFTreeNodeViewModel? Parent { get; }
     public ReadOnlyObservableCollection<IGFFTreeNodeViewModel> Children { get; }
+
 
     public void Delete();
 }
