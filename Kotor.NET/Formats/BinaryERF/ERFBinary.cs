@@ -21,48 +21,65 @@ public class ERFBinary
     }
     public ERFBinary(Stream stream)
     {
-        var reader = new BinaryReader(stream);
-
-        FileHeader = new ERFBinaryFileHeader(reader);
-
-        reader.BaseStream.Position = FileHeader.OffsetToKeyList;
-        for (int i = 0; i < FileHeader.EntryCount; i++)
+        try
         {
-            KeyEntries.Add(new ERFBinaryKeyEntry(reader));
+            var reader = new BinaryReader(stream);
+
+            FileHeader = new ERFBinaryFileHeader(reader);
+
+            reader.BaseStream.Position = FileHeader.OffsetToKeyList;
+            for (int i = 0; i < FileHeader.EntryCount; i++)
+            {
+                KeyEntries.Add(new ERFBinaryKeyEntry(reader));
+            }
+
+            reader.BaseStream.Position = FileHeader.OffsetToResourceList;
+            for (int i = 0; i < FileHeader.EntryCount; i++)
+            {
+                ResourceEntries.Add(new ERFBinaryResourceEntry(reader));
+            }
+
+            foreach (var entry in ResourceEntries)
+            {
+                reader.BaseStream.Position = entry.Offset;
+                ResourceData.Add(reader.ReadBytes(entry.Size));
+            }
         }
-
-        reader.BaseStream.Position = FileHeader.OffsetToResourceList;
-        for (int i = 0; i < FileHeader.EntryCount; i++)
+        catch (Exception ex)
         {
-            ResourceEntries.Add(new ERFBinaryResourceEntry(reader));
-        }
-
-        foreach (var entry in ResourceEntries)
-        {
-            reader.BaseStream.Position = entry.Offset;
-            ResourceData.Add(reader.ReadBytes(entry.Size));
+            throw new IOException("Failed to read the 2DA data.", ex);
         }
     }
 
     public void Write(Stream stream)
     {
-        var writer = new BinaryWriter(stream);
-
-        FileHeader.Write(writer);
-
-        foreach (var entry in KeyEntries)
+        try
         {
-            entry.Write(writer);
+            var writer = new BinaryWriter(stream);
+
+            FileHeader.Write(writer);
+
+            writer.BaseStream.Position = FileHeader.OffsetToKeyList;
+            foreach (var entry in KeyEntries)
+            {
+                entry.Write(writer);
+            }
+
+            writer.BaseStream.Position = FileHeader.OffsetToResourceList;
+            foreach (var entry in ResourceEntries)
+            {
+                entry.Write(writer);
+            }
+
+            for (int i = 0; i < ResourceData.Count; i++)
+            {
+                writer.BaseStream.Position = ResourceEntries[i].Offset;
+                writer.Write(ResourceData[i]);
+            }
         }
-
-        foreach (var entry in ResourceEntries)
+        catch (Exception ex)
         {
-            entry.Write(writer);
-        }
-
-        foreach (var data in ResourceData)
-        {
-            writer.Write(data);
+            throw new IOException("Failed to write the 2DA data.", ex);
         }
     }
 
@@ -76,11 +93,15 @@ public class ERFBinary
         offset += KeyEntries.Count * ERFBinaryKeyEntry.SIZE;
         FileHeader.OffsetToResourceList = offset;
 
-        offset += ResourceEntries.Count * ERFBinaryResourceEntry.SIZE;
+        offset += KeyEntries.Count * ERFBinaryResourceEntry.SIZE;
+        ResourceEntries.Clear();
         for (int i = 0; i < ResourceData.Count; i++)
         {
-            ResourceEntries[i].Offset = offset;
-            ResourceEntries[i].Size = ResourceData[i].Length;
+            ResourceEntries.Add(new ERFBinaryResourceEntry
+            {
+                Offset = offset,
+                Size = ResourceData[i].Length,
+            });
             offset += ResourceData[i].Length;
         }
     }

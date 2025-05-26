@@ -1,0 +1,13 @@
+#MAXLAYOUT ASCII
+filedependancy 211TEL.max
+beginlayout
+   roomcount 2
+      211TELb 1443.6 3466.32 0.0
+      211TELa 1385.82 473.243 0.0
+   trackcount 1
+      211TEL_MGT04 75.1835 730.74 0.0
+   obstaclecount 1
+      211TEL_MGC02 19.0186 1139.38 0.0
+   doorhookcount 1
+      221TELa Door_02 0 -72.282 -0.692468 0.0 1.0 0.0 0.0 0.0
+donelayout

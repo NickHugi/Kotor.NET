@@ -20,54 +20,68 @@ public class KEYBinary
 
     public KEYBinary(Stream stream)
     {
-        var reader = new BinaryReader(stream);
-
-        FileHeader = new KEYBinaryFileHeader(reader);
-
-        FileTable = new List<KEYBinaryFileEntry>();
-        reader.BaseStream.Position = FileHeader.OffsetToFileEntries;
-        for (int i = 0; i < FileHeader.FileCount; i++)
+        try
         {
-            FileTable.Add(new KEYBinaryFileEntry(reader));
+            var reader = new BinaryReader(stream);
+
+            FileHeader = new KEYBinaryFileHeader(reader);
+
+            FileTable = new List<KEYBinaryFileEntry>();
+            reader.BaseStream.Position = FileHeader.OffsetToFileEntries;
+            for (int i = 0; i < FileHeader.FileCount; i++)
+            {
+                FileTable.Add(new KEYBinaryFileEntry(reader));
+            }
+
+            Filenames = new List<string>();
+            foreach (var file in FileTable)
+            {
+                reader.BaseStream.Position = file.FilenameOffset;
+                var filename = reader.ReadString(file.FilenameLength);
+                Filenames.Add(filename);
+            }
+
+            Keys = new List<KEYBinaryKeyEntry>();
+            reader.BaseStream.Position = FileHeader.OffsetToKeyEntries;
+            for (int i = 0; i < FileHeader.KeyCount; i++)
+            {
+                Keys.Add(new KEYBinaryKeyEntry(reader));
+            }
         }
-
-        Filenames = new List<string>();
-        foreach (var file in FileTable)
+        catch (Exception ex)
         {
-            reader.BaseStream.Position = file.FilenameOffset;
-            var filename = reader.ReadString(file.FilenameLength);
-            Filenames.Add(filename);
-        }
-
-        Keys = new List<KEYBinaryKeyEntry>();
-        reader.BaseStream.Position = FileHeader.OffsetToKeyEntries;
-        for (int i = 0; i < FileHeader.KeyCount; i++)
-        {
-            Keys.Add(new KEYBinaryKeyEntry(reader));
+            throw new IOException("Failed to read the 2DA data.", ex);
         }
     }
 
     public void Write(Stream stream)
     {
-        var writer = new BinaryWriter(stream);
-
-        FileHeader.Write(writer);
-
-        writer.BaseStream.Position = FileHeader.OffsetToFileEntries;
-        foreach (var file in FileTable)
+        try
         {
-            file.Write(writer);
+            var writer = new BinaryWriter(stream);
+
+            FileHeader.Write(writer);
+
+            writer.BaseStream.Position = FileHeader.OffsetToFileEntries;
+            foreach (var file in FileTable)
+            {
+                file.Write(writer);
+            }
+
+            for (int i = 0; i < FileTable.Count; i++)
+            {
+                writer.BaseStream.Position = FileTable[i].FilenameOffset;
+                writer.Write(Filenames[i], 0);
+            }
+
+            foreach (var key in Keys)
+            {
+                key.Write(writer);
+            }
         }
-
-        for (int i = 0; i < FileTable.Count; i++)
+        catch (Exception ex)
         {
-            writer.BaseStream.Position = FileTable[i].FilenameOffset;
-            writer.Write(Filenames[i], 0);
-        }
-
-        foreach (var key in Keys)
-        {
-            key.Write(writer);
+            throw new IOException("Failed to write the 2DA data.", ex);
         }
     }
 

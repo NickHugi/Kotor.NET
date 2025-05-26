@@ -52,7 +52,7 @@ public class TestTLKBinary
 
         var stream = new MemoryStream();
         var reader = new BinaryReader(stream);
-        binaryTLK.Write(new BinaryWriter(stream));
+        binaryTLK.Write(stream);
 
 
         Assert.Equal(binaryTLK.Entries[0].StringSize, "abcdef".Length);

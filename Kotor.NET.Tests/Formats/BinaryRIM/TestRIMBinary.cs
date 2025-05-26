@@ -25,15 +25,15 @@ public class TestRIMBinary
 
         Assert.Equal(2, binaryRIM.ResourceEntries.Count);
 
-        var key0 = binaryRIM.ResourceEntries.ElementAt(0);
-        Assert.Equal(0, key0.ResourceID);
-        Assert.Equal(key0.ResourceTypeID, ResourceType.MDL.ID);
-        Assert.Equal("test", key0.ResRef.Get());
+        var resource0 = binaryRIM.ResourceEntries.ElementAt(0);
+        Assert.Equal(0, resource0.ResourceID);
+        Assert.Equal(resource0.ResourceTypeID, ResourceType.MDL.ID);
+        Assert.Equal("test", resource0.ResRef.Get());
 
-        var key1 = binaryRIM.ResourceEntries.ElementAt(1);
-        Assert.Equal(1, key1.ResourceID);
-        Assert.Equal(key1.ResourceTypeID, ResourceType.MDX.ID);
-        Assert.Equal("test", key1.ResRef.Get());
+        var resource1 = binaryRIM.ResourceEntries.ElementAt(1);
+        Assert.Equal(1, resource1.ResourceID);
+        Assert.Equal(resource1.ResourceTypeID, ResourceType.MDX.ID);
+        Assert.Equal("test", resource1.ResRef.Get());
     }
 
     [Fact]

@@ -1,0 +1,8 @@
+isbumpmap 1
+isdiffusebumpmap 1
+isspecularbumpmap 1
+bumpmapscaling 5
+
+
+
+

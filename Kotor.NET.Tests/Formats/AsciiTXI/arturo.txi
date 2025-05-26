@@ -1,0 +1,24 @@
+blending additive
+downsamplemax 0
+
+proceduretype arturo
+channelscale 4
+1
+1
+1
+1
+
+channeltranslate 4
+0
+0
+0
+0
+
+distort 2
+arturowidth 32
+arturoheight 32
+distortionamplitude 20
+speed 1.5
+
+defaultheight 32
+defaultwidth 32

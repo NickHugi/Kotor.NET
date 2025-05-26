@@ -12,6 +12,7 @@ public static class BinaryWriterExtensions
 {
     public static void Write(this BinaryWriter writer, string value, int prefixSize)
     {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         if (prefixSize == 0)
         {
             writer.Write(Encoding.GetEncoding(1252).GetBytes(value));

@@ -10,7 +10,7 @@ namespace Kotor.NET.Formats.BinaryERF;
 
 public class ERFBinaryFileHeader
 {
-    public static readonly int SIZE = 40;
+    public static readonly int SIZE = 160;
     public static readonly IReadOnlyList<string> FILE_TYPES = new List<string>()
     {
         "ERF ", "SAV ", "MOD ", "HAK ",
@@ -41,6 +41,8 @@ public class ERFBinaryFileHeader
         OffsetToResourceList = reader.ReadInt32();
         BuildYear = reader.ReadInt32();
         BuildDay = reader.ReadInt32();
+        reader.BaseStream.Position += 4; // DescriptionStrRef
+        reader.BaseStream.Position += 116; // Reserved
     }
 
     public void Write(BinaryWriter writer)
@@ -55,5 +57,7 @@ public class ERFBinaryFileHeader
         writer.Write(OffsetToResourceList);
         writer.Write(BuildYear);
         writer.Write(BuildDay);
+        writer.Write(0);
+        writer.Write(new byte[116]);
     }
 }
