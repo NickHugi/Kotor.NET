@@ -1,0 +1,20 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Kotor.DevelopmentKit.ViewerMDL.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:Kotor.DevelopmentKit.ViewerMDL.Views"
+
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Kotor.DevelopmentKit.ViewerMDL.Views.MDLResourceViewer"
+        x:DataType="vm:MDLResourceViewerViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Kotor.DevelopmentKit.MDLResourceViewer">
+
+    <Design.DataContext>
+        <vm:MDLResourceViewerViewModel/>
+    </Design.DataContext>
+
+    <views:SceneControl Width="100" Height="100" />
+
+</Window>

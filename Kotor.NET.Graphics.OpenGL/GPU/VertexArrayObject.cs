@@ -9,7 +9,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Kotor.NET.Graphics.OpenGL.GPU;
 
-public class Mesh : IVertexArrayObject
+public class VertexArrayObject : IVertexArrayObject
 {
     public uint VertexArrayID { get; private init; }
     public uint VertexBufferID { get; private init; }
@@ -18,7 +18,7 @@ public class Mesh : IVertexArrayObject
 
     private GL _gl;
 
-    public Mesh(GL gl, uint vertexArrayID, uint vertexBufferID, uint elementBufferID, uint elementCount)
+    public VertexArrayObject(GL gl, uint vertexArrayID, uint vertexBufferID, uint elementBufferID, uint elementCount)
     {
         _gl = gl;
 

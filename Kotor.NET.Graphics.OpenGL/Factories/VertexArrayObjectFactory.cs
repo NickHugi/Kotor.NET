@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Formats.BinaryMDL;
+using Kotor.NET.Graphics.Factories;
 using Kotor.NET.Graphics.GPU;
 using Kotor.NET.Graphics.OpenGL.GPU;
 using Silk.NET.OpenGL;
@@ -11,7 +12,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Kotor.NET.Graphics.OpenGL.Factories;
 
-public class MDLMeshFactory
+public class VertexArrayObjectFactory : IVertexArrayObjectFactory
 {
     public unsafe IVertexArrayObject FromBinary(GL gl, byte[] vertexData, byte[] elementData, uint positionStride, uint normalStride, uint uv1Stride, uint uv2Stride, uint blockSize, uint flags)
     {
@@ -52,6 +53,6 @@ public class MDLMeshFactory
         gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
         gl.BindVertexArray(0);
 
-        return new Mesh(gl, vertexArrayObjectID, vertexbufferObjectID, elementBufferObjectID, elementCount);
+        return new VertexArrayObject(gl, vertexArrayObjectID, vertexbufferObjectID, elementBufferObjectID, elementCount);
     }
 }
