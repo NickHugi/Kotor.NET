@@ -9,52 +9,13 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public class UInt16GFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewModel<ushort>
+public class UInt16GFFTreeNodeViewModel : IFieldGFFTreeNodeViewModel<ushort>
 {
-    private string _label = "";
-    public string Label
+    public override string Type => "UInt16";
+
+    public UInt16GFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, ushort value = 0) : base(parent, label)
     {
-        get => _label;
-        set => this.RaiseAndSetIfChanged(ref _label, value);
-    }
-
-    public bool CanEditLabel => true;
-
-    private ushort _fieldValue;
-    public ushort FieldValue
-    {
-        get => _fieldValue;
-        set => this.RaiseAndSetIfChanged(ref _fieldValue, value);
-    }
-
-    private bool _expanded;
-    public bool Expanded
-    {
-        get => _expanded;
-        set => this.RaiseAndSetIfChanged(ref _expanded, value);
-    }
-
-    public IGFFTreeNodeViewModel Parent { get; }
-
-    private ReadOnlyObservableCollection<IGFFTreeNodeViewModel> _children = new([]);
-    public ReadOnlyObservableCollection<IGFFTreeNodeViewModel> Children => _children;
-
-    public string Type => "UInt16";
-    public string Value => FieldValue.ToString();
-
-    public UInt16GFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, ushort value = 0)
-    {
-        Parent = parent;
-        Label = label;
         FieldValue = value;
-
-        this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
-        this.ObservableForProperty(x => x.FieldValue).Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
-    }
-
-    public void Delete()
-    {
-        ((BaseStructGFFTreeNodeViewModel)Parent).DeleteField(this);
     }
 }
 

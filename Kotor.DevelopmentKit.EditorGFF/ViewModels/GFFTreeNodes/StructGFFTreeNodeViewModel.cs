@@ -11,46 +11,47 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public class StructGFFTreeNodeViewModel : BaseStructGFFTreeNodeViewModel, IFieldGFFTreeNodeViewModel
+public class StructGFFTreeNodeViewModel : IFieldGFFTreeNodeViewModel<Int32>, BaseStructGFFTreeNodeViewModel
 {
-    private string _label = "";
-    public override string Label
+    public override string Type => "Struct";
+
+    public int StructID
     {
-        get => _label;
-        set => this.RaiseAndSetIfChanged(ref _label, value);
+        get => FieldValue;
+        set => FieldValue = value;
     }
 
-    public override bool CanEditLabel => true;
+    private ObservableCollection<BaseGFFTreeNodeViewModel> _children = new([]);
+    public override ReadOnlyObservableCollection<BaseGFFTreeNodeViewModel> Children => new(_children);
 
-    public string Type => "Struct";
-    public string Value => $"{StructID}";
 
-    public StructGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label) : base(parent)
+    public StructGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label) : base(parent, label)
     {
-        Label = label;
-        this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
     }
-    public StructGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, int structID) : base(parent) 
+    public StructGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, int structID) : this(parent, label) 
     {
-        StructID = structID;
-
-        Label = label;
-        this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
+        FieldValue = structID;
     }
-    public StructGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, GFFStruct gffStruct) : base(parent)
+    public StructGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, GFFStruct gffStruct) : this(parent, label)
     {
-        PopulateStruct(gffStruct);
-
-        Label = label;
-        this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
+        //PopulateStruct(gffStruct);
     }
 
-    public override void Delete()
+    public T AddField<T>(T field) where T : IFieldGFFTreeNodeViewModel
     {
-        if (Parent is BaseStructGFFTreeNodeViewModel vmStruct)
-        {
-            vmStruct.DeleteField(this);
-        }
+        _children.Add(field);
+        Expanded = true;
+        return field;
+    }
+
+    public void DeleteField(IFieldGFFTreeNodeViewModel field)
+    {
+        _children.Remove(field);
+    }
+
+    public IFieldGFFTreeNodeViewModel? GetField(string label)
+    {
+        return (IFieldGFFTreeNodeViewModel?)Children.FirstOrDefault(x => x.Label == label);
     }
 }
 

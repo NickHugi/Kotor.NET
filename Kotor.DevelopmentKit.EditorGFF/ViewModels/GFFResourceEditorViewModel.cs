@@ -20,8 +20,8 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels;
 
 public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewModel, GFF>
 {
-    private IGFFTreeNodeViewModel _selectedNode;
-    public IGFFTreeNodeViewModel SelectedNode
+    private BaseGFFTreeNodeViewModel _selectedNode;
+    public BaseGFFTreeNodeViewModel SelectedNode
     {
         get => _selectedNode;
         set => this.RaiseAndSetIfChanged(ref _selectedNode, value);
@@ -29,8 +29,8 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
 
     private RootStructGFFTreeNodeViewModel _rootNode = new RootStructGFFTreeNodeViewModel();
 
-    private HierarchicalTreeDataGridSource<IGFFTreeNodeViewModel> _treeData;
-    public HierarchicalTreeDataGridSource<IGFFTreeNodeViewModel> TreeData
+    private HierarchicalTreeDataGridSource<BaseGFFTreeNodeViewModel> _treeData;
+    public HierarchicalTreeDataGridSource<BaseGFFTreeNodeViewModel> TreeData
     {
         get => _treeData;
         set => this.RaiseAndSetIfChanged(ref _treeData, value);
@@ -104,10 +104,10 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         {
             Columns =
             {
-                new HierarchicalExpanderColumn<IGFFTreeNodeViewModel>(
-                    new TextColumn<IGFFTreeNodeViewModel, string>("Label", x => x.Label, GridLength.Star), x => x.Children, isExpandedSelector: x => x.Expanded),
-                new TextColumn<IGFFTreeNodeViewModel, string>("Type", x => x.Type, GridLength.Parse("100")),
-                new TextColumn<IGFFTreeNodeViewModel, string>("Value", x => x.Value, GridLength.Parse("150")),
+                new HierarchicalExpanderColumn<BaseGFFTreeNodeViewModel>(
+                    new TextColumn<BaseGFFTreeNodeViewModel, string>("Label", x => x.Label, GridLength.Star), x => x.Children, isExpandedSelector: x => x.Expanded),
+                new TextColumn<BaseGFFTreeNodeViewModel, string>("Type", x => x.Type, GridLength.Parse("100")),
+                new TextColumn<BaseGFFTreeNodeViewModel, string>("Value", x => x.Value, GridLength.Parse("150")),
             },
         };
     }
@@ -149,7 +149,7 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         History.Apply(action);
     }
 
-    public TTargetNode? NavigateTo<TTargetNode>(IEnumerable<object> path) where TTargetNode : IGFFTreeNodeViewModel
+    public TTargetNode? NavigateTo<TTargetNode>(IEnumerable<object> path) where TTargetNode : BaseGFFTreeNodeViewModel
     {
         IGFFTreeNodeViewModel? node = _rootNode;
 
@@ -220,9 +220,9 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
 
         return path;
     }
-    public IGFFTreeNodeViewModel FillPath(IEnumerable<object> path)
+    public BaseGFFTreeNodeViewModel FillPath(IEnumerable<object> path)
     {
-        IGFFTreeNodeViewModel node = _rootNode;
+        BaseGFFTreeNodeViewModel node = _rootNode;
 
         foreach (var step in path)
         {
@@ -231,7 +231,7 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
                 var nextNode = structNode.GetField(fieldLabel);
                 if (nextNode is null)
                 {
-                    structNode.AddField(new StructGFFTreeNodeViewModel(structNode, fieldLabel)); // TODO
+                    structNode.AddField(new StructGFFTreeNodeViewModel(structNode as BaseGFFTreeNodeViewModel, fieldLabel)); // TODO
                     node = structNode.GetField(fieldLabel);
                 }
                 else

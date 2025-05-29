@@ -57,7 +57,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
             var position = e.GetPosition(TreeDataGrid);
             var visual = (Visual?)TreeDataGrid.InputHitTest(position);
             var row = visual?.FindAncestorOfType<TreeDataGridRow>();
-            var data = (IGFFTreeNodeViewModel)TreeDataGrid?.RowSelection?.SelectedItem!;
+            var data = (BaseGFFTreeNodeViewModel)TreeDataGrid?.RowSelection?.SelectedItem!;
 
             if (row != null)
             {
@@ -149,7 +149,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
     }
     private void FieldStructPanel_FinishedEditing(object? sender, StructEditedEventArgs e)
     {
-        var action = new SetStructAction(Context.GetPathOf(e.ViewModel), e.OldValue, e.NewValue);
+        var action = new SetStructAction(Context.GetPathOf(e.ViewModel as BaseGFFTreeNodeViewModel), e.OldValue, e.NewValue);
         Context.History.Apply(action);
     }
     private void LabelInput_LostFocus(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -158,7 +158,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
         Context.History.Apply(action);
     }
 
-    private ContextMenu GetStructContextMenu(IGFFTreeNodeViewModel data)
+    private ContextMenu GetStructContextMenu(BaseGFFTreeNodeViewModel data)
     {
         var menu = new ContextMenu();
 
@@ -209,7 +209,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
 
     private void AddUInt8(BaseStructGFFTreeNodeViewModel parent)
     {
-        object[] path = [.. Context.GetPathOf(parent), "New UInt8"];
+        object[] path = [.. Context.GetPathOf(parent as BaseGFFTreeNodeViewModel), "New UInt8"];
         var action = new SetUInt8Action(path, null, 0);
         Context.History.Apply(action);
     }

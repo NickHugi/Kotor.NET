@@ -11,38 +11,17 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public class ListGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewModel
+public class ListGFFTreeNodeViewModel : IFieldGFFTreeNodeViewModel
 {
-    private string _label = "";
-    public string Label
+    public override string Type => "List";
+    public override string Value => $"";
+
+    private ObservableCollection<BaseGFFTreeNodeViewModel> _children = new([]);
+
+
+    public ListGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label) : base(parent)
     {
-        get => _label;
-        set => this.RaiseAndSetIfChanged(ref _label, value);
-    }
-
-    public bool CanEditLabel => true;
-
-    private bool _expanded;
-    public bool Expanded
-    {
-        get => _expanded;
-        set => this.RaiseAndSetIfChanged(ref _expanded, value);
-    }
-
-    public IGFFTreeNodeViewModel Parent { get; }
-
-    private ObservableCollection<IGFFTreeNodeViewModel> _children = new([]);
-    public ReadOnlyObservableCollection<IGFFTreeNodeViewModel> Children => new(_children);
-
-    public string Type => "List";
-    public string Value => $"";
-
-    public ListGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label)
-    {
-        Parent = parent;
         Label = label;
-
-        this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
     }
 
     public StructInListGFFTreeNodeViewModel AddStruct()
@@ -61,12 +40,26 @@ public class ListGFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewMod
 
     public void DeleteStruct(BaseStructGFFTreeNodeViewModel @struct)
     {
-        _children.Remove(@struct);
+        _children.Remove(@struct as BaseGFFTreeNodeViewModel);
     }
 
-    public void Delete()
+    public T AddField<T>(T field) where T : IFieldGFFTreeNodeViewModel
     {
-        ((BaseStructGFFTreeNodeViewModel)Parent).DeleteField(this);
+        _children.Add(field);
+        Expanded = true;
+        return field;
     }
+
+    public void DeleteField(IFieldGFFTreeNodeViewModel field)
+    {
+        _children.Remove(field);
+    }
+
+    public IFieldGFFTreeNodeViewModel? GetField(string label)
+    {
+        return (IFieldGFFTreeNodeViewModel?)Children.FirstOrDefault(x => x.Label == label);
+    }
+
+    public override void Delete() => throw new NotImplementedException();
 }
 

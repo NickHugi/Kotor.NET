@@ -39,7 +39,7 @@ public class GFFViewModel : ReactiveObject
     {
         var gffStruct = new GFFStruct((uint)vmStruct.StructID); // TODO
 
-        foreach (var vmChild in vmStruct.Children)
+        foreach (var vmChild in (vmStruct as BaseGFFTreeNodeViewModel).Children)
         {
             if (vmChild is UInt8GFFTreeNodeViewModel asUInt8) gffStruct.SetUInt8(asUInt8.Label, asUInt8.FieldValue);
             if (vmChild is Int8GFFTreeNodeViewModel asInt8) gffStruct.SetInt8(asInt8.Label, asInt8.FieldValue);

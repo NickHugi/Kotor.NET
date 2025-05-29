@@ -12,47 +12,13 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public class Vector3GFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeViewModel<Vector3ViewModel>
+public class Vector3GFFTreeNodeViewModel : IFieldGFFTreeNodeViewModel<Vector3ViewModel>
 {
-    private string _label = "";
-    public string Label
+    public override string Type => "Vector3";
+    public override string Value => $"{FieldValue.X}, {FieldValue.Y}, {FieldValue.Z}";
+
+    public Vector3GFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label) : base(parent, label)
     {
-        get => _label;
-        set => this.RaiseAndSetIfChanged(ref _label, value);
-    }
-
-    public bool CanEditLabel => true;
-
-    private Vector3ViewModel _fieldValue;
-    public Vector3ViewModel FieldValue
-    {
-        get => _fieldValue;
-        set => this.RaiseAndSetIfChanged(ref _fieldValue, value);
-    }
-
-    private bool _expanded;
-    public bool Expanded
-    {
-        get => _expanded;
-        set => this.RaiseAndSetIfChanged(ref _expanded, value);
-    }
-
-    public IGFFTreeNodeViewModel Parent { get; }
-
-    private ReadOnlyObservableCollection<IGFFTreeNodeViewModel> _children = new([]);
-    public ReadOnlyObservableCollection<IGFFTreeNodeViewModel> Children => _children;
-
-    public string Type => "Vector3";
-    public string Value => $"{FieldValue.X}, {FieldValue.Y}, {FieldValue.Z}";
-
-    public Vector3GFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label)
-    {
-        Parent = parent;
-        Label = label;
-        _fieldValue = new();
-
-        this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
-        this.ObservableForProperty(x => x.FieldValue).Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
         FieldValue.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
     }
     public Vector3GFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, Vector3ViewModel value) : this(parent, label)
@@ -67,11 +33,6 @@ public class Vector3GFFTreeNodeViewModel : ReactiveObject, IFieldGFFTreeNodeView
             Y = value.Y,
             Z = value.Z
         };
-    }
-
-    public void Delete()
-    {
-        ((BaseStructGFFTreeNodeViewModel)Parent).DeleteField(this);
     }
 }
 

@@ -9,16 +9,16 @@ using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
-public class SetStructAction : BaseSetNodeAction<BaseStructGFFTreeNodeViewModel, Int32?>
+public class SetStructAction : BaseSetNodeAction<BaseGFFTreeNodeViewModel, Int32?>
 {
     public SetStructAction(IEnumerable<object> path, Int32? oldValue, Int32? newValue)
         : base(path, oldValue, newValue)
     {
     }
 
-    protected override BaseStructGFFTreeNodeViewModel InstantiateNode(IGFFTreeNodeViewModel parentNode, Int32? value)
+    protected override BaseGFFTreeNodeViewModel InstantiateNode(IGFFTreeNodeViewModel parentNode, Int32? value)
     {
-        if (parentNode is RootStructGFFTreeNodeViewModel rootNode)
+        if (parentNode is BaseGFFTreeNodeViewModel rootNode)
         {
             return new StructGFFTreeNodeViewModel(parentNode, _name) { StructID = value.Value };
         }
@@ -32,36 +32,13 @@ public class SetStructAction : BaseSetNodeAction<BaseStructGFFTreeNodeViewModel,
         }
         else
         {
-            throw new NotSupportedException();
+            throw new InvalidOperationException();
         }
     }
 
-    protected override void SetNewValue(BaseStructGFFTreeNodeViewModel node)
-        => node.StructID = NewValue.Value;
+    protected override void SetNewValue(BaseGFFTreeNodeViewModel node)
+        => (node as BaseStructGFFTreeNodeViewModel).StructID = NewValue.Value;
 
-    protected override void SetOldValue(BaseStructGFFTreeNodeViewModel node)
-        => node.StructID = OldValue.Value;
+    protected override void SetOldValue(BaseGFFTreeNodeViewModel node)
+        => (node as BaseStructGFFTreeNodeViewModel).StructID = OldValue.Value;
 }
-
-//{
-//    public IEnumerable<object> Path { get; }
-//    public Int32 OldValue { get; }
-//    public Int32 NewValue { get; }
-
-//    public SetStructAction(IEnumerable<object> path, Int32 oldValue, Int32 newValue)
-//    {
-//        Path = path;
-//        OldValue = oldValue;
-//        NewValue = newValue;
-//    }
-
-//    public void Apply(GFFResourceEditorViewModel data)
-//    {
-//        Node.StructID = NewValue;
-//    }
-
-//    public void Undo(GFFResourceEditorViewModel data)
-//    {
-//        Node.StructID = OldValue;
-//    }
-//}

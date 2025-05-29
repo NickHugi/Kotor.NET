@@ -31,4 +31,9 @@ public class ResRefViewModel : ReactiveObject
     {
         return new() { Value = _value }; 
     }
+
+    public override string ToString()
+    {
+        return _value;
+    }
 }

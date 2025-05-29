@@ -17,7 +17,7 @@ public class SetUInt8Action : BaseSetNodeAction<UInt8GFFTreeNodeViewModel, byte?
     }
 
     protected override UInt8GFFTreeNodeViewModel InstantiateNode(IGFFTreeNodeViewModel parentNode, byte? value)
-        => new UInt8GFFTreeNodeViewModel((BaseStructGFFTreeNodeViewModel)parentNode, _name, (byte)value);
+        => new UInt8GFFTreeNodeViewModel(parentNode, _name, (byte)value);
 
     protected override void SetNewValue(UInt8GFFTreeNodeViewModel node)
         => node.FieldValue = NewValue!.Value;
