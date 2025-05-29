@@ -12,7 +12,13 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 public class RootStructGFFTreeNodeViewModel : BaseGFFTreeNodeViewModel, BaseStructGFFTreeNodeViewModel
 {
-    public int StructID { get; set; }
+    private int _structID;
+    public int StructID
+    {
+        get => _structID;
+        set => this.RaiseAndSetIfChanged(ref _structID, value);
+    }
+
     public override string Label
     {
         get => "";
