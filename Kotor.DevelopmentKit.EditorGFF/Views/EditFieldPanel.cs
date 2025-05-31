@@ -66,11 +66,8 @@ public abstract class EditFieldPanel<TNodeViewModel, TValueViewModel, TEventArgs
             {
                 RaiseFinishedEditing();
             }
-            else
-            {
-                CurrentValue = GetCurrentValue();
-            }
 
+            CurrentValue = GetCurrentValue();
             _transitoryNode = newNode;
         });
     }

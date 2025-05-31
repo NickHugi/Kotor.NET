@@ -22,6 +22,7 @@ public class Vector4GFFTreeNodeViewModel : IFieldGFFTreeNodeViewModel<Vector4Vie
 
     public Vector4GFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label) : base(parent, label)
     {
+        FieldValue = new();
         FieldValue.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
     }
     public Vector4GFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, Vector4ViewModel value) : this(parent, label)

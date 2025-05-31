@@ -22,6 +22,7 @@ public class LocalizedStringGFFTreeNodeViewModel : IFieldGFFTreeNodeViewModel<Lo
 
     public LocalizedStringGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label) : base(parent, label)
     {
+        FieldValue = new();
         FieldValue.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
         FieldValue.SubStrings.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
     }

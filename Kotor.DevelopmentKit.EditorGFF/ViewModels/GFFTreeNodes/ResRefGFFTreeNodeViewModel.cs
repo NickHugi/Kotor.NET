@@ -18,6 +18,7 @@ public class ResRefGFFTreeNodeViewModel : IFieldGFFTreeNodeViewModel<ResRefViewM
 
     public ResRefGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label) : base(parent, label)
     {
+        FieldValue = new();
         FieldValue.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
     }
     public ResRefGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, ResRefViewModel value) : this(parent, label)

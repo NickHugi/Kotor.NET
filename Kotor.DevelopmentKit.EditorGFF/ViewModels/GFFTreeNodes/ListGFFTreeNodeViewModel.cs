@@ -17,6 +17,7 @@ public class ListGFFTreeNodeViewModel : IFieldGFFTreeNodeViewModel
     public override string Value => $"";
 
     private ObservableCollection<BaseGFFTreeNodeViewModel> _children = new([]);
+    public override ReadOnlyObservableCollection<BaseGFFTreeNodeViewModel> Children => new(_children);
 
 
     public ListGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label) : base(parent)

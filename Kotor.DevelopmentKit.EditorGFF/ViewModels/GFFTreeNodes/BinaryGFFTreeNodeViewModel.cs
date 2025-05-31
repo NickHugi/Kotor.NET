@@ -17,6 +17,7 @@ public class BinaryGFFTreeNodeViewModel : IFieldGFFTreeNodeViewModel<byte[]>
 
     public BinaryGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label) : base(parent, label)
     {
+        FieldValue = new byte[0];
     }
     public BinaryGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, byte[] value) : this(parent, label)
     {
