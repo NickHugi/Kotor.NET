@@ -15,9 +15,9 @@ public interface IStructGFFTreeNodeViewModel : IGFFNodeViewModel
 {
     public int StructID { get; set; }
 
-    public T AddField<T>(T field) where T : IFieldGFFNodeViewModel;
-    public void DeleteField(IFieldGFFNodeViewModel field);
-    public IFieldGFFNodeViewModel? GetField(string label);
+    public T AddField<T>(T field) where T : BaseFieldGFFNodeViewModel;
+    public void DeleteField(BaseFieldGFFNodeViewModel field);
+    public BaseFieldGFFNodeViewModel? GetField(string label);
 
     public abstract void Delete();
 }
@@ -32,7 +32,7 @@ public static class IStructGFFTreeNodeViewModelExtensions
 
             foreach (var (label, value) in gffStruct.GetFields())
             {
-                IFieldGFFNodeViewModel vmNode = value switch
+                BaseFieldGFFNodeViewModel vmNode = value switch
                 {
                     Byte asUInt8 => new FieldUInt8GFFNodeViewModel(node, label, asUInt8),
                     SByte asInt8 => new FieldInt8GFFNodeViewModel(node, label, asInt8),

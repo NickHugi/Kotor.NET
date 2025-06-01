@@ -12,7 +12,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public class FieldVector3GFFNodeViewModel : IFieldGFFTreeNodeViewModel<Vector3ViewModel>
+public class FieldVector3GFFNodeViewModel : BaseFieldGFFTreeNodeViewModel<Vector3ViewModel>
 {
     public override string Type => "Vector3";
     public override string Value => $"{FieldValue.X}, {FieldValue.Y}, {FieldValue.Z}";

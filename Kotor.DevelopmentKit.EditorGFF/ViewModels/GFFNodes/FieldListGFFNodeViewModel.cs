@@ -11,7 +11,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public class FieldListGFFNodeViewModel : IFieldGFFNodeViewModel
+public class FieldListGFFNodeViewModel : BaseFieldGFFNodeViewModel
 {
     public override string Type => "List";
     public override string Value => $"";
@@ -21,6 +21,10 @@ public class FieldListGFFNodeViewModel : IFieldGFFNodeViewModel
 
 
     public FieldListGFFNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent)
+    {
+        Label = label;
+    }
+    public FieldListGFFNodeViewModel(IGFFNodeViewModel parent, string label, GFFList gffList) : this(parent, label)
     {
         Label = label;
     }
@@ -44,21 +48,21 @@ public class FieldListGFFNodeViewModel : IFieldGFFNodeViewModel
         _children.Remove(@struct as BaseGFFNodeViewModel);
     }
 
-    public T AddField<T>(T field) where T : IFieldGFFNodeViewModel
+    public T AddField<T>(T field) where T : BaseFieldGFFNodeViewModel
     {
         _children.Add(field);
         Expanded = true;
         return field;
     }
 
-    public void DeleteField(IFieldGFFNodeViewModel field)
+    public void DeleteField(BaseFieldGFFNodeViewModel field)
     {
         _children.Remove(field);
     }
 
-    public IFieldGFFNodeViewModel? GetField(string label)
+    public BaseFieldGFFNodeViewModel? GetField(string label)
     {
-        return (IFieldGFFNodeViewModel?)Children.FirstOrDefault(x => x.Label == label);
+        return (BaseFieldGFFNodeViewModel?)Children.FirstOrDefault(x => x.Label == label);
     }
 
     public override void Delete() => throw new NotImplementedException();

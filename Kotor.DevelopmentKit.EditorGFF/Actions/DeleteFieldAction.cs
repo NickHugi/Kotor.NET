@@ -11,9 +11,9 @@ namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
 public class DeleteFieldAction : IAction<GFFResourceEditorViewModel>
 {
-    public IFieldGFFNodeViewModel Node { get; }
+    public BaseFieldGFFNodeViewModel Node { get; }
 
-    public DeleteFieldAction(IFieldGFFNodeViewModel node)
+    public DeleteFieldAction(BaseFieldGFFNodeViewModel node)
     {
         Node = node;
     }

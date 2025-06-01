@@ -9,7 +9,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public class FieldSingleGFFNodeViewModel : IFieldGFFTreeNodeViewModel<float>
+public class FieldSingleGFFNodeViewModel : BaseFieldGFFTreeNodeViewModel<float>
 {
     public override string Type => "Single";
 

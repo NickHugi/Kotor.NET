@@ -154,7 +154,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
     }
     private void LabelInput_LostFocus(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        var action = new SetFieldLabel(Context.GetPathOf(Context.SelectedNode), ((IFieldGFFNodeViewModel)Context.SelectedNode).Label, ((TextBox)sender).Text);
+        var action = new SetFieldLabel(Context.GetPathOf(Context.SelectedNode), ((BaseFieldGFFNodeViewModel)Context.SelectedNode).Label, ((TextBox)sender).Text);
         Context.History.Apply(action);
     }
 
@@ -197,7 +197,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
             menu.Items.Add(new MenuItem() { Header = "Cut Struct", Command = ReactiveCommand.Create(() => { }) });
             menu.Items.Add(new MenuItem() { Header = "Delete Struct", Command = ReactiveCommand.Create(() => data.Delete()) });
         }
-        else if (data is IFieldGFFNodeViewModel field)
+        else if (data is BaseFieldGFFNodeViewModel field)
         {
             menu.Items.Add(new MenuItem() { Header = "Copy Field", Command = ReactiveCommand.Create(() => { }) });
             menu.Items.Add(new MenuItem() { Header = "Cut Field", Command = ReactiveCommand.Create(() => { }) });

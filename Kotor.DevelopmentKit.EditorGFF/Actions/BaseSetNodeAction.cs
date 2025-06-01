@@ -75,7 +75,7 @@ public abstract class BaseSetNodeAction<TNodeViewModel, TValueViewModel>
         if (parentNode is IStructGFFTreeNodeViewModel structNode)
         {
             var newNode = InstantiateNode(structNode, value);
-            structNode.AddField(newNode as IFieldGFFNodeViewModel);
+            structNode.AddField(newNode as BaseFieldGFFNodeViewModel);
             return newNode;
         }
         else if (parentNode is FieldListGFFNodeViewModel listNode)

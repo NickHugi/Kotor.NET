@@ -8,7 +8,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public abstract class IFieldGFFNodeViewModel : BaseGFFNodeViewModel
+public abstract class BaseFieldGFFNodeViewModel : BaseGFFNodeViewModel
 {
     public override string Value => "";
     public override bool CanEditLabel => true;
@@ -23,12 +23,12 @@ public abstract class IFieldGFFNodeViewModel : BaseGFFNodeViewModel
     private ReadOnlyObservableCollection<BaseGFFNodeViewModel> _children = new([]);
     public override ReadOnlyObservableCollection<BaseGFFNodeViewModel> Children => _children;
 
-    protected IFieldGFFNodeViewModel(IGFFNodeViewModel? parent) : base(parent)
+    protected BaseFieldGFFNodeViewModel(IGFFNodeViewModel? parent) : base(parent)
     {
     }
 }
 
-public abstract class IFieldGFFTreeNodeViewModel<T> : IFieldGFFNodeViewModel where T  :notnull
+public abstract class BaseFieldGFFTreeNodeViewModel<T> : BaseFieldGFFNodeViewModel where T : notnull
 {
     private T _fieldValue = default!;
     public T FieldValue
@@ -40,7 +40,7 @@ public abstract class IFieldGFFTreeNodeViewModel<T> : IFieldGFFNodeViewModel whe
     public override string Value => FieldValue?.ToString() ?? "";
 
 
-    public IFieldGFFTreeNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent)
+    public BaseFieldGFFTreeNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent)
     {
         Label = label;
 

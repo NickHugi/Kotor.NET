@@ -9,7 +9,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public class FieldUInt8GFFNodeViewModel : IFieldGFFTreeNodeViewModel<byte>
+public class FieldUInt8GFFNodeViewModel : BaseFieldGFFTreeNodeViewModel<byte>
 {
     public  override string Type => "UInt8";
 

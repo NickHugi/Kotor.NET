@@ -143,7 +143,7 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         new GFFBinarySerializer(gff).Serialize().Write(fileStream);
     }
 
-    public void DeleteField(IFieldGFFNodeViewModel field)
+    public void DeleteField(BaseFieldGFFNodeViewModel field)
     {
         var action = new DeleteFieldAction(field);
         History.Apply(action);
@@ -170,7 +170,7 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
             {
                 if (node is IStructGFFTreeNodeViewModel structNode)
                 {
-                    node = structNode.Children.OfType<IFieldGFFNodeViewModel>().FirstOrDefault(x => x.Label == fieldLabel);
+                    node = structNode.Children.OfType<BaseFieldGFFNodeViewModel>().FirstOrDefault(x => x.Label == fieldLabel);
                 }
                 else
                 {
@@ -203,7 +203,7 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
 
         while (next is not null)
         {
-            if (next is IFieldGFFNodeViewModel fieldNode)
+            if (next is BaseFieldGFFNodeViewModel fieldNode)
             {
                 path.Add(next.Label);
             }

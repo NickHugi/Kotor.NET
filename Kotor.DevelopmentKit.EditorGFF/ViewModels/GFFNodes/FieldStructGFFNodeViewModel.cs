@@ -11,7 +11,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public class FieldStructGFFNodeViewModel : IFieldGFFTreeNodeViewModel<Int32>, IStructGFFTreeNodeViewModel
+public class FieldStructGFFNodeViewModel : BaseFieldGFFTreeNodeViewModel<Int32>, IStructGFFTreeNodeViewModel
 {
     public override string Type => "Struct";
 
@@ -37,21 +37,21 @@ public class FieldStructGFFNodeViewModel : IFieldGFFTreeNodeViewModel<Int32>, IS
         //PopulateStruct(gffStruct);
     }
 
-    public T AddField<T>(T field) where T : IFieldGFFNodeViewModel
+    public T AddField<T>(T field) where T : BaseFieldGFFNodeViewModel
     {
         _children.Add(field);
         Expanded = true;
         return field;
     }
 
-    public void DeleteField(IFieldGFFNodeViewModel field)
+    public void DeleteField(BaseFieldGFFNodeViewModel field)
     {
         _children.Remove(field);
     }
 
-    public IFieldGFFNodeViewModel? GetField(string label)
+    public BaseFieldGFFNodeViewModel? GetField(string label)
     {
-        return (IFieldGFFNodeViewModel?)Children.FirstOrDefault(x => x.Label == label);
+        return (BaseFieldGFFNodeViewModel?)Children.FirstOrDefault(x => x.Label == label);
     }
 }
 

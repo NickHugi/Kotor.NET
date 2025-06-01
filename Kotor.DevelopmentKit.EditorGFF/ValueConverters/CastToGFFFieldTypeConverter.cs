@@ -13,7 +13,7 @@ public class CastToGFFFieldTypeConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is IFieldGFFNodeViewModel field)
+        if (value is BaseFieldGFFNodeViewModel field)
         {
             return field;
         }
