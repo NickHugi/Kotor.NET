@@ -11,7 +11,7 @@ namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
 public abstract class BaseSetNodeAction<TNodeViewModel, TValueViewModel>
     : IAction<GFFResourceEditorViewModel>
-    where TNodeViewModel : BaseGFFTreeNodeViewModel
+    where TNodeViewModel : BaseGFFNodeViewModel
 {
     public IEnumerable<object> Path { get; }
     public TValueViewModel OldValue { get; }
@@ -70,18 +70,18 @@ public abstract class BaseSetNodeAction<TNodeViewModel, TValueViewModel>
         }
     }
 
-    protected TNodeViewModel CreateNode(BaseGFFTreeNodeViewModel parentNode, TValueViewModel value)
+    protected TNodeViewModel CreateNode(BaseGFFNodeViewModel parentNode, TValueViewModel value)
     {
-        if (parentNode is BaseStructGFFTreeNodeViewModel structNode)
+        if (parentNode is IStructGFFTreeNodeViewModel structNode)
         {
             var newNode = InstantiateNode(structNode, value);
-            structNode.AddField(newNode as IFieldGFFTreeNodeViewModel);
+            structNode.AddField(newNode as IFieldGFFNodeViewModel);
             return newNode;
         }
-        else if (parentNode is ListGFFTreeNodeViewModel listNode)
+        else if (parentNode is FieldListGFFNodeViewModel listNode)
         {
             var newNode = InstantiateNode(parentNode, value);
-            listNode.AddStruct(newNode as StructInListGFFTreeNodeViewModel);
+            listNode.AddStruct(newNode as ListStructGFFNodeViewModel);
             return newNode;
         }
         else
@@ -90,7 +90,7 @@ public abstract class BaseSetNodeAction<TNodeViewModel, TValueViewModel>
         }
     }
 
-    protected abstract TNodeViewModel InstantiateNode(IGFFTreeNodeViewModel parentNode, TValueViewModel value);
+    protected abstract TNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, TValueViewModel value);
     protected abstract void SetNewValue(TNodeViewModel data);
     protected abstract void SetOldValue(TNodeViewModel data);
 }

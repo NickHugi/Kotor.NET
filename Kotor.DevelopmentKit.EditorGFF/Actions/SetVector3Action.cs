@@ -12,11 +12,11 @@ namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
 public class SetResRefAction : IAction<GFFResourceEditorViewModel>
 {
-    public ResRefGFFTreeNodeViewModel Node { get; }
+    public FieldResRefGFFNodeViewModel Node { get; }
     public ResRefViewModel OldValue { get; }
     public ResRefViewModel NewValue { get; }
 
-    public SetResRefAction(ResRefGFFTreeNodeViewModel node, ResRefViewModel oldValue, ResRefViewModel newValue)
+    public SetResRefAction(FieldResRefGFFNodeViewModel node, ResRefViewModel oldValue, ResRefViewModel newValue)
     {
         Node = node;
         OldValue = oldValue.Clone();

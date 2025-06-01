@@ -9,7 +9,7 @@ using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldVector4Panel : EditFieldPanel<Vector4GFFTreeNodeViewModel, Vector4ViewModel, Vector4EditedEventArgs>
+public partial class FieldVector4Panel : EditFieldPanel<FieldVector4GFFNodeViewModel, Vector4ViewModel, Vector4EditedEventArgs>
 {
     public FieldVector4Panel() : base()
     {

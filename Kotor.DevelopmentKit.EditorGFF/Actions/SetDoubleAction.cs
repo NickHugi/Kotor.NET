@@ -11,11 +11,11 @@ namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
 public class SetDoubleAction : IAction<GFFResourceEditorViewModel>
 {
-    public DoubleGFFTreeNodeViewModel Node { get; }
+    public FieldDoubleGFFNodeViewModel Node { get; }
     public Double OldValue { get; }
     public Double NewValue { get; }
 
-    public SetDoubleAction(DoubleGFFTreeNodeViewModel node, Double oldValue, Double newValue)
+    public SetDoubleAction(FieldDoubleGFFNodeViewModel node, Double oldValue, Double newValue)
     {
         Node = node;
         OldValue = oldValue;

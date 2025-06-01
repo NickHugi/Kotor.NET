@@ -8,21 +8,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public interface IGFFTreeNodeViewModel
-{
-    public string Label { get; set; }
-    public bool CanEditLabel { get; }
-
-    public string Type { get; }
-    public string Value { get; }
-
-    public IGFFTreeNodeViewModel? Parent { get; }
-    public ReadOnlyObservableCollection<BaseGFFTreeNodeViewModel> Children { get; }
-
-    //public void Delete();
-}
-
-public abstract class BaseGFFTreeNodeViewModel : ReactiveObject, IGFFTreeNodeViewModel
+public abstract class BaseGFFNodeViewModel : ReactiveObject, IGFFNodeViewModel
 {
     public abstract string Label { get; set; }
     public abstract bool CanEditLabel { get; }
@@ -40,11 +26,11 @@ public abstract class BaseGFFTreeNodeViewModel : ReactiveObject, IGFFTreeNodeVie
     public int Version { get; set; }
     public int SavedVersion { get; set; }
 
-    public IGFFTreeNodeViewModel? Parent { get; }
-    public abstract ReadOnlyObservableCollection<BaseGFFTreeNodeViewModel> Children { get; }
+    public IGFFNodeViewModel? Parent { get; }
+    public abstract ReadOnlyObservableCollection<BaseGFFNodeViewModel> Children { get; }
 
 
-    public BaseGFFTreeNodeViewModel(IGFFTreeNodeViewModel? parent)
+    public BaseGFFNodeViewModel(IGFFNodeViewModel? parent)
     {
         Parent = parent;
     }

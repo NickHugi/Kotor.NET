@@ -12,11 +12,11 @@ namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
 public class SetLocalizedStringAction : IAction<GFFResourceEditorViewModel>
 {
-    public LocalizedStringGFFTreeNodeViewModel Node { get; }
+    public FieldLocalizedStringGFFNodeViewModel Node { get; }
     public LocalizedStringViewModel OldValue { get; }
     public LocalizedStringViewModel NewValue { get; }
 
-    public SetLocalizedStringAction(LocalizedStringGFFTreeNodeViewModel node, LocalizedStringViewModel oldValue, LocalizedStringViewModel newValue)
+    public SetLocalizedStringAction(FieldLocalizedStringGFFNodeViewModel node, LocalizedStringViewModel oldValue, LocalizedStringViewModel newValue)
     {
         Node = node;
         OldValue = oldValue.Clone();

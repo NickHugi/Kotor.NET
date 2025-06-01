@@ -9,19 +9,19 @@ using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
-public class SetUInt8Action : BaseSetNodeAction<UInt8GFFTreeNodeViewModel, byte?>
+public class SetUInt8Action : BaseSetNodeAction<FieldUInt8GFFNodeViewModel, byte?>
 {
     public SetUInt8Action(IEnumerable<object> path, byte? oldValue, byte? newValue)
         : base(path, oldValue, newValue)
     {
     }
 
-    protected override UInt8GFFTreeNodeViewModel InstantiateNode(IGFFTreeNodeViewModel parentNode, byte? value)
-        => new UInt8GFFTreeNodeViewModel(parentNode, _name, (byte)value);
+    protected override FieldUInt8GFFNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, byte? value)
+        => new FieldUInt8GFFNodeViewModel(parentNode, _name, (byte)value);
 
-    protected override void SetNewValue(UInt8GFFTreeNodeViewModel node)
+    protected override void SetNewValue(FieldUInt8GFFNodeViewModel node)
         => node.FieldValue = NewValue!.Value;
 
-    protected override void SetOldValue(UInt8GFFTreeNodeViewModel node)
+    protected override void SetOldValue(FieldUInt8GFFNodeViewModel node)
         => node.FieldValue = OldValue!.Value;
 }

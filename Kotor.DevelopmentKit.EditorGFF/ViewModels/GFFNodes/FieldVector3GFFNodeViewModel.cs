@@ -12,21 +12,21 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public class Vector3GFFTreeNodeViewModel : IFieldGFFTreeNodeViewModel<Vector3ViewModel>
+public class FieldVector3GFFNodeViewModel : IFieldGFFTreeNodeViewModel<Vector3ViewModel>
 {
     public override string Type => "Vector3";
     public override string Value => $"{FieldValue.X}, {FieldValue.Y}, {FieldValue.Z}";
 
-    public Vector3GFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label) : base(parent, label)
+    public FieldVector3GFFNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent, label)
     {
         FieldValue = new();
         FieldValue.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
     }
-    public Vector3GFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, Vector3ViewModel value) : this(parent, label)
+    public FieldVector3GFFNodeViewModel(IGFFNodeViewModel parent, string label, Vector3ViewModel value) : this(parent, label)
     {
         FieldValue = value;
     }
-    public Vector3GFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, Vector3 value) : this(parent, label)
+    public FieldVector3GFFNodeViewModel(IGFFNodeViewModel parent, string label, Vector3 value) : this(parent, label)
     {
         FieldValue = new()
         {

@@ -11,11 +11,11 @@ namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
 public class SetBinaryAction : IAction<GFFResourceEditorViewModel>
 {
-    public BinaryGFFTreeNodeViewModel Node { get; }
+    public FieldBinaryGFFNodeViewModel Node { get; }
     public byte[] OldValue { get; }
     public byte[] NewValue { get; }
 
-    public SetBinaryAction(BinaryGFFTreeNodeViewModel node, byte[] oldValue, byte[] newValue)
+    public SetBinaryAction(FieldBinaryGFFNodeViewModel node, byte[] oldValue, byte[] newValue)
     {
         Node = node;
         OldValue = oldValue;

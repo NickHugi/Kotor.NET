@@ -20,17 +20,17 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels;
 
 public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewModel, GFF>
 {
-    private BaseGFFTreeNodeViewModel _selectedNode;
-    public BaseGFFTreeNodeViewModel SelectedNode
+    private BaseGFFNodeViewModel _selectedNode;
+    public BaseGFFNodeViewModel SelectedNode
     {
         get => _selectedNode;
         set => this.RaiseAndSetIfChanged(ref _selectedNode, value);
     }
 
-    private RootStructGFFTreeNodeViewModel _rootNode = new RootStructGFFTreeNodeViewModel();
+    private RootStructGFFNodeViewModel _rootNode = new RootStructGFFNodeViewModel();
 
-    private HierarchicalTreeDataGridSource<BaseGFFTreeNodeViewModel> _treeData;
-    public HierarchicalTreeDataGridSource<BaseGFFTreeNodeViewModel> TreeData
+    private HierarchicalTreeDataGridSource<BaseGFFNodeViewModel> _treeData;
+    public HierarchicalTreeDataGridSource<BaseGFFNodeViewModel> TreeData
     {
         get => _treeData;
         set => this.RaiseAndSetIfChanged(ref _treeData, value);
@@ -42,24 +42,24 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         get => _history;
     }
 
-    public bool IsSelectedNodeUInt8 => _selectedNode is UInt8GFFTreeNodeViewModel;
-    public bool IsSelectedNodeInt8 => _selectedNode is Int8GFFTreeNodeViewModel;
-    public bool IsSelectedNodeUInt16 => _selectedNode is UInt16GFFTreeNodeViewModel;
-    public bool IsSelectedNodeInt16 => _selectedNode is Int16GFFTreeNodeViewModel;
-    public bool IsSelectedNodeUInt32 => _selectedNode is UInt32GFFTreeNodeViewModel;
-    public bool IsSelectedNodeInt32 => _selectedNode is Int32GFFTreeNodeViewModel;
-    public bool IsSelectedNodeUInt64 => _selectedNode is UInt64GFFTreeNodeViewModel;
-    public bool IsSelectedNodeInt64 => _selectedNode is Int64GFFTreeNodeViewModel;
-    public bool IsSelectedNodeSingle => _selectedNode is SingleGFFTreeNodeViewModel;
-    public bool IsSelectedNodeDouble => _selectedNode is DoubleGFFTreeNodeViewModel;
-    public bool IsSelectedNodeResRef => _selectedNode is ResRefGFFTreeNodeViewModel;
-    public bool IsSelectedNodeString => _selectedNode is StringGFFTreeNodeViewModel;
-    public bool IsSelectedNodeLocalizedString => _selectedNode is LocalizedStringGFFTreeNodeViewModel;
-    public bool IsSelectedNodeBinary => _selectedNode is BinaryGFFTreeNodeViewModel;
-    public bool IsSelectedNodeVector3 => _selectedNode is Vector3GFFTreeNodeViewModel;
-    public bool IsSelectedNodeVector4 => _selectedNode is Vector4GFFTreeNodeViewModel;
-    public bool IsSelectedNodeStruct => _selectedNode is BaseStructGFFTreeNodeViewModel;
-    public bool IsSelectedNodeList => _selectedNode is ListGFFTreeNodeViewModel;
+    public bool IsSelectedNodeUInt8 => _selectedNode is FieldUInt8GFFNodeViewModel;
+    public bool IsSelectedNodeInt8 => _selectedNode is FieldInt8GFFNodeViewModel;
+    public bool IsSelectedNodeUInt16 => _selectedNode is FieldUInt16GFFNodeViewModel;
+    public bool IsSelectedNodeInt16 => _selectedNode is FieldInt16GFFNodeViewModel;
+    public bool IsSelectedNodeUInt32 => _selectedNode is FieldUInt32GFFNodeViewModel;
+    public bool IsSelectedNodeInt32 => _selectedNode is FieldInt32GFFNodeViewModel;
+    public bool IsSelectedNodeUInt64 => _selectedNode is FieldUInt64GFFNodeViewModel;
+    public bool IsSelectedNodeInt64 => _selectedNode is FieldInt64GFFNodeViewModel;
+    public bool IsSelectedNodeSingle => _selectedNode is FieldSingleGFFNodeViewModel;
+    public bool IsSelectedNodeDouble => _selectedNode is FieldDoubleGFFNodeViewModel;
+    public bool IsSelectedNodeResRef => _selectedNode is FieldResRefGFFNodeViewModel;
+    public bool IsSelectedNodeString => _selectedNode is FieldStringGFFNodeViewModel;
+    public bool IsSelectedNodeLocalizedString => _selectedNode is FieldLocalizedStringGFFNodeViewModel;
+    public bool IsSelectedNodeBinary => _selectedNode is FieldBinaryGFFNodeViewModel;
+    public bool IsSelectedNodeVector3 => _selectedNode is FieldVector3GFFNodeViewModel;
+    public bool IsSelectedNodeVector4 => _selectedNode is FieldVector4GFFNodeViewModel;
+    public bool IsSelectedNodeStruct => _selectedNode is IStructGFFTreeNodeViewModel;
+    public bool IsSelectedNodeList => _selectedNode is FieldListGFFNodeViewModel;
 
 
     public override string WindowTitlePrefix => throw new NotImplementedException();
@@ -97,17 +97,17 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         });
     }
 
-    private void CreateNewTree(RootStructGFFTreeNodeViewModel rootNode)
+    private void CreateNewTree(RootStructGFFNodeViewModel rootNode)
     {
         _rootNode = rootNode;
         TreeData = new(_rootNode)
         {
             Columns =
             {
-                new HierarchicalExpanderColumn<BaseGFFTreeNodeViewModel>(
-                    new TextColumn<BaseGFFTreeNodeViewModel, string>("Label", x => x.Label, GridLength.Star), x => x.Children, isExpandedSelector: x => x.Expanded),
-                new TextColumn<BaseGFFTreeNodeViewModel, string>("Type", x => x.Type, GridLength.Parse("100")),
-                new TextColumn<BaseGFFTreeNodeViewModel, string>("Value", x => x.Value, GridLength.Parse("150")),
+                new HierarchicalExpanderColumn<BaseGFFNodeViewModel>(
+                    new TextColumn<BaseGFFNodeViewModel, string>("Label", x => x.Label, GridLength.Star), x => x.Children, isExpandedSelector: x => x.Expanded),
+                new TextColumn<BaseGFFNodeViewModel, string>("Type", x => x.Type, GridLength.Parse("100")),
+                new TextColumn<BaseGFFNodeViewModel, string>("Value", x => x.Value, GridLength.Parse("150")),
             },
         };
     }
@@ -143,21 +143,21 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         new GFFBinarySerializer(gff).Serialize().Write(fileStream);
     }
 
-    public void DeleteField(IFieldGFFTreeNodeViewModel field)
+    public void DeleteField(IFieldGFFNodeViewModel field)
     {
         var action = new DeleteFieldAction(field);
         History.Apply(action);
     }
 
-    public TTargetNode? NavigateTo<TTargetNode>(IEnumerable<object> path) where TTargetNode : BaseGFFTreeNodeViewModel
+    public TTargetNode? NavigateTo<TTargetNode>(IEnumerable<object> path) where TTargetNode : BaseGFFNodeViewModel
     {
-        IGFFTreeNodeViewModel? node = _rootNode;
+        IGFFNodeViewModel? node = _rootNode;
 
         foreach (var step in path)
         {
             if (step is int listIndex)
             {
-                if (node is ListGFFTreeNodeViewModel listNode)
+                if (node is FieldListGFFNodeViewModel listNode)
                 {
                     node = listNode.Children[listIndex];
                 }
@@ -168,9 +168,9 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
             }
             else if (step is string fieldLabel)
             {
-                if (node is BaseStructGFFTreeNodeViewModel structNode)
+                if (node is IStructGFFTreeNodeViewModel structNode)
                 {
-                    node = structNode.Children.OfType<IFieldGFFTreeNodeViewModel>().FirstOrDefault(x => x.Label == fieldLabel);
+                    node = structNode.Children.OfType<IFieldGFFNodeViewModel>().FirstOrDefault(x => x.Label == fieldLabel);
                 }
                 else
                 {
@@ -196,20 +196,20 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
             throw new ArgumentException();
         }
     }
-    public IEnumerable<object> GetPathOf(IGFFTreeNodeViewModel node)
+    public IEnumerable<object> GetPathOf(IGFFNodeViewModel node)
     {
         var next = node;
         var path = new List<object>();
 
         while (next is not null)
         {
-            if (next is IFieldGFFTreeNodeViewModel fieldNode)
+            if (next is IFieldGFFNodeViewModel fieldNode)
             {
                 path.Add(next.Label);
             }
-            else if (next is StructInListGFFTreeNodeViewModel structInList)
+            else if (next is ListStructGFFNodeViewModel structInList)
             {
-                var listNode = (ListGFFTreeNodeViewModel)structInList.Parent;
+                var listNode = (FieldListGFFNodeViewModel)structInList.Parent;
                 path.Add(listNode.Children.IndexOf(structInList));
             }
 
@@ -220,18 +220,18 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
 
         return path;
     }
-    public BaseGFFTreeNodeViewModel FillPath(IEnumerable<object> path)
+    public BaseGFFNodeViewModel FillPath(IEnumerable<object> path)
     {
-        BaseGFFTreeNodeViewModel node = _rootNode;
+        BaseGFFNodeViewModel node = _rootNode;
 
         foreach (var step in path)
         {
-            if (node is BaseStructGFFTreeNodeViewModel structNode && step is string fieldLabel)
+            if (node is IStructGFFTreeNodeViewModel structNode && step is string fieldLabel)
             {
                 var nextNode = structNode.GetField(fieldLabel);
                 if (nextNode is null)
                 {
-                    structNode.AddField(new StructGFFTreeNodeViewModel(structNode as BaseGFFTreeNodeViewModel, fieldLabel)); // TODO
+                    structNode.AddField(new FieldStructGFFNodeViewModel(structNode as BaseGFFNodeViewModel, fieldLabel)); // TODO
                     node = structNode.GetField(fieldLabel);
                 }
                 else

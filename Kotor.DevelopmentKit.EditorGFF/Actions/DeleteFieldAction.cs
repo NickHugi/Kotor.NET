@@ -11,9 +11,9 @@ namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
 public class DeleteFieldAction : IAction<GFFResourceEditorViewModel>
 {
-    public IFieldGFFTreeNodeViewModel Node { get; }
+    public IFieldGFFNodeViewModel Node { get; }
 
-    public DeleteFieldAction(IFieldGFFTreeNodeViewModel node)
+    public DeleteFieldAction(IFieldGFFNodeViewModel node)
     {
         Node = node;
     }
@@ -25,7 +25,7 @@ public class DeleteFieldAction : IAction<GFFResourceEditorViewModel>
 
     public void Undo(GFFResourceEditorViewModel data)
     {
-        if (Node.Parent is BaseStructGFFTreeNodeViewModel vmStruct)
+        if (Node.Parent is IStructGFFTreeNodeViewModel vmStruct)
         {
             vmStruct.AddField(Node);
         }

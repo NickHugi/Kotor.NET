@@ -10,7 +10,7 @@ using Kotor.NET.Common.Data;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldLocalizedStringPanel : EditFieldPanel<LocalizedStringGFFTreeNodeViewModel, LocalizedStringViewModel, LocalizedStringEditedEventArgs>
+public partial class FieldLocalizedStringPanel : EditFieldPanel<FieldLocalizedStringGFFNodeViewModel, LocalizedStringViewModel, LocalizedStringEditedEventArgs>
 {
     public FieldLocalizedStringPanel() : base()
     {

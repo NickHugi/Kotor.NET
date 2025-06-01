@@ -8,7 +8,7 @@ using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldBinaryPanel : EditFieldPanel<BinaryGFFTreeNodeViewModel, byte[], BinaryEditedEventArgs>
+public partial class FieldBinaryPanel : EditFieldPanel<FieldBinaryGFFNodeViewModel, byte[], BinaryEditedEventArgs>
 {
     public FieldBinaryPanel() : base()
     {

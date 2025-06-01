@@ -13,7 +13,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldUInt16Panel : EditFieldPanel<UInt16GFFTreeNodeViewModel, UInt16, UInt16EditedEventArgs>
+public partial class FieldUInt16Panel : EditFieldPanel<FieldUInt16GFFNodeViewModel, UInt16, UInt16EditedEventArgs>
 {
     public FieldUInt16Panel() : base()
     {

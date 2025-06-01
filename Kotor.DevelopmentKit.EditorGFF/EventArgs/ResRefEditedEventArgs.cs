@@ -11,11 +11,11 @@ namespace Kotor.DevelopmentKit.EditorGFF.EventArgs;
 
 public class ResRefEditedEventArgs : RoutedEventArgs
 {
-    public ResRefGFFTreeNodeViewModel ViewModel { get; }
+    public FieldResRefGFFNodeViewModel ViewModel { get; }
     public ResRefViewModel NewValue { get; }
     public ResRefViewModel OldValue { get; }
 
-    public ResRefEditedEventArgs(RoutedEvent routedEvent, object source, ResRefGFFTreeNodeViewModel viewModel, ResRefViewModel newValue, ResRefViewModel oldValue)
+    public ResRefEditedEventArgs(RoutedEvent routedEvent, object source, FieldResRefGFFNodeViewModel viewModel, ResRefViewModel newValue, ResRefViewModel oldValue)
         : base(routedEvent, source)
     {
         ViewModel = viewModel;

@@ -11,11 +11,11 @@ namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
 public class SetInt32Action : IAction<GFFResourceEditorViewModel>
 {
-    public Int32GFFTreeNodeViewModel Node { get; }
+    public FieldInt32GFFNodeViewModel Node { get; }
     public Int32 OldValue { get; }
     public Int32 NewValue { get; }
 
-    public SetInt32Action(Int32GFFTreeNodeViewModel node, Int32 oldValue, Int32 newValue)
+    public SetInt32Action(FieldInt32GFFNodeViewModel node, Int32 oldValue, Int32 newValue)
     {
         Node = node;
         OldValue = oldValue;

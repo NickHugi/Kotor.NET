@@ -9,7 +9,7 @@ using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldResRefPanel : EditFieldPanel<ResRefGFFTreeNodeViewModel, ResRefViewModel, ResRefEditedEventArgs>
+public partial class FieldResRefPanel : EditFieldPanel<FieldResRefGFFNodeViewModel, ResRefViewModel, ResRefEditedEventArgs>
 {
     public FieldResRefPanel() : base()
     {

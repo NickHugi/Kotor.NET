@@ -8,7 +8,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public abstract class IFieldGFFTreeNodeViewModel : BaseGFFTreeNodeViewModel
+public abstract class IFieldGFFNodeViewModel : BaseGFFNodeViewModel
 {
     public override string Value => "";
     public override bool CanEditLabel => true;
@@ -20,15 +20,15 @@ public abstract class IFieldGFFTreeNodeViewModel : BaseGFFTreeNodeViewModel
         set => this.RaiseAndSetIfChanged(ref _label, value);
     }
 
-    private ReadOnlyObservableCollection<BaseGFFTreeNodeViewModel> _children = new([]);
-    public override ReadOnlyObservableCollection<BaseGFFTreeNodeViewModel> Children => _children;
+    private ReadOnlyObservableCollection<BaseGFFNodeViewModel> _children = new([]);
+    public override ReadOnlyObservableCollection<BaseGFFNodeViewModel> Children => _children;
 
-    protected IFieldGFFTreeNodeViewModel(IGFFTreeNodeViewModel? parent) : base(parent)
+    protected IFieldGFFNodeViewModel(IGFFNodeViewModel? parent) : base(parent)
     {
     }
 }
 
-public abstract class IFieldGFFTreeNodeViewModel<T> : IFieldGFFTreeNodeViewModel where T  :notnull
+public abstract class IFieldGFFTreeNodeViewModel<T> : IFieldGFFNodeViewModel where T  :notnull
 {
     private T _fieldValue = default!;
     public T FieldValue
@@ -40,7 +40,7 @@ public abstract class IFieldGFFTreeNodeViewModel<T> : IFieldGFFTreeNodeViewModel
     public override string Value => FieldValue?.ToString() ?? "";
 
 
-    public IFieldGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label) : base(parent)
+    public IFieldGFFTreeNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent)
     {
         Label = label;
 
@@ -50,7 +50,7 @@ public abstract class IFieldGFFTreeNodeViewModel<T> : IFieldGFFTreeNodeViewModel
 
     public override void Delete()
     {
-        if (Parent is BaseStructGFFTreeNodeViewModel parentStruct)
+        if (Parent is IStructGFFTreeNodeViewModel parentStruct)
         {
             parentStruct.DeleteField(this);
         }

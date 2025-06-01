@@ -10,11 +10,11 @@ namespace Kotor.DevelopmentKit.EditorGFF.EventArgs;
 
 public class UInt8EditedEventArgs : RoutedEventArgs
 {
-    public UInt8GFFTreeNodeViewModel ViewModel { get; }
+    public FieldUInt8GFFNodeViewModel ViewModel { get; }
     public byte NewValue { get; }
     public byte OldValue { get; }
 
-    public UInt8EditedEventArgs(RoutedEvent routedEvent, object source, UInt8GFFTreeNodeViewModel viewModel, byte newValue, byte oldValue)
+    public UInt8EditedEventArgs(RoutedEvent routedEvent, object source, FieldUInt8GFFNodeViewModel viewModel, byte newValue, byte oldValue)
         : base(routedEvent, source)
     {
         ViewModel = viewModel;

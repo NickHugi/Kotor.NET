@@ -11,11 +11,11 @@ namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
 public class SetInt64Action : IAction<GFFResourceEditorViewModel>
 {
-    public Int64GFFTreeNodeViewModel Node { get; }
+    public FieldInt64GFFNodeViewModel Node { get; }
     public Int64 OldValue { get; }
     public Int64 NewValue { get; }
 
-    public SetInt64Action(Int64GFFTreeNodeViewModel node, Int64 oldValue, Int64 newValue)
+    public SetInt64Action(FieldInt64GFFNodeViewModel node, Int64 oldValue, Int64 newValue)
     {
         Node = node;
         OldValue = oldValue;

@@ -9,11 +9,11 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public class Int16GFFTreeNodeViewModel : IFieldGFFTreeNodeViewModel<short>
+public class FieldDoubleGFFNodeViewModel : IFieldGFFTreeNodeViewModel<double>
 {
-    public override string Type => "Int16";
+    public override string Type => "Double";
 
-    public Int16GFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, short value = 0) : base(parent, label)
+    public FieldDoubleGFFNodeViewModel(IGFFNodeViewModel parent, string label, double value = 0) : base(parent, label)
     {
         FieldValue = value;
     }

@@ -12,20 +12,20 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public class ResRefGFFTreeNodeViewModel : IFieldGFFTreeNodeViewModel<ResRefViewModel>
+public class FieldResRefGFFNodeViewModel : IFieldGFFTreeNodeViewModel<ResRefViewModel>
 {
     public override string Type => "ResRef";
 
-    public ResRefGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label) : base(parent, label)
+    public FieldResRefGFFNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent, label)
     {
         FieldValue = new();
         FieldValue.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
     }
-    public ResRefGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, ResRefViewModel value) : this(parent, label)
+    public FieldResRefGFFNodeViewModel(IGFFNodeViewModel parent, string label, ResRefViewModel value) : this(parent, label)
     {
         FieldValue = value;
     }
-    public ResRefGFFTreeNodeViewModel(IGFFTreeNodeViewModel parent, string label, ResRef value) : this(parent, label)
+    public FieldResRefGFFNodeViewModel(IGFFNodeViewModel parent, string label, ResRef value) : this(parent, label)
     {
         FieldValue = new() { Value = value.Get() }; 
     }

@@ -11,11 +11,11 @@ namespace Kotor.DevelopmentKit.EditorGFF.EventArgs;
 
 public class Vector4EditedEventArgs : RoutedEventArgs
 {
-    public Vector4GFFTreeNodeViewModel ViewModel { get; }
+    public FieldVector4GFFNodeViewModel ViewModel { get; }
     public Vector4ViewModel NewValue { get; }
     public Vector4ViewModel OldValue { get; }
 
-    public Vector4EditedEventArgs(RoutedEvent routedEvent, object source, Vector4GFFTreeNodeViewModel viewModel, Vector4ViewModel newValue, Vector4ViewModel oldValue)
+    public Vector4EditedEventArgs(RoutedEvent routedEvent, object source, FieldVector4GFFNodeViewModel viewModel, Vector4ViewModel newValue, Vector4ViewModel oldValue)
         : base(routedEvent, source)
     {
         ViewModel = viewModel;

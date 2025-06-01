@@ -57,7 +57,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
             var position = e.GetPosition(TreeDataGrid);
             var visual = (Visual?)TreeDataGrid.InputHitTest(position);
             var row = visual?.FindAncestorOfType<TreeDataGridRow>();
-            var data = (BaseGFFTreeNodeViewModel)TreeDataGrid?.RowSelection?.SelectedItem!;
+            var data = (BaseGFFNodeViewModel)TreeDataGrid?.RowSelection?.SelectedItem!;
 
             if (row != null)
             {
@@ -149,20 +149,20 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
     }
     private void FieldStructPanel_FinishedEditing(object? sender, StructEditedEventArgs e)
     {
-        var action = new SetStructAction(Context.GetPathOf(e.ViewModel as BaseGFFTreeNodeViewModel), e.OldValue, e.NewValue);
+        var action = new SetStructAction(Context.GetPathOf(e.ViewModel as BaseGFFNodeViewModel), e.OldValue, e.NewValue);
         Context.History.Apply(action);
     }
     private void LabelInput_LostFocus(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        var action = new SetFieldLabel(Context.GetPathOf(Context.SelectedNode), ((IFieldGFFTreeNodeViewModel)Context.SelectedNode).Label, ((TextBox)sender).Text);
+        var action = new SetFieldLabel(Context.GetPathOf(Context.SelectedNode), ((IFieldGFFNodeViewModel)Context.SelectedNode).Label, ((TextBox)sender).Text);
         Context.History.Apply(action);
     }
 
-    private ContextMenu GetStructContextMenu(BaseGFFTreeNodeViewModel data)
+    private ContextMenu GetStructContextMenu(BaseGFFNodeViewModel data)
     {
         var menu = new ContextMenu();
 
-        if (data is BaseStructGFFTreeNodeViewModel dataAsStruct)
+        if (data is IStructGFFTreeNodeViewModel dataAsStruct)
         {
             menu.Items.Add(new MenuItem() { Header = "Add UInt8", Command = ReactiveCommand.Create(() => AddUInt8(dataAsStruct)) });
             menu.Items.Add(new MenuItem() { Header = "Add Int8", Command = ReactiveCommand.Create(() => AddInt8(dataAsStruct)) });
@@ -183,7 +183,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
             menu.Items.Add(new MenuItem() { Header = "Add Struct", Command = ReactiveCommand.Create(() => AddStruct(dataAsStruct)) });
             menu.Items.Add(new MenuItem() { Header = "Add List", Command = ReactiveCommand.Create(() => AddList(dataAsStruct)) });
         }
-        else if (data is ListGFFTreeNodeViewModel dataAsList)
+        else if (data is FieldListGFFNodeViewModel dataAsList)
         {
             menu.Items.Add(new MenuItem() { Header = "Add Struct", Command = ReactiveCommand.Create(() => dataAsList.AddStruct()) });
         }
@@ -191,13 +191,13 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
         if (menu.Items.Count > 0)
             menu.Items.Add(new Separator());
 
-        if (data is StructInListGFFTreeNodeViewModel dataAsStructInList)
+        if (data is ListStructGFFNodeViewModel dataAsStructInList)
         {
             menu.Items.Add(new MenuItem() { Header = "Copy Struct", Command = ReactiveCommand.Create(() => { }) });
             menu.Items.Add(new MenuItem() { Header = "Cut Struct", Command = ReactiveCommand.Create(() => { }) });
             menu.Items.Add(new MenuItem() { Header = "Delete Struct", Command = ReactiveCommand.Create(() => data.Delete()) });
         }
-        else if (data is IFieldGFFTreeNodeViewModel field)
+        else if (data is IFieldGFFNodeViewModel field)
         {
             menu.Items.Add(new MenuItem() { Header = "Copy Field", Command = ReactiveCommand.Create(() => { }) });
             menu.Items.Add(new MenuItem() { Header = "Cut Field", Command = ReactiveCommand.Create(() => { }) });
@@ -207,79 +207,79 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
         return menu;
     }
 
-    private void AddUInt8(BaseStructGFFTreeNodeViewModel parent)
+    private void AddUInt8(IStructGFFTreeNodeViewModel parent)
     {
-        object[] path = [.. Context.GetPathOf(parent as BaseGFFTreeNodeViewModel), "New UInt8"];
+        object[] path = [.. Context.GetPathOf(parent as BaseGFFNodeViewModel), "New UInt8"];
         var action = new SetUInt8Action(path, null, 0);
         Context.History.Apply(action);
     }
-    private void AddInt8(BaseStructGFFTreeNodeViewModel parent)
+    private void AddInt8(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new Int8GFFTreeNodeViewModel(parent, "New Int8"));
+        parent.AddField(new FieldInt8GFFNodeViewModel(parent, "New Int8"));
     }
-    private void AddUInt16(BaseStructGFFTreeNodeViewModel parent)
+    private void AddUInt16(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new UInt16GFFTreeNodeViewModel(parent, "New UInt16"));
+        parent.AddField(new FieldUInt16GFFNodeViewModel(parent, "New UInt16"));
     }
-    private void AddInt16(BaseStructGFFTreeNodeViewModel parent)
+    private void AddInt16(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new Int16GFFTreeNodeViewModel(parent, "New Int16"));
+        parent.AddField(new FieldInt16GFFNodeViewModel(parent, "New Int16"));
     }
-    private void AddUInt32(BaseStructGFFTreeNodeViewModel parent)
+    private void AddUInt32(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new UInt32GFFTreeNodeViewModel(parent, "New UInt32"));
+        parent.AddField(new FieldUInt32GFFNodeViewModel(parent, "New UInt32"));
     }
-    private void AddInt32(BaseStructGFFTreeNodeViewModel parent)
+    private void AddInt32(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new Int32GFFTreeNodeViewModel(parent, "New Int32"));
+        parent.AddField(new FieldInt32GFFNodeViewModel(parent, "New Int32"));
     }
-    private void AddUInt64(BaseStructGFFTreeNodeViewModel parent)
+    private void AddUInt64(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new UInt64GFFTreeNodeViewModel(parent, "New UInt64"));
+        parent.AddField(new FieldUInt64GFFNodeViewModel(parent, "New UInt64"));
     }
-    private void AddInt64(BaseStructGFFTreeNodeViewModel parent)
+    private void AddInt64(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new Int64GFFTreeNodeViewModel(parent, "New UInt64"));
+        parent.AddField(new FieldInt64GFFNodeViewModel(parent, "New UInt64"));
     }
-    private void AddSingle(BaseStructGFFTreeNodeViewModel parent)
+    private void AddSingle(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new SingleGFFTreeNodeViewModel(parent, "New Single"));
+        parent.AddField(new FieldSingleGFFNodeViewModel(parent, "New Single"));
     }
-    private void AddDouble(BaseStructGFFTreeNodeViewModel parent)
+    private void AddDouble(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new DoubleGFFTreeNodeViewModel(parent, "New Double"));
+        parent.AddField(new FieldDoubleGFFNodeViewModel(parent, "New Double"));
     }
-    private void AddResRef(BaseStructGFFTreeNodeViewModel parent)
+    private void AddResRef(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new ResRefGFFTreeNodeViewModel(parent, "New ResRef"));
+        parent.AddField(new FieldResRefGFFNodeViewModel(parent, "New ResRef"));
     }
-    private void AddString(BaseStructGFFTreeNodeViewModel parent)
+    private void AddString(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new StringGFFTreeNodeViewModel(parent, "New String"));
+        parent.AddField(new FieldStringGFFNodeViewModel(parent, "New String"));
     }
-    private void AddLocalizedString(BaseStructGFFTreeNodeViewModel parent)
+    private void AddLocalizedString(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new LocalizedStringGFFTreeNodeViewModel(parent, "New Localized String"));
+        parent.AddField(new FieldLocalizedStringGFFNodeViewModel(parent, "New Localized String"));
     }
-    private void AddBinary(BaseStructGFFTreeNodeViewModel parent)
+    private void AddBinary(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new BinaryGFFTreeNodeViewModel(parent, "New Binary"));
+        parent.AddField(new FieldBinaryGFFNodeViewModel(parent, "New Binary"));
     }
-    private void AddVector3(BaseStructGFFTreeNodeViewModel parent)
+    private void AddVector3(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new Vector3GFFTreeNodeViewModel(parent, "New Vector3"));
+        parent.AddField(new FieldVector3GFFNodeViewModel(parent, "New Vector3"));
     }
-    private void AddVector4(BaseStructGFFTreeNodeViewModel parent)
+    private void AddVector4(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new Vector4GFFTreeNodeViewModel(parent, "New Vector4"));
+        parent.AddField(new FieldVector4GFFNodeViewModel(parent, "New Vector4"));
     }
-    private void AddStruct(BaseStructGFFTreeNodeViewModel parent)
+    private void AddStruct(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new StructGFFTreeNodeViewModel(parent, "New Struct"));
+        parent.AddField(new FieldStructGFFNodeViewModel(parent, "New Struct"));
     }
-    private void AddList(BaseStructGFFTreeNodeViewModel parent)
+    private void AddList(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new ListGFFTreeNodeViewModel(parent, "New List"));
+        parent.AddField(new FieldListGFFNodeViewModel(parent, "New List"));
     }
 
 

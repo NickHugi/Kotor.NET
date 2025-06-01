@@ -8,7 +8,7 @@ using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldInt16Panel : EditFieldPanel<Int16GFFTreeNodeViewModel, Int16, Int16EditedEventArgs>
+public partial class FieldInt16Panel : EditFieldPanel<FieldInt16GFFNodeViewModel, Int16, Int16EditedEventArgs>
 {
     public FieldInt16Panel() : base()
     {

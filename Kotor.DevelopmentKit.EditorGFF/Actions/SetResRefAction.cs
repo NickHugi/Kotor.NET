@@ -12,11 +12,11 @@ namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
 public class SetVector3Action : IAction<GFFResourceEditorViewModel>
 {
-    public Vector3GFFTreeNodeViewModel Node { get; }
+    public FieldVector3GFFNodeViewModel Node { get; }
     public Vector3ViewModel OldValue { get; }
     public Vector3ViewModel NewValue { get; }
 
-    public SetVector3Action(Vector3GFFTreeNodeViewModel node, Vector3ViewModel oldValue, Vector3ViewModel newValue)
+    public SetVector3Action(FieldVector3GFFNodeViewModel node, Vector3ViewModel oldValue, Vector3ViewModel newValue)
     {
         Node = node;
         OldValue = oldValue.Clone();

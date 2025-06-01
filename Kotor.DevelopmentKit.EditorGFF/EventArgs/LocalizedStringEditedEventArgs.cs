@@ -11,11 +11,11 @@ namespace Kotor.DevelopmentKit.EditorGFF.EventArgs;
 
 public class LocalizedStringEditedEventArgs : RoutedEventArgs
 {
-    public LocalizedStringGFFTreeNodeViewModel ViewModel { get; }
+    public FieldLocalizedStringGFFNodeViewModel ViewModel { get; }
     public LocalizedStringViewModel NewValue { get; }
     public LocalizedStringViewModel OldValue { get; }
 
-    public LocalizedStringEditedEventArgs(RoutedEvent routedEvent, object source, LocalizedStringGFFTreeNodeViewModel viewModel, LocalizedStringViewModel newValue, LocalizedStringViewModel oldValue)
+    public LocalizedStringEditedEventArgs(RoutedEvent routedEvent, object source, FieldLocalizedStringGFFNodeViewModel viewModel, LocalizedStringViewModel newValue, LocalizedStringViewModel oldValue)
         : base(routedEvent, source)
     {
         ViewModel = viewModel;

@@ -11,11 +11,11 @@ namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
 public class SetSingleAction : IAction<GFFResourceEditorViewModel>
 {
-    public SingleGFFTreeNodeViewModel Node { get; }
+    public FieldSingleGFFNodeViewModel Node { get; }
     public Single OldValue { get; }
     public Single NewValue { get; }
 
-    public SetSingleAction(SingleGFFTreeNodeViewModel node, Single oldValue, Single newValue)
+    public SetSingleAction(FieldSingleGFFNodeViewModel node, Single oldValue, Single newValue)
     {
         Node = node;
         OldValue = oldValue;

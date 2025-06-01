@@ -9,26 +9,26 @@ using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
-public class SetStructAction : BaseSetNodeAction<BaseGFFTreeNodeViewModel, Int32?>
+public class SetStructAction : BaseSetNodeAction<BaseGFFNodeViewModel, Int32?>
 {
     public SetStructAction(IEnumerable<object> path, Int32? oldValue, Int32? newValue)
         : base(path, oldValue, newValue)
     {
     }
 
-    protected override BaseGFFTreeNodeViewModel InstantiateNode(IGFFTreeNodeViewModel parentNode, Int32? value)
+    protected override BaseGFFNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, Int32? value)
     {
-        if (parentNode is BaseGFFTreeNodeViewModel rootNode)
+        if (parentNode is BaseGFFNodeViewModel rootNode)
         {
-            return new StructGFFTreeNodeViewModel(parentNode, _name) { StructID = value.Value };
+            return new FieldStructGFFNodeViewModel(parentNode, _name) { StructID = value.Value };
         }
-        else if (parentNode is ListGFFTreeNodeViewModel listNode)
+        else if (parentNode is FieldListGFFNodeViewModel listNode)
         {
-            return new StructInListGFFTreeNodeViewModel(parentNode) { StructID = value.Value };
+            return new ListStructGFFNodeViewModel(parentNode) { StructID = value.Value };
         }
-        else if (parentNode is StructGFFTreeNodeViewModel structNode)
+        else if (parentNode is FieldStructGFFNodeViewModel structNode)
         {
-            return new StructGFFTreeNodeViewModel(parentNode, _name) { StructID = value.Value };
+            return new FieldStructGFFNodeViewModel(parentNode, _name) { StructID = value.Value };
         }
         else
         {
@@ -36,9 +36,9 @@ public class SetStructAction : BaseSetNodeAction<BaseGFFTreeNodeViewModel, Int32
         }
     }
 
-    protected override void SetNewValue(BaseGFFTreeNodeViewModel node)
-        => (node as BaseStructGFFTreeNodeViewModel).StructID = NewValue.Value;
+    protected override void SetNewValue(BaseGFFNodeViewModel node)
+        => (node as IStructGFFTreeNodeViewModel).StructID = NewValue.Value;
 
-    protected override void SetOldValue(BaseGFFTreeNodeViewModel node)
-        => (node as BaseStructGFFTreeNodeViewModel).StructID = OldValue.Value;
+    protected override void SetOldValue(BaseGFFNodeViewModel node)
+        => (node as IStructGFFTreeNodeViewModel).StructID = OldValue.Value;
 }
