@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Xml.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -13,6 +15,7 @@ using Kotor.DevelopmentKit.Base.Common;
 using Kotor.DevelopmentKit.Base.Views;
 using Kotor.DevelopmentKit.EditorGFF.Actions;
 using Kotor.DevelopmentKit.EditorGFF.EventArgs;
+using Kotor.DevelopmentKit.EditorGFF.Services;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 using Kotor.NET.Common.Data;
@@ -25,8 +28,6 @@ namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
 public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel, GFFViewModel, GFF>
 {
-    public GFFResourceEditorViewModel Context => (GFFResourceEditorViewModel)DataContext!;
-
     public override FilePickerFileType AllValidFilePickerFileTypes => new FilePickerFileType("All Valid Options")
     {
         Patterns = [.. FilePickerTypes.GFF.Patterns!, .. FilePickerTypes.Encapsulated.Patterns!],
@@ -44,6 +45,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
         FileTypeChoices = [FilePickerTypes.GFF, FilePickerTypes.Encapsulated, AllValidFilePickerFileTypes, FilePickerTypes.All],
     };
     public override List<ResourceType> ResourceTypes => [ResourceType.GFF];
+
 
     public MainWindow()
     {
@@ -158,11 +160,11 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
         Context.History.Apply(action);
     }
 
-    private ContextMenu GetStructContextMenu(BaseGFFNodeViewModel data)
+    private ContextMenu GetStructContextMenu(BaseGFFNodeViewModel node)
     {
         var menu = new ContextMenu();
 
-        if (data is IStructGFFTreeNodeViewModel dataAsStruct)
+        if (node is IStructGFFTreeNodeViewModel dataAsStruct)
         {
             menu.Items.Add(new MenuItem() { Header = "Add UInt8", Command = ReactiveCommand.Create(() => AddUInt8(dataAsStruct)) });
             menu.Items.Add(new MenuItem() { Header = "Add Int8", Command = ReactiveCommand.Create(() => AddInt8(dataAsStruct)) });
@@ -183,7 +185,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
             menu.Items.Add(new MenuItem() { Header = "Add Struct", Command = ReactiveCommand.Create(() => AddStruct(dataAsStruct)) });
             menu.Items.Add(new MenuItem() { Header = "Add List", Command = ReactiveCommand.Create(() => AddList(dataAsStruct)) });
         }
-        else if (data is FieldListGFFNodeViewModel dataAsList)
+        else if (node is FieldListGFFNodeViewModel dataAsList)
         {
             menu.Items.Add(new MenuItem() { Header = "Add Struct", Command = ReactiveCommand.Create(() => dataAsList.AddStruct()) });
         }
@@ -191,17 +193,19 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
         if (menu.Items.Count > 0)
             menu.Items.Add(new Separator());
 
-        if (data is ListStructGFFNodeViewModel dataAsStructInList)
+        if (node is ListStructGFFNodeViewModel dataAsStructInList)
         {
-            menu.Items.Add(new MenuItem() { Header = "Copy Struct", Command = ReactiveCommand.Create(() => { }) });
-            menu.Items.Add(new MenuItem() { Header = "Cut Struct", Command = ReactiveCommand.Create(() => { }) });
-            menu.Items.Add(new MenuItem() { Header = "Delete Struct", Command = ReactiveCommand.Create(() => data.Delete()) });
+            menu.Items.Add(new MenuItem() { Header = "Paste Node", Command = ReactiveCommand.Create(() => PasteNode()) });
+            menu.Items.Add(new MenuItem() { Header = "Copy Struct", Command = ReactiveCommand.Create(async () => await CopyNode(node)) });
+            menu.Items.Add(new MenuItem() { Header = "Cut Struct", Command = ReactiveCommand.Create(async() => await CutNode(node)) });
+            menu.Items.Add(new MenuItem() { Header = "Delete Struct", Command = ReactiveCommand.Create(() => DeleteNode(node)) });
         }
-        else if (data is BaseFieldGFFNodeViewModel field)
+        else if (node is BaseFieldGFFNodeViewModel field)
         {
-            menu.Items.Add(new MenuItem() { Header = "Copy Field", Command = ReactiveCommand.Create(() => { }) });
-            menu.Items.Add(new MenuItem() { Header = "Cut Field", Command = ReactiveCommand.Create(() => { }) });
-            menu.Items.Add(new MenuItem() { Header = "Delete Field", Command = ReactiveCommand.Create(() => Context.DeleteField(field)) });
+            menu.Items.Add(new MenuItem() { Header = "Paste Node", Command = ReactiveCommand.Create(() => PasteNode()) });
+            menu.Items.Add(new MenuItem() { Header = "Copy Field", Command = ReactiveCommand.Create(async () => CopyNode(node)) });
+            menu.Items.Add(new MenuItem() { Header = "Cut Field", Command = ReactiveCommand.Create(async () => CutNode(node)) });
+            menu.Items.Add(new MenuItem() { Header = "Delete Field", Command = ReactiveCommand.Create(async () => DeleteNode(node)) });
         }
 
         return menu;
@@ -282,7 +286,73 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
         parent.AddField(new FieldListGFFNodeViewModel(parent, "New List"));
     }
 
+    private async Task CutNode(BaseGFFNodeViewModel node)
+    {
+        await CopyNode(node);
+        DeleteNode(node);
+    }
 
+    private void DeleteNode(BaseGFFNodeViewModel node)
+    {
+        Context.DeleteNode(node);
+    }
+
+    private async Task CopyNode(BaseGFFNodeViewModel node)
+    {
+        var serilizeService = new SerializeNodeService();
+        var text = serilizeService.Serialize(node);
+        await Clipboard!.SetTextAsync(text);
+    }
+
+    private async Task PasteNode()
+    {
+        var deserializeNodeService = new DeserializeNodeService();
+        var selectedNode = Context.SelectedNode;
+
+        if (await HasStructOnClipboard())
+        {
+            var text = await Clipboard!.GetTextAsync();
+            var node = deserializeNodeService.Deserialize(selectedNode, text);
+        }
+        else if (await HasFieldOnClipboard() && selectedNode is IStructGFFTreeNodeViewModel selectedStructNode)
+        {
+            var text = await Clipboard!.GetTextAsync();
+            var node = (BaseFieldGFFNodeViewModel)deserializeNodeService.Deserialize(selectedNode, text);
+            selectedStructNode.AddField(node);
+        }
+        else
+        {
+            throw new NotSupportedException();
+        }
+    }
+
+    private async Task<bool> HasStructOnClipboard()
+    {
+        try
+        {
+            var clipboard = await Clipboard!.GetTextAsync();
+            var document = XDocument.Parse(clipboard);
+            return document.Elements().FirstOrDefault()?.Name?.ToString() == "Struct";
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    private async Task<bool> HasFieldOnClipboard()
+    {
+        try
+        {
+            var clipboard = await Clipboard!.GetTextAsync();
+            var document = XDocument.Parse(clipboard);
+            return document.Elements().FirstOrDefault()?.Name?.ToString() == "Field";
+        }
+        catch
+        {
+            return false;
+        }
+    }
 
     public void Undo()
     {

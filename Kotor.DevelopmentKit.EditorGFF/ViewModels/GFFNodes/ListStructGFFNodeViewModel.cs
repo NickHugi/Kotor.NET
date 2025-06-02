@@ -40,6 +40,10 @@ public class ListStructGFFNodeViewModel : BaseGFFNodeViewModel, IStructGFFTreeNo
     {
         this.PopulateStruct(gffStruct);
     }
+    public ListStructGFFNodeViewModel(IGFFNodeViewModel parent, int structID) : base(parent)
+    {
+        StructID = structID;
+    }
 
     public override void Delete()
     {

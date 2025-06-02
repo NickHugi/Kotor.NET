@@ -35,5 +35,14 @@ public class FieldVector3GFFNodeViewModel : BaseFieldGFFTreeNodeViewModel<Vector
             Z = value.Z
         };
     }
+    public FieldVector3GFFNodeViewModel(IGFFNodeViewModel parent, string label, float x, float y, float z) : this(parent, label)
+    {
+        FieldValue = new()
+        {
+            X = x,
+            Y = y,
+            Z = z
+        };
+    }
 }
 

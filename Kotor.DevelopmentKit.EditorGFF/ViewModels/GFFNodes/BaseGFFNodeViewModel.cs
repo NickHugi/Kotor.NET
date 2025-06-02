@@ -29,6 +29,29 @@ public abstract class BaseGFFNodeViewModel : ReactiveObject, IGFFNodeViewModel
     public IGFFNodeViewModel? Parent { get; }
     public abstract ReadOnlyObservableCollection<BaseGFFNodeViewModel> Children { get; }
 
+    public IEnumerable<string> Path
+    {
+        get
+        {
+            var path = new List<string>();
+            IGFFNodeViewModel cursor = this;
+            while (cursor.Parent is not null)
+            {
+                if ((BaseGFFNodeViewModel)cursor is ListStructGFFNodeViewModel structInList)
+                {
+                    path.Add(structInList.Children.IndexOf(structInList).ToString());
+                }
+                else
+                {
+                    path.Add(cursor.Label);
+                }
+                cursor = cursor.Parent;
+            }
+            path.Reverse();
+            return path;
+        }
+    }
+
 
     public BaseGFFNodeViewModel(IGFFNodeViewModel? parent)
     {

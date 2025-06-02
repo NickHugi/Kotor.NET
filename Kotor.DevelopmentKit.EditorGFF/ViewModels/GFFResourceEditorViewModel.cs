@@ -143,9 +143,9 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         new GFFBinarySerializer(gff).Serialize().Write(fileStream);
     }
 
-    public void DeleteField(BaseFieldGFFNodeViewModel field)
+    public void DeleteNode(BaseGFFNodeViewModel node)
     {
-        var action = new DeleteFieldAction(field);
+        var action = new DeleteFieldAction(node);
         History.Apply(action);
     }
 

@@ -18,6 +18,7 @@ public class GFFViewModel : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref _rootNode, value);
     }
 
+
     public GFFViewModel()
     {
         RootNode = new();

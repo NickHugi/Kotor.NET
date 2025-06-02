@@ -41,11 +41,15 @@ public class LocalizedStringViewModel : ReactiveObject
         this.WhenPropertyChanged(x => x.SelectedSubstring).Subscribe(x => this.RaisePropertyChanged(nameof(IsSubStringSelected)));
     }
 
-
     public void AddSubString()
     {
         SubStrings.Add(new());
     }
+    public void AddSubString(LocalizedSubStringViewModel substring)
+    {
+        SubStrings.Add(substring);
+    }
+
     public void RemoveSelectedSubString()
     {
         if (SelectedSubstring is not null)
