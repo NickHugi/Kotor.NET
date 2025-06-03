@@ -28,6 +28,18 @@ public abstract class BaseFieldGFFNodeViewModel : BaseGFFNodeViewModel
     protected BaseFieldGFFNodeViewModel(IGFFNodeViewModel? parent) : base(parent)
     {
     }
+
+    public override void Delete()
+    {
+        if (Parent is IStructGFFTreeNodeViewModel parentStruct)
+        {
+            parentStruct.DeleteField(this);
+        }
+        else
+        {
+            throw new InvalidOperationException();
+        }
+    }
 }
 
 public abstract class BaseFieldGFFTreeNodeViewModel<T> : BaseFieldGFFNodeViewModel where T : notnull
@@ -48,17 +60,5 @@ public abstract class BaseFieldGFFTreeNodeViewModel<T> : BaseFieldGFFNodeViewMod
 
         this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
         this.ObservableForProperty(x => x.FieldValue).Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
-    }
-
-    public override void Delete()
-    {
-        if (Parent is IStructGFFTreeNodeViewModel parentStruct)
-        {
-            parentStruct.DeleteField(this);
-        }
-        else
-        {
-            throw new InvalidOperationException();
-        }
     }
 }

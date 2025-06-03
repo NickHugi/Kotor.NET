@@ -64,7 +64,5 @@ public class FieldListGFFNodeViewModel : BaseFieldGFFNodeViewModel
     {
         return (BaseFieldGFFNodeViewModel?)Children.FirstOrDefault(x => x.Label == label);
     }
-
-    public override void Delete() => throw new NotImplementedException();
 }
 
