@@ -14,13 +14,13 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 public class FieldVector3GFFNodeViewModel : BaseFieldGFFTreeNodeViewModel<Vector3ViewModel>
 {
-    public override string Type => "Vector3";
-    public override string Value => $"{FieldValue.X}, {FieldValue.Y}, {FieldValue.Z}";
+    public override string DisplayType => "Vector3";
+    public override string DisplayValue => $"{FieldValue.X}, {FieldValue.Y}, {FieldValue.Z}";
 
     public FieldVector3GFFNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent, label)
     {
         FieldValue = new();
-        FieldValue.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
+        FieldValue.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(DisplayValue)));
     }
     public FieldVector3GFFNodeViewModel(IGFFNodeViewModel parent, string label, Vector3ViewModel value) : this(parent, label)
     {

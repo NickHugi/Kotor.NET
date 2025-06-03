@@ -15,16 +15,16 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 public class FieldLocalizedStringGFFNodeViewModel : BaseFieldGFFTreeNodeViewModel<LocalizedStringViewModel>
 {
-    public override string Type => "Localized String";
-    public override string Value => FieldValue.StringRef == -1
+    public override string DisplayType => "Localized String";
+    public override string DisplayValue => FieldValue.StringRef == -1
         ? $"[{FieldValue.StringRef}]"
         : FieldValue.SubStrings.FirstOrDefault(x => x.Language == Language.English)?.Text?.ToString() ?? "";
 
     public FieldLocalizedStringGFFNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent, label)
     {
         FieldValue = new();
-        FieldValue.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
-        FieldValue.SubStrings.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
+        FieldValue.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(DisplayValue)));
+        FieldValue.SubStrings.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(DisplayValue)));
     }
     public FieldLocalizedStringGFFNodeViewModel(IGFFNodeViewModel parent, string label, LocalizedStringViewModel value) : this(parent, label)
     {

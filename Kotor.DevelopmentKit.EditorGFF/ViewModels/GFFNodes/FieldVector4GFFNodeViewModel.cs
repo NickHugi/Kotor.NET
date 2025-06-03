@@ -17,13 +17,13 @@ public class FieldVector4GFFNodeViewModel : BaseFieldGFFTreeNodeViewModel<Vector
     private ReadOnlyObservableCollection<BaseGFFNodeViewModel> _children = new([]);
     public override ReadOnlyObservableCollection<BaseGFFNodeViewModel> Children => _children;
 
-    public override string Type => "Vector4";
-    public override string Value => $"{FieldValue.X}, {FieldValue.Y}, {FieldValue.Z}, {FieldValue.W}";
+    public override string DisplayType => "Vector4";
+    public override string DisplayValue => $"{FieldValue.X}, {FieldValue.Y}, {FieldValue.Z}, {FieldValue.W}";
 
     public FieldVector4GFFNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent, label)
     {
         FieldValue = new();
-        FieldValue.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
+        FieldValue.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(DisplayValue)));
     }
     public FieldVector4GFFNodeViewModel(IGFFNodeViewModel parent, string label, Vector4ViewModel value) : this(parent, label)
     {

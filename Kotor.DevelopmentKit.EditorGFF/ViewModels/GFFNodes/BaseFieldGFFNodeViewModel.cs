@@ -11,7 +11,7 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 public abstract class BaseFieldGFFNodeViewModel : BaseGFFNodeViewModel
 {
-    public override string Value => "";
+    public override string DisplayValue => "";
     public override bool CanEditLabel => true;
 
     private string _label = "";
@@ -51,7 +51,7 @@ public abstract class BaseFieldGFFTreeNodeViewModel<T> : BaseFieldGFFNodeViewMod
         set => this.RaiseAndSetIfChanged(ref _fieldValue, value);
     }
 
-    public override string Value => FieldValue?.ToString() ?? "";
+    public override string DisplayValue => FieldValue?.ToString() ?? "";
 
 
     public BaseFieldGFFTreeNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent)
@@ -59,6 +59,6 @@ public abstract class BaseFieldGFFTreeNodeViewModel<T> : BaseFieldGFFNodeViewMod
         Label = label;
 
         this.ObservableForProperty(x => x.Label).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
-        this.ObservableForProperty(x => x.FieldValue).Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
+        this.ObservableForProperty(x => x.FieldValue).Subscribe(x => this.RaisePropertyChanged(nameof(DisplayValue)));
     }
 }

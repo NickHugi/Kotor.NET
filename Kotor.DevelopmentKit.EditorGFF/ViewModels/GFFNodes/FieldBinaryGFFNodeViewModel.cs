@@ -11,8 +11,8 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 public class FieldBinaryGFFNodeViewModel : BaseFieldGFFTreeNodeViewModel<byte[]>
 {
-    public override string Type => "Binary";
-    public override string Value => $"";
+    public override string DisplayType => "Binary";
+    public override string DisplayValue => $"";
 
 
     public FieldBinaryGFFNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent, label)

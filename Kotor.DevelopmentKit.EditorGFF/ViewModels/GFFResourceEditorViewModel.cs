@@ -106,8 +106,8 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
             {
                 new HierarchicalExpanderColumn<BaseGFFNodeViewModel>(
                     new TextColumn<BaseGFFNodeViewModel, string>("Label", x => x.Label, GridLength.Star), x => x.Children, isExpandedSelector: x => x.Expanded),
-                new TextColumn<BaseGFFNodeViewModel, string>("Type", x => x.Type, GridLength.Parse("100")),
-                new TextColumn<BaseGFFNodeViewModel, string>("Value", x => x.Value, GridLength.Parse("150")),
+                new TextColumn<BaseGFFNodeViewModel, string>("Type", x => x.DisplayType, GridLength.Parse("100")),
+                new TextColumn<BaseGFFNodeViewModel, string>("Value", x => x.DisplayValue, GridLength.Parse("150")),
             },
         };
     }

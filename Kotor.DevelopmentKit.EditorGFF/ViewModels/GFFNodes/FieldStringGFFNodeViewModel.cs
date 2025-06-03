@@ -11,7 +11,7 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 public class FieldStringGFFNodeViewModel : BaseFieldGFFTreeNodeViewModel<string>
 {
-    public override string Type => "String";
+    public override string DisplayType => "String";
 
     public FieldStringGFFNodeViewModel(IGFFNodeViewModel parent, string label, string value = "") : base(parent, label)
     {

@@ -13,8 +13,8 @@ public abstract class BaseGFFNodeViewModel : ReactiveObject, IGFFNodeViewModel
     public abstract string Label { get; set; }
     public abstract bool CanEditLabel { get; }
 
-    public abstract string Type { get; }
-    public abstract string Value { get; }
+    public abstract string DisplayType { get; }
+    public abstract string DisplayValue { get; }
 
     private bool _expanded = true;
     public bool Expanded

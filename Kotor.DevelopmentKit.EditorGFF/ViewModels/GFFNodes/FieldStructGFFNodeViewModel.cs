@@ -13,7 +13,7 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 public class FieldStructGFFNodeViewModel : BaseFieldGFFTreeNodeViewModel<Int32>, IStructGFFTreeNodeViewModel
 {
-    public override string Type => "Struct";
+    public override string DisplayType => "Struct";
 
     public int StructID
     {

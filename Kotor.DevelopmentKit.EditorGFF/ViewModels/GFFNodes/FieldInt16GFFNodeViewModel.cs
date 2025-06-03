@@ -11,7 +11,7 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 public class FieldInt16GFFNodeViewModel : BaseFieldGFFTreeNodeViewModel<short>
 {
-    public override string Type => "Int16";
+    public override string DisplayType => "Int16";
 
     public FieldInt16GFFNodeViewModel(IGFFNodeViewModel parent, string label, short value = 0) : base(parent, label)
     {

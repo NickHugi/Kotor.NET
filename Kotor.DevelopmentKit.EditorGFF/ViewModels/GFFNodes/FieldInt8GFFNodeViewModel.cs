@@ -11,7 +11,7 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 public class FieldInt8GFFNodeViewModel : BaseFieldGFFTreeNodeViewModel<sbyte>
 {
-    public override string Type => "Int8";
+    public override string DisplayType => "Int8";
 
     public FieldInt8GFFNodeViewModel(IGFFNodeViewModel parent, string label, sbyte value = 0) : base(parent, label)
     {

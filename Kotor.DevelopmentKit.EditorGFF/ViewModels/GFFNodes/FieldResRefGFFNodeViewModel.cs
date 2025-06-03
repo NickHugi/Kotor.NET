@@ -14,12 +14,12 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 public class FieldResRefGFFNodeViewModel : BaseFieldGFFTreeNodeViewModel<ResRefViewModel>
 {
-    public override string Type => "ResRef";
+    public override string DisplayType => "ResRef";
 
     public FieldResRefGFFNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent, label)
     {
         FieldValue = new();
-        FieldValue.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(Value)));
+        FieldValue.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(DisplayValue)));
     }
     public FieldResRefGFFNodeViewModel(IGFFNodeViewModel parent, string label, ResRefViewModel value) : this(parent, label)
     {

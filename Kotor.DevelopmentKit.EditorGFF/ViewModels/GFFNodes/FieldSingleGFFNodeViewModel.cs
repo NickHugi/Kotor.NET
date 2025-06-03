@@ -11,7 +11,7 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 public class FieldSingleGFFNodeViewModel : BaseFieldGFFTreeNodeViewModel<float>
 {
-    public override string Type => "Single";
+    public override string DisplayType => "Single";
 
     public FieldSingleGFFNodeViewModel(IGFFNodeViewModel parent, string label, float value = 0) : base(parent, label)
     {

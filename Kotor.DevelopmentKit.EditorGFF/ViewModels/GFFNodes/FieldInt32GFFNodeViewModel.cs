@@ -11,7 +11,7 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 public class FieldInt32GFFNodeViewModel : BaseFieldGFFTreeNodeViewModel<int>
 {
-    public override string Type => "Int32";
+    public override string DisplayType => "Int32";
 
     public FieldInt32GFFNodeViewModel(IGFFNodeViewModel parent, string label, int value = 0) : base(parent, label)
     {

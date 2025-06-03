@@ -11,7 +11,7 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 public class FieldDoubleGFFNodeViewModel : BaseFieldGFFTreeNodeViewModel<double>
 {
-    public override string Type => "Double";
+    public override string DisplayType => "Double";
 
     public FieldDoubleGFFNodeViewModel(IGFFNodeViewModel parent, string label, double value = 0) : base(parent, label)
     {

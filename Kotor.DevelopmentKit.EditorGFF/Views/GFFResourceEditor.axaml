@@ -56,7 +56,7 @@
                     <StackPanel>
                         <StackPanel Orientation="Vertical">
                             <TextBlock Foreground="Gray">Type</TextBlock>
-                            <editor-views:FieldTypeComboBox FieldType="{Binding SelectedNode.Type}" />
+                            <editor-views:FieldTypeComboBox FieldType="{Binding SelectedNode.DisplayType}" />
                         </StackPanel>
                         <StackPanel Orientation="Vertical">
                             <TextBlock Foreground="Gray">Label</TextBlock>

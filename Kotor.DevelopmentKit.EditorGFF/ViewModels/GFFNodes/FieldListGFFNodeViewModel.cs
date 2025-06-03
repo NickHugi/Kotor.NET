@@ -13,8 +13,8 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 public class FieldListGFFNodeViewModel : BaseFieldGFFNodeViewModel
 {
-    public override string Type => "List";
-    public override string Value => $"";
+    public override string DisplayType => "List";
+    public override string DisplayValue => $"";
 
     private ObservableCollection<BaseGFFNodeViewModel> _children = new([]);
     public override ReadOnlyObservableCollection<BaseGFFNodeViewModel> Children => new(_children);

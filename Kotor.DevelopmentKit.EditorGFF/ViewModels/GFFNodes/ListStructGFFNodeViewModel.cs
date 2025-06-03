@@ -19,8 +19,8 @@ public class ListStructGFFNodeViewModel : BaseGFFNodeViewModel, IStructGFFTreeNo
         set => throw new NotImplementedException();
     }
     public override bool CanEditLabel => false;
-    public override string Type => "Struct";
-    public override string Value => StructID.ToString();
+    public override string DisplayType => "Struct";
+    public override string DisplayValue => StructID.ToString();
 
     private int _structID;
     public int StructID
