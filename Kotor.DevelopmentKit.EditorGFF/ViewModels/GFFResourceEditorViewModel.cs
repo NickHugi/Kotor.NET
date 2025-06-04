@@ -10,6 +10,7 @@ using DynamicData.Binding;
 using Kotor.DevelopmentKit.Base.Common;
 using Kotor.DevelopmentKit.Base.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.Actions;
+using Kotor.DevelopmentKit.EditorGFF.Models;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Formats.Binary2DA.Serialisation;
@@ -149,6 +150,12 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         History.Apply(action);
     }
 
+    public TTargetNode? NavigateTo<TTargetNode>(params NodePath[] path) where TTargetNode : BaseGFFNodeViewModel
+    {
+        var fullPath = path.SelectMany(x => x);
+        var node = NavigateTo<TTargetNode>(fullPath);
+        return node;
+    }
     public TTargetNode? NavigateTo<TTargetNode>(IEnumerable<object> path) where TTargetNode : BaseGFFNodeViewModel
     {
         IGFFNodeViewModel? node = _rootNode;

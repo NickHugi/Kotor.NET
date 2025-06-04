@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.Base.Common;
+using Kotor.DevelopmentKit.EditorGFF.Models;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
@@ -13,15 +14,15 @@ public abstract class BaseSetNodeAction<TNodeViewModel, TValueViewModel>
     : IAction<GFFResourceEditorViewModel>
     where TNodeViewModel : BaseGFFNodeViewModel
 {
-    public IEnumerable<object> Path { get; }
+    public NodePath ExistingPath { get; }
+    public NodePath CreatePath { get; }
     public TValueViewModel OldValue { get; }
     public TValueViewModel NewValue { get; }
 
-    protected string _name => Path.Last().ToString();
-
-    public BaseSetNodeAction(IEnumerable<object> path, TValueViewModel oldValue, TValueViewModel newValue)
+    public BaseSetNodeAction(NodePath existingPath, NodePath createPath, TValueViewModel oldValue, TValueViewModel newValue)
     {
-        Path = path;
+        ExistingPath = existingPath;
+        CreatePath = createPath;
         OldValue = oldValue;
         NewValue = newValue;
     }
@@ -30,22 +31,8 @@ public abstract class BaseSetNodeAction<TNodeViewModel, TValueViewModel>
     {
         var node = data.NavigateTo<TNodeViewModel>(Path);
 
-        if (NewValue is null)
-        {
-           node!.Delete();
-        }
-        else
-        {
-            if (node is null)
-            {
-                var parentNode = data.FillPath(Path.SkipLast(1));
-                node = CreateNode(parentNode, NewValue);
-            }
-            else
-            {
-                SetNewValue(node);
-            }
-        }
+        var parentNode = data.FillPath(Path.SkipLast(1));
+        node = CreateNode(parentNode, NewValue);
     }
 
     public void Undo(GFFResourceEditorViewModel data)
