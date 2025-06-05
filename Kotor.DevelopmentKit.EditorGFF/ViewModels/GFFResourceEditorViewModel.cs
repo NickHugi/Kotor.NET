@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
+using Avalonia.Controls.Shapes;
 using Avalonia.Threading;
 using DynamicData;
 using DynamicData.Binding;
@@ -29,6 +30,7 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
     }
 
     private RootStructGFFNodeViewModel _rootNode = new RootStructGFFNodeViewModel();
+    public RootStructGFFNodeViewModel RootNode => _rootNode;
 
     private HierarchicalTreeDataGridSource<BaseGFFNodeViewModel> _treeData;
     public HierarchicalTreeDataGridSource<BaseGFFNodeViewModel> TreeData
@@ -150,83 +152,6 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         History.Apply(action);
     }
 
-    public TTargetNode? NavigateTo<TTargetNode>(params NodePath[] path) where TTargetNode : BaseGFFNodeViewModel
-    {
-        var fullPath = path.SelectMany(x => x);
-        var node = NavigateTo<TTargetNode>(fullPath);
-        return node;
-    }
-    public TTargetNode? NavigateTo<TTargetNode>(IEnumerable<object> path) where TTargetNode : BaseGFFNodeViewModel
-    {
-        IGFFNodeViewModel? node = _rootNode;
-
-        foreach (var step in path)
-        {
-            if (step is int listIndex)
-            {
-                if (node is FieldListGFFNodeViewModel listNode)
-                {
-                    node = listNode.Children[listIndex];
-                }
-                else
-                {
-                    throw new ArgumentException();
-                }
-            }
-            else if (step is string fieldLabel)
-            {
-                if (node is IStructGFFTreeNodeViewModel structNode)
-                {
-                    node = structNode.Children.OfType<BaseFieldGFFNodeViewModel>().FirstOrDefault(x => x.Label == fieldLabel);
-                }
-                else
-                {
-                    throw new ArgumentException();
-                }
-            }
-            else
-            {
-                throw new ArgumentException();
-            }
-        }
-
-        if (node is null)
-        {
-            return default;
-        }
-        else if (node is TTargetNode targetNode)
-        {
-            return targetNode;
-        }
-        else
-        {
-            throw new ArgumentException();
-        }
-    }
-    public IEnumerable<object> GetPathOf(IGFFNodeViewModel node)
-    {
-        var next = node;
-        var path = new List<object>();
-
-        while (next is not null)
-        {
-            if (next is BaseFieldGFFNodeViewModel fieldNode)
-            {
-                path.Add(next.Label);
-            }
-            else if (next is ListStructGFFNodeViewModel structInList)
-            {
-                var listNode = (FieldListGFFNodeViewModel)structInList.Parent;
-                path.Add(listNode.Children.IndexOf(structInList));
-            }
-
-            next = next.Parent;
-        }
-
-        path.Reverse();
-
-        return path;
-    }
     public BaseGFFNodeViewModel FillPath(IEnumerable<object> path)
     {
         BaseGFFNodeViewModel node = _rootNode;
@@ -249,6 +174,25 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         }
 
         return node;
+    }
+
+    public void SetUInt8Node(NodePath path, byte value)
+    {
+        var (existing, missing) = RootNode.SplitPath(new NodePath(path.SkipLast(1)));
+        if (missing.Count() > 1)
+        {
+            var fillAction = new CreatePathAction(existing, missing);
+            History.Apply(fillAction);
+        }
+
+        var node = RootNode.NavigateTo<FieldUInt8GFFNodeViewModel>(path);
+        var oldValue = node?.FieldValue;
+
+        if (value == oldValue)
+            return;
+
+        var setAction = new SetUInt8Action(path, oldValue, value);
+        History.Apply(setAction);
     }
 
     public void Undo()

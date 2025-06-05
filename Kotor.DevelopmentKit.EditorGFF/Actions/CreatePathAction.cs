@@ -23,14 +23,14 @@ public class CreatePathAction : IAction<GFFResourceEditorViewModel>
 
     public void Apply(GFFResourceEditorViewModel data)
     {
-        var node = data.NavigateTo<BaseFieldGFFNodeViewModel>(ExistingPath);
+        var node = data.RootNode.NavigateTo<BaseFieldGFFNodeViewModel>(ExistingPath);
         data.FillPath(CreatePath);
     }
 
     public void Undo(GFFResourceEditorViewModel data)
     {
-        var node = data.NavigateTo<BaseFieldGFFNodeViewModel>(ExistingPath);
-        var createdRootNode = data.NavigateTo<BaseFieldGFFNodeViewModel>(CreatePath, new NodePath(ExistingPath.Head))!;
+        var node = data.RootNode.NavigateTo<BaseFieldGFFNodeViewModel>(ExistingPath);
+        var createdRootNode = data.RootNode.NavigateTo<BaseFieldGFFNodeViewModel>(CreatePath, new NodePath(ExistingPath.Head))!;
         createdRootNode.Delete();
     }
 }

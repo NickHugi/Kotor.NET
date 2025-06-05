@@ -12,7 +12,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public class FieldResRefGFFNodeViewModel : BaseFieldGFFTreeNodeViewModel<ResRefViewModel>
+public class FieldResRefGFFNodeViewModel : BaseFieldGFFNodeViewModel<ResRefViewModel>
 {
     public override string DisplayType => "ResRef";
 

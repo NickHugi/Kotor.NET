@@ -25,11 +25,11 @@ public class SetFieldLabel : IAction<GFFResourceEditorViewModel>
 
     public void Apply(GFFResourceEditorViewModel data)
     {
-        data.NavigateTo<BaseFieldGFFNodeViewModel>(OldPath).Label = NewLabel;
+        data.RootNode.NavigateTo<BaseFieldGFFNodeViewModel>(OldPath).Label = NewLabel;
     }
 
     public void Undo(GFFResourceEditorViewModel data)
     {
-        data.NavigateTo<BaseFieldGFFNodeViewModel>(NewPath).Label = NewLabel;
+        data.RootNode.NavigateTo<BaseFieldGFFNodeViewModel>(NewPath).Label = NewLabel;
     }
 }

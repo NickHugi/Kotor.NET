@@ -15,6 +15,7 @@ using Kotor.DevelopmentKit.Base.Common;
 using Kotor.DevelopmentKit.Base.Views;
 using Kotor.DevelopmentKit.EditorGFF.Actions;
 using Kotor.DevelopmentKit.EditorGFF.EventArgs;
+using Kotor.DevelopmentKit.EditorGFF.Models;
 using Kotor.DevelopmentKit.EditorGFF.Services;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
@@ -71,8 +72,12 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
     }
     private void FieldUInt8Panel_FinishedEditing(object? sender, UInt8EditedEventArgs e)
     {
-        var action = new SetUInt8Action(Context.GetPathOf(e.ViewModel), e.OldValue, e.NewValue);
-        Context.History.Apply(action);
+        Context.SetUInt8Node(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
+        //if (e.OldValue == e.NewValue)
+        //    return;
+
+        //var action = new SetUInt8Action(Context.RootNode.GetPathOf(e.EditedNode), e.OldValue, e.NewValue);
+        //Context.History.Apply(action);
     }
     private void FieldInt8Panel_FinishedEditing(object? sender, Int8EditedEventArgs e)
     {
@@ -81,7 +86,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
     }
     private void FieldUInt16Panel_FinishedEditing(object? sender, UInt16EditedEventArgs e)
     {
-        var action = new SetUInt16Action(Context.GetPathOf(e.ViewModel), e.OldValue, e.NewValue);
+        var action = new SetUInt16Action(Context.RootNode.GetPathOf(e.ViewModel), e.OldValue, e.NewValue);
         Context.History.Apply(action);
     }
     private void FieldInt16Panel_FinishedEditing(object? sender, Int16EditedEventArgs e)
@@ -151,12 +156,12 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
     }
     private void FieldStructPanel_FinishedEditing(object? sender, StructEditedEventArgs e)
     {
-        var action = new SetStructAction(Context.GetPathOf(e.ViewModel as BaseGFFNodeViewModel), e.OldValue, e.NewValue);
+        var action = new SetStructAction(Context.RootNode.GetPathOf(e.ViewModel as BaseGFFNodeViewModel), e.OldValue, e.NewValue);
         Context.History.Apply(action);
     }
     private void LabelInput_LostFocus(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        var action = new SetFieldLabel(Context.GetPathOf(Context.SelectedNode), ((BaseFieldGFFNodeViewModel)Context.SelectedNode).Label, ((TextBox)sender).Text);
+        var action = new SetFieldLabel(Context.RootNode.GetPathOf(Context.SelectedNode), ((BaseFieldGFFNodeViewModel)Context.SelectedNode).Label, ((TextBox)sender).Text);
         Context.History.Apply(action);
     }
 
@@ -213,7 +218,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
 
     private void AddUInt8(IStructGFFTreeNodeViewModel parent)
     {
-        object[] path = [.. Context.GetPathOf(parent as BaseGFFNodeViewModel), "New UInt8"];
+        object[] path = [.. Context.RootNode.GetPathOf(parent as BaseGFFNodeViewModel), "New UInt8"];
         var action = new SetUInt8Action(path, null, 0);
         Context.History.Apply(action);
     }

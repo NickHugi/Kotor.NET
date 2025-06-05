@@ -12,7 +12,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public class FieldVector4GFFNodeViewModel : BaseFieldGFFTreeNodeViewModel<Vector4ViewModel>
+public class FieldVector4GFFNodeViewModel : BaseFieldGFFNodeViewModel<Vector4ViewModel>
 {
     private ReadOnlyObservableCollection<BaseGFFNodeViewModel> _children = new([]);
     public override ReadOnlyObservableCollection<BaseGFFNodeViewModel> Children => _children;

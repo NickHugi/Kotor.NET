@@ -24,11 +24,11 @@ public class SetUInt16Action : IAction<GFFResourceEditorViewModel>
 
     public void Apply(GFFResourceEditorViewModel data)
     {
-        data.NavigateTo<FieldUInt16GFFNodeViewModel>(Path)!.FieldValue = NewValue;
+        data.RootNode.NavigateTo<FieldUInt16GFFNodeViewModel>(Path)!.FieldValue = NewValue;
     }
 
     public void Undo(GFFResourceEditorViewModel data)
     {
-        data.NavigateTo<FieldUInt16GFFNodeViewModel>(Path)!.FieldValue = NewValue;
+        data.RootNode.NavigateTo<FieldUInt16GFFNodeViewModel>(Path)!.FieldValue = NewValue;
     }
 }

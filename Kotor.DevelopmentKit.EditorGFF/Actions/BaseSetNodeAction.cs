@@ -14,41 +14,53 @@ public abstract class BaseSetNodeAction<TNodeViewModel, TValueViewModel>
     : IAction<GFFResourceEditorViewModel>
     where TNodeViewModel : BaseGFFNodeViewModel
 {
-    public NodePath ExistingPath { get; }
-    public NodePath CreatePath { get; }
+    public NodePath Path { get; }
     public TValueViewModel OldValue { get; }
     public TValueViewModel NewValue { get; }
 
-    public BaseSetNodeAction(NodePath existingPath, NodePath createPath, TValueViewModel oldValue, TValueViewModel newValue)
+    public BaseSetNodeAction(NodePath path, TValueViewModel oldValue, TValueViewModel newValue)
     {
-        ExistingPath = existingPath;
-        CreatePath = createPath;
+        Path = path;
         OldValue = oldValue;
         NewValue = newValue;
     }
 
     public void Apply(GFFResourceEditorViewModel data)
     {
-        var node = data.NavigateTo<TNodeViewModel>(Path);
+        var node = data.RootNode.NavigateTo<TNodeViewModel>(Path);
 
-        var parentNode = data.FillPath(Path.SkipLast(1));
-        node = CreateNode(parentNode, NewValue);
+        if (node is null)
+        {
+            var parent = data.RootNode.NavigateTo<BaseGFFNodeViewModel>(Path.SkipLast(1));
+            CreateNode(parent, NewValue);
+        }
+        else
+        {
+            if (NewValue is null)
+            {
+                node.Delete();
+            }
+            else
+            {
+                SetNewValue(node);
+            }
+        }
     }
 
     public void Undo(GFFResourceEditorViewModel data)
     {
-        var node = data.NavigateTo<TNodeViewModel>(Path);
+        var node = data.RootNode.NavigateTo<TNodeViewModel>(Path);
 
-        if (OldValue is null)
+        if (node is null)
         {
-            node!.Delete();
+            var parent = data.RootNode.NavigateTo<BaseGFFNodeViewModel>(Path.SkipLast(1));
+            CreateNode(parent, OldValue);
         }
         else
         {
-            if (node is null)
+            if (OldValue is null)
             {
-                var parentNode = data.FillPath(Path.SkipLast(1));
-                node = CreateNode(parentNode, OldValue);
+                node.Delete();
             }
             else
             {

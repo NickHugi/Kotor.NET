@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DynamicData;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
@@ -42,7 +37,7 @@ public abstract class BaseFieldGFFNodeViewModel : BaseGFFNodeViewModel
     }
 }
 
-public abstract class BaseFieldGFFTreeNodeViewModel<T> : BaseFieldGFFNodeViewModel where T : notnull
+public abstract class BaseFieldGFFNodeViewModel<T> : BaseFieldGFFNodeViewModel where T : notnull
 {
     private T _fieldValue = default!;
     public T FieldValue
@@ -54,7 +49,7 @@ public abstract class BaseFieldGFFTreeNodeViewModel<T> : BaseFieldGFFNodeViewMod
     public override string DisplayValue => FieldValue?.ToString() ?? "";
 
 
-    public BaseFieldGFFTreeNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent)
+    public BaseFieldGFFNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent)
     {
         Label = label;
 

@@ -13,7 +13,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public class FieldLocalizedStringGFFNodeViewModel : BaseFieldGFFTreeNodeViewModel<LocalizedStringViewModel>
+public class FieldLocalizedStringGFFNodeViewModel : BaseFieldGFFNodeViewModel<LocalizedStringViewModel>
 {
     public override string DisplayType => "Localized String";
     public override string DisplayValue => FieldValue.StringRef == -1

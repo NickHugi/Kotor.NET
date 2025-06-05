@@ -9,8 +9,8 @@ namespace Kotor.DevelopmentKit.EditorGFF.Models;
 
 public class NodePath : IEnumerable<object>
 {
-    public string Head => _path.First().ToString()!;
-    public string Tail => _path.Last().ToString()!;
+    public string? Head => _path.First().ToString();
+    public string? Tail => _path.Last().ToString();
 
     private readonly IEnumerable<object> _path;
 
@@ -37,10 +37,10 @@ public class NodePath : IEnumerable<object>
 
     private void ValidatePath()
     {
-        if (_path.Count() == 0)
-        {
-            throw new NotSupportedException();
-        }
+        //if (_path.Count() == 0)
+        //{
+        //    throw new NotSupportedException();
+        //}
         if (_path.Any(x => x.GetType() != typeof(string) && x.GetType() != typeof(int)))
         {
             throw new NotSupportedException();

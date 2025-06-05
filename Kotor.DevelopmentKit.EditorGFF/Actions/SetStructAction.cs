@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.Base.Common;
+using Kotor.DevelopmentKit.EditorGFF.Models;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
@@ -11,7 +12,7 @@ namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
 public class SetStructAction : BaseSetNodeAction<BaseGFFNodeViewModel, Int32?>
 {
-    public SetStructAction(IEnumerable<object> path, Int32? oldValue, Int32? newValue)
+    public SetStructAction(NodePath path, Int32? oldValue, Int32? newValue)
         : base(path, oldValue, newValue)
     {
     }
@@ -20,7 +21,7 @@ public class SetStructAction : BaseSetNodeAction<BaseGFFNodeViewModel, Int32?>
     {
         if (parentNode is BaseGFFNodeViewModel rootNode)
         {
-            return new FieldStructGFFNodeViewModel(parentNode, _name) { StructID = value.Value };
+            return new FieldStructGFFNodeViewModel(parentNode, Path.Tail) { StructID = value.Value };
         }
         else if (parentNode is FieldListGFFNodeViewModel listNode)
         {
@@ -28,7 +29,7 @@ public class SetStructAction : BaseSetNodeAction<BaseGFFNodeViewModel, Int32?>
         }
         else if (parentNode is FieldStructGFFNodeViewModel structNode)
         {
-            return new FieldStructGFFNodeViewModel(parentNode, _name) { StructID = value.Value };
+            return new FieldStructGFFNodeViewModel(parentNode, Path.Tail) { StructID = value.Value };
         }
         else
         {
