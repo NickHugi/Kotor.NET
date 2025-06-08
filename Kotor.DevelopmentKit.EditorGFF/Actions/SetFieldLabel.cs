@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.Base.Common;
+using Kotor.DevelopmentKit.EditorGFF.Extensions;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
@@ -25,11 +26,13 @@ public class SetFieldLabel : IAction<GFFResourceEditorViewModel>
 
     public void Apply(GFFResourceEditorViewModel data)
     {
-        data.RootNode.NavigateTo<BaseFieldGFFNodeViewModel>(OldPath).Label = NewLabel;
+        var node = data.RootNode.NavigateTo<BaseFieldGFFNodeViewModel>(OldPath);
+        node.Label = NewLabel.GetUniqueLabel(node.Parent as IStructGFFTreeNodeViewModel);
     }
 
     public void Undo(GFFResourceEditorViewModel data)
     {
-        data.RootNode.NavigateTo<BaseFieldGFFNodeViewModel>(NewPath).Label = NewLabel;
+        var node = data.RootNode.NavigateTo<BaseFieldGFFNodeViewModel>(OldPath);
+        node.Label = OldLabel;
     }
 }

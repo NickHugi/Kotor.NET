@@ -9,7 +9,6 @@ namespace Kotor.DevelopmentKit.EditorGFF.Models;
 
 public class NodePath : IEnumerable<object>
 {
-    public string? Head => _path.First().ToString();
     public string? Tail => _path.Last().ToString();
 
     private readonly IEnumerable<object> _path;

@@ -30,7 +30,7 @@ public class CreatePathAction : IAction<GFFResourceEditorViewModel>
     public void Undo(GFFResourceEditorViewModel data)
     {
         var node = data.RootNode.NavigateTo<BaseFieldGFFNodeViewModel>(ExistingPath);
-        var createdRootNode = data.RootNode.NavigateTo<BaseFieldGFFNodeViewModel>(CreatePath, new NodePath(ExistingPath.Head))!;
+        var createdRootNode = data.RootNode.NavigateTo<BaseFieldGFFNodeViewModel>(CreatePath, new NodePath(ExistingPath.First() as string))!;
         createdRootNode.Delete();
     }
 }

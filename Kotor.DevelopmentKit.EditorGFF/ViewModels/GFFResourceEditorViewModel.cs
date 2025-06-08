@@ -9,6 +9,7 @@ using DynamicData.Binding;
 using Kotor.DevelopmentKit.Base.Common;
 using Kotor.DevelopmentKit.Base.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.Actions;
+using Kotor.DevelopmentKit.EditorGFF.Extensions;
 using Kotor.DevelopmentKit.EditorGFF.Models;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 using Kotor.NET.Formats.Binary2DA.Serialisation;
@@ -287,6 +288,23 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         History.Apply(setAction);
     }
 
+    public void Relabel(NodePath path, string label)
+    {
+        var node = RootNode.NavigateTo<BaseGFFNodeViewModel>(path);
+        var action = new SetFieldLabel(path, node.Label, label);
+        History.Apply(action);
+    }
+
+    public void Undo()
+    {
+        History.Undo();
+    }
+
+    public void Redo()
+    {
+        History.Redo();
+    }
+
     private void SetFieldValueForNode<TValue>(NodePath path, TValue newValue, Func<TValue?, IAction<GFFResourceEditorViewModel>> createAction)
         where TValue : struct
     {
@@ -324,34 +342,5 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
 
         var setAction = createAction(oldValue);
         History.Apply(setAction);
-    }
-
-    public void Undo()
-    {
-        History.Undo();
-    }
-
-    public void Redo()
-    {
-        History.Redo();
-    }
-
-    private string FindOriginalFieldLabel(IStructGFFTreeNodeViewModel structNode, string label)
-    {
-        if (structNode.GetField(label) is null)
-            return label;
-
-        int count = 1;
-        var newLabel = label;
-
-        do
-        {
-            count++;
-
-            var suffix = "(" + count + ")";
-            label = label + suffix;
-        } while (structNode.GetField(newLabel) is not null);
-
-        return label;
     }
 }
