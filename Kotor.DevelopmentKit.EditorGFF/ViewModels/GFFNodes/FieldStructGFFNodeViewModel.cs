@@ -24,6 +24,8 @@ public class FieldStructGFFNodeViewModel : BaseFieldGFFNodeViewModel<Int32>, ISt
     private ObservableCollection<BaseGFFNodeViewModel> _children = new([]);
     public override ReadOnlyObservableCollection<BaseGFFNodeViewModel> Children => new(_children);
 
+    bool IStructGFFTreeNodeViewModel.IsDeleted => IsDeleted;
+
 
     public FieldStructGFFNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent, label)
     {

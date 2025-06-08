@@ -19,8 +19,8 @@ public abstract class EditFieldPanel : UserControl
 }
 
 
-public abstract class EditFieldPanel<TNodeViewModel, TValueViewModel, TEventArgs> : EditFieldPanel
-    //: UserControl
+public abstract class EditFieldPanel<TNodeViewModel, TValueViewModel, TEventArgs>
+    : EditFieldPanel
     where TNodeViewModel : class
     where TEventArgs : RoutedEventArgs
 {

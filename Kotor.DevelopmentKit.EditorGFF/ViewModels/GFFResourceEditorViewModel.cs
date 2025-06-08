@@ -335,4 +335,23 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
     {
         History.Redo();
     }
+
+    private string FindOriginalFieldLabel(IStructGFFTreeNodeViewModel structNode, string label)
+    {
+        if (structNode.GetField(label) is null)
+            return label;
+
+        int count = 1;
+        var newLabel = label;
+
+        do
+        {
+            count++;
+
+            var suffix = "(" + count + ")";
+            label = label + suffix;
+        } while (structNode.GetField(newLabel) is not null);
+
+        return label;
+    }
 }

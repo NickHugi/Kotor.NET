@@ -53,7 +53,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
         InitializeComponent();
     }
     
-    private void TreeDataGrid_PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
+    private async void TreeDataGrid_PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
     {
         if (e.GetCurrentPoint(this).Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed)
         {
@@ -64,7 +64,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
 
             if (row != null)
             {
-                var menu = GetStructContextMenu(data);
+                var menu = await GetStructContextMenu(data);
 
                 menu.Open(row);
             }
@@ -144,7 +144,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
         Context.History.Apply(action);
     }
 
-    private ContextMenu GetStructContextMenu(BaseGFFNodeViewModel node)
+    private async Task<ContextMenu> GetStructContextMenu(BaseGFFNodeViewModel node)
     {
         var menu = new ContextMenu();
 
@@ -175,21 +175,40 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
         }
 
         if (menu.Items.Count > 0)
-            menu.Items.Add(new Separator());
-
-        if (node is ListStructGFFNodeViewModel dataAsStructInList)
         {
-            menu.Items.Add(new MenuItem() { Header = "Paste Node", Command = ReactiveCommand.Create(() => PasteNode()) });
+            menu.Items.Add(new Separator());
+        }
+
+        if (node is FieldListGFFNodeViewModel)
+        {
+            menu.Items.Add(new MenuItem() { Header = "Paste Struct", Command = ReactiveCommand.Create(() => PasteNode()), IsEnabled=await HasStructOnClipboard() });
+            menu.Items.Add(new MenuItem() { Header = "Copy Field", Command = ReactiveCommand.Create(async () => await CopyNode(node)) });
+            menu.Items.Add(new MenuItem() { Header = "Cut Field", Command = ReactiveCommand.Create(async() => await CutNode(node)) });
+            menu.Items.Add(new MenuItem() { Header = "Delete Field", Command = ReactiveCommand.Create(() => DeleteNode(node)) });
+        }
+        else if (node is RootStructGFFNodeViewModel)
+        {
+            menu.Items.Add(new MenuItem() { Header = "Paste Field", Command = ReactiveCommand.Create(() => PasteNode()), IsEnabled = await HasFieldOnClipboard() });
+        }
+        else if (node is ListStructGFFNodeViewModel)
+        {
+            menu.Items.Add(new MenuItem() { Header = "Paste Field", Command = ReactiveCommand.Create(() => PasteNode()), IsEnabled = await HasFieldOnClipboard() });
             menu.Items.Add(new MenuItem() { Header = "Copy Struct", Command = ReactiveCommand.Create(async () => await CopyNode(node)) });
-            menu.Items.Add(new MenuItem() { Header = "Cut Struct", Command = ReactiveCommand.Create(async() => await CutNode(node)) });
+            menu.Items.Add(new MenuItem() { Header = "Cut Struct", Command = ReactiveCommand.Create(async () => await CutNode(node)) });
             menu.Items.Add(new MenuItem() { Header = "Delete Struct", Command = ReactiveCommand.Create(() => DeleteNode(node)) });
         }
-        else if (node is BaseFieldGFFNodeViewModel field)
+        else if (node is FieldStructGFFNodeViewModel)
         {
-            menu.Items.Add(new MenuItem() { Header = "Paste Node", Command = ReactiveCommand.Create(() => PasteNode()) });
-            menu.Items.Add(new MenuItem() { Header = "Copy Field", Command = ReactiveCommand.Create(async () => CopyNode(node)) });
-            menu.Items.Add(new MenuItem() { Header = "Cut Field", Command = ReactiveCommand.Create(async () => CutNode(node)) });
-            menu.Items.Add(new MenuItem() { Header = "Delete Field", Command = ReactiveCommand.Create(async () => DeleteNode(node)) });
+            menu.Items.Add(new MenuItem() { Header = "Paste Field", Command = ReactiveCommand.Create(() => PasteNode()), IsEnabled = await HasFieldOnClipboard() });
+            menu.Items.Add(new MenuItem() { Header = "Copy Field", Command = ReactiveCommand.Create(async () => await CopyNode(node)) });
+            menu.Items.Add(new MenuItem() { Header = "Cut Field", Command = ReactiveCommand.Create(async () => await CutNode(node)) });
+            menu.Items.Add(new MenuItem() { Header = "Delete Field", Command = ReactiveCommand.Create(() => DeleteNode(node)) });
+        }
+        else if (node is BaseFieldGFFNodeViewModel)
+        {
+            menu.Items.Add(new MenuItem() { Header = "Copy Field", Command = ReactiveCommand.Create(async () => await CopyNode(node)) });
+            menu.Items.Add(new MenuItem() { Header = "Cut Field", Command = ReactiveCommand.Create(async () => await CutNode(node)) });
+            menu.Items.Add(new MenuItem() { Header = "Delete Field", Command = ReactiveCommand.Create(() => DeleteNode(node)) });
         }
 
         return menu;
@@ -314,10 +333,11 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
         var deserializeNodeService = new DeserializeNodeService();
         var selectedNode = Context.SelectedNode;
 
-        if (await HasStructOnClipboard())
+        if (await HasStructOnClipboard() && selectedNode is FieldListGFFNodeViewModel selectedListNode)
         {
             var text = await Clipboard!.GetTextAsync();
-            var node = deserializeNodeService.Deserialize(selectedNode, text);
+            var node = (ListStructGFFNodeViewModel)deserializeNodeService.Deserialize(selectedNode, text);
+            selectedListNode.AddStruct(node);
         }
         else if (await HasFieldOnClipboard() && selectedNode is IStructGFFTreeNodeViewModel selectedStructNode)
         {

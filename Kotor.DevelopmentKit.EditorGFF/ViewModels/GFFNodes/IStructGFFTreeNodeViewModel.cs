@@ -14,6 +14,7 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 public interface IStructGFFTreeNodeViewModel : IGFFNodeViewModel
 {
     public int StructID { get; set; }
+    public bool IsDeleted { get; }
 
     public T AddField<T>(T field) where T : BaseFieldGFFNodeViewModel;
     public void DeleteField(BaseFieldGFFNodeViewModel field);

@@ -53,6 +53,11 @@ public abstract class BaseGFFNodeViewModel : ReactiveObject, IGFFNodeViewModel
         }
     }
 
+    public bool IsDeleted
+    {
+        get => !Parent?.Children?.Contains(this) ?? false;
+    }
+
 
     public BaseGFFNodeViewModel(IGFFNodeViewModel? parent)
     {
