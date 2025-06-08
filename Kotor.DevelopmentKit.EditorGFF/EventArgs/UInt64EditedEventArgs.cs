@@ -10,14 +10,14 @@ namespace Kotor.DevelopmentKit.EditorGFF.EventArgs;
 
 public class UInt64EditedEventArgs : RoutedEventArgs
 {
-    public FieldUInt64GFFNodeViewModel ViewModel { get; }
+    public FieldUInt64GFFNodeViewModel EditedNode { get; }
     public UInt64 NewValue { get; }
     public UInt64 OldValue { get; }
 
     public UInt64EditedEventArgs(RoutedEvent routedEvent, object source, FieldUInt64GFFNodeViewModel viewModel, UInt64 newValue, UInt64 oldValue)
         : base(routedEvent, source)
     {
-        ViewModel = viewModel;
+        EditedNode = viewModel;
         NewValue = newValue;
         OldValue = oldValue;
     }

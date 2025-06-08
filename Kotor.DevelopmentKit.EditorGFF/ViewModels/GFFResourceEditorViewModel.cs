@@ -4,8 +4,6 @@ using System.IO;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
-using Avalonia.Controls.Shapes;
-using Avalonia.Threading;
 using DynamicData;
 using DynamicData.Binding;
 using Kotor.DevelopmentKit.Base.Common;
@@ -13,7 +11,6 @@ using Kotor.DevelopmentKit.Base.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.Actions;
 using Kotor.DevelopmentKit.EditorGFF.Models;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
-using Kotor.NET.Common.Data;
 using Kotor.NET.Formats.Binary2DA.Serialisation;
 using Kotor.NET.Resources.KotorGFF;
 using ReactiveUI;
@@ -178,6 +175,86 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
 
     public void SetUInt8Node(NodePath path, byte value)
     {
+        SetFieldValueForNode(path, value, (oldValue) => new SetUInt8Action(path, oldValue, value));
+    }
+
+    public void SetInt8Node(NodePath path, sbyte value)
+    {
+        SetFieldValueForNode(path, value, (oldValue) => new SetInt8Action(path, oldValue, value));
+    }
+
+    public void SetUInt16Node(NodePath path, UInt16 value)
+    {
+        SetFieldValueForNode(path, value, (oldValue) => new SetUInt16Action(path, oldValue, value));
+    }
+
+    public void SetInt16Node(NodePath path, Int16 value)
+    {
+        SetFieldValueForNode(path, value, (oldValue) => new SetInt16Action(path, oldValue, value));
+    }
+
+    public void SetUInt32Node(NodePath path, UInt32 value)
+    {
+        SetFieldValueForNode(path, value, (oldValue) => new SetUInt32Action(path, oldValue, value));
+    }
+
+    public void SetInt32Node(NodePath path, Int32 value)
+    {
+        SetFieldValueForNode(path, value, (oldValue) => new SetInt32Action(path, oldValue, value));
+    }
+
+    public void SetUInt64Node(NodePath path, UInt64 value)
+    {
+        SetFieldValueForNode(path, value, (oldValue) => new SetUInt64Action(path, oldValue, value));
+    }
+
+    public void SetInt64Node(NodePath path, Int64 value)
+    {
+        SetFieldValueForNode(path, value, (oldValue) => new SetInt64Action(path, oldValue, value));
+    }
+
+    public void SetSingleNode(NodePath path, Single value)
+    {
+        SetFieldValueForNode(path, value, (oldValue) => new SetSingleAction(path, oldValue, value));
+    }
+
+    public void SetDoubleNode(NodePath path, Double value)
+    {
+        SetFieldValueForNode(path, value, (oldValue) => new SetDoubleAction(path, oldValue, value));
+    }
+
+    public void SetResRefNode(NodePath path, ResRefViewModel value)
+    {
+        SetFieldValueForNode(path, value, (oldValue) => new SetResRefAction(path, oldValue, value));
+    }
+
+    public void SetStringNode(NodePath path, String value)
+    {
+        SetFieldValueForNode(path, value, (oldValue) => new SetStringAction(path, oldValue, value));
+    }
+
+    public void SetLocalizedStringNode(NodePath path, LocalizedStringViewModel value)
+    {
+        SetFieldValueForNode(path, value, (oldValue) => new SetLocalizedStringAction(path, oldValue, value));
+    }
+
+    public void SetBinaryNode(NodePath path, byte[] value)
+    {
+        SetFieldValueForNode(path, value, (oldValue) => new SetBinaryAction(path, oldValue, value));
+    }
+
+    public void SetVector3Node(NodePath path, Vector3ViewModel value)
+    {
+        SetFieldValueForNode(path, value, (oldValue) => new SetVector3Action(path, oldValue, value));
+    }
+
+    public void SetVector4Node(NodePath path, Vector4ViewModel value)
+    {
+        SetFieldValueForNode(path, value, (oldValue) => new SetVector4Action(path, oldValue, value));
+    }
+
+    public void SetList(NodePath path)
+    {
         var (existing, missing) = RootNode.SplitPath(new NodePath(path.SkipLast(1)));
         if (missing.Count() > 1)
         {
@@ -185,13 +262,67 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
             History.Apply(fillAction);
         }
 
-        var node = RootNode.NavigateTo<FieldUInt8GFFNodeViewModel>(path);
-        var oldValue = node?.FieldValue;
+        var node = RootNode.NavigateTo<ListStructGFFNodeViewModel>(path);
 
-        if (value == oldValue)
+        var setAction = new SetListAction(path);
+        History.Apply(setAction);
+    }
+
+    public void SetStructNode(NodePath path, Int32 value)
+    {
+        var (existing, missing) = RootNode.SplitPath(new NodePath(path.SkipLast(1)));
+        if (missing.Count() > 1)
+        {
+            var fillAction = new CreatePathAction(existing, missing);
+            History.Apply(fillAction);
+        }
+
+        var node = RootNode.NavigateTo<BaseGFFNodeViewModel>(path) as IStructGFFTreeNodeViewModel;
+
+        var oldValue = node?.StructID;
+        if (value.Equals(oldValue))
             return;
 
-        var setAction = new SetUInt8Action(path, oldValue, value);
+        var setAction = new SetStructAction(path, oldValue, value);
+        History.Apply(setAction);
+    }
+
+    private void SetFieldValueForNode<TValue>(NodePath path, TValue newValue, Func<TValue?, IAction<GFFResourceEditorViewModel>> createAction)
+        where TValue : struct
+    {
+        var (existing, missing) = RootNode.SplitPath(new NodePath(path.SkipLast(1)));
+        if (missing.Count() > 1)
+        {
+            var fillAction = new CreatePathAction(existing, missing);
+            History.Apply(fillAction);
+        }
+
+        var node = RootNode.NavigateTo<BaseFieldGFFNodeViewModel<TValue>>(path);
+        TValue? oldValue = (node is null) ? null : node.FieldValue;
+
+        if (newValue.Equals(oldValue))
+            return;
+
+        var setAction = createAction(oldValue);
+        History.Apply(setAction);
+    }
+    private void SetFieldValueForNode<TValue>(NodePath path, TValue newValue, Func<TValue?, IAction<GFFResourceEditorViewModel>> createAction)
+        where TValue : class
+    {
+        var (existing, missing) = RootNode.SplitPath(new NodePath(path.SkipLast(1)));
+        if (missing.Count() > 1)
+        {
+            var fillAction = new CreatePathAction(existing, missing);
+            History.Apply(fillAction);
+        }
+
+        var node = RootNode.NavigateTo<BaseFieldGFFNodeViewModel<TValue>>(path);
+        TValue? oldValue = (node is null) ? default(TValue?) : node.FieldValue;
+
+        if (newValue.Equals(oldValue))
+            return;
+
+        var setAction = createAction(oldValue);
         History.Apply(setAction);
     }
 

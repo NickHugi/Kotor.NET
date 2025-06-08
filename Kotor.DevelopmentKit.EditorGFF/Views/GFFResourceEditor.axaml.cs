@@ -73,91 +73,70 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
     private void FieldUInt8Panel_FinishedEditing(object? sender, UInt8EditedEventArgs e)
     {
         Context.SetUInt8Node(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
-        //if (e.OldValue == e.NewValue)
-        //    return;
-
-        //var action = new SetUInt8Action(Context.RootNode.GetPathOf(e.EditedNode), e.OldValue, e.NewValue);
-        //Context.History.Apply(action);
     }
     private void FieldInt8Panel_FinishedEditing(object? sender, Int8EditedEventArgs e)
     {
-        var action = new SetInt8Action(e.ViewModel, e.OldValue, e.NewValue);
-        Context.History.Apply(action);
+        Context.SetInt8Node(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
     }
     private void FieldUInt16Panel_FinishedEditing(object? sender, UInt16EditedEventArgs e)
     {
-        var action = new SetUInt16Action(Context.RootNode.GetPathOf(e.ViewModel), e.OldValue, e.NewValue);
-        Context.History.Apply(action);
+        Context.SetUInt16Node(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
     }
     private void FieldInt16Panel_FinishedEditing(object? sender, Int16EditedEventArgs e)
     {
-        var action = new SetInt16Action(e.ViewModel, e.OldValue, e.NewValue);
-        Context.History.Apply(action);
+        Context.SetInt16Node(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
     }
     private void FieldUInt32Panel_FinishedEditing(object? sender, UInt32EditedEventArgs e)
     {
-        var action = new SetUInt32Action(e.ViewModel, e.OldValue, e.NewValue);
-        Context.History.Apply(action);
+        Context.SetUInt32Node(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
     }
     private void FieldInt32Panel_FinishedEditing(object? sender, Int32EditedEventArgs e)
     {
-        var action = new SetInt32Action(e.ViewModel, e.OldValue, e.NewValue);
-        Context.History.Apply(action);
+        Context.SetInt32Node(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
     }
     private void FieldUInt64Panel_FinishedEditing(object? sender, UInt64EditedEventArgs e)
     {
-        var action = new SetUInt64Action(e.ViewModel, e.OldValue, e.NewValue);
-        Context.History.Apply(action);
+        Context.SetUInt64Node(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
     }
     private void FieldInt64Panel_FinishedEditing(object? sender, Int64EditedEventArgs e)
     {
-        var action = new SetInt64Action(e.ViewModel, e.OldValue, e.NewValue);
-        Context.History.Apply(action);
+        Context.SetInt64Node(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
     }
     private void FieldSinglePanel_FinishedEditing(object? sender, SingleEditedEventArgs e)
     {
-        var action = new SetSingleAction(e.ViewModel, e.OldValue, e.NewValue);
-        Context.History.Apply(action);
+        Context.SetSingleNode(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
     }
     private void FieldDoublePanel_FinishedEditing(object? sender, DoubleEditedEventArgs e)
     {
-        var action = new SetDoubleAction(e.ViewModel, e.OldValue, e.NewValue);
-        Context.History.Apply(action);
+        Context.SetDoubleNode(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
     }
     private void FieldStringPanel_FinishedEditing(object? sender, StringEditedEventArgs e)
     {
-        var action = new SetStringAction(e.ViewModel, e.OldValue, e.NewValue);
-        Context.History.Apply(action);
+        Context.SetStringNode(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
     }
     private void FieldResRefPanel_FinishedEditing(object? sender, ResRefEditedEventArgs e)
     {
-        var action = new SetResRefAction(e.ViewModel, e.OldValue, e.NewValue);
-        Context.History.Apply(action);
+        Context.SetResRefNode(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
     }
     private void FieldLocalizedStringPanel_FinishedEditing(object? sender, LocalizedStringEditedEventArgs e)
     {
-        var action = new SetLocalizedStringAction(e.ViewModel, e.OldValue, e.NewValue);
-        Context.History.Apply(action);
+        Context.SetLocalizedStringNode(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
     }
     private void FieldBinaryPanel_FinishedEditing(object? sender, BinaryEditedEventArgs e)
     {
-        var action = new SetBinaryAction(e.ViewModel, e.OldValue, e.NewValue);
-        Context.History.Apply(action);
+        Context.SetBinaryNode(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
     }
     private void FieldVector3Panel_FinishedEditing(object? sender, Vector3EditedEventArgs e)
     {
-        var action = new SetVector3Action(e.ViewModel, e.OldValue, e.NewValue);
-        Context.History.Apply(action);
+        Context.SetVector3Node(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
     }
     private void FieldVector4Panel_FinishedEditing(object? sender, Vector4EditedEventArgs e)
     {
-        var action = new SetVector4Action(e.ViewModel, e.OldValue, e.NewValue);
-        Context.History.Apply(action);
+        Context.SetVector4Node(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
     }
     private void FieldStructPanel_FinishedEditing(object? sender, StructEditedEventArgs e)
     {
-        var action = new SetStructAction(Context.RootNode.GetPathOf(e.ViewModel as BaseGFFNodeViewModel), e.OldValue, e.NewValue);
-        Context.History.Apply(action);
+        Context.SetStructNode(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
     }
     private void LabelInput_LostFocus(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
@@ -192,7 +171,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
         }
         else if (node is FieldListGFFNodeViewModel dataAsList)
         {
-            menu.Items.Add(new MenuItem() { Header = "Add Struct", Command = ReactiveCommand.Create(() => dataAsList.AddStruct()) });
+            menu.Items.Add(new MenuItem() { Header = "Add Struct", Command = ReactiveCommand.Create(() => AddStruct(dataAsList)) });
         }
 
         if (menu.Items.Count > 0)
@@ -218,77 +197,98 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
 
     private void AddUInt8(IStructGFFTreeNodeViewModel parent)
     {
-        object[] path = [.. Context.RootNode.GetPathOf(parent as BaseGFFNodeViewModel), "New UInt8"];
-        var action = new SetUInt8Action(path, null, 0);
-        Context.History.Apply(action);
+        var path = Context.RootNode.GetPathOf(parent).Extend("New UInt8");
+        Context.SetUInt8Node(path, default);
     }
     private void AddInt8(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new FieldInt8GFFNodeViewModel(parent, "New Int8"));
+        var path = Context.RootNode.GetPathOf(parent).Extend("New Int8");
+        Context.SetInt8Node(path, default);
     }
     private void AddUInt16(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new FieldUInt16GFFNodeViewModel(parent, "New UInt16"));
+        var path = Context.RootNode.GetPathOf(parent).Extend("New UInt16");
+        Context.SetUInt16Node(path, default);
     }
     private void AddInt16(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new FieldInt16GFFNodeViewModel(parent, "New Int16"));
+        var path = Context.RootNode.GetPathOf(parent).Extend("New Int16");
+        Context.SetInt16Node(path, default);
     }
     private void AddUInt32(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new FieldUInt32GFFNodeViewModel(parent, "New UInt32"));
+        var path = Context.RootNode.GetPathOf(parent).Extend("New UInt32");
+        Context.SetUInt32Node(path, default);
     }
     private void AddInt32(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new FieldInt32GFFNodeViewModel(parent, "New Int32"));
+        var path = Context.RootNode.GetPathOf(parent).Extend("New Int32");
+        Context.SetInt32Node(path, default);
     }
     private void AddUInt64(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new FieldUInt64GFFNodeViewModel(parent, "New UInt64"));
+        var path = Context.RootNode.GetPathOf(parent).Extend("New UInt64");
+        Context.SetUInt64Node(path, default);
     }
     private void AddInt64(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new FieldInt64GFFNodeViewModel(parent, "New UInt64"));
+        var path = Context.RootNode.GetPathOf(parent).Extend("New UInt64");
+        Context.SetUInt64Node(path, default);
     }
     private void AddSingle(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new FieldSingleGFFNodeViewModel(parent, "New Single"));
+        var path = Context.RootNode.GetPathOf(parent).Extend("New Single");
+        Context.SetSingleNode(path, default);
     }
     private void AddDouble(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new FieldDoubleGFFNodeViewModel(parent, "New Double"));
+        var path = Context.RootNode.GetPathOf(parent).Extend("New Double");
+        Context.SetDoubleNode(path, default);
     }
     private void AddResRef(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new FieldResRefGFFNodeViewModel(parent, "New ResRef"));
+        var path = Context.RootNode.GetPathOf(parent).Extend("New ResRef");
+        Context.SetResRefNode(path, new());
     }
     private void AddString(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new FieldStringGFFNodeViewModel(parent, "New String"));
+        var path = Context.RootNode.GetPathOf(parent).Extend("New String");
+        Context.SetStringNode(path, "");
     }
     private void AddLocalizedString(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new FieldLocalizedStringGFFNodeViewModel(parent, "New Localized String"));
+        var path = Context.RootNode.GetPathOf(parent).Extend("New Localized String");
+        Context.SetLocalizedStringNode(path, new());
     }
     private void AddBinary(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new FieldBinaryGFFNodeViewModel(parent, "New Binary"));
+        var path = Context.RootNode.GetPathOf(parent).Extend("New Single");
+        Context.SetSingleNode(path, default);
     }
     private void AddVector3(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new FieldVector3GFFNodeViewModel(parent, "New Vector3"));
+        var path = Context.RootNode.GetPathOf(parent).Extend("New Vector3");
+        Context.SetVector3Node(path, default);
     }
     private void AddVector4(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new FieldVector4GFFNodeViewModel(parent, "New Vector4"));
+        var path = Context.RootNode.GetPathOf(parent).Extend("New Vector4");
+        Context.SetVector4Node(path, default);
     }
     private void AddStruct(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new FieldStructGFFNodeViewModel(parent, "New Struct"));
+        var path = Context.RootNode.GetPathOf(parent).Extend("New Struct");
+        Context.SetStructNode(path, default);
+    }
+    private void AddStruct(FieldListGFFNodeViewModel parent)
+    {
+        var path = Context.RootNode.GetPathOf(parent).Extend(parent.Children.Count);
+        Context.SetStructNode(path, default);
     }
     private void AddList(IStructGFFTreeNodeViewModel parent)
     {
-        parent.AddField(new FieldListGFFNodeViewModel(parent, "New List"));
+        var path = Context.RootNode.GetPathOf(parent).Extend("New List");
+        Context.SetList(path);
     }
 
     private async Task CutNode(BaseGFFNodeViewModel node)

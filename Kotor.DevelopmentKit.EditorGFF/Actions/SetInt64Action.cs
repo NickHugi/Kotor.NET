@@ -4,31 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.Base.Common;
+using Kotor.DevelopmentKit.EditorGFF.Models;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
-public class SetInt64Action : IAction<GFFResourceEditorViewModel>
+public class SetInt64Action : BaseSetNodeAction<FieldInt64GFFNodeViewModel, Int64?>
 {
-    public FieldInt64GFFNodeViewModel Node { get; }
-    public Int64 OldValue { get; }
-    public Int64 NewValue { get; }
-
-    public SetInt64Action(FieldInt64GFFNodeViewModel node, Int64 oldValue, Int64 newValue)
+    public SetInt64Action(NodePath path, Int64? oldValue, Int64? newValue)
+        : base(path, oldValue, newValue)
     {
-        Node = node;
-        OldValue = oldValue;
-        NewValue = newValue;
     }
 
-    public void Apply(GFFResourceEditorViewModel data)
-    {
-        Node.FieldValue = NewValue;
-    }
+    protected override FieldInt64GFFNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, Int64? value)
+        => new FieldInt64GFFNodeViewModel(parentNode, Path.Tail, value.Value);
 
-    public void Undo(GFFResourceEditorViewModel data)
-    {
-        Node.FieldValue = OldValue;
-    }
+    protected override void SetNewValue(FieldInt64GFFNodeViewModel node)
+        => node.FieldValue = NewValue!.Value;
+
+    protected override void SetOldValue(FieldInt64GFFNodeViewModel node)
+        => node.FieldValue = OldValue!.Value;
 }

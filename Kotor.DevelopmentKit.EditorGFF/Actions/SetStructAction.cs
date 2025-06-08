@@ -19,15 +19,15 @@ public class SetStructAction : BaseSetNodeAction<BaseGFFNodeViewModel, Int32?>
 
     protected override BaseGFFNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, Int32? value)
     {
-        if (parentNode is BaseGFFNodeViewModel rootNode)
-        {
-            return new FieldStructGFFNodeViewModel(parentNode, Path.Tail) { StructID = value.Value };
-        }
-        else if (parentNode is FieldListGFFNodeViewModel listNode)
+        if (parentNode is FieldListGFFNodeViewModel listNode)
         {
             return new ListStructGFFNodeViewModel(parentNode) { StructID = value.Value };
         }
         else if (parentNode is FieldStructGFFNodeViewModel structNode)
+        {
+            return new FieldStructGFFNodeViewModel(parentNode, Path.Tail) { StructID = value.Value };
+        }
+        if (parentNode is RootStructGFFNodeViewModel rootNode)
         {
             return new FieldStructGFFNodeViewModel(parentNode, Path.Tail) { StructID = value.Value };
         }

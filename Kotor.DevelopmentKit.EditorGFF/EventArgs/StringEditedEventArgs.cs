@@ -10,14 +10,14 @@ namespace Kotor.DevelopmentKit.EditorGFF.EventArgs;
 
 public class StringEditedEventArgs : RoutedEventArgs
 {
-    public FieldStringGFFNodeViewModel ViewModel { get; }
+    public FieldStringGFFNodeViewModel EditedNode { get; }
     public String NewValue { get; }
     public String OldValue { get; }
 
     public StringEditedEventArgs(RoutedEvent routedEvent, object source, FieldStringGFFNodeViewModel viewModel, String newValue, String oldValue)
         : base(routedEvent, source)
     {
-        ViewModel = viewModel;
+        EditedNode = viewModel;
         NewValue = newValue;
         OldValue = oldValue;
     }

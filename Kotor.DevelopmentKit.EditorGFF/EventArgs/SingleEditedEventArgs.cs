@@ -10,14 +10,14 @@ namespace Kotor.DevelopmentKit.EditorGFF.EventArgs;
 
 public class SingleEditedEventArgs : RoutedEventArgs
 {
-    public FieldSingleGFFNodeViewModel ViewModel { get; }
+    public FieldSingleGFFNodeViewModel EditedNode { get; }
     public Single NewValue { get; }
     public Single OldValue { get; }
 
     public SingleEditedEventArgs(RoutedEvent routedEvent, object source, FieldSingleGFFNodeViewModel viewModel, Single newValue, Single oldValue)
         : base(routedEvent, source)
     {
-        ViewModel = viewModel;
+        EditedNode = viewModel;
         NewValue = newValue;
         OldValue = oldValue;
     }

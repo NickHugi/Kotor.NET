@@ -11,14 +11,14 @@ namespace Kotor.DevelopmentKit.EditorGFF.EventArgs;
 
 public class BinaryEditedEventArgs : RoutedEventArgs
 {
-    public FieldBinaryGFFNodeViewModel ViewModel { get; }
+    public FieldBinaryGFFNodeViewModel EditedNode { get; }
     public byte[] NewValue { get; }
     public byte[] OldValue { get; }
 
     public BinaryEditedEventArgs(RoutedEvent routedEvent, object source, FieldBinaryGFFNodeViewModel viewModel, byte[] newValue, byte[] oldValue)
         : base(routedEvent, source)
     {
-        ViewModel = viewModel;
+        EditedNode = viewModel;
         NewValue = newValue;
         OldValue = oldValue;
     }

@@ -121,7 +121,7 @@ public abstract class BaseGFFNodeViewModel : ReactiveObject, IGFFNodeViewModel
             {
                 if (node is FieldListGFFNodeViewModel listNode)
                 {
-                    node = listNode.Children[listIndex];
+                    node = listNode.Children.ElementAtOrDefault(listIndex);
                 }
                 else
                 {

@@ -4,31 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.Base.Common;
+using Kotor.DevelopmentKit.EditorGFF.Models;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
-public class SetDoubleAction : IAction<GFFResourceEditorViewModel>
+public class SetDoubleAction : BaseSetNodeAction<FieldDoubleGFFNodeViewModel, Double?>
 {
-    public FieldDoubleGFFNodeViewModel Node { get; }
-    public Double OldValue { get; }
-    public Double NewValue { get; }
-
-    public SetDoubleAction(FieldDoubleGFFNodeViewModel node, Double oldValue, Double newValue)
+    public SetDoubleAction(NodePath path, Double? oldValue, Double? newValue)
+        : base(path, oldValue, newValue)
     {
-        Node = node;
-        OldValue = oldValue;
-        NewValue = newValue;
     }
 
-    public void Apply(GFFResourceEditorViewModel data)
-    {
-        Node.FieldValue = NewValue;
-    }
+    protected override FieldDoubleGFFNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, Double? value)
+        => new FieldDoubleGFFNodeViewModel(parentNode, Path.Tail, value.Value);
 
-    public void Undo(GFFResourceEditorViewModel data)
-    {
-        Node.FieldValue = OldValue;
-    }
+    protected override void SetNewValue(FieldDoubleGFFNodeViewModel node)
+        => node.FieldValue = NewValue!.Value;
+
+    protected override void SetOldValue(FieldDoubleGFFNodeViewModel node)
+        => node.FieldValue = OldValue!.Value;
 }

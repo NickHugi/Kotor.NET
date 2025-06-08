@@ -4,31 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.Base.Common;
+using Kotor.DevelopmentKit.EditorGFF.Models;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
-public class SetSingleAction : IAction<GFFResourceEditorViewModel>
+public class SetSingleAction : BaseSetNodeAction<FieldSingleGFFNodeViewModel, Single?>
 {
-    public FieldSingleGFFNodeViewModel Node { get; }
-    public Single OldValue { get; }
-    public Single NewValue { get; }
-
-    public SetSingleAction(FieldSingleGFFNodeViewModel node, Single oldValue, Single newValue)
+    public SetSingleAction(NodePath path, Single? oldValue, Single? newValue)
+        : base(path, oldValue, newValue)
     {
-        Node = node;
-        OldValue = oldValue;
-        NewValue = newValue;
     }
 
-    public void Apply(GFFResourceEditorViewModel data)
-    {
-        Node.FieldValue = NewValue;
-    }
+    protected override FieldSingleGFFNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, Single? value)
+        => new FieldSingleGFFNodeViewModel(parentNode, Path.Tail, value.Value);
 
-    public void Undo(GFFResourceEditorViewModel data)
-    {
-        Node.FieldValue = OldValue;
-    }
+    protected override void SetNewValue(FieldSingleGFFNodeViewModel node)
+        => node.FieldValue = NewValue!.Value;
+
+    protected override void SetOldValue(FieldSingleGFFNodeViewModel node)
+        => node.FieldValue = OldValue!.Value;
 }
+

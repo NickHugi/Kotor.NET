@@ -5,31 +5,25 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.Base.Common;
 using Kotor.DevelopmentKit.Base.ViewModels;
+using Kotor.DevelopmentKit.EditorGFF.Models;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
-public class SetResRefAction : IAction<GFFResourceEditorViewModel>
+public class SetVector3Action : BaseSetNodeAction<FieldVector3GFFNodeViewModel, Vector3ViewModel?>
 {
-    public FieldResRefGFFNodeViewModel Node { get; }
-    public ResRefViewModel OldValue { get; }
-    public ResRefViewModel NewValue { get; }
-
-    public SetResRefAction(FieldResRefGFFNodeViewModel node, ResRefViewModel oldValue, ResRefViewModel newValue)
+    public SetVector3Action(NodePath path, Vector3ViewModel? oldValue, Vector3ViewModel? newValue)
+        : base(path, oldValue, newValue)
     {
-        Node = node;
-        OldValue = oldValue.Clone();
-        NewValue = newValue.Clone();
     }
 
-    public void Apply(GFFResourceEditorViewModel data)
-    {
-        Node.FieldValue = NewValue;
-    }
+    protected override FieldVector3GFFNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, Vector3ViewModel? value)
+        => new FieldVector3GFFNodeViewModel(parentNode, Path.Tail, value);
 
-    public void Undo(GFFResourceEditorViewModel data)
-    {
-        Node.FieldValue = OldValue;
-    }
+    protected override void SetNewValue(FieldVector3GFFNodeViewModel node)
+        => node.FieldValue = NewValue!;
+
+    protected override void SetOldValue(FieldVector3GFFNodeViewModel node)
+        => node.FieldValue = OldValue!;
 }

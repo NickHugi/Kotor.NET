@@ -4,31 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.Base.Common;
+using Kotor.DevelopmentKit.EditorGFF.Models;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
-public class SetInt16Action : IAction<GFFResourceEditorViewModel>
+public class SetInt16Action : BaseSetNodeAction<FieldInt16GFFNodeViewModel, Int16?>
 {
-    public FieldInt16GFFNodeViewModel Node { get; }
-    public Int16 OldValue { get; }
-    public Int16 NewValue { get; }
-
-    public SetInt16Action(FieldInt16GFFNodeViewModel node, Int16 oldValue, Int16 newValue)
+    public SetInt16Action(NodePath path, Int16? oldValue, Int16? newValue)
+        : base(path, oldValue, newValue)
     {
-        Node = node;
-        OldValue = oldValue;
-        NewValue = newValue;
     }
 
-    public void Apply(GFFResourceEditorViewModel data)
-    {
-        Node.FieldValue = NewValue;
-    }
+    protected override FieldInt16GFFNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, Int16? value)
+        => new FieldInt16GFFNodeViewModel(parentNode, Path.Tail, value.Value);
 
-    public void Undo(GFFResourceEditorViewModel data)
-    {
-        Node.FieldValue = OldValue;
-    }
+    protected override void SetNewValue(FieldInt16GFFNodeViewModel node)
+        => node.FieldValue = NewValue!.Value;
+
+    protected override void SetOldValue(FieldInt16GFFNodeViewModel node)
+        => node.FieldValue = OldValue!.Value;
 }

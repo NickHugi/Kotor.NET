@@ -26,6 +26,15 @@ public class NodePath : IEnumerable<object>
         ValidatePath();
     }
 
+    public NodePath Extend(string node)
+    {
+        return new([.. _path, node]);
+    }
+    public NodePath Extend(int node)
+    {
+        return new([.. _path, node]);
+    }
+
     public IEnumerator<object> GetEnumerator()
     {
         return _path.GetEnumerator();
@@ -35,12 +44,13 @@ public class NodePath : IEnumerable<object>
         return _path.GetEnumerator();
     }
 
+    public override string ToString()
+    {
+        return string.Join(", ", _path);
+    }
+
     private void ValidatePath()
     {
-        //if (_path.Count() == 0)
-        //{
-        //    throw new NotSupportedException();
-        //}
         if (_path.Any(x => x.GetType() != typeof(string) && x.GetType() != typeof(int)))
         {
             throw new NotSupportedException();
