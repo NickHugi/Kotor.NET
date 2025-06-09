@@ -62,6 +62,8 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
     public bool IsSelectedNodeStruct => _selectedNode is IStructGFFTreeNodeViewModel;
     public bool IsSelectedNodeList => _selectedNode is FieldListGFFNodeViewModel;
 
+    public bool IsLocalizedSubstringSelected => (_selectedNode is FieldLocalizedStringGFFNodeViewModel locstring) && (locstring.FieldValue.IsSubStringSelected);
+
 
     public override string WindowTitlePrefix => throw new NotImplementedException();
 

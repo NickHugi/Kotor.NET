@@ -10,39 +10,38 @@
              x:Class="Kotor.DevelopmentKit.EditorGFF.Views.FieldLocalizedStringPanel"
              x:Name="Control">
     <StackPanel>
+        <StackPanel>
+            <TextBlock Foreground="Gray">StringRef</TextBlock>
+            <TextBox Text="{Binding #Control.CurrentValue.StringRef, Mode=TwoWay}" />
 
-        <TextBlock Foreground="Gray">StringRef</TextBlock>
-        <TextBox Text="{Binding #Control.CurrentValue.StringRef, Mode=TwoWay}" />
+            <TextBlock Foreground="Gray">SubString</TextBlock>
+            <Grid ColumnDefinitions="*, 4, Auto, 4, Auto">
+                <ComboBox Grid.Column="0" ItemsSource="{Binding #Control.CurrentValue.SubStrings}" SelectedItem="{Binding #Control.CurrentValue.SelectedSubstring, Mode=TwoWay}" HorizontalAlignment="Stretch">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="base-vm:LocalizedSubStringViewModel">
+                            <TextBlock Text="{Binding Label}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button Grid.Column="2" Command="{Binding #Control.AddSubString}">Add</Button>
+                <Button Grid.Column="4" Command="{Binding #Control.RemoveSelectedSubString}" IsEnabled="{Binding #Control.CurrentValue.IsSubStringSelected}">Remove</Button>
+            </Grid>
+        </StackPanel>
+        <StackPanel IsVisible="{Binding #Control.CurrentValue.IsSubStringSelected}">
+            <Grid ColumnDefinitions="*, 4, *">
+                <StackPanel Grid.Column="0" Orientation="Vertical">
+                    <TextBlock Foreground="Gray">Language</TextBlock>
+                    <base-views:LanguageComboBox HorizontalAlignment="Stretch" SelectedLanguage="{Binding #Control.CurrentValue.SelectedSubstring.Language, Mode=TwoWay}" />
+                </StackPanel>
 
-        <TextBlock Foreground="Gray">SubString</TextBlock>
-        <Grid ColumnDefinitions="*, 4, Auto, 4, Auto">
-            <ComboBox Grid.Column="0" ItemsSource="{Binding #Control.CurrentValue.SubStrings}" SelectedItem="{Binding #Control.CurrentValue.SelectedSubstring, Mode=TwoWay}" HorizontalAlignment="Stretch">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate DataType="base-vm:LocalizedSubStringViewModel">
-                        <TextBlock Text="{Binding Label}"/>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-            <Button Grid.Column="2" Command="{Binding #Control.AddSubString}">Add</Button>
-            <Button Grid.Column="4" Command="{Binding #Control.RemoveSelectedSubString}" IsEnabled="{Binding #Control.CurrentValue.IsSubStringSelected}">Remove</Button>
-        </Grid>
+                <StackPanel Grid.Column="2" Orientation="Vertical">
+                    <TextBlock Foreground="Gray">Gender</TextBlock>
+                    <base-views:GenderComboBox HorizontalAlignment="Stretch" SelectedGender="{Binding #Control.CurrentValue.SelectedSubstring.Gender, Mode=TwoWay}" />
+                </StackPanel>
+            </Grid>
 
-        <Rectangle Fill="Gray" HorizontalAlignment="Stretch" Height="2" Margin="0 12 0 12" />
-
-        <Grid ColumnDefinitions="*, 4, *">
-            <StackPanel Grid.Column="0" Orientation="Vertical">
-                <TextBlock Foreground="Gray">Language</TextBlock>
-                <base-views:LanguageComboBox HorizontalAlignment="Stretch" SelectedLanguage="{Binding #Control.CurrentValue.SelectedSubstring.Language, Mode=TwoWay}" />
-            </StackPanel>
-
-            <StackPanel Grid.Column="2" Orientation="Vertical">
-                <TextBlock Foreground="Gray">Gender</TextBlock>
-                <base-views:GenderComboBox HorizontalAlignment="Stretch" SelectedGender="{Binding #Control.CurrentValue.SelectedSubstring.Gender, Mode=TwoWay}" />
-            </StackPanel>
-        </Grid>
-
-        <TextBlock Foreground="Gray">Text</TextBlock>
-        <TextBox Height="100" Text="{Binding #Control.CurrentValue.SelectedSubstring.Text, Mode=TwoWay}" AcceptsReturn="True" TextWrapping="Wrap" />
-
+            <TextBlock Foreground="Gray">Text</TextBlock>
+            <TextBox Height="100" Text="{Binding #Control.CurrentValue.SelectedSubstring.Text, Mode=TwoWay}" AcceptsReturn="True" TextWrapping="Wrap" />
+        </StackPanel>
     </StackPanel>
 </UserControl>
