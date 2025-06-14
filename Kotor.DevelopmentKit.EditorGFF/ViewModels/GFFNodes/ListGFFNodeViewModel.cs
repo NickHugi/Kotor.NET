@@ -11,7 +11,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public class FieldListGFFNodeViewModel : BaseFieldGFFNodeViewModel
+public class ListGFFNodeViewModel : BaseFieldGFFNodeViewModel
 {
     public override string DisplayType => "List";
     public override string DisplayValue => $"";
@@ -20,11 +20,11 @@ public class FieldListGFFNodeViewModel : BaseFieldGFFNodeViewModel
     public override ReadOnlyObservableCollection<BaseGFFNodeViewModel> Children => new(_children);
 
 
-    public FieldListGFFNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent)
+    public ListGFFNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent)
     {
         Label = label;
     }
-    public FieldListGFFNodeViewModel(IGFFNodeViewModel parent, string label, GFFList gffList) : this(parent, label)
+    public ListGFFNodeViewModel(IGFFNodeViewModel parent, string label, GFFList gffList) : this(parent, label)
     {
         Label = label;
     }

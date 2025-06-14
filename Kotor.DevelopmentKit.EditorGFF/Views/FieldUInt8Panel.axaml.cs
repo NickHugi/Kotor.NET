@@ -6,13 +6,21 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using DynamicData.Binding;
 using Kotor.DevelopmentKit.EditorGFF.EventArgs;
+using Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldUInt8Panel : EditFieldPanel<FieldUInt8GFFNodeViewModel, Byte, UInt8EditedEventArgs>
+public partial class FieldUInt8Panel : EditFieldPanel<UInt8GFFNodeViewModel, Byte, UInt8EditedEventArgs>
 {
+    public required UInt8PanelViewModel ViewModel
+    {
+        get => (DataContext as UInt8PanelViewModel)!;
+        set => DataContext = value;
+    }
+
+
     public FieldUInt8Panel() : base()
     {
         InitializeComponent();
@@ -20,7 +28,7 @@ public partial class FieldUInt8Panel : EditFieldPanel<FieldUInt8GFFNodeViewModel
 
     protected override void RaiseFinishedEditing()
     {
-        RoutedEventArgs args = new UInt8EditedEventArgs(FinishedEditingEvent, this, _transitoryNode, CurrentValue, _transitoryNode.FieldValue);
+        RoutedEventArgs args = new UInt8EditedEventArgs(FinishedEditingEvent, this, ViewModel.SourcePath, ViewModel.Value);
         RaiseEvent(args);
     }
 

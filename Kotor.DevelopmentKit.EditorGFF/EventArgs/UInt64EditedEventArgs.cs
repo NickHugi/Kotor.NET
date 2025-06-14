@@ -4,21 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Interactivity;
+using Kotor.DevelopmentKit.EditorGFF.Models;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.EventArgs;
 
 public class UInt64EditedEventArgs : RoutedEventArgs
 {
-    public FieldUInt64GFFNodeViewModel EditedNode { get; }
+    public NodePath SourcePath { get; }
     public UInt64 NewValue { get; }
-    public UInt64 OldValue { get; }
 
-    public UInt64EditedEventArgs(RoutedEvent routedEvent, object source, FieldUInt64GFFNodeViewModel viewModel, UInt64 newValue, UInt64 oldValue)
+    public UInt64EditedEventArgs(RoutedEvent routedEvent, object source, NodePath sourcePath, UInt64 newValue)
         : base(routedEvent, source)
     {
-        EditedNode = viewModel;
+        SourcePath = sourcePath;
         NewValue = newValue;
-        OldValue = oldValue;
     }
 }

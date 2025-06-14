@@ -7,10 +7,11 @@ using Kotor.NET.Common.Data;
 using Kotor.NET.Common.Localization;
 using Kotor.NET.Extensions;
 using Kotor.NET.Formats.BinaryTLK;
+using Kotor.NET.Interfaces;
 
 namespace Kotor.NET.Services;
 
-public class LocateTalkTableStringService
+public class TalkTableLookup : ITalkTableLookup
 {
     public TalkTableString Locate(string path, StringRef stringref)
     {

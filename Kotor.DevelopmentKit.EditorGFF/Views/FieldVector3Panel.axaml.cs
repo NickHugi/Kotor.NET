@@ -5,12 +5,20 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Kotor.DevelopmentKit.Base.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.EventArgs;
+using Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldVector3Panel : EditFieldPanel<FieldVector3GFFNodeViewModel, Vector3ViewModel, Vector3EditedEventArgs>
+public partial class FieldVector3Panel : EditFieldPanel<Vector3GFFNodeViewModel, Vector3ViewModel, Vector3EditedEventArgs>
 {
+    public required Vector3PanelViewModel ViewModel
+    {
+        get => (DataContext as Vector3PanelViewModel)!;
+        set => DataContext = value;
+    }
+
+
     public FieldVector3Panel() : base()
     {
         InitializeComponent();
@@ -18,7 +26,7 @@ public partial class FieldVector3Panel : EditFieldPanel<FieldVector3GFFNodeViewM
 
     protected override void RaiseFinishedEditing()
     {
-        RoutedEventArgs args = new Vector3EditedEventArgs(FinishedEditingEvent, this, _transitoryNode, CurrentValue, _transitoryNode.FieldValue);
+        RoutedEventArgs args = new Vector3EditedEventArgs(FinishedEditingEvent, this, ViewModel.SourcePath, ViewModel.Value);
         RaiseEvent(args);
     }
 

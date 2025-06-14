@@ -29,7 +29,7 @@ public class DeleteFieldAction : IAction<GFFResourceEditorViewModel>
         {
             structNode.AddField(fieldNode);
         }
-        else if (Node.Parent is FieldListGFFNodeViewModel listNode && Node is ListStructGFFNodeViewModel childStructNode)
+        else if (Node.Parent is ListGFFNodeViewModel listNode && Node is ListStructGFFNodeViewModel childStructNode)
         {
             listNode.AddStruct(childStructNode);
         }

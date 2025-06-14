@@ -3,11 +3,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              
+             xmlns:vm="clr-namespace:Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel"
+             
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="300"
              x:Class="Kotor.DevelopmentKit.EditorGFF.Views.FieldDoublePanel"
+             x:DataType="vm:DoublePanelViewModel"
              x:Name="Control">
     <StackPanel>
         <TextBlock Foreground="Gray">Value</TextBlock>
-        <NumericUpDown Value="{Binding #Control.CurrentValue}" ParsingNumberStyle="Float" LostFocus="NumericUpDown_LostFocus" />
+        <NumericUpDown Value="{Binding Value}" ParsingNumberStyle="Float" LostFocus="NumericUpDown_LostFocus" />
     </StackPanel>
 </UserControl>

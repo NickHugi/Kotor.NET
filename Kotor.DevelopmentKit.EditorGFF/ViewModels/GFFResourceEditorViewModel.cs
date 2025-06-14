@@ -11,9 +11,11 @@ using Kotor.DevelopmentKit.Base.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.Actions;
 using Kotor.DevelopmentKit.EditorGFF.Extensions;
 using Kotor.DevelopmentKit.EditorGFF.Models;
+using Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 using Kotor.NET.Formats.Binary2DA.Serialisation;
 using Kotor.NET.Resources.KotorGFF;
+using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels;
@@ -43,26 +45,56 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         get => _history;
     }
 
-    public bool IsSelectedNodeUInt8 => _selectedNode is FieldUInt8GFFNodeViewModel;
-    public bool IsSelectedNodeInt8 => _selectedNode is FieldInt8GFFNodeViewModel;
-    public bool IsSelectedNodeUInt16 => _selectedNode is FieldUInt16GFFNodeViewModel;
-    public bool IsSelectedNodeInt16 => _selectedNode is FieldInt16GFFNodeViewModel;
-    public bool IsSelectedNodeUInt32 => _selectedNode is FieldUInt32GFFNodeViewModel;
-    public bool IsSelectedNodeInt32 => _selectedNode is FieldInt32GFFNodeViewModel;
-    public bool IsSelectedNodeUInt64 => _selectedNode is FieldUInt64GFFNodeViewModel;
-    public bool IsSelectedNodeInt64 => _selectedNode is FieldInt64GFFNodeViewModel;
-    public bool IsSelectedNodeSingle => _selectedNode is FieldSingleGFFNodeViewModel;
-    public bool IsSelectedNodeDouble => _selectedNode is FieldDoubleGFFNodeViewModel;
-    public bool IsSelectedNodeResRef => _selectedNode is FieldResRefGFFNodeViewModel;
-    public bool IsSelectedNodeString => _selectedNode is FieldStringGFFNodeViewModel;
-    public bool IsSelectedNodeLocalizedString => _selectedNode is FieldLocalizedStringGFFNodeViewModel;
-    public bool IsSelectedNodeBinary => _selectedNode is FieldBinaryGFFNodeViewModel;
-    public bool IsSelectedNodeVector3 => _selectedNode is FieldVector3GFFNodeViewModel;
-    public bool IsSelectedNodeVector4 => _selectedNode is FieldVector4GFFNodeViewModel;
-    public bool IsSelectedNodeStruct => _selectedNode is IStructGFFTreeNodeViewModel;
-    public bool IsSelectedNodeList => _selectedNode is FieldListGFFNodeViewModel;
+    public INodePanelViewModel PanelData
+    {
+        get
+        {
+            var path = RootNode.GetPathOf(_selectedNode);
 
-    public bool IsLocalizedSubstringSelected => (_selectedNode is FieldLocalizedStringGFFNodeViewModel locstring) && (locstring.FieldValue.IsSubStringSelected);
+            return _selectedNode switch
+            {
+                UInt8GFFNodeViewModel node => ActivatorUtilities.CreateInstance<UInt8PanelViewModel>(App.ServiceProvider, path, node.FieldValue),
+                Int8GFFNodeViewModel node => ActivatorUtilities.CreateInstance<Int8PanelViewModel>(App.ServiceProvider, path, node.FieldValue),
+                UInt16GFFNodeViewModel node => ActivatorUtilities.CreateInstance<UInt16PanelViewModel>(App.ServiceProvider, path, node.FieldValue),
+                Int16GFFNodeViewModel node => ActivatorUtilities.CreateInstance<Int16PanelViewModel>(App.ServiceProvider, path, node.FieldValue),
+                UInt32GFFNodeViewModel node => ActivatorUtilities.CreateInstance<UInt32PanelViewModel>(App.ServiceProvider, path, node.FieldValue),
+                Int32GFFNodeViewModel node => ActivatorUtilities.CreateInstance<Int32PanelViewModel>(App.ServiceProvider, path, node.FieldValue),
+                UInt64GFFNodeViewModel node => ActivatorUtilities.CreateInstance<UInt64PanelViewModel>(App.ServiceProvider, path, node.FieldValue),
+                Int64GFFNodeViewModel node => ActivatorUtilities.CreateInstance<Int64PanelViewModel>(App.ServiceProvider, path, node.FieldValue),
+                SingleGFFNodeViewModel node => ActivatorUtilities.CreateInstance<SinglePanelViewModel>(App.ServiceProvider, path, node.FieldValue),
+                DoubleGFFNodeViewModel node => ActivatorUtilities.CreateInstance<DoublePanelViewModel>(App.ServiceProvider, path, node.FieldValue),
+                ResRefGFFNodeViewModel node => ActivatorUtilities.CreateInstance<ResRefPanelViewModel>(App.ServiceProvider, path, node.FieldValue),
+                StringGFFNodeViewModel node => ActivatorUtilities.CreateInstance<StringPanelViewModel>(App.ServiceProvider, path, node.FieldValue),
+                LocalizedStringGFFNodeViewModel node => ActivatorUtilities.CreateInstance<LocalizedStringPanelViewModel>(App.ServiceProvider, path, node.FieldValue),
+                BinaryGFFNodeViewModel node => ActivatorUtilities.CreateInstance<BinaryPanelViewModel>(App.ServiceProvider, path, node.FieldValue),
+                IStructGFFTreeNodeViewModel node => ActivatorUtilities.CreateInstance<Int32PanelViewModel>(App.ServiceProvider, path, node.StructID),
+                Vector3GFFNodeViewModel node => ActivatorUtilities.CreateInstance<Vector3PanelViewModel>(App.ServiceProvider, path, node.FieldValue),
+                Vector4GFFNodeViewModel node => ActivatorUtilities.CreateInstance<Vector4PanelViewModel>(App.ServiceProvider, path, node.FieldValue),
+                _ => throw new InvalidOperationException()
+            };
+        }
+    }
+
+    public bool IsSelectedNodeUInt8 => _selectedNode is UInt8GFFNodeViewModel;
+    public bool IsSelectedNodeInt8 => _selectedNode is Int8GFFNodeViewModel;
+    public bool IsSelectedNodeUInt16 => _selectedNode is UInt16GFFNodeViewModel;
+    public bool IsSelectedNodeInt16 => _selectedNode is Int16GFFNodeViewModel;
+    public bool IsSelectedNodeUInt32 => _selectedNode is UInt32GFFNodeViewModel;
+    public bool IsSelectedNodeInt32 => _selectedNode is Int32GFFNodeViewModel;
+    public bool IsSelectedNodeUInt64 => _selectedNode is UInt64GFFNodeViewModel;
+    public bool IsSelectedNodeInt64 => _selectedNode is Int64GFFNodeViewModel;
+    public bool IsSelectedNodeSingle => _selectedNode is SingleGFFNodeViewModel;
+    public bool IsSelectedNodeDouble => _selectedNode is DoubleGFFNodeViewModel;
+    public bool IsSelectedNodeResRef => _selectedNode is ResRefGFFNodeViewModel;
+    public bool IsSelectedNodeString => _selectedNode is StringGFFNodeViewModel;
+    public bool IsSelectedNodeLocalizedString => _selectedNode is LocalizedStringGFFNodeViewModel;
+    public bool IsSelectedNodeBinary => _selectedNode is BinaryGFFNodeViewModel;
+    public bool IsSelectedNodeVector3 => _selectedNode is Vector3GFFNodeViewModel;
+    public bool IsSelectedNodeVector4 => _selectedNode is Vector4GFFNodeViewModel;
+    public bool IsSelectedNodeStruct => _selectedNode is IStructGFFTreeNodeViewModel;
+    public bool IsSelectedNodeList => _selectedNode is ListGFFNodeViewModel;
+
+    public bool IsLocalizedSubstringSelected => (_selectedNode is LocalizedStringGFFNodeViewModel locstring) && (locstring.FieldValue.IsSubStringSelected);
 
 
     public override string WindowTitlePrefix => throw new NotImplementedException();
@@ -82,11 +114,11 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
             this.RaisePropertyChanged(nameof(IsSelectedNodeUInt8));
             this.RaisePropertyChanged(nameof(IsSelectedNodeInt8));
             this.RaisePropertyChanged(nameof(IsSelectedNodeUInt16));
-            this.RaisePropertyChanged(nameof(IsSelectedNodeUInt16));
+            this.RaisePropertyChanged(nameof(IsSelectedNodeInt16));
             this.RaisePropertyChanged(nameof(IsSelectedNodeUInt32));
-            this.RaisePropertyChanged(nameof(IsSelectedNodeUInt32));
+            this.RaisePropertyChanged(nameof(IsSelectedNodeInt32));
             this.RaisePropertyChanged(nameof(IsSelectedNodeUInt64));
-            this.RaisePropertyChanged(nameof(IsSelectedNodeUInt64));
+            this.RaisePropertyChanged(nameof(IsSelectedNodeInt64));
             this.RaisePropertyChanged(nameof(IsSelectedNodeSingle));
             this.RaisePropertyChanged(nameof(IsSelectedNodeDouble));
             this.RaisePropertyChanged(nameof(IsSelectedNodeResRef));
@@ -97,6 +129,7 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
             this.RaisePropertyChanged(nameof(IsSelectedNodeVector4));
             this.RaisePropertyChanged(nameof(IsSelectedNodeStruct));
             this.RaisePropertyChanged(nameof(IsSelectedNodeList));
+            this.RaisePropertyChanged(nameof(PanelData));
         });
     }
 

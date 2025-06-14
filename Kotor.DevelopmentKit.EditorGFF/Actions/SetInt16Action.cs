@@ -10,19 +10,19 @@ using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
-public class SetInt16Action : BaseSetNodeAction<FieldInt16GFFNodeViewModel, Int16?>
+public class SetInt16Action : BaseSetNodeAction<Int16GFFNodeViewModel, Int16?>
 {
     public SetInt16Action(NodePath path, Int16? oldValue, Int16? newValue)
         : base(path, oldValue, newValue)
     {
     }
 
-    protected override FieldInt16GFFNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, Int16? value)
-        => new FieldInt16GFFNodeViewModel(parentNode, Path.Tail, value.Value);
+    protected override Int16GFFNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, Int16? value)
+        => new Int16GFFNodeViewModel(parentNode, Path.Tail, value.Value);
 
-    protected override void SetNewValue(FieldInt16GFFNodeViewModel node)
+    protected override void SetNewValue(Int16GFFNodeViewModel node)
         => node.FieldValue = NewValue!.Value;
 
-    protected override void SetOldValue(FieldInt16GFFNodeViewModel node)
+    protected override void SetOldValue(Int16GFFNodeViewModel node)
         => node.FieldValue = OldValue!.Value;
 }

@@ -1,92 +1,74 @@
 using System;
+using System.Reactive.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using DynamicData.Binding;
 using Kotor.DevelopmentKit.Base.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.EventArgs;
+using Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 using Kotor.NET.Common.Data;
+using Kotor.NET.Common.Localization;
+using Kotor.NET.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldLocalizedStringPanel : EditFieldPanel<FieldLocalizedStringGFFNodeViewModel, LocalizedStringViewModel, LocalizedStringEditedEventArgs>
+public partial class FieldLocalizedStringPanel : UserControl
 {
+    public event EventHandler<UInt16EditedEventArgs>? FinishedEditing
+    {
+        add => AddHandler(FinishedEditingEvent, value);
+        remove => RemoveHandler(FinishedEditingEvent, value);
+    }
+    public static readonly RoutedEvent<LocalizedStringEditedEventArgs> FinishedEditingEvent =
+            RoutedEvent.Register<EditFieldPanel, LocalizedStringEditedEventArgs>(nameof(FinishedEditing), RoutingStrategies.Bubble);
+
+    public required LocalizedStringPanelViewModel ViewModel
+    {
+        get => (DataContext as LocalizedStringPanelViewModel)!;
+        set => DataContext = value;
+    }
+
+
     public FieldLocalizedStringPanel() : base()
     {
         InitializeComponent();
+
+        //this.WhenAnyValue(x => x.DataContext)
+        //    .WhereNotNull()
+        //    .Subscribe(x =>
+        //    {
+        //        ViewModel.Value.WhenAnyPropertyChanged().Subscribe(y =>
+        //        {
+
+        //        });
+        //    });
     }
 
     public void AddSubString()
     {
-        CurrentValue.AddSubString();
-        RaiseFinishedEditing();
-    }
-    public void RemoveSelectedSubString()
-    {
-        CurrentValue.RemoveSelectedSubString();
+        ViewModel.Value.AddSubString();
         RaiseFinishedEditing();
     }
 
-    protected override void RaiseFinishedEditing()
+    public void RemoveSelectedSubString()
     {
-        RoutedEventArgs args = new LocalizedStringEditedEventArgs(FinishedEditingEvent, this, _transitoryNode, CurrentValue, _transitoryNode.FieldValue);
+        ViewModel.Value.RemoveSelectedSubString();
+        RaiseFinishedEditing();
+    }
+
+    private void RaiseFinishedEditing()
+    {
+        RoutedEventArgs args = new LocalizedStringEditedEventArgs(FinishedEditingEvent, this, ViewModel.SourcePath, ViewModel.Value);
         RaiseEvent(args);
     }
 
-    protected override LocalizedStringViewModel GetCurrentValue()
+    private void TextBox_LostFocus(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        return SourceNode?.FieldValue.Clone() ?? new();
+        RaiseFinishedEditing();
     }
 }
-
-//{
-//    public LocalizedStringGFFTreeNodeViewModel Context => (LocalizedStringGFFTreeNodeViewModel)DataContext!;
-
-//    public event EventHandler<LocalizedStringEditedEventArgs>? FinishedEditing
-//    {
-//        add => AddHandler(FinishedEditingEvent, value);
-//        remove => RemoveHandler(FinishedEditingEvent, value);
-//    }
-//    public static readonly RoutedEvent<LocalizedStringEditedEventArgs> FinishedEditingEvent =
-//            RoutedEvent.Register<FieldLocalizedStringPanel, LocalizedStringEditedEventArgs>(nameof(FinishedEditing), RoutingStrategies.Bubble);
-
-//    private LocalizedStringViewModel _originalValue;
-//    private LocalizedStringGFFTreeNodeViewModel? _contextTransition;
-
-//    public FieldLocalizedStringPanel()
-//    {
-//        InitializeComponent();
-//    }
-
-//    protected override void OnDataContextBeginUpdate()
-//    {
-//        if (Context is null)
-//        {
-
-//        }
-//        else
-//        {
-//            _contextTransition = Context;
-//            _originalValue = Context.FieldValue.Clone();
-//        }
-//    }
-
-//    public void AddSubString()
-//    {
-//        Context.FieldValue.AddSubString();
-//        EmitEvent();
-//    }
-//    public void RemoveSelectedSubString()
-//    {
-//        Context.FieldValue.RemoveSelectedSubString();
-//        EmitEvent();
-//    }
-
-//    private void EmitEvent()
-//    {
-//        RoutedEventArgs args = new LocalizedStringEditedEventArgs(FinishedEditingEvent, this, _contextTransition, _contextTransition.FieldValue.Clone(), _originalValue.Clone());
-//        RaiseEvent(args);
-//        _originalValue = Context.FieldValue.Clone();
-//    }
-//}

@@ -27,18 +27,18 @@ public class DeserializeNodeService
             var label = element.Attribute("Label")!.Value;
             return element.Attribute("Type").Value switch
             {
-                "UInt8" => new FieldUInt8GFFNodeViewModel(hook, label, Byte.Parse(element.Attribute("Value")!.Value)),
-                "Int8" => new FieldInt8GFFNodeViewModel(hook, label, SByte.Parse(element.Attribute("Value")!.Value)),
-                "UInt16" => new FieldUInt16GFFNodeViewModel(hook, label, UInt16.Parse(element.Attribute("Value")!.Value)),
-                "Int16" => new FieldInt16GFFNodeViewModel(hook, label, Int16.Parse(element.Attribute("Value")!.Value)),
-                "UInt32" => new FieldUInt32GFFNodeViewModel(hook, label, UInt32.Parse(element.Attribute("Value")!.Value)),
-                "Int32" => new FieldInt32GFFNodeViewModel(hook, label, Int32.Parse(element.Attribute("Value")!.Value)),
-                "UInt64" => new FieldUInt64GFFNodeViewModel(hook, label, UInt64.Parse(element.Attribute("Value")!.Value)),
-                "Int64" => new FieldInt64GFFNodeViewModel(hook, label, Int64.Parse(element.Attribute("Value")!.Value)),
-                "Single" => new FieldSingleGFFNodeViewModel(hook, label, Single.Parse(element.Attribute("Value")!.Value)),
-                "Double" => new FieldDoubleGFFNodeViewModel(hook, label, Double.Parse(element.Attribute("Value")!.Value)),
-                "ResRef" => new FieldResRefGFFNodeViewModel(hook, label, element.Attribute("Value")!.Value),
-                "String" => new FieldStringGFFNodeViewModel(hook, label, element.Attribute("Value")!.Value),
+                "UInt8" => new UInt8GFFNodeViewModel(hook, label, Byte.Parse(element.Attribute("Value")!.Value)),
+                "Int8" => new Int8GFFNodeViewModel(hook, label, SByte.Parse(element.Attribute("Value")!.Value)),
+                "UInt16" => new UInt16GFFNodeViewModel(hook, label, UInt16.Parse(element.Attribute("Value")!.Value)),
+                "Int16" => new Int16GFFNodeViewModel(hook, label, Int16.Parse(element.Attribute("Value")!.Value)),
+                "UInt32" => new UInt32GFFNodeViewModel(hook, label, UInt32.Parse(element.Attribute("Value")!.Value)),
+                "Int32" => new Int32GFFNodeViewModel(hook, label, Int32.Parse(element.Attribute("Value")!.Value)),
+                "UInt64" => new UInt64GFFNodeViewModel(hook, label, UInt64.Parse(element.Attribute("Value")!.Value)),
+                "Int64" => new Int64GFFNodeViewModel(hook, label, Int64.Parse(element.Attribute("Value")!.Value)),
+                "Single" => new SingleGFFNodeViewModel(hook, label, Single.Parse(element.Attribute("Value")!.Value)),
+                "Double" => new DoubleGFFNodeViewModel(hook, label, Double.Parse(element.Attribute("Value")!.Value)),
+                "ResRef" => new ResRefGFFNodeViewModel(hook, label, element.Attribute("Value")!.Value),
+                "String" => new StringGFFNodeViewModel(hook, label, element.Attribute("Value")!.Value),
                 "LocalizedString" => ParseLocalizedString(hook, label, element),
                 "Vector3" => ParseVector3(hook, label, element),
                 "Vector4" => ParseVector4(hook, label, element),
@@ -48,7 +48,7 @@ public class DeserializeNodeService
                 _ => throw new NotSupportedException()
             };
         }
-        else if (element.Name == "Struct" && hook is FieldListGFFNodeViewModel listNode)
+        else if (element.Name == "Struct" && hook is ListGFFNodeViewModel listNode)
         {
             var listStructNode = new ListStructGFFNodeViewModel(listNode);
             ParseStructInner(listStructNode, element);
@@ -64,9 +64,9 @@ public class DeserializeNodeService
         }
     }
 
-    private FieldLocalizedStringGFFNodeViewModel ParseLocalizedString(BaseGFFNodeViewModel hook, string label, XElement element)
+    private LocalizedStringGFFNodeViewModel ParseLocalizedString(BaseGFFNodeViewModel hook, string label, XElement element)
     {
-        var fieldNode = new FieldLocalizedStringGFFNodeViewModel(hook, label);
+        var fieldNode = new LocalizedStringGFFNodeViewModel(hook, label);
         foreach (var childElement in element.Descendants())
         {
             var substring = new LocalizedSubStringViewModel();
@@ -75,32 +75,32 @@ public class DeserializeNodeService
         return fieldNode;
     }
 
-    private FieldVector3GFFNodeViewModel ParseVector3(BaseGFFNodeViewModel hook, string label, XElement element)
+    private Vector3GFFNodeViewModel ParseVector3(BaseGFFNodeViewModel hook, string label, XElement element)
     {
         var x = float.Parse(element.Element("X")!.Attribute("Value")!.Value);
         var y = float.Parse(element.Element("Y")!.Attribute("Value")!.Value);
         var z = float.Parse(element.Element("Z")!.Attribute("Value")!.Value);
-        return new FieldVector3GFFNodeViewModel(hook, label, x, y, z);
+        return new Vector3GFFNodeViewModel(hook, label, x, y, z);
     }
 
-    private FieldVector4GFFNodeViewModel ParseVector4(BaseGFFNodeViewModel hook, string label, XElement element)
+    private Vector4GFFNodeViewModel ParseVector4(BaseGFFNodeViewModel hook, string label, XElement element)
     {
         var x = float.Parse(element.Element("X")!.Attribute("Value")!.Value);
         var y = float.Parse(element.Element("Y")!.Attribute("Value")!.Value);
         var z = float.Parse(element.Element("Z")!.Attribute("Value")!.Value);
         var w = float.Parse(element.Element("W")!.Attribute("Value")!.Value);
-        return new FieldVector4GFFNodeViewModel(hook, label, x, y, z, w);
+        return new Vector4GFFNodeViewModel(hook, label, x, y, z, w);
     }
 
-    private FieldBinaryGFFNodeViewModel ParseBinary(BaseGFFNodeViewModel hook, string label, XElement element)
+    private BinaryGFFNodeViewModel ParseBinary(BaseGFFNodeViewModel hook, string label, XElement element)
     {
         var data = Convert.FromBase64String(element.Attribute("Value").Value);
-        return new FieldBinaryGFFNodeViewModel(hook, label, data);
+        return new BinaryGFFNodeViewModel(hook, label, data);
     }
 
-    private FieldListGFFNodeViewModel ParseList(BaseGFFNodeViewModel hook, string label, XElement element)
+    private ListGFFNodeViewModel ParseList(BaseGFFNodeViewModel hook, string label, XElement element)
     {
-        var node = new FieldListGFFNodeViewModel(hook, label);
+        var node = new ListGFFNodeViewModel(hook, label);
         foreach (var childElement in element.Descendants())
         {
             var structNode = Parse(node, childElement);

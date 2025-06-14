@@ -13,24 +13,24 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public class FieldLocalizedStringGFFNodeViewModel : BaseFieldGFFNodeViewModel<LocalizedStringViewModel>
+public class LocalizedStringGFFNodeViewModel : BaseFieldGFFNodeViewModel<LocalizedStringViewModel>
 {
     public override string DisplayType => "Localized String";
     public override string DisplayValue => FieldValue.StringRef == -1
         ? $"[{FieldValue.StringRef}]"
         : FieldValue.SubStrings.FirstOrDefault(x => x.Language == Language.English)?.Text?.ToString() ?? "";
 
-    public FieldLocalizedStringGFFNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent, label)
+    public LocalizedStringGFFNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent, label)
     {
         FieldValue = new();
         FieldValue.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(DisplayValue)));
         FieldValue.SubStrings.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(DisplayValue)));
     }
-    public FieldLocalizedStringGFFNodeViewModel(IGFFNodeViewModel parent, string label, LocalizedStringViewModel value) : this(parent, label)
+    public LocalizedStringGFFNodeViewModel(IGFFNodeViewModel parent, string label, LocalizedStringViewModel value) : this(parent, label)
     {
         FieldValue = value;
     }
-    public FieldLocalizedStringGFFNodeViewModel(IGFFNodeViewModel parent, string label, LocalisedString value) : this(parent, label)
+    public LocalizedStringGFFNodeViewModel(IGFFNodeViewModel parent, string label, LocalisedString value) : this(parent, label)
     {
         FieldValue = new()
         {

@@ -11,19 +11,19 @@ using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
-public class SetLocalizedStringAction : BaseSetNodeAction<FieldLocalizedStringGFFNodeViewModel, LocalizedStringViewModel?>
+public class SetLocalizedStringAction : BaseSetNodeAction<LocalizedStringGFFNodeViewModel, LocalizedStringViewModel?>
 {
     public SetLocalizedStringAction(NodePath path, LocalizedStringViewModel? oldValue, LocalizedStringViewModel? newValue)
         : base(path, oldValue, newValue)
     {
     }
 
-    protected override FieldLocalizedStringGFFNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, LocalizedStringViewModel? value)
-        => new FieldLocalizedStringGFFNodeViewModel(parentNode, Path.Tail, value);
+    protected override LocalizedStringGFFNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, LocalizedStringViewModel? value)
+        => new LocalizedStringGFFNodeViewModel(parentNode, Path.Tail, value);
 
-    protected override void SetNewValue(FieldLocalizedStringGFFNodeViewModel node)
+    protected override void SetNewValue(LocalizedStringGFFNodeViewModel node)
         => node.FieldValue = NewValue!;
 
-    protected override void SetOldValue(FieldLocalizedStringGFFNodeViewModel node)
+    protected override void SetOldValue(LocalizedStringGFFNodeViewModel node)
         => node.FieldValue = OldValue!;
 }

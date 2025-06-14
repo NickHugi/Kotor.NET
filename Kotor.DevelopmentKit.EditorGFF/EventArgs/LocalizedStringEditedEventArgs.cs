@@ -5,21 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Interactivity;
 using Kotor.DevelopmentKit.Base.ViewModels;
+using Kotor.DevelopmentKit.EditorGFF.Models;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.EventArgs;
 
 public class LocalizedStringEditedEventArgs : RoutedEventArgs
 {
-    public FieldLocalizedStringGFFNodeViewModel EditedNode { get; }
+    public NodePath SourcePath { get; }
     public LocalizedStringViewModel NewValue { get; }
-    public LocalizedStringViewModel OldValue { get; }
 
-    public LocalizedStringEditedEventArgs(RoutedEvent routedEvent, object source, FieldLocalizedStringGFFNodeViewModel viewModel, LocalizedStringViewModel newValue, LocalizedStringViewModel oldValue)
+    public LocalizedStringEditedEventArgs(RoutedEvent routedEvent, object source, NodePath sourcePath, LocalizedStringViewModel newValue)
         : base(routedEvent, source)
     {
-        EditedNode = viewModel;
+        SourcePath = sourcePath;
         NewValue = newValue.Clone();
-        OldValue = oldValue.Clone();
     }
 }

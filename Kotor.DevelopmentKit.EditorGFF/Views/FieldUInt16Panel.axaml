@@ -3,12 +3,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              
+             xmlns:vm="clr-namespace:Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel"
+             
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="300"
              x:Class="Kotor.DevelopmentKit.EditorGFF.Views.FieldUInt16Panel"
+             x:DataType="vm:UInt16PanelViewModel"
              x:Name="Control">
     <StackPanel Focusable="True">
         <Border Name="FocusDummy" IsHitTestVisible="False" Focusable="True" />
         <TextBlock Foreground="Gray">Value</TextBlock>
-        <NumericUpDown Value="{Binding #Control.CurrentValue}" Minimum="0" Maximum="65535" FormatString="N0" ParsingNumberStyle="Integer" LostFocus="NumericUpDown_LostFocus" />
+        <NumericUpDown Value="{Binding Value}" Minimum="0" Maximum="65535" FormatString="N0" ParsingNumberStyle="Integer" LostFocus="NumericUpDown_LostFocus" />
     </StackPanel>
 </UserControl>

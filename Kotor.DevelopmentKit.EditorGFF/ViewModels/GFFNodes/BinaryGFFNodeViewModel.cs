@@ -9,17 +9,17 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public class FieldBinaryGFFNodeViewModel : BaseFieldGFFNodeViewModel<byte[]>
+public class BinaryGFFNodeViewModel : BaseFieldGFFNodeViewModel<byte[]>
 {
     public override string DisplayType => "Binary";
     public override string DisplayValue => $"";
 
 
-    public FieldBinaryGFFNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent, label)
+    public BinaryGFFNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent, label)
     {
         FieldValue = new byte[0];
     }
-    public FieldBinaryGFFNodeViewModel(IGFFNodeViewModel parent, string label, byte[] value) : this(parent, label)
+    public BinaryGFFNodeViewModel(IGFFNodeViewModel parent, string label, byte[] value) : this(parent, label)
     {
         FieldValue = value;
     }

@@ -4,12 +4,20 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Kotor.DevelopmentKit.EditorGFF.EventArgs;
+using Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldUInt64Panel : EditFieldPanel<FieldUInt64GFFNodeViewModel, UInt64, UInt64EditedEventArgs>
+public partial class FieldUInt64Panel : EditFieldPanel<UInt64GFFNodeViewModel, UInt64, UInt64EditedEventArgs>
 {
+    public required UInt64PanelViewModel ViewModel
+    {
+        get => (DataContext as UInt64PanelViewModel)!;
+        set => DataContext = value;
+    }
+
+
     public FieldUInt64Panel() : base()
     {
         InitializeComponent();
@@ -17,7 +25,7 @@ public partial class FieldUInt64Panel : EditFieldPanel<FieldUInt64GFFNodeViewMod
 
     protected override void RaiseFinishedEditing()
     {
-        RoutedEventArgs args = new UInt64EditedEventArgs(FinishedEditingEvent, this, _transitoryNode, CurrentValue, _transitoryNode.FieldValue);
+        RoutedEventArgs args = new UInt64EditedEventArgs(FinishedEditingEvent, this, ViewModel.SourcePath, ViewModel.Value);
         RaiseEvent(args);
     }
 

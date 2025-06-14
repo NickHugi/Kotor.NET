@@ -5,18 +5,24 @@
 
              xmlns:base-views="clr-namespace:Kotor.DevelopmentKit.Base.Views;assembly=Kotor.DevelopmentKit.Base"
              xmlns:base-vm="clr-namespace:Kotor.DevelopmentKit.Base.ViewModels;assembly=Kotor.DevelopmentKit.Base"
+             xmlns:vm="clr-namespace:Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel"
              
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="300"
              x:Class="Kotor.DevelopmentKit.EditorGFF.Views.FieldLocalizedStringPanel"
+             x:DataType="vm:LocalizedStringPanelViewModel"
              x:Name="Control">
     <StackPanel>
-        <StackPanel>
-            <TextBlock Foreground="Gray">StringRef</TextBlock>
-            <TextBox Text="{Binding #Control.CurrentValue.StringRef, Mode=TwoWay}" />
+        <StackPanel Spacing="6">
+            <StackPanel>
+                <TextBlock Foreground="Gray">StringRef</TextBlock>
+                <TextBox Text="{Binding Value.StringRef, Mode=TwoWay}" LostFocus="TextBox_LostFocus" />
+                <TextBox Text="{Binding TalkTableString.Text}" Height="60" IsReadOnly="True"/>
+            </StackPanel>
 
+            <StackPanel>
             <TextBlock Foreground="Gray">SubString</TextBlock>
             <Grid ColumnDefinitions="*, 4, Auto, 4, Auto">
-                <ComboBox Grid.Column="0" ItemsSource="{Binding #Control.CurrentValue.SubStrings}" SelectedItem="{Binding #Control.CurrentValue.SelectedSubstring, Mode=TwoWay}" HorizontalAlignment="Stretch">
+                <ComboBox Grid.Column="0" ItemsSource="{Binding Value.SubStrings}" SelectedItem="{Binding Value.SelectedSubstring, Mode=TwoWay}" HorizontalAlignment="Stretch">
                     <ComboBox.ItemTemplate>
                         <DataTemplate DataType="base-vm:LocalizedSubStringViewModel">
                             <TextBlock Text="{Binding Label}"/>
@@ -24,24 +30,25 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 <Button Grid.Column="2" Command="{Binding #Control.AddSubString}">Add</Button>
-                <Button Grid.Column="4" Command="{Binding #Control.RemoveSelectedSubString}" IsEnabled="{Binding #Control.CurrentValue.IsSubStringSelected}">Remove</Button>
+                <Button Grid.Column="4" Command="{Binding #Control.RemoveSelectedSubString}" IsEnabled="{Binding Value.IsSubStringSelected}">Remove</Button>
             </Grid>
+            </StackPanel>
         </StackPanel>
-        <StackPanel IsVisible="{Binding #Control.CurrentValue.IsSubStringSelected}">
+        <StackPanel IsVisible="{Binding Value.IsSubStringSelected}">
             <Grid ColumnDefinitions="*, 4, *">
                 <StackPanel Grid.Column="0" Orientation="Vertical">
                     <TextBlock Foreground="Gray">Language</TextBlock>
-                    <base-views:LanguageComboBox HorizontalAlignment="Stretch" SelectedLanguage="{Binding #Control.CurrentValue.SelectedSubstring.Language, Mode=TwoWay}" />
+                    <base-views:LanguageComboBox HorizontalAlignment="Stretch" SelectedLanguage="{Binding Value.SelectedSubstring.Language, Mode=TwoWay}" />
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Orientation="Vertical">
                     <TextBlock Foreground="Gray">Gender</TextBlock>
-                    <base-views:GenderComboBox HorizontalAlignment="Stretch" SelectedGender="{Binding #Control.CurrentValue.SelectedSubstring.Gender, Mode=TwoWay}" />
+                    <base-views:GenderComboBox HorizontalAlignment="Stretch" SelectedGender="{Binding Value.SelectedSubstring.Gender, Mode=TwoWay}" />
                 </StackPanel>
             </Grid>
 
             <TextBlock Foreground="Gray">Text</TextBlock>
-            <TextBox Height="100" Text="{Binding #Control.CurrentValue.SelectedSubstring.Text, Mode=TwoWay}" AcceptsReturn="True" TextWrapping="Wrap" />
+            <TextBox Height="100" Text="{Binding Value.SelectedSubstring.Text, Mode=TwoWay}" AcceptsReturn="True" TextWrapping="Wrap" />
         </StackPanel>
     </StackPanel>
 </UserControl>

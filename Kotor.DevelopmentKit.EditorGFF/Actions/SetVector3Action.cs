@@ -11,19 +11,19 @@ using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
-public class SetVector3Action : BaseSetNodeAction<FieldVector3GFFNodeViewModel, Vector3ViewModel?>
+public class SetVector3Action : BaseSetNodeAction<Vector3GFFNodeViewModel, Vector3ViewModel?>
 {
     public SetVector3Action(NodePath path, Vector3ViewModel? oldValue, Vector3ViewModel? newValue)
         : base(path, oldValue, newValue)
     {
     }
 
-    protected override FieldVector3GFFNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, Vector3ViewModel? value)
-        => new FieldVector3GFFNodeViewModel(parentNode, Path.Tail, value);
+    protected override Vector3GFFNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, Vector3ViewModel? value)
+        => new Vector3GFFNodeViewModel(parentNode, Path.Tail, value);
 
-    protected override void SetNewValue(FieldVector3GFFNodeViewModel node)
+    protected override void SetNewValue(Vector3GFFNodeViewModel node)
         => node.FieldValue = NewValue!;
 
-    protected override void SetOldValue(FieldVector3GFFNodeViewModel node)
+    protected override void SetOldValue(Vector3GFFNodeViewModel node)
         => node.FieldValue = OldValue!;
 }

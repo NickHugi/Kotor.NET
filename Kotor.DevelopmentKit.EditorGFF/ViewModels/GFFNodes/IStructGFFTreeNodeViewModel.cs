@@ -35,31 +35,31 @@ public static class IStructGFFTreeNodeViewModelExtensions
             {
                 BaseFieldGFFNodeViewModel vmNode = value switch
                 {
-                    Byte asUInt8 => new FieldUInt8GFFNodeViewModel(node, label, asUInt8),
-                    SByte asInt8 => new FieldInt8GFFNodeViewModel(node, label, asInt8),
-                    UInt16 asUInt16 => new FieldUInt16GFFNodeViewModel(node, label, asUInt16),
-                    Int16 asInt16 => new FieldInt16GFFNodeViewModel(node, label, asInt16),
-                    UInt32 asUInt32 => new FieldUInt32GFFNodeViewModel(node, label, asUInt32),
-                    Int32 asInt32 => new FieldInt32GFFNodeViewModel(node, label, asInt32),
-                    UInt64 asUInt64 => new FieldUInt64GFFNodeViewModel(node, label, asUInt64),
-                    Int64 asInt64 => new FieldInt64GFFNodeViewModel(node, label, asInt64),
-                    Single asSingle => new FieldSingleGFFNodeViewModel(node, label, asSingle),
-                    Double asDouble => new FieldDoubleGFFNodeViewModel(node, label, asDouble),
-                    ResRef asResRef => new FieldResRefGFFNodeViewModel(node, label, asResRef),
-                    String asString => new FieldStringGFFNodeViewModel(node, label, asString),
-                    LocalisedString asLocalizedString => new FieldLocalizedStringGFFNodeViewModel(node, label, asLocalizedString),
-                    byte[] asBinary => new FieldBinaryGFFNodeViewModel(node, label, asBinary),
-                    Vector3 asVector3 => new FieldVector3GFFNodeViewModel(node, label, asVector3),
-                    Vector4 asVector4 => new FieldVector4GFFNodeViewModel(node, label, asVector4),
+                    Byte asUInt8 => new UInt8GFFNodeViewModel(node, label, asUInt8),
+                    SByte asInt8 => new Int8GFFNodeViewModel(node, label, asInt8),
+                    UInt16 asUInt16 => new UInt16GFFNodeViewModel(node, label, asUInt16),
+                    Int16 asInt16 => new Int16GFFNodeViewModel(node, label, asInt16),
+                    UInt32 asUInt32 => new UInt32GFFNodeViewModel(node, label, asUInt32),
+                    Int32 asInt32 => new Int32GFFNodeViewModel(node, label, asInt32),
+                    UInt64 asUInt64 => new UInt64GFFNodeViewModel(node, label, asUInt64),
+                    Int64 asInt64 => new Int64GFFNodeViewModel(node, label, asInt64),
+                    Single asSingle => new SingleGFFNodeViewModel(node, label, asSingle),
+                    Double asDouble => new DoubleGFFNodeViewModel(node, label, asDouble),
+                    ResRef asResRef => new ResRefGFFNodeViewModel(node, label, asResRef),
+                    String asString => new StringGFFNodeViewModel(node, label, asString),
+                    LocalisedString asLocalizedString => new LocalizedStringGFFNodeViewModel(node, label, asLocalizedString),
+                    byte[] asBinary => new BinaryGFFNodeViewModel(node, label, asBinary),
+                    Vector3 asVector3 => new Vector3GFFNodeViewModel(node, label, asVector3),
+                    Vector4 asVector4 => new Vector4GFFNodeViewModel(node, label, asVector4),
                     GFFStruct asStruct => new FieldStructGFFNodeViewModel(node, label, (int)asStruct.ID), // TODO standardize as either int or uint
-                    GFFList asList => new FieldListGFFNodeViewModel(node, label),
+                    GFFList asList => new ListGFFNodeViewModel(node, label),
                 };
 
                 if (vmNode is IStructGFFTreeNodeViewModel thisStructField)
                 {
                     thisStructField.PopulateStruct(value as GFFStruct);
                 }
-                if (vmNode is FieldListGFFNodeViewModel vmListField)
+                if (vmNode is ListGFFNodeViewModel vmListField)
                 {
                     var list = value as GFFList;
                     list.ToList().ForEach(x =>

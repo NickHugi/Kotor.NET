@@ -10,20 +10,20 @@ using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
-public class SetSingleAction : BaseSetNodeAction<FieldSingleGFFNodeViewModel, Single?>
+public class SetSingleAction : BaseSetNodeAction<SingleGFFNodeViewModel, Single?>
 {
     public SetSingleAction(NodePath path, Single? oldValue, Single? newValue)
         : base(path, oldValue, newValue)
     {
     }
 
-    protected override FieldSingleGFFNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, Single? value)
-        => new FieldSingleGFFNodeViewModel(parentNode, Path.Tail, value.Value);
+    protected override SingleGFFNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, Single? value)
+        => new SingleGFFNodeViewModel(parentNode, Path.Tail, value.Value);
 
-    protected override void SetNewValue(FieldSingleGFFNodeViewModel node)
+    protected override void SetNewValue(SingleGFFNodeViewModel node)
         => node.FieldValue = NewValue!.Value;
 
-    protected override void SetOldValue(FieldSingleGFFNodeViewModel node)
+    protected override void SetOldValue(SingleGFFNodeViewModel node)
         => node.FieldValue = OldValue!.Value;
 }
 

@@ -12,21 +12,21 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public class FieldVector3GFFNodeViewModel : BaseFieldGFFNodeViewModel<Vector3ViewModel>
+public class Vector3GFFNodeViewModel : BaseFieldGFFNodeViewModel<Vector3ViewModel>
 {
     public override string DisplayType => "Vector3";
     public override string DisplayValue => $"{FieldValue.X}, {FieldValue.Y}, {FieldValue.Z}";
 
-    public FieldVector3GFFNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent, label)
+    public Vector3GFFNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent, label)
     {
         FieldValue = new();
         FieldValue.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(DisplayValue)));
     }
-    public FieldVector3GFFNodeViewModel(IGFFNodeViewModel parent, string label, Vector3ViewModel value) : this(parent, label)
+    public Vector3GFFNodeViewModel(IGFFNodeViewModel parent, string label, Vector3ViewModel value) : this(parent, label)
     {
         FieldValue = value;
     }
-    public FieldVector3GFFNodeViewModel(IGFFNodeViewModel parent, string label, Vector3 value) : this(parent, label)
+    public Vector3GFFNodeViewModel(IGFFNodeViewModel parent, string label, Vector3 value) : this(parent, label)
     {
         FieldValue = new()
         {
@@ -35,7 +35,7 @@ public class FieldVector3GFFNodeViewModel : BaseFieldGFFNodeViewModel<Vector3Vie
             Z = value.Z
         };
     }
-    public FieldVector3GFFNodeViewModel(IGFFNodeViewModel parent, string label, float x, float y, float z) : this(parent, label)
+    public Vector3GFFNodeViewModel(IGFFNodeViewModel parent, string label, float x, float y, float z) : this(parent, label)
     {
         FieldValue = new()
         {

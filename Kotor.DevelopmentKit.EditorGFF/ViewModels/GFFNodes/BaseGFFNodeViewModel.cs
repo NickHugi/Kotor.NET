@@ -79,7 +79,7 @@ public abstract class BaseGFFNodeViewModel : ReactiveObject, IGFFNodeViewModel
             }
             else if (next is ListStructGFFNodeViewModel structInList)
             {
-                var listNode = (FieldListGFFNodeViewModel)structInList.Parent;
+                var listNode = (ListGFFNodeViewModel)structInList.Parent;
                 path.Add(listNode.Children.IndexOf(structInList));
             }
 
@@ -124,7 +124,7 @@ public abstract class BaseGFFNodeViewModel : ReactiveObject, IGFFNodeViewModel
         {
             if (step is int listIndex)
             {
-                if (node is FieldListGFFNodeViewModel listNode)
+                if (node is ListGFFNodeViewModel listNode)
                 {
                     node = listNode.Children.ElementAtOrDefault(listIndex);
                 }

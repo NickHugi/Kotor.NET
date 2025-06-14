@@ -73,71 +73,71 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
     }
     private void FieldUInt8Panel_FinishedEditing(object? sender, UInt8EditedEventArgs e)
     {
-        Context.SetUInt8Node(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
+        Context.SetUInt8Node(e.SourcePath, e.NewValue);
     }
     private void FieldInt8Panel_FinishedEditing(object? sender, Int8EditedEventArgs e)
     {
-        Context.SetInt8Node(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
+        Context.SetInt8Node(e.SourcePath, e.NewValue);
     }
     private void FieldUInt16Panel_FinishedEditing(object? sender, UInt16EditedEventArgs e)
     {
-        Context.SetUInt16Node(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
+        Context.SetUInt16Node(e.SourcePath, e.NewValue);
     }
     private void FieldInt16Panel_FinishedEditing(object? sender, Int16EditedEventArgs e)
     {
-        Context.SetInt16Node(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
+        Context.SetInt16Node(e.SourcePath, e.NewValue);
     }
     private void FieldUInt32Panel_FinishedEditing(object? sender, UInt32EditedEventArgs e)
     {
-        Context.SetUInt32Node(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
+        Context.SetUInt32Node(e.SourcePath, e.NewValue);
     }
     private void FieldInt32Panel_FinishedEditing(object? sender, Int32EditedEventArgs e)
     {
-        Context.SetInt32Node(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
+        Context.SetInt32Node(e.SourcePath, e.NewValue);
     }
     private void FieldUInt64Panel_FinishedEditing(object? sender, UInt64EditedEventArgs e)
     {
-        Context.SetUInt64Node(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
+        Context.SetUInt64Node(e.SourcePath, e.NewValue);
     }
     private void FieldInt64Panel_FinishedEditing(object? sender, Int64EditedEventArgs e)
     {
-        Context.SetInt64Node(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
+        Context.SetInt64Node(e.SourcePath, e.NewValue);
     }
     private void FieldSinglePanel_FinishedEditing(object? sender, SingleEditedEventArgs e)
     {
-        Context.SetSingleNode(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
+        Context.SetSingleNode(e.SourcePath, e.NewValue);
     }
     private void FieldDoublePanel_FinishedEditing(object? sender, DoubleEditedEventArgs e)
     {
-        Context.SetDoubleNode(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
+        Context.SetDoubleNode(e.SourcePath, e.NewValue);
     }
     private void FieldStringPanel_FinishedEditing(object? sender, StringEditedEventArgs e)
     {
-        Context.SetStringNode(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
+        Context.SetStringNode(e.SourcePath, e.NewValue);
     }
     private void FieldResRefPanel_FinishedEditing(object? sender, ResRefEditedEventArgs e)
     {
-        Context.SetResRefNode(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
+        Context.SetResRefNode(e.SourcePath, e.NewValue);
     }
     private void FieldLocalizedStringPanel_FinishedEditing(object? sender, LocalizedStringEditedEventArgs e)
     {
-        Context.SetLocalizedStringNode(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
+        Context.SetLocalizedStringNode(e.SourcePath, e.NewValue);
     }
     private void FieldBinaryPanel_FinishedEditing(object? sender, BinaryEditedEventArgs e)
     {
-        Context.SetBinaryNode(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
+        Context.SetBinaryNode(e.SourcePath, e.NewValue);
     }
     private void FieldVector3Panel_FinishedEditing(object? sender, Vector3EditedEventArgs e)
     {
-        Context.SetVector3Node(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
+        Context.SetVector3Node(e.SourcePath, e.NewValue);
     }
     private void FieldVector4Panel_FinishedEditing(object? sender, Vector4EditedEventArgs e)
     {
-        Context.SetVector4Node(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
+        Context.SetVector4Node(e.SourcePath, e.NewValue);
     }
     private void FieldStructPanel_FinishedEditing(object? sender, StructEditedEventArgs e)
     {
-        Context.SetStructNode(Context.RootNode.GetPathOf(e.EditedNode), e.NewValue);
+        Context.SetStructNode(e.SourcePath, e.NewValue);
     }
     private void LabelInput_LostFocus(object? sender, RoutedEventArgs e)
     {
@@ -171,7 +171,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
             menu.Items.Add(new MenuItem() { Header = "Add Struct", Command = ReactiveCommand.Create(() => AddStruct(dataAsStruct)) });
             menu.Items.Add(new MenuItem() { Header = "Add List", Command = ReactiveCommand.Create(() => AddList(dataAsStruct)) });
         }
-        else if (node is FieldListGFFNodeViewModel dataAsList)
+        else if (node is ListGFFNodeViewModel dataAsList)
         {
             menu.Items.Add(new MenuItem() { Header = "Add Struct", Command = ReactiveCommand.Create(() => AddStruct(dataAsList)) });
         }
@@ -181,7 +181,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
             menu.Items.Add(new Separator());
         }
 
-        if (node is FieldListGFFNodeViewModel)
+        if (node is ListGFFNodeViewModel)
         {
             menu.Items.Add(new MenuItem() { Header = "Paste Struct", Command = ReactiveCommand.Create(() => PasteNode()), IsEnabled=await HasStructOnClipboard() });
             menu.Items.Add(new MenuItem() { Header = "Copy Field", Command = ReactiveCommand.Create(async () => await CopyNode(node)) });
@@ -318,7 +318,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetStructNode(path, default);
     }
-    private void AddStruct(FieldListGFFNodeViewModel parent)
+    private void AddStruct(ListGFFNodeViewModel parent)
     {
         var path = Context.RootNode.GetPathOf(parent).Extend(parent.Children.Count);
         Context.SetStructNode(path, default);
@@ -353,7 +353,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
         var deserializeNodeService = new DeserializeNodeService();
         var selectedNode = Context.SelectedNode;
 
-        if (await HasStructOnClipboard() && selectedNode is FieldListGFFNodeViewModel selectedListNode)
+        if (await HasStructOnClipboard() && selectedNode is ListGFFNodeViewModel selectedListNode)
         {
             var text = await Clipboard!.GetTextAsync();
             var node = (ListStructGFFNodeViewModel)deserializeNodeService.Deserialize(selectedNode, text);

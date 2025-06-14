@@ -5,21 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Interactivity;
 using Kotor.DevelopmentKit.Base.ViewModels;
+using Kotor.DevelopmentKit.EditorGFF.Models;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.EventArgs;
 
 public class Vector4EditedEventArgs : RoutedEventArgs
 {
-    public FieldVector4GFFNodeViewModel EditedNode { get; }
+    public NodePath SourcePath { get; }
     public Vector4ViewModel NewValue { get; }
-    public Vector4ViewModel OldValue { get; }
 
-    public Vector4EditedEventArgs(RoutedEvent routedEvent, object source, FieldVector4GFFNodeViewModel viewModel, Vector4ViewModel newValue, Vector4ViewModel oldValue)
+    public Vector4EditedEventArgs(RoutedEvent routedEvent, object source, NodePath sourePath, Vector4ViewModel newValue)
         : base(routedEvent, source)
     {
-        EditedNode = viewModel;
+        SourcePath = sourePath;
         NewValue = newValue.Clone();
-        OldValue = oldValue.Clone();
     }
 }

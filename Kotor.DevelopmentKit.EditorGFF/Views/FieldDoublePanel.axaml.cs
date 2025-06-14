@@ -4,12 +4,20 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Kotor.DevelopmentKit.EditorGFF.EventArgs;
+using Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldDoublePanel : EditFieldPanel<FieldDoubleGFFNodeViewModel, Double, DoubleEditedEventArgs>
+public partial class FieldDoublePanel : EditFieldPanel<DoubleGFFNodeViewModel, Double, DoubleEditedEventArgs>
 {
+    public required DoublePanelViewModel ViewModel
+    {
+        get => (DataContext as DoublePanelViewModel)!;
+        set => DataContext = value;
+    }
+
+
     public FieldDoublePanel() : base()
     {
         InitializeComponent();
@@ -17,7 +25,7 @@ public partial class FieldDoublePanel : EditFieldPanel<FieldDoubleGFFNodeViewMod
 
     protected override void RaiseFinishedEditing()
     {
-        RoutedEventArgs args = new DoubleEditedEventArgs(FinishedEditingEvent, this, _transitoryNode, CurrentValue, _transitoryNode.FieldValue);
+        RoutedEventArgs args = new DoubleEditedEventArgs(FinishedEditingEvent, this, ViewModel.SourcePath, ViewModel.Value);
         RaiseEvent(args);
     }
 

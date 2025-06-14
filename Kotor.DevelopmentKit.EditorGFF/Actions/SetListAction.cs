@@ -17,9 +17,9 @@ public class SetListAction : BaseSetNodeAction<BaseGFFNodeViewModel, bool?>
     {
     }
 
-    protected override FieldListGFFNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, bool? _)
+    protected override ListGFFNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, bool? _)
     {
-        return new FieldListGFFNodeViewModel(parentNode, Path.Tail);
+        return new ListGFFNodeViewModel(parentNode, Path.Tail);
     }
 
     protected override void SetNewValue(BaseGFFNodeViewModel node)

@@ -10,19 +10,19 @@ using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
-public class SetUInt64Action : BaseSetNodeAction<FieldUInt64GFFNodeViewModel, UInt64?>
+public class SetUInt64Action : BaseSetNodeAction<UInt64GFFNodeViewModel, UInt64?>
 {
     public SetUInt64Action(NodePath path, UInt64? oldValue, UInt64? newValue)
         : base(path, oldValue, newValue)
     {
     }
 
-    protected override FieldUInt64GFFNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, UInt64? value)
-        => new FieldUInt64GFFNodeViewModel(parentNode, Path.Tail, value.Value);
+    protected override UInt64GFFNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, UInt64? value)
+        => new UInt64GFFNodeViewModel(parentNode, Path.Tail, value.Value);
 
-    protected override void SetNewValue(FieldUInt64GFFNodeViewModel node)
+    protected override void SetNewValue(UInt64GFFNodeViewModel node)
         => node.FieldValue = NewValue!.Value;
 
-    protected override void SetOldValue(FieldUInt64GFFNodeViewModel node)
+    protected override void SetOldValue(UInt64GFFNodeViewModel node)
         => node.FieldValue = OldValue!.Value;
 }

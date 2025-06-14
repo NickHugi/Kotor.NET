@@ -3,11 +3,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              
+             xmlns:vm="clr-namespace:Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel"
+             
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="300"
              x:Class="Kotor.DevelopmentKit.EditorGFF.Views.FieldResRefPanel"
+             x:DataType="vm:ResRefPanelViewModel"
              x:Name="Control">
     <StackPanel>
         <TextBlock Foreground="Gray">Value</TextBlock>
-        <TextBox Text="{Binding #Control.CurrentValue.Value, Mode=TwoWay}" MaxLength="16" LostFocus="TextBox_LostFocus" />
+        <TextBox Text="{Binding Value.Value, Mode=TwoWay}" MaxLength="16" LostFocus="TextBox_LostFocus" />
     </StackPanel>
 </UserControl>

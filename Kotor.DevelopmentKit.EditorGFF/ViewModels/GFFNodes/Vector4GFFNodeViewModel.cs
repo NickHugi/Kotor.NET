@@ -12,7 +12,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public class FieldVector4GFFNodeViewModel : BaseFieldGFFNodeViewModel<Vector4ViewModel>
+public class Vector4GFFNodeViewModel : BaseFieldGFFNodeViewModel<Vector4ViewModel>
 {
     private ReadOnlyObservableCollection<BaseGFFNodeViewModel> _children = new([]);
     public override ReadOnlyObservableCollection<BaseGFFNodeViewModel> Children => _children;
@@ -20,16 +20,16 @@ public class FieldVector4GFFNodeViewModel : BaseFieldGFFNodeViewModel<Vector4Vie
     public override string DisplayType => "Vector4";
     public override string DisplayValue => $"{FieldValue.X}, {FieldValue.Y}, {FieldValue.Z}, {FieldValue.W}";
 
-    public FieldVector4GFFNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent, label)
+    public Vector4GFFNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent, label)
     {
         FieldValue = new();
         FieldValue.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(DisplayValue)));
     }
-    public FieldVector4GFFNodeViewModel(IGFFNodeViewModel parent, string label, Vector4ViewModel value) : this(parent, label)
+    public Vector4GFFNodeViewModel(IGFFNodeViewModel parent, string label, Vector4ViewModel value) : this(parent, label)
     {
         FieldValue = value;
     }
-    public FieldVector4GFFNodeViewModel(IGFFNodeViewModel parent, string label, Vector4 value) : this(parent, label)
+    public Vector4GFFNodeViewModel(IGFFNodeViewModel parent, string label, Vector4 value) : this(parent, label)
     {
         FieldValue = new()
         {
@@ -39,7 +39,7 @@ public class FieldVector4GFFNodeViewModel : BaseFieldGFFNodeViewModel<Vector4Vie
             W = value.W
         };
     }
-    public FieldVector4GFFNodeViewModel(IGFFNodeViewModel parent, string label, float x, float y, float z, float w) : this(parent, label)
+    public Vector4GFFNodeViewModel(IGFFNodeViewModel parent, string label, float x, float y, float z, float w) : this(parent, label)
     {
         FieldValue = new()
         {

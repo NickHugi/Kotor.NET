@@ -4,12 +4,20 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Kotor.DevelopmentKit.EditorGFF.EventArgs;
+using Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldInt16Panel : EditFieldPanel<FieldInt16GFFNodeViewModel, Int16, Int16EditedEventArgs>
+public partial class FieldInt16Panel : EditFieldPanel<Int16GFFNodeViewModel, Int16, Int16EditedEventArgs>
 {
+    public required Int16PanelViewModel ViewModel
+    {
+        get => (DataContext as Int16PanelViewModel)!;
+        set => DataContext = value;
+    }
+
+
     public FieldInt16Panel() : base()
     {
         InitializeComponent();
@@ -17,7 +25,7 @@ public partial class FieldInt16Panel : EditFieldPanel<FieldInt16GFFNodeViewModel
 
     protected override void RaiseFinishedEditing()
     {
-        RoutedEventArgs args = new Int16EditedEventArgs(FinishedEditingEvent, this, _transitoryNode, CurrentValue, _transitoryNode.FieldValue);
+        RoutedEventArgs args = new Int16EditedEventArgs(FinishedEditingEvent, this, ViewModel.SourcePath, ViewModel.Value);
         RaiseEvent(args);
     }
 
