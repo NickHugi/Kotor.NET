@@ -16,9 +16,8 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
 
 public class ResRefPanelViewModel : BaseNodePanelViewModel<ResRefViewModel>
 {
-    public ResRefPanelViewModel(NodePath path, ResRefViewModel value)
+    public ResRefPanelViewModel(ResRefViewModel value)
     {
-        SourcePath = path;
         Value = value;
     }
 }

@@ -32,9 +32,8 @@ public class LocalizedStringPanelViewModel : BaseNodePanelViewModel<LocalizedStr
     private readonly ITalkTableLookup _talkTableLookup;
 
 
-    public LocalizedStringPanelViewModel(ITalkTableLookup talkTableLookup, LocalizedStringViewModel locstring, NodePath path)
+    public LocalizedStringPanelViewModel(ITalkTableLookup talkTableLookup, LocalizedStringViewModel locstring)
     {
-        SourcePath = path;
         Value = locstring.Clone();
         _talkTableLookup = talkTableLookup;
 

@@ -15,9 +15,8 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
 
 public class UInt16PanelViewModel : BaseNodePanelViewModel<UInt16>
 {
-    public UInt16PanelViewModel(NodePath path, UInt16 value)
+    public UInt16PanelViewModel(UInt16 value)
     {
-        SourcePath = path;
         Value = value;
     }
 }

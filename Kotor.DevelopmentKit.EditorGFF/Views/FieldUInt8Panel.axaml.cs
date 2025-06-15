@@ -28,7 +28,7 @@ public partial class FieldUInt8Panel : EditFieldPanel<UInt8GFFNodeViewModel, Byt
 
     protected override void RaiseFinishedEditing()
     {
-        RoutedEventArgs args = new UInt8EditedEventArgs(FinishedEditingEvent, this, ViewModel.SourcePath, ViewModel.Value);
+        RoutedEventArgs args = new UInt8EditedEventArgs(FinishedEditingEvent, this, ViewModel.Value);
         RaiseEvent(args);
     }
 

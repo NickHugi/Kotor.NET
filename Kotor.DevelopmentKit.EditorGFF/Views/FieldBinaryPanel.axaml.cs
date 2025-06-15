@@ -25,7 +25,7 @@ public partial class FieldBinaryPanel : EditFieldPanel<BinaryGFFNodeViewModel, b
 
     protected override void RaiseFinishedEditing()
     {
-        RoutedEventArgs args = new BinaryEditedEventArgs(FinishedEditingEvent, this, ViewModel.SourcePath, ViewModel.Value);
+        RoutedEventArgs args = new BinaryEditedEventArgs(FinishedEditingEvent, this, ViewModel.Value);
         RaiseEvent(args);
     }
 

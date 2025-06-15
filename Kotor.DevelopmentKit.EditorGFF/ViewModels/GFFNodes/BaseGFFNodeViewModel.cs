@@ -30,7 +30,7 @@ public abstract class BaseGFFNodeViewModel : ReactiveObject, IGFFNodeViewModel
     public IGFFNodeViewModel? Parent { get; }
     public abstract ReadOnlyObservableCollection<BaseGFFNodeViewModel> Children { get; }
 
-    public IEnumerable<string> Path
+    public NodePath Path
     {
         get
         {
@@ -49,7 +49,7 @@ public abstract class BaseGFFNodeViewModel : ReactiveObject, IGFFNodeViewModel
                 cursor = cursor.Parent;
             }
             path.Reverse();
-            return path;
+            return new(path);
         }
     }
 

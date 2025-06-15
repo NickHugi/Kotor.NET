@@ -11,13 +11,11 @@ namespace Kotor.DevelopmentKit.EditorGFF.EventArgs;
 
 public class Int8EditedEventArgs : RoutedEventArgs
 {
-    public NodePath SourcePath { get; }
     public sbyte NewValue { get; }
 
-    public Int8EditedEventArgs(RoutedEvent routedEvent, object source, NodePath sourcePath, sbyte newValue)
+    public Int8EditedEventArgs(RoutedEvent routedEvent, object source, sbyte newValue)
         : base(routedEvent, source)
     {
-        SourcePath = sourcePath;
         NewValue = newValue;
     }
 }

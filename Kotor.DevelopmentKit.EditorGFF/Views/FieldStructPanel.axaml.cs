@@ -25,7 +25,7 @@ public partial class FieldStructPanel : EditFieldPanel<IStructGFFTreeNodeViewMod
 
     protected override void RaiseFinishedEditing()
     {
-        RoutedEventArgs args = new StructEditedEventArgs(FinishedEditingEvent, this, ViewModel.SourcePath, ViewModel.Value);
+        RoutedEventArgs args = new StructEditedEventArgs(FinishedEditingEvent, this, ViewModel.Value);
         RaiseEvent(args);
     }
 

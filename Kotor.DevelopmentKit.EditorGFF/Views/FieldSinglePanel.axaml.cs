@@ -25,7 +25,7 @@ public partial class FieldSinglePanel : EditFieldPanel<SingleGFFNodeViewModel, S
 
     protected override void RaiseFinishedEditing()
     {
-        RoutedEventArgs args = new SingleEditedEventArgs(FinishedEditingEvent, this, ViewModel.SourcePath, ViewModel.Value);
+        RoutedEventArgs args = new SingleEditedEventArgs(FinishedEditingEvent, this, ViewModel.Value);
         RaiseEvent(args);
     }
 

@@ -15,9 +15,8 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
 
 public class SinglePanelViewModel : BaseNodePanelViewModel<Single>
 {
-    public SinglePanelViewModel(NodePath path, Single value)
+    public SinglePanelViewModel(Single value)
     {
-        SourcePath = path;
         Value = value;
     }
 }

@@ -63,7 +63,7 @@ public partial class FieldLocalizedStringPanel : UserControl
 
     private void RaiseFinishedEditing()
     {
-        RoutedEventArgs args = new LocalizedStringEditedEventArgs(FinishedEditingEvent, this, ViewModel.SourcePath, ViewModel.Value);
+        RoutedEventArgs args = new LocalizedStringEditedEventArgs(FinishedEditingEvent, this, ViewModel.Value);
         RaiseEvent(args);
     }
 

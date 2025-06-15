@@ -15,9 +15,8 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
 
 public class UInt8PanelViewModel : BaseNodePanelViewModel<byte>
 {
-    public UInt8PanelViewModel(NodePath path, byte value)
+    public UInt8PanelViewModel(byte value)
     {
-        SourcePath = path;
         Value = value;
     }
 }

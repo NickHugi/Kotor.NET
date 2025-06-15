@@ -16,9 +16,8 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
 
 public class Vector3PanelViewModel : BaseNodePanelViewModel<Vector3ViewModel>
 {
-    public Vector3PanelViewModel(NodePath path, Vector3ViewModel value)
+    public Vector3PanelViewModel(Vector3ViewModel value)
     {
-        SourcePath = path;
         Value = value;
     }
 }

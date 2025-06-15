@@ -73,77 +73,79 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
     }
     private void FieldUInt8Panel_FinishedEditing(object? sender, UInt8EditedEventArgs e)
     {
-        Context.SetUInt8Node(e.SourcePath, e.NewValue);
+        Context.SetUInt8Node(Context.SelectedNode.Path, e.NewValue);
     }
     private void FieldInt8Panel_FinishedEditing(object? sender, Int8EditedEventArgs e)
     {
-        Context.SetInt8Node(e.SourcePath, e.NewValue);
+        Context.SetInt8Node(Context.SelectedNode.Path, e.NewValue);
     }
     private void FieldUInt16Panel_FinishedEditing(object? sender, UInt16EditedEventArgs e)
     {
-        Context.SetUInt16Node(e.SourcePath, e.NewValue);
+        Context.SetUInt16Node(Context.SelectedNode.Path, e.NewValue);
     }
     private void FieldInt16Panel_FinishedEditing(object? sender, Int16EditedEventArgs e)
     {
-        Context.SetInt16Node(e.SourcePath, e.NewValue);
+        Context.SetInt16Node(Context.SelectedNode.Path, e.NewValue);
     }
     private void FieldUInt32Panel_FinishedEditing(object? sender, UInt32EditedEventArgs e)
     {
-        Context.SetUInt32Node(e.SourcePath, e.NewValue);
+        Context.SetUInt32Node(Context.SelectedNode.Path, e.NewValue);
     }
     private void FieldInt32Panel_FinishedEditing(object? sender, Int32EditedEventArgs e)
     {
-        Context.SetInt32Node(e.SourcePath, e.NewValue);
+        Context.SetInt32Node(Context.SelectedNode.Path, e.NewValue);
     }
     private void FieldUInt64Panel_FinishedEditing(object? sender, UInt64EditedEventArgs e)
     {
-        Context.SetUInt64Node(e.SourcePath, e.NewValue);
+        Context.SetUInt64Node(Context.SelectedNode.Path, e.NewValue);
     }
     private void FieldInt64Panel_FinishedEditing(object? sender, Int64EditedEventArgs e)
     {
-        Context.SetInt64Node(e.SourcePath, e.NewValue);
+        Context.SetInt64Node(Context.SelectedNode.Path, e.NewValue);
     }
     private void FieldSinglePanel_FinishedEditing(object? sender, SingleEditedEventArgs e)
     {
-        Context.SetSingleNode(e.SourcePath, e.NewValue);
+        Context.SetSingleNode(Context.SelectedNode.Path, e.NewValue);
     }
     private void FieldDoublePanel_FinishedEditing(object? sender, DoubleEditedEventArgs e)
     {
-        Context.SetDoubleNode(e.SourcePath, e.NewValue);
+        Context.SetDoubleNode(Context.SelectedNode.Path, e.NewValue);
     }
     private void FieldStringPanel_FinishedEditing(object? sender, StringEditedEventArgs e)
     {
-        Context.SetStringNode(e.SourcePath, e.NewValue);
+        Context.SetStringNode(Context.SelectedNode.Path, e.NewValue);
     }
     private void FieldResRefPanel_FinishedEditing(object? sender, ResRefEditedEventArgs e)
     {
-        Context.SetResRefNode(e.SourcePath, e.NewValue);
+        Context.SetResRefNode(Context.SelectedNode.Path, e.NewValue);
     }
     private void FieldLocalizedStringPanel_FinishedEditing(object? sender, LocalizedStringEditedEventArgs e)
     {
-        Context.SetLocalizedStringNode(e.SourcePath, e.NewValue);
+        Context.SetLocalizedStringNode(Context.SelectedNode.Path, e.NewValue);
     }
     private void FieldBinaryPanel_FinishedEditing(object? sender, BinaryEditedEventArgs e)
     {
-        Context.SetBinaryNode(e.SourcePath, e.NewValue);
+        Context.SetBinaryNode(Context.SelectedNode.Path, e.NewValue);
     }
     private void FieldVector3Panel_FinishedEditing(object? sender, Vector3EditedEventArgs e)
     {
-        Context.SetVector3Node(e.SourcePath, e.NewValue);
+        Context.SetVector3Node(Context.SelectedNode.Path, e.NewValue);
     }
     private void FieldVector4Panel_FinishedEditing(object? sender, Vector4EditedEventArgs e)
     {
-        Context.SetVector4Node(e.SourcePath, e.NewValue);
+        Context.SetVector4Node(Context.SelectedNode.Path, e.NewValue);
     }
     private void FieldStructPanel_FinishedEditing(object? sender, StructEditedEventArgs e)
     {
-        Context.SetStructNode(e.SourcePath, e.NewValue);
+        Context.SetStructNode(Context.SelectedNode.Path, e.NewValue);
     }
     private void LabelInput_LostFocus(object? sender, RoutedEventArgs e)
     {
-        var label = ((TextBox)sender).Text;
-        var path = Context.RootNode.GetPathOf(Context.SelectedNode);
-        Context.Relabel(path, label);
+        if (sender is TextBox textbox && textbox.Text != Context.SelectedNode.Label)
+        {
+            var path = Context.RootNode.GetPathOf(Context.SelectedNode);
+            Context.Relabel(path, textbox.Text ?? "");
+        }
     }
 
     private async Task<ContextMenu> GetStructContextMenu(BaseGFFNodeViewModel node)
@@ -308,7 +310,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
     }
     private void AddVector4(IStructGFFTreeNodeViewModel parent)
     {
-        var label = "Vector4 UInt8".GetUniqueLabel(parent);
+        var label = "New Vector4".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetVector4Node(path, new());
     }

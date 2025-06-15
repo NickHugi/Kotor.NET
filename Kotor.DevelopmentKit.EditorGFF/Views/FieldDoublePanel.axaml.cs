@@ -25,7 +25,7 @@ public partial class FieldDoublePanel : EditFieldPanel<DoubleGFFNodeViewModel, D
 
     protected override void RaiseFinishedEditing()
     {
-        RoutedEventArgs args = new DoubleEditedEventArgs(FinishedEditingEvent, this, ViewModel.SourcePath, ViewModel.Value);
+        RoutedEventArgs args = new DoubleEditedEventArgs(FinishedEditingEvent, this, ViewModel.Value);
         RaiseEvent(args);
     }
 

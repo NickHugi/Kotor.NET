@@ -12,13 +12,11 @@ namespace Kotor.DevelopmentKit.EditorGFF.EventArgs;
 
 public class LocalizedStringEditedEventArgs : RoutedEventArgs
 {
-    public NodePath SourcePath { get; }
     public LocalizedStringViewModel NewValue { get; }
 
-    public LocalizedStringEditedEventArgs(RoutedEvent routedEvent, object source, NodePath sourcePath, LocalizedStringViewModel newValue)
+    public LocalizedStringEditedEventArgs(RoutedEvent routedEvent, object source, LocalizedStringViewModel newValue)
         : base(routedEvent, source)
     {
-        SourcePath = sourcePath;
         NewValue = newValue.Clone();
     }
 }

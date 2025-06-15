@@ -26,7 +26,7 @@ public partial class FieldResRefPanel : EditFieldPanel<ResRefGFFNodeViewModel, R
 
     protected override void RaiseFinishedEditing()
     {
-        RoutedEventArgs args = new ResRefEditedEventArgs(FinishedEditingEvent, this, ViewModel.SourcePath, ViewModel.Value);
+        RoutedEventArgs args = new ResRefEditedEventArgs(FinishedEditingEvent, this, ViewModel.Value);
         RaiseEvent(args);
     }
 

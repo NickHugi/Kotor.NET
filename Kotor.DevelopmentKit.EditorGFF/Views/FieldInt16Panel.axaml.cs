@@ -25,7 +25,7 @@ public partial class FieldInt16Panel : EditFieldPanel<Int16GFFNodeViewModel, Int
 
     protected override void RaiseFinishedEditing()
     {
-        RoutedEventArgs args = new Int16EditedEventArgs(FinishedEditingEvent, this, ViewModel.SourcePath, ViewModel.Value);
+        RoutedEventArgs args = new Int16EditedEventArgs(FinishedEditingEvent, this, ViewModel.Value);
         RaiseEvent(args);
     }
 

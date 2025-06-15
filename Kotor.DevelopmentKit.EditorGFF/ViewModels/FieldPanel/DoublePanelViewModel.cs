@@ -15,9 +15,8 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
 
 public class DoublePanelViewModel : BaseNodePanelViewModel<Double>
 {
-    public DoublePanelViewModel(NodePath path, Double value)
+    public DoublePanelViewModel(Double value)
     {
-        SourcePath = path;
         Value = value;
     }
 }

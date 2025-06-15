@@ -12,13 +12,11 @@ namespace Kotor.DevelopmentKit.EditorGFF.EventArgs;
 
 public class ResRefEditedEventArgs : RoutedEventArgs
 {
-    public NodePath SourcePath { get; }
     public ResRefViewModel NewValue { get; }
 
-    public ResRefEditedEventArgs(RoutedEvent routedEvent, object source, NodePath sourcePath, ResRefViewModel newValue)
+    public ResRefEditedEventArgs(RoutedEvent routedEvent, object source, ResRefViewModel newValue)
         : base(routedEvent, source)
     {
-        SourcePath = sourcePath;
         NewValue = newValue.Clone();
     }
 }

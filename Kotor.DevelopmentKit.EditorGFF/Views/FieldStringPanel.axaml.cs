@@ -25,7 +25,7 @@ public partial class FieldStringPanel : EditFieldPanel<StringGFFNodeViewModel, S
 
     protected override void RaiseFinishedEditing()
     {
-        RoutedEventArgs args = new StringEditedEventArgs(FinishedEditingEvent, this, ViewModel.SourcePath, ViewModel.Value);
+        RoutedEventArgs args = new StringEditedEventArgs(FinishedEditingEvent, this, ViewModel.Value);
         RaiseEvent(args);
     }
 

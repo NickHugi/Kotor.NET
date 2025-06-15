@@ -15,9 +15,8 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
 
 public class Int64PanelViewModel : BaseNodePanelViewModel<Int64>
 {
-    public Int64PanelViewModel(NodePath path, Int64 value)
+    public Int64PanelViewModel(Int64 value)
     {
-        SourcePath = path;
         Value = value;
     }
 }

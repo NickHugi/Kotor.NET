@@ -12,13 +12,11 @@ namespace Kotor.DevelopmentKit.EditorGFF.EventArgs;
 
 public class Vector4EditedEventArgs : RoutedEventArgs
 {
-    public NodePath SourcePath { get; }
     public Vector4ViewModel NewValue { get; }
 
-    public Vector4EditedEventArgs(RoutedEvent routedEvent, object source, NodePath sourePath, Vector4ViewModel newValue)
+    public Vector4EditedEventArgs(RoutedEvent routedEvent, object source, Vector4ViewModel newValue)
         : base(routedEvent, source)
     {
-        SourcePath = sourePath;
         NewValue = newValue.Clone();
     }
 }

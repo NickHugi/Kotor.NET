@@ -25,7 +25,7 @@ public partial class FieldUInt64Panel : EditFieldPanel<UInt64GFFNodeViewModel, U
 
     protected override void RaiseFinishedEditing()
     {
-        RoutedEventArgs args = new UInt64EditedEventArgs(FinishedEditingEvent, this, ViewModel.SourcePath, ViewModel.Value);
+        RoutedEventArgs args = new UInt64EditedEventArgs(FinishedEditingEvent, this, ViewModel.Value);
         RaiseEvent(args);
     }
 

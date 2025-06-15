@@ -11,13 +11,11 @@ namespace Kotor.DevelopmentKit.EditorGFF.EventArgs;
 
 public class DoubleEditedEventArgs : RoutedEventArgs
 {
-    public NodePath SourcePath { get; }
     public Double NewValue { get; }
 
-    public DoubleEditedEventArgs(RoutedEvent routedEvent, object source, NodePath sourcePath, Double newValue)
+    public DoubleEditedEventArgs(RoutedEvent routedEvent, object source, Double newValue)
         : base(routedEvent, source)
     {
-        SourcePath = sourcePath;
         NewValue = newValue;
     }
 }

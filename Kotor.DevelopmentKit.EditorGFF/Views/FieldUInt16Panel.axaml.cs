@@ -30,7 +30,7 @@ public partial class FieldUInt16Panel : EditFieldPanel<UInt16GFFNodeViewModel, U
 
     protected override void RaiseFinishedEditing()
     {
-        RoutedEventArgs args = new UInt16EditedEventArgs(FinishedEditingEvent, this, ViewModel.SourcePath, ViewModel.Value);
+        RoutedEventArgs args = new UInt16EditedEventArgs(FinishedEditingEvent, this, ViewModel.Value);
         RaiseEvent(args);
     }
 

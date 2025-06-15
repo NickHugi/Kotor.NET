@@ -10,7 +10,6 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
 
 public interface INodePanelViewModel
 {
-    public NodePath SourcePath { get; set; }
     public abstract object Value { set; }
 }
 
@@ -26,12 +25,5 @@ public abstract class BaseNodePanelViewModel<TValue> : ReactiveObject, INodePane
     object INodePanelViewModel.Value
     {
         set => Value = (TValue)value;
-    }
-
-    private NodePath _sourcePath;
-    public NodePath SourcePath
-    {
-        get => _sourcePath;
-        set => this.RaiseAndSetIfChanged(ref _sourcePath, value);
     }
 }

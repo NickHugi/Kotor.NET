@@ -11,13 +11,11 @@ namespace Kotor.DevelopmentKit.EditorGFF.EventArgs;
 
 public class UInt64EditedEventArgs : RoutedEventArgs
 {
-    public NodePath SourcePath { get; }
     public UInt64 NewValue { get; }
 
-    public UInt64EditedEventArgs(RoutedEvent routedEvent, object source, NodePath sourcePath, UInt64 newValue)
+    public UInt64EditedEventArgs(RoutedEvent routedEvent, object source, UInt64 newValue)
         : base(routedEvent, source)
     {
-        SourcePath = sourcePath;
         NewValue = newValue;
     }
 }

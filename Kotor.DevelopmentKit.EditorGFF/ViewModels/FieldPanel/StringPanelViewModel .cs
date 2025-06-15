@@ -16,9 +16,8 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
 
 public class StringPanelViewModel : BaseNodePanelViewModel<String>
 {
-    public StringPanelViewModel(NodePath path, String value)
+    public StringPanelViewModel(String value)
     {
-        SourcePath = path;
         Value = value;
     }
 }

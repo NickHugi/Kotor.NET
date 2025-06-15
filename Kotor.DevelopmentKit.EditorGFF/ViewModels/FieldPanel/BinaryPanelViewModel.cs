@@ -18,7 +18,6 @@ public class BinaryPanelViewModel : BaseNodePanelViewModel<byte[]>
 {
     public BinaryPanelViewModel(NodePath path, byte[] value)
     {
-        SourcePath = path;
         Value = value;
     }
 }

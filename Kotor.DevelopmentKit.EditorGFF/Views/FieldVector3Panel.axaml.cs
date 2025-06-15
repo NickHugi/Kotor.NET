@@ -26,7 +26,7 @@ public partial class FieldVector3Panel : EditFieldPanel<Vector3GFFNodeViewModel,
 
     protected override void RaiseFinishedEditing()
     {
-        RoutedEventArgs args = new Vector3EditedEventArgs(FinishedEditingEvent, this, ViewModel.SourcePath, ViewModel.Value);
+        RoutedEventArgs args = new Vector3EditedEventArgs(FinishedEditingEvent, this, ViewModel.Value);
         RaiseEvent(args);
     }
 
