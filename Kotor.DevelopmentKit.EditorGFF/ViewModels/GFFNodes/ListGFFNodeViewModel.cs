@@ -43,7 +43,7 @@ public class ListGFFNodeViewModel : BaseFieldGFFNodeViewModel
         return childStruct;
     }
 
-    public void DeleteStruct(IStructGFFTreeNodeViewModel @struct)
+    public void DeleteStruct(IStructGFFNodeViewModel @struct)
     {
         _children.Remove(@struct as BaseGFFNodeViewModel);
     }

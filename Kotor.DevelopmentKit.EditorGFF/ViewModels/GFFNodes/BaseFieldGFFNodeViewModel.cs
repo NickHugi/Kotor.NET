@@ -26,7 +26,7 @@ public abstract class BaseFieldGFFNodeViewModel : BaseGFFNodeViewModel
 
     public override void Delete()
     {
-        if (Parent is IStructGFFTreeNodeViewModel parentStruct)
+        if (Parent is IStructGFFNodeViewModel parentStruct)
         {
             parentStruct.DeleteField(this);
         }

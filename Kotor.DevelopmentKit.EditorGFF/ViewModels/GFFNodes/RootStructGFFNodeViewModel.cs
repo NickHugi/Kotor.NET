@@ -10,7 +10,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
-public class RootStructGFFNodeViewModel : BaseGFFNodeViewModel, IStructGFFTreeNodeViewModel
+public class RootStructGFFNodeViewModel : BaseGFFNodeViewModel, IStructGFFNodeViewModel
 {
     private int _structID;
     public int StructID

@@ -22,7 +22,7 @@ public class DeserializeNodeService
 
     private BaseGFFNodeViewModel Parse(BaseGFFNodeViewModel hook, XElement element)
     {
-        if (element.Name == "Field" && hook is IStructGFFTreeNodeViewModel structNode)
+        if (element.Name == "Field" && hook is IStructGFFNodeViewModel structNode)
         {
             var label = element.Attribute("Label")!.Value;
             return element.Attribute("Type").Value switch
@@ -118,7 +118,7 @@ public class DeserializeNodeService
 
     private void ParseStructInner(BaseGFFNodeViewModel structNode, XElement structElement)
     {
-        if (structNode is IStructGFFTreeNodeViewModel structNodeInterface)
+        if (structNode is IStructGFFNodeViewModel structNodeInterface)
         {
             foreach (var fieldElement in structElement.Descendants())
             {

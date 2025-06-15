@@ -38,8 +38,8 @@ public class SetStructAction : BaseSetNodeAction<BaseGFFNodeViewModel, Int32?>
     }
 
     protected override void SetNewValue(BaseGFFNodeViewModel node)
-        => (node as IStructGFFTreeNodeViewModel).StructID = NewValue.Value;
+        => (node as IStructGFFNodeViewModel).StructID = NewValue.Value;
 
     protected override void SetOldValue(BaseGFFNodeViewModel node)
-        => (node as IStructGFFTreeNodeViewModel).StructID = OldValue.Value;
+        => (node as IStructGFFNodeViewModel).StructID = OldValue.Value;
 }

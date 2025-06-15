@@ -16,7 +16,7 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
 
 public class BinaryPanelViewModel : BaseNodePanelViewModel<byte[]>
 {
-    public BinaryPanelViewModel(NodePath path, byte[] value)
+    public BinaryPanelViewModel(byte[] value)
     {
         Value = value;
     }

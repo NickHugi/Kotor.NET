@@ -31,7 +31,8 @@ public abstract class BaseSetNodeAction<TNodeViewModel, TValueViewModel>
 
         if (node is null)
         {
-            var parent = data.RootNode.NavigateTo<BaseGFFNodeViewModel>(Path.SkipLast(1));
+            var newParentPath = new NodePath(Path.SkipLast(1));
+            var parent = data.RootNode.NavigateTo<BaseGFFNodeViewModel>(newParentPath);
             CreateNode(parent, NewValue);
         }
         else
@@ -53,7 +54,8 @@ public abstract class BaseSetNodeAction<TNodeViewModel, TValueViewModel>
 
         if (node is null)
         {
-            var parent = data.RootNode.NavigateTo<BaseGFFNodeViewModel>(Path.SkipLast(1));
+            var newParentPath = new NodePath(Path.SkipLast(1));
+            var parent = data.RootNode.NavigateTo<BaseGFFNodeViewModel>(newParentPath) ?? throw new InvalidOperationException();
             CreateNode(parent, OldValue);
         }
         else
@@ -71,7 +73,7 @@ public abstract class BaseSetNodeAction<TNodeViewModel, TValueViewModel>
 
     protected TNodeViewModel CreateNode(BaseGFFNodeViewModel parentNode, TValueViewModel value)
     {
-        if (parentNode is IStructGFFTreeNodeViewModel structNode)
+        if (parentNode is IStructGFFNodeViewModel structNode)
         {
             var newNode = InstantiateNode(structNode, value);
             structNode.AddField(newNode as BaseFieldGFFNodeViewModel);

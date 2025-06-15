@@ -152,7 +152,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
     {
         var menu = new ContextMenu();
 
-        if (node is IStructGFFTreeNodeViewModel dataAsStruct)
+        if (node is IStructGFFNodeViewModel dataAsStruct)
         {
             menu.Items.Add(new MenuItem() { Header = "Add UInt8", Command = ReactiveCommand.Create(() => AddUInt8(dataAsStruct)) });
             menu.Items.Add(new MenuItem() { Header = "Add Int8", Command = ReactiveCommand.Create(() => AddInt8(dataAsStruct)) });
@@ -218,103 +218,103 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
         return menu;
     }
 
-    private void AddUInt8(IStructGFFTreeNodeViewModel parent)
+    private void AddUInt8(IStructGFFNodeViewModel parent)
     {
         var label = "New UInt8".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetUInt8Node(path, default);
     }
-    private void AddInt8(IStructGFFTreeNodeViewModel parent)
+    private void AddInt8(IStructGFFNodeViewModel parent)
     {
         var label = "New Int8".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetInt8Node(path, default);
     }
-    private void AddUInt16(IStructGFFTreeNodeViewModel parent)
+    private void AddUInt16(IStructGFFNodeViewModel parent)
     {
         var label = "New UInt16".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetUInt16Node(path, default);
     }
-    private void AddInt16(IStructGFFTreeNodeViewModel parent)
+    private void AddInt16(IStructGFFNodeViewModel parent)
     {
         var label = "New Int16".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetInt16Node(path, default);
     }
-    private void AddUInt32(IStructGFFTreeNodeViewModel parent)
+    private void AddUInt32(IStructGFFNodeViewModel parent)
     {
         var label = "New UInt32".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetUInt32Node(path, default);
     }
-    private void AddInt32(IStructGFFTreeNodeViewModel parent)
+    private void AddInt32(IStructGFFNodeViewModel parent)
     {
         var label = "New Int32".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetInt32Node(path, default);
     }
-    private void AddUInt64(IStructGFFTreeNodeViewModel parent)
+    private void AddUInt64(IStructGFFNodeViewModel parent)
     {
         var label = "New UInt64".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetUInt64Node(path, default);
     }
-    private void AddInt64(IStructGFFTreeNodeViewModel parent)
+    private void AddInt64(IStructGFFNodeViewModel parent)
     {
         var label = "New Int64".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetUInt64Node(path, default);
     }
-    private void AddSingle(IStructGFFTreeNodeViewModel parent)
+    private void AddSingle(IStructGFFNodeViewModel parent)
     {
         var label = "New Single".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetSingleNode(path, default);
     }
-    private void AddDouble(IStructGFFTreeNodeViewModel parent)
+    private void AddDouble(IStructGFFNodeViewModel parent)
     {
         var label = "New Double".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetDoubleNode(path, default);
     }
-    private void AddResRef(IStructGFFTreeNodeViewModel parent)
+    private void AddResRef(IStructGFFNodeViewModel parent)
     {
         var label = "New ResRef".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetResRefNode(path, new());
     }
-    private void AddString(IStructGFFTreeNodeViewModel parent)
+    private void AddString(IStructGFFNodeViewModel parent)
     {
         var label = "New String".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetStringNode(path, "");
     }
-    private void AddLocalizedString(IStructGFFTreeNodeViewModel parent)
+    private void AddLocalizedString(IStructGFFNodeViewModel parent)
     {
         var label = "New Localized String".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetLocalizedStringNode(path, new());
     }
-    private void AddBinary(IStructGFFTreeNodeViewModel parent)
+    private void AddBinary(IStructGFFNodeViewModel parent)
     {
         var label = "New Binary".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetBinaryNode(path, []);
     }
-    private void AddVector3(IStructGFFTreeNodeViewModel parent)
+    private void AddVector3(IStructGFFNodeViewModel parent)
     {
         var label = "New Vector3".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetVector3Node(path, new());
     }
-    private void AddVector4(IStructGFFTreeNodeViewModel parent)
+    private void AddVector4(IStructGFFNodeViewModel parent)
     {
         var label = "New Vector4".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetVector4Node(path, new());
     }
-    private void AddStruct(IStructGFFTreeNodeViewModel parent)
+    private void AddStruct(IStructGFFNodeViewModel parent)
     {
         var label = "New Struct".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
@@ -325,7 +325,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
         var path = Context.RootNode.GetPathOf(parent).Extend(parent.Children.Count);
         Context.SetStructNode(path, default);
     }
-    private void AddList(IStructGFFTreeNodeViewModel parent)
+    private void AddList(IStructGFFNodeViewModel parent)
     {
         var label = "New List".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
@@ -357,13 +357,13 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
 
         if (await HasStructOnClipboard() && selectedNode is ListGFFNodeViewModel selectedListNode)
         {
-            var text = await Clipboard!.GetTextAsync();
+            var text = await Clipboard!.GetTextAsync() ?? "";
             var node = (ListStructGFFNodeViewModel)deserializeNodeService.Deserialize(selectedNode, text);
             selectedListNode.AddStruct(node);
         }
-        else if (await HasFieldOnClipboard() && selectedNode is IStructGFFTreeNodeViewModel selectedStructNode)
+        else if (await HasFieldOnClipboard() && selectedNode is IStructGFFNodeViewModel selectedStructNode)
         {
-            var text = await Clipboard!.GetTextAsync();
+            var text = await Clipboard!.GetTextAsync() ?? "";
             var node = (BaseFieldGFFNodeViewModel)deserializeNodeService.Deserialize(selectedNode, text);
             node.Label = node.Label.GetUniqueLabel(selectedStructNode);
             selectedStructNode.AddField(node);
@@ -378,7 +378,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
     {
         try
         {
-            var clipboard = await Clipboard!.GetTextAsync();
+            var clipboard = await Clipboard!.GetTextAsync() ?? "";
             var document = XDocument.Parse(clipboard);
             return document.Elements().FirstOrDefault()?.Name?.ToString() == "Struct";
         }
@@ -392,7 +392,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
     {
         try
         {
-            var clipboard = await Clipboard!.GetTextAsync();
+            var clipboard = await Clipboard!.GetTextAsync() ?? "";
             var document = XDocument.Parse(clipboard);
             return document.Elements().FirstOrDefault()?.Name?.ToString() == "Field";
         }

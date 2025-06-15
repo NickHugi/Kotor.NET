@@ -36,7 +36,7 @@ public class GFFViewModel : ReactiveObject
             Root = BuildStruct(RootNode)
         };
     }
-    private GFFStruct BuildStruct(IStructGFFTreeNodeViewModel vmStruct)
+    private GFFStruct BuildStruct(IStructGFFNodeViewModel vmStruct)
     {
         var gffStruct = new GFFStruct((uint)vmStruct.StructID); // TODO
 
@@ -70,7 +70,7 @@ public class GFFViewModel : ReactiveObject
 
         foreach (var vmChild in vmList.Children)
         {
-            if (vmChild is IStructGFFTreeNodeViewModel vmStruct)
+            if (vmChild is IStructGFFNodeViewModel vmStruct)
             {
                 gffList.Add(BuildStruct(vmStruct));
             }

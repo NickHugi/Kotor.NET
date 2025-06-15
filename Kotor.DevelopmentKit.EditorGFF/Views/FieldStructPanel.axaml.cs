@@ -9,7 +9,7 @@ using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldStructPanel : EditFieldPanel<IStructGFFTreeNodeViewModel, Int32, StructEditedEventArgs>
+public partial class FieldStructPanel : EditFieldPanel<IStructGFFNodeViewModel, Int32, StructEditedEventArgs>
 {
     public required StructPanelViewModel ViewModel
     {

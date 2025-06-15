@@ -67,7 +67,7 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
                 StringGFFNodeViewModel node => ActivatorUtilities.CreateInstance<StringPanelViewModel>(App.ServiceProvider, node.FieldValue),
                 LocalizedStringGFFNodeViewModel node => ActivatorUtilities.CreateInstance<LocalizedStringPanelViewModel>(App.ServiceProvider, node.FieldValue),
                 BinaryGFFNodeViewModel node => ActivatorUtilities.CreateInstance<BinaryPanelViewModel>(App.ServiceProvider, node.FieldValue),
-                IStructGFFTreeNodeViewModel node => ActivatorUtilities.CreateInstance<StructPanelViewModel>(App.ServiceProvider, node.StructID),
+                IStructGFFNodeViewModel node => ActivatorUtilities.CreateInstance<StructPanelViewModel>(App.ServiceProvider, node.StructID),
                 Vector3GFFNodeViewModel node => ActivatorUtilities.CreateInstance<Vector3PanelViewModel>(App.ServiceProvider, node.FieldValue),
                 Vector4GFFNodeViewModel node => ActivatorUtilities.CreateInstance<Vector4PanelViewModel>(App.ServiceProvider, node.FieldValue),
                 ListGFFNodeViewModel node => null,
@@ -151,18 +151,19 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         History.Apply(action);
     }
 
-    public BaseGFFNodeViewModel FillPath(IEnumerable<object> path)
+    public BaseGFFNodeViewModel FillPath(NodePath path)
     {
         BaseGFFNodeViewModel node = _rootNode;
 
         foreach (var step in path)
         {
-            if (node is IStructGFFTreeNodeViewModel structNode && step is string fieldLabel)
+            if (node is IStructGFFNodeViewModel structNode && step is string fieldLabel)
             {
                 var nextNode = structNode.GetField(fieldLabel);
                 if (nextNode is null)
                 {
-                    structNode.AddField(new FieldStructGFFNodeViewModel(structNode as BaseGFFNodeViewModel, fieldLabel)); // TODO
+                    var field = structNode as BaseGFFNodeViewModel;
+                    structNode.AddField(new FieldStructGFFNodeViewModel(field, fieldLabel)); // TODO
                     node = structNode.GetField(fieldLabel);
                 }
                 else
@@ -279,7 +280,7 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
             History.Apply(fillAction);
         }
 
-        var node = RootNode.NavigateTo<BaseGFFNodeViewModel>(path) as IStructGFFTreeNodeViewModel;
+        var node = RootNode.NavigateTo<BaseGFFNodeViewModel>(path) as IStructGFFNodeViewModel;
 
         var oldValue = node?.StructID;
         if (value.Equals(oldValue))

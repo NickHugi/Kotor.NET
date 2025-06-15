@@ -9,8 +9,10 @@ namespace Kotor.DevelopmentKit.EditorGFF.Extensions;
 
 public static class StringExtensions
 {
-    public static string GetUniqueLabel(this string label, IStructGFFTreeNodeViewModel structNode)
+    public static string GetUniqueLabel(this string label, IStructGFFNodeViewModel? structNode)
     {
+        if (structNode is null)
+            return label;
         if (structNode.GetField(label) is null)
             return label;
 

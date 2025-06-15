@@ -116,7 +116,7 @@ public abstract class BaseGFFNodeViewModel : ReactiveObject, IGFFNodeViewModel
         var node = NavigateTo<TTargetNode>(fullPath);
         return node;
     }
-    public TTargetNode? NavigateTo<TTargetNode>(IEnumerable<object> path) where TTargetNode : BaseGFFNodeViewModel
+    private TTargetNode? NavigateTo<TTargetNode>(IEnumerable<object> path) where TTargetNode : BaseGFFNodeViewModel
     {
         IGFFNodeViewModel? node = this;
 
@@ -135,7 +135,7 @@ public abstract class BaseGFFNodeViewModel : ReactiveObject, IGFFNodeViewModel
             }
             else if (step is string fieldLabel)
             {
-                if (node is IStructGFFTreeNodeViewModel structNode)
+                if (node is IStructGFFNodeViewModel structNode)
                 {
                     node = structNode.Children.OfType<BaseFieldGFFNodeViewModel>().FirstOrDefault(x => x.Label == fieldLabel);
                 }

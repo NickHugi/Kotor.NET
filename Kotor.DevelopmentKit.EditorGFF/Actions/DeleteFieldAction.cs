@@ -25,7 +25,7 @@ public class DeleteFieldAction : IAction<GFFResourceEditorViewModel>
 
     public void Undo(GFFResourceEditorViewModel data)
     {
-        if (Node.Parent is IStructGFFTreeNodeViewModel structNode && Node is BaseFieldGFFNodeViewModel fieldNode)
+        if (Node.Parent is IStructGFFNodeViewModel structNode && Node is BaseFieldGFFNodeViewModel fieldNode)
         {
             structNode.AddField(fieldNode);
         }

@@ -15,7 +15,7 @@ public interface INodePanelViewModel
 
 public abstract class BaseNodePanelViewModel<TValue> : ReactiveObject, INodePanelViewModel
 {
-    private TValue _value;
+    private TValue _value = default!;
     public TValue Value
     {
         get => _value;
