@@ -51,6 +51,7 @@ public static class IStructGFFTreeNodeViewModelExtensions
                     Vector4 asVector4 => new Vector4GFFNodeViewModel(node, label, asVector4),
                     GFFStruct asStruct => new FieldStructGFFNodeViewModel(node, label, (int)asStruct.ID), // TODO standardize as either int or uint
                     GFFList asList => new ListGFFNodeViewModel(node, label),
+                    _ => throw new InvalidOperationException()
                 };
 
                 if (vmNode is IStructGFFNodeViewModel thisStructField)

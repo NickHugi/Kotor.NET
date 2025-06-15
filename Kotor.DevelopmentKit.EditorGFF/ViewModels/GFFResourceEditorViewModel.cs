@@ -49,6 +49,9 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
     {
         get
         {
+            if (_selectedNode is null)
+                return null;
+
             var path = RootNode.GetPathOf(_selectedNode);
 
             return _selectedNode switch
@@ -71,7 +74,6 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
                 Vector3GFFNodeViewModel node => ActivatorUtilities.CreateInstance<Vector3PanelViewModel>(App.ServiceProvider, node.FieldValue),
                 Vector4GFFNodeViewModel node => ActivatorUtilities.CreateInstance<Vector4PanelViewModel>(App.ServiceProvider, node.FieldValue),
                 ListGFFNodeViewModel node => null,
-                null => null,
                 _ => throw new InvalidOperationException()
             };
         }

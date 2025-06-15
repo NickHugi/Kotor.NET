@@ -12,7 +12,7 @@ namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
 public class SetBinaryAction : BaseSetNodeAction<BinaryGFFNodeViewModel, byte[]>
 {
-    public SetBinaryAction(NodePath path, byte[] oldValue, byte[] newValue)
+    public SetBinaryAction(NodePath path, byte[]? oldValue, byte[] newValue)
         : base(path, oldValue, newValue)
     {
     }

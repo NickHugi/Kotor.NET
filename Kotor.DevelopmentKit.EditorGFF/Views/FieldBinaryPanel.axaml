@@ -11,7 +11,14 @@
              x:Name="Control">
     <Border Background="#eee" BorderBrush="#ddd" BorderThickness="1" CornerRadius="4" Padding="10">
         <StackPanel>
-            <Button>Upload</Button>
+            <StackPanel Orientation="Horizontal">
+                <Button Click="Import_Click">Import</Button>
+                <Button Click="Export_Click">Export</Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock>Bytes: </TextBlock>
+                <TextBlock Text="{Binding Value.Length}" />
+            </StackPanel>
         </StackPanel>
     </Border>
 </UserControl>
