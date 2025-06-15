@@ -9,8 +9,10 @@
              x:Class="Kotor.DevelopmentKit.EditorGFF.Views.FieldInt64Panel"
              x:DataType="vm:Int64PanelViewModel"
              x:Name="Control">
-    <StackPanel>
-        <TextBlock Foreground="Gray">Value</TextBlock>
-        <NumericUpDown Value="{Binding Value}" Minimum="-9223372036854775808" Maximum="9223372036854775807" FormatString="N0" ParsingNumberStyle="Integer" LostFocus="NumericUpDown_LostFocus" />
-    </StackPanel>
+    <Border Background="#eee" BorderBrush="#ddd" BorderThickness="1" CornerRadius="4" Padding="10">
+        <StackPanel>
+            <TextBlock Foreground="Gray">Value</TextBlock>
+            <NumericUpDown Value="{Binding Value}" Minimum="-9223372036854775808" Maximum="9223372036854775807" FormatString="N0" ParsingNumberStyle="Integer" LostFocus="NumericUpDown_LostFocus" />
+        </StackPanel>
+    </Border>
 </UserControl>

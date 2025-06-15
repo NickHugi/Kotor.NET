@@ -9,8 +9,10 @@
              x:Class="Kotor.DevelopmentKit.EditorGFF.Views.FieldStringPanel"
              x:DataType="vm:StringPanelViewModel"
              x:Name="Control">
-    <StackPanel>
-        <TextBlock Foreground="Gray">Value</TextBlock>
-        <TextBox Text="{Binding Value}" AcceptsReturn="True" LostFocus="TextBox_LostFocus" />
-    </StackPanel>
+    <Border Background="#eee" BorderBrush="#ddd" BorderThickness="1" CornerRadius="4" Padding="10">
+        <StackPanel>
+            <TextBlock Foreground="Gray">Value</TextBlock>
+            <TextBox Text="{Binding Value}" AcceptsReturn="True" LostFocus="TextBox_LostFocus" />
+        </StackPanel>
+    </Border>
 </UserControl>

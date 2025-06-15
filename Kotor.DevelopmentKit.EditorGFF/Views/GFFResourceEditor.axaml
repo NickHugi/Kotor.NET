@@ -67,66 +67,62 @@
                         </StackPanel>
                     </Border>
 
-                    <Border Background="#eee" BorderBrush="#ddd" BorderThickness="1" CornerRadius="4" Padding="10"
-                            IsVisible="{Binding SelectedNode, Converter={StaticResource NotEqualsConverter}, ConverterParameter={x:Null}}">
-                        <Panel>
-                            <ContentControl Content="{Binding PanelData}">
-                                <ContentControl.DataTemplates>
-                                    <DataTemplate DataType="{x:Type panel-vm:UInt8PanelViewModel}">
-                                        <panel-views:FieldUInt8Panel FinishedEditing="FieldUInt8Panel_FinishedEditing" />
-                                    </DataTemplate>
-                                    <DataTemplate DataType="{x:Type panel-vm:Int8PanelViewModel}">
-                                        <panel-views:FieldInt8Panel FinishedEditing="FieldInt8Panel_FinishedEditing" />
-                                    </DataTemplate>
-                                    <DataTemplate DataType="{x:Type panel-vm:UInt16PanelViewModel}">
-                                        <panel-views:FieldUInt16Panel FinishedEditing="FieldUInt16Panel_FinishedEditing" />
-                                    </DataTemplate>
-                                    <DataTemplate DataType="{x:Type panel-vm:Int16PanelViewModel}">
-                                        <panel-views:FieldInt16Panel FinishedEditing="FieldInt16Panel_FinishedEditing" />
-                                    </DataTemplate>
-                                    <DataTemplate DataType="{x:Type panel-vm:UInt32PanelViewModel}">
-                                        <panel-views:FieldUInt32Panel FinishedEditing="FieldUInt32Panel_FinishedEditing" />
-                                    </DataTemplate>
-                                    <DataTemplate DataType="{x:Type panel-vm:Int32PanelViewModel}">
-                                        <panel-views:FieldInt32Panel FinishedEditing="FieldInt32Panel_FinishedEditing" />
-                                    </DataTemplate>
-                                    <DataTemplate DataType="{x:Type panel-vm:UInt64PanelViewModel}">
-                                        <panel-views:FieldUInt64Panel FinishedEditing="FieldUInt64Panel_FinishedEditing" />
-                                    </DataTemplate>
-                                    <DataTemplate DataType="{x:Type panel-vm:Int64PanelViewModel}">
-                                        <panel-views:FieldInt64Panel FinishedEditing="FieldInt64Panel_FinishedEditing" />
-                                    </DataTemplate>
-                                    <DataTemplate DataType="{x:Type panel-vm:SinglePanelViewModel}">
-                                        <panel-views:FieldSinglePanel FinishedEditing="FieldSinglePanel_FinishedEditing" />
-                                    </DataTemplate>
-                                    <DataTemplate DataType="{x:Type panel-vm:DoublePanelViewModel}">
-                                        <panel-views:FieldDoublePanel FinishedEditing="FieldDoublePanel_FinishedEditing" />
-                                    </DataTemplate>
-                                    <DataTemplate DataType="{x:Type panel-vm:ResRefPanelViewModel}">
-                                        <panel-views:FieldResRefPanel FinishedEditing="FieldResRefPanel_FinishedEditing" />
-                                    </DataTemplate>
-                                    <DataTemplate DataType="{x:Type panel-vm:StringPanelViewModel}">
-                                        <panel-views:FieldStringPanel FinishedEditing="FieldStringPanel_FinishedEditing" />
-                                    </DataTemplate>
-                                    <DataTemplate DataType="{x:Type panel-vm:LocalizedStringPanelViewModel}">
-                                        <panel-views:FieldLocalizedStringPanel FinishedEditing="FieldLocalizedStringPanel_FinishedEditing" />
-                                    </DataTemplate>
-                                    <DataTemplate DataType="{x:Type panel-vm:BinaryPanelViewModel}">
-                                        <panel-views:FieldBinaryPanel FinishedEditing="FieldBinaryPanel_FinishedEditing" />
-                                    </DataTemplate>
-                                    <DataTemplate DataType="{x:Type panel-vm:Vector3PanelViewModel}">
-                                        <panel-views:FieldVector3Panel FinishedEditing="FieldVector3Panel_FinishedEditing" />
-                                    </DataTemplate>
-                                    <DataTemplate DataType="{x:Type panel-vm:Vector4PanelViewModel}">
-                                        <panel-views:FieldVector4Panel FinishedEditing="FieldVector4Panel_FinishedEditing" />
-                                    </DataTemplate>
-                                    <DataTemplate DataType="{x:Type panel-vm:StructPanelViewModel}">
-                                        <panel-views:FieldStructPanel FinishedEditing="FieldStructPanel_FinishedEditing" />
-                                    </DataTemplate>
-                                </ContentControl.DataTemplates>
-                            </ContentControl>
-                        </Panel>
-                    </Border>
+                    
+                    <ContentControl Content="{Binding PanelData}">
+                        <ContentControl.DataTemplates>
+                            <DataTemplate DataType="{x:Type panel-vm:UInt8PanelViewModel}">
+                                <panel-views:FieldUInt8Panel FinishedEditing="FieldUInt8Panel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:Int8PanelViewModel}">
+                                <panel-views:FieldInt8Panel FinishedEditing="FieldInt8Panel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:UInt16PanelViewModel}">
+                                <panel-views:FieldUInt16Panel FinishedEditing="FieldUInt16Panel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:Int16PanelViewModel}">
+                                <panel-views:FieldInt16Panel FinishedEditing="FieldInt16Panel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:UInt32PanelViewModel}">
+                                <panel-views:FieldUInt32Panel FinishedEditing="FieldUInt32Panel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:Int32PanelViewModel}">
+                                <panel-views:FieldInt32Panel FinishedEditing="FieldInt32Panel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:UInt64PanelViewModel}">
+                                <panel-views:FieldUInt64Panel FinishedEditing="FieldUInt64Panel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:Int64PanelViewModel}">
+                                <panel-views:FieldInt64Panel FinishedEditing="FieldInt64Panel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:SinglePanelViewModel}">
+                                <panel-views:FieldSinglePanel FinishedEditing="FieldSinglePanel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:DoublePanelViewModel}">
+                                <panel-views:FieldDoublePanel FinishedEditing="FieldDoublePanel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:ResRefPanelViewModel}">
+                                <panel-views:FieldResRefPanel FinishedEditing="FieldResRefPanel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:StringPanelViewModel}">
+                                <panel-views:FieldStringPanel FinishedEditing="FieldStringPanel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:LocalizedStringPanelViewModel}">
+                                <panel-views:FieldLocalizedStringPanel FinishedEditing="FieldLocalizedStringPanel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:BinaryPanelViewModel}">
+                                <panel-views:FieldBinaryPanel FinishedEditing="FieldBinaryPanel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:Vector3PanelViewModel}">
+                                <panel-views:FieldVector3Panel FinishedEditing="FieldVector3Panel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:Vector4PanelViewModel}">
+                                <panel-views:FieldVector4Panel FinishedEditing="FieldVector4Panel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:StructPanelViewModel}">
+                                <panel-views:FieldStructPanel FinishedEditing="FieldStructPanel_FinishedEditing" />
+                            </DataTemplate>
+                        </ContentControl.DataTemplates>
+                    </ContentControl>
                 </StackPanel>
             </ScrollViewer>
         </Grid>

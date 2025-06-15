@@ -9,9 +9,10 @@
              x:Class="Kotor.DevelopmentKit.EditorGFF.Views.FieldUInt16Panel"
              x:DataType="vm:UInt16PanelViewModel"
              x:Name="Control">
-    <StackPanel Focusable="True">
-        <Border Name="FocusDummy" IsHitTestVisible="False" Focusable="True" />
-        <TextBlock Foreground="Gray">Value</TextBlock>
-        <NumericUpDown Value="{Binding Value}" Minimum="0" Maximum="65535" FormatString="N0" ParsingNumberStyle="Integer" LostFocus="NumericUpDown_LostFocus" />
-    </StackPanel>
+    <Border Background="#eee" BorderBrush="#ddd" BorderThickness="1" CornerRadius="4" Padding="10">
+        <StackPanel>
+            <TextBlock Foreground="Gray">Value</TextBlock>
+            <NumericUpDown Value="{Binding Value}" Minimum="0" Maximum="65535" FormatString="N0" ParsingNumberStyle="Integer" LostFocus="NumericUpDown_LostFocus" />
+        </StackPanel>
+    </Border>
 </UserControl>

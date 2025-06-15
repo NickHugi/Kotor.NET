@@ -9,14 +9,16 @@
              x:Class="Kotor.DevelopmentKit.EditorGFF.Views.FieldVector3Panel"
              x:DataType="vm:Vector3PanelViewModel"
              x:Name="Control">
-    <StackPanel>
-        <TextBlock Foreground="Gray">X</TextBlock>
-        <NumericUpDown Value="{Binding Value.X}" ParsingNumberStyle="Float" LostFocus="NumericUpDown_LostFocus" />
+    <Border Background="#eee" BorderBrush="#ddd" BorderThickness="1" CornerRadius="4" Padding="10">
+        <StackPanel>
+            <TextBlock Foreground="Gray">X</TextBlock>
+            <NumericUpDown Value="{Binding Value.X}" ParsingNumberStyle="Float" LostFocus="NumericUpDown_LostFocus" />
 
-        <TextBlock Foreground="Gray">Y</TextBlock>
-        <NumericUpDown Value="{Binding Value.Y}" ParsingNumberStyle="Float" LostFocus="NumericUpDown_LostFocus" />
+            <TextBlock Foreground="Gray">Y</TextBlock>
+            <NumericUpDown Value="{Binding Value.Y}" ParsingNumberStyle="Float" LostFocus="NumericUpDown_LostFocus" />
 
-        <TextBlock Foreground="Gray">Z</TextBlock>
-        <NumericUpDown Value="{Binding Value.Z}" ParsingNumberStyle="Float" LostFocus="NumericUpDown_LostFocus" />
-    </StackPanel>
+            <TextBlock Foreground="Gray">Z</TextBlock>
+            <NumericUpDown Value="{Binding Value.Z}" ParsingNumberStyle="Float" LostFocus="NumericUpDown_LostFocus" />
+        </StackPanel>
+    </Border>
 </UserControl>

@@ -77,10 +77,8 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         }
     }
 
-    public bool IsLocalizedSubstringSelected => (_selectedNode is LocalizedStringGFFNodeViewModel locstring) && (locstring.FieldValue.IsSubStringSelected);
-
-
     public override string WindowTitlePrefix => throw new NotImplementedException();
+
 
     public GFFResourceEditorViewModel()
     {

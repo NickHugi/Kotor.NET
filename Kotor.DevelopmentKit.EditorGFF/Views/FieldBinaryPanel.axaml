@@ -9,7 +9,9 @@
              x:Class="Kotor.DevelopmentKit.EditorGFF.Views.FieldBinaryPanel"
              x:DataType="vm:BinaryPanelViewModel"
              x:Name="Control">
-    <StackPanel>
-        <Button>Upload</Button>
-    </StackPanel>
+    <Border Background="#eee" BorderBrush="#ddd" BorderThickness="1" CornerRadius="4" Padding="10">
+        <StackPanel>
+            <Button>Upload</Button>
+        </StackPanel>
+    </Border>
 </UserControl>

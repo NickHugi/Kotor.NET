@@ -9,8 +9,10 @@
              x:Class="Kotor.DevelopmentKit.EditorGFF.Views.FieldSinglePanel"
              x:DataType="vm:SinglePanelViewModel"
              x:Name="Control">
-    <StackPanel>
-        <TextBlock Foreground="Gray">Value</TextBlock>
-        <NumericUpDown Value="{Binding Value}" ParsingNumberStyle="Float" LostFocus="NumericUpDown_LostFocus" />
-    </StackPanel>
+    <Border Background="#eee" BorderBrush="#ddd" BorderThickness="1" CornerRadius="4" Padding="10">
+        <StackPanel>
+            <TextBlock Foreground="Gray">Value</TextBlock>
+            <NumericUpDown Value="{Binding Value}" ParsingNumberStyle="Float" LostFocus="NumericUpDown_LostFocus" />
+        </StackPanel>
+    </Border>
 </UserControl>
