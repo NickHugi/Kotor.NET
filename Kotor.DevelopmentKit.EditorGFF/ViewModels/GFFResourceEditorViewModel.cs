@@ -77,7 +77,7 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         }
     }
 
-    public override string WindowTitlePrefix => throw new NotImplementedException();
+    public override string WindowTitlePrefix => "GFF Editor";
 
 
     public GFFResourceEditorViewModel()
@@ -97,21 +97,6 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         });
     }
 
-    private void CreateNewTree(RootStructGFFNodeViewModel rootNode)
-    {
-        _rootNode = rootNode;
-        TreeData = new(_rootNode)
-        {
-            Columns =
-            {
-                new HierarchicalExpanderColumn<BaseGFFNodeViewModel>(
-                    new TextColumn<BaseGFFNodeViewModel, string>("Label", x => x.Label, GridLength.Star), x => x.Children, isExpandedSelector: x => x.Expanded),
-                new TextColumn<BaseGFFNodeViewModel, string>("Type", x => x.DisplayType, GridLength.Parse("100")),
-                new TextColumn<BaseGFFNodeViewModel, string>("Value", x => x.DisplayValue, GridLength.Parse("150")),
-            },
-        };
-    }
-
     public override void LoadModel(GFF model)
     {
         Resource.Load(model);
@@ -121,14 +106,17 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
     {
         return Resource.Build();
     }
+
     public override GFF DeserializeModel(byte[] bytes)
     {
         return GFF.FromBytes(bytes);
     }
+
     public override GFF DeserializeModel(string path)
     {
         return GFF.FromFile(path);
     }
+
     public override byte[] SerializeModelToBytes()
     {
         var gff = BuildModel();
@@ -136,6 +124,7 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         new GFFBinarySerializer(gff).Serialize().Write(memoryStream);
         return memoryStream.ToArray();
     }
+
     public override void SerializeModelToFile()
     {
         var gff = BuildModel();
@@ -342,5 +331,20 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
 
         var setAction = createAction(oldValue);
         History.Apply(setAction);
+    }
+
+    private void CreateNewTree(RootStructGFFNodeViewModel rootNode)
+    {
+        _rootNode = rootNode;
+        TreeData = new(_rootNode)
+        {
+            Columns =
+            {
+                new HierarchicalExpanderColumn<BaseGFFNodeViewModel>(
+                    new TextColumn<BaseGFFNodeViewModel, string>("Label", x => x.Label, GridLength.Star), x => x.Children, isExpandedSelector: x => x.Expanded),
+                new TextColumn<BaseGFFNodeViewModel, string>("Type", x => x.DisplayType, GridLength.Parse("100")),
+                new TextColumn<BaseGFFNodeViewModel, string>("Value", x => x.DisplayValue, GridLength.Parse("150")),
+            },
+        };
     }
 }
