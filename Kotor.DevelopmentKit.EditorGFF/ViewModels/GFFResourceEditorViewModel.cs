@@ -22,8 +22,8 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels;
 
 public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewModel, GFF>
 {
-    private BaseGFFNodeViewModel _selectedNode;
-    public BaseGFFNodeViewModel SelectedNode
+    private BaseGFFNodeViewModel? _selectedNode;
+    public BaseGFFNodeViewModel? SelectedNode
     {
         get => _selectedNode;
         set => this.RaiseAndSetIfChanged(ref _selectedNode, value);
@@ -77,25 +77,6 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         }
     }
 
-    public bool IsSelectedNodeUInt8 => _selectedNode is UInt8GFFNodeViewModel;
-    public bool IsSelectedNodeInt8 => _selectedNode is Int8GFFNodeViewModel;
-    public bool IsSelectedNodeUInt16 => _selectedNode is UInt16GFFNodeViewModel;
-    public bool IsSelectedNodeInt16 => _selectedNode is Int16GFFNodeViewModel;
-    public bool IsSelectedNodeUInt32 => _selectedNode is UInt32GFFNodeViewModel;
-    public bool IsSelectedNodeInt32 => _selectedNode is Int32GFFNodeViewModel;
-    public bool IsSelectedNodeUInt64 => _selectedNode is UInt64GFFNodeViewModel;
-    public bool IsSelectedNodeInt64 => _selectedNode is Int64GFFNodeViewModel;
-    public bool IsSelectedNodeSingle => _selectedNode is SingleGFFNodeViewModel;
-    public bool IsSelectedNodeDouble => _selectedNode is DoubleGFFNodeViewModel;
-    public bool IsSelectedNodeResRef => _selectedNode is ResRefGFFNodeViewModel;
-    public bool IsSelectedNodeString => _selectedNode is StringGFFNodeViewModel;
-    public bool IsSelectedNodeLocalizedString => _selectedNode is LocalizedStringGFFNodeViewModel;
-    public bool IsSelectedNodeBinary => _selectedNode is BinaryGFFNodeViewModel;
-    public bool IsSelectedNodeVector3 => _selectedNode is Vector3GFFNodeViewModel;
-    public bool IsSelectedNodeVector4 => _selectedNode is Vector4GFFNodeViewModel;
-    public bool IsSelectedNodeStruct => _selectedNode is IStructGFFTreeNodeViewModel;
-    public bool IsSelectedNodeList => _selectedNode is ListGFFNodeViewModel;
-
     public bool IsLocalizedSubstringSelected => (_selectedNode is LocalizedStringGFFNodeViewModel locstring) && (locstring.FieldValue.IsSubStringSelected);
 
 
@@ -103,6 +84,7 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
 
     public GFFResourceEditorViewModel()
     {
+        _treeData = new(new RootStructGFFNodeViewModel());
         _history = new(this);
         Resource = new();
 
@@ -113,24 +95,6 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
 
         this.WhenPropertyChanged(x => x.SelectedNode).Subscribe(x =>
         {
-            this.RaisePropertyChanged(nameof(IsSelectedNodeUInt8));
-            this.RaisePropertyChanged(nameof(IsSelectedNodeInt8));
-            this.RaisePropertyChanged(nameof(IsSelectedNodeUInt16));
-            this.RaisePropertyChanged(nameof(IsSelectedNodeInt16));
-            this.RaisePropertyChanged(nameof(IsSelectedNodeUInt32));
-            this.RaisePropertyChanged(nameof(IsSelectedNodeInt32));
-            this.RaisePropertyChanged(nameof(IsSelectedNodeUInt64));
-            this.RaisePropertyChanged(nameof(IsSelectedNodeInt64));
-            this.RaisePropertyChanged(nameof(IsSelectedNodeSingle));
-            this.RaisePropertyChanged(nameof(IsSelectedNodeDouble));
-            this.RaisePropertyChanged(nameof(IsSelectedNodeResRef));
-            this.RaisePropertyChanged(nameof(IsSelectedNodeString));
-            this.RaisePropertyChanged(nameof(IsSelectedNodeLocalizedString));
-            this.RaisePropertyChanged(nameof(IsSelectedNodeBinary));
-            this.RaisePropertyChanged(nameof(IsSelectedNodeVector3));
-            this.RaisePropertyChanged(nameof(IsSelectedNodeVector4));
-            this.RaisePropertyChanged(nameof(IsSelectedNodeStruct));
-            this.RaisePropertyChanged(nameof(IsSelectedNodeList));
             this.RaisePropertyChanged(nameof(PanelData));
         });
     }
