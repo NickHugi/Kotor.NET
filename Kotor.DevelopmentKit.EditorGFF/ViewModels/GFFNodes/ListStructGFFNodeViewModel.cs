@@ -48,9 +48,9 @@ public class ListStructGFFNodeViewModel : BaseGFFNodeViewModel, IStructGFFNodeVi
 
     public override void Delete()
     {
-        if (Parent is ListGFFNodeViewModel vmList)
+        if (Parent is ListGFFNodeViewModel listNode)
         {
-            vmList.DeleteStruct(this);
+            listNode.DeleteStruct(this);
         }
     }
 

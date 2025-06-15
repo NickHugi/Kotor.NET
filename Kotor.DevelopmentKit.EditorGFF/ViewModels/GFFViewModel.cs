@@ -36,11 +36,11 @@ public class GFFViewModel : ReactiveObject
             Root = BuildStruct(RootNode)
         };
     }
-    private GFFStruct BuildStruct(IStructGFFNodeViewModel vmStruct)
+    private GFFStruct BuildStruct(IStructGFFNodeViewModel structNode)
     {
-        var gffStruct = new GFFStruct((uint)vmStruct.StructID); // TODO
+        var gffStruct = new GFFStruct((uint)structNode.StructID);
 
-        foreach (var vmChild in (vmStruct as BaseGFFNodeViewModel).Children)
+        foreach (var vmChild in (structNode as BaseGFFNodeViewModel).Children)
         {
             if (vmChild is UInt8GFFNodeViewModel asUInt8) gffStruct.SetUInt8(asUInt8.Label, asUInt8.FieldValue);
             if (vmChild is Int8GFFNodeViewModel asInt8) gffStruct.SetInt8(asInt8.Label, asInt8.FieldValue);
@@ -64,15 +64,15 @@ public class GFFViewModel : ReactiveObject
 
         return gffStruct;
     }
-    private GFFList BuildList(ListGFFNodeViewModel vmList)
+    private GFFList BuildList(ListGFFNodeViewModel listNode)
     {
         var gffList = new GFFList();
 
-        foreach (var vmChild in vmList.Children)
+        foreach (var vmChild in listNode.Children)
         {
-            if (vmChild is IStructGFFNodeViewModel vmStruct)
+            if (vmChild is IStructGFFNodeViewModel structNode)
             {
-                gffList.Add(BuildStruct(vmStruct));
+                gffList.Add(BuildStruct(structNode));
             }
         }
 

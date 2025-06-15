@@ -37,16 +37,6 @@ public partial class FieldLocalizedStringPanel : UserControl
     public FieldLocalizedStringPanel() : base()
     {
         InitializeComponent();
-
-        //this.WhenAnyValue(x => x.DataContext)
-        //    .WhereNotNull()
-        //    .Subscribe(x =>
-        //    {
-        //        ViewModel.Value.WhenAnyPropertyChanged().Subscribe(y =>
-        //        {
-
-        //        });
-        //    });
     }
 
     public void AddSubString()
