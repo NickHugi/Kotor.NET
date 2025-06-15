@@ -11,9 +11,9 @@ namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
 public partial class FieldStructPanel : EditFieldPanel<IStructGFFTreeNodeViewModel, Int32, StructEditedEventArgs>
 {
-    public required Int32PanelViewModel ViewModel
+    public required StructPanelViewModel ViewModel
     {
-        get => (DataContext as Int32PanelViewModel)!;
+        get => (DataContext as StructPanelViewModel)!;
         set => DataContext = value;
     }
 

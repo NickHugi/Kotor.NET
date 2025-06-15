@@ -45,7 +45,7 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         get => _history;
     }
 
-    public INodePanelViewModel PanelData
+    public INodePanelViewModel? PanelData
     {
         get
         {
@@ -67,9 +67,11 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
                 StringGFFNodeViewModel node => ActivatorUtilities.CreateInstance<StringPanelViewModel>(App.ServiceProvider, node.FieldValue),
                 LocalizedStringGFFNodeViewModel node => ActivatorUtilities.CreateInstance<LocalizedStringPanelViewModel>(App.ServiceProvider, node.FieldValue),
                 BinaryGFFNodeViewModel node => ActivatorUtilities.CreateInstance<BinaryPanelViewModel>(App.ServiceProvider, node.FieldValue),
-                IStructGFFTreeNodeViewModel node => ActivatorUtilities.CreateInstance<Int32PanelViewModel>(App.ServiceProvider, node.StructID),
+                IStructGFFTreeNodeViewModel node => ActivatorUtilities.CreateInstance<StructPanelViewModel>(App.ServiceProvider, node.StructID),
                 Vector3GFFNodeViewModel node => ActivatorUtilities.CreateInstance<Vector3PanelViewModel>(App.ServiceProvider, node.FieldValue),
                 Vector4GFFNodeViewModel node => ActivatorUtilities.CreateInstance<Vector4PanelViewModel>(App.ServiceProvider, node.FieldValue),
+                ListGFFNodeViewModel node => null,
+                null => null,
                 _ => throw new InvalidOperationException()
             };
         }
