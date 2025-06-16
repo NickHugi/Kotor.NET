@@ -11,4 +11,7 @@ public enum Platform
     Windows,
     Mac,
     Linux,
+    Android,
+    Switch,
+    Xbox,
 }

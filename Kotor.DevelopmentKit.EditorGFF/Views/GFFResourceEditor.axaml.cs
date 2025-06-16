@@ -11,6 +11,7 @@ using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using Kotor.DevelopmentKit.Base;
 using Kotor.DevelopmentKit.Base.Common;
 using Kotor.DevelopmentKit.Base.Views;
 using Kotor.DevelopmentKit.EditorGFF.Actions;
@@ -239,6 +240,11 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
     public void Redo()
     {
         Dispatcher.UIThread.Post(() => Context.Redo(), DispatcherPriority.Default);
+    }
+
+    public async Task OpenSettings()
+    {
+        await new SettingsDialog().ShowDialog(this);
     }
 
     public async Task<bool> HasStructOnClipboard()

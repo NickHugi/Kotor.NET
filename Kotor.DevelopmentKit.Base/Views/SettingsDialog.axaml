@@ -1,0 +1,25 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        
+        xmlns:vm="using:Kotor.DevelopmentKit.Base.ViewModels"
+        xmlns:settings="using:Kotor.DevelopmentKit.Base.Settings"
+        
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:DataType="vm:SettingsDialogViewModel"
+        x:Class="Kotor.DevelopmentKit.Base.SettingsDialog">
+    <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <TreeView DockPanel.Dock="Left" BorderThickness="1" BorderBrush="Black" ItemsSource="{Binding Settings}"
+                  Width="300">
+            <TreeView.DataTemplates>
+                <TreeDataTemplate DataType="{x:Type settings:BaseSettingPage}" ItemsSource="{Binding Pages}">
+                    <TextBlock Text="{Binding PageName}" />
+                </TreeDataTemplate>
+            </TreeView.DataTemplates>
+        </TreeView>
+        <StackPanel DockPanel.Dock="Right" Orientation="Vertical">
+            
+        </StackPanel>
+    </DockPanel>
+</Window>

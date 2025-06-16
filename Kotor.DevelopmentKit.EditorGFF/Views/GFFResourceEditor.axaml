@@ -37,6 +37,9 @@
                 <MenuItem Header="_Undo" Command="{Binding #Window.Undo}"></MenuItem>
                 <MenuItem Header="_Redo" Command="{Binding #Window.Redo}"></MenuItem>
             </MenuItem>
+            <MenuItem Header="_Options">
+                <MenuItem Header="_Open Settings" Command="{Binding #Window.OpenSettings}"></MenuItem>
+            </MenuItem>
         </Menu>
 
         <Grid Margin="10" ColumnDefinitions="*, 320">
