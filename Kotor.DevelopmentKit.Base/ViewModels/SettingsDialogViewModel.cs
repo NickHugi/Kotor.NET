@@ -19,4 +19,10 @@ public class SettingsDialogViewModel : ReactiveObject
             ]
         ),
     ];
+
+    public BaseSettingPage SelectedPage
+    {
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
 }

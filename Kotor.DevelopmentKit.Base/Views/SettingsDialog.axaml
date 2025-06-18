@@ -3,23 +3,45 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         
+        xmlns:reflection="using:System.Reflection"
         xmlns:vm="using:Kotor.DevelopmentKit.Base.ViewModels"
         xmlns:settings="using:Kotor.DevelopmentKit.Base.Settings"
+
+        xmlns:boolean-vm="using:Kotor.DevelopmentKit.Base.Settings.Types.Boolean"
+        xmlns:boolean-view="clr-namespace:Kotor.DevelopmentKit.Base.Settings.Types.Boolean"
+
+        xmlns:integer-vm="using:Kotor.DevelopmentKit.Base.Settings.Types.Integer"
+        xmlns:integer-view="clr-namespace:Kotor.DevelopmentKit.Base.Settings.Types.Integer"
+        
+        xmlns:string-vm="using:Kotor.DevelopmentKit.Base.Settings.Types.String"
+        xmlns:string-view="clr-namespace:Kotor.DevelopmentKit.Base.Settings.Types.String"
         
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:DataType="vm:SettingsDialogViewModel"
         x:Class="Kotor.DevelopmentKit.Base.SettingsDialog">
     <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <TreeView DockPanel.Dock="Left" BorderThickness="1" BorderBrush="Black" ItemsSource="{Binding Settings}"
-                  Width="300">
+                  Width="200" SelectedItem="{Binding SelectedPage}">
             <TreeView.DataTemplates>
                 <TreeDataTemplate DataType="{x:Type settings:BaseSettingPage}" ItemsSource="{Binding Pages}">
                     <TextBlock Text="{Binding PageName}" />
                 </TreeDataTemplate>
             </TreeView.DataTemplates>
         </TreeView>
-        <StackPanel DockPanel.Dock="Right" Orientation="Vertical">
-            
-        </StackPanel>
+        <ScrollViewer DockPanel.Dock="Right" HorizontalAlignment="Stretch">
+            <ItemsControl ItemsSource="{Binding SelectedPage.Properties}" Margin="25">
+                <ItemsControl.DataTemplates>
+                    <DataTemplate DataType="{x:Type boolean-vm:BooleanPanelViewModel}">
+                        <boolean-view:BooleanPanel Margin="0 0 0 25" />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type integer-vm:IntegerPanelViewModel}">
+                        <integer-view:IntegerPanel Margin="0 0 0 25" />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type string-vm:StringPanelViewModel}">
+                        <string-view:StringPanel Margin="0 0 0 25" />
+                    </DataTemplate>
+                </ItemsControl.DataTemplates>
+            </ItemsControl>
+        </ScrollViewer>
     </DockPanel>
 </Window>
