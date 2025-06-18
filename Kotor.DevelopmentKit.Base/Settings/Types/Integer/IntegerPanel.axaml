@@ -8,8 +8,13 @@
              x:DataType="vm:IntegerPanelViewModel"
              x:Class="Kotor.DevelopmentKit.Base.Settings.Types.Integer.IntegerPanel">
     <StackPanel Spacing="2">
-        <TextBlock FontWeight="Bold" Text="{Binding Name}" />
-        <TextBlock Text="{Binding Description}" VerticalAlignment="Center" />
+        <TextBlock FontWeight="Bold"
+                   Text="{Binding Name}"
+                   />
+        <TextBlock Text="{Binding Description}"
+                   VerticalAlignment="Center"
+                   TextWrapping="Wrap"
+                   />
         <NumericUpDown Value="{Binding Value}" />
     </StackPanel>
 </UserControl>

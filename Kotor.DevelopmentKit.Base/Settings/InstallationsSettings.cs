@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.DevelopmentKit.Base.Settings.Pages;
 using Kotor.DevelopmentKit.Base.Settings.Types.Boolean;
 using Kotor.DevelopmentKit.Base.Settings.Types.Integer;
 using Kotor.DevelopmentKit.Base.Settings.Types.String;
@@ -11,10 +12,9 @@ using Kotor.NET.Common;
 
 namespace Kotor.DevelopmentKit.Base.Settings;
 
-public class InstallationsSettings : BaseSettingPage
+[Page("Installation")]
+public class InstallationsSettings
 {
-    public override string PageName => "Installations";
-
     [BooleanSetting("Test Boolean", "Very descriptve")]
     public bool TestBoolean { get; set; } = true;
 

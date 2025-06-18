@@ -8,10 +8,15 @@
              x:DataType="vm:BooleanPanelViewModel"
              x:Class="Kotor.DevelopmentKit.Base.Settings.Types.Boolean.BooleanPanel">
     <StackPanel Spacing="2">
-        <TextBlock FontWeight="Bold" Text="{Binding Name}" />
+        <TextBlock FontWeight="Bold"
+                   Text="{Binding Name}"
+                   />
         <StackPanel Orientation="Horizontal">
             <CheckBox IsChecked="{Binding Value}" />
-            <TextBlock Text="{Binding Description}" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding Description}"
+                       VerticalAlignment="Center"
+                       TextWrapping="Wrap"
+                       />
         </StackPanel>
     </StackPanel>
 </UserControl>
