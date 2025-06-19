@@ -23,8 +23,8 @@
                   BorderThickness="1"
                   BorderBrush="Gray"
                   GridLinesVisibility="All"
-                  SelectedItem="{Binding SelectedItem}"
+                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                   />
-        <!--<settings-view:SettingsItemsControl />-->
+        <settings-view:SettingsItemsControl DataContext="{Binding SelectedItemProperties}" />
     </StackPanel>
 </UserControl>

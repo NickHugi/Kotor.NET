@@ -51,4 +51,8 @@
       <DependentUpon>EncapsulatedResourceList.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Settings\Types\Enum\" />
+  </ItemGroup>
 </Project>

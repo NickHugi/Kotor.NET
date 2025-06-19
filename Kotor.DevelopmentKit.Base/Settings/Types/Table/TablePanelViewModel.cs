@@ -5,6 +5,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using DynamicData.Binding;
+using Kotor.DevelopmentKit.Base.Settings.Pages;
 using Kotor.DevelopmentKit.Base.Settings.Types.Table;
 using ReactiveUI;
 
@@ -24,6 +26,23 @@ public class TablePanelViewModel : SettingsViewModel
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
+    public ICollection<SettingsViewModel> SelectedItemProperties
+    {
+        get
+        {
+            if (SelectedItem is null)
+                return [];
+
+            var instanceType = SelectedItem.GetType();
+
+            return instanceType
+                .GetProperties()
+                .Select(x => (x, x.GetCustomAttribute<SettingAttribute>()))
+                .Where(x => x.Item2 is not null)
+                .Select(x => x.Item2!.GetViewModel(x.x, SelectedItem))
+                .ToArray();
+        }
+    }
 
     private readonly TableSettingAttribute _attribute;
     private readonly PropertyInfo _propertyInfo;
@@ -34,5 +53,10 @@ public class TablePanelViewModel : SettingsViewModel
         _attribute = attribute;
         _propertyInfo = propertyInfo;
         _instance = instance;
+
+        this.WhenPropertyChanged(x => x.SelectedItem).Subscribe(x =>
+        {
+            this.RaisePropertyChanged(nameof(SelectedItemProperties));
+        });
     }
 }
