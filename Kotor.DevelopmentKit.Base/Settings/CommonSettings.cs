@@ -10,5 +10,5 @@ namespace Kotor.DevelopmentKit.Base.Settings;
 [Page("Common")]
 public class CommonSettings
 {
-    public InstallationsSettings Installation { get; set; } = new();
+    public Installations Installations { get; set; } = new();
 }

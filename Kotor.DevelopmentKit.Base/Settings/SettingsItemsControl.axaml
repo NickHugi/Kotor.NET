@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+
+             xmlns:vm="using:Kotor.DevelopmentKit.Base.Settings.Types"
+             xmlns:collection="using:System.Collections.Generic"
+             xmlns:pages="using:Kotor.DevelopmentKit.Base.Settings.Pages"
+
+            xmlns:boolean-vm="using:Kotor.DevelopmentKit.Base.Settings.Types.Boolean"
+            xmlns:boolean-view="clr-namespace:Kotor.DevelopmentKit.Base.Settings.Types.Boolean"
+
+            xmlns:integer-vm="using:Kotor.DevelopmentKit.Base.Settings.Types.Integer"
+            xmlns:integer-view="clr-namespace:Kotor.DevelopmentKit.Base.Settings.Types.Integer"
+        
+            xmlns:string-vm="using:Kotor.DevelopmentKit.Base.Settings.Types.String"
+            xmlns:string-view="clr-namespace:Kotor.DevelopmentKit.Base.Settings.Types.String"
+             
+            xmlns:table-vm="using:Kotor.DevelopmentKit.Base.Settings.Types.Table"
+            xmlns:table-view="clr-namespace:Kotor.DevelopmentKit.Base.Settings.Types.Table"
+             
+             x:DataType="{x:Type collection:ICollection, x:TypeArguments=vm:SettingsViewModel}"
+             x:Class="Kotor.DevelopmentKit.Base.SettingsItemsControl">
+    <ItemsControl ItemsSource="{Binding .}">
+        <ItemsControl.DataTemplates>
+            <DataTemplate DataType="{x:Type boolean-vm:BooleanPanelViewModel}">
+                <boolean-view:BooleanPanel Margin="0 0 0 25" />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type integer-vm:IntegerPanelViewModel}">
+                <integer-view:IntegerPanel Margin="0 0 0 25" />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type string-vm:StringPanelViewModel}">
+                <string-view:StringPanel Margin="0 0 0 25" />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type table-vm:TablePanelViewModel}">
+                <table-view:TablePanel Margin="0 0 0 25" />
+            </DataTemplate>
+        </ItemsControl.DataTemplates>
+    </ItemsControl>
+</UserControl>

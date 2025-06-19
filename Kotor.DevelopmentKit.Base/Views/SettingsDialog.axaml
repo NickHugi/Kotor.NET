@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         
+        xmlns:base-view="clr-namespace:Kotor.DevelopmentKit.Base"
         xmlns:vm="using:Kotor.DevelopmentKit.Base.ViewModels"
         xmlns:pages="using:Kotor.DevelopmentKit.Base.Settings.Pages"
 
@@ -27,20 +28,8 @@
                 </TreeDataTemplate>
             </TreeView.DataTemplates>
         </TreeView>
-        <ScrollViewer DockPanel.Dock="Right" HorizontalAlignment="Stretch">
-            <ItemsControl ItemsSource="{Binding SelectedPage.Properties}" Margin="25">
-                <ItemsControl.DataTemplates>
-                    <DataTemplate DataType="{x:Type boolean-vm:BooleanPanelViewModel}">
-                        <boolean-view:BooleanPanel Margin="0 0 0 25" />
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type integer-vm:IntegerPanelViewModel}">
-                        <integer-view:IntegerPanel Margin="0 0 0 25" />
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type string-vm:StringPanelViewModel}">
-                        <string-view:StringPanel Margin="0 0 0 25" />
-                    </DataTemplate>
-                </ItemsControl.DataTemplates>
-            </ItemsControl>
+        <ScrollViewer DockPanel.Dock="Right" HorizontalAlignment="Stretch" Margin="25">
+            <base-view:SettingsItemsControl DataContext="{Binding SelectedPage.Properties}" />
         </ScrollViewer>
     </DockPanel>
 </Window>

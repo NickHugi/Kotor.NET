@@ -3,8 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="using:Kotor.DevelopmentKit.Base.Settings.Types.String"
              mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="50"
+             
+             xmlns:vm="using:Kotor.DevelopmentKit.Base.Settings.Types.String"
+             
              x:DataType="vm:StringPanelViewModel"
              x:Class="Kotor.DevelopmentKit.Base.Settings.Types.String.StringPanel">
     <StackPanel Spacing="2">
