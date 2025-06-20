@@ -11,12 +11,10 @@
         <TextBlock FontWeight="Bold"
                    Text="{Binding Name}"
                    />
-        <StackPanel Orientation="Horizontal">
-            <CheckBox IsChecked="{Binding Value}" />
+        <CheckBox IsChecked="{Binding Value}">
             <TextBlock Text="{Binding Description}"
-                       VerticalAlignment="Center"
                        TextWrapping="Wrap"
                        />
-        </StackPanel>
+        </CheckBox>
     </StackPanel>
 </UserControl>

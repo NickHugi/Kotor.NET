@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.DevelopmentKit.Base.Settings.Types.Enum;
 using Kotor.DevelopmentKit.Base.Settings.Types.String;
 using Kotor.NET.Common;
 using ReactiveUI;
@@ -25,12 +26,14 @@ public class Installation : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
+    [EnumSetting("Game", "Which KotOR game the installation is linked to.")]
     public required GameEngine Game
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
+    [EnumSetting("Platform", "Which platform the installation is targetting.")]
     public required Platform Platform
     {
         get => field;

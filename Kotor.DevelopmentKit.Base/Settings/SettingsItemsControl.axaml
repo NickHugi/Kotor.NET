@@ -20,6 +20,9 @@
             xmlns:table-vm="using:Kotor.DevelopmentKit.Base.Settings.Types.Table"
             xmlns:table-view="clr-namespace:Kotor.DevelopmentKit.Base.Settings.Types.Table"
              
+            xmlns:enum-vm="using:Kotor.DevelopmentKit.Base.Settings.Types.Enum"
+            xmlns:enum-view="clr-namespace:Kotor.DevelopmentKit.Base.Settings.Types.Enum"
+             
              x:DataType="{x:Type collection:ICollection, x:TypeArguments=vm:SettingsViewModel}"
              x:Class="Kotor.DevelopmentKit.Base.SettingsItemsControl">
     <ItemsControl ItemsSource="{Binding .}">
@@ -35,6 +38,9 @@
             </DataTemplate>
             <DataTemplate DataType="{x:Type table-vm:TablePanelViewModel}">
                 <table-view:TablePanel Margin="0 0 0 25" />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type enum-vm:EnumPanelViewModel}">
+                <enum-view:EnumPanel Margin="0 0 0 25" />
             </DataTemplate>
         </ItemsControl.DataTemplates>
     </ItemsControl>

@@ -35,6 +35,9 @@
     <Compile Update="MainWindow.axaml.cs">
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
+    <Compile Update="Settings\Types\Enum\EnumPanel.axaml.cs">
+      <DependentUpon>EnumPanel.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Settings\Types\Integer\IntegerPanel.axaml.cs">
       <DependentUpon>IntegerPanel.axaml</DependentUpon>
     </Compile>
@@ -50,9 +53,5 @@
     <Compile Update="Views\EncapsulatedResourceList.axaml.cs">
       <DependentUpon>EncapsulatedResourceList.axaml</DependentUpon>
     </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Settings\Types\Enum\" />
   </ItemGroup>
 </Project>

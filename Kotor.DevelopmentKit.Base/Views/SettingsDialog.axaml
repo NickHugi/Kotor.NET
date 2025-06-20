@@ -15,13 +15,15 @@
         
         xmlns:string-vm="using:Kotor.DevelopmentKit.Base.Settings.Types.String"
         xmlns:string-view="clr-namespace:Kotor.DevelopmentKit.Base.Settings.Types.String"
+
+        Width="650" Height="400"
         
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="650" d:DesignHeight="400"
         x:DataType="vm:SettingsDialogViewModel"
         x:Class="Kotor.DevelopmentKit.Base.SettingsDialog">
     <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <TreeView DockPanel.Dock="Left" BorderThickness="1" BorderBrush="Black" ItemsSource="{Binding Pages}"
-                  Width="600" SelectedItem="{Binding SelectedPage}">
+                  Width="200" SelectedItem="{Binding SelectedPage}">
             <TreeView.DataTemplates>
                 <TreeDataTemplate DataType="{x:Type pages:SettingsPageViewModel}" ItemsSource="{Binding Pages}">
                     <TextBlock Text="{Binding Name}" />
