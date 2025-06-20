@@ -12,5 +12,6 @@ public enum GameEngine
     [Description("KotOR 1")]
     K1,
 
+    [Description("KotOR 2")]
     K2,
 }

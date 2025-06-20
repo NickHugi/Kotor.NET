@@ -17,14 +17,14 @@ public class Installation : ReactiveObject
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
-    }
+    } = "";
 
     [StringSetting("Path", "The path to the root directory of the KotOR installlation.")]
     public required string Path
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
-    }
+    } = "";
 
     [EnumSetting("Game", "Which KotOR game the installation is linked to.")]
     public required GameEngine Game
