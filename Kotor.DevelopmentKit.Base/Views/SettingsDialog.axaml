@@ -22,6 +22,12 @@
         x:DataType="vm:SettingsDialogViewModel"
         x:Class="Kotor.DevelopmentKit.Base.SettingsDialog">
     <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <StackPanel DockPanel.Dock="Bottom"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button >Apply</Button>
+            <Button>Cancel</Button>
+        </StackPanel>
         <TreeView DockPanel.Dock="Left" BorderThickness="1" BorderBrush="Black" ItemsSource="{Binding Pages}"
                   Width="200" SelectedItem="{Binding SelectedPage}">
             <TreeView.DataTemplates>

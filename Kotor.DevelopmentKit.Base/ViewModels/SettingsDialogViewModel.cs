@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.Base.Settings;
 using Kotor.DevelopmentKit.Base.Settings.Pages;
@@ -14,7 +15,18 @@ namespace Kotor.DevelopmentKit.Base.ViewModels;
 
 public class SettingsDialogViewModel : ReactiveObject
 {
-    public IReadOnlyCollection<SettingsPageViewModel> Pages { get; }
+    public DefaultSettingsRoot Settings { get; } = new();
+    public IReadOnlyCollection<SettingsPageViewModel> Pages
+    {
+        get
+        {
+            return typeof(DefaultSettingsRoot)
+                .GetProperties()
+                .Where(x => x.PropertyType.GetCustomAttribute<PageAttribute>() is not null)
+                .Select(x => x.PropertyType.GetCustomAttribute<PageAttribute>()!.GetViewModel(x))
+                .ToList();
+        }
+    }
 
     public SettingsPageViewModel? SelectedPage
     {
@@ -25,10 +37,5 @@ public class SettingsDialogViewModel : ReactiveObject
     public SettingsDialogViewModel()
     {
         var common = new CommonSettings();
-
-        Pages =
-            [
-                common.GetType().GetCustomAttribute<PageAttribute>().GetViewModel(common)
-            ];
     }
 }
