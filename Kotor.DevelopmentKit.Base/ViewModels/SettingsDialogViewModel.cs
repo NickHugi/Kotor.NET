@@ -15,15 +15,15 @@ namespace Kotor.DevelopmentKit.Base.ViewModels;
 
 public class SettingsDialogViewModel : ReactiveObject
 {
-    public DefaultSettingsRoot Settings { get; } = new();
     public IReadOnlyCollection<SettingsPageViewModel> Pages
     {
         get
         {
-            return typeof(DefaultSettingsRoot)
+            return _settings
+                .GetType()
                 .GetProperties()
                 .Where(x => x.PropertyType.GetCustomAttribute<PageAttribute>() is not null)
-                .Select(x => x.PropertyType.GetCustomAttribute<PageAttribute>()!.GetViewModel(x))
+                .Select(x => x.PropertyType.GetCustomAttribute<PageAttribute>()!.GetViewModel(x.GetValue(_settings)))
                 .ToList();
         }
     }
@@ -34,8 +34,11 @@ public class SettingsDialogViewModel : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public SettingsDialogViewModel()
+    private readonly DefaultSettingsRoot _settings;
+
+
+    public SettingsDialogViewModel(DefaultSettingsRoot settings)
     {
-        var common = new CommonSettings();
+        _settings = settings;
     }
 }

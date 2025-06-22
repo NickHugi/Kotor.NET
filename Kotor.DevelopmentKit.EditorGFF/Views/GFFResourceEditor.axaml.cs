@@ -13,6 +13,8 @@ using Avalonia.Threading;
 using Avalonia.VisualTree;
 using Kotor.DevelopmentKit.Base;
 using Kotor.DevelopmentKit.Base.Common;
+using Kotor.DevelopmentKit.Base.Settings;
+using Kotor.DevelopmentKit.Base.ViewModels;
 using Kotor.DevelopmentKit.Base.Views;
 using Kotor.DevelopmentKit.EditorGFF.Actions;
 using Kotor.DevelopmentKit.EditorGFF.EventArgs;
@@ -24,6 +26,7 @@ using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Resources.Kotor2DA;
 using Kotor.NET.Resources.KotorGFF;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualBasic;
 using ReactiveUI;
 
@@ -244,7 +247,11 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
 
     public async Task OpenSettings()
     {
-        await new SettingsDialog().ShowDialog(this);
+        var viewModel = App.ServiceProvider.GetService<SettingsDialogViewModel>();
+        await new SettingsDialog()
+        {
+            DataContext = viewModel
+        }.ShowDialog(this);
     }
 
     public async Task<bool> HasStructOnClipboard()

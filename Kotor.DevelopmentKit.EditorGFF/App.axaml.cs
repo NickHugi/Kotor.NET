@@ -2,6 +2,9 @@ using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Kotor.DevelopmentKit.Base.Settings;
+using Kotor.DevelopmentKit.Base.ViewModels;
+using Kotor.DevelopmentKit.EditorGFF.Settings;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.Views;
 using Kotor.NET.Interfaces;
@@ -38,6 +41,8 @@ public partial class App : Application
     {
         var services = new ServiceCollection();
 
+        services.AddSingleton<DefaultSettingsRoot, GFFSettingsRoot>();
+        services.AddScoped<SettingsDialogViewModel>();
         services.AddScoped<ITalkTableLookup, TalkTableLookup>();
 
         return services.BuildServiceProvider();

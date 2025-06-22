@@ -9,7 +9,6 @@ public partial class SettingsDialog : Window
 {
     public SettingsDialog()
     {
-        DataContext = new SettingsDialogViewModel();
         InitializeComponent();
     }
 }

@@ -7,7 +7,7 @@ using Kotor.DevelopmentKit.Base.Settings;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Settings;
 
-internal sealed class GFFSettingsRoot : DefaultSettingsRoot
+public class GFFSettingsRoot : DefaultSettingsRoot
 {
 
 }
