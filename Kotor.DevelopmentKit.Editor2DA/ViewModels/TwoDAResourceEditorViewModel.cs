@@ -68,7 +68,7 @@ public class TwoDAResourceEditorViewModel : BaseResourceEditorViewModel<TwoDAVie
     }
 
 
-    public TwoDAResourceEditorViewModel()
+    public TwoDAResourceEditorViewModel() : base(null)
     {
         _history = new(this);
         Resource = new();

@@ -11,18 +11,15 @@
         xmlns:panel-vm="using:Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel"
         xmlns:editor-views="clr-namespace:Kotor.DevelopmentKit.EditorGFF.Views"
         xmlns:panel-views="clr-namespace:Kotor.DevelopmentKit.EditorGFF.Views"
+        xmlns:settings-views="clr-namespace:Kotor.DevelopmentKit.Base.Settings;assembly=Kotor.DevelopmentKit.Base"
         
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         Width="800" Height="450"
         x:Name="Window"
         x:Class="Kotor.DevelopmentKit.EditorGFF.Views.MainWindow"
         x:DataType="vm:GFFResourceEditorViewModel"
-        Title="Kotor.DevelopmentKit.EditorGFF">
-
-    <Design.DataContext>
-        <vm:GFFResourceEditorViewModel/>
-    </Design.DataContext>
-
+        Title="Kotor.DevelopmentKit.EditorGFF"
+        >
     <DockPanel>
 
         <Menu DockPanel.Dock="Top" BorderThickness="0 0 0 1" BorderBrush="LightGray">
@@ -38,7 +35,15 @@
                 <MenuItem Header="_Redo" Command="{Binding #Window.Redo}"></MenuItem>
             </MenuItem>
             <MenuItem Header="_Options">
-                <MenuItem Header="_Open Settings" Command="{Binding #Window.OpenSettings}"></MenuItem>
+                <MenuItem Header="_Open Settings" Command="{Binding #Window.OpenSettings}" />
+                <MenuItem Header="_ABC">
+                    <MenuItem Header="_ABC" />
+                </MenuItem>
+                <Separator />
+                <settings-views:SelectInstallationMenuItem
+                    SelectedInstallation ="{Binding SelectedInstallation}"
+                    Installations="{Binding Settings.Common.Installations.List}"
+                    />
             </MenuItem>
         </Menu>
 

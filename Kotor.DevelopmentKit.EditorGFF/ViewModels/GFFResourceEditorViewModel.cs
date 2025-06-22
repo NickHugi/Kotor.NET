@@ -7,10 +7,12 @@ using Avalonia.Controls.Models.TreeDataGrid;
 using DynamicData;
 using DynamicData.Binding;
 using Kotor.DevelopmentKit.Base.Common;
+using Kotor.DevelopmentKit.Base.Settings;
 using Kotor.DevelopmentKit.Base.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.Actions;
 using Kotor.DevelopmentKit.EditorGFF.Extensions;
 using Kotor.DevelopmentKit.EditorGFF.Models;
+using Kotor.DevelopmentKit.EditorGFF.Settings;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 using Kotor.NET.Formats.Binary2DA.Serialisation;
@@ -82,7 +84,7 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
     public override string WindowTitlePrefix => "GFF Editor";
 
 
-    public GFFResourceEditorViewModel()
+    public GFFResourceEditorViewModel(DefaultSettingsRoot settings) : base(settings)
     {
         _treeData = new(new RootStructGFFNodeViewModel());
         _history = new(this);

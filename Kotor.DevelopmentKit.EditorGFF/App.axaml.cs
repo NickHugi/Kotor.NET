@@ -28,9 +28,10 @@ public partial class App : Application
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
+            var viewModel = ServiceProvider.GetService<GFFResourceEditorViewModel>();
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new GFFResourceEditorViewModel(),
+                DataContext = viewModel
             };
         }
 
@@ -43,6 +44,7 @@ public partial class App : Application
 
         services.AddSingleton<DefaultSettingsRoot, GFFSettingsRoot>();
         services.AddScoped<SettingsDialogViewModel>();
+        services.AddScoped<GFFResourceEditorViewModel>();
         services.AddScoped<ITalkTableLookup, TalkTableLookup>();
 
         return services.BuildServiceProvider();

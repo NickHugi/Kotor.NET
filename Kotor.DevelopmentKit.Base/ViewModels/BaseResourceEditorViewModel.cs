@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Kotor.DevelopmentKit.Base.Settings;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Encapsulations;
 using ReactiveUI;
@@ -104,9 +105,19 @@ public abstract class BaseResourceEditorViewModel<TViewModel, TModel>
     private readonly Interaction<Exception, Unit> _loadingError = new();
     public Interaction<Exception, Unit> ExceptionInteraction => this._loadingError;
 
-    
-    public BaseResourceEditorViewModel()
+    public DefaultSettingsRoot Settings { get; }
+
+    public Installation SelectedInstallation
     {
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
+    
+    public BaseResourceEditorViewModel(DefaultSettingsRoot settings)
+    {
+        Settings = settings;
+
         this.ObservableForProperty(x => x.FilePath)
             .Subscribe(x => this.RaisePropertyChanged(nameof(FilePathAssigned)));
 
