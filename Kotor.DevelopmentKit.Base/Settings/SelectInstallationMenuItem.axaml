@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="200"
 
-             Name="MenuItemX"
+             Name="MenuItem"
              Header="_Set Installation"
           
              xmlns:collection="using:System.Collections.Generic"

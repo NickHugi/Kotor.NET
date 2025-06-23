@@ -36,9 +36,6 @@
             </MenuItem>
             <MenuItem Header="_Options">
                 <MenuItem Header="_Open Settings" Command="{Binding #Window.OpenSettings}" />
-                <MenuItem Header="_ABC">
-                    <MenuItem Header="_ABC" />
-                </MenuItem>
                 <Separator />
                 <settings-views:SelectInstallationMenuItem
                     SelectedInstallation ="{Binding SelectedInstallation}"
