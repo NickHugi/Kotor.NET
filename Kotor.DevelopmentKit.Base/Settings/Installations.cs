@@ -24,7 +24,7 @@ public class Installations
         "KotOR Installations",
         "Configure the list of different KotOR installations that the toolset is aware of."
     )]
-    public ObservableCollection<Installation> List { get; set; } =
+    public ObservableCollection<Installation> List { get; } =
         [
             new Installation() { Name = "K1", Path = @"C:\K1", Game = NET.Common.GameEngine.K1, Platform = NET.Common.Platform.Windows }
         ];

@@ -19,7 +19,10 @@ public class TablePanelViewModel : SettingsViewModel
 {
     public string Name => _attribute.Name;
     public string Description => _attribute.Description;
-    public ObservableCollection<object> Value { get; set; }
+    public IList Value
+    {
+        get => (IList)_propertyInfo.GetValue(_instance);
+    }
     public object? SelectedItem
     {
         get => field;
@@ -57,8 +60,8 @@ public class TablePanelViewModel : SettingsViewModel
         _instance = instance;
         _rowType = _propertyInfo.PropertyType.GetGenericArguments().First();
 
-        var value = _propertyInfo.GetValue(_instance) as IList;
-        Value = new(value.OfType<object>());
+        //var value = _propertyInfo.GetValue(_instance) as IList;
+        //Value = new(value.OfType<object>());
 
         AddCommand = ReactiveCommand.Create(AddAction);
         RemoveCommand = ReactiveCommand.Create(RemoveAction);
@@ -77,6 +80,5 @@ public class TablePanelViewModel : SettingsViewModel
     private void RemoveAction()
     {
         Value.Remove(SelectedItem);
-
     }
 }
