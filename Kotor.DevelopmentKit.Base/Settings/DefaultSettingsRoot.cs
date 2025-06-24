@@ -9,19 +9,11 @@ namespace Kotor.DevelopmentKit.Base.Settings;
 
 public class DefaultSettingsRoot
 {
-    public CommonSettings Common { get; set; } = new();
+    public const string SettingsFilepath = "settings.json";
 
-    private readonly string _path = "./settings.json";
+    public CommonSettings Common { get; set; } = new();
 
     public DefaultSettingsRoot()
     {
-        if (Path.Exists(_path))
-        {
-
-        }
-        else
-        {
-
-        }
     }
 }

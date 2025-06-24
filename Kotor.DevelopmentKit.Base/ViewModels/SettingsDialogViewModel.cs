@@ -1,14 +1,18 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive;
 using System.Reflection;
-using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.Base.Settings;
 using Kotor.DevelopmentKit.Base.Settings.Pages;
+using Kotor.DevelopmentKit.Base.Settings.Services;
 using Kotor.DevelopmentKit.Base.Settings.Types;
 using Kotor.NET.Common;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.Base.ViewModels;
@@ -27,18 +31,72 @@ public class SettingsDialogViewModel : ReactiveObject
                 .ToList();
         }
     }
-
     public SettingsPageViewModel? SelectedPage
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
+    public ReactiveCommand<Unit, Unit> SaveCommand { get; }
+    public ReactiveCommand<Unit, Unit> CancelCommand { get; }
+
+    public Interaction<Unit, Unit> CloseInteraction { get; }
+
     private readonly DefaultSettingsRoot _settings;
+    private readonly ISaveSettingsService _saveSettingsService;
+    private readonly ILoadSettingsService _loadSettingsService;
 
 
-    public SettingsDialogViewModel(DefaultSettingsRoot settings)
+    public SettingsDialogViewModel(
+        DefaultSettingsRoot settings,
+        ISaveSettingsService saveSettingsService,
+        ILoadSettingsService loadSettingsService)
     {
         _settings = settings;
+        _saveSettingsService = saveSettingsService;
+        _loadSettingsService = loadSettingsService;
+
+        SaveCommand = ReactiveCommand.Create(Save);
+        CancelCommand = ReactiveCommand.Create(Cancel);
+
+        CloseInteraction = new();
+    }
+
+    public void Save()
+    {
+        _saveSettingsService.Save(DefaultSettingsRoot.SettingsFilepath, _settings);
+
+        Close();
+    }
+
+    public void Cancel()
+    {
+        var settings = _loadSettingsService.Load(DefaultSettingsRoot.SettingsFilepath, _settings.GetType());
+        JsonConvert.PopulateObject(JsonConvert.SerializeObject(settings), _settings, new JsonSerializerSettings
+        {
+            ContractResolver = new CollectionClearingContractResolver()
+        });
+
+        Close();
+    }
+
+    public void Close()
+    {
+        CloseInteraction.Handle(Unit.Default).Subscribe();
+    }
+}
+
+public class CollectionClearingContractResolver : DefaultContractResolver
+{
+    protected override JsonArrayContract CreateArrayContract(Type objectType)
+    {
+        var c = base.CreateArrayContract(objectType);
+        c.OnDeserializingCallbacks.Add((obj, streamingContext) =>
+        {
+            var list = obj as IList;
+            if (list != null && !list.IsReadOnly)
+                list.Clear();
+        });
+        return c;
     }
 }

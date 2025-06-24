@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DynamicData.Binding;
+using Kotor.DevelopmentKit.Base.Settings;
 using Kotor.DevelopmentKit.Base.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.Models;
 using Kotor.NET.Common.Localization;
@@ -32,7 +33,7 @@ public class LocalizedStringPanelViewModel : BaseNodePanelViewModel<LocalizedStr
     private readonly ITalkTableLookup _talkTableLookup;
 
 
-    public LocalizedStringPanelViewModel(ITalkTableLookup talkTableLookup, LocalizedStringViewModel locstring)
+    public LocalizedStringPanelViewModel(ITalkTableLookup talkTableLookup, LocalizedStringViewModel locstring/*, Installation installation*/)
     {
         Value = locstring.Clone();
         _talkTableLookup = talkTableLookup;

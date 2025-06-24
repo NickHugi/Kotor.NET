@@ -57,6 +57,7 @@ public class GameDirectoryLocator
 
     ];
 
+    // convert into service
     public static GameDirectoryLocator Instance { get; } = new();
 
     public PotentialGameDirectory[] Locate()
@@ -89,14 +90,14 @@ public class GameDirectoryLocator
     private PotentialGameDirectory[] LocateOnMac()
     {
         return Locations
-            .Where(x => x.Platform == Platform.Windows)
+            .Where(x => x.Platform == Platform.Mac)
             .Where(x => Path.Exists(x.Path))
             .ToArray();
     }
     private PotentialGameDirectory[] LocateOnLinux()
     {
         return Locations
-            .Where(x => x.Platform == Platform.Windows)
+            .Where(x => x.Platform == Platform.Linux)
             .Where(x => Path.Exists(x.Path))
             .ToArray();
     }

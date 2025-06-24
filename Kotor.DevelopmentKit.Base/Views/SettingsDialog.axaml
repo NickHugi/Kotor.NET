@@ -7,37 +7,43 @@
         xmlns:vm="using:Kotor.DevelopmentKit.Base.ViewModels"
         xmlns:pages="using:Kotor.DevelopmentKit.Base.Settings.Pages"
 
-        xmlns:boolean-vm="using:Kotor.DevelopmentKit.Base.Settings.Types.Boolean"
-        xmlns:boolean-view="clr-namespace:Kotor.DevelopmentKit.Base.Settings.Types.Boolean"
-
-        xmlns:integer-vm="using:Kotor.DevelopmentKit.Base.Settings.Types.Integer"
-        xmlns:integer-view="clr-namespace:Kotor.DevelopmentKit.Base.Settings.Types.Integer"
-        
-        xmlns:string-vm="using:Kotor.DevelopmentKit.Base.Settings.Types.String"
-        xmlns:string-view="clr-namespace:Kotor.DevelopmentKit.Base.Settings.Types.String"
-
-        Width="650" Height="400"
+        Title="Settings"
+        Width="800" Height="450"
+        Padding="5"
         
         mc:Ignorable="d" d:DesignWidth="650" d:DesignHeight="400"
         x:DataType="vm:SettingsDialogViewModel"
         x:Class="Kotor.DevelopmentKit.Base.SettingsDialog">
-    <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <DockPanel HorizontalAlignment="Stretch"
+               VerticalAlignment="Stretch">
         <StackPanel DockPanel.Dock="Bottom"
                     Orientation="Horizontal"
-                    HorizontalAlignment="Right">
-            <Button >Apply</Button>
-            <Button>Cancel</Button>
+                    HorizontalAlignment="Right"
+                    Spacing="5"
+                    Margin="0 5 0 0">
+            <Button Command="{Binding ApplyCommand}">Apply</Button>
+            <Button Command="{Binding CancelCommand}">Cancel</Button>
         </StackPanel>
-        <TreeView DockPanel.Dock="Left" BorderThickness="1" BorderBrush="Black" ItemsSource="{Binding Pages}"
-                  Width="200" SelectedItem="{Binding SelectedPage}">
+        <TreeView DockPanel.Dock="Left"
+                  ItemsSource="{Binding Pages}"
+                  SelectedItem="{Binding SelectedPage}"
+                  BorderThickness="1"
+                  BorderBrush="Gray"
+                  Width="200">
             <TreeView.DataTemplates>
                 <TreeDataTemplate DataType="{x:Type pages:SettingsPageViewModel}" ItemsSource="{Binding Pages}">
                     <TextBlock Text="{Binding Name}" />
                 </TreeDataTemplate>
             </TreeView.DataTemplates>
         </TreeView>
-        <ScrollViewer DockPanel.Dock="Right" HorizontalAlignment="Stretch" Margin="25">
-            <base-view:SettingsItemsControl DataContext="{Binding SelectedPage.Properties}" />
-        </ScrollViewer>
+        <Border DockPanel.Dock="Right"
+                          BorderThickness="1"
+                          BorderBrush="Gray"
+                          HorizontalAlignment="Stretch"
+                          Margin="5 0 0 0">
+            <ScrollViewer>
+                <base-view:SettingsItemsControl DataContext="{Binding SelectedPage.Properties}" />
+            </ScrollViewer>
+        </Border>
     </DockPanel>
 </Window>

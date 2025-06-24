@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Kotor.DevelopmentKit.Base.Settings.Types;
 
+[AttributeUsage(AttributeTargets.Property)]
 public abstract class SettingAttribute : Attribute
 {
     public string Name { get; }
