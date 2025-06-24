@@ -19,11 +19,9 @@ namespace Kotor.DevelopmentKit.Base.Settings;
 public class Installations : ReactiveObject
 {
     [DataMember]
-    [BooleanSetting(
-        "Automatically Check for Installations",
-        @"When enabled, the toolset on startup will automatically check for existing KotOR
-          installations that have not yet been to the list."
-    )]
+    [BooleanSetting("Automatically Check for Installations",
+        "When enabled, the toolset on startup will automatically check for existing KotOR " +
+        "installations that have not yet been to the list.")]
     public bool AutoCheckForInstallations
     {
         get => field;
@@ -31,9 +29,7 @@ public class Installations : ReactiveObject
     }
 
     [DataMember]
-    [TableSetting(
-        "KotOR Installations",
-        "Configure the list of different KotOR installations that the toolset is aware of."
-    )]
+    [TableSetting("KotOR Installations",
+        "Configure the list of different KotOR installations that the toolset is aware of.")]
     public ObservableCollection<Installation> List { get; } = [];
 }

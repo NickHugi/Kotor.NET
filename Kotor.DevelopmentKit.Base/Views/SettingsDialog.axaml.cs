@@ -17,7 +17,6 @@ public partial class SettingsDialog : ReactiveWindow<SettingsDialogViewModel>
     {
         InitializeComponent();
 
-
         this.WhenAnyValue(x => x.ViewModel)
             .WhereNotNull()
             .Subscribe(x =>

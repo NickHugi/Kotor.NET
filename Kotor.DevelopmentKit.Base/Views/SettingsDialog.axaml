@@ -21,7 +21,7 @@
                     HorizontalAlignment="Right"
                     Spacing="5"
                     Margin="0 5 0 0">
-            <Button Command="{Binding ApplyCommand}">Apply</Button>
+            <Button Command="{Binding SaveCommand}">OK</Button>
             <Button Command="{Binding CancelCommand}">Cancel</Button>
         </StackPanel>
         <TreeView DockPanel.Dock="Left"
@@ -41,7 +41,7 @@
                           BorderBrush="Gray"
                           HorizontalAlignment="Stretch"
                           Margin="5 0 0 0">
-            <ScrollViewer>
+            <ScrollViewer Padding="5">
                 <base-view:SettingsItemsControl DataContext="{Binding SelectedPage.Properties}" />
             </ScrollViewer>
         </Border>
