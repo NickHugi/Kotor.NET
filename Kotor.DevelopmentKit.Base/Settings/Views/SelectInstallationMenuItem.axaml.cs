@@ -13,23 +13,23 @@ using Kotor.DevelopmentKit.Base.Settings.Values;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.Base.Settings;
+namespace Kotor.DevelopmentKit.Base.Settings.Views;
 
 public partial class SelectInstallationMenuItem : MenuItem
 {
-    public static readonly StyledProperty<Installation?> SelectedInstallationProperty
-        = AvaloniaProperty.Register<SelectInstallationMenuItem, Installation?>(nameof(SelectedInstallation), defaultBindingMode: BindingMode.TwoWay);
+    public static readonly StyledProperty<InstallationSettings?> SelectedInstallationProperty
+        = AvaloniaProperty.Register<SelectInstallationMenuItem, InstallationSettings?>(nameof(SelectedInstallation), defaultBindingMode: BindingMode.TwoWay);
 
-    public static readonly StyledProperty<ObservableCollection<Installation>> InstallationsProperty
-        = AvaloniaProperty.Register<SelectInstallationMenuItem, ObservableCollection<Installation>>(nameof(Installations));
+    public static readonly StyledProperty<ObservableCollection<InstallationSettings>> InstallationsProperty
+        = AvaloniaProperty.Register<SelectInstallationMenuItem, ObservableCollection<InstallationSettings>>(nameof(Installations));
 
-    public Installation? SelectedInstallation
+    public InstallationSettings? SelectedInstallation
     {
         get => GetValue(SelectedInstallationProperty);
         set => SetValue(SelectedInstallationProperty, value);
     }
 
-    public ObservableCollection<Installation> Installations
+    public ObservableCollection<InstallationSettings> Installations
     {
         get => GetValue(InstallationsProperty);
     }
@@ -70,7 +70,7 @@ public partial class SelectInstallationMenuItem : MenuItem
             });
     }
 
-    public void SelectInstallation(Installation? installation)
+    public void SelectInstallation(InstallationSettings? installation)
     {
         SelectedInstallation = installation;
     }

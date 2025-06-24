@@ -9,7 +9,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.Base.Settings.Values;
 
-public class DefaultSettingsRoot : ReactiveObject
+public class DefaultSettingsRoot : BaseSettings
 {
     public const string SettingsFilepath = "settings.json";
 

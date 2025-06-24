@@ -107,7 +107,7 @@ public abstract class BaseResourceEditorViewModel<TViewModel, TModel>
 
     public DefaultSettingsRoot Settings { get; }
 
-    public Installation SelectedInstallation
+    public InstallationSettings SelectedInstallation
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);

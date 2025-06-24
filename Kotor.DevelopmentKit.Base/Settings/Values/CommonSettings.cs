@@ -9,8 +9,8 @@ using Kotor.DevelopmentKit.Base.Settings.Attributes;
 namespace Kotor.DevelopmentKit.Base.Settings.Values;
 
 [Page("Common")]
-public class CommonSettings
+public class CommonSettings : BaseSettings
 {
     [DataMember]
-    public Installations Installations { get; set; } = new();
+    public InstallationsSettings Installations { get; set; } = new();
 }

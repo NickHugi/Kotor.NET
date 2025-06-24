@@ -32,7 +32,7 @@ public class AutoCheckInstallationsService
 
             if (alreadyTaken is false)
             {
-                installations.Add(new Installation
+                installations.Add(new InstallationSettings
                 {
                     Name = $"{potential.Game} {potential.Release}",
                     Game = potential.Game,

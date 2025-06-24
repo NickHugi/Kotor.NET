@@ -11,7 +11,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.Base.Settings.Values;
 
-public class Installation : ReactiveObject
+public class InstallationSettings : BaseSettings
 {
     [DataMember]
     [StringSetting("Name", "The name that will be used by the toolset to reference this installation")]

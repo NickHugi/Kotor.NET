@@ -11,7 +11,7 @@
         xmlns:panel-vm="using:Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel"
         xmlns:editor-views="clr-namespace:Kotor.DevelopmentKit.EditorGFF.Views"
         xmlns:panel-views="clr-namespace:Kotor.DevelopmentKit.EditorGFF.Views"
-        xmlns:settings-views="clr-namespace:Kotor.DevelopmentKit.Base.Settings;assembly=Kotor.DevelopmentKit.Base"
+        xmlns:settings-views="clr-namespace:Kotor.DevelopmentKit.Base.Settings.Views;assembly=Kotor.DevelopmentKit.Base"
         
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         Width="800" Height="450"

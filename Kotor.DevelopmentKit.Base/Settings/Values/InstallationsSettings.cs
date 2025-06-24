@@ -16,7 +16,7 @@ using ReactiveUI;
 namespace Kotor.DevelopmentKit.Base.Settings.Values;
 
 [Page("Installation")]
-public class Installations : ReactiveObject
+public class InstallationsSettings : BaseSettings
 {
     [DataMember]
     [BooleanSetting("Automatically Check for Installations",
@@ -31,5 +31,5 @@ public class Installations : ReactiveObject
     [DataMember]
     [TableSetting("KotOR Installations",
         "Configure the list of different KotOR installations that the toolset is aware of.")]
-    public ObservableCollection<Installation> List { get; } = [];
+    public ObservableCollection<InstallationSettings> List { get; } = [];
 }
