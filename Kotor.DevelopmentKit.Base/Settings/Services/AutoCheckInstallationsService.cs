@@ -16,18 +16,18 @@ public interface IAutoCheckInstallationsService
 
 public class AutoCheckInstallationsService
 (
-    DefaultSettingsRoot settings
+    ISearchForInstallationService _searchForGames,
+    DefaultSettingsRoot _settings
 ) : IAutoCheckInstallationsService
 {
     public void CheckAndAdd()
     {
-        if (!settings.Common.Installations.AutoCheckForInstallations)
+        if (!_settings.Common.Installations.AutoCheckForInstallations)
             return;
 
-        var directories = PotentialDirectories();
-        directories.ToList().ForEach(potential =>
+        _searchForGames.Search().ToList().ForEach(potential =>
         {
-            var installations = settings.Common.Installations.List;
+            var installations = _settings.Common.Installations.List;
             var alreadyTaken = installations.Any(existing => String.Equals(
                 GetFullPath(potential.Path).TrimEnd('\\'),
                 GetFullPath(existing.Path).TrimEnd('\\'),
@@ -44,11 +44,6 @@ public class AutoCheckInstallationsService
                 });
             }
         });
-    }
-
-    private IEnumerable<PotentialGameDirectory> PotentialDirectories()
-    {
-        return GameDirectoryLocator.Instance.Locate();
     }
 
     private string GetFullPath(string path)

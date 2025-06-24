@@ -68,6 +68,7 @@ public partial class App : Application
         services.AddScoped<SettingsDialogViewModel>();
         services.AddScoped<GFFResourceEditorViewModel>();
         services.AddScoped<IAutoCheckInstallationsService, AutoCheckInstallationsService>();
+        services.AddScoped<ISearchForInstallationService, SearchForInstallationService>();
         services.AddScoped<ILoadSettingsService, LoadSettingsService>();
         services.AddScoped<ISaveSettingsService, SaveSettingsService>();
         services.AddScoped<ITalkTableLookup, TalkTableLookup>();
