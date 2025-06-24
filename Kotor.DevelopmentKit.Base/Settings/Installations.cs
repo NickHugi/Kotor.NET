@@ -7,7 +7,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
-using Kotor.DevelopmentKit.Base.Settings.Pages;
+using Kotor.DevelopmentKit.Base.Settings.Attributes;
 using Kotor.DevelopmentKit.Base.Settings.Types.Boolean;
 using Kotor.DevelopmentKit.Base.Settings.Types.Table;
 using Kotor.NET.Common;

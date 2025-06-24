@@ -8,7 +8,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using DynamicData.Binding;
-using Kotor.DevelopmentKit.Base.Settings.Pages;
 using Kotor.DevelopmentKit.Base.Settings.Types.Table;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.Base.Settings.Types;
 
-namespace Kotor.DevelopmentKit.Base.Settings.Pages;
+namespace Kotor.DevelopmentKit.Base.Settings.ViewModels;
 
 public class SettingsPageViewModel
 {

@@ -5,8 +5,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.Base.Settings.Types;
+using Kotor.DevelopmentKit.Base.Settings.ViewModels;
 
-namespace Kotor.DevelopmentKit.Base.Settings.Pages;
+namespace Kotor.DevelopmentKit.Base.Settings.Attributes;
 
 public class PageAttribute : Attribute
 {
