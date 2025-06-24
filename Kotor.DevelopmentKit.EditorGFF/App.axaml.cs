@@ -9,7 +9,7 @@ using Kotor.DevelopmentKit.Base;
 using Kotor.DevelopmentKit.Base.Settings;
 using Kotor.DevelopmentKit.Base.Settings.Interfaces;
 using Kotor.DevelopmentKit.Base.Settings.Services;
-using Kotor.DevelopmentKit.Base.ViewModels;
+using Kotor.DevelopmentKit.Base.Settings.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.Settings;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.Views;

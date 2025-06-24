@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         
         xmlns:base-view="clr-namespace:Kotor.DevelopmentKit.Base"
-        xmlns:vm="using:Kotor.DevelopmentKit.Base.ViewModels"
+        xmlns:settings-vm="using:Kotor.DevelopmentKit.Base.Settings.ViewModels"
         xmlns:pages="using:Kotor.DevelopmentKit.Base.Settings.Pages"
 
         Title="Settings"
@@ -12,7 +12,7 @@
         Padding="5"
         
         mc:Ignorable="d" d:DesignWidth="650" d:DesignHeight="400"
-        x:DataType="vm:SettingsDialogViewModel"
+        x:DataType="settings-vm:SettingsDialogViewModel"
         x:Class="Kotor.DevelopmentKit.Base.SettingsDialog">
     <DockPanel HorizontalAlignment="Stretch"
                VerticalAlignment="Stretch">

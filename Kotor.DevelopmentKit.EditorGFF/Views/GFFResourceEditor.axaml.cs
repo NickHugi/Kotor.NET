@@ -14,7 +14,7 @@ using Avalonia.VisualTree;
 using Kotor.DevelopmentKit.Base;
 using Kotor.DevelopmentKit.Base.Common;
 using Kotor.DevelopmentKit.Base.Settings;
-using Kotor.DevelopmentKit.Base.ViewModels;
+using Kotor.DevelopmentKit.Base.Settings.ViewModels;
 using Kotor.DevelopmentKit.Base.Views;
 using Kotor.DevelopmentKit.EditorGFF.Actions;
 using Kotor.DevelopmentKit.EditorGFF.EventArgs;

@@ -15,7 +15,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.Base.ViewModels;
+namespace Kotor.DevelopmentKit.Base.Settings.ViewModels;
 
 public class SettingsDialogViewModel : ReactiveObject
 {
