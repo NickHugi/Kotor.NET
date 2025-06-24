@@ -4,15 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.DevelopmentKit.Base.Settings.Interfaces;
 using Kotor.NET.Common;
 using Kotor.NET.Helpers;
 
 namespace Kotor.DevelopmentKit.Base.Settings.Services;
-
-public interface IAutoCheckInstallationsService
-{
-    public void CheckAndAdd();
-}
 
 public class AutoCheckInstallationsService
 (

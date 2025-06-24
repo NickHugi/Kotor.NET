@@ -4,18 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.DevelopmentKit.Base.Settings.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Kotor.DevelopmentKit.Base.Settings.Services;
-
-public interface ILoadSettingsService
-{
-    public T Load<T>(string filepath) where T : DefaultSettingsRoot, new();
-
-    DefaultSettingsRoot Load(string filepath, Type type);
-}
 
 public class LoadSettingsService : ILoadSettingsService
 {

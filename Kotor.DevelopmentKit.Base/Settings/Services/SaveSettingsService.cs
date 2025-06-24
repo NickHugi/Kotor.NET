@@ -4,15 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.DevelopmentKit.Base.Settings.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Kotor.DevelopmentKit.Base.Settings.Services;
-
-public interface ISaveSettingsService
-{
-    public void Save(string filepath, DefaultSettingsRoot root);
-}
 
 public class SaveSettingsService : ISaveSettingsService
 {
