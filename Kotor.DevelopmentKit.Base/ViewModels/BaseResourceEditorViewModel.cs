@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Kotor.DevelopmentKit.Base.Settings;
+using Kotor.DevelopmentKit.Base.Settings.Values;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Encapsulations;
 using ReactiveUI;

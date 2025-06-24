@@ -9,7 +9,7 @@ using Kotor.DevelopmentKit.Base.Settings.Types.String;
 using Kotor.NET.Common;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.Base.Settings;
+namespace Kotor.DevelopmentKit.Base.Settings.Values;
 
 public class Installation : ReactiveObject
 {

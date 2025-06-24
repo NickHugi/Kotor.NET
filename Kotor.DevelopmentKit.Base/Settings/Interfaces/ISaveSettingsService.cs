@@ -1,4 +1,6 @@
-﻿namespace Kotor.DevelopmentKit.Base.Settings.Interfaces;
+﻿using Kotor.DevelopmentKit.Base.Settings.Values;
+
+namespace Kotor.DevelopmentKit.Base.Settings.Interfaces;
 
 public interface ISaveSettingsService
 {

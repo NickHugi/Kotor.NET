@@ -7,7 +7,7 @@ using Avalonia.Controls.Models.TreeDataGrid;
 using DynamicData;
 using DynamicData.Binding;
 using Kotor.DevelopmentKit.Base.Common;
-using Kotor.DevelopmentKit.Base.Settings;
+using Kotor.DevelopmentKit.Base.Settings.Values;
 using Kotor.DevelopmentKit.Base.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.Actions;
 using Kotor.DevelopmentKit.EditorGFF.Extensions;

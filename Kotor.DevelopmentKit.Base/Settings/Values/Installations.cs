@@ -13,7 +13,7 @@ using Kotor.DevelopmentKit.Base.Settings.Types.Table;
 using Kotor.NET.Common;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.Base.Settings;
+namespace Kotor.DevelopmentKit.Base.Settings.Values;
 
 [Page("Installation")]
 public class Installations : ReactiveObject

@@ -9,6 +9,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Markup.Xaml;
 using DynamicData.Binding;
+using Kotor.DevelopmentKit.Base.Settings.Values;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 

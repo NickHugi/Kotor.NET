@@ -8,8 +8,8 @@
           Header="_Set Installation"
           
           xmlns:collection="using:System.Collections.Generic"
-          xmlns:settings-vm="using:Kotor.DevelopmentKit.Base.Settings"
+          xmlns:settings-value-vm="using:Kotor.DevelopmentKit.Base.Settings.Value"
            
-          x:DataType="{x:Type collection:ICollection, x:TypeArguments=settings-vm:Installation}"
+          x:DataType="{x:Type collection:ICollection, x:TypeArguments=settings-value-vm:Installation}"
           x:Class="Kotor.DevelopmentKit.Base.Settings.SelectInstallationMenuItem"
           />
