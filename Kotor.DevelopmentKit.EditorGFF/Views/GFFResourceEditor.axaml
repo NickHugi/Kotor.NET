@@ -107,7 +107,7 @@
                                 <panel-views:FieldStringPanel FinishedEditing="FieldStringPanel_FinishedEditing" />
                             </DataTemplate>
                             <DataTemplate DataType="{x:Type panel-vm:LocalizedStringPanelViewModel}">
-                                <panel-views:FieldLocalizedStringPanel FinishedEditing="FieldLocalizedStringPanel_FinishedEditing" />
+                                <panel-views:FieldLocalizedStringPanel FinishedEditing="FieldLocalizedStringPanel_FinishedEditing" Installation="{Binding #Window.DataContext.SelectedInstallation}" />
                             </DataTemplate>
                             <DataTemplate DataType="{x:Type panel-vm:BinaryPanelViewModel}">
                                 <panel-views:FieldBinaryPanel FinishedEditing="FieldBinaryPanel_FinishedEditing" />
