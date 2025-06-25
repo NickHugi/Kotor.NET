@@ -1,6 +1,6 @@
 ﻿namespace Kotor.DevelopmentKit.Base.Settings.Interfaces;
 
-public interface IAutoCheckInstallationsService
+public interface IInstallationsScanner
 {
     public void CheckAndAdd();
 }

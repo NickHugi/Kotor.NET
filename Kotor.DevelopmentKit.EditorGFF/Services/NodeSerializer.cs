@@ -9,7 +9,7 @@ using Kotor.NET.Resources.KotorGFF;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Services;
 
-public class SerializeNodeService
+public class NodeSerializer
 {
     public string Serialize(BaseGFFNodeViewModel node)
     {

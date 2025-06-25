@@ -9,7 +9,7 @@ using Kotor.NET.Helpers;
 
 namespace Kotor.DevelopmentKit.Base.Settings.Services;
 
-public class SearchForInstallationService : ISearchForInstallationService
+public class InstallationLocator : IInstallationLocator
 {
     public IEnumerable<PotentialGameDirectory> Search()
     {

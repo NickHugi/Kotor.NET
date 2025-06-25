@@ -12,7 +12,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Kotor.DevelopmentKit.Base.Settings.Services;
 
-public class LoadSettingsService : ILoadSettingsService
+public class SettingsImporter : ISettingsImporter
 {
     public T Load<T>(string filepath)
         where T : DefaultSettingsRoot, new()

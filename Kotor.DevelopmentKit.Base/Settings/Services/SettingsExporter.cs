@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Kotor.DevelopmentKit.Base.Settings.Services;
 
-public class SaveSettingsService : ISaveSettingsService
+public class SettingsExporter : ISettingsExporter
 {
     public void Save(string filepath, DefaultSettingsRoot root)
     {

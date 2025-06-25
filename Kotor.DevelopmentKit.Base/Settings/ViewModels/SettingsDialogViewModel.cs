@@ -43,14 +43,14 @@ public class SettingsDialogViewModel : ReactiveObject
     public Interaction<Unit, Unit> CloseInteraction { get; }
 
     private readonly DefaultSettingsRoot _settings;
-    private readonly ISaveSettingsService _saveSettingsService;
-    private readonly ILoadSettingsService _loadSettingsService;
+    private readonly ISettingsExporter _saveSettingsService;
+    private readonly ISettingsImporter _loadSettingsService;
 
 
     public SettingsDialogViewModel(
         DefaultSettingsRoot settings,
-        ISaveSettingsService saveSettingsService,
-        ILoadSettingsService loadSettingsService)
+        ISettingsExporter saveSettingsService,
+        ISettingsImporter loadSettingsService)
     {
         _settings = settings;
         _saveSettingsService = saveSettingsService;

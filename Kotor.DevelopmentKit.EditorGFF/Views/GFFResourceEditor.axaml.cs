@@ -206,14 +206,14 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
 
     public async Task CopyNode(BaseGFFNodeViewModel node)
     {
-        var serilizeService = new SerializeNodeService();
+        var serilizeService = new NodeSerializer();
         var text = serilizeService.Serialize(node);
         await Clipboard!.SetTextAsync(text);
     }
 
     public async Task PasteNode()
     {
-        var deserializeNodeService = new DeserializeNodeService();
+        var deserializeNodeService = new NodeDeserializer();
         var selectedNode = Context.SelectedNode;
 
         if (await HasStructOnClipboard() && selectedNode is ListGFFNodeViewModel selectedListNode)

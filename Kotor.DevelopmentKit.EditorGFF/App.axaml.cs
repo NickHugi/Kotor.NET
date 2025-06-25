@@ -42,7 +42,7 @@ public partial class App : Application
     {
         ServiceProvider = BuildServiceProvider();
 
-        ServiceProvider.GetService<IAutoCheckInstallationsService>()?.CheckAndAdd();
+        ServiceProvider.GetService<IInstallationsScanner>()?.CheckAndAdd();
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
@@ -63,15 +63,15 @@ public partial class App : Application
 
         services.AddSingleton<DefaultSettingsRoot, GFFSettingsRoot>(x =>
         {
-            return x.GetService<ILoadSettingsService>()!.Load<GFFSettingsRoot>(DefaultSettingsRoot.SettingsFilepath);
+            return x.GetService<ISettingsImporter>()!.Load<GFFSettingsRoot>(DefaultSettingsRoot.SettingsFilepath);
         });
         
         services.AddScoped<SettingsDialogViewModel>();
         services.AddScoped<GFFResourceEditorViewModel>();
-        services.AddScoped<IAutoCheckInstallationsService, AutoCheckInstallationsService>();
-        services.AddScoped<ISearchForInstallationService, SearchForInstallationService>();
-        services.AddScoped<ILoadSettingsService, LoadSettingsService>();
-        services.AddScoped<ISaveSettingsService, SaveSettingsService>();
+        services.AddScoped<IInstallationsScanner, InstallationsScanner>();
+        services.AddScoped<IInstallationLocator, InstallationLocator>();
+        services.AddScoped<ISettingsImporter, SettingsImporter>();
+        services.AddScoped<ISettingsExporter, SettingsExporter>();
         services.AddScoped<ITalkTableLookup, TalkTableLookup>();
 
         return services.BuildServiceProvider();

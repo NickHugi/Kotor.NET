@@ -11,11 +11,11 @@ using Kotor.NET.Helpers;
 
 namespace Kotor.DevelopmentKit.Base.Settings.Services;
 
-public class AutoCheckInstallationsService
+public class InstallationsScanner
 (
-    ISearchForInstallationService _searchForGames,
+    IInstallationLocator _searchForGames,
     DefaultSettingsRoot _settings
-) : IAutoCheckInstallationsService
+) : IInstallationsScanner
 {
     public void CheckAndAdd()
     {

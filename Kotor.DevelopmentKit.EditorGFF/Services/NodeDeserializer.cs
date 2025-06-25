@@ -11,7 +11,7 @@ using Kotor.NET.Formats.BinaryGFF;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Services;
 
-public class DeserializeNodeService
+public class NodeDeserializer
 {
     public BaseGFFNodeViewModel Deserialize(BaseGFFNodeViewModel hook, string text)
     {
