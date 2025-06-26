@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Kotor.DevelopmentKit.EditorGFF.Interfaces;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 using Kotor.NET.Resources.KotorGFF;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Services;
 
-public class NodeSerializer
+public class NodeSerializer : INodeSerializer
 {
     public string Serialize(BaseGFFNodeViewModel node)
     {

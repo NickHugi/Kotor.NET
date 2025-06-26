@@ -6,10 +6,12 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 using Kotor.DevelopmentKit.Base;
+using Kotor.DevelopmentKit.Base.Extensions;
 using Kotor.DevelopmentKit.Base.Settings.Interfaces;
 using Kotor.DevelopmentKit.Base.Settings.Services;
 using Kotor.DevelopmentKit.Base.Settings.Values;
 using Kotor.DevelopmentKit.Base.Settings.ViewModels;
+using Kotor.DevelopmentKit.EditorGFF.Extensions;
 using Kotor.DevelopmentKit.EditorGFF.Settings;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.Views;
@@ -58,21 +60,11 @@ public partial class App : Application
 
     private IServiceProvider BuildServiceProvider()
     {
-        // TODO extension
         var services = new ServiceCollection();
 
-        services.AddSingleton<DefaultSettingsRoot, GFFSettingsRoot>(x =>
-        {
-            return x.GetService<ISettingsImporter>()!.Load<GFFSettingsRoot>(DefaultSettingsRoot.SettingsFilepath);
-        });
-        
-        services.AddScoped<SettingsDialogViewModel>();
-        services.AddScoped<GFFResourceEditorViewModel>();
-        services.AddScoped<IInstallationsScanner, InstallationsScanner>();
-        services.AddScoped<IInstallationLocator, InstallationLocator>();
-        services.AddScoped<ISettingsImporter, SettingsImporter>();
-        services.AddScoped<ISettingsExporter, SettingsExporter>();
-        services.AddScoped<ITalkTableLookup, TalkTableLookup>();
+        services.AddBaseServices();
+        services.AddSettings<GFFSettingsRoot>();
+        services.AddGFFEditorServices();        
 
         return services.BuildServiceProvider();
     }

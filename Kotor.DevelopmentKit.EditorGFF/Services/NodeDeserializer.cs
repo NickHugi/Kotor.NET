@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using DynamicData;
 using Kotor.DevelopmentKit.Base.ViewModels;
+using Kotor.DevelopmentKit.EditorGFF.Interfaces;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 using Kotor.NET.Formats.BinaryGFF;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Services;
 
-public class NodeDeserializer
+public class NodeDeserializer : INodeDeserializer
 {
     public BaseGFFNodeViewModel Deserialize(BaseGFFNodeViewModel hook, string text)
     {
