@@ -6,36 +6,36 @@ using System.Text;
 using System.Threading.Tasks;
 using DynamicData;
 using DynamicData.Binding;
-using Kotor.DevelopmentKit.Base.ViewModels;
+using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using Kotor.NET.Common;
 using Kotor.NET.Common.Data;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
+namespace Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 
-public class LocalizedStringGFFNodeViewModel : BaseFieldGFFNodeViewModel<LocalizedStringViewModel>
+public class LocalizedStringGFFNode : BaseFieldGFFNodeViewModel<ReactiveLocalizedString>
 {
     public override string DisplayType => "Localized String";
     public override string DisplayValue => FieldValue.StringRef == -1
         ? $"[{FieldValue.StringRef}]"
         : FieldValue.SubStrings.FirstOrDefault(x => x.Language == Language.English)?.Text?.ToString() ?? "";
 
-    public LocalizedStringGFFNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent, label)
+    public LocalizedStringGFFNode(IGFFNode parent, string label) : base(parent, label)
     {
         FieldValue = new();
         FieldValue.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(DisplayValue)));
         FieldValue.SubStrings.WhenAnyPropertyChanged().Subscribe(x => this.RaisePropertyChanged(nameof(DisplayValue)));
     }
-    public LocalizedStringGFFNodeViewModel(IGFFNodeViewModel parent, string label, LocalizedStringViewModel value) : this(parent, label)
+    public LocalizedStringGFFNode(IGFFNode parent, string label, ReactiveLocalizedString value) : this(parent, label)
     {
         FieldValue = value;
     }
-    public LocalizedStringGFFNodeViewModel(IGFFNodeViewModel parent, string label, LocalisedString value) : this(parent, label)
+    public LocalizedStringGFFNode(IGFFNode parent, string label, LocalisedString value) : this(parent, label)
     {
         FieldValue = new()
         {
             StringRef = value.StringRef,
-            SubStrings = new(value.AllSubstrings().Select(x => new LocalizedSubStringViewModel()
+            SubStrings = new(value.AllSubstrings().Select(x => new ReactiveLocalizedSubString()
             {
                 Language = x.Language,
                 Gender = x.Gender,

@@ -1,8 +1,8 @@
-﻿using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
+﻿using Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Interfaces;
 
 public interface INodeDeserializer
 {
-    BaseGFFNodeViewModel Deserialize(BaseGFFNodeViewModel hook, string text);
+    BaseGFFNode Deserialize(BaseGFFNode hook, string text);
 }

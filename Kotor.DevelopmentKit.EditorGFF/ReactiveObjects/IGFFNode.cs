@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
+namespace Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 
-public interface IGFFNodeViewModel
+public interface IGFFNode
 {
     public string Label { get; set; }
     public bool CanEditLabel { get; }
@@ -10,8 +10,8 @@ public interface IGFFNodeViewModel
     public string DisplayType { get; }
     public string DisplayValue { get; }
 
-    public IGFFNodeViewModel? Parent { get; }
-    public ReadOnlyObservableCollection<BaseGFFNodeViewModel> Children { get; }
+    public IGFFNode? Parent { get; }
+    public ReadOnlyObservableCollection<BaseGFFNode> Children { get; }
 
     public void Delete();
 }

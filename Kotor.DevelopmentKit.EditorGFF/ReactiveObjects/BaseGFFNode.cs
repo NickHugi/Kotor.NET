@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Kotor.DevelopmentKit.EditorGFF.Models;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
+namespace Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 
-public abstract class BaseGFFNodeViewModel : ReactiveObject, IGFFNodeViewModel
+public abstract class BaseGFFNode : ReactiveObject, IGFFNode
 {
     public abstract string Label { get; set; }
     public abstract bool CanEditLabel { get; }
@@ -27,18 +27,18 @@ public abstract class BaseGFFNodeViewModel : ReactiveObject, IGFFNodeViewModel
     public int Version { get; set; }
     public int SavedVersion { get; set; }
 
-    public IGFFNodeViewModel? Parent { get; }
-    public abstract ReadOnlyObservableCollection<BaseGFFNodeViewModel> Children { get; }
+    public IGFFNode? Parent { get; }
+    public abstract ReadOnlyObservableCollection<BaseGFFNode> Children { get; }
 
     public NodePath Path
     {
         get
         {
             var path = new List<string>();
-            IGFFNodeViewModel cursor = this;
+            IGFFNode cursor = this;
             while (cursor.Parent is not null)
             {
-                if ((BaseGFFNodeViewModel)cursor is ListStructGFFNodeViewModel structInList)
+                if ((BaseGFFNode)cursor is ListStructGFFNode structInList)
                 {
                     path.Add(structInList.Children.IndexOf(structInList).ToString());
                 }
@@ -59,27 +59,27 @@ public abstract class BaseGFFNodeViewModel : ReactiveObject, IGFFNodeViewModel
     }
 
 
-    public BaseGFFNodeViewModel(IGFFNodeViewModel? parent)
+    public BaseGFFNode(IGFFNode? parent)
     {
         Parent = parent;
     }
 
     public abstract void Delete();
 
-    public NodePath GetPathOf(IGFFNodeViewModel node)
+    public NodePath GetPathOf(IGFFNode node)
     {
         var next = node;
         var path = new List<object>();
 
         while (next is not null)
         {
-            if (next is BaseFieldGFFNodeViewModel fieldNode)
+            if (next is BaseFieldGFFNode fieldNode)
             {
                 path.Add(next.Label);
             }
-            else if (next is ListStructGFFNodeViewModel structInList)
+            else if (next is ListStructGFFNode structInList)
             {
-                var listNode = (ListGFFNodeViewModel)structInList.Parent;
+                var listNode = (ListGFFNode)structInList.Parent;
                 path.Add(listNode.Children.IndexOf(structInList));
             }
 
@@ -100,7 +100,7 @@ public abstract class BaseGFFNodeViewModel : ReactiveObject, IGFFNodeViewModel
         while (remaining.Count() > 0 && cursor is not null)
         {
             count++;
-            cursor = cursor.NavigateTo<BaseGFFNodeViewModel>([remaining.First()]);
+            cursor = cursor.NavigateTo<BaseGFFNode>([remaining.First()]);
             remaining = new NodePath(path.Skip(count));
         }
 
@@ -110,21 +110,21 @@ public abstract class BaseGFFNodeViewModel : ReactiveObject, IGFFNodeViewModel
         return (existing, missing);
     }
 
-    public TTargetNode? NavigateTo<TTargetNode>(params NodePath[] path) where TTargetNode : BaseGFFNodeViewModel
+    public TTargetNode? NavigateTo<TTargetNode>(params NodePath[] path) where TTargetNode : BaseGFFNode
     {
         var fullPath = path.SelectMany(x => x);
         var node = NavigateTo<TTargetNode>(fullPath);
         return node;
     }
-    private TTargetNode? NavigateTo<TTargetNode>(IEnumerable<object> path) where TTargetNode : BaseGFFNodeViewModel
+    private TTargetNode? NavigateTo<TTargetNode>(IEnumerable<object> path) where TTargetNode : BaseGFFNode
     {
-        IGFFNodeViewModel? node = this;
+        IGFFNode? node = this;
 
         foreach (var step in path)
         {
             if (step is int listIndex)
             {
-                if (node is ListGFFNodeViewModel listNode)
+                if (node is ListGFFNode listNode)
                 {
                     node = listNode.Children.ElementAtOrDefault(listIndex);
                 }
@@ -135,9 +135,9 @@ public abstract class BaseGFFNodeViewModel : ReactiveObject, IGFFNodeViewModel
             }
             else if (step is string fieldLabel)
             {
-                if (node is IStructGFFNodeViewModel structNode)
+                if (node is IStructGFFNode structNode)
                 {
-                    node = structNode.Children.OfType<BaseFieldGFFNodeViewModel>().FirstOrDefault(x => x.Label == fieldLabel);
+                    node = structNode.Children.OfType<BaseFieldGFFNode>().FirstOrDefault(x => x.Label == fieldLabel);
                 }
                 else
                 {

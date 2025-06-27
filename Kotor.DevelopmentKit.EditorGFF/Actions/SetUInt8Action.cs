@@ -5,24 +5,24 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.Base.Common;
 using Kotor.DevelopmentKit.EditorGFF.Models;
+using Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels;
-using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
-public class SetUInt8Action : BaseSetNodeAction<UInt8GFFNodeViewModel, byte?>
+public class SetUInt8Action : BaseSetNodeAction<UInt8GFFNode, byte?>
 {
     public SetUInt8Action(NodePath path, byte? oldValue, byte? newValue)
         : base(path, oldValue, newValue)
     {
     }
 
-    protected override UInt8GFFNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, byte? value)
-        => new UInt8GFFNodeViewModel(parentNode, Path.Tail, (byte)value);
+    protected override UInt8GFFNode InstantiateNode(IGFFNode parentNode, byte? value)
+        => new UInt8GFFNode(parentNode, Path.Tail, (byte)value);
 
-    protected override void SetNewValue(UInt8GFFNodeViewModel node)
+    protected override void SetNewValue(UInt8GFFNode node)
         => node.FieldValue = NewValue!.Value;
 
-    protected override void SetOldValue(UInt8GFFNodeViewModel node)
+    protected override void SetOldValue(UInt8GFFNode node)
         => node.FieldValue = OldValue!.Value;
 }

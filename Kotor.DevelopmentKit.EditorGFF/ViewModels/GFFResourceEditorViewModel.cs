@@ -7,14 +7,15 @@ using Avalonia.Controls.Models.TreeDataGrid;
 using DynamicData;
 using DynamicData.Binding;
 using Kotor.DevelopmentKit.Base.Common;
+using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using Kotor.DevelopmentKit.Base.Settings.Values;
 using Kotor.DevelopmentKit.Base.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.Actions;
 using Kotor.DevelopmentKit.EditorGFF.Extensions;
 using Kotor.DevelopmentKit.EditorGFF.Models;
+using Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 using Kotor.DevelopmentKit.EditorGFF.Settings;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
-using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 using Kotor.NET.Formats.Binary2DA.Serialisation;
 using Kotor.NET.Resources.KotorGFF;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,18 +25,18 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels;
 
 public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewModel, GFF>
 {
-    private BaseGFFNodeViewModel? _selectedNode;
-    public BaseGFFNodeViewModel? SelectedNode
+    private BaseGFFNode? _selectedNode;
+    public BaseGFFNode? SelectedNode
     {
         get => _selectedNode;
         set => this.RaiseAndSetIfChanged(ref _selectedNode, value);
     }
 
-    private RootStructGFFNodeViewModel _rootNode = new RootStructGFFNodeViewModel();
-    public RootStructGFFNodeViewModel RootNode => _rootNode;
+    private RootStructGFFNode _rootNode = new RootStructGFFNode();
+    public RootStructGFFNode RootNode => _rootNode;
 
-    private HierarchicalTreeDataGridSource<BaseGFFNodeViewModel> _treeData;
-    public HierarchicalTreeDataGridSource<BaseGFFNodeViewModel> TreeData
+    private HierarchicalTreeDataGridSource<BaseGFFNode> _treeData;
+    public HierarchicalTreeDataGridSource<BaseGFFNode> TreeData
     {
         get => _treeData;
         set => this.RaiseAndSetIfChanged(ref _treeData, value);
@@ -58,24 +59,24 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
 
             return _selectedNode switch
             {
-                UInt8GFFNodeViewModel node => ActivatorUtilities.CreateInstance<UInt8PanelViewModel>(App.ServiceProvider, node.FieldValue),
-                Int8GFFNodeViewModel node => ActivatorUtilities.CreateInstance<Int8PanelViewModel>(App.ServiceProvider, node.FieldValue),
-                UInt16GFFNodeViewModel node => ActivatorUtilities.CreateInstance<UInt16PanelViewModel>(App.ServiceProvider, node.FieldValue),
-                Int16GFFNodeViewModel node => ActivatorUtilities.CreateInstance<Int16PanelViewModel>(App.ServiceProvider, node.FieldValue),
-                UInt32GFFNodeViewModel node => ActivatorUtilities.CreateInstance<UInt32PanelViewModel>(App.ServiceProvider, node.FieldValue),
-                Int32GFFNodeViewModel node => ActivatorUtilities.CreateInstance<Int32PanelViewModel>(App.ServiceProvider, node.FieldValue),
-                UInt64GFFNodeViewModel node => ActivatorUtilities.CreateInstance<UInt64PanelViewModel>(App.ServiceProvider, node.FieldValue),
-                Int64GFFNodeViewModel node => ActivatorUtilities.CreateInstance<Int64PanelViewModel>(App.ServiceProvider, node.FieldValue),
-                SingleGFFNodeViewModel node => ActivatorUtilities.CreateInstance<SinglePanelViewModel>(App.ServiceProvider, node.FieldValue),
-                DoubleGFFNodeViewModel node => ActivatorUtilities.CreateInstance<DoublePanelViewModel>(App.ServiceProvider, node.FieldValue),
-                ResRefGFFNodeViewModel node => ActivatorUtilities.CreateInstance<ResRefPanelViewModel>(App.ServiceProvider, node.FieldValue),
-                StringGFFNodeViewModel node => ActivatorUtilities.CreateInstance<StringPanelViewModel>(App.ServiceProvider, node.FieldValue),
-                LocalizedStringGFFNodeViewModel node => ActivatorUtilities.CreateInstance<LocalizedStringPanelViewModel>(App.ServiceProvider, node.FieldValue),
-                BinaryGFFNodeViewModel node => ActivatorUtilities.CreateInstance<BinaryPanelViewModel>(App.ServiceProvider, node.FieldValue),
-                IStructGFFNodeViewModel node => ActivatorUtilities.CreateInstance<StructPanelViewModel>(App.ServiceProvider, node.StructID),
-                Vector3GFFNodeViewModel node => ActivatorUtilities.CreateInstance<Vector3PanelViewModel>(App.ServiceProvider, node.FieldValue),
-                Vector4GFFNodeViewModel node => ActivatorUtilities.CreateInstance<Vector4PanelViewModel>(App.ServiceProvider, node.FieldValue),
-                ListGFFNodeViewModel node => null,
+                UInt8GFFNode node => ActivatorUtilities.CreateInstance<UInt8PanelViewModel>(App.ServiceProvider, node.FieldValue),
+                Int8GFFNode node => ActivatorUtilities.CreateInstance<Int8PanelViewModel>(App.ServiceProvider, node.FieldValue),
+                UInt16GFFNode node => ActivatorUtilities.CreateInstance<UInt16PanelViewModel>(App.ServiceProvider, node.FieldValue),
+                Int16GFFNode node => ActivatorUtilities.CreateInstance<Int16PanelViewModel>(App.ServiceProvider, node.FieldValue),
+                UInt32GFFNode node => ActivatorUtilities.CreateInstance<UInt32PanelViewModel>(App.ServiceProvider, node.FieldValue),
+                Int32GFFNode node => ActivatorUtilities.CreateInstance<Int32PanelViewModel>(App.ServiceProvider, node.FieldValue),
+                UInt64GFFNode node => ActivatorUtilities.CreateInstance<UInt64PanelViewModel>(App.ServiceProvider, node.FieldValue),
+                Int64GFFNode node => ActivatorUtilities.CreateInstance<Int64PanelViewModel>(App.ServiceProvider, node.FieldValue),
+                SingleGFFNode node => ActivatorUtilities.CreateInstance<SinglePanelViewModel>(App.ServiceProvider, node.FieldValue),
+                DoubleGFFNode node => ActivatorUtilities.CreateInstance<DoublePanelViewModel>(App.ServiceProvider, node.FieldValue),
+                ResRefGFFNode node => ActivatorUtilities.CreateInstance<ResRefPanelViewModel>(App.ServiceProvider, node.FieldValue),
+                StringGFFNode node => ActivatorUtilities.CreateInstance<StringPanelViewModel>(App.ServiceProvider, node.FieldValue),
+                LocalizedStringGFFNode node => ActivatorUtilities.CreateInstance<LocalizedStringPanelViewModel>(App.ServiceProvider, node.FieldValue),
+                BinaryGFFNode node => ActivatorUtilities.CreateInstance<BinaryPanelViewModel>(App.ServiceProvider, node.FieldValue),
+                IStructGFFNode node => ActivatorUtilities.CreateInstance<StructPanelViewModel>(App.ServiceProvider, node.StructID),
+                Vector3GFFNode node => ActivatorUtilities.CreateInstance<Vector3PanelViewModel>(App.ServiceProvider, node.FieldValue),
+                Vector4GFFNode node => ActivatorUtilities.CreateInstance<Vector4PanelViewModel>(App.ServiceProvider, node.FieldValue),
+                ListGFFNode node => null,
                 _ => throw new InvalidOperationException()
             };
         }
@@ -86,7 +87,7 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
 
     public GFFResourceEditorViewModel(DefaultSettingsRoot settings) : base(settings)
     {
-        _treeData = new(new RootStructGFFNodeViewModel());
+        _treeData = new(new RootStructGFFNode());
         _history = new(this);
         Resource = new();
 
@@ -136,25 +137,25 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         new GFFBinarySerializer(gff).Serialize().Write(fileStream);
     }
 
-    public void DeleteNode(BaseGFFNodeViewModel node)
+    public void DeleteNode(BaseGFFNode node)
     {
         var action = new DeleteFieldAction(node);
         History.Apply(action);
     }
 
-    public BaseGFFNodeViewModel FillPath(NodePath path)
+    public BaseGFFNode FillPath(NodePath path)
     {
-        BaseGFFNodeViewModel node = _rootNode;
+        BaseGFFNode node = _rootNode;
 
         foreach (var step in path)
         {
-            if (node is IStructGFFNodeViewModel structNode && step is string fieldLabel)
+            if (node is IStructGFFNode structNode && step is string fieldLabel)
             {
                 var nextNode = structNode.GetField(fieldLabel);
                 if (nextNode is null)
                 {
-                    var field = structNode as BaseGFFNodeViewModel;
-                    structNode.AddField(new FieldStructGFFNodeViewModel(field, fieldLabel)); // TODO
+                    var field = structNode as BaseGFFNode;
+                    structNode.AddField(new FieldStructGFFNode(field, fieldLabel)); // TODO
                     node = structNode.GetField(fieldLabel);
                 }
                 else
@@ -217,7 +218,7 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         SetFieldValueForNode(path, value, (oldValue) => new SetDoubleAction(path, oldValue, value));
     }
 
-    public void SetResRefNode(NodePath path, ResRefViewModel value)
+    public void SetResRefNode(NodePath path, ReactiveResRef value)
     {
         SetFieldValueForNode(path, value, (oldValue) => new SetResRefAction(path, oldValue, value));
     }
@@ -227,7 +228,7 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         SetFieldValueForNode(path, value, (oldValue) => new SetStringAction(path, oldValue, value));
     }
 
-    public void SetLocalizedStringNode(NodePath path, LocalizedStringViewModel value)
+    public void SetLocalizedStringNode(NodePath path, ReactiveLocalizedString value)
     {
         SetFieldValueForNode(path, value, (oldValue) => new SetLocalizedStringAction(path, oldValue, value));
     }
@@ -256,7 +257,7 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
             History.Apply(fillAction);
         }
 
-        var node = RootNode.NavigateTo<ListStructGFFNodeViewModel>(path);
+        var node = RootNode.NavigateTo<ListStructGFFNode>(path);
 
         var setAction = new SetListAction(path);
         History.Apply(setAction);
@@ -271,7 +272,7 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
             History.Apply(fillAction);
         }
 
-        var node = RootNode.NavigateTo<BaseGFFNodeViewModel>(path) as IStructGFFNodeViewModel;
+        var node = RootNode.NavigateTo<BaseGFFNode>(path) as IStructGFFNode;
 
         var oldValue = node?.StructID;
         if (value.Equals(oldValue))
@@ -283,7 +284,7 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
 
     public void Relabel(NodePath path, string label)
     {
-        var node = RootNode.NavigateTo<BaseGFFNodeViewModel>(path);
+        var node = RootNode.NavigateTo<BaseGFFNode>(path);
         var action = new SetFieldLabel(path, node.Label, label);
         History.Apply(action);
     }
@@ -337,17 +338,17 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         History.Apply(setAction);
     }
 
-    private void CreateNewTree(RootStructGFFNodeViewModel rootNode)
+    private void CreateNewTree(RootStructGFFNode rootNode)
     {
         _rootNode = rootNode;
         TreeData = new(_rootNode)
         {
             Columns =
             {
-                new HierarchicalExpanderColumn<BaseGFFNodeViewModel>(
-                    new TextColumn<BaseGFFNodeViewModel, string>("Label", x => x.Label, GridLength.Star), x => x.Children, isExpandedSelector: x => x.Expanded),
-                new TextColumn<BaseGFFNodeViewModel, string>("Type", x => x.DisplayType, GridLength.Parse("100")),
-                new TextColumn<BaseGFFNodeViewModel, string>("Value", x => x.DisplayValue, GridLength.Parse("150")),
+                new HierarchicalExpanderColumn<BaseGFFNode>(
+                    new TextColumn<BaseGFFNode, string>("Label", x => x.Label, GridLength.Star), x => x.Children, isExpandedSelector: x => x.Expanded),
+                new TextColumn<BaseGFFNode, string>("Type", x => x.DisplayType, GridLength.Parse("100")),
+                new TextColumn<BaseGFFNode, string>("Value", x => x.DisplayValue, GridLength.Parse("150")),
             },
         };
     }

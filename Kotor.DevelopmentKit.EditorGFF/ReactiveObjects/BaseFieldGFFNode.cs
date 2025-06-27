@@ -2,9 +2,9 @@
 using System.Collections.ObjectModel;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
+namespace Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 
-public abstract class BaseFieldGFFNodeViewModel : BaseGFFNodeViewModel
+public abstract class BaseFieldGFFNode : BaseGFFNode
 {
     public override string DisplayValue => "";
     public override bool CanEditLabel => true;
@@ -16,17 +16,17 @@ public abstract class BaseFieldGFFNodeViewModel : BaseGFFNodeViewModel
         set => this.RaiseAndSetIfChanged(ref _label, value);
     }
 
-    private ReadOnlyObservableCollection<BaseGFFNodeViewModel> _children = new([]);
-    public override ReadOnlyObservableCollection<BaseGFFNodeViewModel> Children => _children;
+    private ReadOnlyObservableCollection<BaseGFFNode> _children = new([]);
+    public override ReadOnlyObservableCollection<BaseGFFNode> Children => _children;
 
 
-    protected BaseFieldGFFNodeViewModel(IGFFNodeViewModel? parent) : base(parent)
+    protected BaseFieldGFFNode(IGFFNode? parent) : base(parent)
     {
     }
 
     public override void Delete()
     {
-        if (Parent is IStructGFFNodeViewModel parentStruct)
+        if (Parent is IStructGFFNode parentStruct)
         {
             parentStruct.DeleteField(this);
         }
@@ -37,7 +37,7 @@ public abstract class BaseFieldGFFNodeViewModel : BaseGFFNodeViewModel
     }
 }
 
-public abstract class BaseFieldGFFNodeViewModel<T> : BaseFieldGFFNodeViewModel where T : notnull
+public abstract class BaseFieldGFFNodeViewModel<T> : BaseFieldGFFNode where T : notnull
 {
     private T _fieldValue = default!;
     public T FieldValue
@@ -49,7 +49,7 @@ public abstract class BaseFieldGFFNodeViewModel<T> : BaseFieldGFFNodeViewModel w
     public override string DisplayValue => FieldValue?.ToString() ?? "";
 
 
-    public BaseFieldGFFNodeViewModel(IGFFNodeViewModel parent, string label) : base(parent)
+    public BaseFieldGFFNodeViewModel(IGFFNode parent, string label) : base(parent)
     {
         Label = label;
 

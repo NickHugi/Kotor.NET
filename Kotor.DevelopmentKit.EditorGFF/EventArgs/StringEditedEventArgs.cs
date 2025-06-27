@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Interactivity;
 using Kotor.DevelopmentKit.EditorGFF.Models;
-using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.EventArgs;
 

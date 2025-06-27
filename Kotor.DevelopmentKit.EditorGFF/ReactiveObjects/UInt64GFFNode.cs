@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 using DynamicData;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
+namespace Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 
-public class UInt64GFFNodeViewModel : BaseFieldGFFNodeViewModel<ulong>
+public class UInt64GFFNode : BaseFieldGFFNodeViewModel<ulong>
 {
     public override string DisplayType => "UInt64";
 
-    public UInt64GFFNodeViewModel(IGFFNodeViewModel parent, string label, ulong value = 0) : base(parent, label)
+    public UInt64GFFNode(IGFFNode parent, string label, ulong value = 0) : base(parent, label)
     {
         FieldValue = value;
     }

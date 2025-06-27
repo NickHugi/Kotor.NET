@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 using DynamicData;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
+namespace Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 
-public class SingleGFFNodeViewModel : BaseFieldGFFNodeViewModel<float>
+public class SingleGFFNode : BaseFieldGFFNodeViewModel<float>
 {
     public override string DisplayType => "Single";
 
-    public SingleGFFNodeViewModel(IGFFNodeViewModel parent, string label, float value = 0) : base(parent, label)
+    public SingleGFFNode(IGFFNode parent, string label, float value = 0) : base(parent, label)
     {
         FieldValue = value;
     }

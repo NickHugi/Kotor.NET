@@ -5,7 +5,7 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DynamicData.Binding;
-using Kotor.DevelopmentKit.Base.ViewModels;
+using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using Kotor.DevelopmentKit.EditorGFF.Models;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Common.Localization;
@@ -14,9 +14,9 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
 
-public class ResRefPanelViewModel : BaseNodePanelViewModel<ResRefViewModel>
+public class ResRefPanelViewModel : BaseNodePanelViewModel<ReactiveResRef>
 {
-    public ResRefPanelViewModel(ResRefViewModel value)
+    public ResRefPanelViewModel(ReactiveResRef value)
     {
         Value = value;
     }

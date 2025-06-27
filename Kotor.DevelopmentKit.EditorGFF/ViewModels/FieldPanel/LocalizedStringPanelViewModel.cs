@@ -7,9 +7,9 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DynamicData.Binding;
+using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using Kotor.DevelopmentKit.Base.Settings;
 using Kotor.DevelopmentKit.Base.Settings.Values;
-using Kotor.DevelopmentKit.Base.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.Models;
 using Kotor.NET.Common.Localization;
 using Kotor.NET.Interfaces;
@@ -17,7 +17,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
 
-public class LocalizedStringPanelViewModel : BaseNodePanelViewModel<LocalizedStringViewModel>
+public class LocalizedStringPanelViewModel : BaseNodePanelViewModel<ReactiveLocalizedString>
 {
     private TalkTableString _talkTableString;
     public TalkTableString TalkTableString
@@ -43,7 +43,7 @@ public class LocalizedStringPanelViewModel : BaseNodePanelViewModel<LocalizedStr
     private readonly ITalkTableLookup _talkTableLookup;
 
 
-    public LocalizedStringPanelViewModel(ITalkTableLookup talkTableLookup, LocalizedStringViewModel locstring)
+    public LocalizedStringPanelViewModel(ITalkTableLookup talkTableLookup, ReactiveLocalizedString locstring)
     {
         Value = locstring.Clone();
         _talkTableLookup = talkTableLookup;

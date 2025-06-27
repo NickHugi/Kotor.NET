@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.Base.Common;
 using Kotor.DevelopmentKit.EditorGFF.Models;
+using Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels;
-using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
 public abstract class BaseSetNodeAction<TNodeViewModel, TValueViewModel>
     : IAction<GFFResourceEditorViewModel>
-    where TNodeViewModel : BaseGFFNodeViewModel
+    where TNodeViewModel : BaseGFFNode
 {
     public NodePath Path { get; }
     public TValueViewModel OldValue { get; }
@@ -32,7 +32,7 @@ public abstract class BaseSetNodeAction<TNodeViewModel, TValueViewModel>
         if (node is null)
         {
             var newParentPath = new NodePath(Path.SkipLast(1));
-            var parent = data.RootNode.NavigateTo<BaseGFFNodeViewModel>(newParentPath);
+            var parent = data.RootNode.NavigateTo<BaseGFFNode>(newParentPath);
             CreateNode(parent, NewValue);
         }
         else
@@ -55,7 +55,7 @@ public abstract class BaseSetNodeAction<TNodeViewModel, TValueViewModel>
         if (node is null)
         {
             var newParentPath = new NodePath(Path.SkipLast(1));
-            var parent = data.RootNode.NavigateTo<BaseGFFNodeViewModel>(newParentPath) ?? throw new InvalidOperationException();
+            var parent = data.RootNode.NavigateTo<BaseGFFNode>(newParentPath) ?? throw new InvalidOperationException();
             CreateNode(parent, OldValue);
         }
         else
@@ -71,18 +71,18 @@ public abstract class BaseSetNodeAction<TNodeViewModel, TValueViewModel>
         }
     }
 
-    protected TNodeViewModel CreateNode(BaseGFFNodeViewModel parentNode, TValueViewModel value)
+    protected TNodeViewModel CreateNode(BaseGFFNode parentNode, TValueViewModel value)
     {
-        if (parentNode is IStructGFFNodeViewModel structNode)
+        if (parentNode is IStructGFFNode structNode)
         {
             var newNode = InstantiateNode(structNode, value);
-            structNode.AddField(newNode as BaseFieldGFFNodeViewModel);
+            structNode.AddField(newNode as BaseFieldGFFNode);
             return newNode;
         }
-        else if (parentNode is ListGFFNodeViewModel listNode)
+        else if (parentNode is ListGFFNode listNode)
         {
             var newNode = InstantiateNode(parentNode, value);
-            listNode.AddStruct(newNode as ListStructGFFNodeViewModel);
+            listNode.AddStruct(newNode as ListStructGFFNode);
             return newNode;
         }
         else
@@ -91,7 +91,7 @@ public abstract class BaseSetNodeAction<TNodeViewModel, TValueViewModel>
         }
     }
 
-    protected abstract TNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, TValueViewModel value);
+    protected abstract TNodeViewModel InstantiateNode(IGFFNode parentNode, TValueViewModel value);
     protected abstract void SetNewValue(TNodeViewModel data);
     protected abstract void SetOldValue(TNodeViewModel data);
 }

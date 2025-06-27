@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Kotor.NET.Common.Data;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.Base.ViewModels;
+namespace Kotor.DevelopmentKit.Base.ReactiveObjects;
 
 public class Vector3ViewModel : ReactiveObject
 {

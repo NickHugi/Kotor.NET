@@ -8,9 +8,9 @@ using DynamicData;
 using Kotor.NET.Resources.KotorGFF;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
+namespace Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 
-public class RootStructGFFNodeViewModel : BaseGFFNodeViewModel, IStructGFFNodeViewModel
+public class RootStructGFFNode : BaseGFFNode, IStructGFFNode
 {
     private int _structID;
     public int StructID
@@ -28,14 +28,14 @@ public class RootStructGFFNodeViewModel : BaseGFFNodeViewModel, IStructGFFNodeVi
     public override string DisplayType => "Struct";
     public override string DisplayValue => StructID.ToString();
 
-    private ObservableCollection<BaseGFFNodeViewModel> _children = new([]);
-    public override ReadOnlyObservableCollection<BaseGFFNodeViewModel> Children => new(_children);
+    private ObservableCollection<BaseGFFNode> _children = new([]);
+    public override ReadOnlyObservableCollection<BaseGFFNode> Children => new(_children);
 
 
-    public RootStructGFFNodeViewModel() : base(null)
+    public RootStructGFFNode() : base(null)
     {
     }
-    public RootStructGFFNodeViewModel(GFFStruct gffStruct) : base(null)
+    public RootStructGFFNode(GFFStruct gffStruct) : base(null)
     {
     }
 
@@ -44,20 +44,20 @@ public class RootStructGFFNodeViewModel : BaseGFFNodeViewModel, IStructGFFNodeVi
         throw new InvalidOperationException("Cannot delete the root node of a GFF resource.");
     }
 
-    public T AddField<T>(T field) where T : BaseFieldGFFNodeViewModel
+    public T AddField<T>(T field) where T : BaseFieldGFFNode
     {
         _children.Add(field);
         Expanded = true;
         return field;
     }
 
-    public void DeleteField(BaseFieldGFFNodeViewModel field)
+    public void DeleteField(BaseFieldGFFNode field)
     {
         _children.Remove(field);
     }
 
-    public BaseFieldGFFNodeViewModel? GetField(string label)
+    public BaseFieldGFFNode? GetField(string label)
     {
-        return (BaseFieldGFFNodeViewModel?)Children.FirstOrDefault(x => x.Label == label);
+        return (BaseFieldGFFNode?)Children.FirstOrDefault(x => x.Label == label);
     }
 }

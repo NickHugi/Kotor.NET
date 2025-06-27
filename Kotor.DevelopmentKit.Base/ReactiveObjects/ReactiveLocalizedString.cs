@@ -8,9 +8,9 @@ using DynamicData.Binding;
 using Kotor.NET.Common.Data;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.Base.ViewModels;
+namespace Kotor.DevelopmentKit.Base.ReactiveObjects;
 
-public class LocalizedStringViewModel : ReactiveObject
+public class ReactiveLocalizedString : ReactiveObject
 {
     private int _stringref;
     public int StringRef
@@ -19,15 +19,15 @@ public class LocalizedStringViewModel : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref _stringref, value);
     }
 
-    private AvaloniaList<LocalizedSubStringViewModel> _substrings = new();
-    public AvaloniaList<LocalizedSubStringViewModel> SubStrings
+    private AvaloniaList<ReactiveLocalizedSubString> _substrings = new();
+    public AvaloniaList<ReactiveLocalizedSubString> SubStrings
     {
         get => _substrings;
         init => _substrings = value;
     }
 
-    private LocalizedSubStringViewModel? _selectedSubstring;
-    public LocalizedSubStringViewModel? SelectedSubstring
+    private ReactiveLocalizedSubString? _selectedSubstring;
+    public ReactiveLocalizedSubString? SelectedSubstring
     {
         get => _selectedSubstring;
         set => this.RaiseAndSetIfChanged(ref _selectedSubstring, value);
@@ -36,7 +36,7 @@ public class LocalizedStringViewModel : ReactiveObject
     public bool IsSubStringSelected => _selectedSubstring is not null;
 
 
-    public LocalizedStringViewModel()
+    public ReactiveLocalizedString()
     {
         this.WhenPropertyChanged(x => x.SelectedSubstring).Subscribe(x => this.RaisePropertyChanged(nameof(IsSubStringSelected)));
     }
@@ -45,7 +45,7 @@ public class LocalizedStringViewModel : ReactiveObject
     {
         SubStrings.Add(new());
     }
-    public void AddSubString(LocalizedSubStringViewModel substring)
+    public void AddSubString(ReactiveLocalizedSubString substring)
     {
         SubStrings.Add(substring);
     }
@@ -65,7 +65,7 @@ public class LocalizedStringViewModel : ReactiveObject
             StringRef = StringRef
         };
     }
-    public LocalizedStringViewModel Clone()
+    public ReactiveLocalizedString Clone()
     {
         return new()
         {

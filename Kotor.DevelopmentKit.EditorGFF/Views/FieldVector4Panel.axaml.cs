@@ -3,14 +3,14 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using Kotor.DevelopmentKit.Base.ViewModels;
+using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using Kotor.DevelopmentKit.EditorGFF.EventArgs;
+using Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
-using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldVector4Panel : EditFieldPanel<Vector4GFFNodeViewModel, Vector4ViewModel, Vector4EditedEventArgs>
+public partial class FieldVector4Panel : EditFieldPanel<Vector4GFFNode, Vector4ViewModel, Vector4EditedEventArgs>
 {
     public required Vector4PanelViewModel ViewModel
     {

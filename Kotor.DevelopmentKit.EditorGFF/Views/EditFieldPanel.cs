@@ -8,7 +8,6 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Kotor.DevelopmentKit.EditorGFF.EventArgs;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels;
-using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 

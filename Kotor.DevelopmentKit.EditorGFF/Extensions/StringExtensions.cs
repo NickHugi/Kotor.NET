@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
+using Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Extensions;
 
 public static class StringExtensions
 {
-    public static string GetUniqueLabel(this string label, IStructGFFNodeViewModel? structNode)
+    public static string GetUniqueLabel(this string label, IStructGFFNode? structNode)
     {
         if (structNode is null)
             return label;

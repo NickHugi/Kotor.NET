@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using Kotor.NET.Common.Data;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.Base.ViewModels;
+namespace Kotor.DevelopmentKit.Base.ReactiveObjects;
 
-public class ResRefViewModel : ReactiveObject
+public class ReactiveResRef : ReactiveObject
 {
     private string _value = "";
     public string Value
@@ -27,7 +27,7 @@ public class ResRefViewModel : ReactiveObject
     {
         return new(Value);
     }
-    public ResRefViewModel Clone()
+    public ReactiveResRef Clone()
     {
         return new() { Value = _value }; 
     }

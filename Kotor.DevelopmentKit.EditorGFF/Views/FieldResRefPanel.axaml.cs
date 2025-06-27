@@ -3,14 +3,14 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using Kotor.DevelopmentKit.Base.ViewModels;
+using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using Kotor.DevelopmentKit.EditorGFF.EventArgs;
+using Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
-using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldResRefPanel : EditFieldPanel<ResRefGFFNodeViewModel, ResRefViewModel, ResRefEditedEventArgs>
+public partial class FieldResRefPanel : EditFieldPanel<ResRefGFFNode, ReactiveResRef, ResRefEditedEventArgs>
 {
     public required ResRefPanelViewModel ViewModel
     {
@@ -30,7 +30,7 @@ public partial class FieldResRefPanel : EditFieldPanel<ResRefGFFNodeViewModel, R
         RaiseEvent(args);
     }
 
-    protected override ResRefViewModel GetCurrentValue()
+    protected override ReactiveResRef GetCurrentValue()
     {
         return SourceNode?.FieldValue.Clone() ?? new();
     }

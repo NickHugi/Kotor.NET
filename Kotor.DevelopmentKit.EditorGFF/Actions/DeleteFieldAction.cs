@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.Base.Common;
-using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels;
+using Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
 public class DeleteFieldAction : IAction<GFFResourceEditorViewModel>
 {
-    public BaseGFFNodeViewModel Node { get; }
+    public BaseGFFNode Node { get; }
 
-    public DeleteFieldAction(BaseGFFNodeViewModel node)
+    public DeleteFieldAction(BaseGFFNode node)
     {
         Node = node;
     }
@@ -25,11 +25,11 @@ public class DeleteFieldAction : IAction<GFFResourceEditorViewModel>
 
     public void Undo(GFFResourceEditorViewModel data)
     {
-        if (Node.Parent is IStructGFFNodeViewModel structNode && Node is BaseFieldGFFNodeViewModel fieldNode)
+        if (Node.Parent is IStructGFFNode structNode && Node is BaseFieldGFFNode fieldNode)
         {
             structNode.AddField(fieldNode);
         }
-        else if (Node.Parent is ListGFFNodeViewModel listNode && Node is ListStructGFFNodeViewModel childStructNode)
+        else if (Node.Parent is ListGFFNode listNode && Node is ListStructGFFNode childStructNode)
         {
             listNode.AddStruct(childStructNode);
         }

@@ -4,12 +4,12 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Kotor.DevelopmentKit.EditorGFF.EventArgs;
+using Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
-using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldSinglePanel : EditFieldPanel<SingleGFFNodeViewModel, Single, SingleEditedEventArgs>
+public partial class FieldSinglePanel : EditFieldPanel<SingleGFFNode, Single, SingleEditedEventArgs>
 {
     public required SinglePanelViewModel ViewModel
     {

@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 
              xmlns:base-views="clr-namespace:Kotor.DevelopmentKit.Base.Views;assembly=Kotor.DevelopmentKit.Base"
-             xmlns:base-vm="clr-namespace:Kotor.DevelopmentKit.Base.ViewModels;assembly=Kotor.DevelopmentKit.Base"
+             xmlns:base-reactive="clr-namespace:Kotor.DevelopmentKit.Base.ReactiveObjects;assembly=Kotor.DevelopmentKit.Base"
              xmlns:vm="clr-namespace:Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel"
              
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="300"
@@ -25,7 +25,7 @@
                     <Grid ColumnDefinitions="*, 4, Auto, 4, Auto">
                         <ComboBox Grid.Column="0" ItemsSource="{Binding Value.SubStrings}" SelectedItem="{Binding Value.SelectedSubstring, Mode=TwoWay}" HorizontalAlignment="Stretch">
                             <ComboBox.ItemTemplate>
-                                <DataTemplate DataType="base-vm:LocalizedSubStringViewModel">
+                                <DataTemplate DataType="base-reactive:ReactiveLocalizedSubString">
                                     <TextBlock Text="{Binding Label}"/>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>

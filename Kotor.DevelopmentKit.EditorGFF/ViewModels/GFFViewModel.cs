@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
+using Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 using Kotor.NET.Resources.KotorGFF;
 using ReactiveUI;
 
@@ -11,8 +11,8 @@ namespace Kotor.DevelopmentKit.EditorGFF.ViewModels;
 
 public class GFFViewModel : ReactiveObject
 {
-    private RootStructGFFNodeViewModel _rootNode = default!;
-    public RootStructGFFNodeViewModel RootNode
+    private RootStructGFFNode _rootNode = default!;
+    public RootStructGFFNode RootNode
     {
         get => _rootNode;
         set => this.RaiseAndSetIfChanged(ref _rootNode, value);
@@ -36,41 +36,41 @@ public class GFFViewModel : ReactiveObject
             Root = BuildStruct(RootNode)
         };
     }
-    private GFFStruct BuildStruct(IStructGFFNodeViewModel structNode)
+    private GFFStruct BuildStruct(IStructGFFNode structNode)
     {
         var gffStruct = new GFFStruct((uint)structNode.StructID);
 
-        foreach (var vmChild in (structNode as BaseGFFNodeViewModel).Children)
+        foreach (var vmChild in (structNode as BaseGFFNode).Children)
         {
-            if (vmChild is UInt8GFFNodeViewModel asUInt8) gffStruct.SetUInt8(asUInt8.Label, asUInt8.FieldValue);
-            if (vmChild is Int8GFFNodeViewModel asInt8) gffStruct.SetInt8(asInt8.Label, asInt8.FieldValue);
-            if (vmChild is UInt16GFFNodeViewModel asUInt16) gffStruct.SetUInt16(asUInt16.Label, asUInt16.FieldValue);
-            if (vmChild is Int16GFFNodeViewModel asInt16) gffStruct.SetInt16(asInt16.Label, asInt16.FieldValue);
-            if (vmChild is UInt32GFFNodeViewModel asUInt32) gffStruct.SetUInt32(asUInt32.Label, asUInt32.FieldValue);
-            if (vmChild is Int32GFFNodeViewModel asInt32) gffStruct.SetInt32(asInt32.Label, asInt32.FieldValue);
-            if (vmChild is UInt64GFFNodeViewModel asUInt64) gffStruct.SetUInt64(asUInt64.Label, asUInt64.FieldValue);
-            if (vmChild is Int64GFFNodeViewModel asInt64) gffStruct.SetInt64(asInt64.Label, asInt64.FieldValue);
-            if (vmChild is SingleGFFNodeViewModel asSingle) gffStruct.SetSingle(asSingle.Label, asSingle.FieldValue);
-            if (vmChild is DoubleGFFNodeViewModel asDouble) gffStruct.SetDouble(asDouble.Label, asDouble.FieldValue);
-            if (vmChild is ResRefGFFNodeViewModel asResRef) gffStruct.SetResRef(asResRef.Label, asResRef.FieldValue.AsModel());
-            if (vmChild is StringGFFNodeViewModel asString) gffStruct.SetString(asString.Label, asString.FieldValue);
-            if (vmChild is LocalizedStringGFFNodeViewModel asLocalisedString) gffStruct.SetLocalisedString(asLocalisedString.Label, asLocalisedString.FieldValue.AsModel());
-            if (vmChild is BinaryGFFNodeViewModel asBinary) gffStruct.SetBinary(asBinary.Label, asBinary.FieldValue);
-            if (vmChild is Vector3GFFNodeViewModel asVector3) gffStruct.SetVector3(asVector3.Label, asVector3.FieldValue.AsModel());
-            if (vmChild is Vector4GFFNodeViewModel asVector4) gffStruct.SetVector4(asVector4.Label, asVector4.FieldValue.AsModel());
-            if (vmChild is ListGFFNodeViewModel asList) gffStruct.SetList(asList.Label, BuildList(asList));
-            if (vmChild is FieldStructGFFNodeViewModel asStruct) gffStruct.SetStruct(asStruct.Label, BuildStruct(asStruct));
+            if (vmChild is UInt8GFFNode asUInt8) gffStruct.SetUInt8(asUInt8.Label, asUInt8.FieldValue);
+            if (vmChild is Int8GFFNode asInt8) gffStruct.SetInt8(asInt8.Label, asInt8.FieldValue);
+            if (vmChild is UInt16GFFNode asUInt16) gffStruct.SetUInt16(asUInt16.Label, asUInt16.FieldValue);
+            if (vmChild is Int16GFFNode asInt16) gffStruct.SetInt16(asInt16.Label, asInt16.FieldValue);
+            if (vmChild is UInt32GFFNode asUInt32) gffStruct.SetUInt32(asUInt32.Label, asUInt32.FieldValue);
+            if (vmChild is Int32GFFNode asInt32) gffStruct.SetInt32(asInt32.Label, asInt32.FieldValue);
+            if (vmChild is UInt64GFFNode asUInt64) gffStruct.SetUInt64(asUInt64.Label, asUInt64.FieldValue);
+            if (vmChild is Int64GFFNode asInt64) gffStruct.SetInt64(asInt64.Label, asInt64.FieldValue);
+            if (vmChild is SingleGFFNode asSingle) gffStruct.SetSingle(asSingle.Label, asSingle.FieldValue);
+            if (vmChild is DoubleGFFNode asDouble) gffStruct.SetDouble(asDouble.Label, asDouble.FieldValue);
+            if (vmChild is ResRefGFFNode asResRef) gffStruct.SetResRef(asResRef.Label, asResRef.FieldValue.AsModel());
+            if (vmChild is StringGFFNode asString) gffStruct.SetString(asString.Label, asString.FieldValue);
+            if (vmChild is LocalizedStringGFFNode asLocalisedString) gffStruct.SetLocalisedString(asLocalisedString.Label, asLocalisedString.FieldValue.AsModel());
+            if (vmChild is BinaryGFFNode asBinary) gffStruct.SetBinary(asBinary.Label, asBinary.FieldValue);
+            if (vmChild is Vector3GFFNode asVector3) gffStruct.SetVector3(asVector3.Label, asVector3.FieldValue.AsModel());
+            if (vmChild is Vector4GFFNode asVector4) gffStruct.SetVector4(asVector4.Label, asVector4.FieldValue.AsModel());
+            if (vmChild is ListGFFNode asList) gffStruct.SetList(asList.Label, BuildList(asList));
+            if (vmChild is FieldStructGFFNode asStruct) gffStruct.SetStruct(asStruct.Label, BuildStruct(asStruct));
         }
 
         return gffStruct;
     }
-    private GFFList BuildList(ListGFFNodeViewModel listNode)
+    private GFFList BuildList(ListGFFNode listNode)
     {
         var gffList = new GFFList();
 
         foreach (var vmChild in listNode.Children)
         {
-            if (vmChild is IStructGFFNodeViewModel structNode)
+            if (vmChild is IStructGFFNode structNode)
             {
                 gffList.Add(BuildStruct(structNode));
             }

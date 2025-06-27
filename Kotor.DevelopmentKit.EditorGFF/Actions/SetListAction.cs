@@ -5,28 +5,28 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.Base.Common;
 using Kotor.DevelopmentKit.EditorGFF.Models;
+using Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels;
-using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
-public class SetListAction : BaseSetNodeAction<BaseGFFNodeViewModel, bool?>
+public class SetListAction : BaseSetNodeAction<BaseGFFNode, bool?>
 {
     public SetListAction(NodePath path)
         : base(path, null, true)
     {
     }
 
-    protected override ListGFFNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, bool? _)
+    protected override ListGFFNode InstantiateNode(IGFFNode parentNode, bool? _)
     {
-        return new ListGFFNodeViewModel(parentNode, Path.Tail);
+        return new ListGFFNode(parentNode, Path.Tail);
     }
 
-    protected override void SetNewValue(BaseGFFNodeViewModel node)
+    protected override void SetNewValue(BaseGFFNode node)
     {
     }
 
-    protected override void SetOldValue(BaseGFFNodeViewModel node)
+    protected override void SetOldValue(BaseGFFNode node)
     {
     }
 }

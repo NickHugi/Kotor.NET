@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using Kotor.DevelopmentKit.Base.Common;
 using Kotor.DevelopmentKit.EditorGFF.Extensions;
 using Kotor.DevelopmentKit.EditorGFF.Models;
+using Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels;
-using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
@@ -27,13 +27,13 @@ public class SetFieldLabel : IAction<GFFResourceEditorViewModel>
 
     public void Apply(GFFResourceEditorViewModel data)
     {
-        var node = data.RootNode.NavigateTo<BaseFieldGFFNodeViewModel>(OldPath);
-        node.Label = NewLabel.GetUniqueLabel(node.Parent as IStructGFFNodeViewModel);
+        var node = data.RootNode.NavigateTo<BaseFieldGFFNode>(OldPath);
+        node.Label = NewLabel.GetUniqueLabel(node.Parent as IStructGFFNode);
     }
 
     public void Undo(GFFResourceEditorViewModel data)
     {
-        var node = data.RootNode.NavigateTo<BaseFieldGFFNodeViewModel>(OldPath);
+        var node = data.RootNode.NavigateTo<BaseFieldGFFNode>(OldPath);
         node.Label = OldLabel;
     }
 }

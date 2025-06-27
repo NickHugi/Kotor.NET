@@ -8,9 +8,9 @@ using Kotor.NET.Common;
 using Kotor.NET.Common.Data;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.Base.ViewModels;
+namespace Kotor.DevelopmentKit.Base.ReactiveObjects;
 
-public class LocalizedSubStringViewModel : ReactiveObject
+public class ReactiveLocalizedSubString : ReactiveObject
 {
     private Language _language;
     public Language Language
@@ -36,7 +36,7 @@ public class LocalizedSubStringViewModel : ReactiveObject
     public string Label => $"{Gender.ToString()} {Language.ToString()}";
 
 
-    public LocalizedSubStringViewModel()
+    public ReactiveLocalizedSubString()
     {
         this.WhenPropertyChanged(x => x.Gender).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
         this.WhenPropertyChanged(x => x.Language).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
@@ -47,7 +47,7 @@ public class LocalizedSubStringViewModel : ReactiveObject
     {
         return new(Language, Gender, Text);
     }
-    public LocalizedSubStringViewModel Clone()
+    public ReactiveLocalizedSubString Clone()
     {
         return new() { Language = _language, Gender = _gender, Text = _text };
     }

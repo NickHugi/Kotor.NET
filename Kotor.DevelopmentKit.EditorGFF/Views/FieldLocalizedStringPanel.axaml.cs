@@ -11,7 +11,6 @@ using Kotor.DevelopmentKit.Base.Settings.Values;
 using Kotor.DevelopmentKit.Base.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.EventArgs;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
-using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Common.Localization;
 using Kotor.NET.Interfaces;

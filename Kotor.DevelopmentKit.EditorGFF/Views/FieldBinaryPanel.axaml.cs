@@ -7,12 +7,12 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
 using Kotor.DevelopmentKit.EditorGFF.EventArgs;
+using Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
-using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldBinaryPanel : EditFieldPanel<BinaryGFFNodeViewModel, byte[], BinaryEditedEventArgs>
+public partial class FieldBinaryPanel : EditFieldPanel<BinaryGFFNode, byte[], BinaryEditedEventArgs>
 {
     public required BinaryPanelViewModel ViewModel
     {

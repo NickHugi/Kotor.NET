@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 using DynamicData;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
+namespace Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 
-public class Int32GFFNodeViewModel : BaseFieldGFFNodeViewModel<int>
+public class Int32GFFNode : BaseFieldGFFNodeViewModel<int>
 {
     public override string DisplayType => "Int32";
 
-    public Int32GFFNodeViewModel(IGFFNodeViewModel parent, string label, int value = 0) : base(parent, label)
+    public Int32GFFNode(IGFFNode parent, string label, int value = 0) : base(parent, label)
     {
         FieldValue = value;
     }

@@ -4,12 +4,12 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Kotor.DevelopmentKit.EditorGFF.EventArgs;
+using Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
-using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class FieldUInt32Panel : EditFieldPanel<UInt32GFFNodeViewModel, UInt32, UInt32EditedEventArgs>
+public partial class FieldUInt32Panel : EditFieldPanel<UInt32GFFNode, UInt32, UInt32EditedEventArgs>
 {
     public required UInt32PanelViewModel ViewModel
     {

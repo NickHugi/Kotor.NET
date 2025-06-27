@@ -20,9 +20,9 @@ using Kotor.DevelopmentKit.EditorGFF.Actions;
 using Kotor.DevelopmentKit.EditorGFF.EventArgs;
 using Kotor.DevelopmentKit.EditorGFF.Extensions;
 using Kotor.DevelopmentKit.EditorGFF.Models;
+using Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 using Kotor.DevelopmentKit.EditorGFF.Services;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels;
-using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Resources.Kotor2DA;
 using Kotor.NET.Resources.KotorGFF;
@@ -61,150 +61,150 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
         InitializeComponent();
     }
 
-    public void AddUInt8(IStructGFFNodeViewModel parent)
+    public void AddUInt8(IStructGFFNode parent)
     {
         var label = "New UInt8".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetUInt8Node(path, default);
     }
 
-    public void AddInt8(IStructGFFNodeViewModel parent)
+    public void AddInt8(IStructGFFNode parent)
     {
         var label = "New Int8".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetInt8Node(path, default);
     }
 
-    public void AddUInt16(IStructGFFNodeViewModel parent)
+    public void AddUInt16(IStructGFFNode parent)
     {
         var label = "New UInt16".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetUInt16Node(path, default);
     }
 
-    public void AddInt16(IStructGFFNodeViewModel parent)
+    public void AddInt16(IStructGFFNode parent)
     {
         var label = "New Int16".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetInt16Node(path, default);
     }
 
-    public void AddUInt32(IStructGFFNodeViewModel parent)
+    public void AddUInt32(IStructGFFNode parent)
     {
         var label = "New UInt32".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetUInt32Node(path, default);
     }
 
-    public void AddInt32(IStructGFFNodeViewModel parent)
+    public void AddInt32(IStructGFFNode parent)
     {
         var label = "New Int32".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetInt32Node(path, default);
     }
 
-    public void AddUInt64(IStructGFFNodeViewModel parent)
+    public void AddUInt64(IStructGFFNode parent)
     {
         var label = "New UInt64".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetUInt64Node(path, default);
     }
 
-    public void AddInt64(IStructGFFNodeViewModel parent)
+    public void AddInt64(IStructGFFNode parent)
     {
         var label = "New Int64".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetUInt64Node(path, default);
     }
 
-    public void AddSingle(IStructGFFNodeViewModel parent)
+    public void AddSingle(IStructGFFNode parent)
     {
         var label = "New Single".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetSingleNode(path, default);
     }
 
-    public void AddDouble(IStructGFFNodeViewModel parent)
+    public void AddDouble(IStructGFFNode parent)
     {
         var label = "New Double".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetDoubleNode(path, default);
     }
 
-    public void AddResRef(IStructGFFNodeViewModel parent)
+    public void AddResRef(IStructGFFNode parent)
     {
         var label = "New ResRef".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetResRefNode(path, new());
     }
 
-    public void AddString(IStructGFFNodeViewModel parent)
+    public void AddString(IStructGFFNode parent)
     {
         var label = "New String".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetStringNode(path, "");
     }
 
-    public void AddLocalizedString(IStructGFFNodeViewModel parent)
+    public void AddLocalizedString(IStructGFFNode parent)
     {
         var label = "New Localized String".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetLocalizedStringNode(path, new());
     }
 
-    public void AddBinary(IStructGFFNodeViewModel parent)
+    public void AddBinary(IStructGFFNode parent)
     {
         var label = "New Binary".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetBinaryNode(path, []);
     }
 
-    public void AddVector3(IStructGFFNodeViewModel parent)
+    public void AddVector3(IStructGFFNode parent)
     {
         var label = "New Vector3".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetVector3Node(path, new());
     }
 
-    public void AddVector4(IStructGFFNodeViewModel parent)
+    public void AddVector4(IStructGFFNode parent)
     {
         var label = "New Vector4".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetVector4Node(path, new());
     }
 
-    public void AddStruct(IStructGFFNodeViewModel parent)
+    public void AddStruct(IStructGFFNode parent)
     {
         var label = "New Struct".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetStructNode(path, default);
     }
 
-    public void AddStruct(ListGFFNodeViewModel parent)
+    public void AddStruct(ListGFFNode parent)
     {
         var path = Context.RootNode.GetPathOf(parent).Extend(parent.Children.Count);
         Context.SetStructNode(path, default);
     }
 
-    public void AddList(IStructGFFNodeViewModel parent)
+    public void AddList(IStructGFFNode parent)
     {
         var label = "New List".GetUniqueLabel(parent);
         var path = Context.RootNode.GetPathOf(parent).Extend(label);
         Context.SetList(path);
     }
 
-    public async Task CutNode(BaseGFFNodeViewModel node)
+    public async Task CutNode(BaseGFFNode node)
     {
         await CopyNode(node);
         DeleteNode(node);
     }
 
-    public void DeleteNode(BaseGFFNodeViewModel node)
+    public void DeleteNode(BaseGFFNode node)
     {
         Context.DeleteNode(node);
     }
 
-    public async Task CopyNode(BaseGFFNodeViewModel node)
+    public async Task CopyNode(BaseGFFNode node)
     {
         var serilizeService = new NodeSerializer();
         var text = serilizeService.Serialize(node);
@@ -216,16 +216,16 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
         var deserializeNodeService = new NodeDeserializer();
         var selectedNode = Context.SelectedNode;
 
-        if (await HasStructOnClipboard() && selectedNode is ListGFFNodeViewModel selectedListNode)
+        if (await HasStructOnClipboard() && selectedNode is ListGFFNode selectedListNode)
         {
             var text = await Clipboard!.GetTextAsync() ?? "";
-            var node = (ListStructGFFNodeViewModel)deserializeNodeService.Deserialize(selectedNode, text);
+            var node = (ListStructGFFNode)deserializeNodeService.Deserialize(selectedNode, text);
             selectedListNode.AddStruct(node);
         }
-        else if (await HasFieldOnClipboard() && selectedNode is IStructGFFNodeViewModel selectedStructNode)
+        else if (await HasFieldOnClipboard() && selectedNode is IStructGFFNode selectedStructNode)
         {
             var text = await Clipboard!.GetTextAsync() ?? "";
-            var node = (BaseFieldGFFNodeViewModel)deserializeNodeService.Deserialize(selectedNode, text);
+            var node = (BaseFieldGFFNode)deserializeNodeService.Deserialize(selectedNode, text);
             node.Label = node.Label.GetUniqueLabel(selectedStructNode);
             selectedStructNode.AddField(node);
         }
@@ -282,11 +282,11 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
         }
     }
 
-    private async Task<ContextMenu> GetStructContextMenu(BaseGFFNodeViewModel node)
+    private async Task<ContextMenu> GetStructContextMenu(BaseGFFNode node)
     {
         var menu = new ContextMenu();
 
-        if (node is IStructGFFNodeViewModel dataAsStruct)
+        if (node is IStructGFFNode dataAsStruct)
         {
             menu.Items.Add(new MenuItem() { Header = "Add UInt8", Command = ReactiveCommand.Create(() => AddUInt8(dataAsStruct)) });
             menu.Items.Add(new MenuItem() { Header = "Add Int8", Command = ReactiveCommand.Create(() => AddInt8(dataAsStruct)) });
@@ -307,7 +307,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
             menu.Items.Add(new MenuItem() { Header = "Add Struct", Command = ReactiveCommand.Create(() => AddStruct(dataAsStruct)) });
             menu.Items.Add(new MenuItem() { Header = "Add List", Command = ReactiveCommand.Create(() => AddList(dataAsStruct)) });
         }
-        else if (node is ListGFFNodeViewModel dataAsList)
+        else if (node is ListGFFNode dataAsList)
         {
             menu.Items.Add(new MenuItem() { Header = "Add Struct", Command = ReactiveCommand.Create(() => AddStruct(dataAsList)) });
         }
@@ -317,32 +317,32 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
             menu.Items.Add(new Separator());
         }
 
-        if (node is ListGFFNodeViewModel)
+        if (node is ListGFFNode)
         {
             menu.Items.Add(new MenuItem() { Header = "Paste Struct", Command = ReactiveCommand.Create(() => PasteNode()), IsEnabled = await HasStructOnClipboard() });
             menu.Items.Add(new MenuItem() { Header = "Copy Field", Command = ReactiveCommand.Create(async () => await CopyNode(node)) });
             menu.Items.Add(new MenuItem() { Header = "Cut Field", Command = ReactiveCommand.Create(async () => await CutNode(node)) });
             menu.Items.Add(new MenuItem() { Header = "Delete Field", Command = ReactiveCommand.Create(() => DeleteNode(node)) });
         }
-        else if (node is RootStructGFFNodeViewModel)
+        else if (node is RootStructGFFNode)
         {
             menu.Items.Add(new MenuItem() { Header = "Paste Field", Command = ReactiveCommand.Create(() => PasteNode()), IsEnabled = await HasFieldOnClipboard() });
         }
-        else if (node is ListStructGFFNodeViewModel)
+        else if (node is ListStructGFFNode)
         {
             menu.Items.Add(new MenuItem() { Header = "Paste Field", Command = ReactiveCommand.Create(() => PasteNode()), IsEnabled = await HasFieldOnClipboard() });
             menu.Items.Add(new MenuItem() { Header = "Copy Struct", Command = ReactiveCommand.Create(async () => await CopyNode(node)) });
             menu.Items.Add(new MenuItem() { Header = "Cut Struct", Command = ReactiveCommand.Create(async () => await CutNode(node)) });
             menu.Items.Add(new MenuItem() { Header = "Delete Struct", Command = ReactiveCommand.Create(() => DeleteNode(node)) });
         }
-        else if (node is FieldStructGFFNodeViewModel)
+        else if (node is FieldStructGFFNode)
         {
             menu.Items.Add(new MenuItem() { Header = "Paste Field", Command = ReactiveCommand.Create(() => PasteNode()), IsEnabled = await HasFieldOnClipboard() });
             menu.Items.Add(new MenuItem() { Header = "Copy Field", Command = ReactiveCommand.Create(async () => await CopyNode(node)) });
             menu.Items.Add(new MenuItem() { Header = "Cut Field", Command = ReactiveCommand.Create(async () => await CutNode(node)) });
             menu.Items.Add(new MenuItem() { Header = "Delete Field", Command = ReactiveCommand.Create(() => DeleteNode(node)) });
         }
-        else if (node is BaseFieldGFFNodeViewModel)
+        else if (node is BaseFieldGFFNode)
         {
             menu.Items.Add(new MenuItem() { Header = "Copy Field", Command = ReactiveCommand.Create(async () => await CopyNode(node)) });
             menu.Items.Add(new MenuItem() { Header = "Cut Field", Command = ReactiveCommand.Create(async () => await CutNode(node)) });
@@ -359,7 +359,7 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
             var position = e.GetPosition(TreeDataGrid);
             var visual = (Visual?)TreeDataGrid.InputHitTest(position);
             var row = visual?.FindAncestorOfType<TreeDataGridRow>();
-            var data = (BaseGFFNodeViewModel)TreeDataGrid?.RowSelection?.SelectedItem!;
+            var data = (BaseGFFNode)TreeDataGrid?.RowSelection?.SelectedItem!;
 
             if (row != null)
             {

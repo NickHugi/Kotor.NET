@@ -5,24 +5,24 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.Base.Common;
 using Kotor.DevelopmentKit.EditorGFF.Models;
+using Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels;
-using Kotor.DevelopmentKit.EditorGFF.ViewModels.GFFTreeNodes;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Actions;
 
-public class SetStringAction : BaseSetNodeAction<StringGFFNodeViewModel, String?>
+public class SetStringAction : BaseSetNodeAction<StringGFFNode, String?>
 {
     public SetStringAction(NodePath path, String? oldValue, String? newValue)
         : base(path, oldValue, newValue)
     {
     }
 
-    protected override StringGFFNodeViewModel InstantiateNode(IGFFNodeViewModel parentNode, String? value)
-        => new StringGFFNodeViewModel(parentNode, Path.Tail, value);
+    protected override StringGFFNode InstantiateNode(IGFFNode parentNode, String? value)
+        => new StringGFFNode(parentNode, Path.Tail, value);
 
-    protected override void SetNewValue(StringGFFNodeViewModel node)
+    protected override void SetNewValue(StringGFFNode node)
         => node.FieldValue = NewValue!;
 
-    protected override void SetOldValue(StringGFFNodeViewModel node)
+    protected override void SetOldValue(StringGFFNode node)
         => node.FieldValue = OldValue!;
 }
