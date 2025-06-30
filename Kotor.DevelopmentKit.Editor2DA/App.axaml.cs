@@ -24,13 +24,7 @@ public partial class App : Application
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
-
-        AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
-        TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
-        RxApp.DefaultExceptionHandler = Observer.Create<Exception>(ex =>
-        {
-            HandleException(ex);
-        });
+        this.HandleExceptions();
     }
 
     public override void OnFrameworkInitializationCompleted()
@@ -55,39 +49,5 @@ public partial class App : Application
         services.AddBaseServices();
 
         return services.BuildServiceProvider();
-    }
-
-    private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
-    {
-        if (e.ExceptionObject is Exception ex)
-        {
-            HandleException(ex);
-        }
-    }
-    private void OnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
-    {
-        HandleException(e.Exception.InnerException);
-        e.SetObserved(); // Prevents application crash
-    }
-
-    private void HandleException(Exception ex)
-    {
-        AvaloniaScheduler.Instance.Schedule(() =>
-        {
-            var context = new ExceptionDialogViewModel()
-            {
-                Exception = ex,
-                Message = ex.Message,
-            };
-            var dialog = new ExceptionDialog()
-            {
-                DataContext = context
-            };
-
-            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
-                dialog.ShowDialog(desktop.MainWindow!);
-            }
-        });
     }
 }

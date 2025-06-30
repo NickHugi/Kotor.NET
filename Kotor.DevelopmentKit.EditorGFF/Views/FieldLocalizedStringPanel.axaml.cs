@@ -22,7 +22,7 @@ namespace Kotor.DevelopmentKit.EditorGFF.Views;
 public partial class FieldLocalizedStringPanel : ReactiveUserControl<LocalizedStringPanelViewModel>
 {
     public static readonly RoutedEvent<LocalizedStringEditedEventArgs> FinishedEditingEvent =
-        RoutedEvent.Register<EditFieldPanel, LocalizedStringEditedEventArgs>(nameof(FinishedEditing), RoutingStrategies.Bubble);
+        RoutedEvent.Register<BaseEditFieldPanel, LocalizedStringEditedEventArgs>(nameof(FinishedEditing), RoutingStrategies.Bubble);
 
     public static StyledProperty<InstallationSettings?> InstallationProperty =
         AvaloniaProperty.Register<FieldLocalizedStringPanel, InstallationSettings?>(nameof(Installation));

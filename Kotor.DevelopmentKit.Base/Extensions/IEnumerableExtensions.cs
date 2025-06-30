@@ -9,7 +9,7 @@ using Avalonia.Collections;
 
 namespace Kotor.DevelopmentKit.Base.Extensions;
 
-public static class IEnumerableExtensionscs
+public static class IEnumerableExtensions
 {
     public static AvaloniaDictionary<TKey, TElement> ToAvaloniaDictionary<TSource, TKey, TElement>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
         where TKey : notnull

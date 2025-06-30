@@ -12,14 +12,14 @@ using Kotor.DevelopmentKit.EditorGFF.ViewModels;
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
 
-public abstract class EditFieldPanel : UserControl
+public abstract class BaseEditFieldPanel : UserControl
 {
 
 }
 
 
 public abstract class EditFieldPanel<TNodeViewModel, TValueViewModel, TEventArgs>
-    : EditFieldPanel
+    : BaseEditFieldPanel
     where TNodeViewModel : class
     where TEventArgs : RoutedEventArgs
 {
@@ -29,7 +29,7 @@ public abstract class EditFieldPanel<TNodeViewModel, TValueViewModel, TEventArgs
         remove => RemoveHandler(FinishedEditingEvent, value);
     }
     public static readonly RoutedEvent<TEventArgs> FinishedEditingEvent =
-            RoutedEvent.Register<EditFieldPanel, TEventArgs>(nameof(FinishedEditing), RoutingStrategies.Bubble);
+            RoutedEvent.Register<BaseEditFieldPanel, TEventArgs>(nameof(FinishedEditing), RoutingStrategies.Bubble);
 
     public GFFViewModel GFF
     {
@@ -37,7 +37,7 @@ public abstract class EditFieldPanel<TNodeViewModel, TValueViewModel, TEventArgs
         set => SetValue(GFFProperty, value);
     }
     public static readonly StyledProperty<GFFViewModel> GFFProperty =
-        AvaloniaProperty.Register<EditFieldPanel, GFFViewModel>(nameof(GFF));
+        AvaloniaProperty.Register<BaseEditFieldPanel, GFFViewModel>(nameof(GFF));
 
     public TNodeViewModel SourceNode
     {
@@ -45,7 +45,7 @@ public abstract class EditFieldPanel<TNodeViewModel, TValueViewModel, TEventArgs
         set => SetValue(SourceNodeProperty, value);
     }
     public static readonly StyledProperty<TNodeViewModel> SourceNodeProperty =
-        AvaloniaProperty.Register<EditFieldPanel, TNodeViewModel>(nameof(SourceNode));
+        AvaloniaProperty.Register<BaseEditFieldPanel, TNodeViewModel>(nameof(SourceNode));
 
     public TValueViewModel CurrentValue
     {
@@ -53,7 +53,7 @@ public abstract class EditFieldPanel<TNodeViewModel, TValueViewModel, TEventArgs
         set => SetValue(CurrentValueProperty, value);
     }
     public static readonly StyledProperty<TValueViewModel> CurrentValueProperty =
-        AvaloniaProperty.Register<EditFieldPanel, TValueViewModel>(nameof(CurrentValue));
+        AvaloniaProperty.Register<BaseEditFieldPanel, TValueViewModel>(nameof(CurrentValue));
 
     protected TNodeViewModel? _transitoryNode;
 
