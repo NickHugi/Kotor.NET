@@ -53,7 +53,27 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
         FileTypeChoices = [FilePickerTypes.GFF, FilePickerTypes.Encapsulated, AllValidFilePickerFileTypes, FilePickerTypes.All],
     };
 
-    public override List<ResourceType> ResourceTypes => [ResourceType.GFF];
+    public override List<ResourceType> ResourceTypes =>
+    [
+        ResourceType.GFF,
+        ResourceType.UTC,
+        ResourceType.UTD,
+        ResourceType.UTE,
+        ResourceType.UTI,
+        ResourceType.UTM,
+        ResourceType.UTP,
+        ResourceType.UTS,
+        ResourceType.UTT,
+        ResourceType.UTW,
+        ResourceType.IFO,
+        ResourceType.ARE,
+        ResourceType.GIT,
+        ResourceType.JRL,
+        ResourceType.DLG,
+        ResourceType.FAC,
+        ResourceType.PTH,
+        ResourceType.GUI,
+    ];
 
 
     public MainWindow()

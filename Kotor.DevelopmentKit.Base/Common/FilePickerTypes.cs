@@ -10,7 +10,8 @@ public static class FilePickerTypes
     };
     public static readonly FilePickerFileType GFF = new FilePickerFileType("GFF File")
     {
-        Patterns = ["*.gff"],
+        Patterns = ["*.gff", "*.utc", "*.utd", "*.ute", "*.uti", "*.utm", "*.uts", "*.utt", "*.utw",
+        "*.ifo", "*.are", "*.git", "*.jrl", "*.dlg", "*.fac", "*.pth", "*.gui"],
     };
 
     public static readonly FilePickerFileType ERF = new FilePickerFileType("ERF File")
