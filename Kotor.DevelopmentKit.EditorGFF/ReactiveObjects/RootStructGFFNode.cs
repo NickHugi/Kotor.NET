@@ -37,6 +37,7 @@ public class RootStructGFFNode : BaseGFFNode, IStructGFFNode
     }
     public RootStructGFFNode(GFFStruct gffStruct) : base(null)
     {
+        this.PopulateStruct(gffStruct);
     }
 
     public override void Delete()

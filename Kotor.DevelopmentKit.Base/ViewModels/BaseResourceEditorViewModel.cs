@@ -159,8 +159,8 @@ public abstract class BaseResourceEditorViewModel<TViewModel, TModel>
             }
             else
             {
-                var twoda = DeserializeModel(FilePath);
-                LoadModel(twoda);
+                var model = DeserializeModel(FilePath);
+                LoadModel(model);
             }
         }
         catch (Exception ex)
