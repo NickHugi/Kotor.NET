@@ -52,9 +52,13 @@
                           Grid.Column="0"
                           >
                 <TreeDataGrid.Styles>
-                    <Style Selector=":is(TreeDataGridCell):nth-child(n)">
-                        <Setter Property="BorderBrush" Value="LightGray" />
-                        <Setter Property="BorderThickness" Value="0,0,1,1" />
+                    <!--<Style Selector="TreeDataGridColumnHeadersPresenter">
+                        <Setter Property="IsVisible" Value="False"/>
+                    </Style>-->
+                    <Style Selector="TreeDataGridRow">
+                        <Style Selector="^:nth-child(even):not(:selected) :is(TreeDataGridCell):not(:nth-child(3n+1))">
+                            <Setter Property="Background" Value="WhiteSmoke" />
+                        </Style>
                     </Style>
                 </TreeDataGrid.Styles>
             </TreeDataGrid>
