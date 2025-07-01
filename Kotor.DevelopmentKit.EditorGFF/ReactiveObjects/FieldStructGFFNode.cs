@@ -11,11 +11,11 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 
-public class FieldStructGFFNode : BaseFieldGFFNodeViewModel<int>, IStructGFFNode
+public class FieldStructGFFNode : BaseFieldGFFNodeViewModel<GFFStructID>, IStructGFFNode
 {
     public override string DisplayType => "Struct";
 
-    public int StructID
+    public GFFStructID StructID
     {
         get => FieldValue;
         set => FieldValue = value;

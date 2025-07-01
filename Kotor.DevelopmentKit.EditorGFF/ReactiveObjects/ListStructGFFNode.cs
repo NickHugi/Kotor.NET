@@ -22,8 +22,8 @@ public class ListStructGFFNode : BaseGFFNode, IStructGFFNode
     public override string DisplayType => "Struct";
     public override string DisplayValue => StructID.ToString();
 
-    private int _structID;
-    public int StructID
+    private GFFStructID _structID;
+    public GFFStructID StructID
     {
         get => _structID;
         set => this.RaiseAndSetIfChanged(ref _structID, value);

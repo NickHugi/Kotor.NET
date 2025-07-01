@@ -13,7 +13,7 @@ namespace Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 
 public interface IStructGFFNode : IGFFNode
 {
-    public int StructID { get; set; }
+    public GFFStructID StructID { get; set; }
     public bool IsDeleted { get; }
 
     public T AddField<T>(T field) where T : BaseFieldGFFNode;
@@ -27,7 +27,7 @@ public static class IStructGFFTreeNodeViewModelExtensions
     {
         if (self is BaseGFFNode node)
         {
-            self.StructID = (int)gffStruct.ID; // TODO
+            self.StructID = gffStruct.ID;
 
             foreach (var (label, value) in gffStruct.GetFields())
             {

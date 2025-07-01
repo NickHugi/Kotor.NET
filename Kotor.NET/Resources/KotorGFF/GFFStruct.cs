@@ -6,7 +6,7 @@ public class GFFStruct
 {
     internal Dictionary<string, object> _data = new();
 
-    public uint ID { get; set; }
+    public GFFStructID ID { get; set; }
 
     public GFFStruct()
     {
@@ -149,7 +149,7 @@ public class GFFStruct
     {
         SetValue<GFFStruct>(fieldName, value);
     }
-    public GFFStruct SetStruct(string fieldName, uint structID = 0)
+    public GFFStruct SetStruct(string fieldName, GFFStructID structID = new())
     {
         var value = new GFFStruct(structID);
         SetValue<GFFStruct>(fieldName, value);
