@@ -507,10 +507,14 @@ public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel,
 
     private void LabelInput_LostFocus(object? sender, RoutedEventArgs e)
     {
-        if (sender is TextBox textbox && textbox.Text != Context.SelectedNode.Label)
-        {
-            var path = Context.RootNode.GetPathOf(Context.SelectedNode);
-            Context.Relabel(path, textbox.Text ?? "");
-        }
+        if (Context.SelectedNode is null)
+            return;
+        if (sender is not TextBox textbox)
+            return;
+        if (textbox.Text == Context.SelectedNode.Label)
+            return;
+
+        var path = Context.RootNode.GetPathOf(Context.SelectedNode);
+        Context.Relabel(path, textbox.Text ?? "");
     }
 }
