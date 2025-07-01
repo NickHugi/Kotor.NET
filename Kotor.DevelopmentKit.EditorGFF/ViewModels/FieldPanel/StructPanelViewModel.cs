@@ -9,13 +9,14 @@ using Kotor.DevelopmentKit.Base.ViewModels;
 using Kotor.DevelopmentKit.EditorGFF.Models;
 using Kotor.NET.Common.Localization;
 using Kotor.NET.Interfaces;
+using Kotor.NET.Resources.KotorGFF;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
 
 public class StructPanelViewModel : BaseNodePanelViewModel<Int32>
 {
-    public StructPanelViewModel(Int32 value)
+    public StructPanelViewModel(GFFStructID value)
     {
         Value = value;
     }
