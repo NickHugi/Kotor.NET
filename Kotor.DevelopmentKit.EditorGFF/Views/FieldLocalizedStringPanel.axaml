@@ -16,7 +16,11 @@
             <StackPanel Spacing="6">
                 <StackPanel>
                     <TextBlock Foreground="Gray">StringRef</TextBlock>
-                    <TextBox Text="{Binding Value.StringRef, Mode=TwoWay}" LostFocus="TextBox_LostFocus" />
+                    <NumericUpDown Value="{Binding Value.StringRef}"
+                                   LostFocus="TextBox_LostFocus"
+                                   Minimum="0"
+                                   FormatString="F0"
+                                   ParsingNumberStyle="Integer" />
                     <TextBox Text="{Binding TalkTableString.Text}" Height="60" IsReadOnly="True" TextWrapping="Wrap" />
                 </StackPanel>
 
