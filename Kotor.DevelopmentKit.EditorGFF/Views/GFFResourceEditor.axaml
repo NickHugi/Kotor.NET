@@ -18,7 +18,7 @@
         x:Name="Window"
         x:Class="Kotor.DevelopmentKit.EditorGFF.Views.MainWindow"
         x:DataType="vm:GFFResourceEditorViewModel"
-        Title="Kotor.DevelopmentKit.EditorGFF"
+        Title="{Binding WindowTitle}"
         >
     <DockPanel>
 
