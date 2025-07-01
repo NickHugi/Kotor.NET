@@ -32,7 +32,7 @@ public class SettingsImporter : ISettingsImporter
     public DefaultSettingsRoot Load(string filepath, Type type)
     {
         if (type.IsAssignableFrom(typeof(DefaultSettingsRoot)))
-            throw new ArgumentException(); // TODO
+            throw new ArgumentException("Invalid type passed for settings root.");
 
         if (File.Exists(filepath))
         {
