@@ -50,7 +50,14 @@
                           PointerPressed="TreeDataGrid_PointerPressed"
                           base-extensions:TreeDataGridExtensions.SelectedItem="{Binding SelectedNode, Mode=TwoWay}"
                           Grid.Column="0"
-                          />
+                          >
+                <TreeDataGrid.Styles>
+                    <Style Selector=":is(TreeDataGridCell):nth-child(n)">
+                        <Setter Property="BorderBrush" Value="LightGray" />
+                        <Setter Property="BorderThickness" Value="0,0,1,1" />
+                    </Style>
+                </TreeDataGrid.Styles>
+            </TreeDataGrid>
 
             <ScrollViewer Grid.Column="1">
                 <StackPanel Orientation="Vertical" Spacing="5" Margin="10 0 0 0">            
