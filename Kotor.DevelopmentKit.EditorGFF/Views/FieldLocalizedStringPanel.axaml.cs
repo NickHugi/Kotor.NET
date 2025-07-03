@@ -39,17 +39,17 @@ public partial class FieldLocalizedStringPanel : ReactiveUserControl<LocalizedSt
         set => SetValue(InstallationProperty, value);
     }
 
-
     public FieldLocalizedStringPanel() : base()
     {
         InitializeComponent();
 
-        this.WhenAnyValue(x => x.ViewModel)
-            .WhereNotNull()
-            .Subscribe(vm =>
-            {
-                this.Bind(vm, x => x.Installation, v => v.Installation);
-            });
+        this.WhenActivated(disposables =>
+        {
+            this.WhenAnyValue(x => x.Installation)
+                .Where(x => ViewModel is not null)
+                .BindTo(ViewModel, vm => vm.Installation)
+                .DisposeWith(disposables);
+        });
     }
 
     public void AddSubString()
