@@ -155,7 +155,7 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
                 if (nextNode is null)
                 {
                     var field = structNode as BaseGFFNode;
-                    structNode.AddField(new FieldStructGFFNode(field, fieldLabel)); // TODO
+                    structNode.AddField(new FieldStructGFFNode(field, fieldLabel));
                     node = structNode.GetField(fieldLabel);
                 }
                 else

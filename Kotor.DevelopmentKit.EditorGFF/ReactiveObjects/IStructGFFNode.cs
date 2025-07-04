@@ -49,7 +49,7 @@ public static class IStructGFFTreeNodeViewModelExtensions
                     byte[] asBinary => new BinaryGFFNode(node, label, asBinary),
                     Vector3 asVector3 => new Vector3GFFNode(node, label, asVector3),
                     Vector4 asVector4 => new Vector4GFFNode(node, label, asVector4),
-                    GFFStruct asStruct => new FieldStructGFFNode(node, label, (int)asStruct.ID), // TODO standardize as either int or uint
+                    GFFStruct asStruct => new FieldStructGFFNode(node, label, asStruct.ID),
                     GFFList asList => new ListGFFNode(node, label),
                     _ => throw new InvalidOperationException()
                 };
