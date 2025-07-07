@@ -1,0 +1,54 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DynamicData.Binding;
+using Kotor.NET.Common;
+using Kotor.NET.Common.Data;
+using ReactiveUI;
+
+namespace Kotor.DevelopmentKit.Base.ReactiveObjects;
+
+public class ReactiveLocalizedSubString : ReactiveObject
+{
+    private Language _language;
+    public Language Language
+    {
+        get => _language;
+        set => this.RaiseAndSetIfChanged(ref _language, value);
+    }
+
+    private Gender _gender;
+    public Gender Gender
+    {
+        get => _gender;
+        set => this.RaiseAndSetIfChanged(ref _gender, value);
+    }
+
+    private string _text = "";
+    public string Text
+    {
+        get => _text;
+        set => this.RaiseAndSetIfChanged(ref _text, value);
+    }
+
+    public string Label => $"{Gender.ToString()} {Language.ToString()}";
+
+
+    public ReactiveLocalizedSubString()
+    {
+        this.WhenPropertyChanged(x => x.Gender).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
+        this.WhenPropertyChanged(x => x.Language).Subscribe(x => this.RaisePropertyChanged(nameof(Label)));
+    }
+
+
+    public LocalisedSubstring AsModel()
+    {
+        return new(Language, Gender, Text);
+    }
+    public ReactiveLocalizedSubString Clone()
+    {
+        return new() { Language = _language, Gender = _gender, Text = _text };
+    }
+}

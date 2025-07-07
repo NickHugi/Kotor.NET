@@ -1,0 +1,147 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        
+        xmlns:base-views="clr-namespace:Kotor.DevelopmentKit.Base.Views;assembly=Kotor.DevelopmentKit.Base"
+        xmlns:base-converters="clr-namespace:Kotor.DevelopmentKit.Base.ValueConverters;assembly=Kotor.DevelopmentKit.Base"
+        xmlns:base-extensions="clr-namespace:Kotor.DevelopmentKit.Base.Extensions;assembly=Kotor.DevelopmentKit.Base"
+        
+        xmlns:vm="using:Kotor.DevelopmentKit.EditorGFF.ViewModels"
+        xmlns:panel-vm="using:Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel"
+        xmlns:editor-views="clr-namespace:Kotor.DevelopmentKit.EditorGFF.Views"
+        xmlns:panel-views="clr-namespace:Kotor.DevelopmentKit.EditorGFF.Views"
+        xmlns:settings-views="clr-namespace:Kotor.DevelopmentKit.Base.Settings.Views;assembly=Kotor.DevelopmentKit.Base"
+        
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        Width="800" Height="450"
+        x:Name="Window"
+        x:Class="Kotor.DevelopmentKit.EditorGFF.Views.MainWindow"
+        x:DataType="vm:GFFResourceEditorViewModel"
+        Title="{Binding WindowTitle}"
+        >
+    <DockPanel>
+
+        <Menu DockPanel.Dock="Top" BorderThickness="0 0 0 1" BorderBrush="LightGray">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New" Command="{Binding #Window.NewFile}" InputGesture="Ctrl+N" HotKey="Ctrl+N"/>
+                <MenuItem Header="_Open" Command="{Binding #Window.OpenFile}" InputGesture="Ctrl+O" HotKey="Ctrl+O"/>
+                <MenuItem Header="_Save" Command="{Binding #Window.SaveFile}" InputGesture="Ctrl+S" HotKey="Ctrl+S" IsEnabled="{Binding FilePathAssigned}"/>
+                <MenuItem Header="_Save As" Command="{Binding #Window.SaveFileAs}" InputGesture="Ctrl+Shift+S" HotKey="Ctrl+Shift+S" />
+                <MenuItem Header="_Reset" Command="{Binding #Window.ResetFile}" InputGesture="Ctrl+R" HotKey="Ctrl+R" />
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="_Undo" Command="{Binding #Window.Undo}" InputGesture="Ctrl+Z" HotKey="Ctrl+Z" IsEnabled="{Binding History.CanUndo}" />
+                <MenuItem Header="_Redo" Command="{Binding #Window.Redo}" InputGesture="Ctrl+Y" HotKey="Ctrl+Y" IsEnabled="{Binding History.CanRedo}" />
+                <Separator/>
+                <MenuItem Header="_Cut" Command="{Binding #Window.CutSelectedNode}" InputGesture="Ctrl+X" HotKey="Ctrl+X" />
+                <MenuItem Header="_Copy" Command="{Binding #Window.CopySelectedNode}" InputGesture="Ctrl+C" HotKey="Ctrl+C" />
+                <MenuItem Header="_Paste" Command="{Binding #Window.PasteNode}" InputGesture="Ctrl+V" HotKey="Ctrl+V" />
+            </MenuItem>
+            <MenuItem Header="_Options">
+                <MenuItem Header="_Open Settings" Command="{Binding #Window.OpenSettings}" />
+                <Separator />
+                <settings-views:SelectInstallationMenuItem
+                    SelectedInstallation ="{Binding SelectedInstallation}"
+                    Installations="{Binding Settings.Common.Installations.List}"
+                    />
+            </MenuItem>
+        </Menu>
+
+        <Grid Margin="10" ColumnDefinitions="*, 320">
+            <TreeDataGrid Name="TreeDataGrid"
+                          Source="{Binding TreeData}"
+                          PointerPressed="TreeDataGrid_PointerPressed"
+                          base-extensions:TreeDataGridExtensions.SelectedItem="{Binding SelectedNode, Mode=TwoWay}"
+                          Grid.Column="0"
+                          >
+                <TreeDataGrid.Styles>
+                    <!--<Style Selector="TreeDataGridColumnHeadersPresenter">
+                        <Setter Property="IsVisible" Value="False"/>
+                    </Style>-->
+                    <Style Selector="TreeDataGridRow">
+                        <Style Selector="^:nth-child(even):not(:selected) :is(TreeDataGridCell):not(:nth-child(3n+1))">
+                            <Setter Property="Background" Value="WhiteSmoke" />
+                        </Style>
+                    </Style>
+                </TreeDataGrid.Styles>
+            </TreeDataGrid>
+
+            <ScrollViewer Grid.Column="1">
+                <StackPanel Orientation="Vertical" Spacing="5" Margin="10 0 0 0">            
+                    <Border Background="#eee" BorderBrush="#ddd" BorderThickness="1" CornerRadius="4" Padding="10">
+                        <StackPanel>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Foreground="Gray">Type</TextBlock>
+                                <editor-views:FieldTypeComboBox FieldType="{Binding SelectedNode.DisplayType}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Foreground="Gray">Label</TextBlock>
+                                <TextBox Text="{Binding SelectedNode.Label, Mode=OneWay}" LostFocus="LabelInput_LostFocus" IsEnabled="{Binding SelectedNode.CanEditLabel}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    
+                    <ContentControl Content="{Binding PanelData}">
+                        <ContentControl.DataTemplates>
+                            <DataTemplate DataType="{x:Type panel-vm:UInt8PanelViewModel}">
+                                <panel-views:FieldUInt8Panel FinishedEditing="FieldUInt8Panel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:Int8PanelViewModel}">
+                                <panel-views:FieldInt8Panel FinishedEditing="FieldInt8Panel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:UInt16PanelViewModel}">
+                                <panel-views:FieldUInt16Panel FinishedEditing="FieldUInt16Panel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:Int16PanelViewModel}">
+                                <panel-views:FieldInt16Panel FinishedEditing="FieldInt16Panel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:UInt32PanelViewModel}">
+                                <panel-views:FieldUInt32Panel FinishedEditing="FieldUInt32Panel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:Int32PanelViewModel}">
+                                <panel-views:FieldInt32Panel FinishedEditing="FieldInt32Panel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:UInt64PanelViewModel}">
+                                <panel-views:FieldUInt64Panel FinishedEditing="FieldUInt64Panel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:Int64PanelViewModel}">
+                                <panel-views:FieldInt64Panel FinishedEditing="FieldInt64Panel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:SinglePanelViewModel}">
+                                <panel-views:FieldSinglePanel FinishedEditing="FieldSinglePanel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:DoublePanelViewModel}">
+                                <panel-views:FieldDoublePanel FinishedEditing="FieldDoublePanel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:ResRefPanelViewModel}">
+                                <panel-views:FieldResRefPanel FinishedEditing="FieldResRefPanel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:StringPanelViewModel}">
+                                <panel-views:FieldStringPanel FinishedEditing="FieldStringPanel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:LocalizedStringPanelViewModel}">
+                                <panel-views:FieldLocalizedStringPanel FinishedEditing="FieldLocalizedStringPanel_FinishedEditing" Installation="{Binding #Window.DataContext.SelectedInstallation}" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:BinaryPanelViewModel}">
+                                <panel-views:FieldBinaryPanel FinishedEditing="FieldBinaryPanel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:Vector3PanelViewModel}">
+                                <panel-views:FieldVector3Panel FinishedEditing="FieldVector3Panel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:Vector4PanelViewModel}">
+                                <panel-views:FieldVector4Panel FinishedEditing="FieldVector4Panel_FinishedEditing" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type panel-vm:StructPanelViewModel}">
+                                <panel-views:FieldStructPanel FinishedEditing="FieldStructPanel_FinishedEditing" />
+                            </DataTemplate>
+                        </ContentControl.DataTemplates>
+                    </ContentControl>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    
+    </DockPanel>
+
+</Window>

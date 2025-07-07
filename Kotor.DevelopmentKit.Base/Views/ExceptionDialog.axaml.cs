@@ -23,7 +23,10 @@ public partial class ExceptionDialog : Window
 
     public async Task Copy()
     {
-        Clipboard?.SetTextAsync(Context.StackTrace);
+        if (Clipboard is not null)
+        {
+            await Clipboard.SetTextAsync(Context.StackTrace);
+        }
     }
 
     public static async Task ShowDilaog(Window window, Exception exception)

@@ -20,7 +20,7 @@ public class TestIFO
 
         // Assert
         Assert.Equal("m02aa", ifo.VoiceOverID);
-        Assert.Equal("tar_m02aa", ifo.Name.GetSubstring(Language.English, Gender.MaleOrNeutral));
+        Assert.Equal("tar_m02aa", ifo.Name.GetSubstring(Language.English, Gender.Male));
         Assert.Equal("", ifo.Tag);
         Assert.Equal("m02aa", ifo.EntryArea);
         Assert.Equal(3, ifo.ModEntryX);

@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Avalonia.Interactivity;
+using Kotor.DevelopmentKit.EditorGFF.Models;
+
+namespace Kotor.DevelopmentKit.EditorGFF.EventArgs;
+
+public class SingleEditedEventArgs : RoutedEventArgs
+{
+    public Single NewValue { get; }
+
+    public SingleEditedEventArgs(RoutedEvent routedEvent, object source, Single newValue)
+        : base(routedEvent, source)
+    {
+        NewValue = newValue;
+    }
+}

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Kotor.NET.Common.Data;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.Base.ViewModels;
+namespace Kotor.DevelopmentKit.Base.ReactiveObjects;
 
-public class ResourceViewModel : ReactiveObject
+public class ReactiveResource : ReactiveObject
 {
     private string _filepath = default!;
     public required string Filepath

@@ -1,0 +1,48 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        
+        xmlns:base-view="clr-namespace:Kotor.DevelopmentKit.Base"
+        xmlns:settings-vm="using:Kotor.DevelopmentKit.Base.Settings.ViewModels"
+
+        Title="Settings"
+        Width="800" Height="450"
+        Padding="5"
+        
+        mc:Ignorable="d" d:DesignWidth="650" d:DesignHeight="400"
+        x:DataType="settings-vm:SettingsDialogViewModel"
+        x:Class="Kotor.DevelopmentKit.Base.SettingsDialog">
+    <DockPanel HorizontalAlignment="Stretch"
+               VerticalAlignment="Stretch">
+        <StackPanel DockPanel.Dock="Bottom"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Spacing="5"
+                    Margin="0 5 0 0">
+            <Button Command="{Binding SaveCommand}">OK</Button>
+            <Button Command="{Binding CancelCommand}">Cancel</Button>
+        </StackPanel>
+        <TreeView DockPanel.Dock="Left"
+                  ItemsSource="{Binding Pages}"
+                  SelectedItem="{Binding SelectedPage}"
+                  BorderThickness="1"
+                  BorderBrush="Gray"
+                  Width="200">
+            <TreeView.DataTemplates>
+                <TreeDataTemplate DataType="{x:Type settings-vm:SettingsPageViewModel}" ItemsSource="{Binding Pages}">
+                    <TextBlock Text="{Binding Name}" />
+                </TreeDataTemplate>
+            </TreeView.DataTemplates>
+        </TreeView>
+        <Border DockPanel.Dock="Right"
+                          BorderThickness="1"
+                          BorderBrush="Gray"
+                          HorizontalAlignment="Stretch"
+                          Margin="5 0 0 0">
+            <ScrollViewer Padding="5">
+                <base-view:SettingsItemsControl DataContext="{Binding SelectedPage.Properties}" />
+            </ScrollViewer>
+        </Border>
+    </DockPanel>
+</Window>

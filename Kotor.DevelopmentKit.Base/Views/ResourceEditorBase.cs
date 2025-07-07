@@ -112,7 +112,7 @@ public abstract class ResourceEditorBase<TEditorViewModel, TResourceViewModel, T
 
         if (resource is not null)
         {
-            Context.LoadFromFile(resource.FilePath, resource.ResRef, resource.ResourceType);
+            await Context.LoadFromFile(resource.FilePath, resource.ResRef, resource.ResourceType);
         }
     }
 
@@ -175,7 +175,7 @@ public abstract class ResourceEditorBase<TEditorViewModel, TResourceViewModel, T
         }
         else if (alternativeSave == SaveFileAlternativesDialogResult.ToCurrent)
         {
-            Context.SaveToFile();
+            await Context.SaveToFile();
         }
         else if (alternativeSave == SaveFileAlternativesDialogResult.None)
         {
@@ -189,7 +189,7 @@ public abstract class ResourceEditorBase<TEditorViewModel, TResourceViewModel, T
 
         if (resource is not null)
         {
-            Context.SaveToFile(resource.FilePath, resource.ResRef, resource.ResourceType);
+            await Context.SaveToFile(resource.FilePath, resource.ResRef, resource.ResourceType);
         }
     }
 
