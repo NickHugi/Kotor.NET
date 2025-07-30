@@ -1,0 +1,14 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:views="clr-namespace:Kotor.DevelopmentKit.EditorGFF.Views"
+             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="32"
+             x:Class="Kotor.DevelopmentKit.EditorGFF.Views.FieldTypeComboBox"
+             Name="Wololo"
+             HorizontalAlignment="Stretch">
+        <ComboBox HorizontalAlignment="Stretch"
+                  SelectedItem="{Binding FieldType, RelativeSource={RelativeSource AncestorType=views:FieldTypeComboBox}}"
+                  Name="ComboBox"
+                  IsEnabled="False" />
+</UserControl>

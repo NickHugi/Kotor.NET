@@ -18,35 +18,49 @@ public class LYTAscii
     }
     public LYTAscii(Stream stream)
     {
-        var reader = new StreamReader(stream);
-
-        while (true)
+        try
         {
-            var line = reader.ReadLine();
+            var reader = new StreamReader(stream);
 
-            if (line is null)
-                break;
+            while (true)
+            {
+                var line = reader.ReadLine();
 
-            var tokens = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            var command = tokens.FirstOrDefault()?.ToLower();
+                if (line is null)
+                    break;
 
-            if (command is null)
-                continue;
+                var tokens = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                var command = tokens.FirstOrDefault()?.ToLower();
 
-            if (command == "filedependancy")
-                FileDependency = tokens.ElementAt(1);
-            if (command == "beginlayout")
-                Layout = new LYTAsciiLayout(reader);
+                if (command is null)
+                    continue;
+
+                if (command == "filedependancy")
+                    FileDependency = tokens.ElementAt(1);
+                if (command == "beginlayout")
+                    Layout = new LYTAsciiLayout(reader);
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new IOException("Failed to read the 2DA data.", ex);
         }
     }
 
     public void Write(Stream stream)
     {
-        var writer = new StreamWriter(stream);
+        try
+        {
+            var writer = new StreamWriter(stream);
 
-        if (string.IsNullOrWhiteSpace(FileDependency) == false)
-            writer.WriteLine($"filedependancy {FileDependency}");
+            if (string.IsNullOrWhiteSpace(FileDependency) == false)
+                writer.WriteLine($"filedependancy {FileDependency}");
 
-        Layout.Write(writer);
+            Layout.Write(writer);
+        }
+        catch (Exception ex)
+        {
+            throw new IOException("Failed to write the 2DA data.", ex);
+        }
     }
 }

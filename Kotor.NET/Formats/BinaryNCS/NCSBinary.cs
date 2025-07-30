@@ -17,20 +17,34 @@ public class NCSBinary
     }
     public NCSBinary(Stream stream)
     {
-        var reader = new BinaryReader(stream);
-        FileHeader = new(reader);
-
-        while (reader.BaseStream.Position < reader.BaseStream.Length)
+        try
         {
-            Instructions.Add(new NCSBinaryInstruction(reader));
+            var reader = new BinaryReader(stream);
+            FileHeader = new(reader);
+
+            while (reader.BaseStream.Position < reader.BaseStream.Length)
+            {
+                Instructions.Add(new NCSBinaryInstruction(reader));
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new IOException("Failed to read the 2DA data.", ex);
         }
     }
 
     public void Write(Stream stream)
     {
-        var writer = new BinaryWriter(stream);
+        try
+        {
+            var writer = new BinaryWriter(stream);
 
-        FileHeader.Write(writer);
+            FileHeader.Write(writer);
+        }
+        catch (Exception ex)
+        {
+            throw new IOException("Failed to write the 2DA data.", ex);
+        }
     }
 
     public void Recalculate()

@@ -1,4 +1,6 @@
-﻿namespace Kotor.NET.Resources.Kotor2DA;
+﻿using Kotor.NET.Resources.Kotor2DA.Events;
+
+namespace Kotor.NET.Resources.Kotor2DA;
 
 /// <summary>
 /// Represents a cell within a 2DA table.
@@ -37,6 +39,7 @@ public class TwoDACell
     public TwoDACell SetString(string? value)
     {
         _row._cells[_column] = value ?? "";
+
         return this;
     }
     /// <summary>
@@ -56,6 +59,7 @@ public class TwoDACell
     public TwoDACell SetInt(int? value)
     {
         _row._cells[_column] = value?.ToString() ?? "";
+
         return this;
     }
     /// <summary>
@@ -75,6 +79,7 @@ public class TwoDACell
     public TwoDACell SetDecimal(decimal? value)
     {
         _row._cells[_column] = value?.ToString() ?? "";
+
         return this;
     }
     /// <summary>
@@ -99,6 +104,7 @@ public class TwoDACell
             false => "0",
             _ => ""
         };
+
         return this;
     }
     /// <summary>

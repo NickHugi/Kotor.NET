@@ -1,0 +1,21 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:Kotor.DevelopmentKit.Base.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="62"
+        x:Class="Kotor.DevelopmentKit.Base.SaveFileAlternativesDialog"
+        x:DataType="vm:SaveFileAlternativesDialogViewModel"
+        x:Name="Window"
+        Title="SaveFileAlternativesDialog"
+        SizeToContent="WidthAndHeight">
+    <StackPanel Orientation="Vertical" Margin="5" Spacing="5">
+        <TextBlock Text="{Binding Message}" />
+        <StackPanel Orientation="Horizontal" Spacing="5">
+            <Button Command="{Binding #Window.Cancel}">Cancel</Button>
+            <Button Command="{Binding #Window.SaveToMOD}" IsVisible="{Binding ShowOptionForMOD}">Save to MOD</Button>
+            <Button Command="{Binding #Window.SaveToOverride}" IsVisible="{Binding ShowOptionForOverride}">Save to Override</Button>
+            <Button Command="{Binding #Window.SaveToFile}">Save to File</Button>
+        </StackPanel>
+    </StackPanel>
+</Window>

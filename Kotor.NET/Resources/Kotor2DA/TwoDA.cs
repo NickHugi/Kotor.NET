@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Exceptions;
 using Kotor.NET.Formats.Binary2DA;
 using Kotor.NET.Formats.Binary2DA.Serialisation;
+using Kotor.NET.Formats.BinaryERF.Serialisation;
+using Kotor.NET.Resources.Kotor2DA.Events;
+using Kotor.NET.Resources.KotorERF;
 
 namespace Kotor.NET.Resources.Kotor2DA;
 
@@ -68,6 +72,38 @@ public class TwoDA
     }
 
     /// <summary>
+    /// Serialize the TwoDA object to the specified file.
+    /// </summary>
+    /// <param name="twoda">The TwoDA object to serialize.</param>
+    /// <param name="filepath">The path to save the serialized TwoDA file.</param>
+    /// <returns></returns>
+    public static void ToFile(TwoDA twoda, string filepath)
+    {
+        using var stream = File.OpenWrite(filepath);
+        new TwoDABinarySerializer(twoda).Serialize().Write(stream);
+    }
+    /// <summary>
+    /// Serialze the TwoDA object into bytes.
+    /// </summary>
+    /// <param name="twoda">The TwoDA object to serialize.</param>
+    /// <returns>The bytes of the TwoDA in binary format.</returns>
+    public static byte[] ToBytes(TwoDA twoda)
+    {
+        using var stream = new MemoryStream();
+        new TwoDABinarySerializer(twoda).Serialize().Write(stream);
+        return stream.ToArray();
+    }
+    /// <summary>
+    /// Serialize the TwoDA object and write it to the stream.
+    /// </summary>
+    /// <param name="twoda">The TwoDA object to serialize.</param>
+    /// <param name="stream">The target stream to write to.</param>
+    public static void ToStream(TwoDA twoda, Stream stream)
+    {
+        new TwoDABinarySerializer(twoda).Serialize().Write(stream);
+    }
+
+    /// <summary>
     /// Returns the row object at the specified index in the table.
     /// </summary>
     /// <param name="index">The index into the table to retrieve.</param>
@@ -123,6 +159,7 @@ public class TwoDA
         var row = new TwoDARow(this);
         row.RowHeader = header;
         _rows.Add(row);
+
         return row;
     }
 

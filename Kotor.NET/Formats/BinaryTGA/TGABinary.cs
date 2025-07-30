@@ -20,35 +20,49 @@ public class TGABinary
     }
     public TGABinary(Stream stream)
     {
-        var writer = new BinaryWriter(stream);
-
-        var reader = new BinaryReader(stream);
-        FileHeader = new(reader);
-        ID = reader.ReadString(FileHeader.IDLength);
-
-        var bytesPerColourMapEntry = FileHeader.ColourMapDepth / 8;
-        for (int i = 0; i < FileHeader.ColourMapLength; i++)
+        try
         {
-            ColourMap.Add(reader.ReadBytes(bytesPerColourMapEntry));
+            var writer = new BinaryWriter(stream);
+
+            var reader = new BinaryReader(stream);
+            FileHeader = new(reader);
+            ID = reader.ReadString(FileHeader.IDLength);
+
+            var bytesPerColourMapEntry = FileHeader.ColourMapDepth / 8;
+            for (int i = 0; i < FileHeader.ColourMapLength; i++)
+            {
+                ColourMap.Add(reader.ReadBytes(bytesPerColourMapEntry));
+            }
+
+            var imageType = (TGABinaryImageType)FileHeader.ImageType;
+            ImageData = imageType switch
+            {
+                TGABinaryImageType.ColourMapped => ReadMapped(reader),
+                TGABinaryImageType.RGB => ReadRGB(reader),
+                TGABinaryImageType.RLE_ColourMapped => ReadRLEMapped(reader),
+                TGABinaryImageType.RLE_RGB => ReadRLERGB(reader),
+                _ => throw new Exception()
+            };
         }
-
-        var imageType = (TGABinaryImageType)FileHeader.ImageType;
-        ImageData = imageType switch
+        catch (Exception ex)
         {
-            TGABinaryImageType.ColourMapped => ReadMapped(reader),
-            TGABinaryImageType.RGB => ReadRGB(reader),
-            TGABinaryImageType.RLE_ColourMapped => ReadRLEMapped(reader),
-            TGABinaryImageType.RLE_RGB => ReadRLERGB(reader),
-            _ => throw new Exception()
-        };
+            throw new IOException("Failed to read the 2DA data.", ex);
+        }
     }
 
     public void Write(BinaryWriter writer)
     {
-        FileHeader.Write(writer);
-        writer.Write(ID, 0);
-        ColourMap.ForEach(x => writer.Write(x));
-        ImageData.ForEach(x => writer.Write(x));
+        try
+        {
+            FileHeader.Write(writer);
+            writer.Write(ID, 0);
+            ColourMap.ForEach(x => writer.Write(x));
+            ImageData.ForEach(x => writer.Write(x));
+        }
+        catch (Exception ex)
+        {
+            throw new IOException("Failed to write the 2DA data.", ex);
+        }
     }
 
     private List<byte[]> ReadMapped(BinaryReader reader)

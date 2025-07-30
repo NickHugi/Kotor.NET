@@ -1,0 +1,73 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+
+             xmlns:base-views="clr-namespace:Kotor.DevelopmentKit.Base.Views;assembly=Kotor.DevelopmentKit.Base"
+             xmlns:base-reactive="clr-namespace:Kotor.DevelopmentKit.Base.ReactiveObjects;assembly=Kotor.DevelopmentKit.Base"
+             xmlns:vm="clr-namespace:Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel"
+             
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="300"
+             x:Class="Kotor.DevelopmentKit.EditorGFF.Views.FieldLocalizedStringPanel"
+             x:DataType="vm:LocalizedStringPanelViewModel"
+             x:Name="Control">
+    <StackPanel Spacing="4">
+        <Border Background="#eee" BorderBrush="#ddd" BorderThickness="1" CornerRadius="4" Padding="10">
+            <StackPanel Spacing="6">
+                <StackPanel>
+                    <TextBlock Foreground="Gray">StringRef</TextBlock>
+                    <NumericUpDown Value="{Binding Value.StringRef}"
+                                   LostFocus="TextBox_LostFocus"
+                                   Minimum="0"
+                                   FormatString="F0"
+                                   ParsingNumberStyle="Integer" />
+                    <TextBox Text="{Binding TalkTableString.Text}" Height="60" IsReadOnly="True" TextWrapping="Wrap" />
+                </StackPanel>
+
+                <StackPanel>
+                    <TextBlock Foreground="Gray">SubString</TextBlock>
+                    <Grid ColumnDefinitions="*, 4, Auto, 4, Auto">
+                        <ComboBox Grid.Column="0" ItemsSource="{Binding Value.SubStrings}" SelectedItem="{Binding Value.SelectedSubstring, Mode=TwoWay}" HorizontalAlignment="Stretch">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate DataType="base-reactive:ReactiveLocalizedSubString">
+                                    <TextBlock Text="{Binding Label}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <Button Grid.Column="2" Command="{Binding #Control.AddSubString}">Add</Button>
+                        <Button Grid.Column="4" Command="{Binding #Control.RemoveSelectedSubString}" IsEnabled="{Binding Value.IsSubStringSelected}">Remove</Button>
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <Border Background="#eee" BorderBrush="#ddd" BorderThickness="1" CornerRadius="4" Padding="10">
+            <StackPanel IsVisible="{Binding Value.IsSubStringSelected}">
+                <Grid ColumnDefinitions="*, 4, *">
+                    <StackPanel Grid.Column="0" Orientation="Vertical">
+                        <TextBlock Foreground="Gray">Language</TextBlock>
+                        <base-views:LanguageComboBox SelectedLanguage="{Binding Value.SelectedSubstring.Language, Mode=TwoWay}"
+                                                     HorizontalAlignment="Stretch"
+                                                     LostFocus="LanguageComboBox_LostFocus"
+                                                     />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" Orientation="Vertical">
+                        <TextBlock Foreground="Gray">Gender</TextBlock>
+                        <base-views:GenderComboBox SelectedGender="{Binding Value.SelectedSubstring.Gender, Mode=TwoWay}"
+                                                   HorizontalAlignment="Stretch"
+                                                   LostFocus="GenderComboBox_LostFocus"
+                                                   />
+                    </StackPanel>
+                </Grid>
+
+                <TextBlock Foreground="Gray">Text</TextBlock>
+                <TextBox Text="{Binding Value.SelectedSubstring.Text, Mode=TwoWay}"
+                         Height="100"
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap"
+                         />
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

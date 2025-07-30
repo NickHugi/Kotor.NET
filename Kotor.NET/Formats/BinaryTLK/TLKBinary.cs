@@ -21,36 +21,50 @@ public class TLKBinary
 
     public TLKBinary(Stream stream)
     {
-        var reader = new BinaryReader(stream);
-        FileHeader = new TLKBinaryFileHeader(reader);
-
-        for (int i = 0; i < FileHeader.EntryCount; i++)
+        try
         {
-            Entries.Add(new TLKBinaryEntry(reader));
+            var reader = new BinaryReader(stream);
+            FileHeader = new TLKBinaryFileHeader(reader);
+
+            for (int i = 0; i < FileHeader.EntryCount; i++)
+            {
+                Entries.Add(new TLKBinaryEntry(reader));
+            }
+
+            foreach (var entry in Entries)
+            {
+                reader.BaseStream.Position = entry.OffsetToString + FileHeader.OffsetToEntries;
+                var text = reader.ReadString(entry.StringSize);
+                Strings.Add(text);
+            }
         }
-
-        foreach (var entry in Entries)
+        catch (Exception ex)
         {
-            reader.BaseStream.Position = entry.OffsetToString + FileHeader.OffsetToEntries;
-            var text = reader.ReadString(entry.StringSize);
-            Strings.Add(text);
+            throw new IOException("Failed to read the 2DA data.", ex);
         }
     }
 
     public void Write(Stream stream)
     {
-        var writer = new BinaryWriter(stream);
-
-        FileHeader.Write(writer);
-
-        foreach (var stringData in Entries)
+        try
         {
-            stringData.Write(writer);
+            var writer = new BinaryWriter(stream);
+
+            FileHeader.Write(writer);
+
+            foreach (var stringData in Entries)
+            {
+                stringData.Write(writer);
+            }
+
+            foreach (var entry in Strings)
+            {
+                writer.Write(entry, 0);
+            }
         }
-
-        foreach (var entry in Strings)
+        catch (Exception ex)
         {
-            writer.Write(entry, 0);
+            throw new IOException("Failed to write the 2DA data.", ex);
         }
     }
 
