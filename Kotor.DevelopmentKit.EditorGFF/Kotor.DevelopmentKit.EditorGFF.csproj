@@ -1,0 +1,84 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.3.1" />
+    <PackageReference Include="Avalonia.Controls.TreeDataGrid" Version="11.1.1" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.1" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.1" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.1" />
+    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.3.1">
+      <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+      <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0-preview.5.25277.114" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kotor.DevelopmentKit.Base\Kotor.DevelopmentKit.Base.csproj" />
+    <ProjectReference Include="..\Kotor.NET\Kotor.NET.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\FieldVector4Panel.axaml.cs">
+      <DependentUpon>FieldVector4Panel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldVector3Panel.axaml.cs">
+      <DependentUpon>FieldVector3Panel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldStructPanel.axaml.cs">
+      <DependentUpon>FieldStructPanel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldLocalizedStringPanel.axaml.cs">
+      <DependentUpon>FieldLocalizedStringPanel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldBinaryPanel.axaml.cs">
+      <DependentUpon>FieldBinaryPanel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldStringPanel.axaml.cs">
+      <DependentUpon>FieldStringPanel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldResRefPanel.axaml.cs">
+      <DependentUpon>FieldResRefPanel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldInt64Panel.axaml.cs">
+      <DependentUpon>FieldInt64Panel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldDoublePanel.axaml.cs">
+      <DependentUpon>FieldDoublePanel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldSinglePanel.axaml.cs">
+      <DependentUpon>FieldSinglePanel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldUInt32Panel.axaml.cs">
+      <DependentUpon>FieldUInt32Panel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldInt32Panel.axaml.cs">
+      <DependentUpon>FieldInt32Panel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldInt8Panel.axaml.cs">
+      <DependentUpon>FieldInt8Panel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldInt16Panel.axaml.cs">
+      <DependentUpon>FieldInt16Panel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldUInt16Panel.axaml.cs">
+      <DependentUpon>FieldUInt16Panel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FieldUInt64Panel.axaml.cs">
+      <DependentUpon>FieldUInt64Panel.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\GFFResourceEditor.axaml.cs">
+      <DependentUpon>GFFResourceEditor.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+</Project>

@@ -15,7 +15,7 @@ public class GFFList : IList<GFFStruct>
     public int Count => _structs.Count;
     public bool IsReadOnly => false;
 
-    public GFFStruct Add(uint structID = 0)
+    public GFFStruct Add(GFFStructID structID = new())
     {
         var gffStruct = new GFFStruct(structID);
         Add(gffStruct);
@@ -32,7 +32,7 @@ public class GFFList : IList<GFFStruct>
     public void RemoveAt(int index) => _structs.RemoveAt(index);
     IEnumerator IEnumerable.GetEnumerator() => _structs.GetEnumerator();
 
-    public IEnumerable<GFFStruct> OfStructID(uint structID)
+    public IEnumerable<GFFStruct> OfStructID(GFFStructID structID)
     {
         return _structs.Where(x => x.ID == structID);
     }

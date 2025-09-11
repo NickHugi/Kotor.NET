@@ -12,7 +12,24 @@ public class GFFBinaryFileHeader
     public static readonly int SIZE = 56;
     public static readonly IReadOnlyList<string> FILE_TYPES = new List<string>()
     {
-        "GFF ", // TODO
+        "GFF ",
+        "UTC ",
+        "UTD ",
+        "UTE ",
+        "UTI ",
+        "UTM ",
+        "UTP ",
+        "UTS ",
+        "UTT ",
+        "UTW ",
+        "IFO ",
+        "ARE ",
+        "GIT ",
+        "JRL ",
+        "DLG ",
+        "FAC ",
+        "PTH ",
+        "GUI ",
     };
     public static readonly string FILE_VERSION = "V3.2";
 

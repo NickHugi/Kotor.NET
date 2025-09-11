@@ -8,6 +8,6 @@ namespace Kotor.NET.Common;
 
 public enum Gender
 {
-    MaleOrNeutral,
+    Male,
     Female,
 }
