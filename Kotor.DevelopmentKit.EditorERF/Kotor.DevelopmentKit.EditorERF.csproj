@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.3.5" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.5" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.5" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.5" />
+    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.3.5">
+      <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+      <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.5" />
+    <PackageReference Include="DynamicData" Version="9.4.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.9" />
+    <PackageReference Include="ReactiveUI" Version="20.4.1" />
+    <PackageReference Include="ReactiveUI.Validation" Version="4.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\ERFResourceEditor.axaml.cs">
+      <DependentUpon>ERFResourceEditor.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+</Project>
