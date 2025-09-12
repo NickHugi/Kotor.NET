@@ -12,6 +12,17 @@
         <vm:ERFResourceEditorViewModel />
     </Design.DataContext>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <StackPanel>
+        <DataGrid>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Filename"  />
+                <DataGridTextColumn Header="Type"  />
+                <DataGridTextColumn Header="Size"  />
+                <!--<DataGridTextColumn Header="Filename" Binding="{Binding Filename}" />
+                <DataGridTextColumn Header="Type" Binding="{Binding Type}" />
+                <DataGridTextColumn Header="Size" Binding="{Binding Size}" />-->
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
 
 </Window>
