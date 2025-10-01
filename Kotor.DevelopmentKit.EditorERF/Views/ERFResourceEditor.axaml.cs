@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
@@ -8,7 +9,7 @@ using Kotor.NET.Resources.KotorERF;
 
 namespace Kotor.DevelopmentKit.EditorERF.Views;
 
-public partial class ERFResourceEditor : ResourceEditorBase<ERFResourceEditorViewModel, ERFViewModel, ERF>
+public partial class ERFResourceEditor : ResourceEditorBase<ERFResourceEditorViewModel, ERFViewModel>
 {
     public ERFResourceEditor()
     {
@@ -22,4 +23,14 @@ public partial class ERFResourceEditor : ResourceEditorBase<ERFResourceEditorVie
     public override FilePickerSaveOptions FilePickerSaveOptions => throw new System.NotImplementedException();
 
     public override List<ResourceType> ResourceTypes => throw new System.NotImplementedException();
+
+    public void Undo()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Redo()
+    {
+        throw new NotImplementedException();
+    }
 }
