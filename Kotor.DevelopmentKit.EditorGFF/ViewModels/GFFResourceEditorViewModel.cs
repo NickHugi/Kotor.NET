@@ -17,13 +17,14 @@ using Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 using Kotor.DevelopmentKit.EditorGFF.Settings;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
 using Kotor.NET.Formats.Binary2DA.Serialisation;
+using Kotor.NET.Resources.Kotor2DA;
 using Kotor.NET.Resources.KotorGFF;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.ViewModels;
 
-public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewModel, GFF>
+public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewModel>
 {
     private BaseGFFNode? _selectedNode;
     public BaseGFFNode? SelectedNode
@@ -102,37 +103,38 @@ public class GFFResourceEditorViewModel : BaseResourceEditorViewModel<GFFViewMod
         });
     }
 
-    public override void LoadModel(GFF model)
+    public override void NewFile()
+    {
+        FilePath = null;
+        LoadModel(new());
+    }
+
+    protected override void DeserializeAndLoad(byte[] data)
+    {
+        var model = GFF.FromBytes(data);
+        LoadModel(model);
+    }
+    protected override void DeserializeAndLoad(string filepath)
+    {
+        var model = GFF.FromFile(filepath);
+        LoadModel(model);
+    }
+
+    public void LoadModel(GFF model)
     {
         Resource.Load(model);
     }
 
-    public override GFF BuildModel()
-    {
-        return Resource.Build();
-    }
-
-    public override GFF DeserializeModel(byte[] bytes)
-    {
-        return GFF.FromBytes(bytes);
-    }
-
-    public override GFF DeserializeModel(string path)
-    {
-        return GFF.FromFile(path);
-    }
-
     public override byte[] SerializeModelToBytes()
     {
-        var gff = BuildModel();
+        var gff = Resource.Build();
         using var memoryStream = new MemoryStream();
         new GFFBinarySerializer(gff).Serialize().Write(memoryStream);
         return memoryStream.ToArray();
     }
-
     public override void SerializeModelToFile()
     {
-        var gff = BuildModel();
+        var gff = Resource.Build();
         using var fileStream = File.OpenWrite(FilePath);
         new GFFBinarySerializer(gff).Serialize().Write(fileStream);
     }

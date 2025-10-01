@@ -26,7 +26,7 @@ using Kotor.DevelopmentKit.Base.Views;
 
 namespace Kotor.DevelopmentKit.Editor2DA.Views;
 
-public partial class TwoDAResourceEditor : ResourceEditorBase<TwoDAResourceEditorViewModel, TwoDAViewModel, TwoDA>
+public partial class TwoDAResourceEditor : ResourceEditorBase<TwoDAResourceEditorViewModel, TwoDAViewModel>
 {
     public override FilePickerFileType AllValidFilePickerFileTypes => new FilePickerFileType("All Valid Options")
     {

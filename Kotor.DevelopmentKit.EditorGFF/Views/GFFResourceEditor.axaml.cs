@@ -32,7 +32,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
-public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel, GFFViewModel, GFF>
+public partial class MainWindow : ResourceEditorBase<GFFResourceEditorViewModel, GFFViewModel>
 {
     public override FilePickerFileType AllValidFilePickerFileTypes => new FilePickerFileType("All Valid Options")
     {

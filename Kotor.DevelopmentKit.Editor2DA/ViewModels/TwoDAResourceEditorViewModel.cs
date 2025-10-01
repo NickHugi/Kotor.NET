@@ -20,7 +20,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.Editor2DA.ViewModels;
 
-public class TwoDAResourceEditorViewModel : BaseResourceEditorViewModel<TwoDAViewModel, TwoDA>
+public class TwoDAResourceEditorViewModel : BaseResourceEditorViewModel<TwoDAViewModel>
 {
     public override string WindowTitlePrefix => "2DA Editor";
 
@@ -31,7 +31,6 @@ public class TwoDAResourceEditorViewModel : BaseResourceEditorViewModel<TwoDAVie
         set => this.RaiseAndSetIfChanged(ref _showFilter, value);
     }
 
-    private int _selectedRowIndex;
     public int SelectedRowIndex
     {
         get
@@ -74,40 +73,42 @@ public class TwoDAResourceEditorViewModel : BaseResourceEditorViewModel<TwoDAVie
         Resource = new();
     }
 
+    public override void NewFile()
+    {
+        FilePath = null;
+        LoadModel(new());
+    }
+
+    protected override void DeserializeAndLoad(byte[] data)
+    {
+        var model = TwoDA.FromBytes(data);
+        LoadModel(model);
+    }
+    protected override void DeserializeAndLoad(string filepath)
+    {
+        var model = TwoDA.FromFile(filepath);
+        LoadModel(model);
+    }
 
     public override byte[] SerializeModelToBytes()
     {
-        var twoda = BuildModel();
+        var twoda = Resource.Build();
         using var memoryStream = new MemoryStream();
         new TwoDABinarySerializer(twoda).Serialize().Write(memoryStream);
         return memoryStream.ToArray();
     }
     public override void SerializeModelToFile()
     {
-        var twoda = BuildModel();
+        var twoda = Resource.Build();
         using var fileStream = File.OpenWrite(FilePath);
         new TwoDABinarySerializer(twoda).Serialize().Write(fileStream);
     }
 
-    public override TwoDA BuildModel()
-    {
-        return Resource.Build();
-    }
-    public override void LoadModel(TwoDA model)
+    public void LoadModel(TwoDA model)
     {
         Resource.Filter = "";
         Resource.Load(model);
     }
-
-    public override TwoDA DeserializeModel(byte[] bytes)
-    {
-        return TwoDA.FromBytes(bytes);
-    }
-    public override TwoDA DeserializeModel(string path)
-    {
-        return TwoDA.FromFile(path);
-    }
-
 
     public void ToggleFilter()
     {

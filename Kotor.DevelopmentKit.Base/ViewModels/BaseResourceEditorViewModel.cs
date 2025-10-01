@@ -11,37 +11,32 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.Base.ViewModels;
 
-public interface IResourceEditorViewModel<TViewModel, TModel>
+//public interface IResourceEditorViewModel<TViewModel>
+//    where TViewModel : ReactiveObject
+//{
+//    public string FilePath { get; set; }
+//    public ResourceType ResourceType { get; set; }
+//    public TViewModel Resource { get; set; }
+//    public string ResRef { get; set; }
+
+//    public Interaction<Exception, Unit> ExceptionInteraction { get; }
+
+//    public void NewFile();
+
+//    public Task LoadFromFile(string filepath, ResRef resref, ResourceType resourceType);
+//    public Task LoadFromFile(string filepath);
+//    public Task LoadFromFile();
+
+//    public Task SaveToFile(string filepath, ResRef resref, ResourceType resourceType);
+//    public Task SaveToFile(string filepath);
+//    public Task SaveToFile();
+
+//    public byte[] SerializeModelToBytes();
+//}
+
+public abstract class BaseResourceEditorViewModel<TViewModel>
+    : ReactiveObject/*, IResourceEditorViewModel<TViewModel>*/
     where TViewModel : ReactiveObject
-    where TModel : new()
-{
-    public string FilePath { get; set; }
-    public ResourceType ResourceType { get; set; }
-    public TViewModel Resource { get; set; }
-    public string ResRef { get; set; }
-
-    public Interaction<Exception, Unit> ExceptionInteraction { get; }
-
-    public void LoadModel(TModel model);
-    public TModel BuildModel();
-
-    public void NewFile();
-
-    public Task LoadFromFile(string filepath, ResRef resref, ResourceType resourceType);
-    public Task LoadFromFile(string filepath);
-    public Task LoadFromFile();
-
-    public Task SaveToFile(string filepath, ResRef resref, ResourceType resourceType);
-    public Task SaveToFile(string filepath);
-    public Task SaveToFile();
-
-    public byte[] SerializeModelToBytes();
-}
-
-public abstract class BaseResourceEditorViewModel<TViewModel, TModel>
-    : ReactiveObject, IResourceEditorViewModel<TViewModel, TModel>
-    where TViewModel : ReactiveObject
-    where TModel : new()
 {
     /// <summary>
     /// The path only including either the last directory leading up to the file, or if the file
@@ -74,36 +69,36 @@ public abstract class BaseResourceEditorViewModel<TViewModel, TModel>
     public string ResourceFilename => (ResRef is null || ResourceType is null) ? Path.GetFileName(FilePath) : $"{ResRef}.{ResourceType.Extension}";
     public bool FilePathAssigned => FilePath is not null;
 
-    private string? _filepath = default!;
+
     public string? FilePath
     {
-        get => _filepath;
-        set => this.RaiseAndSetIfChanged(ref _filepath, value);
-    }
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = default!;
 
-    private string _resref = default!;
     public string ResRef
     {
-        get => _resref;
-        set => this.RaiseAndSetIfChanged(ref _resref, value);
-    }
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = default!;
 
-    private ResourceType _resourceType = default!;
     public ResourceType ResourceType
     {
-        get => _resourceType;
-        set => this.RaiseAndSetIfChanged(ref _resourceType, value);
-    }
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = default!;
 
-    private TViewModel _resource = default!;
     public TViewModel Resource
     {
-        get => _resource;
-        set => this.RaiseAndSetIfChanged(ref _resource, value);
-    }
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = default!;
 
-    private readonly Interaction<Exception, Unit> _loadingError = new();
-    public Interaction<Exception, Unit> ExceptionInteraction => this._loadingError;
+    public Interaction<Exception, Unit> ExceptionInteraction
+    {
+        get;
+        set;
+    } = new();
 
     public DefaultSettingsRoot Settings { get; }
 
@@ -126,11 +121,7 @@ public abstract class BaseResourceEditorViewModel<TViewModel, TModel>
     }
 
 
-    public void NewFile()
-    {
-        FilePath = null;
-        LoadModel(new());
-    }
+    public abstract void NewFile();
 
     public async Task LoadFromFile(string filepath, ResRef resref, ResourceType resourceType)
     {
@@ -154,19 +145,17 @@ public abstract class BaseResourceEditorViewModel<TViewModel, TModel>
             {
                 var capsule = Encapsulation.LoadFromPath(FilePath);
                 var data = capsule.Read(ResRef, ResourceType);
-                var model = DeserializeModel(data);
-                LoadModel(model);
+                DeserializeAndLoad(data);
             }
             else
             {
-                var model = DeserializeModel(FilePath);
-                LoadModel(model);
+                DeserializeAndLoad(FilePath);
             }
         }
         catch (Exception ex)
         {
             NewFile();
-            await _loadingError.Handle(ex);
+            await ExceptionInteraction.Handle(ex);
         }
     }
 
@@ -198,16 +187,13 @@ public abstract class BaseResourceEditorViewModel<TViewModel, TModel>
         }
         catch (Exception ex)
         {
-            await _loadingError.Handle(ex);
+            await ExceptionInteraction.Handle(ex);
         }
     }
 
-    public abstract void LoadModel(TModel model);
-    public abstract TModel BuildModel();
-
-    public abstract TModel DeserializeModel(byte[] bytes);
-    public abstract TModel DeserializeModel(string path);
-
     public abstract byte[] SerializeModelToBytes();
     public abstract void SerializeModelToFile();
+
+    protected abstract void DeserializeAndLoad(byte[] data);
+    protected abstract void DeserializeAndLoad(string filepath);
 }

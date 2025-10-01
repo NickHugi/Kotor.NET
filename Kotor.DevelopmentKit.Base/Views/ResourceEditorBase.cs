@@ -19,10 +19,9 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.Base.Views;
 
-public abstract class ResourceEditorBase<TEditorViewModel, TResourceViewModel, TResourceModel> : Window
-    where TEditorViewModel : IResourceEditorViewModel<TResourceViewModel, TResourceModel>
+public abstract class ResourceEditorBase<TEditorViewModel, TResourceViewModel> : Window
+    where TEditorViewModel : BaseResourceEditorViewModel<TResourceViewModel>
     where TResourceViewModel : ReactiveObject
-    where TResourceModel : new()
 {
     public abstract FilePickerFileType AllValidFilePickerFileTypes { get; }
     public abstract FilePickerOpenOptions FilePickerOpenOptions { get; }
