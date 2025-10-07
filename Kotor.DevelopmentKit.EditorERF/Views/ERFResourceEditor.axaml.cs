@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
+using Avalonia.Platform.Storage;
 using Avalonia.ReactiveUI;
 using Kotor.DevelopmentKit.Base.Common;
 using Kotor.DevelopmentKit.Base.DialogResults;
@@ -31,22 +32,22 @@ public partial class ERFResourceEditor : ReactiveWindow<ERFResourceEditorViewMod
         });
     }
 
-    //public override FilePickerFileType AllValidFilePickerFileTypes => throw new System.NotImplementedException();
+    public FilePickerOpenOptions FilePickerOpenOptions { get; } = new()
+    {
+        Title = "Open ERF/RIM File",
+        AllowMultiple = false,
+        FileTypeFilter = [FilePickerTypes.MOD, FilePickerTypes.ERF, FilePickerTypes.RIM, FilePickerTypes.EncapsulatedWriteable, FilePickerTypes.All],
+    };
 
-    //public override FilePickerOpenOptions FilePickerOpenOptions => throw new System.NotImplementedException();
-
-    //public override FilePickerSaveOptions FilePickerSaveOptions => throw new System.NotImplementedException();
-
-    //public override List<ResourceType> ResourceTypes => throw new System.NotImplementedException();
+    public FilePickerSaveOptions FilePickerSaveOptions { get; } = new()
+    {
+        Title = "Save ERF/RIM File",
+        FileTypeChoices = [FilePickerTypes.MOD, FilePickerTypes.ERF, FilePickerTypes.RIM, FilePickerTypes.EncapsulatedWriteable, FilePickerTypes.All],
+    };
 
     public async Task<LoadFromERFWindowDialogResult> SelectResourceToLoad()
     {
-        var files = await GetTopLevel(this)!.StorageProvider.OpenFilePickerAsync(new()
-        {
-            Title = "Open ERF/RIM File",
-            AllowMultiple = false,
-            FileTypeFilter = [FilePickerTypes.ERF, FilePickerTypes.Encapsulated, FilePickerTypes.All],
-        });
+        var files = await GetTopLevel(this)!.StorageProvider.OpenFilePickerAsync(FilePickerOpenOptions);
 
         var file = files.FirstOrDefault();
 
@@ -74,11 +75,7 @@ public partial class ERFResourceEditor : ReactiveWindow<ERFResourceEditorViewMod
 
     public async Task<SaveToERFWindowDialogResult> SelectResourceToSave()
     {
-        var file = await GetTopLevel(this)!.StorageProvider.SaveFilePickerAsync(new()
-        {
-            Title = "Save ERF/RIM File",
-            FileTypeChoices = [FilePickerTypes.ERF, FilePickerTypes.MOD, FilePickerTypes.RIM],
-        });
+        var file = await GetTopLevel(this)!.StorageProvider.SaveFilePickerAsync(FilePickerSaveOptions);
 
         if (file is null)
         {

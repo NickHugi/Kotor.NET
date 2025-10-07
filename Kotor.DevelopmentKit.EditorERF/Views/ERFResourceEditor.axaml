@@ -28,8 +28,13 @@
             </MenuItem>
         </Menu>
 
-        <Grid RowDefinitions="*, Auto">
-            <DataGrid Grid.Row="0" ItemsSource="{Binding Resource.Resources}" SelectedIndex="{Binding SelectedIndex}" Margin="5">
+        <Grid RowDefinitions="*, Auto" RowSpacing="5" Margin="5">
+            <DataGrid Grid.Row="0"
+                      BorderBrush="LightGray"
+                      BorderThickness="2"
+                      CornerRadius="2"
+                      ItemsSource="{Binding Resource.Resources}"
+                      SelectedIndex="{Binding SelectedIndex}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ResRef" Binding="{Binding ResRef}" IsReadOnly="True" />
                     <DataGridTextColumn Header="Type" Binding="{Binding ResourceType}" IsReadOnly="True" />
@@ -40,11 +45,14 @@
                 </DataGrid.KeyBindings>
             </DataGrid>
 
-            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
-                <TextBox Text="{Binding ImportFolderPath}" AcceptsReturn="False" />
-                <Button Command="{Binding SelectImportFolder}">...</Button>
-                <Button Command="{Binding Import}">Import</Button>
-            </StackPanel>
+            <Grid Grid.Row="1"
+                  ColumnDefinitions="*, Auto, Auto"
+                  ColumnSpacing="5"
+                  HorizontalAlignment="Stretch">
+                <TextBox Grid.Column="0" Text="{Binding ImportFolderPath}" AcceptsReturn="False" />
+                <Button Grid.Column="1" Command="{Binding SelectImportFolder}" HorizontalAlignment="Right">...</Button>
+                <Button Grid.Column="2" Command="{Binding Import}">Import</Button>
+            </Grid>
         </Grid>
     </DockPanel>
 
