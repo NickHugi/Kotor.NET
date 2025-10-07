@@ -19,6 +19,7 @@
             </MenuItem>
             <MenuItem Header="_Edit">
                 <MenuItem Header="_Add Files" Command="{Binding AddFiles}" />
+                <MenuItem Header="_Extract Files" Command="{Binding AddFiles}" />
                 <Separator/>
                 <MenuItem Header="_Clear All" Command="{Binding Clear}" />
                 <MenuItem Header="_Remove Selected" Command="{Binding RemoveSelected}" InputGesture="Delete" />

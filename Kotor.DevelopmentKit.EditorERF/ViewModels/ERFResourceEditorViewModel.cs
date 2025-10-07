@@ -184,4 +184,9 @@ public class ERFResourceEditorViewModel : BaseResourceEditorViewModel<ERFViewMod
             });
         }
     }
+
+    public async Task ExtractFiles()
+    {
+        // TODO
+    }
 }
