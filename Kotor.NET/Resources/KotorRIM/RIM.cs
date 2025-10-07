@@ -5,8 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Common.Data;
+using Kotor.NET.Formats.BinaryERF.Serialisation;
 using Kotor.NET.Formats.BinaryRIM;
 using Kotor.NET.Formats.BinaryRIM.Serialisation;
+using Kotor.NET.Resources.KotorERF;
 
 namespace Kotor.NET.Resources.KotorRIM;
 
@@ -33,6 +35,16 @@ public class RIM : IEnumerable<RIMResource>
         var binary = new RIMBinary(stream);
         var deserializer = new RIMBinaryDeserializer(binary);
         return deserializer.Deserialize();
+    }
+    public static byte[] ToBytes(RIM rim)
+    {
+        using var stream = new MemoryStream();
+        new RIMBinarySerializer(rim).Serialize().Write(stream);
+        return stream.ToArray();
+    }
+    public static void ToStream(RIM rim, Stream stream)
+    {
+        new RIMBinarySerializer(rim).Serialize().Write(stream);
     }
 
     public IEnumerator<RIMResource> GetEnumerator() => _resources.GetEnumerator();

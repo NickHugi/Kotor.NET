@@ -28,6 +28,10 @@
     <PackageReference Include="DynamicData" Version="9.4.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.9" />
     <PackageReference Include="ReactiveUI" Version="20.4.1" />
+    <PackageReference Include="ReactiveUI.SourceGenerators" Version="2.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="ReactiveUI.Validation" Version="4.1.1" />
   </ItemGroup>
 

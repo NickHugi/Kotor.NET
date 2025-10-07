@@ -11,29 +11,41 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top" BorderThickness="0 0 0 1" BorderBrush="LightGray">
             <MenuItem Header="_File">
-                <MenuItem Header="_New" Command="{Binding #Window.NewFile}" InputGesture="Ctrl+N" HotKey="Ctrl+N"/>
-                <MenuItem Header="_Open" Command="{Binding #Window.OpenFile}" InputGesture="Ctrl+O" HotKey="Ctrl+O"/>
-                <MenuItem Header="_Save" Command="{Binding #Window.SaveFile}" InputGesture="Ctrl+S" HotKey="Ctrl+S" IsEnabled="{Binding FilePathAssigned}"/>
-                <MenuItem Header="_Save As" Command="{Binding #Window.SaveFileAs}" InputGesture="Ctrl+Shift+S" HotKey="Ctrl+Shift+S" />
-                <MenuItem Header="_Reset" Command="{Binding #Window.ResetFile}" InputGesture="Ctrl+R" HotKey="Ctrl+R" />
+                <MenuItem Header="_New" Command="{Binding New}" InputGesture="Ctrl+N" HotKey="Ctrl+N"/>
+                <MenuItem Header="_Open" Command="{Binding Open}" InputGesture="Ctrl+O" HotKey="Ctrl+O"/>
+                <MenuItem Header="_Save" Command="{Binding Save}" InputGesture="Ctrl+S" HotKey="Ctrl+S" IsEnabled="{Binding FilePathAssigned}"/>
+                <MenuItem Header="_Save As" Command="{Binding SaveAs}" InputGesture="Ctrl+Shift+S" HotKey="Ctrl+Shift+S" />
+                <MenuItem Header="_Reset" Command="{Binding Reset}" InputGesture="Ctrl+R" HotKey="Ctrl+R" />
             </MenuItem>
             <MenuItem Header="_Edit">
-                <MenuItem Header="_Undo" Command="{Binding #Window.Undo}" InputGesture="Ctrl+Z" HotKey="Ctrl+Z" IsEnabled="{Binding History.CanUndo}" />
-                <MenuItem Header="_Redo" Command="{Binding #Window.Redo}" InputGesture="Ctrl+Y" HotKey="Ctrl+Y" IsEnabled="{Binding History.CanRedo}" />
+                <MenuItem Header="_Add Files" Command="{Binding AddFiles}" />
                 <Separator/>
+                <MenuItem Header="_Clear All" Command="{Binding Clear}" />
+                <MenuItem Header="_Remove Selected" Command="{Binding RemoveSelected}" InputGesture="Delete" />
+                <Separator/>
+                <MenuItem Header="_Undo" Command="{Binding Undo}" InputGesture="Ctrl+Z" HotKey="Ctrl+Z" IsEnabled="{Binding History.CanUndo}" />
+                <MenuItem Header="_Redo" Command="{Binding Redo}" InputGesture="Ctrl+Y" HotKey="Ctrl+Y" IsEnabled="{Binding History.CanRedo}" />
             </MenuItem>
         </Menu>
-        
-        <DataGrid>
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Filename"  />
-                <DataGridTextColumn Header="Type"  />
-                <DataGridTextColumn Header="Size"  />
-                <!--<DataGridTextColumn Header="Filename" Binding="{Binding Filename}" />
-                <DataGridTextColumn Header="Type" Binding="{Binding Type}" />
-                <DataGridTextColumn Header="Size" Binding="{Binding Size}" />-->
-            </DataGrid.Columns>
-        </DataGrid>
+
+        <Grid RowDefinitions="*, Auto">
+            <DataGrid Grid.Row="0" ItemsSource="{Binding Resource.Resources}" SelectedIndex="{Binding SelectedIndex}" Margin="5">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ResRef" Binding="{Binding ResRef}" IsReadOnly="True" />
+                    <DataGridTextColumn Header="Type" Binding="{Binding ResourceType}" IsReadOnly="True" />
+                    <DataGridTextColumn Header="Size" Binding="{Binding Data.Length}" IsReadOnly="True" />
+                </DataGrid.Columns>
+                <DataGrid.KeyBindings>
+                    <KeyBinding Command="{Binding RemoveSelected}" Gesture="Delete" />
+                </DataGrid.KeyBindings>
+            </DataGrid>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
+                <TextBox Text="{Binding ImportFolderPath}" AcceptsReturn="False" />
+                <Button Command="{Binding SelectImportFolder}">...</Button>
+                <Button Command="{Binding Import}">Import</Button>
+            </StackPanel>
+        </Grid>
     </DockPanel>
 
 </Window>
