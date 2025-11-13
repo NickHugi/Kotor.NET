@@ -8,7 +8,7 @@ using Kotor.NET.Patcher.Modifiers.For2DA.CellValues;
 using Kotor.NET.Patcher.Modifiers.For2DA.RowLocators;
 using Kotor.NET.Resources.Kotor2DA;
 
-namespace Kotor.NET.Patcher.Modifiers.For2DA;
+namespace Kotor.NET.Patcher.Modifiers.For2DA.Modifiers;
 
 public class EditRow2DAModifier : I2DAModifier
 {

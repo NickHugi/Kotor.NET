@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Kotor.NET.Patcher.Modifiers.For2DA.Assignments;
 using Kotor.NET.Resources.Kotor2DA;
 
-namespace Kotor.NET.Patcher.Modifiers.For2DA;
+namespace Kotor.NET.Patcher.Modifiers.For2DA.Modifiers;
 
 public class AddColumn2DAModifier : I2DAModifier
 {

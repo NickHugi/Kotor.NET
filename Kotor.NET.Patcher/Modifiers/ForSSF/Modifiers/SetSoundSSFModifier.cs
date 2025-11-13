@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Kotor.NET.Patcher.Modifiers.ForSSF.ValueResolver;
 using Kotor.NET.Resources.KotorSSF;
 
-namespace Kotor.NET.Patcher.Modifiers.ForSSF;
+namespace Kotor.NET.Patcher.Modifiers.ForSSF.Modifiers;
 
 public class SetSoundSSFModifier : ISSFModifier
 {

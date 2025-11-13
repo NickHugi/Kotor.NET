@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Kotor.NET.Resources.Kotor2DA;
 using Kotor.NET.Resources.KotorSSF;
 
-namespace Kotor.NET.Patcher.Modifiers.ForSSF;
+namespace Kotor.NET.Patcher.Modifiers.ForSSF.Modifiers;
 
 public interface ISSFModifier
 {

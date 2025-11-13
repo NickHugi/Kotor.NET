@@ -1,8 +1,8 @@
 ﻿using IniParser.Model;
 using Kotor.NET.Patcher.Extensions;
-using Kotor.NET.Patcher.Modifiers.For2DA;
 using Kotor.NET.Patcher.Modifiers.For2DA.Assignments;
 using Kotor.NET.Patcher.Modifiers.For2DA.CellValues;
+using Kotor.NET.Patcher.Modifiers.For2DA.Modifiers;
 using Kotor.NET.Patcher.Modifiers.For2DA.RowLocators;
 
 namespace Kotor.NET.Patcher.Parsers.LegacyINI.For2DA;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IniParser.Model;
-using Kotor.NET.Patcher.Modifiers.ForSSF;
+using Kotor.NET.Patcher.Modifiers.ForSSF.Modifiers;
 using Kotor.NET.Patcher.Modifiers.ForSSF.ValueResolver;
 using Kotor.NET.Resources.KotorSSF;
 using static System.Runtime.InteropServices.JavaScript.JSType;

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using Kotor.NET.Patcher.Modifiers.ForGFF.Values;
 using Kotor.NET.Resources.KotorGFF;
 
-namespace Kotor.NET.Patcher.Modifiers.ForGFF;
+namespace Kotor.NET.Patcher.Modifiers.ForGFF.Modifiers;
 
-public class EditFieldUnknownGFFModifier
+public class EditFieldUnknownGFFModifier : IGFFModifier
 {
     public required string Label { get; set; }
     public required BindingPath Path { get; set; }

@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 using Kotor.NET.Patcher.Modifiers.ForGFF.Values;
 using Kotor.NET.Resources.KotorGFF;
 
-namespace Kotor.NET.Patcher.Modifiers.ForGFF;
+namespace Kotor.NET.Patcher.Modifiers.ForGFF.Modifiers;
 
-public class SetFieldUInt8GFFModifier
+public class SetFieldUInt8GFFModifier : IGFFModifier
 {
     public required string Label { get; set; }
     public required BindingPath Path { get; set; }
     public required BaseValue Value { get; set; }
     public required bool MustAlreadyExist { get; set; }
 
-    public void Apply(GFFStruct @struct)
+    public void Apply(GFFStruct @struct, PatcherMemory memory)
     {
         @struct = Path.ResolveStruct(@struct);
         var value = Value.AsUInt8();

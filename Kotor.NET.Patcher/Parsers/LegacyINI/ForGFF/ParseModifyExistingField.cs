@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IniParser.Model;
 using Kotor.NET.Patcher.Modifiers.ForGFF;
+using Kotor.NET.Patcher.Modifiers.ForGFF.Modifiers;
 using Kotor.NET.Patcher.Modifiers.ForGFF.Values;
 
 namespace Kotor.NET.Patcher.Parsers.LegacyINI.ForGFF;

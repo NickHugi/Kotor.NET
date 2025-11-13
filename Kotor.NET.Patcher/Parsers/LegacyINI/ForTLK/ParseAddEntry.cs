@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IniParser.Model;
 using Kotor.NET.Patcher.Modifiers.ForSSF;
-using Kotor.NET.Patcher.Modifiers.ForTLK;
+using Kotor.NET.Patcher.Modifiers.ForTLK.Modifiers;
 using Kotor.NET.Resources.KotorTLK;
 
 namespace Kotor.NET.Patcher.Parsers.LegacyINI.ForTLK;

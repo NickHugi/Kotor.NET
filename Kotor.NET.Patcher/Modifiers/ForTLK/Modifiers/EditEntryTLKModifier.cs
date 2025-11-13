@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Resources.KotorTLK;
 
-namespace Kotor.NET.Patcher.Modifiers.ForTLK;
+namespace Kotor.NET.Patcher.Modifiers.ForTLK.Modifiers;
 
-public class EditEntryTLKModifier
+public class EditEntryTLKModifier : ITLKModifier
 {
     public required int IndexIntoTargetTLK { get; init; }
     public required int IndexIntoSourceTLK { get; init; }
