@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Parsers\LegacyINI\ForTLK\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="ini-parser-netstandard" Version="2.5.2" />
   </ItemGroup>
 
