@@ -12,6 +12,7 @@ using Kotor.NET.Resources.KotorSSF;
 using Kotor.NET.Patcher.Modifiers.ForSSF;
 using Kotor.NET.Patcher.Parsers.LegacyINI.ForSSF;
 using Kotor.NET.Patcher.Modifiers.ForSSF.ValueResolver;
+using Kotor.NET.Patcher.Modifiers.ForSSF.Modifiers;
 
 namespace Kotor.NET.Patcher.Tests.Parsers.LegacyINI.ForSSF;
 

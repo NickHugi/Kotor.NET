@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.NET.Common.Data;
 
 namespace Kotor.NET.Patcher.Modifiers;
 
@@ -174,6 +175,21 @@ public class PatcherMemory
         else
         {
             return _values[key];
+        }
+    }
+    public ResRef GetResRef(string key)
+    {
+        if (!Contains(key))
+        {
+            throw new PatchingException($"No value is stored in memory for key '{key}'.");
+        }
+        else if (_values[key].Length > 16)
+        {
+            throw new PatchingException($"Stored ResRef in memory exceeds 16 characters for key '{key}'.");
+        }
+        else
+        {
+            return new(_values[key]);
         }
     }
 

@@ -28,27 +28,40 @@ public class LocalisedString
     {
         return _substrings.ToList();
     }
+
     public void RemoveAllSubstrings()
     {
         _substrings.Clear();
     }
+
+    public void SetSubstring(int languageID, string text)
+    {
+        var language = (Language)(languageID / 2);
+        var gender = (Gender)(languageID % 2);
+        SetSubstring(language, gender, text);
+    }
+
     public void SetSubstring(Language language, Gender gender, string text)
     {
         RemoveSubstring(language, gender);
         _substrings.Add(new(language, gender, text));
     }
+
     public string? GetSubstring(Language language, Gender gender)
     {
         return _substrings.FirstOrDefault(x => x.Language == language && x.Gender == gender)?.Text;
     }
+
     public void RemoveSubstring(Language language, Gender gender)
     {
         _substrings.Where(x => x.Language != language && x.Gender != gender).ToList();
     }
+
     public bool HasSubstring(Language language, Gender gender)
     {
         return _substrings.Any(x => x.Language == language && x.Gender == gender);
     }
+
     public int Count()
     {
         return _substrings.Count();

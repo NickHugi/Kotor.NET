@@ -7,6 +7,7 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using IniParser.Parser;
 using Kotor.NET.Patcher.Modifiers.ForTLK;
+using Kotor.NET.Patcher.Modifiers.ForTLK.Modifiers;
 using Kotor.NET.Patcher.Parsers.LegacyINI.ForTLK;
 
 namespace Kotor.NET.Patcher.Tests.Parsers.LegacyINI.ForTLK;

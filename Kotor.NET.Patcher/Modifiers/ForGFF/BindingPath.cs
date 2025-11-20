@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.NET.Patcher.Modifiers.ForGFF.Directive;
 using Kotor.NET.Resources.KotorGFF;
 
 namespace Kotor.NET.Patcher.Modifiers.ForGFF;
@@ -12,6 +13,10 @@ public class BindingPath
 {
     public IEnumerable<string> Navigation { get; }
 
+    public BindingPath()
+    {
+        Navigation = new List<string>();
+    }
     public BindingPath(string path)
     {
         Navigation = path.Split(@"\");
@@ -70,7 +75,9 @@ public class BindingPath
     }
     private object Navigate(GFFStruct @struct, string step)
     {
-        return @struct.GetStruct(step) ?? throw new PatchingException($"Failed to navigate to '{this}'.");
+        return (object)@struct.GetStruct(step)
+            ?? (object)@struct.GetList(step)
+            ?? throw new PatchingException($"Failed to navigate to '{this}'.");
     }
     private object Navigate(GFFList @list, string step)
     {

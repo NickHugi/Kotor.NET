@@ -95,31 +95,31 @@ public class GFFStruct
     }
     public bool HasInt8(string fieldName)
     {
-        return HasValue<byte>(fieldName);
+        return HasValue<sbyte>(fieldName);
     }
     public bool HasUInt16(string fieldName)
     {
-        return HasValue<byte>(fieldName);
+        return HasValue<ushort>(fieldName);
     }
     public bool HasInt16(string fieldName)
     {
-        return HasValue<byte>(fieldName);
+        return HasValue<short>(fieldName);
     }
     public bool HasUInt32(string fieldName)
     {
-        return HasValue<byte>(fieldName);
+        return HasValue<uint>(fieldName);
     }
     public bool HasInt32(string fieldName)
     {
-        return HasValue<byte>(fieldName);
+        return HasValue<int>(fieldName);
     }
     public bool HasUInt64(string fieldName)
     {
-        return HasValue<byte>(fieldName);
+        return HasValue<ulong>(fieldName);
     }
     public bool HasInt64(string fieldName)
     {
-        return HasValue<byte>(fieldName);
+        return HasValue<long>(fieldName);
     }
     public bool HasSingle(string fieldName)
     {

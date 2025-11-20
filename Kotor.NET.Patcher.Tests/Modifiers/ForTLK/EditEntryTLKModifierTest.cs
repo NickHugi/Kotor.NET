@@ -8,6 +8,7 @@ using FluentAssertions.Execution;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Patcher.Modifiers;
 using Kotor.NET.Patcher.Modifiers.ForTLK;
+using Kotor.NET.Patcher.Modifiers.ForTLK.Modifiers;
 using Kotor.NET.Resources.KotorTLK;
 
 namespace Kotor.NET.Patcher.Tests.Modifiers.ForTLK;
