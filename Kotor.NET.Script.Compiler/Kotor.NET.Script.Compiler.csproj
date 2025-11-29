@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="YaccLexTools" Version="1.2.3" />
+  </ItemGroup>
+  <ItemGroup Label="Calculator">
+    <YaccFile Include="Calculator\Calculator.Language.grammar.y">
+      <OutputFile>Calculator\Calculator.Parser.Generated.cs</OutputFile>
+      <Arguments>/gplex /nolines</Arguments>
+    </YaccFile>
+    <None Include="Calculator\Calculator.Parser.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Calculator.Language.grammar.y</DependentUpon>
+    </None>
+    <LexFile Include="Calculator\Calculator.Language.analyzer.lex">
+      <OutputFile>Calculator\Calculator.Scanner.Generated.cs</OutputFile>
+    </LexFile>
+    <None Include="Calculator\Calculator.Scanner.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Calculator.Language.analyzer.lex</DependentUpon>
+    </None>
+  </ItemGroup>
+</Project>

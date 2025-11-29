@@ -1,0 +1,147 @@
+
+// ==========================================================================
+//  GPPG error listing for yacc source file <Calculator\Calculator.Language.grammar.y - 28/11/2025 12:24:05 AM>
+// ==========================================================================
+//  Version:  1.5.3
+//  DateTime: 28/11/2025 12:24:07 AM
+// ==========================================================================
+
+
+%namespace Kotor_NET_Script_Compiler.Calculator
+%using Kotor.NET.Script.Compiler.AST;
+%partial
+%parsertype CalculatorParser
+%visibility internal
+%tokentype Token
+
+%{
+public class AstNode {}
+%}
+
+%valuetype AstNode
+
+
+%start compilation_unit
+
+%token SEMI, COMMA,
+    LBRACE, RBRACE,
+    LPAREN, RPAREN,
+    IDENTIFIER,
+    RETURN,
+    VOID_TYPE, INT_TYPE, FLOAT_TYPE, STRING_TYPE, BOOL_TYPE, VECTOR_TYPE, LOCATION_TYPE, EFFECT_TYPE,
+    INT_LITERAL, FLOAT_LITERAL, STRING_LITERAL, BOOL_LITERAL, OBJECT_LITERAL
+
+%%
+// Warning: NonTerminal symbol "initialisation_statement" is unreachable
+// ---------------------------------------------------------------------
+
+compilation_unit
+    : declaration_list					{ $$ = new AstNode(); }
+    ;
+
+declaration_list
+    : declaration
+    | declaration_list declaration      { }
+    |                                   { }
+    ;
+
+declaration
+    : forward_declaration               { Console.WriteLine("Hello World"); }
+    | complete_declaration              { }
+    ;
+
+complete_declaration                    
+    : function_signature LBRACE statement_list RBRACE       { }
+    ;
+
+forward_declaration
+    : function_signature SEMI            { }
+    ;
+
+function_signature
+    : type_specifier IDENTIFIER LPAREN parameter_list RPAREN    { }
+    ;
+
+parameter_list
+    : parameter_declaration                                     { }
+    | parameter_list COMMA parameter_declaration                { }
+    |                                                           { }
+    ;
+
+parameter_declaration
+    : type_specifier IDENTIFIER                                 { }
+    ;
+
+type_specifier 
+    : VOID_TYPE                                             { }
+    | INT_TYPE                                              { }
+    | FLOAT_TYPE                                            { }
+    | STRING_TYPE                                           { }
+    | VECTOR_TYPE                                           { }
+    | LOCATION_TYPE                                         { }
+    | EFFECT_TYPE                                           { }
+    ;
+
+statement_list
+    : statement                                             { }
+    | statement_list statement                              { }
+    |                                                       { }
+    ;
+
+statement
+    : SEMI                                                  { }
+    | declaration_statement                                 { }
+    | return_statement                                      { } 
+    | expression SEMI                                       { }
+    ;
+
+
+declaration_statement
+    : type_specifier variable_declarators SEMI              { }
+    ;
+
+
+return_statement
+    : RETURN SEMI                                           { }
+    | RETURN expression SEMI                                { }
+    ;
+
+
+variable_declarators
+    : IDENTIFIER                                            { }
+    | variable_declarators COMMA IDENTIFIER                 { }
+    ;
+
+
+initialisation_statement
+    : type_specifier IDENTIFIER
+    ;
+
+
+expression
+    : constant_expression                                   { }
+    | function_call_expression                              { }
+    ;
+
+constant_expression
+    : INT_LITERAL                                           { }
+    | FLOAT_LITERAL                                         { }
+    | STRING_LITERAL                                        { }
+    | OBJECT_LITERAL                                        { }
+    | BOOL_LITERAL                                          { }
+    ;
+
+function_call_expression
+    : IDENTIFIER LPAREN argument_list RPAREN
+    ;
+
+argument_list
+    : expression                                            { }
+    | argument_list expression                              { }
+    ;
+
+
+
+%%
+// ==========================================================================
+

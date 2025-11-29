@@ -1,0 +1,75 @@
+
+// ==========================================================================
+//  GPLEX error listing for lex source file <Calculator.Language.analyzer.lex>
+// ==========================================================================
+//  Version:  1.2.3
+//  DateTime: 27/11/2025 11:46:41 PM
+// ==========================================================================
+
+
+%namespace Kotor_NET_Script_Compiler.Calculator
+%scannertype CalculatorScanner
+%visibility internal
+%tokentype Token
+
+%option stack, minimize, parser, verbose, persistbuffer, noembedbuffers
+
+Identifier [A-Za-z_][A-Za-z0-9_]*
+Digit [0-9]
+Whitespace [ \t\r\n]+
+
+%{
+
+%}
+
+
+%%
+
+
+{Whitespace}+		/* skip */
+
+"{"		{ return (int)Token.LBRACE; } /* yytext */
+"}"		{ return (int)Token.RBRACE; }
+"("		{ return (int)Token.LPAREN; }
+")"		{ return (int)Token.RPAREN; }
+";"		{ return (int)Token.SEMI; }
+","		{ return (int)Token.COMMA; }
+"void"		            { return (int)Token.VOID_TYPE; }
+"int"		            { return (int)Token.INT_TYPE; }
+"float"		            { return (int)Token.FLOAT_TYPE; }
+"string"		        { return (int)Token.STRING_TYPE; }
+"vector"		        { return (int)Token.VECTOR_TYPE; }
+"location"		        { return (int)Token.LOCATION_TYPE; }
+"effect"		        { return (int)Token.EFFECT_TYPE; }
+{Identifier}		    { return (int)Token.IDENTIFIER; }
+//^^^^^^^^^^
+// Warning: This pattern always overrides ""true"" 
+// Warning: This pattern always overrides ""false"" 
+// Warning: This pattern always overrides ""objectself"" 
+// Warning: This pattern always overrides ""objectinvalid"" 
+// Warning: This pattern always overrides ""return"" 
+// ---------------------------------------------------------
+{Digit}+		        { return (int)Token.INT_LITERAL; }
+"true"                  { return (int)Token.BOOL_LITERAL; }
+//^^^^
+// Warning: This pattern always overridden by "{Identifier}" 
+// ----------------------------------------------------------
+"false"                 { return (int)Token.BOOL_LITERAL; }
+//^^^^^
+// Warning: This pattern always overridden by "{Identifier}" 
+// ----------------------------------------------------------
+"objectself"            { return (int)Token.OBJECT_LITERAL; }
+//^^^^^^^^^^
+// Warning: This pattern always overridden by "{Identifier}" 
+// ----------------------------------------------------------
+"objectinvalid"         { return (int)Token.OBJECT_LITERAL; }
+//^^^^^^^^^^^^^
+// Warning: This pattern always overridden by "{Identifier}" 
+// ----------------------------------------------------------
+"return"                { return (int)Token.RETURN; }
+//^^^^^^
+// Warning: This pattern always overridden by "{Identifier}" 
+// ----------------------------------------------------------
+%%
+// ==========================================================================
+

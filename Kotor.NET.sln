@@ -19,6 +19,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kotor.DevelopmentKit.Base",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kotor.DevelopmentKit.EditorGFF", "Kotor.DevelopmentKit.EditorGFF\Kotor.DevelopmentKit.EditorGFF.csproj", "{55CF0D51-B431-4426-8942-29F70E4D1CF7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kotor.NET.Script.Compiler", "Kotor.NET.Script.Compiler\Kotor.NET.Script.Compiler.csproj", "{5B972CCD-21D3-4899-8131-0CF7D0FD91D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kotor.NET.Script.Compiler.Tests", "Kotor.NET.Script.Compiler.Tests\Kotor.NET.Script.Compiler.Tests.csproj", "{7D3AC97A-C3C3-4F0B-972E-DD2176E01AAB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{55CF0D51-B431-4426-8942-29F70E4D1CF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55CF0D51-B431-4426-8942-29F70E4D1CF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55CF0D51-B431-4426-8942-29F70E4D1CF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B972CCD-21D3-4899-8131-0CF7D0FD91D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B972CCD-21D3-4899-8131-0CF7D0FD91D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B972CCD-21D3-4899-8131-0CF7D0FD91D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B972CCD-21D3-4899-8131-0CF7D0FD91D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D3AC97A-C3C3-4F0B-972E-DD2176E01AAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D3AC97A-C3C3-4F0B-972E-DD2176E01AAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D3AC97A-C3C3-4F0B-972E-DD2176E01AAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D3AC97A-C3C3-4F0B-972E-DD2176E01AAB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,6 +68,8 @@ Global
 		{D7FCF73A-9DC7-4224-AC64-BDD5CF40D5AA} = {739D01ED-DE35-4946-8809-424A58B8D01C}
 		{707B30C5-C7EB-460A-8F9F-B4794AF9D8A9} = {739D01ED-DE35-4946-8809-424A58B8D01C}
 		{55CF0D51-B431-4426-8942-29F70E4D1CF7} = {739D01ED-DE35-4946-8809-424A58B8D01C}
+		{5B972CCD-21D3-4899-8131-0CF7D0FD91D1} = {5A80EBC7-36DC-4E56-A52B-3C3547E0F912}
+		{7D3AC97A-C3C3-4F0B-972E-DD2176E01AAB} = {04B783EF-93EC-4A15-ADD4-0BF8C60EDA75}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C3B4FE44-EA0E-476F-8106-438E6CC691A7}
