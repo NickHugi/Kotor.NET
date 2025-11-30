@@ -25,4 +25,9 @@
     </PackageReference>
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kotor.NET.Graphics.OpenGL\Kotor.NET.Graphics.OpenGL.csproj" />
+    <ProjectReference Include="..\Kotor.NET.Graphics\Kotor.NET.Graphics.csproj" />
+  </ItemGroup>
 </Project>

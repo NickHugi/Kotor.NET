@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kotor.NET.Graphics.GPU;
+
+public interface IModel
+{
+    public IModel[] Children { get; }
+    public string Texture { get; }
+    public IVertexArrayObject VertexArrayObject { get; }
+    public Matrix4x4 Transformation { get; }
+}

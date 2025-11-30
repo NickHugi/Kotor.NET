@@ -15,6 +15,6 @@
         <vm:MDLResourceViewerViewModel/>
     </Design.DataContext>
 
-    <views:SceneControl Width="100" Height="100" />
+    <views:SceneControl />
 
 </Window>

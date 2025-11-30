@@ -7,6 +7,7 @@ using Kotor.NET.Formats.BinaryMDL;
 using Kotor.NET.Graphics.Factories;
 using Kotor.NET.Graphics.GPU;
 using Kotor.NET.Graphics.OpenGL.GPU;
+using Silk.NET.Core.Contexts;
 using Silk.NET.OpenGL;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
