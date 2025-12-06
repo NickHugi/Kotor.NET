@@ -22,7 +22,7 @@ public class ShaderFactory(GL _gl) : IShaderFactory
     public IShader FromFile(string vertexShader, string fragmentShader)
     {
         using var vertexShaderStream = File.OpenRead(vertexShader);
-        using var fragmentShaderStream = File.OpenRead(vertexShader);
+        using var fragmentShaderStream = File.OpenRead(fragmentShader);
         return FromStream(vertexShaderStream, fragmentShaderStream);
     }
     public IShader FromStream(Stream vertexShader, Stream fragmentShader)
@@ -66,6 +66,9 @@ public class ShaderFactory(GL _gl) : IShaderFactory
             string infoLog = _gl.GetShaderInfoLog(programID);
             throw new Exception(infoLog);
         }
+
+        _gl.DeleteShader(vertexShaderID);
+        _gl.DeleteShader(fragmentShaderID);
 
         return new GPU.Shader(_gl, programID, vertexShaderID, fragmentShaderID);
     }

@@ -29,4 +29,9 @@ public class Shader : IShader
     {
         _gl.UseProgram(ID);
     }
+
+    public int GetUniformLocation(string name)
+    {
+        return _gl.GetUniformLocation(ID, name);
+    }
 }

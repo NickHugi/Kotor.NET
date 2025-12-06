@@ -11,4 +11,5 @@ public interface IShader
     public uint ID { get; }
 
     public void Activate();
+    int GetUniformLocation(string name);
 }

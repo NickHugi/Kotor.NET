@@ -8,11 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Assets\" />
+    <ProjectReference Include="..\Kotor.NET\Kotor.NET.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Kotor.NET\Kotor.NET.csproj" />
+    <None Update="Assets\fragment.glsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\vertex.glsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

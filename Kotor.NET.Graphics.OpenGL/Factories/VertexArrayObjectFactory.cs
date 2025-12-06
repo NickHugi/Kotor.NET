@@ -33,27 +33,49 @@ public class VertexArrayObjectFactory : IVertexArrayObjectFactory
         var elementCount = (uint)elementData.Count() / 2;
 
         var bitmask = (MDLBinaryMDXVertexBitmask)flags;
-        if (MDLBinaryMDXVertexBitmask.Vertices.HasFlag(bitmask))
+        if (!bitmask.Equals(0))
         {
-            gl.EnableVertexAttribArray(1);
-            gl.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, blockSize, (void*)positionStride);
-        }
+            if (MDLBinaryMDXVertexBitmask.Vertices.HasFlag(bitmask))
+            {
+                gl.EnableVertexAttribArray(0);
+                gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, blockSize, (void*)positionStride);
+            }
 
-        if (MDLBinaryMDXVertexBitmask.UV1.HasFlag(bitmask))
-        {
-            gl.EnableVertexAttribArray(3);
-            gl.VertexAttribPointer(3, 2, VertexAttribPointerType.Float, false, blockSize, (void*)uv1Stride);
-        }
+            if (MDLBinaryMDXVertexBitmask.UV1.HasFlag(bitmask))
+            {
+                gl.EnableVertexAttribArray(3);
+                gl.VertexAttribPointer(3, 2, VertexAttribPointerType.Float, false, blockSize, (void*)uv1Stride);
+            }
 
-        if (MDLBinaryMDXVertexBitmask.UV2.HasFlag(bitmask))
-        {
-            gl.EnableVertexAttribArray(4);
-            gl.VertexAttribPointer(4, 2, VertexAttribPointerType.Float, false, blockSize, (void*)uv2Stride);
+            if (MDLBinaryMDXVertexBitmask.UV2.HasFlag(bitmask))
+            {
+                gl.EnableVertexAttribArray(4);
+                gl.VertexAttribPointer(4, 2, VertexAttribPointerType.Float, false, blockSize, (void*)uv2Stride);
+            }
         }
 
         gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
         gl.BindVertexArray(0);
 
         return new VertexArrayObject(gl, vertexArrayObjectID, vertexbufferObjectID, elementBufferObjectID, elementCount);
+    }
+
+    public unsafe IVertexArrayObject FromXYZ(GL gl, float[] vertices, ushort[] indices)
+    {
+        var vao = gl.GenVertexArray();
+        gl.BindVertexArray(vao);
+
+        var vbo = gl.GenBuffer();
+        gl.BindBuffer(BufferTargetARB.ArrayBuffer, vbo);
+        gl.BufferData<float>(BufferTargetARB.ArrayBuffer, vertices, BufferUsageARB.StaticDraw);
+
+        var ebo = gl.GenBuffer();
+        gl.BindBuffer(BufferTargetARB.ElementArrayBuffer, ebo);
+        gl.BufferData<ushort>(BufferTargetARB.ElementArrayBuffer, indices, BufferUsageARB.StaticDraw);
+
+        gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), (void*)0);
+        gl.EnableVertexAttribArray(0);
+
+        return new VertexArrayObject(gl, vao, vbo, ebo, 3);
     }
 }
