@@ -7,7 +7,7 @@ using Kotor.NET.Graphics.Model;
 
 namespace Kotor.NET.Graphics.OpenGL.Model;
 
-public class Model
+public class KModel
 {
     public DummyNode Root { get; set; }
 }
