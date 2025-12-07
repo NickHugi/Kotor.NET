@@ -9,6 +9,8 @@ namespace Kotor.NET.Graphics;
 
 public interface IAssetManager
 {
+    public static IAssetManager Manager { get; }
+
     public IShader GetShader(string shader);
     public IVertexArrayObject GetVAO(string vao);
     public IModel GetModel(string model);

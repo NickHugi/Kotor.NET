@@ -11,4 +11,12 @@ public abstract class BaseNode
 {
     public readonly ICollection<BaseNode> Nodes = new List<BaseNode>();
     public Matrix4x4 Transformation { get; set; }
+
+    public virtual void Render(IRenderFrame renderFrame)
+    {
+        foreach (BaseNode node in Nodes)
+        {
+            node.Render(renderFrame);
+        }
+    }
 }

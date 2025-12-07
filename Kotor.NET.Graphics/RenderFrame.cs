@@ -27,4 +27,9 @@ public class RenderFrame : IRenderFrame
             renderable.VAO.Draw();
         }
     }
+
+    public void AddObject(IRenderObject renderObject)
+    {
+        _objects.Add(renderObject);
+    }
 }
