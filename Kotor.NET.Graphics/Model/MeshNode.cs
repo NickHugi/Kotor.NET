@@ -8,19 +8,19 @@ using Kotor.NET.Graphics.GPU;
 
 namespace Kotor.NET.Graphics.Model;
 
-public class MeshNode : BaseNode
+public class MeshNode : DummyNode
 {
-    public required string Mesh { get; set; }
-    public required string Texture1 { get; set; }
-    public required string Texture2 { get; set; }
+    public IVertexArrayObject Mesh { get; set; }
+    public string Texture1 { get; set; } = "";
+    public string Texture2 { get; set; } = "";
 
     public override void Render(IRenderFrame frame)
     {
         var shader = IAssetManager.Manager.GetShader("basic");
+        //var texture = IAssetManager.Manager.GetTexture(Texture1);
         ITexture texture = null;
-        var mesh = IAssetManager.Manager.GetVAO(Mesh);
 
-        var renderObject = new RenderObject(shader, texture, mesh, Matrix4x4.Identity);
+        var renderObject = new RenderObject(shader, texture, Mesh, Matrix4x4.Identity);
         frame.AddObject(renderObject);
 
         base.Render(frame);

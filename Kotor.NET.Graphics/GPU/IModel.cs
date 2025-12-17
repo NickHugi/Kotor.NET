@@ -9,8 +9,7 @@ namespace Kotor.NET.Graphics.GPU;
 
 public interface IModel
 {
-    public IModel[] Children { get; }
-    public string Texture { get; }
-    public IVertexArrayObject VertexArrayObject { get; }
     public Matrix4x4 Transformation { get; }
+
+    void Render(IRenderFrame frame);
 }

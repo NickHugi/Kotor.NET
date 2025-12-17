@@ -17,12 +17,12 @@ public class RenderFrame : IRenderFrame
 
     public void Render()
     {
-        var optimized = _objects.OrderBy(x => x.Shader.ID).ThenBy(x => x.Texture.ID).ToList();
+        var optimized = _objects.OrderBy(x => x.Shader.ID).ThenBy(x => x.Texture?.ID).ToList();
 
         foreach (var renderable in optimized)
         {
-            renderable.Shader.Activate();
-            renderable.Texture.Activate();
+            //renderable.Shader.Activate();
+            //renderable.Texture.Activate();
             // TODO - shader
             renderable.VAO.Draw();
         }

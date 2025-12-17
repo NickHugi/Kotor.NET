@@ -35,23 +35,23 @@ public class VertexArrayObjectFactory : IVertexArrayObjectFactory
         var bitmask = (MDLBinaryMDXVertexBitmask)flags;
         if (!bitmask.Equals(0))
         {
-            if (MDLBinaryMDXVertexBitmask.Vertices.HasFlag(bitmask))
+            if (bitmask.HasFlag(MDLBinaryMDXVertexBitmask.Vertices))
             {
                 gl.EnableVertexAttribArray(0);
                 gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, blockSize, (void*)positionStride);
             }
 
-            if (MDLBinaryMDXVertexBitmask.UV1.HasFlag(bitmask))
-            {
-                gl.EnableVertexAttribArray(3);
-                gl.VertexAttribPointer(3, 2, VertexAttribPointerType.Float, false, blockSize, (void*)uv1Stride);
-            }
+            //if (bitmask.HasFlag(MDLBinaryMDXVertexBitmask.UV1))
+            //{
+            //    gl.EnableVertexAttribArray(3);
+            //    gl.VertexAttribPointer(2, 2, VertexAttribPointerType.Float, false, blockSize, (void*)uv1Stride);
+            //}
 
-            if (MDLBinaryMDXVertexBitmask.UV2.HasFlag(bitmask))
-            {
-                gl.EnableVertexAttribArray(4);
-                gl.VertexAttribPointer(4, 2, VertexAttribPointerType.Float, false, blockSize, (void*)uv2Stride);
-            }
+            //if (bitmask.HasFlag(MDLBinaryMDXVertexBitmask.UV2))
+            //{
+            //    gl.EnableVertexAttribArray(4);
+            //    gl.VertexAttribPointer(3, 2, VertexAttribPointerType.Float, false, blockSize, (void*)uv2Stride);
+            //}
         }
 
         gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);

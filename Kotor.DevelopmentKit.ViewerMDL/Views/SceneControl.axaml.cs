@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using Avalonia;
@@ -8,7 +9,9 @@ using Avalonia.Markup.Xaml;
 using Avalonia.OpenGL;
 using Avalonia.OpenGL.Controls;
 using Kotor.NET.Formats.BinaryMDL;
+using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.GPU;
+using Kotor.NET.Graphics.OpenGL;
 using Kotor.NET.Graphics.OpenGL.Factories;
 using Kotor.NET.Graphics.OpenGL.GPU;
 using Silk.NET.Core.Contexts;
@@ -27,17 +30,12 @@ public partial class SceneControl : OpenGlControlBase
     public SceneControl()
     {
         InitializeComponent();
+        IAssetManager.Manager = new AssetManager();
     }
 
     protected unsafe override void OnOpenGlInit(GlInterface gl)
     {
         base.OnOpenGlInit(gl);
-
-        _context = new AvaloniaSilkNativeContext(gl.GetProcAddress);
-        _silk = new GL(_context);
-
-        gl.ClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-
 
         float[] vertices =
             [
@@ -55,8 +53,17 @@ public partial class SceneControl : OpenGlControlBase
         byte[] vertexData = vertices.SelectMany(BitConverter.GetBytes).ToArray();
         byte[] indexData = indices.SelectMany(BitConverter.GetBytes).ToArray();
 
+        _context = new AvaloniaSilkNativeContext(gl.GetProcAddress);
+        _silk = new GL(_context);
+        _silk.Enable(EnableCap.DepthTest);
+
         _shader = new ShaderFactory(_silk).FromFile("Assets/vertex.glsl", "Assets/fragment.glsl");
-        _vao = new VertexArrayObjectFactory().FromBinary(_silk, vertexData, indexData, 0, 0, 0, 0, 12, (uint)(MDLBinaryMDXVertexBitmask.Vertices));
+        IAssetManager.Manager.AddShader("basic", _shader);
+
+        var mdl = File.ReadAllBytes(@"C:\Users\hugin\Desktop\Modding\model_c_selkath\c_selkath.mdl");
+        var mdx = File.ReadAllBytes(@"C:\Users\hugin\Desktop\Modding\model_c_selkath\c_selkath.mdx");
+        _model = new ModelLoader().LoadModel(_silk, mdl, mdx);
+        //_vao = new VertexArrayObjectFactory().FromBinary(_silk, vertexData, indexData, 0, 0, 0, 0, 12, (uint)(MDLBinaryMDXVertexBitmask.Vertices));
     }
 
     protected override void OnOpenGlDeinit(GlInterface gl)
@@ -64,6 +71,7 @@ public partial class SceneControl : OpenGlControlBase
         base.OnOpenGlDeinit(gl);
     }
 
+    private IModel _model;
     private IVertexArrayObject _vao;
     private IShader _shader;
     protected override void OnOpenGlRender(GlInterface gl, int fb)
@@ -73,8 +81,10 @@ public partial class SceneControl : OpenGlControlBase
         var height = (uint)(Bounds.Height * scale);
         _silk.Viewport(0, 0, width, height);
 
-        _silk.ClearColor(0.0f, 0.25f, 0.0f, 1.0f);
-        _silk.Clear(ClearBufferMask.ColorBufferBit);
+        _silk.ClearColor(0.1f, 0.0f, 0.0f, 1.0f);
+        _silk.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
+
+        var frame = new RenderFrame([]);
 
         var projectionLocation = _shader.GetUniformLocation("projection");
         var viewLocation = _shader.GetUniformLocation("view");
@@ -82,12 +92,16 @@ public partial class SceneControl : OpenGlControlBase
 
         var identity = Matrix4x4.Identity.ToDoubleArray();
         var projection = Matrix4x4.CreatePerspectiveFieldOfView((float)Math.PI/3f, width / (float)height, 0.001f, 1000).ToDoubleArray();
-        var view = Matrix4x4.CreateLookAt(new(0, 0, 2), new(), new(0, 1, 0)).ToDoubleArray();
+        //var view = Matrix4x4.CreateLookAt(new(-5, -5, 1), new(0, 0, 1), new(0, 0, 1)).ToDoubleArray();
+        var view = Matrix4x4.CreateLookAt(new(2, 4, 4), new(0, 0, 0), new(0, 1, 0)).ToDoubleArray();
         _shader.Activate();
         _silk.UniformMatrix4(projectionLocation, false, projection);
         _silk.UniformMatrix4(viewLocation, false, view);
         _silk.UniformMatrix4(modelLocation, false, identity);
-        _vao.Draw();
+        _model.Render(frame);
+        //_vao.Draw();
+
+        frame.Render();
     }
 }
 

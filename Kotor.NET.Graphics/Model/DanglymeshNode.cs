@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace Kotor.NET.Graphics.Model;
 
-public class DanglymeshNode
+public class DanglymeshNode : MeshNode
 {
 }

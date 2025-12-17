@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace Kotor.NET.Graphics.Model;
 
-public class WalkmeshNode : MeshNode
+public class SabermeshNode : DummyNode
 {
 }

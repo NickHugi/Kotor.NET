@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace Kotor.NET.Graphics.Model;
 
-public class EmitterNode
+public class EmitterNode : DummyNode
 {
 }

@@ -32,11 +32,12 @@ public class Scene
     }
     private List<IRenderObject> BuildNestedRenderObject(IModel model, Matrix4x4 parentTransformation)
     {
-        var shader = AssetManager.GetShader("default");
-        var texture = AssetManager.GetTexture(model.Texture);
-        var vao = model.VertexArrayObject;
-        var transformation = parentTransformation * model.Transformation;
-        var renderObject = new RenderObject(shader, texture, vao, transformation);
-        return [renderObject, ..model.Children.SelectMany(model => BuildNestedRenderObject(model, Matrix4x4.Identity))];
+        return null;
+    //    var shader = AssetManager.GetShader("default");
+    //    var texture = AssetManager.GetTexture(model.Texture);
+    //    var vao = model.VertexArrayObject;
+    //    var transformation = parentTransformation * model.Transformation;
+    //    var renderObject = new RenderObject(shader, texture, vao, transformation);
+    //    return [renderObject, ..model.Children.SelectMany(model => BuildNestedRenderObject(model, Matrix4x4.Identity))];
     }
 }

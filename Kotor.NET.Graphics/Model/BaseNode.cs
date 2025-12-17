@@ -14,9 +14,9 @@ public abstract class BaseNode
 
     public virtual void Render(IRenderFrame renderFrame)
     {
-        foreach (BaseNode node in Nodes)
-        {
-            node.Render(renderFrame);
-        }
+        //foreach (BaseNode node in Nodes)
+        //{
+        //    node.Render(renderFrame);
+        //}
     }
 }
