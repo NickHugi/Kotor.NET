@@ -20,7 +20,8 @@ public class MeshNode : DummyNode
         //var texture = IAssetManager.Manager.GetTexture(Texture1);
         ITexture texture = null;
 
-        var renderObject = new RenderObject(shader, texture, Mesh, Matrix4x4.Identity);
+        var renderObject = new RenderObject(shader, texture, Mesh, Transformation);
+        //var renderObject = new RenderObject(shader, texture, Mesh, Matrix4x4.Identity);
         frame.AddObject(renderObject);
 
         base.Render(frame);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,4 +13,5 @@ public interface IShader
 
     public void Activate();
     int GetUniformLocation(string name);
+    void SetMatrix4x4(string name, Matrix4x4 value);
 }

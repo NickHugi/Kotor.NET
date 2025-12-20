@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.DevelopmentKit.ViewerMDL.Views;
 using Kotor.NET.Graphics.GPU;
 using Silk.NET.OpenGL;
 
@@ -33,5 +35,11 @@ public class Shader : IShader
     public int GetUniformLocation(string name)
     {
         return _gl.GetUniformLocation(ID, name);
+    }
+
+    public void SetMatrix4x4(string name, Matrix4x4 value)
+    {
+        var location = GetUniformLocation(name);
+        _gl.UniformMatrix4(location, false, value.ToDoubleArray());
     }
 }

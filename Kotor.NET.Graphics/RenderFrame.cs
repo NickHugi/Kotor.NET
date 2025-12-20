@@ -24,6 +24,7 @@ public class RenderFrame : IRenderFrame
             //renderable.Shader.Activate();
             //renderable.Texture.Activate();
             // TODO - shader
+            renderable.Shader.SetMatrix4x4("model", renderable.Transformation);
             renderable.VAO.Draw();
         }
     }

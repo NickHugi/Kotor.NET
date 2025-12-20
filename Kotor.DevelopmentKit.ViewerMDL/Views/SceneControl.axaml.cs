@@ -92,30 +92,14 @@ public partial class SceneControl : OpenGlControlBase
 
         var identity = Matrix4x4.Identity.ToDoubleArray();
         var projection = Matrix4x4.CreatePerspectiveFieldOfView((float)Math.PI/3f, width / (float)height, 0.001f, 1000).ToDoubleArray();
-        //var view = Matrix4x4.CreateLookAt(new(-5, -5, 1), new(0, 0, 1), new(0, 0, 1)).ToDoubleArray();
-        var view = Matrix4x4.CreateLookAt(new(2, 4, 4), new(0, 0, 0), new(0, 1, 0)).ToDoubleArray();
+        var view = Matrix4x4.CreateLookAt(new(5, 0, 1), new(0, 0, 2), new(0, 0, 1)).ToDoubleArray();
         _shader.Activate();
         _silk.UniformMatrix4(projectionLocation, false, projection);
         _silk.UniformMatrix4(viewLocation, false, view);
         _silk.UniformMatrix4(modelLocation, false, identity);
         _model.Render(frame);
-        //_vao.Draw();
 
         frame.Render();
-    }
-}
-
-public static class Matrix4x4Exntensions
-{
-    public static float[] ToDoubleArray(this Matrix4x4 m)
-    {
-        return
-        [
-            m.M11, m.M12, m.M13, m.M14,
-            m.M21, m.M22, m.M23, m.M24,
-            m.M31, m.M32, m.M33, m.M34,
-            m.M41, m.M42, m.M43, m.M44
-        ];
     }
 }
 
@@ -142,6 +126,33 @@ public class AvaloniaSilkNativeContext : INativeContext
     {
         addr = _getProcAddress(proc);
         return true;
+    }
+
+    public static Matrix4x4 CreateLookAtZUp(
+        Vector3 eye,
+        Vector3 target)
+    {
+        // Forward (camera looks toward target)
+        Vector3 forward = Vector3.Normalize(eye - target);
+
+        // Z is up
+        Vector3 up = Vector3.UnitZ;
+
+        // Right = Up × Forward
+        Vector3 right = Vector3.Normalize(Vector3.Cross(up, forward));
+
+        // Recompute orthogonal up
+        Vector3 trueUp = Vector3.Cross(forward, right);
+
+        return new Matrix4x4(
+            right.X, trueUp.X, forward.X, 0f,
+            right.Y, trueUp.Y, forward.Y, 0f,
+            right.Z, trueUp.Z, forward.Z, 0f,
+            -Vector3.Dot(right, eye),
+            -Vector3.Dot(trueUp, eye),
+            -Vector3.Dot(forward, eye),
+            1f
+        );
     }
 
     //public IntPtr GetProcAddress(string procName)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Extensions;
@@ -27,15 +28,18 @@ public class ModelLoader
 
         return new KModel()
         {
-            Root = LoadNode(gl, reader, mdxReader, modelHeader.OffsetToRootNode)
+            Root = LoadNode(gl, reader, mdxReader, modelHeader.OffsetToRootNode, null)
         };
     }
 
-    private BaseNode LoadNode(GL gl, MDLBinaryReader reader, BinaryReader mdxReader, int nodeOffset)
+    private BaseNode LoadNode(GL gl, MDLBinaryReader reader, BinaryReader mdxReader, int nodeOffset, BaseNode? parent)
     {
         reader.SetStreamPosition(nodeOffset);
         var dummyHeader = new MDLBinaryNodeHeader(reader);
         BaseNode node;
+
+        var position = new Vector3(dummyHeader.Position.X, dummyHeader.Position.Y, dummyHeader.Position.Z);
+        var orientation = new Quaternion(dummyHeader.Rotation.Y, dummyHeader.Rotation.Z, dummyHeader.Rotation.W, dummyHeader.Rotation.X);
 
         if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.TrimeshFlag))
         {
@@ -65,9 +69,12 @@ public class ModelLoader
                 var danglyHeader = new MDLBinaryDanglyHeader(reader);
                 node = new DanglymeshNode()
                 {
+                    Parent = parent,
                     Mesh = vao,
                     Texture1 = trimeshHeader.Texture,
                     Texture2 = trimeshHeader.Lightmap,
+                    Position = position,
+                    Orientation = orientation
                 };
             }
             else if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.SkinFlag))
@@ -75,9 +82,12 @@ public class ModelLoader
                 var skinHeader = new MDLBinarySkinmeshHeader(reader);
                 node = new SkinmeshNode()
                 {
+                    Parent = parent,
                     Mesh = vao,
                     Texture1 = trimeshHeader.Texture,
                     Texture2 = trimeshHeader.Lightmap,
+                    Position = position,
+                    Orientation = orientation
                 };
             }
             else if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.SaberFlag))
@@ -90,18 +100,24 @@ public class ModelLoader
                 var walkmeshHeader = new MDLBinaryWalkmeshHeader(reader);
                 node = new WalkmeshNode()
                 {
+                    Parent = parent,
                     Mesh = vao,
                     Texture1 = trimeshHeader.Texture,
                     Texture2 = trimeshHeader.Lightmap,
+                    Position = position,
+                    Orientation = orientation
                 };
             }
             else
             {
                 node = new MeshNode()
                 {
+                    Parent = parent,
                     Mesh = vao,
                     Texture1 = trimeshHeader.Texture,
                     Texture2 = trimeshHeader.Lightmap,
+                    Position = position,
+                    Orientation = orientation
                 };
             }
         }
@@ -134,8 +150,7 @@ public class ModelLoader
         }
         foreach (var childOffset in childOffsets)
         {
-            node.Nodes.Add(
-                LoadNode(gl, reader, mdxReader, childOffset));
+            node.Nodes.Add(LoadNode(gl, reader, mdxReader, childOffset, node));
         }
 
         return node;
