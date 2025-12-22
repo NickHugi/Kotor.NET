@@ -93,7 +93,12 @@ public class ModelLoader
             else if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.SaberFlag))
             {
                 var saberHeader = new MDLBinarySabermeshHeader(reader);
-                node = new SabermeshNode();
+                node = new SabermeshNode()
+                {
+                    Parent = parent,
+                    Position = position,
+                    Orientation = orientation
+                };
             }
             else if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.AABBFlag))
             {
@@ -123,19 +128,39 @@ public class ModelLoader
         }
         else if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.LightFlag))
         {
-            node = new LightNode();
+            node = new LightNode()
+            {
+                Parent = parent,
+                Position = position,
+                Orientation = orientation
+            };
         }
         else if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.EmitterFlag))
         {
-            node = new EmitterNode();
+            node = new EmitterNode()
+            {
+                Parent = parent,
+                Position = position,
+                Orientation = orientation
+            };
         }
         else if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.ReferenceFlag))
         {
-            node = new ReferenceNode();
+            node = new ReferenceNode()
+            {
+                Parent = parent,
+                Position = position,
+                Orientation = orientation
+            };
         }
         else if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.NodeFlag))
         {
-            node = new DummyNode();
+            node = new DummyNode()
+            {
+                Parent = parent,
+                Position = position,
+                Orientation = orientation
+            };
         }
         else
         {
