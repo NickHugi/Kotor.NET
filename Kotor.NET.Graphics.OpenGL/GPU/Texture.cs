@@ -23,6 +23,7 @@ public class Texture : ITexture
 
     public void Activate()
     {
+        _gl.ActiveTexture(GLEnum.Texture0);
         _gl.BindTexture(TextureTarget.Texture2D, ID);
     }
 }

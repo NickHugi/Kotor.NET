@@ -22,9 +22,13 @@ public class KModel : IModel
         {
             var target = iterate.First();
             iterate.RemoveAt(0);
-            iterate.AddRange(target.Nodes);
 
-            target.Render(frame);
+            if (target.Visible)
+            {
+                iterate.AddRange(target.Nodes);
+
+                target.Render(frame);
+            }
         }
     }
 }

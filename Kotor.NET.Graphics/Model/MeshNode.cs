@@ -17,11 +17,12 @@ public class MeshNode : DummyNode
     public override void Render(IRenderFrame frame)
     {
         var shader = IAssetManager.Manager.GetShader("basic");
-        //var texture = IAssetManager.Manager.GetTexture(Texture1);
-        ITexture texture = null;
+
+        var texture = (Texture1 == "NULL" || Texture1 == "")
+            ? null
+            : IAssetManager.Manager.GetTexture(Texture1);
 
         var renderObject = new RenderObject(shader, texture, Mesh, Transformation);
-        //var renderObject = new RenderObject(shader, texture, Mesh, Matrix4x4.Identity);
         frame.AddObject(renderObject);
 
         base.Render(frame);

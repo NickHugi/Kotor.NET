@@ -89,6 +89,12 @@ public class TPCBuilder
         if (_format is null)
             throw new ArgumentException("A texture format must be set before building the TPC.");
 
-        return new TPC(_width, _height, _layerCount, _mipmapCount, _format);
+        var tpc = new TPC(_width, _height, _layerCount, _mipmapCount, _format);
+        foreach ((var layer, var mipmap) in _data.Keys)
+        {
+            tpc._layers[layer]._mipmaps[mipmap].Data = _data[(layer, mipmap)];
+        }
+
+        return tpc;
     }
 }

@@ -22,9 +22,10 @@ public class RenderFrame : IRenderFrame
         foreach (var renderable in optimized)
         {
             //renderable.Shader.Activate();
-            //renderable.Texture.Activate();
             // TODO - shader
             renderable.Shader.SetMatrix4x4("model", renderable.Transformation);
+            if (renderable.Texture is not null)
+                renderable.Texture.Activate();
             renderable.VAO.Draw();
         }
     }

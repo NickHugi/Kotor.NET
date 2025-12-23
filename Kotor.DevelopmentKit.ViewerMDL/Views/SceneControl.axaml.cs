@@ -60,6 +60,9 @@ public partial class SceneControl : OpenGlControlBase
         _shader = new ShaderFactory(_silk).FromFile("Assets/vertex.glsl", "Assets/fragment.glsl");
         IAssetManager.Manager.AddShader("basic", _shader);
 
+        var texture0 = new TPCTextureFactory(_silk).FromFile(@"C:\Users\hugin\Desktop\Modding\model_c_selkath\N_Selkath01.tpc");
+        IAssetManager.Manager.AddTexture("N_Selkath01", texture0);
+
         var mdl = File.ReadAllBytes(@"C:\Users\hugin\Desktop\Modding\model_c_selkath\c_selkath.mdl");
         var mdx = File.ReadAllBytes(@"C:\Users\hugin\Desktop\Modding\model_c_selkath\c_selkath.mdx");
         _model = new ModelLoader().LoadModel(_silk, mdl, mdx);
@@ -89,14 +92,16 @@ public partial class SceneControl : OpenGlControlBase
         var projectionLocation = _shader.GetUniformLocation("projection");
         var viewLocation = _shader.GetUniformLocation("view");
         var modelLocation = _shader.GetUniformLocation("model");
+        var textureLocation = _shader.GetUniformLocation("texture1");
 
         var identity = Matrix4x4.Identity.ToDoubleArray();
         var projection = Matrix4x4.CreatePerspectiveFieldOfView((float)Math.PI/3f, width / (float)height, 0.001f, 1000).ToDoubleArray();
-        var view = Matrix4x4.CreateLookAt(new(5, 0, 1), new(0, 0, 2), new(0, 0, 1)).ToDoubleArray();
+        var view = Matrix4x4.CreateLookAt(new(0, 3, 1), new(0, 0, 1), new(0, 0, 1)).ToDoubleArray();
         _shader.Activate();
         _silk.UniformMatrix4(projectionLocation, false, projection);
         _silk.UniformMatrix4(viewLocation, false, view);
         _silk.UniformMatrix4(modelLocation, false, identity);
+        _silk.Uniform1(textureLocation, 0);
         _model.Render(frame);
 
         frame.Render();

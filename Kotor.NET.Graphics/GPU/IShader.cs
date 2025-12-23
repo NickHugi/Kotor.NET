@@ -14,4 +14,5 @@ public interface IShader
     public void Activate();
     int GetUniformLocation(string name);
     void SetMatrix4x4(string name, Matrix4x4 value);
+    void SetUniform1(string name, double value);
 }

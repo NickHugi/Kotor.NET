@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -44,12 +45,13 @@ public abstract class BaseNode
                 _transformation = (Parent is null) ? Matrix4x4.Identity : Parent.Transformation;
 
                 _transformation = Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position) * _transformation;
-                //_transformation = _transformation * Matrix4x4.CreateTranslation(Position) * Matrix4x4.CreateFromQuaternion(Orientation);
             }
 
             return _transformation.Value;
         }
     }
+
+    public bool Visible;
 
     public virtual void Render(IRenderFrame renderFrame)
     {

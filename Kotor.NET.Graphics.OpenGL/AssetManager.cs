@@ -25,7 +25,7 @@ public class AssetManager : IAssetManager
 
     public void AddTexture(string name, ITexture texture)
     {
-        _textures.Add(name, texture);
+        _textures.Add(name.ToLower(), texture);
     }
 
     public IModel GetModel(string name)
@@ -40,6 +40,6 @@ public class AssetManager : IAssetManager
 
     public ITexture GetTexture(string name)
     {
-        return _textures[name];
+        return _textures[name.ToLower()];
     }
 }

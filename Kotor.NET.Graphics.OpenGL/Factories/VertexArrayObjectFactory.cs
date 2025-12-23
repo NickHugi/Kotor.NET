@@ -41,17 +41,17 @@ public class VertexArrayObjectFactory : IVertexArrayObjectFactory
                 gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, blockSize, (void*)positionStride);
             }
 
-            //if (bitmask.HasFlag(MDLBinaryMDXVertexBitmask.UV1))
-            //{
-            //    gl.EnableVertexAttribArray(3);
-            //    gl.VertexAttribPointer(2, 2, VertexAttribPointerType.Float, false, blockSize, (void*)uv1Stride);
-            //}
+            if (bitmask.HasFlag(MDLBinaryMDXVertexBitmask.UV1))
+            {
+                gl.EnableVertexAttribArray(2);
+                gl.VertexAttribPointer(2, 2, VertexAttribPointerType.Float, false, blockSize, (void*)uv1Stride);
+            }
 
-            //if (bitmask.HasFlag(MDLBinaryMDXVertexBitmask.UV2))
-            //{
-            //    gl.EnableVertexAttribArray(4);
-            //    gl.VertexAttribPointer(3, 2, VertexAttribPointerType.Float, false, blockSize, (void*)uv2Stride);
-            //}
+            if (bitmask.HasFlag(MDLBinaryMDXVertexBitmask.UV2))
+            {
+                gl.EnableVertexAttribArray(3);
+                gl.VertexAttribPointer(3, 2, VertexAttribPointerType.Float, false, blockSize, (void*)uv2Stride);
+            }
         }
 
         gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);

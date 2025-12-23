@@ -4,8 +4,11 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.NET.Formats.BinaryTPC.Serialisation;
 using Kotor.NET.Graphics.Factories;
 using Kotor.NET.Graphics.GPU;
+using Kotor.NET.Resources.KotorTPC;
+using Kotor.NET.Resources.KotorTPC.TextureFormats;
 using Silk.NET.OpenGL;
 
 namespace Kotor.NET.Graphics.OpenGL.Factories;
@@ -23,28 +26,31 @@ public class TPCTextureFactory(GL _gl) : ITextureFactory
         using var textureStream = File.OpenRead(texture);
         return FromStream(textureStream);
     }
-    public ITexture FromStream(Stream texture)
+    public unsafe ITexture FromStream(Stream stream)
     {
-        var vertexShaderSource = new StreamReader(texture).ReadToEnd();
-        return FromSource();
-    }
-    public ITexture FromSource()
-    {
+        var tpc = new TPCBinaryDeserializer(new Formats.BinaryTPC.TPCBinary(stream)).Deserialize();
         var textureID = _gl.GenTexture();
 
         _gl.BindTexture(GLEnum.Texture2D, textureID);
 
+        _gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
+        _gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+        _gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+        _gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMinFilter.Linear);
+
         // TODO
-        //if (tpc.Format == TPCTextureFormat.DXT1)
-        //{
-        //    fixed (byte* buf = mipmap.Data)
-        //        gl.CompressedTexImage2D(GLEnum.Texture2D, 0, InternalFormat.CompressedRgbS3TCDxt1Ext, (uint)tpc.Width, (uint)tpc.Height, 0, (uint)mipmap.Size, buf);
-        //}
-        //else if (tpc.Format == TPCTextureFormat.DXT5)
-        //{
-        //    fixed (byte* buf = mipmap.Data)
-        //        gl.CompressedTexImage2D(GLEnum.Texture2D, 0, InternalFormat.CompressedRgbaS3TCDxt5Ext, (uint)tpc.Width, (uint)tpc.Height, 0, (uint)mipmap.Size, buf);
-        //}
+        if (tpc.TextureFormat == TPCTextureFormat.DXT1)
+        {
+            var data = tpc.GetData(0, 0);
+            fixed (byte* buf = data)
+                _gl.CompressedTexImage2D(GLEnum.Texture2D, 0, InternalFormat.CompressedRgbS3TCDxt1Ext, (uint)tpc.Width, (uint)tpc.Height, 0, (uint)data.Length, buf);
+        }
+        else if (tpc.TextureFormat == TPCTextureFormat.DXT5)
+        {
+            var data = tpc.GetData(0, 0);
+            fixed (byte* buf = data)
+                _gl.CompressedTexImage2D(GLEnum.Texture2D, 0, InternalFormat.CompressedRgbaS3TCDxt5Ext, (uint)tpc.Width, (uint)tpc.Height, 0, (uint)data.Length, buf);
+        }
         //else if (tpc.Format == TPCTextureFormat.RGB)
         //{
         //    fixed (byte* buf = mipmap.Data)
@@ -55,15 +61,6 @@ public class TPCTextureFactory(GL _gl) : ITextureFactory
         //    fixed (byte* buf = mipmap.Data)
         //        gl.TexImage2D(GLEnum.Texture2D, 0, InternalFormat.Rgba, (uint)mipmap.Width, (uint)mipmap.Height, 0, GLEnum.Rgba, PixelType.UnsignedByte, buf);
         //}
-
-        var textureWrapSFilter = (int)GLEnum.Repeat;
-        _gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, textureWrapSFilter);
-        var textureWrapTFilter = (int)GLEnum.Repeat;
-        _gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, textureWrapTFilter);
-        var textureMinFilter = (int)GLEnum.NearestMipmapLinear;
-        _gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, textureMinFilter);
-        var textureMagFilter = (int)GLEnum.Linear;
-        _gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, textureMagFilter);
 
         _gl.GenerateMipmap(TextureTarget.Texture2D);
 

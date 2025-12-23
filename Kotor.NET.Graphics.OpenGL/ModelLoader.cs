@@ -70,6 +70,7 @@ public class ModelLoader
                 node = new DanglymeshNode()
                 {
                     Parent = parent,
+                    Visible = trimeshHeader.DoesRender != 0,
                     Mesh = vao,
                     Texture1 = trimeshHeader.Texture,
                     Texture2 = trimeshHeader.Lightmap,
@@ -83,6 +84,7 @@ public class ModelLoader
                 node = new SkinmeshNode()
                 {
                     Parent = parent,
+                    Visible = trimeshHeader.DoesRender != 0,
                     Mesh = vao,
                     Texture1 = trimeshHeader.Texture,
                     Texture2 = trimeshHeader.Lightmap,
@@ -96,6 +98,7 @@ public class ModelLoader
                 node = new SabermeshNode()
                 {
                     Parent = parent,
+                    Visible = trimeshHeader.DoesRender != 0,
                     Position = position,
                     Orientation = orientation
                 };
@@ -106,6 +109,7 @@ public class ModelLoader
                 node = new WalkmeshNode()
                 {
                     Parent = parent,
+                    Visible = trimeshHeader.DoesRender != 0,
                     Mesh = vao,
                     Texture1 = trimeshHeader.Texture,
                     Texture2 = trimeshHeader.Lightmap,
@@ -118,6 +122,7 @@ public class ModelLoader
                 node = new MeshNode()
                 {
                     Parent = parent,
+                    Visible = trimeshHeader.DoesRender != 0,
                     Mesh = vao,
                     Texture1 = trimeshHeader.Texture,
                     Texture2 = trimeshHeader.Lightmap,
@@ -140,6 +145,7 @@ public class ModelLoader
             node = new EmitterNode()
             {
                 Parent = parent,
+                Visible = true,
                 Position = position,
                 Orientation = orientation
             };
@@ -149,6 +155,7 @@ public class ModelLoader
             node = new ReferenceNode()
             {
                 Parent = parent,
+                Visible = true,
                 Position = position,
                 Orientation = orientation
             };
@@ -158,6 +165,7 @@ public class ModelLoader
             node = new DummyNode()
             {
                 Parent = parent,
+                Visible = true, 
                 Position = position,
                 Orientation = orientation
             };

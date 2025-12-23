@@ -9,7 +9,6 @@ namespace Kotor.NET.Graphics.Factories;
 
 public interface ITextureFactory
 {
-    public ITexture FromSource();
     public ITexture FromFile(string texture);
     public ITexture FromStream(Stream texture);
     public ITexture FromEmbeddedResource(string texture);

@@ -42,4 +42,10 @@ public class Shader : IShader
         var location = GetUniformLocation(name);
         _gl.UniformMatrix4(location, false, value.ToDoubleArray());
     }
+
+    public void SetUniform1(string name, double value)
+    {
+        var location = GetUniformLocation(name);
+        _gl.Uniform1(location, value);
+    }
 }
