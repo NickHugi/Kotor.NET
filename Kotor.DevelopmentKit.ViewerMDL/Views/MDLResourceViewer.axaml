@@ -8,6 +8,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Kotor.DevelopmentKit.ViewerMDL.Views.MDLResourceViewer"
         x:DataType="vm:MDLResourceViewerViewModel"
+        x:Name="Window"
         Icon="/Assets/avalonia-logo.ico"
         Title="Kotor.DevelopmentKit.MDLResourceViewer">
 
@@ -15,6 +16,14 @@
         <vm:MDLResourceViewerViewModel/>
     </Design.DataContext>
 
-    <views:SceneControl />
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open" Command="{Binding #Window.Open}" />
+            </MenuItem>
+        </Menu>
+
+        <views:SceneControl />
+    </DockPanel>
 
 </Window>

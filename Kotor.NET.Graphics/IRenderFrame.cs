@@ -8,6 +8,7 @@ namespace Kotor.NET.Graphics;
 
 public interface IRenderFrame
 {
-    void AddObject(IRenderObject renderObject);
+    public IAssetManager AssetManager { get; }
+    public void AddObject(IRenderObject renderObject);
     public void Render();
 }

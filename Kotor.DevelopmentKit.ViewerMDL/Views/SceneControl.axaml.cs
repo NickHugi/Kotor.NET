@@ -8,6 +8,8 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.OpenGL;
 using Avalonia.OpenGL.Controls;
+using Avalonia.Threading;
+using Kotor.DevelopmentKit.ViewerMDL.ViewModels;
 using Kotor.NET.Formats.BinaryMDL;
 using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.GPU;
@@ -24,49 +26,27 @@ namespace Kotor.DevelopmentKit.ViewerMDL.Views;
 
 public partial class SceneControl : OpenGlControlBase
 {
-    private AvaloniaSilkNativeContext _context;
-    private GL _silk;
+    public MDLResourceViewerViewModel ViewModel => (MDLResourceViewerViewModel)DataContext;
 
     public SceneControl()
     {
         InitializeComponent();
-        IAssetManager.Manager = new AssetManager();
     }
 
     protected unsafe override void OnOpenGlInit(GlInterface gl)
     {
         base.OnOpenGlInit(gl);
 
-        float[] vertices =
-            [
-                -1f, -1f, 0,
-                1f, -1f, 0,
-                1f, 1f, 0,
-                -1f, 1f, 0
-            ];
-        ushort[] indices =
-            [
-                0,1,3,
-                1,2,3
-            ];
+        ViewModel.Context = new AvaloniaSilkNativeContext(gl.GetProcAddress);
+        ViewModel.GL = new GL(ViewModel.Context);
+        ViewModel.GL.Enable(EnableCap.DepthTest);
+        ViewModel.AssetManager = new AssetManager();
 
-        byte[] vertexData = vertices.SelectMany(BitConverter.GetBytes).ToArray();
-        byte[] indexData = indices.SelectMany(BitConverter.GetBytes).ToArray();
+        var shader = new ShaderFactory(ViewModel.GL).FromFile("Assets/vertex.glsl", "Assets/fragment.glsl");
+        ViewModel.AssetManager.AddShader("basic", shader);
 
-        _context = new AvaloniaSilkNativeContext(gl.GetProcAddress);
-        _silk = new GL(_context);
-        _silk.Enable(EnableCap.DepthTest);
-
-        _shader = new ShaderFactory(_silk).FromFile("Assets/vertex.glsl", "Assets/fragment.glsl");
-        IAssetManager.Manager.AddShader("basic", _shader);
-
-        var texture0 = new TPCTextureFactory(_silk).FromFile(@"C:\Users\hugin\Desktop\Modding\model_c_selkath\N_Selkath01.tpc");
-        IAssetManager.Manager.AddTexture("N_Selkath01", texture0);
-
-        var mdl = File.ReadAllBytes(@"C:\Users\hugin\Desktop\Modding\model_c_selkath\c_selkath.mdl");
-        var mdx = File.ReadAllBytes(@"C:\Users\hugin\Desktop\Modding\model_c_selkath\c_selkath.mdx");
-        _model = new ModelLoader().LoadModel(_silk, mdl, mdx);
-        //_vao = new VertexArrayObjectFactory().FromBinary(_silk, vertexData, indexData, 0, 0, 0, 0, 12, (uint)(MDLBinaryMDXVertexBitmask.Vertices));
+        var texture0 = new TPCTextureFactory(ViewModel.GL).FromFile(@"C:\Users\hugin\Desktop\Modding\model_c_selkath\N_Selkath01.tpc");
+        ViewModel.AssetManager.AddTexture("N_Selkath01", texture0);
     }
 
     protected override void OnOpenGlDeinit(GlInterface gl)
@@ -74,37 +54,44 @@ public partial class SceneControl : OpenGlControlBase
         base.OnOpenGlDeinit(gl);
     }
 
-    private IModel _model;
-    private IVertexArrayObject _vao;
-    private IShader _shader;
     protected override void OnOpenGlRender(GlInterface gl, int fb)
     {
         var scale = TopLevel.GetTopLevel(this).RenderScaling;
         var width = (uint)(Bounds.Width * scale);
         var height = (uint)(Bounds.Height * scale);
-        _silk.Viewport(0, 0, width, height);
+        ViewModel.GL.Viewport(0, 0, width, height);
 
-        _silk.ClearColor(0.1f, 0.0f, 0.0f, 1.0f);
-        _silk.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
+        ViewModel.GL.ClearColor(0.1f, 0.0f, 0.0f, 1.0f);
+        ViewModel.GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
-        var frame = new RenderFrame([]);
+        var frame = new RenderFrame(ViewModel.AssetManager, []);
 
-        var projectionLocation = _shader.GetUniformLocation("projection");
-        var viewLocation = _shader.GetUniformLocation("view");
-        var modelLocation = _shader.GetUniformLocation("model");
-        var textureLocation = _shader.GetUniformLocation("texture1");
+        var projectionLocation = ViewModel.AssetManager.GetShader("basic").GetUniformLocation("projection");
+        var viewLocation = ViewModel.AssetManager.GetShader("basic").GetUniformLocation("view");
+        var modelLocation = ViewModel.AssetManager.GetShader("basic").GetUniformLocation("model");
+        var textureLocation = ViewModel.AssetManager.GetShader("basic").GetUniformLocation("texture1");
 
         var identity = Matrix4x4.Identity.ToDoubleArray();
         var projection = Matrix4x4.CreatePerspectiveFieldOfView((float)Math.PI/3f, width / (float)height, 0.001f, 1000).ToDoubleArray();
-        var view = Matrix4x4.CreateLookAt(new(0, 3, 1), new(0, 0, 1), new(0, 0, 1)).ToDoubleArray();
-        _shader.Activate();
-        _silk.UniformMatrix4(projectionLocation, false, projection);
-        _silk.UniformMatrix4(viewLocation, false, view);
-        _silk.UniformMatrix4(modelLocation, false, identity);
-        _silk.Uniform1(textureLocation, 0);
-        _model.Render(frame);
+        var view = Matrix4x4.CreateLookAt(new(1, 3, 2), new(0, 0, 1), new(0, 0, 1)).ToDoubleArray();
+        ViewModel.AssetManager.GetShader("basic").Activate();
+        ViewModel.GL.UniformMatrix4(projectionLocation, false, projection);
+        ViewModel.GL.UniformMatrix4(viewLocation, false, view);
+        ViewModel.GL.UniformMatrix4(modelLocation, false, identity);
+        ViewModel.GL.Uniform1(textureLocation, 0);
+
+        while(ViewModel.ModelBuffer.Count > 0)
+        {
+            var name = ViewModel.ModelBuffer.Keys.First();
+            ViewModel.ModelBuffer.TryRemove(name, out var getModel);
+            ViewModel.AssetManager.AddModel(name, getModel());
+        }
+
+        if (ViewModel.AssetManager.HasModel("model"))
+            ViewModel.AssetManager.GetModel("model").Render(frame);
 
         frame.Render();
+        RequestNextFrameRendering();
     }
 }
 

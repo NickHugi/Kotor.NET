@@ -8,10 +8,13 @@ namespace Kotor.NET.Graphics;
 
 public class RenderFrame : IRenderFrame
 {
+    public IAssetManager AssetManager { get; }
+
     private List<IRenderObject> _objects = new();
 
-    public RenderFrame(List<IRenderObject> objects)
+    public RenderFrame(IAssetManager assetManager, List<IRenderObject> objects)
     {
+        AssetManager = assetManager;
         _objects = objects;
     }
 
@@ -21,8 +24,6 @@ public class RenderFrame : IRenderFrame
 
         foreach (var renderable in optimized)
         {
-            //renderable.Shader.Activate();
-            // TODO - shader
             renderable.Shader.SetMatrix4x4("model", renderable.Transformation);
             if (renderable.Texture is not null)
                 renderable.Texture.Activate();

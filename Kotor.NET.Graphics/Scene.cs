@@ -28,7 +28,7 @@ public class Scene
     private IRenderFrame BuildRenderFrame()
     {
         var renderObjects = Models.SelectMany(model => BuildNestedRenderObject(model, Matrix4x4.Identity)).ToList();
-        return new RenderFrame(renderObjects); ;
+        return new RenderFrame(AssetManager, renderObjects);
     }
     private List<IRenderObject> BuildNestedRenderObject(IModel model, Matrix4x4 parentTransformation)
     {

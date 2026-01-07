@@ -15,12 +15,12 @@ public class AssetManager : IAssetManager
 
     public void AddModel(string name, IModel model)
     {
-        _models.Add(name, model);
+        _models.Add(name.ToLower(), model);
     }
 
     public void AddShader(string name, IShader shader)
     {
-        _shaders.Add(name, shader);
+        _shaders.Add(name.ToLower(), shader);
     }
 
     public void AddTexture(string name, ITexture texture)
@@ -30,16 +30,26 @@ public class AssetManager : IAssetManager
 
     public IModel GetModel(string name)
     {
-        return _models[name];
+        return _models[name.ToLower()];
     }
 
     public IShader GetShader(string name)
     {
-        return _shaders[name];
+        return _shaders[name.ToLower()];
     }
 
     public ITexture GetTexture(string name)
     {
         return _textures[name.ToLower()];
+    }
+
+    public bool HasModel(string name)
+    {
+        return _models.TryGetValue(name.ToLower(), out var _);
+    }
+
+    public void UnloadAll()
+    {
+        // TODO
     }
 }

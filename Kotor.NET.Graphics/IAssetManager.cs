@@ -9,12 +9,11 @@ namespace Kotor.NET.Graphics;
 
 public interface IAssetManager
 {
-    public static IAssetManager Manager { get; set; }
-
     public IShader GetShader(string shader);
     public IModel GetModel(string model);
     public ITexture GetTexture(string texture);
     void AddModel(string name, IModel model);
     void AddShader(string name, IShader shader);
     void AddTexture(string name, ITexture texture);
+    bool HasModel(string name);
 }
