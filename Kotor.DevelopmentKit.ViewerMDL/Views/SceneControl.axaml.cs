@@ -1,5 +1,5 @@
 using System;
-using System.Drawing;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -10,17 +10,22 @@ using Avalonia.OpenGL;
 using Avalonia.OpenGL.Controls;
 using Avalonia.Threading;
 using Kotor.DevelopmentKit.ViewerMDL.ViewModels;
+using Kotor.NET.Common.Data;
 using Kotor.NET.Formats.BinaryMDL;
+using Kotor.NET.Formats.BinaryTPC.Serialisation;
 using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.GPU;
+using Kotor.NET.Graphics.Model;
 using Kotor.NET.Graphics.OpenGL;
 using Kotor.NET.Graphics.OpenGL.Factories;
 using Kotor.NET.Graphics.OpenGL.GPU;
+using Kotor.NET.Resources.KotorTPC.TextureFormats;
 using Silk.NET.Core.Contexts;
 using Silk.NET.Core.Native;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 using Shader = Kotor.NET.Graphics.OpenGL.GPU.Shader;
+using Vector3 = System.Numerics.Vector3;
 
 namespace Kotor.DevelopmentKit.ViewerMDL.Views;
 
@@ -45,8 +50,11 @@ public partial class SceneControl : OpenGlControlBase
         var shader = new ShaderFactory(ViewModel.GL).FromFile("Assets/vertex.glsl", "Assets/fragment.glsl");
         ViewModel.AssetManager.AddShader("basic", shader);
 
-        var texture0 = new TPCTextureFactory(ViewModel.GL).FromFile(@"C:\Users\hugin\Desktop\Modding\model_c_selkath\N_Selkath01.tpc");
-        ViewModel.AssetManager.AddTexture("N_Selkath01", texture0);
+        //var texture0 = new TPCTextureFactory(ViewModel.GL).FromFile(@"C:\Users\hugin\Desktop\Modding\model_c_selkath\N_Selkath01.tpc");
+        //ViewModel.AssetManager.AddTexture("N_Selkath01", texture0);
+
+        var placeholderTexture = new TPCTextureFactory(ViewModel.GL).FromPlaceholder();
+        ViewModel.AssetManager.AddTexture("placeholder", placeholderTexture);
     }
 
     protected override void OnOpenGlDeinit(GlInterface gl)
@@ -80,11 +88,43 @@ public partial class SceneControl : OpenGlControlBase
         ViewModel.GL.UniformMatrix4(modelLocation, false, identity);
         ViewModel.GL.Uniform1(textureLocation, 0);
 
-        while(ViewModel.ModelBuffer.Count > 0)
+        while (ViewModel.ModelBuffer.Count > 0)
         {
             var name = ViewModel.ModelBuffer.Keys.First();
-            ViewModel.ModelBuffer.TryRemove(name, out var getModel);
-            ViewModel.AssetManager.AddModel(name, getModel());
+            var data = ViewModel.ModelBuffer.TryRemove(name, out var value) ? value() : (null, null);
+
+            var model = new ModelLoader().LoadModel(ViewModel.GL, data.MDL, data.MDX);
+            ViewModel.AssetManager.AddModel(name, model);
+
+            var check = new List<BaseNode>() { model.Root };
+            while (check.Any())
+            {
+                var node = check.First();
+                check.RemoveAt(0);
+                check.AddRange(node.Nodes);
+
+                if (node is MeshNode mesh)
+                {
+                    var hasTexture1 = !string.IsNullOrEmpty(mesh.Texture1) && string.Equals(mesh.Texture1, "NULL", StringComparison.OrdinalIgnoreCase);
+                    if (!hasTexture1)
+                    {
+                        ViewModel.TextureRequests.Enqueue(mesh.Texture1);
+                    }
+                }
+            }
+        }
+
+        while (ViewModel.TextureRequests.Count > 0)
+        {
+            var name = ViewModel.TextureRequests.TryDequeue(out var value) ? value : null;
+            if (!ViewModel.AssetManager.HasTexture(name))
+            {
+                var data = ViewModel.Source.Find(name, ResourceType.TPC)
+                    ?? ViewModel.Source.Find(name, ResourceType.TGA);
+                using var stream = data.OpenStream();
+                var texture = new TPCTextureFactory(ViewModel.GL).FromStream(stream);
+                ViewModel.AssetManager.AddTexture(name, texture);
+            }
         }
 
         if (ViewModel.AssetManager.HasModel("model"))

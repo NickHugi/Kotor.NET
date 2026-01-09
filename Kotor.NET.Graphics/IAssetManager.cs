@@ -16,4 +16,5 @@ public interface IAssetManager
     void AddShader(string name, IShader shader);
     void AddTexture(string name, ITexture texture);
     bool HasModel(string name);
+    bool HasTexture(string name);
 }

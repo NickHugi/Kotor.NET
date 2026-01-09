@@ -26,4 +26,9 @@ public class ResourceInfo
         Size = size;
         Offset = offset;
     }
+
+    public Stream OpenStream()
+    {
+        return File.Open(FilePath, FileMode.Open);
+    }
 }

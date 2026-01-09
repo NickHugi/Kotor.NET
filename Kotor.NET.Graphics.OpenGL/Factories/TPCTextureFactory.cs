@@ -66,4 +66,22 @@ public class TPCTextureFactory(GL _gl) : ITextureFactory
 
         return new GPU.Texture(_gl, textureID);
     }
+    public unsafe ITexture FromPlaceholder()
+    {
+        var textureID = _gl.GenTexture();
+
+        _gl.BindTexture(GLEnum.Texture2D, textureID);
+
+        _gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
+        _gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+        _gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+        _gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMinFilter.Linear);
+
+        var data = Enumerable.Range(0, 32 * 32).SelectMany(x => new byte[] { 255, 0, 255, 255 }).ToArray();
+
+        fixed (byte* buf = data)
+            _gl.TexImage2D(GLEnum.Texture2D, 0, InternalFormat.Rgba, 32, 32, 0, GLEnum.Rgba, PixelType.UnsignedByte, buf);
+
+        return new GPU.Texture(_gl, textureID);
+    }
 }

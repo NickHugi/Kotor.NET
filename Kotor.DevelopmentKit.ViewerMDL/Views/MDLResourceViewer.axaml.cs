@@ -7,6 +7,7 @@ using Avalonia.Platform.Storage;
 using Avalonia.ReactiveUI;
 using Avalonia.Threading;
 using Kotor.DevelopmentKit.ViewerMDL.ViewModels;
+using Kotor.NET.Encapsulations;
 using Kotor.NET.Graphics.OpenGL;
 using Silk.NET.OpenGL;
 
@@ -37,6 +38,9 @@ public partial class MDLResourceViewer : ReactiveWindow<MDLResourceViewerViewMod
 
         if (file is not null)
         {
+            var directory = Path.GetDirectoryName(file.Path.AbsolutePath);
+            ViewModel.Source = new FolderEncapsulation(directory);
+
             ViewModel.ModelBuffer.TryAdd("model", () =>
             {
                 var mdlFilepath = file.Path.AbsolutePath;
@@ -45,9 +49,7 @@ public partial class MDLResourceViewer : ReactiveWindow<MDLResourceViewerViewMod
                 var mdxFilepath = mdlFilepath.Replace(".mdl", ".mdx");
                 var mdx = File.ReadAllBytes(mdxFilepath);
 
-                var model = new ModelLoader().LoadModel(ViewModel.GL, mdl, mdx);
-
-                return model;
+                return (mdl, mdx);
             });
         }
     }

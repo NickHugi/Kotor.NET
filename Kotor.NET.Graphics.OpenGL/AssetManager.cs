@@ -38,14 +38,19 @@ public class AssetManager : IAssetManager
         return _shaders[name.ToLower()];
     }
 
-    public ITexture GetTexture(string name)
+    public ITexture? GetTexture(string name)
     {
-        return _textures[name.ToLower()];
+        return _textures.TryGetValue(name.ToLower(), out var texture) ? texture : null;
     }
 
     public bool HasModel(string name)
     {
         return _models.TryGetValue(name.ToLower(), out var _);
+    }
+
+    public bool HasTexture(string name)
+    {
+        return _textures.TryGetValue(name.ToLower(), out var _);
     }
 
     public void UnloadAll()

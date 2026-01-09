@@ -25,8 +25,16 @@ public class RenderFrame : IRenderFrame
         foreach (var renderable in optimized)
         {
             renderable.Shader.SetMatrix4x4("model", renderable.Transformation);
+
             if (renderable.Texture is not null)
+            {
                 renderable.Texture.Activate();
+            }
+            else
+            {
+                AssetManager.GetTexture("placeholder").Activate();
+            }
+
             renderable.VAO.Draw();
         }
     }
