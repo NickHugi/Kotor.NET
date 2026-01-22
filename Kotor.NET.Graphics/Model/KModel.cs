@@ -14,8 +14,9 @@ public class KModel : IModel
     public BaseNode Root { get; set; }
     public Matrix4x4 Transformation => Matrix4x4.Identity;
 
-    public void Render(IRenderFrame frame, IAssetManager assetManager, Matrix4x4 transformation)
+    public ICollection<IRenderObject> Render(IAssetManager assetManager, Matrix4x4 transformation)
     {
+        var objects = new List<IRenderObject>();
         var iterate = new List<BaseNode>() { Root };
 
         while (iterate.Any())
@@ -26,9 +27,10 @@ public class KModel : IModel
             if (target.Visible)
             {
                 iterate.AddRange(target.Nodes);
-
-                target.Render(frame, assetManager, transformation);
+                objects.AddRange(target.Render(assetManager, transformation));
             }
         }
+
+        return objects;
     }
 }

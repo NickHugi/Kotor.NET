@@ -11,5 +11,5 @@ public interface IModel
 {
     public Matrix4x4 Transformation { get; }
 
-    void Render(IRenderFrame frame, IAssetManager assetManager, Matrix4x4 transformation);
+    public ICollection<IRenderObject> Render(IAssetManager assetManager, Matrix4x4 transformation);
 }

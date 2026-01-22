@@ -17,7 +17,8 @@ public class StaticModel : IEntity
     {
         if (assetManager.HasModel(Model))
         {
-            assetManager.GetModel(Model).Render(frame, assetManager, Transformation);
+            var objects = assetManager.GetModel(Model).Render(assetManager, Transformation);
+            objects.ToList().ForEach(frame.AddObject);
         }
     }
 

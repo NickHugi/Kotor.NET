@@ -14,7 +14,7 @@ public class MeshNode : DummyNode
     public string Texture1 { get; set; } = "";
     public string Texture2 { get; set; } = "";
 
-    public override void Render(IRenderFrame frame, IAssetManager assetManager, Matrix4x4 entityTransform)
+    public override ICollection<IRenderObject> Render(IAssetManager assetManager, Matrix4x4 entityTransform)
     {
         var shader = assetManager.GetShader("basic");
 
@@ -23,8 +23,9 @@ public class MeshNode : DummyNode
             : assetManager.GetTexture(Texture1);
 
         var renderObject = new RenderObject(shader, texture, Mesh, Transformation, entityTransform);
-        frame.AddObject(renderObject);
 
-        base.Render(frame, assetManager, entityTransform);
+        var objects = base.Render(assetManager, entityTransform);
+        objects.Add(renderObject);
+        return objects;
     }
 }

@@ -53,8 +53,9 @@ public abstract class BaseNode
 
     public bool Visible;
 
-    public virtual void Render(IRenderFrame renderFrame, IAssetManager assetManager, Matrix4x4 entityTransform)
+    public virtual ICollection<IRenderObject> Render(IAssetManager assetManager, Matrix4x4 entityTransform)
     {
+        return [];
     }
 
     private void ResetTransformation()
