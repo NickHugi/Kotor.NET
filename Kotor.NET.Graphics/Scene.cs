@@ -25,6 +25,11 @@ public class Scene
         frame.Render();
     }
 
+    public void Update(float deltaTime)
+    {
+
+    }
+
     private IRenderFrame BuildRenderFrame()
     {
         var renderObjects = Models.SelectMany(model => BuildNestedRenderObject(model, Matrix4x4.Identity)).ToList();

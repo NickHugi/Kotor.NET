@@ -12,13 +12,15 @@ public class RenderObject : IRenderObject
     public IShader Shader { get; }
     public ITexture Texture { get; }
     public IVertexArrayObject VAO { get; }
-    public Matrix4x4 Transformation { get; }
+    public Matrix4x4 ModelTransform { get; }
+    public Matrix4x4 EntityTransform { get; }
 
-    public RenderObject(IShader shader, ITexture texture, IVertexArrayObject vao, Matrix4x4 transformation)
+    public RenderObject(IShader shader, ITexture texture, IVertexArrayObject vao, Matrix4x4 modelTransform, Matrix4x4 entityTransform)
     {
         Shader = shader;
         Texture = texture;
         VAO = vao;
-        Transformation = transformation;
+        ModelTransform = modelTransform;
+        EntityTransform = entityTransform;
     }
 }

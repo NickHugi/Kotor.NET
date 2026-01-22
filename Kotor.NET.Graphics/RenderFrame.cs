@@ -24,7 +24,8 @@ public class RenderFrame : IRenderFrame
 
         foreach (var renderable in optimized)
         {
-            renderable.Shader.SetMatrix4x4("model", renderable.Transformation);
+            renderable.Shader.SetMatrix4x4("entity", renderable.EntityTransform);
+            renderable.Shader.SetMatrix4x4("model", renderable.ModelTransform);
 
             if (renderable.Texture is not null)
             {

@@ -14,7 +14,7 @@ public class KModel : IModel
     public BaseNode Root { get; set; }
     public Matrix4x4 Transformation => Matrix4x4.Identity;
 
-    public void Render(IRenderFrame frame)
+    public void Render(IRenderFrame frame, Matrix4x4 transformation)
     {
         var iterate = new List<BaseNode>() { Root };
 
@@ -27,7 +27,7 @@ public class KModel : IModel
             {
                 iterate.AddRange(target.Nodes);
 
-                target.Render(frame);
+                target.Render(frame, transformation);
             }
         }
     }

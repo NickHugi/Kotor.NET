@@ -5,11 +5,12 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kotor.NET.Graphics.GPU;
+namespace Kotor.NET.Graphics;
 
-public interface IModel
+public interface IEntity
 {
     public Matrix4x4 Transformation { get; }
 
-    void Render(IRenderFrame frame, Matrix4x4 transformation);
+    public void Render(IRenderFrame frame);
+    public void Update(float delta);
 }

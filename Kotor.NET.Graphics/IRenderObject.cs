@@ -13,5 +13,6 @@ public interface IRenderObject
     public IShader Shader { get; }
     public ITexture Texture { get; }
     public IVertexArrayObject VAO { get; }
-    public Matrix4x4 Transformation { get; }
+    public Matrix4x4 ModelTransform { get; }
+    public Matrix4x4 EntityTransform { get; }
 }

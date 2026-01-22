@@ -1,30 +1,18 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Numerics;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using Avalonia.OpenGL;
 using Avalonia.OpenGL.Controls;
-using Avalonia.Threading;
 using Kotor.DevelopmentKit.ViewerMDL.ViewModels;
 using Kotor.NET.Common.Data;
-using Kotor.NET.Formats.BinaryMDL;
-using Kotor.NET.Formats.BinaryTPC.Serialisation;
 using Kotor.NET.Graphics;
-using Kotor.NET.Graphics.GPU;
 using Kotor.NET.Graphics.Model;
 using Kotor.NET.Graphics.OpenGL;
 using Kotor.NET.Graphics.OpenGL.Factories;
-using Kotor.NET.Graphics.OpenGL.GPU;
-using Kotor.NET.Resources.KotorTPC.TextureFormats;
 using Silk.NET.Core.Contexts;
-using Silk.NET.Core.Native;
-using Silk.NET.Maths;
 using Silk.NET.OpenGL;
-using Shader = Kotor.NET.Graphics.OpenGL.GPU.Shader;
 using Vector3 = System.Numerics.Vector3;
 
 namespace Kotor.DevelopmentKit.ViewerMDL.Views;
@@ -49,9 +37,6 @@ public partial class SceneControl : OpenGlControlBase
 
         var shader = new ShaderFactory(ViewModel.GL).FromFile("Assets/vertex.glsl", "Assets/fragment.glsl");
         ViewModel.AssetManager.AddShader("basic", shader);
-
-        //var texture0 = new TPCTextureFactory(ViewModel.GL).FromFile(@"C:\Users\hugin\Desktop\Modding\model_c_selkath\N_Selkath01.tpc");
-        //ViewModel.AssetManager.AddTexture("N_Selkath01", texture0);
 
         var placeholderTexture = new TPCTextureFactory(ViewModel.GL).FromPlaceholder();
         ViewModel.AssetManager.AddTexture("placeholder", placeholderTexture);
@@ -128,7 +113,7 @@ public partial class SceneControl : OpenGlControlBase
         }
 
         if (ViewModel.AssetManager.HasModel("model"))
-            ViewModel.AssetManager.GetModel("model").Render(frame);
+            ViewModel.AssetManager.GetModel("model").Render(frame, Matrix4x4.Identity);
 
         frame.Render();
         RequestNextFrameRendering();

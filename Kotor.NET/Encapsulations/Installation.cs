@@ -14,7 +14,6 @@ public class Installation
     public GameEngine Engine { get; }
     public Platform Platform { get; }
 
-
     private List<IEncapsulation> _additional { get; } = new();
     private List<IEncapsulation> _texturePackDirectory { get; } = new();
     private List<IEncapsulation> _modulesDirectory { get; } = new();
