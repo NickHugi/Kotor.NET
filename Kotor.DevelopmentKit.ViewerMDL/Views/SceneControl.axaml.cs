@@ -40,6 +40,8 @@ public partial class SceneControl : OpenGlControlBase
 
         var placeholderTexture = new TPCTextureFactory(ViewModel.GL).FromPlaceholder();
         ViewModel.AssetManager.AddTexture("placeholder", placeholderTexture);
+
+        ViewModel.Scene = new(ViewModel.AssetManager);
     }
 
     protected override void OnOpenGlDeinit(GlInterface gl)
@@ -81,6 +83,12 @@ public partial class SceneControl : OpenGlControlBase
             var model = new ModelLoader().LoadModel(ViewModel.GL, data.MDL, data.MDX);
             ViewModel.AssetManager.AddModel(name, model);
 
+            ViewModel.Scene.Entities.Add(new StaticModel()
+            {
+                Model = model,
+                Transformation = Matrix4x4.Identity
+            });
+
             var check = new List<BaseNode>() { model.Root };
             while (check.Any())
             {
@@ -112,8 +120,10 @@ public partial class SceneControl : OpenGlControlBase
             }
         }
 
-        if (ViewModel.AssetManager.HasModel("model"))
-            ViewModel.AssetManager.GetModel("model").Render(frame, Matrix4x4.Identity);
+        ViewModel.Scene.Render();
+
+        //if (ViewModel.AssetManager.HasModel("model"))
+        //    ViewModel.AssetManager.GetModel("model").Render(frame, Matrix4x4.Identity);
 
         frame.Render();
         RequestNextFrameRendering();

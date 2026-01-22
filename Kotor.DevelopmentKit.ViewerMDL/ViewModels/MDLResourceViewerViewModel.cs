@@ -30,7 +30,13 @@ public class MDLResourceViewerViewModel : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public IModel Model
+    //public IModel Model
+    //{
+    //    get => field;
+    //    set => this.RaiseAndSetIfChanged(ref field, value);
+    //}
+
+    public Scene Scene
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);

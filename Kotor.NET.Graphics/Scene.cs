@@ -11,17 +11,18 @@ namespace Kotor.NET.Graphics;
 public class Scene
 {
     public IAssetManager AssetManager { get; }
-    public List<IModel> Models { get; }
+    public List<IEntity> Entities { get; }
 
     public Scene(IAssetManager assetManager)
     {
         AssetManager = assetManager;
-        Models = new();
+        Entities = new();
     }
 
     public void Render()
     {
-        var frame = BuildRenderFrame();
+        var frame = new RenderFrame(AssetManager, []);
+        Entities.ForEach(x => x.Render(frame));
         frame.Render();
     }
 
@@ -32,8 +33,9 @@ public class Scene
 
     private IRenderFrame BuildRenderFrame()
     {
-        var renderObjects = Models.SelectMany(model => BuildNestedRenderObject(model, Matrix4x4.Identity)).ToList();
-        return new RenderFrame(AssetManager, renderObjects);
+        //var renderObjects = Entities.SelectMany(model => BuildNestedRenderObject(model, Matrix4x4.Identity)).ToList();
+        //return new RenderFrame(AssetManager, renderObjects);
+        return null;
     }
     private List<IRenderObject> BuildNestedRenderObject(IModel model, Matrix4x4 parentTransformation)
     {
