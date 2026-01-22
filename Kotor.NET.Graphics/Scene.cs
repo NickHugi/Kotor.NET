@@ -22,7 +22,7 @@ public class Scene
     public void Render()
     {
         var frame = new RenderFrame(AssetManager, []);
-        Entities.ForEach(x => x.Render(frame));
+        Entities.ForEach(x => x.Render(frame, AssetManager));
         frame.Render();
     }
 

@@ -85,7 +85,7 @@ public partial class SceneControl : OpenGlControlBase
 
             ViewModel.Scene.Entities.Add(new StaticModel()
             {
-                Model = model,
+                Model = name,
                 Transformation = Matrix4x4.Identity
             });
 

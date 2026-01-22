@@ -11,6 +11,6 @@ public interface IEntity
 {
     public Matrix4x4 Transformation { get; }
 
-    public void Render(IRenderFrame frame);
+    public void Render(IRenderFrame frame, IAssetManager assetManager);
     public void Update(float delta);
 }

@@ -10,13 +10,15 @@ namespace Kotor.NET.Graphics;
 
 public class StaticModel : IEntity
 {
-    public IModel Model { get; set; }
+    public string Model { get; set; }
     public Matrix4x4 Transformation { get; set; }
 
-    public void Render(IRenderFrame frame)
+    public void Render(IRenderFrame frame, IAssetManager assetManager)
     {
-        Model.Render(frame, Transformation);
-        
+        if (assetManager.HasModel(Model))
+        {
+            assetManager.GetModel(Model).Render(frame, Transformation);
+        }
     }
 
     public void Update(float delta)
