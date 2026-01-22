@@ -14,17 +14,17 @@ public class MeshNode : DummyNode
     public string Texture1 { get; set; } = "";
     public string Texture2 { get; set; } = "";
 
-    public override void Render(IRenderFrame frame, Matrix4x4 entityTransform)
+    public override void Render(IRenderFrame frame, IAssetManager assetManager, Matrix4x4 entityTransform)
     {
-        var shader = frame.AssetManager.GetShader("basic");
+        var shader = assetManager.GetShader("basic");
 
         var texture = (Texture1 == "NULL" || Texture1 == "")
             ? null
-            : frame.AssetManager.GetTexture(Texture1);
+            : assetManager.GetTexture(Texture1);
 
         var renderObject = new RenderObject(shader, texture, Mesh, Transformation, entityTransform);
         frame.AddObject(renderObject);
 
-        base.Render(frame, entityTransform);
+        base.Render(frame, assetManager, entityTransform);
     }
 }

@@ -41,7 +41,7 @@ public partial class SceneControl : OpenGlControlBase
         var placeholderTexture = new TPCTextureFactory(ViewModel.GL).FromPlaceholder();
         ViewModel.AssetManager.AddTexture("placeholder", placeholderTexture);
 
-        ViewModel.Scene = new(ViewModel.AssetManager);
+        ViewModel.Scene = new();
     }
 
     protected override void OnOpenGlDeinit(GlInterface gl)
@@ -58,8 +58,6 @@ public partial class SceneControl : OpenGlControlBase
 
         ViewModel.GL.ClearColor(0.1f, 0.0f, 0.0f, 1.0f);
         ViewModel.GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
-
-        var frame = new RenderFrame(ViewModel.AssetManager, []);
 
         var projectionLocation = ViewModel.AssetManager.GetShader("basic").GetUniformLocation("projection");
         var viewLocation = ViewModel.AssetManager.GetShader("basic").GetUniformLocation("view");
@@ -82,12 +80,6 @@ public partial class SceneControl : OpenGlControlBase
 
             var model = new ModelLoader().LoadModel(ViewModel.GL, data.MDL, data.MDX);
             ViewModel.AssetManager.AddModel(name, model);
-
-            ViewModel.Scene.Entities.Add(new StaticModel()
-            {
-                Model = name,
-                Transformation = Matrix4x4.Identity
-            });
 
             var check = new List<BaseNode>() { model.Root };
             while (check.Any())
@@ -120,12 +112,12 @@ public partial class SceneControl : OpenGlControlBase
             }
         }
 
-        ViewModel.Scene.Render();
+        ViewModel.Scene.Render(ViewModel.AssetManager);
 
         //if (ViewModel.AssetManager.HasModel("model"))
         //    ViewModel.AssetManager.GetModel("model").Render(frame, Matrix4x4.Identity);
 
-        frame.Render();
+        //frame.Render(TODO);
         RequestNextFrameRendering();
     }
 }

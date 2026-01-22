@@ -53,7 +53,7 @@ public abstract class BaseNode
 
     public bool Visible;
 
-    public virtual void Render(IRenderFrame renderFrame, Matrix4x4 entityTransform)
+    public virtual void Render(IRenderFrame renderFrame, IAssetManager assetManager, Matrix4x4 entityTransform)
     {
     }
 

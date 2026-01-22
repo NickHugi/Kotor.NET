@@ -1,13 +1,16 @@
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Reactive.Joins;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using Avalonia.ReactiveUI;
 using Avalonia.Threading;
 using Kotor.DevelopmentKit.ViewerMDL.ViewModels;
 using Kotor.NET.Encapsulations;
+using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.OpenGL;
 using Silk.NET.OpenGL;
 
@@ -50,6 +53,12 @@ public partial class MDLResourceViewer : ReactiveWindow<MDLResourceViewerViewMod
                 var mdx = File.ReadAllBytes(mdxFilepath);
 
                 return (mdl, mdx);
+            });
+
+            ViewModel.Scene.Entities.Add(new StaticModel()
+            {
+                Model = "model",
+                Transformation = Matrix4x4.Identity
             });
         }
     }

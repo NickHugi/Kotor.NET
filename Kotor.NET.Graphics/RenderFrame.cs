@@ -8,17 +8,14 @@ namespace Kotor.NET.Graphics;
 
 public class RenderFrame : IRenderFrame
 {
-    public IAssetManager AssetManager { get; }
-
     private List<IRenderObject> _objects = new();
 
-    public RenderFrame(IAssetManager assetManager, List<IRenderObject> objects)
+    public RenderFrame(List<IRenderObject> objects)
     {
-        AssetManager = assetManager;
         _objects = objects;
     }
 
-    public void Render()
+    public void Render(IAssetManager assetManager)
     {
         var optimized = _objects.OrderBy(x => x.Shader.ID).ThenBy(x => x.Texture?.ID).ToList();
 
@@ -33,7 +30,7 @@ public class RenderFrame : IRenderFrame
             }
             else
             {
-                AssetManager.GetTexture("placeholder").Activate();
+                assetManager.GetTexture("placeholder").Activate();
             }
 
             renderable.VAO.Draw();
