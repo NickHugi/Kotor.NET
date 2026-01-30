@@ -61,10 +61,36 @@ public class ModelLoader
         var position = new Vector3(dummyHeader.Position.X, dummyHeader.Position.Y, dummyHeader.Position.Z);
         var orientation = new Quaternion(dummyHeader.Rotation.Y, dummyHeader.Rotation.Z, dummyHeader.Rotation.W, dummyHeader.Rotation.X);
 
-        if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.TrimeshFlag))
-        {
-            var trimeshHeader = new MDLBinaryTrimeshHeader(reader);
+        MDLBinaryTrimeshHeader trimeshHeader = null;
+        MDLBinarySkinmeshHeader skinmeshHeader = null;
+        MDLBinarySabermeshHeader sabermeshHeader = null;
+        MDLBinaryWalkmeshHeader walkmeshHeader = null;
+        MDLBinaryDanglyHeader danglymeshHeader = null;
+        MDLBinaryLightHeader lightHeader = null;
+        MDLBinaryEmitterHeader emitterHeader = null;
+        MDLBinaryReferenceHeader referenceHeader = null;
 
+        if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.TrimeshFlag))
+            trimeshHeader = new MDLBinaryTrimeshHeader(reader);
+        if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.DanglyFlag))
+            danglymeshHeader = new MDLBinaryDanglyHeader(reader);
+        if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.SkinFlag))
+            skinmeshHeader = new MDLBinarySkinmeshHeader(reader);
+        if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.DanglyFlag))
+            danglymeshHeader = new MDLBinaryDanglyHeader(reader);
+        if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.SaberFlag))
+            sabermeshHeader = new MDLBinarySabermeshHeader(reader);
+        if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.AABBFlag))
+            walkmeshHeader = new MDLBinaryWalkmeshHeader(reader);
+        if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.LightFlag))
+            lightHeader = new MDLBinaryLightHeader(reader);
+        if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.EmitterFlag))
+            emitterHeader = new MDLBinaryEmitterHeader(reader);
+        if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.ReferenceFlag))
+            referenceHeader = new MDLBinaryReferenceHeader(reader);
+
+        if (trimeshHeader is not null)
+        {
             reader.SetStreamPosition(trimeshHeader.OffsetToVertexIndicesOffsetArray);
             var offsetToIndices = reader.ReadUInt32();
             reader.SetStreamPosition((int)offsetToIndices);
@@ -73,20 +99,19 @@ public class ModelLoader
             mdxReader.BaseStream.Position = trimeshHeader.MDXOffsetToData;
             var mdxData = mdxReader.ReadBytes(trimeshHeader.MDXDataSize * trimeshHeader.VertexCount); 
 
-            var vao = new VertexArrayObjectFactory().FromBinary(
-                gl,
-                mdxData,
-                indicesData,
-                (uint)trimeshHeader.MDXPositionStride,
-                (uint)trimeshHeader.MDXNormalStride,
-                (uint)trimeshHeader.MDXTexture1Stride,
-                (uint)trimeshHeader.MDXTexture2Stride,
-                (uint)trimeshHeader.MDXDataSize,
-                (uint)trimeshHeader.MDXDataBitmap);
-
-            if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.DanglyFlag))
+            if (danglymeshHeader is not null)
             {
-                var danglyHeader = new MDLBinaryDanglyHeader(reader);
+                var vao = new VertexArrayObjectFactory().FromBinary(
+                    gl,
+                    mdxData,
+                    indicesData,
+                    (uint)trimeshHeader.MDXPositionStride,
+                    (uint)trimeshHeader.MDXNormalStride,
+                    (uint)trimeshHeader.MDXTexture1Stride,
+                    (uint)trimeshHeader.MDXTexture2Stride,
+                    (uint)trimeshHeader.MDXDataSize,
+                    (uint)trimeshHeader.MDXDataBitmap);
+
                 node = new DanglymeshNode()
                 {
                     NodeID = dummyHeader.NodeNumber,
@@ -100,9 +125,21 @@ public class ModelLoader
                     Orientation = orientation
                 };
             }
-            else if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.SkinFlag))
+            else if (skinmeshHeader is not null)
             {
-                var skinHeader = new MDLBinarySkinmeshHeader(reader);
+                var vao = new VertexArrayObjectFactory().SkinFromBinary(
+                    gl,
+                    mdxData,
+                    indicesData,
+                    (uint)trimeshHeader.MDXPositionStride,
+                    (uint)trimeshHeader.MDXNormalStride,
+                    (uint)trimeshHeader.MDXTexture1Stride,
+                    (uint)trimeshHeader.MDXTexture2Stride,
+                    (uint)trimeshHeader.MDXDataSize,
+                    (uint)trimeshHeader.MDXDataBitmap,
+                    (uint)skinmeshHeader.MDXWeightValueStride,
+                    (uint)skinmeshHeader.MDXWeightIndexStride);
+
                 node = new SkinmeshNode()
                 {
                     NodeID = dummyHeader.NodeNumber,
@@ -113,12 +150,41 @@ public class ModelLoader
                     Texture1 = trimeshHeader.Texture,
                     Texture2 = trimeshHeader.Lightmap,
                     Position = position,
-                    Orientation = orientation
+                    Orientation = orientation,
+                    BoneIndices =
+                    [
+                        skinmeshHeader.BoneIndex1,
+                        skinmeshHeader.BoneIndex2,
+                        skinmeshHeader.BoneIndex3,
+                        skinmeshHeader.BoneIndex4,
+                        skinmeshHeader.BoneIndex5,
+                        skinmeshHeader.BoneIndex6,
+                        skinmeshHeader.BoneIndex7,
+                        skinmeshHeader.BoneIndex8,
+                        skinmeshHeader.BoneIndex9,
+                        skinmeshHeader.BoneIndex10,
+                        skinmeshHeader.BoneIndex11,
+                        skinmeshHeader.BoneIndex12,
+                        skinmeshHeader.BoneIndex13,
+                        skinmeshHeader.BoneIndex14,
+                        skinmeshHeader.BoneIndex15,
+                        skinmeshHeader.BoneIndex16,
+                    ]
                 };
             }
-            else if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.SaberFlag))
+            else if (sabermeshHeader is not null)
             {
-                var saberHeader = new MDLBinarySabermeshHeader(reader);
+                var vao = new VertexArrayObjectFactory().FromBinary(
+                    gl,
+                    mdxData,
+                    indicesData,
+                    (uint)trimeshHeader.MDXPositionStride,
+                    (uint)trimeshHeader.MDXNormalStride,
+                    (uint)trimeshHeader.MDXTexture1Stride,
+                    (uint)trimeshHeader.MDXTexture2Stride,
+                    (uint)trimeshHeader.MDXDataSize,
+                    (uint)trimeshHeader.MDXDataBitmap);
+
                 node = new SabermeshNode()
                 {
                     NodeID = dummyHeader.NodeNumber,
@@ -129,9 +195,19 @@ public class ModelLoader
                     Orientation = orientation
                 };
             }
-            else if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.AABBFlag))
+            else if (walkmeshHeader is not null)
             {
-                var walkmeshHeader = new MDLBinaryWalkmeshHeader(reader);
+                var vao = new VertexArrayObjectFactory().FromBinary(
+                    gl,
+                    mdxData,
+                    indicesData,
+                    (uint)trimeshHeader.MDXPositionStride,
+                    (uint)trimeshHeader.MDXNormalStride,
+                    (uint)trimeshHeader.MDXTexture1Stride,
+                    (uint)trimeshHeader.MDXTexture2Stride,
+                    (uint)trimeshHeader.MDXDataSize,
+                    (uint)trimeshHeader.MDXDataBitmap);
+
                 node = new WalkmeshNode()
                 {
                     NodeID = dummyHeader.NodeNumber,
@@ -147,6 +223,17 @@ public class ModelLoader
             }
             else
             {
+                var vao = new VertexArrayObjectFactory().FromBinary(
+                    gl,
+                    mdxData,
+                    indicesData,
+                    (uint)trimeshHeader.MDXPositionStride,
+                    (uint)trimeshHeader.MDXNormalStride,
+                    (uint)trimeshHeader.MDXTexture1Stride,
+                    (uint)trimeshHeader.MDXTexture2Stride,
+                    (uint)trimeshHeader.MDXDataSize,
+                    (uint)trimeshHeader.MDXDataBitmap);
+
                 node = new MeshNode()
                 {
                     NodeID = dummyHeader.NodeNumber,
@@ -161,7 +248,7 @@ public class ModelLoader
                 };
             }
         }
-        else if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.LightFlag))
+        else if (lightHeader is not null)
         {
             node = new LightNode()
             {
@@ -172,7 +259,7 @@ public class ModelLoader
                 Orientation = orientation
             };
         }
-        else if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.EmitterFlag))
+        else if (emitterHeader is not null)
         {
             node = new EmitterNode()
             {
@@ -184,7 +271,7 @@ public class ModelLoader
                 Orientation = orientation
             };
         }
-        else if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.ReferenceFlag))
+        else if (referenceHeader is not null)
         {
             node = new ReferenceNode()
             {
@@ -196,7 +283,7 @@ public class ModelLoader
                 Orientation = orientation
             };
         }
-        else if (((MDLBinaryNodeType)dummyHeader.NodeType).HasFlag(MDLBinaryNodeType.NodeFlag))
+        else if (dummyHeader is not null)
         {
             node = new DummyNode()
             {

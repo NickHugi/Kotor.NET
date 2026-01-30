@@ -59,7 +59,18 @@ public class VertexArrayObjectFactory : IVertexArrayObjectFactory
 
         return new VertexArrayObject(gl, vertexArrayObjectID, vertexbufferObjectID, elementBufferObjectID, elementCount);
     }
-    public unsafe IVertexArrayObject SkinFromBinary(GL gl, byte[] vertexData, byte[] elementData, uint positionStride, uint normalStride, uint uv1Stride, uint uv2Stride, uint blockSize, uint flags, uint weightValueStride, uint weightIndexStride)
+    public unsafe IVertexArrayObject SkinFromBinary(
+        GL gl,
+        byte[] vertexData,
+        byte[] elementData,
+        uint positionStride,
+        uint normalStride,
+        uint uv1Stride,
+        uint uv2Stride,
+        uint blockSize,
+        uint flags,
+        uint weightValueStride,
+        uint weightIndexStride)
     {
         var vertexArrayObjectID = gl.GenVertexArray();
         var vertexbufferObjectID = gl.GenBuffer();
