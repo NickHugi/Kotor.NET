@@ -12,11 +12,41 @@ namespace Kotor.NET.Graphics.OpenGL.Model;
 public class KModel : IModel
 {
     public BaseNode Root { get; set; }
-    public Matrix4x4 Transformation => Matrix4x4.Identity;
+    public ICollection<Controller> Controllers { get; set; }
+    public ICollection<Animation> Animations { get; set; }
 
-    public ICollection<IRenderObject> Render(IAssetManager assetManager, Matrix4x4 transformation)
+    public ICollection<IRenderObject> Render(IAssetManager assetManager, Matrix4x4 entityTransform)
     {
+        var nodes = GetAllNodes();
         var objects = new List<IRenderObject>();
+
+        Root.GenerateTransform("crun", 0.0f);
+
+        foreach (var node in nodes)
+        {
+            objects.AddRange(node.Render(assetManager, entityTransform));
+        }
+
+        return objects;
+    }
+    public ICollection<IRenderObject> Render(IAssetManager assetManager, Matrix4x4 entityTransform, string animation, float timeKey)
+    {
+        var nodes = GetAllNodes();
+        var objects = new List<IRenderObject>();
+
+        Root.GenerateTransform();
+
+        foreach (var node in nodes)
+        {
+            node.Render(assetManager, entityTransform);
+        }
+
+        return objects;
+    }
+
+    private IEnumerable<BaseNode> GetAllNodes()
+    {
+        var nodes = new List<BaseNode>();
         var iterate = new List<BaseNode>() { Root };
 
         while (iterate.Any())
@@ -24,13 +54,8 @@ public class KModel : IModel
             var target = iterate.First();
             iterate.RemoveAt(0);
 
-            if (target.Visible)
-            {
-                iterate.AddRange(target.Nodes);
-                objects.AddRange(target.Render(assetManager, transformation));
-            }
+            iterate.AddRange(target.Nodes);
+            yield return target;
         }
-
-        return objects;
     }
 }

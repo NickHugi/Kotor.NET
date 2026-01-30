@@ -66,7 +66,7 @@ public partial class SceneControl : OpenGlControlBase
 
         var identity = Matrix4x4.Identity.ToDoubleArray();
         var projection = Matrix4x4.CreatePerspectiveFieldOfView((float)Math.PI/3f, width / (float)height, 0.001f, 1000).ToDoubleArray();
-        var view = Matrix4x4.CreateLookAt(new(1, 3, 2), new(0, 0, 1), new(0, 0, 1)).ToDoubleArray();
+        var view = Matrix4x4.CreateLookAt(new(0, 4, 2), new(0, 0, 1), new(0, 0, 1)).ToDoubleArray();
         ViewModel.AssetManager.GetShader("basic").Activate();
         ViewModel.GL.UniformMatrix4(projectionLocation, false, projection);
         ViewModel.GL.UniformMatrix4(viewLocation, false, view);

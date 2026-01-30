@@ -26,16 +26,36 @@ public class ModelLoader
         reader.SetStreamPosition(0);
         var modelHeader = new MDLBinaryModelHeader(reader);
 
-        return new KModel()
+        var model = new KModel();
+        model.Animations = [];
+        for (int i = 0; i < modelHeader.AnimationCount; i++)
         {
-            Root = LoadNode(gl, reader, mdxReader, modelHeader.OffsetToRootNode, null)
-        };
+            reader.SetStreamPosition(modelHeader.AnimationOffsetArrayOffset + (i * 4));
+            var offset = reader.ReadInt32();
+            model.Animations.Add(LoadAnimation(gl, reader, mdxReader, offset, model));
+        }
+        model.Root = LoadNode(gl, reader, mdxReader, modelHeader.OffsetToRootNode, null, model);
+        return model;
     }
 
-    private BaseNode LoadNode(GL gl, MDLBinaryReader reader, BinaryReader mdxReader, int nodeOffset, BaseNode? parent)
+    private Animation LoadAnimation(GL gl, MDLBinaryReader reader, BinaryReader mdxReader, int animOffset, KModel model)
+    {
+        reader.SetStreamPosition(animOffset);
+        var animationHeader = new MDLBinaryAnimationHeader(reader);
+
+        var animation = new Animation();
+        animation.Name = animationHeader.GeometryHeader.Name;
+        animation.Root = LoadNode(gl, reader, mdxReader, animationHeader.GeometryHeader.RootNodeOffset, null, model);
+        animation.Length = animationHeader.AnimationLength;
+        animation.Transition = animationHeader.TransitionTime;
+        return animation;
+    }
+
+    private BaseNode LoadNode(GL gl, MDLBinaryReader reader, BinaryReader mdxReader, int nodeOffset, BaseNode? parent, KModel model)
     {
         reader.SetStreamPosition(nodeOffset);
         var dummyHeader = new MDLBinaryNodeHeader(reader);
+
         BaseNode node;
 
         var position = new Vector3(dummyHeader.Position.X, dummyHeader.Position.Y, dummyHeader.Position.Z);
@@ -69,6 +89,8 @@ public class ModelLoader
                 var danglyHeader = new MDLBinaryDanglyHeader(reader);
                 node = new DanglymeshNode()
                 {
+                    NodeID = dummyHeader.NodeNumber,
+                    Model = model,
                     Parent = parent,
                     Visible = trimeshHeader.DoesRender != 0,
                     Mesh = vao,
@@ -83,8 +105,10 @@ public class ModelLoader
                 var skinHeader = new MDLBinarySkinmeshHeader(reader);
                 node = new SkinmeshNode()
                 {
+                    NodeID = dummyHeader.NodeNumber,
+                    Model = model,
                     Parent = parent,
-                    Visible = trimeshHeader.DoesRender != 0,
+                    Visible = false,//trimeshHeader.DoesRender != 0,
                     Mesh = vao,
                     Texture1 = trimeshHeader.Texture,
                     Texture2 = trimeshHeader.Lightmap,
@@ -97,6 +121,8 @@ public class ModelLoader
                 var saberHeader = new MDLBinarySabermeshHeader(reader);
                 node = new SabermeshNode()
                 {
+                    NodeID = dummyHeader.NodeNumber,
+                    Model = model,
                     Parent = parent,
                     Visible = trimeshHeader.DoesRender != 0,
                     Position = position,
@@ -108,6 +134,8 @@ public class ModelLoader
                 var walkmeshHeader = new MDLBinaryWalkmeshHeader(reader);
                 node = new WalkmeshNode()
                 {
+                    NodeID = dummyHeader.NodeNumber,
+                    Model = model,
                     Parent = parent,
                     Visible = trimeshHeader.DoesRender != 0,
                     Mesh = vao,
@@ -121,8 +149,10 @@ public class ModelLoader
             {
                 node = new MeshNode()
                 {
+                    NodeID = dummyHeader.NodeNumber,
+                    Model = model,
                     Parent = parent,
-                    Visible = trimeshHeader.DoesRender != 0,
+                    Visible = true,//trimeshHeader.DoesRender != 0,
                     Mesh = vao,
                     Texture1 = trimeshHeader.Texture,
                     Texture2 = trimeshHeader.Lightmap,
@@ -135,6 +165,8 @@ public class ModelLoader
         {
             node = new LightNode()
             {
+                NodeID = dummyHeader.NodeNumber,
+                Model = model,
                 Parent = parent,
                 Position = position,
                 Orientation = orientation
@@ -144,6 +176,8 @@ public class ModelLoader
         {
             node = new EmitterNode()
             {
+                NodeID = dummyHeader.NodeNumber,
+                Model = model,
                 Parent = parent,
                 Visible = true,
                 Position = position,
@@ -154,6 +188,8 @@ public class ModelLoader
         {
             node = new ReferenceNode()
             {
+                NodeID = dummyHeader.NodeNumber,
+                Model = model,
                 Parent = parent,
                 Visible = true,
                 Position = position,
@@ -164,6 +200,8 @@ public class ModelLoader
         {
             node = new DummyNode()
             {
+                NodeID = dummyHeader.NodeNumber,
+                Model = model,
                 Parent = parent,
                 Visible = true, 
                 Position = position,
@@ -175,6 +213,35 @@ public class ModelLoader
             throw new Exception();
         }
 
+        var controllers = new List<Controller>();
+        node.Controllers = controllers;
+        for (int i = 0; i < dummyHeader.ControllerArrayCount; i++)
+        {
+            var controller = new Controller();
+
+            reader.SetStreamPosition(dummyHeader.OffsetToControllerArray + (i * MDLBinaryControllerHeader.SIZE));
+            var controllerHeader = new MDLBinaryControllerHeader(reader);
+            for (int j = 0; j < controllerHeader.RowCount; j++)
+            {
+                var realColumnCount = (controllerHeader.ControllerType == 20 && controllerHeader.ColumnCount == 2) ? 1 : controllerHeader.ColumnCount;
+
+                reader.SetStreamPosition(dummyHeader.OffsetToControllerData + (4 * controllerHeader.FirstKeyOffset) + (4 * j));
+                var timeKey = reader.ReadSingle();
+                reader.SetStreamPosition(dummyHeader.OffsetToControllerData + (4 * controllerHeader.FirstDataOffset) + (4 * j * realColumnCount));
+                var data = Enumerable
+                    .Range(0, realColumnCount)
+                    .Select(x => reader.ReadSingle()).ToArray();
+
+                controller.ControllerData.Add(new ControllerDataRow()
+                {
+                    TimeKey = timeKey,
+                    Values = data
+                });
+            }
+            controller.ControllerType = controllerHeader.ControllerType;
+            controllers.Add(controller);
+        }
+
         var childOffsets = new List<int>(dummyHeader.ChildArrayCount);
         reader.SetStreamPosition(dummyHeader.OffsetToChildOffsetArray);
         for (int i = 0; i < dummyHeader.ChildArrayCount; i++)
@@ -183,7 +250,7 @@ public class ModelLoader
         }
         foreach (var childOffset in childOffsets)
         {
-            node.Nodes.Add(LoadNode(gl, reader, mdxReader, childOffset, node));
+            node.Nodes.Add(LoadNode(gl, reader, mdxReader, childOffset, node, model));
         }
 
         return node;
