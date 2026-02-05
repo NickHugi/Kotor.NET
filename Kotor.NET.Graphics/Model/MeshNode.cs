@@ -22,9 +22,27 @@ public class MeshNode : DummyNode
             ? null
             : assetManager.GetTexture(Texture1);
 
-        var renderObject = new RenderObject(shader, texture, Mesh, Transformation, entityTransform);
+        var renderObject = new RenderObject(shader, texture, Mesh, WorldTransformation, entityTransform);
 
         var objects = base.Render(assetManager, entityTransform);
+        objects.Add(renderObject);
+        return objects;
+    }
+
+    public override ICollection<IRenderObject> Render(IAssetManager assetManager, Matrix4x4 entityTransform, string animation, float timeKey)
+    {
+        if (!Visible)
+            return [];
+
+        var shader = assetManager.GetShader("basic");
+
+        var texture = (Texture1 == "NULL" || Texture1 == "")
+            ? null
+            : assetManager.GetTexture(Texture1);
+
+        var renderObject = new RenderObject(shader, texture, Mesh, WorldTransformation, entityTransform);
+
+        var objects = base.Render(assetManager, entityTransform, animation, timeKey);
         objects.Add(renderObject);
         return objects;
     }

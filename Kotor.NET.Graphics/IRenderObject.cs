@@ -15,4 +15,5 @@ public interface IRenderObject
     public IVertexArrayObject VAO { get; }
     public Matrix4x4 ModelTransform { get; }
     public Matrix4x4 EntityTransform { get; }
+    public Matrix4x4[] FinalBoneMatrices { get; }
 }

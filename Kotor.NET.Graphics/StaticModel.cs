@@ -21,6 +21,14 @@ public class StaticModel : IEntity
             objects.ToList().ForEach(frame.AddObject);
         }
     }
+    public void Render(IRenderFrame frame, IAssetManager assetManager, string animation, float timeKey)
+    {
+        if (assetManager.HasModel(Model))
+        {
+            var objects = assetManager.GetModel(Model).Render(assetManager, Transformation, animation, timeKey);
+            objects.ToList().ForEach(frame.AddObject);
+        }
+    }
 
     public void Update(float delta)
     {

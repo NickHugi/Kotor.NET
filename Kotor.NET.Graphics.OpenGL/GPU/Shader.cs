@@ -43,9 +43,18 @@ public class Shader : IShader
         _gl.UniformMatrix4(location, false, value.ToDoubleArray());
     }
 
-    public void SetUniform1(string name, double value)
+    public void SetMatrix4x4Array(string name, Matrix4x4[] value)
+    {
+        for (int i = 0; i < value.Length; i++)
+        {
+            var location = GetUniformLocation($"{name}[{i}]");
+            _gl.UniformMatrix4(location, false, value[i].ToDoubleArray());
+        }
+    }
+
+    public void SetUniform1(string name, int value)
     {
         var location = GetUniformLocation(name);
-        _gl.Uniform1(location, value);
+        _gl.Uniform1(location, 0);
     }
 }

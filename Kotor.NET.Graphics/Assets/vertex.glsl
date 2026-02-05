@@ -10,9 +10,10 @@ layout (location = 5) in vec4 weights;
 
 out vec2 texCoord1;
 out vec2 texCoord2;
+out float bug;
 
 uniform mat4 entity;
-uniform mat4 model;
+uniform mat4 mesh;
 uniform mat4 view;
 uniform mat4 projection;
 
@@ -22,21 +23,32 @@ uniform mat4 finalBonesMatrices[MAX_BONES];
 
 void main()
 {
-    vec4 totalPosition = vec4(0.0f);
-    for(int i = 0 ; i < MAX_BONE_INFLUENCE; i++)
+    if (boneIds[0] >= 0.0f && boneIds[0] <= 16.0f)
     {
-        if(boneIds[i] == -1.0f) 
-            continue;
-        if(int(boneIds[i]) >= MAX_BONES) 
-        {
-            totalPosition = vec4(aPosition, 1.0f);
-            break;
-        }
-        vec4 localPosition = finalBonesMatrices[int(boneIds[i])] * vec4(aPosition,1.0f);
-        totalPosition += localPosition * weights[i];
-    }
+        vec4 localPos = vec4(aPosition, 1.0f);
+        vec4 skinnedPosition = vec4(0.0f);
 
-    gl_Position = projection * view * entity * model * vec4(aPosition, 1.0f);
+        for (int i = 0; i < MAX_BONE_INFLUENCE; i++)
+        {
+            int boneID = int(boneIds[i]);
+
+            if (boneID < 0)
+                continue;
+            if (boneID >= MAX_BONES)
+                continue;
+            if (weights[i] == 0.0)
+                continue;
+                
+            skinnedPosition += weights[i] * (finalBonesMatrices[boneID] * mesh * localPos);
+        }
+
+        //gl_Position = projection * view * entity * mesh * skinnedPosition;
+        gl_Position = projection * view * skinnedPosition;
+    }
+    else
+    {
+        gl_Position = projection * view * entity * mesh * vec4(aPosition, 1.0f);
+    }
 
     texCoord1 = vec2(aTexCoord1.x, aTexCoord1.y);
     texCoord2 = vec2(aTexCoord2.x, aTexCoord2.y);

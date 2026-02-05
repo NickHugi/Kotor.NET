@@ -59,19 +59,15 @@ public partial class SceneControl : OpenGlControlBase
         ViewModel.GL.ClearColor(0.1f, 0.0f, 0.0f, 1.0f);
         ViewModel.GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
-        var projectionLocation = ViewModel.AssetManager.GetShader("basic").GetUniformLocation("projection");
-        var viewLocation = ViewModel.AssetManager.GetShader("basic").GetUniformLocation("view");
-        var modelLocation = ViewModel.AssetManager.GetShader("basic").GetUniformLocation("model");
-        var textureLocation = ViewModel.AssetManager.GetShader("basic").GetUniformLocation("texture1");
-
-        var identity = Matrix4x4.Identity.ToDoubleArray();
-        var projection = Matrix4x4.CreatePerspectiveFieldOfView((float)Math.PI/3f, width / (float)height, 0.001f, 1000).ToDoubleArray();
-        var view = Matrix4x4.CreateLookAt(new(0, 4, 2), new(0, 0, 1), new(0, 0, 1)).ToDoubleArray();
+        var projection = Matrix4x4.CreatePerspectiveFieldOfView((float)Math.PI/3f, width / (float)height, 0.001f, 1000);
+        var view = Matrix4x4.CreateLookAt(new(5, 1, 0), new(0, 0, 0), new(0, 0, 1));
+        view = Matrix4x4.CreateLookAt(new(1, 2, 2), new(0, 0, 1.5f), new(0, 0, 1));
+        //view = Matrix4x4.CreateLookAt(new(0.3f, 1.6f, 3), new(0, 1.6402f, 0), new(0, 0, 1));
         ViewModel.AssetManager.GetShader("basic").Activate();
-        ViewModel.GL.UniformMatrix4(projectionLocation, false, projection);
-        ViewModel.GL.UniformMatrix4(viewLocation, false, view);
-        ViewModel.GL.UniformMatrix4(modelLocation, false, identity);
-        ViewModel.GL.Uniform1(textureLocation, 0);
+        ViewModel.AssetManager.GetShader("basic").SetMatrix4x4("projection", projection);
+        ViewModel.AssetManager.GetShader("basic").SetMatrix4x4("view", view);
+        ViewModel.AssetManager.GetShader("basic").SetMatrix4x4("mesh", Matrix4x4.Identity);
+        ViewModel.AssetManager.GetShader("basic").SetUniform1("texture1", 0);
 
         while (ViewModel.ModelBuffer.Count > 0)
         {

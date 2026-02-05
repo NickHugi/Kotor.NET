@@ -20,7 +20,7 @@ public class KModel : IModel
         var nodes = GetAllNodes();
         var objects = new List<IRenderObject>();
 
-        Root.GenerateTransform("crun", 0.0f);
+        Root.GenerateTransform();
 
         foreach (var node in nodes)
         {
@@ -34,11 +34,11 @@ public class KModel : IModel
         var nodes = GetAllNodes();
         var objects = new List<IRenderObject>();
 
-        Root.GenerateTransform();
+        Root.GenerateTransform(animation, timeKey);
 
         foreach (var node in nodes)
         {
-            node.Render(assetManager, entityTransform);
+            objects.AddRange(node.Render(assetManager, entityTransform, animation, timeKey));
         }
 
         return objects;

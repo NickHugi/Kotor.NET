@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,7 +23,8 @@ public class RenderFrame : IRenderFrame
         foreach (var renderable in optimized)
         {
             renderable.Shader.SetMatrix4x4("entity", renderable.EntityTransform);
-            renderable.Shader.SetMatrix4x4("model", renderable.ModelTransform);
+            renderable.Shader.SetMatrix4x4("mesh", renderable.ModelTransform);
+            renderable.Shader.SetMatrix4x4Array("finalBonesMatrices", renderable.FinalBoneMatrices);
 
             if (renderable.Texture is not null)
             {

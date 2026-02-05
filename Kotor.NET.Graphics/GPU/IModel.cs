@@ -10,4 +10,5 @@ namespace Kotor.NET.Graphics.GPU;
 public interface IModel
 {
     public ICollection<IRenderObject> Render(IAssetManager assetManager, Matrix4x4 transformation);
+    ICollection<IRenderObject> Render(IAssetManager assetManager, Matrix4x4 entityTransform, string animation, float timeKey);
 }

@@ -27,7 +27,25 @@ public abstract class BaseNode
         get; set;
     }
 
-    public Matrix4x4 Transformation
+    public Matrix4x4 OriginalWorldTransformation
+    {
+        get; private set;
+    }
+    public Matrix4x4 OriginalLocalTransform
+    {
+        get; private set;
+    }
+
+    public Matrix4x4 WorldTransformation
+    {
+        get; private set;
+    }
+    public Matrix4x4 LocalTransformation
+    {
+        get; private set;
+    }
+
+    public Matrix4x4 InverseBindMatrix
     {
         get; private set;
     }
@@ -45,8 +63,8 @@ public abstract class BaseNode
 
     public void GenerateTransform()
     {
-        Transformation = (Parent is null) ? Matrix4x4.Identity : Parent.Transformation;
-        Transformation = Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position) * Transformation;
+        WorldTransformation = (Parent is null) ? (Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position)) : Parent.WorldTransformation;
+        WorldTransformation = Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position) * WorldTransformation;
 
         foreach (var node in Nodes)
         {
@@ -55,15 +73,61 @@ public abstract class BaseNode
     }
     public void GenerateTransform(string animation, float timeKey)
     {
+        var test = Matrix4x4.Identity;
+        var test2 = Matrix4x4.Identity;
+
+        if (NodeID != 0 && NodeID != 6 && Model.Root.FindNode(6) is { } head && head.WorldTransformation.GetDeterminant() != 0)
+        {
+            //test = head.WorldTransformation;
+            //Matrix4x4.Invert(test, out test2);
+
+        }
+
+        if (NodeID == 6)
+        {
+            //Position = new(0, 0, 0);
+            //Orientation = Quaternion.Identity;
+        }
+
+        if (NodeID == 7)
+        {
+
+            //test = Matrix4x4.CreateTranslation(123, -120, 20);
+            //test = Matrix4x4.CreateFromQuaternion(Quaternion.CreateFromYawPitchRoll(3, 3, 3));
+
+            //var head = Parent.FindNode(6);
+            //test = head.LocalTransformation;
+            //Matrix4x4.Invert(test, out test2);
+
+            //Orientation = Quaternion.Identity;
+            //Position = new(0, 0, 1.2229f);
+            //Orientation = Quaternion.Identity;
+            //Orientation = Quaternion.Inverse(new(0.452152f, -0.54354f, -0.452152f, 0.543651f));
+        }
+
         var anim = Model.Animations.First(x => x.Name == animation);
         var animNode = anim.Root.FindNode(NodeID);
 
         var position = animNode?.GetAnimPosition(this, timeKey) ?? Position;
         var rotation = animNode?.GetAnimRotation(this, timeKey) ?? Orientation;
+        LocalTransformation = Matrix4x4.CreateFromQuaternion(rotation) * Matrix4x4.CreateTranslation(position);
+        WorldTransformation = (Parent is null) ? LocalTransformation : LocalTransformation * Parent.WorldTransformation;
 
-        var local = Matrix4x4.CreateFromQuaternion(rotation)
-                  * Matrix4x4.CreateTranslation(position);
-        Transformation = (Parent is null) ? local : local * Parent.Transformation;
+        //if (NodeID == 7)
+        //{
+        //    LocalTransformation = Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position + new Vector3(0f, 0.5f, 0f));
+        //    WorldTransformation = (Parent is null) ? LocalTransformation : LocalTransformation * Parent.WorldTransformation;
+        //}
+        //else
+        //{
+        //    LocalTransformation = Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position);
+        //    WorldTransformation = (Parent is null) ? LocalTransformation : LocalTransformation * Parent.WorldTransformation;
+        //}
+
+        OriginalLocalTransform = Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position);
+        OriginalWorldTransformation = (Parent is null) ? OriginalLocalTransform : OriginalLocalTransform * Parent.OriginalWorldTransformation;
+
+        InverseBindMatrix = Matrix4x4.Invert(OriginalWorldTransformation, out var value) ? value : Matrix4x4.Identity;
 
         foreach (var node in Nodes)
         {
@@ -116,7 +180,7 @@ public abstract class BaseNode
                     controller.ControllerData.First().Values[2],
                     controller.ControllerData.First().Values[3]
                 );
-                return original.Orientation * q;
+                return q;
             }
             else
             {
@@ -173,17 +237,5 @@ public static class QuaternionExtensions
             tmpQuat = new((float)(x * invLength), (float)(y * invLength), (float)(z * invLength), 0);
         }
         return Quaternion.Normalize(tmpQuat);
-
-        //var comp = BitConverter.ToInt32(data);
-        //var x = ((comp & 0x7FF) / 1023.0) - 1.0f;
-        //var y = (((comp >> 11) & 0x7FF) / 1023.0) - 1.0f;
-        //var z = ((comp >> 22) / 511.0) - 1.0f;
-        //var mag2 = x * x + y * y + z * z;
-        //var w = 0f;
-        //if (mag2 < 1.0f)
-        //    w = (float)Math.Sqrt(1.0f - mag2);
-        //else
-        //    w = 0.0f;
-        //return new Quaternion((float)x, (float)y, (float)z, (float)w);
     }
 }

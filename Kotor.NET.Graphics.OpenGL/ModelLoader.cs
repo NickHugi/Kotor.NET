@@ -127,6 +127,21 @@ public class ModelLoader
             }
             else if (skinmeshHeader is not null)
             {
+                reader.SetStreamPosition(skinmeshHeader.BonemapOffset);
+                var bonemap = Enumerable
+                    .Repeat(0, skinmeshHeader.BonemapCount)
+                    .Select(x => (int)reader.ReadSingle())
+                    .ToArray();
+
+                reader.SetStreamPosition(skinmeshHeader.TBonesOffset);
+                var tbones = Enumerable
+                    .Repeat(0, skinmeshHeader.TBonesCount)
+                    .Select(x => new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle()))
+                    .ToArray();
+
+                reader.SetStreamPosition(skinmeshHeader.QBonesOffset);
+                var qbones = Enumerable.Repeat(0, skinmeshHeader.QBonesCount).Select(x => reader.ReadQuaternion(true)).ToArray();
+
                 var vao = new VertexArrayObjectFactory().SkinFromBinary(
                     gl,
                     mdxData,
@@ -145,7 +160,7 @@ public class ModelLoader
                     NodeID = dummyHeader.NodeNumber,
                     Model = model,
                     Parent = parent,
-                    Visible = false,//trimeshHeader.DoesRender != 0,
+                    Visible = trimeshHeader.DoesRender != 0,
                     Mesh = vao,
                     Texture1 = trimeshHeader.Texture,
                     Texture2 = trimeshHeader.Lightmap,
@@ -169,7 +184,10 @@ public class ModelLoader
                         skinmeshHeader.BoneIndex14,
                         skinmeshHeader.BoneIndex15,
                         skinmeshHeader.BoneIndex16,
-                    ]
+                    ],
+                    Bonemap = bonemap,
+                    TBones = tbones,
+                    QBones = qbones
                 };
             }
             else if (sabermeshHeader is not null)
@@ -239,7 +257,7 @@ public class ModelLoader
                     NodeID = dummyHeader.NodeNumber,
                     Model = model,
                     Parent = parent,
-                    Visible = true,//trimeshHeader.DoesRender != 0,
+                    Visible = trimeshHeader.DoesRender != 0,
                     Mesh = vao,
                     Texture1 = trimeshHeader.Texture,
                     Texture2 = trimeshHeader.Lightmap,
