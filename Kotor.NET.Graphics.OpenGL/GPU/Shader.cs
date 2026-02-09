@@ -4,8 +4,8 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using Kotor.DevelopmentKit.ViewerMDL.Views;
 using Kotor.NET.Graphics.GPU;
+using Kotor.NET.Graphics.OpenGL.Extensions;
 using Silk.NET.OpenGL;
 
 namespace Kotor.NET.Graphics.OpenGL.GPU;

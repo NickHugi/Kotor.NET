@@ -1,8 +1,8 @@
 using System.Numerics;
 
-namespace Kotor.DevelopmentKit.ViewerMDL.Views;
+namespace Kotor.NET.Graphics.OpenGL.Extensions;
 
-public static class Matrix4x4Exntensions
+public static class Matrix4x4Extensions
 {
     public static float[] ToDoubleArray(this Matrix4x4 m)
     {

@@ -20,7 +20,6 @@ public class Scene
     public void Render(IAssetManager assetManager)
     {
         var frame = new RenderFrame([]);
-        //Entities.ForEach(x => x.Render(frame, assetManager));
         Entities.ForEach(x => x.Render(frame, assetManager, "cwalk", 0.0f));
         frame.Render(assetManager);
     }

@@ -61,8 +61,6 @@ public partial class SceneControl : OpenGlControlBase
 
         var projection = Matrix4x4.CreatePerspectiveFieldOfView((float)Math.PI/3f, width / (float)height, 0.001f, 1000);
         var view = Matrix4x4.CreateLookAt(new(5, 1, 0), new(0, 0, 0), new(0, 0, 1));
-        view = Matrix4x4.CreateLookAt(new(1, 2, 2), new(0, 0, 1.5f), new(0, 0, 1));
-        //view = Matrix4x4.CreateLookAt(new(0.3f, 1.6f, 3), new(0, 1.6402f, 0), new(0, 0, 1));
         ViewModel.AssetManager.GetShader("basic").Activate();
         ViewModel.AssetManager.GetShader("basic").SetMatrix4x4("projection", projection);
         ViewModel.AssetManager.GetShader("basic").SetMatrix4x4("view", view);
@@ -110,10 +108,7 @@ public partial class SceneControl : OpenGlControlBase
 
         ViewModel.Scene.Render(ViewModel.AssetManager);
 
-        //if (ViewModel.AssetManager.HasModel("model"))
-        //    ViewModel.AssetManager.GetModel("model").Render(frame, Matrix4x4.Identity);
 
-        //frame.Render(TODO);
         RequestNextFrameRendering();
     }
 }
