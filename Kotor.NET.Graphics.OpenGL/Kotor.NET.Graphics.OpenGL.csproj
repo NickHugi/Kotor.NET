@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Extensions\Matrix4x4Extensions.cs~RF48729c01.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Silk.NET.OpenGL" Version="2.21.0" />
   </ItemGroup>
 

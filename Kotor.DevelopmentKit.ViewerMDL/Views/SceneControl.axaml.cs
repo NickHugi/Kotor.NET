@@ -49,6 +49,7 @@ public partial class SceneControl : OpenGlControlBase
         base.OnOpenGlDeinit(gl);
     }
 
+    private DateTime _lastRender = DateTime.Now;
     protected override void OnOpenGlRender(GlInterface gl, int fb)
     {
         var scale = TopLevel.GetTopLevel(this).RenderScaling;
@@ -60,7 +61,7 @@ public partial class SceneControl : OpenGlControlBase
         ViewModel.GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
         var projection = Matrix4x4.CreatePerspectiveFieldOfView((float)Math.PI/3f, width / (float)height, 0.001f, 1000);
-        var view = Matrix4x4.CreateLookAt(new(5, 1, 0), new(0, 0, 0), new(0, 0, 1));
+        var view = Matrix4x4.CreateLookAt(new(2, 2, 1), new(0, 0, 1f), new(0, 0, 1));
         ViewModel.AssetManager.GetShader("basic").Activate();
         ViewModel.AssetManager.GetShader("basic").SetMatrix4x4("projection", projection);
         ViewModel.AssetManager.GetShader("basic").SetMatrix4x4("view", view);
@@ -106,8 +107,12 @@ public partial class SceneControl : OpenGlControlBase
             }
         }
 
+        var delta = (float)(DateTime.Now - _lastRender).Milliseconds / 1000;
+
+        ViewModel.Scene.Update(ViewModel.AssetManager, delta);
         ViewModel.Scene.Render(ViewModel.AssetManager);
 
+        _lastRender = DateTime.Now;
 
         RequestNextFrameRendering();
     }

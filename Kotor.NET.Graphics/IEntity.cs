@@ -12,6 +12,6 @@ public interface IEntity
     public Matrix4x4 Transformation { get; }
 
     public void Render(IRenderFrame frame, IAssetManager assetManager);
-    void Render(IRenderFrame frame, IAssetManager assetManager, string animation, float timeKey);
-    public void Update(float delta);
+
+    public void Update(IAssetManager assetManager, float delta);
 }

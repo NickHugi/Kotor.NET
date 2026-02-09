@@ -22,7 +22,6 @@ public abstract class BaseNode
     {
         get; set;
     }
-
     public Quaternion Orientation
     {
         get; set;
@@ -113,10 +112,32 @@ public abstract class BaseNode
     {
         var controller = Controllers.FirstOrDefault(x => x.ControllerType == 8);
 
-        if (controller is not null)
+        if (controller is not null && controller.Data.Count > 0)
         {
-            var p = new Vector3(controller.ControllerData.First().Values);
-            return original.Position + p;
+            var rowA = controller.Data.OrderByDescending(x => x.TimeKey).FirstOrDefault(x => x.TimeKey < timeKey) ?? controller.Data.Last();
+            var rowB = controller.Data.FirstOrDefault(x => x.TimeKey > rowA.TimeKey);
+
+            if (rowA is null)
+            {
+                return null;
+            }
+            else
+            {
+                var positionA = new Vector3(rowA.Values);
+
+                if (rowB is null)
+                {
+                    return original.Position + positionA;
+                }
+                else
+                {
+                    var positionB = new Vector3(rowB.Values);
+                    var timeSinceA = timeKey - rowA.TimeKey;
+                    var durationBetweenRows = rowB.TimeKey - rowA.TimeKey;
+                    var weight = timeSinceA / durationBetweenRows;
+                    return original.Position + Vector3.Lerp(positionA, positionB, weight);
+                }
+            }
         }
         else
         {
@@ -128,27 +149,54 @@ public abstract class BaseNode
     {
         var controller = Controllers.FirstOrDefault(x => x.ControllerType == 20);
 
-        if (controller is not null)
+        if (controller is not null && controller.Data.Count > 0)
         {
-            if (controller.ControllerData.First().Values.Length == 4)
+            var rowA = controller.Data.OrderByDescending(x => x.TimeKey).FirstOrDefault(x => x.TimeKey < timeKey) ?? controller.Data.Last();
+            var rowB = controller.Data.FirstOrDefault(x => x.TimeKey > rowA.TimeKey);
+
+            if (rowA is null)
             {
-                var q = new Quaternion(
-                    controller.ControllerData.First().Values[0],
-                    controller.ControllerData.First().Values[1],
-                    controller.ControllerData.First().Values[2],
-                    controller.ControllerData.First().Values[3]
-                );
-                return q;
+                return null;
             }
             else
             {
-                var q = controller.ControllerData.First().Values[0].UncompressQuaternion();
-                return q;
+                var rotationA = GetQuaternion(rowA);
+
+                if (rowB is null)
+                {
+                    return rotationA;
+                }
+                else
+                {
+                    var rotationB = GetQuaternion(rowB);
+                    var timeSinceA = timeKey - rowA.TimeKey;
+                    var durationBetweenRows = rowB.TimeKey - rowA.TimeKey;
+                    var weight = timeSinceA / durationBetweenRows;
+                    return Quaternion.Lerp(rotationA, rotationB, weight);
+                }
             }
         }
         else
         {
             return null;
+        }
+    }
+    private Quaternion GetQuaternion(ControllerDataRow row)
+    {
+        if (row.Values.Length == 4)
+        {
+            var q = new Quaternion(
+                row.Values[0],
+                row.Values[1],
+                row.Values[2],
+                row.Values[3]
+            );
+            return q;
+        }
+        else
+        {
+            var q = row.Values[0].UncompressQuaternion();
+            return q;
         }
     }
 }

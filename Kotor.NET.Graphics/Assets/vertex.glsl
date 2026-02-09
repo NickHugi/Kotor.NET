@@ -42,7 +42,6 @@ void main()
             skinnedPosition += weights[i] * (finalBonesMatrices[boneID] * mesh * localPos);
         }
 
-        //gl_Position = projection * view * entity * mesh * skinnedPosition;
         gl_Position = projection * view * skinnedPosition;
     }
     else

@@ -12,7 +12,6 @@ namespace Kotor.NET.Graphics.OpenGL.Model;
 public class KModel : IModel
 {
     public BaseNode Root { get; set; }
-    public ICollection<Controller> Controllers { get; set; }
     public ICollection<Animation> Animations { get; set; }
 
     public ICollection<IRenderObject> Render(IAssetManager assetManager, Matrix4x4 entityTransform)

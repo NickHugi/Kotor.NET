@@ -62,14 +62,7 @@ public class SkinmeshNode : MeshNode
             if (bone.NodeID == 0)
                 break;
 
-            var index = Bonemap.ToList().IndexOf(i);
-
-            var meshInverse = Matrix4x4.Invert(LocalTransformation, out var inv) ? inv : Matrix4x4.Identity;
-            var invbind = Matrix4x4.Invert(Model.Root.FindNode(7).OriginalWorldTransformation, out var inv2) ? inv2 : Matrix4x4.Identity;
-            //finalBoneMatrices[i] = bone.WorldTransformation * invbind;
-            //finalBoneMatrices[i] = bone.WorldTransformation * bone.InverseBindMatrix;
             finalBoneMatrices[i] = bone.InverseBindMatrix * bone.WorldTransformation;
-            //finalBoneMatrices[i] = Matrix4x4.CreateTranslation(0, 0, 0.5f);
         }
 
         var renderObject = new RenderObject(shader, texture, Mesh, WorldTransformation, entityTransform, finalBoneMatrices);
@@ -77,11 +70,5 @@ public class SkinmeshNode : MeshNode
         List<IRenderObject> objects = [];
         objects.Add(renderObject);
         return objects;
-    }
-
-    public Matrix4x4 GetInverseBoneMatrix(int nodeID)
-    {
-        //return Matrix4x4.CreateTranslation(TBones[nodeID]) * Matrix4x4.CreateFromQuaternion(QBones[nodeID]);
-        return Matrix4x4.CreateFromQuaternion(QBones[nodeID]) * Matrix4x4.CreateTranslation(TBones[nodeID]);
     }
 }

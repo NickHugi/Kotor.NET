@@ -337,7 +337,7 @@ public class ModelLoader
                     .Range(0, realColumnCount)
                     .Select(x => reader.ReadSingle()).ToArray();
 
-                controller.ControllerData.Add(new ControllerDataRow()
+                controller.Data.Add(new ControllerDataRow()
                 {
                     TimeKey = timeKey,
                     Values = data

@@ -9,7 +9,7 @@ namespace Kotor.NET.Graphics.Model;
 public class Controller
 {
     public int ControllerType { get; set; }
-    public ICollection<ControllerDataRow> ControllerData { get; set; } = [];
+    public ICollection<ControllerDataRow> Data { get; set; } = [];
 }
 
 public class ControllerDataRow

@@ -20,12 +20,12 @@ public class Scene
     public void Render(IAssetManager assetManager)
     {
         var frame = new RenderFrame([]);
-        Entities.ForEach(x => x.Render(frame, assetManager, "cwalk", 0.0f));
+        Entities.ForEach(x => x.Render(frame, assetManager));
         frame.Render(assetManager);
     }
 
-    public void Update(float deltaTime)
+    public void Update(IAssetManager assetManager, float deltaTime)
     {
-        Entities.ForEach(x => x.Update(deltaTime));
+        Entities.ForEach(x => x.Update(assetManager, deltaTime));
     }
 }

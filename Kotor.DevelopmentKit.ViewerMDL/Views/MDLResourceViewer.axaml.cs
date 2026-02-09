@@ -11,6 +11,7 @@ using Avalonia.Threading;
 using Kotor.DevelopmentKit.ViewerMDL.ViewModels;
 using Kotor.NET.Encapsulations;
 using Kotor.NET.Graphics;
+using Kotor.NET.Graphics.Entities;
 using Kotor.NET.Graphics.OpenGL;
 using Silk.NET.OpenGL;
 
@@ -55,10 +56,11 @@ public partial class MDLResourceViewer : ReactiveWindow<MDLResourceViewerViewMod
                 return (mdl, mdx);
             });
 
-            ViewModel.Scene.Entities.Add(new StaticModel()
+            ViewModel.Scene.Entities.Add(new AnimatedModel()
             {
                 Model = "model",
-                Transformation = Matrix4x4.Identity
+                Animation = "cpause2",
+                Transformation = Matrix4x4.Identity,
             });
         }
     }
