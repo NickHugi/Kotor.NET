@@ -4,10 +4,11 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.NET.Graphics.GPU;
 
-namespace Kotor.NET.Graphics.GPU;
+namespace Kotor.NET.Graphics;
 
-public class RenderObject : IRenderObject
+public class RenderObject
 {
     public IShader Shader { get; }
     public ITexture Texture { get; }

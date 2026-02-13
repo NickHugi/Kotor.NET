@@ -59,7 +59,9 @@ public partial class MDLResourceViewer : ReactiveWindow<MDLResourceViewerViewMod
             ViewModel.Scene.Entities.Add(new AnimatedModel()
             {
                 Model = "model",
-                Animation = "cpause2",
+                Animations = [
+                    new("cdead") { BlendFactor=0.1f, Paused = true },
+                    new("cwalk") { BlendFactor=0.9f }],
                 Transformation = Matrix4x4.Identity,
             });
         }

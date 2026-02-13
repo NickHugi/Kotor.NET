@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Graphics.GPU;
 
-namespace Kotor.NET.Graphics.Model;
+namespace Kotor.NET.Graphics.Model.Nodes;
 
 public class SkinmeshNode : MeshNode
 {
@@ -27,29 +27,14 @@ public class SkinmeshNode : MeshNode
         return node;
     }
 
-    public override ICollection<IRenderObject> Render(IAssetManager assetManager, Matrix4x4 entityTransform)
-    {
-        var shader = assetManager.GetShader("basic");
-
-        var texture = (Texture1 == "NULL" || Texture1 == "")
-            ? null
-            : assetManager.GetTexture(Texture1);
-
-        var renderObject = new RenderObject(shader, texture, Mesh, WorldTransformation, entityTransform);
-
-        var objects = base.Render(assetManager, entityTransform);
-        objects.Add(renderObject);
-        return objects;
-    }
-
-    public override ICollection<IRenderObject> Render(IAssetManager assetManager, Matrix4x4 entityTransform, string animation, float timeKey)  
+    public override ICollection<RenderObject> Render(IAssetManager assetManager, Matrix4x4 entityTransform)
     {
         if (!Visible)
             return [];
 
         var shader = assetManager.GetShader("basic");
 
-        var texture = (Texture1 == "NULL" || Texture1 == "")
+        var texture = Texture1 == "NULL" || Texture1 == ""
             ? null
             : assetManager.GetTexture(Texture1);
 
@@ -66,9 +51,6 @@ public class SkinmeshNode : MeshNode
         }
 
         var renderObject = new RenderObject(shader, texture, Mesh, WorldTransformation, entityTransform, finalBoneMatrices);
-
-        List<IRenderObject> objects = [];
-        objects.Add(renderObject);
-        return objects;
+        return [renderObject];
     }
 }

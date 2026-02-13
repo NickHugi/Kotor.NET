@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Kotor.NET.Extensions;
 using Kotor.NET.Formats.BinaryMDL;
 using Kotor.NET.Graphics.Model;
+using Kotor.NET.Graphics.Model.Nodes;
 using Kotor.NET.Graphics.OpenGL.Factories;
 using Kotor.NET.Graphics.OpenGL.Model;
 using Silk.NET.OpenGL;

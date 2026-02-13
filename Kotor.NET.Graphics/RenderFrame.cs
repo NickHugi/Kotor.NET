@@ -7,14 +7,9 @@ using System.Threading.Tasks;
 
 namespace Kotor.NET.Graphics;
 
-public class RenderFrame : IRenderFrame
+public class RenderFrame
 {
-    private List<IRenderObject> _objects = new();
-
-    public RenderFrame(List<IRenderObject> objects)
-    {
-        _objects = objects;
-    }
+    private List<RenderObject> _objects = new();
 
     public void Render(IAssetManager assetManager)
     {
@@ -39,7 +34,7 @@ public class RenderFrame : IRenderFrame
         }
     }
 
-    public void AddObject(IRenderObject renderObject)
+    public void AddObject(RenderObject renderObject)
     {
         _objects.Add(renderObject);
     }

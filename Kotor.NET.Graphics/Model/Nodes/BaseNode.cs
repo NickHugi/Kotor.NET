@@ -5,10 +5,11 @@ using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.NET.Graphics.Entities;
 using Kotor.NET.Graphics.Extensions;
 using Kotor.NET.Graphics.OpenGL.Model;
 
-namespace Kotor.NET.Graphics.Model;
+namespace Kotor.NET.Graphics.Model.Nodes;
 
 public abstract class BaseNode
 {
@@ -52,43 +53,43 @@ public abstract class BaseNode
 
     public bool Visible;
 
-    public virtual ICollection<IRenderObject> Render(IAssetManager assetManager, Matrix4x4 entityTransform)
-    {
-        return [];
-    }
-    public virtual ICollection<IRenderObject> Render(IAssetManager assetManager, Matrix4x4 entityTransform, string animation, float timeKey)
+    public virtual ICollection<RenderObject> Render(IAssetManager assetManager, Matrix4x4 entityTransform)
     {
         return [];
     }
 
-    public void GenerateTransform()
+    public void GenerateTransform(ICollection<AnimationItem> animations)
     {
-        WorldTransformation = (Parent is null) ? (Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position)) : Parent.WorldTransformation;
-        WorldTransformation = Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position) * WorldTransformation;
+        var blendSum = animations.Sum(x => x.BlendFactor);
+        var transforms = new List<Matrix4x4>();
 
-        foreach (var node in Nodes)
+        foreach (var live in animations)
         {
-            node.GenerateTransform();
+            var animation = Model.Animations.First(x => x.Name == live.Name);
+            var animNode = animation?.Root.FindNode(NodeID);
+            var position = animNode?.GetAnimPosition(this, live.CurrentTime) ?? Position;
+            var rotation = animNode?.GetAnimRotation(this, live.CurrentTime) ?? Orientation;
+            var transform = Matrix4x4.CreateFromQuaternion(rotation) * Matrix4x4.CreateTranslation(position);
+            transforms.Add(transform);
         }
-    }
-    public void GenerateTransform(string animation, float timeKey)
-    {
-        var anim = Model.Animations.First(x => x.Name == animation);
-        var animNode = anim.Root.FindNode(NodeID);
 
-        var position = animNode?.GetAnimPosition(this, timeKey) ?? Position;
-        var rotation = animNode?.GetAnimRotation(this, timeKey) ?? Orientation;
-        LocalTransformation = Matrix4x4.CreateFromQuaternion(rotation) * Matrix4x4.CreateTranslation(position);
-        WorldTransformation = (Parent is null) ? LocalTransformation : LocalTransformation * Parent.WorldTransformation;
+        Matrix4x4 blend = transforms.FirstOrDefault();
+        for (int i = 0; i < transforms.Count - 1; i++)
+        {
+            blend = Matrix4x4.Lerp(blend, transforms[i + 1], animations.ElementAt(i + 1).BlendFactor);
+        }
 
         OriginalLocalTransform = Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position);
-        OriginalWorldTransformation = (Parent is null) ? OriginalLocalTransform : OriginalLocalTransform * Parent.OriginalWorldTransformation;
+        OriginalWorldTransformation = Parent is null ? OriginalLocalTransform : OriginalLocalTransform * Parent.OriginalWorldTransformation;
+
+        LocalTransformation = transforms.Any() ? blend : OriginalLocalTransform;
+        WorldTransformation = Parent is null ? LocalTransformation : LocalTransformation * Parent.WorldTransformation;
 
         InverseBindMatrix = Matrix4x4.Invert(OriginalWorldTransformation, out var value) ? value : Matrix4x4.Identity;
 
         foreach (var node in Nodes)
         {
-            node.GenerateTransform(animation, timeKey);
+            node.GenerateTransform(animations);
         }
     }
 

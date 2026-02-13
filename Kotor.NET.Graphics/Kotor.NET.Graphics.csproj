@@ -11,13 +11,4 @@
     <ProjectReference Include="..\Kotor.NET\Kotor.NET.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Assets\fragment.glsl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\vertex.glsl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

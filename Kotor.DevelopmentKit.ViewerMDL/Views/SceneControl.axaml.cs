@@ -8,7 +8,7 @@ using Avalonia.OpenGL.Controls;
 using Kotor.DevelopmentKit.ViewerMDL.ViewModels;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Graphics;
-using Kotor.NET.Graphics.Model;
+using Kotor.NET.Graphics.Model.Nodes;
 using Kotor.NET.Graphics.OpenGL;
 using Kotor.NET.Graphics.OpenGL.Factories;
 using Silk.NET.Core.Contexts;

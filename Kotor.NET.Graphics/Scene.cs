@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.NET.Graphics.Entities;
 using Kotor.NET.Graphics.GPU;
 
 namespace Kotor.NET.Graphics;
@@ -19,7 +20,7 @@ public class Scene
 
     public void Render(IAssetManager assetManager)
     {
-        var frame = new RenderFrame([]);
+        var frame = new RenderFrame();
         Entities.ForEach(x => x.Render(frame, assetManager));
         frame.Render(assetManager);
     }
