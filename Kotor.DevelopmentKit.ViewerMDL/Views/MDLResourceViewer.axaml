@@ -23,7 +23,28 @@
             </MenuItem>
         </Menu>
 
-        <views:SceneControl />
+        <DockPanel>
+            <Grid DockPanel.Dock="Right" Width="200" RowDefinitions="*,Auto">
+                <ListBox ItemsSource="{Binding Animations}"
+                         SelectedItem="{Binding SelectedAnimation}"
+                         Grid.Row="0"
+                         ScrollViewer.VerticalScrollBarVisibility="Visible"/>
+                <Grid Grid.Row="1" ColumnDefinitions="*, *">
+                    <Button Grid.Column="0"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            Content="Pause"
+                            Click="Pause_Click"/>
+                    <Button Grid.Column="1"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            Content="Play"
+                            Click="Play_Click"/>
+                </Grid>
+            </Grid>
+
+            <views:SceneControl />
+        </DockPanel>
     </DockPanel>
 
 </Window>

@@ -56,14 +56,27 @@ public partial class MDLResourceViewer : ReactiveWindow<MDLResourceViewerViewMod
                 return (mdl, mdx);
             });
 
-            ViewModel.Scene.Entities.Add(new AnimatedModel()
+            ViewModel.ModelEntity = new AnimatedModel()
             {
                 Model = "model",
-                Animations = [
-                    new("cdead") { BlendFactor=0.1f, Paused = true },
-                    new("cwalk") { BlendFactor=0.9f }],
+                Animations = [],
                 Transformation = Matrix4x4.Identity,
-            });
+            };
+            ViewModel.Scene.Entities.Add(ViewModel.ModelEntity);
         }
+    }
+
+    private void Play_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        ViewModel.ModelEntity.Animations.Clear();
+        ViewModel.ModelEntity.Animations.Add(new(ViewModel.SelectedAnimation)
+        {
+            BlendFactor = 1,
+        });
+    }
+
+    private void Pause_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        ViewModel.ModelEntity.Animations.ForEach(x => x.Paused = true);
     }
 }

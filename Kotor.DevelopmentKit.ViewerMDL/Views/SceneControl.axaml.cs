@@ -74,6 +74,7 @@ public partial class SceneControl : OpenGlControlBase
             var data = ViewModel.ModelBuffer.TryRemove(name, out var value) ? value() : (null, null);
 
             var model = new ModelLoader().LoadModel(ViewModel.GL, data.MDL, data.MDX);
+            ViewModel.Model = model;
             ViewModel.AssetManager.AddModel(name, model);
 
             var check = new List<BaseNode>() { model.Root };
