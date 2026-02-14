@@ -45,4 +45,16 @@ public class KModel
             yield return target;
         }
     }
+
+    public ICollection<string> GetAllTextures()
+    {
+        var nodes = GetAllNodes();
+        var textures = nodes.OfType<MeshNode>().Select(x => x.Texture1).Distinct().ToList();
+        var lightmaps = nodes.OfType<MeshNode>().Select(x => x.Texture2).Distinct().ToList();
+
+        return textures.Concat(lightmaps)
+            .Where(x => !string.IsNullOrEmpty(x))
+            .Where(x => x.ToUpper() != "NULL")
+            .ToList();
+    }
 }

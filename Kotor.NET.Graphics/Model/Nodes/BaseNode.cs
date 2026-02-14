@@ -76,7 +76,7 @@ public abstract class BaseNode
         Matrix4x4 blend = transforms.FirstOrDefault();
         for (int i = 0; i < transforms.Count - 1; i++)
         {
-            blend = Matrix4x4.Lerp(blend, transforms[i + 1], animations.ElementAt(i + 1).BlendFactor);
+            blend = Matrix4x4.Lerp(blend, transforms[i + 1], animations.ElementAt(i + 1).BlendFactor / blendSum);
         }
 
         OriginalLocalTransform = Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position);

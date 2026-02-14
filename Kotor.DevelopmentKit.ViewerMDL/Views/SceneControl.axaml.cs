@@ -105,6 +105,10 @@ public partial class SceneControl : OpenGlControlBase
                 using var stream = data.OpenStream();
                 var texture = new TPCTextureFactory(ViewModel.GL).FromStream(stream);
                 ViewModel.AssetManager.AddTexture(name, texture);
+                ViewModel.TextureSource.Edit(updater =>
+                {
+                    updater.AddOrUpdate(data.FilePath, name);
+                });
             }
         }
 

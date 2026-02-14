@@ -27,7 +27,7 @@ public class AnimatedModel : IEntity
 
     public void Update(IAssetManager assetManager, float delta)
     {
-        foreach (var animation in Animations)
+        foreach (var animation in Animations.ToList())
         {
             if (!animation.Paused)
             {
@@ -35,6 +35,12 @@ public class AnimatedModel : IEntity
 
                 var animationLength = assetManager.GetModel(Model).Animations.Single(x => x.Name == animation.Name).Length;
                 animation.CurrentTime %= animationLength;
+            }
+
+            animation.BlendFactor -= animation.FadeFactor * delta;
+            if (animation.BlendFactor <= 0)
+            {
+                Animations.Remove(animation);
             }
         }
     }

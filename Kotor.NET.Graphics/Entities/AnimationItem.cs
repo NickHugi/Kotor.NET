@@ -13,7 +13,7 @@ public class AnimationItem
     public float CurrentTime { get; set; }
     public bool Paused { get; set; }
     public float BlendFactor { get; set; }
-    public bool Fading { get; set; }
+    public float FadeFactor { get; set; }
 
     public AnimationItem(Animation animation)
     {
@@ -23,19 +23,4 @@ public class AnimationItem
     {
         Name = name;
     }
-
-    public void Restart()
-    {
-        CurrentTime = 0;
-    }
-
-    public void FadeOut()
-    {
-        Paused = true;
-        Fading = true;
-        BlendFactor = 1.0f;
-    }
 }
-
-// is it fading
-// how fast is it fading

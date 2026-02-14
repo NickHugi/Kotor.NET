@@ -26,6 +26,7 @@
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.0" />
+    <PackageReference Include="DynamicData" Version="8.4.1" />
     <PackageReference Include="glm" Version="1.0.2" />
   </ItemGroup>
 

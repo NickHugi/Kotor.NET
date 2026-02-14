@@ -24,7 +24,7 @@
         </Menu>
 
         <DockPanel>
-            <Grid DockPanel.Dock="Right" Width="200" RowDefinitions="*,Auto">
+            <Grid DockPanel.Dock="Right" Width="250" RowDefinitions="*,Auto,*,Auto">
                 <ListBox ItemsSource="{Binding Animations}"
                          SelectedItem="{Binding SelectedAnimation}"
                          Grid.Row="0"
@@ -41,6 +41,23 @@
                             Content="Play"
                             Click="Play_Click"/>
                 </Grid>
+                
+                <ListBox ItemsSource="{Binding Textures}"
+                         Grid.Row="2">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Image IsVisible="{Binding Image}" />
+                                <TextBlock Text="{Binding Name}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Button Grid.Row="3"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        Content="Swap"
+                        Click="Swap_Click"/>
             </Grid>
 
             <views:SceneControl />

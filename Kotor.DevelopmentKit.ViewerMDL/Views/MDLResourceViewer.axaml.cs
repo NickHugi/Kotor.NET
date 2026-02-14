@@ -68,14 +68,24 @@ public partial class MDLResourceViewer : ReactiveWindow<MDLResourceViewerViewMod
 
     private void Play_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        ViewModel.ModelEntity.Animations.Clear();
+        ViewModel.ModelEntity.Animations.ForEach(x =>
+        {
+            x.BlendFactor = 1f;
+            x.FadeFactor = 5f;
+        });
         ViewModel.ModelEntity.Animations.Add(new(ViewModel.SelectedAnimation)
         {
             BlendFactor = 1,
+            CurrentTime = ViewModel.ModelEntity.Animations.FirstOrDefault()?.CurrentTime ?? 0
         });
     }
 
     private void Pause_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        ViewModel.ModelEntity.Animations.ForEach(x => x.Paused = true);
+    }
+
+    private void Swap_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         ViewModel.ModelEntity.Animations.ForEach(x => x.Paused = true);
     }
