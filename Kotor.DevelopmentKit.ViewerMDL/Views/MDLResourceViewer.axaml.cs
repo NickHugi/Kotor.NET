@@ -42,12 +42,12 @@ public partial class MDLResourceViewer : ReactiveWindow<MDLResourceViewerViewMod
 
         if (file is not null)
         {
-            var directory = Path.GetDirectoryName(file.Path.AbsolutePath);
+            var directory = Path.GetDirectoryName(file.Path.LocalPath);
             ViewModel.Source = new FolderEncapsulation(directory);
 
             ViewModel.ModelBuffer.TryAdd("model", () =>
             {
-                var mdlFilepath = file.Path.AbsolutePath;
+                var mdlFilepath = file.Path.LocalPath;
                 var mdl = File.ReadAllBytes(mdlFilepath);
 
                 var mdxFilepath = mdlFilepath.Replace(".mdl", ".mdx");

@@ -47,7 +47,7 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <Image IsVisible="{Binding Image}" />
+                                <!--<Image IsVisible="{Binding Image}" />-->
                                 <TextBlock Text="{Binding Name}" />
                             </StackPanel>
                         </DataTemplate>

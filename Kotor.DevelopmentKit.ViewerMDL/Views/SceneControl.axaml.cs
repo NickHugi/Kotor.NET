@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.OpenGL;
 using Avalonia.OpenGL.Controls;
+using Avalonia.Rendering;
 using Kotor.DevelopmentKit.ViewerMDL.ViewModels;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Graphics;
@@ -17,7 +19,7 @@ using Vector3 = System.Numerics.Vector3;
 
 namespace Kotor.DevelopmentKit.ViewerMDL.Views;
 
-public partial class SceneControl : OpenGlControlBase
+public partial class SceneControl : OpenGlControlBase, ICustomHitTest
 {
     public MDLResourceViewerViewModel ViewModel => (MDLResourceViewerViewModel)DataContext;
 
@@ -50,6 +52,22 @@ public partial class SceneControl : OpenGlControlBase
     }
 
     private DateTime _lastRender = DateTime.Now;
+    private float _yaw
+    {
+        get => field;
+        set => field = value;
+    }
+    private float _pitch
+    {
+        get => field;
+        set => field = (float)Math.Min(Math.Max(-Math.PI/2, value), Math.PI/2);
+    }
+    private float _zoom
+    {
+        get => field;
+        set => field = Math.Max(value, 0.1f);
+    } = 2;
+
     protected override void OnOpenGlRender(GlInterface gl, int fb)
     {
         var scale = TopLevel.GetTopLevel(this).RenderScaling;
@@ -60,8 +78,8 @@ public partial class SceneControl : OpenGlControlBase
         ViewModel.GL.ClearColor(0.1f, 0.0f, 0.0f, 1.0f);
         ViewModel.GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
-        var projection = Matrix4x4.CreatePerspectiveFieldOfView((float)Math.PI/3f, width / (float)height, 0.001f, 1000);
-        var view = Matrix4x4.CreateLookAt(new(2, 2, 1), new(0, 0, 1f), new(0, 0, 1));
+        var projection = Matrix4x4.CreatePerspectiveFieldOfView((float)Math.PI / 3f, width / (float)height, 0.001f, 1000);
+        var view = CreateOrbitLookAt(new(0, 0, 1), _yaw, _pitch, _zoom);
         ViewModel.AssetManager.GetShader("basic").Activate();
         ViewModel.AssetManager.GetShader("basic").SetMatrix4x4("projection", projection);
         ViewModel.AssetManager.GetShader("basic").SetMatrix4x4("view", view);
@@ -120,6 +138,59 @@ public partial class SceneControl : OpenGlControlBase
         _lastRender = DateTime.Now;
 
         RequestNextFrameRendering();
+    }
+
+    private Point? _lastPointerPosition;
+    private void PointerMoved(object? sender, Avalonia.Input.PointerEventArgs e)
+    {
+        var currentPosition = e.GetPosition(this);
+
+        if (_lastPointerPosition.HasValue)
+        {
+            var delta = currentPosition - _lastPointerPosition.Value;
+
+            double deltaX = delta.X;
+            double deltaY = delta.Y;
+
+            if (e.GetCurrentPoint(this).Properties.IsMiddleButtonPressed)
+            {
+                _pitch += (float)deltaY / 500;
+                _yaw -= (float)deltaX / 500;
+            }
+        }
+
+        _lastPointerPosition = currentPosition;
+    }
+
+    public static Matrix4x4 CreateOrbitLookAt(Vector3 target, float yaw, float pitch, float radius)
+    {
+        pitch = Math.Clamp(pitch, -1.55f, 1.55f);
+
+        float cosPitch = MathF.Cos(pitch);
+        float sinPitch = MathF.Sin(pitch);
+        float cosYaw = MathF.Cos(yaw);
+        float sinYaw = MathF.Sin(yaw);
+
+        float x = radius * cosPitch * cosYaw;
+        float y = radius * cosPitch * sinYaw;
+        float z = radius * sinPitch;
+
+        Vector3 cameraPosition = target + new Vector3(x, y, z);
+
+        return Matrix4x4.CreateLookAt(
+            cameraPosition,
+            target,
+            Vector3.UnitZ);
+    }
+
+    private void PointerWheelChanged(object? sender, Avalonia.Input.PointerWheelEventArgs e)
+    {
+        _zoom -= (float)(e.Delta.Y / 1);
+    }
+
+    bool ICustomHitTest.HitTest(Point point)
+    {
+        return this.Bounds.Contains(point);
     }
 }
 
