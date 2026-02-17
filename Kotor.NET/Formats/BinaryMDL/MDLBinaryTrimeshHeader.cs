@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.NET.Common;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Extensions;
 
@@ -13,21 +15,45 @@ public class MDLBinaryTrimeshHeader
     public static readonly int K1_SIZE = 332;
     public static readonly int K2_SIZE = 340;
 
-    public static readonly uint K1_NORMAL_FP1 = 4216656;
-    public static readonly uint K1_NORMAL_FP2 = 4216672;
-    public static readonly uint K1_SKIN_FP1 = 4216592;
-    public static readonly uint K1_SKIN_FP2 = 4216608;
-    public static readonly uint K1_DANGLY_FP1 = 4216640;
-    public static readonly uint K1_DANGLY_FP2 = 4216624;
+    public static readonly uint K1_PC_MESH_FP1 = 4216656;
+    public static readonly uint K1_PC_MESH_FP2 = 4216672;
+    public static readonly uint K1_PC_SKIN_FP1 = 4216592;
+    public static readonly uint K1_PC_SKIN_FP2 = 4216608;
+    public static readonly uint K1_PC_DANGLY_FP1 = 4216640;
+    public static readonly uint K1_PC_DANGLY_FP2 = 4216624;
 
-    public static readonly uint K2_NORMAL_FP1 = 4216880;
-    public static readonly uint K2_NORMAL_FP2 = 4216896;
-    public static readonly uint K2_SKIN_FP1 = 4216816;
-    public static readonly uint K2_SKIN_FP2 = 4216832;
-    public static readonly uint K2_DANGLY_FP1 = 4216848;
-    public static readonly uint K2_DANGLY_FP2 = 4216864;
+    public static readonly uint K1_XBOX_MESH_FP1 = 4267376;
+    public static readonly uint K1_XBOX_MESH_FP2 = 4264048;
+    public static readonly uint K1_XBOX_SKIN_FP1 = 4264032;
+    public static readonly uint K1_XBOX_SKIN_FP2 = 4264048;
+    public static readonly uint K1_XBOX_DANGLY_FP1 = 4266736;
+    public static readonly uint K1_XBOX_DANGLY_FP2 = 4266720;
 
-    public bool IsTSL => new List<uint> { K2_NORMAL_FP1, K2_SKIN_FP1, K2_DANGLY_FP1 }.Contains(FunctionPointer1);
+    public static readonly uint K2_PC_MESH_FP1 = 4216880;
+    public static readonly uint K2_PC_MESH_FP2 = 4216896;
+    public static readonly uint K2_PC_SKIN_FP1 = 4216816;
+    public static readonly uint K2_PC_SKIN_FP2 = 4216832;
+    public static readonly uint K2_PC_DANGLY_FP1 = 4216848;
+    public static readonly uint K2_PC_DANGLY_FP2 = 4216864;
+
+    public static readonly uint K2_XBOX_MESH_FP1 = 4216576;
+    public static readonly uint K2_XBOX_MESH_FP2 = 4216592;
+    public static readonly uint K2_XBOX_SKIN_FP1 = 4216512;
+    public static readonly uint K2_XBOX_SKIN_FP2 = 4216528;
+    public static readonly uint K2_XBOX_DANGLY_FP1 = 4216560;
+    public static readonly uint K2_XBOX_DANGLY_FP2 = 4216544;
+
+    public bool IsTSL => new List<uint>
+    {
+        K2_PC_MESH_FP1, K2_PC_SKIN_FP1, K2_PC_DANGLY_FP1,
+        K2_XBOX_MESH_FP1, K2_XBOX_SKIN_FP1, K2_XBOX_DANGLY_FP1
+    }.Contains(FunctionPointer1);
+
+    public bool IsXbox => new List<uint>
+    {
+        K1_XBOX_MESH_FP1, K1_XBOX_SKIN_FP1, K1_XBOX_DANGLY_FP1,
+        K2_XBOX_MESH_FP1, K2_XBOX_SKIN_FP1, K2_XBOX_DANGLY_FP1
+    }.Contains(FunctionPointer1);
 
     public uint FunctionPointer1 { get; set; }
     public uint FunctionPointer2 { get; set; }
@@ -57,8 +83,7 @@ public class MDLBinaryTrimeshHeader
     public int Unknown1 { get; set; } = -1;
     public int Unknown2 { get; set; } = -1;
     public int Unknown3 { get; set; } = 0;
-    public int Unknown4 { get; set; }
-    public int Unknown8 { get; set; }
+    public byte[] UnknownSaberValues { get; } = new byte[8];
     public int AnimateUV { get; set; }
     public Vector2 UVDirection { get; set; } = new();
     public float UVSpeed { get; set; }
@@ -133,8 +158,7 @@ public class MDLBinaryTrimeshHeader
         Unknown1 = reader.ReadInt32();
         Unknown2 = reader.ReadInt32();
         Unknown3 = reader.ReadInt32();
-        Unknown4 = reader.ReadInt32();
-        Unknown8 = reader.ReadInt32();
+        UnknownSaberValues = reader.ReadBytes(8);
         AnimateUV = reader.ReadInt32();
         UVDirection = reader.ReadVector2();
         UVSpeed = reader.ReadSingle();
@@ -207,8 +231,7 @@ public class MDLBinaryTrimeshHeader
         writer.Write(Unknown1);
         writer.Write(Unknown2);
         writer.Write(Unknown3);
-        writer.Write(Unknown4);
-        writer.Write(Unknown8);
+        writer.Write(UnknownSaberValues);
         writer.Write(AnimateUV);
         writer.Write(UVDirection);
         writer.Write(UVSpeed);

@@ -1,4 +1,5 @@
-﻿using Kotor.NET.Common.Data;
+﻿using System.Numerics;
+using Kotor.NET.Common.Data;
 
 namespace Kotor.NET.Resources.KotorGFF;
 

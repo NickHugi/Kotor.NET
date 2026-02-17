@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ public class MDLBinaryLight
     public List<float> FlareSizes { get; set; } = new();
     public List<float> FlarePositions { get; set; } = new();
     public List<Vector3> FlareColourShifts { get; set; } = new();
-    public List<int> FlareTextureOffsets { get; set; } = new();
+    public List<int> FlareTextureNameOffsets { get; set; } = new();
     public List<string> FlareTextures { get; set; } = new();
 
     public MDLBinaryLight()
@@ -44,10 +45,10 @@ public class MDLBinaryLight
         reader.SetStreamPosition(lightHeader.OffsetToFlareTextureNameOffsetsArray);
         for (int i = 0; i < lightHeader.FlareTextureNameCount; i++)
         {
-            FlareTextureOffsets.Add(reader.ReadInt32());
+            FlareTextureNameOffsets.Add(reader.ReadInt32());
         }
 
-        foreach (var textureNameOffset in FlareTextureOffsets)
+        foreach (var textureNameOffset in FlareTextureNameOffsets)
         {
             reader.SetStreamPosition(textureNameOffset);
             FlareTextures.Add(reader.ReadTerminatedString('\0'));
@@ -75,15 +76,15 @@ public class MDLBinaryLight
         }
 
         writer.SetStreamPosition(lightHeader.OffsetToFlareTextureNameOffsetsArray);
-        foreach (var flareTextureOffset in FlareTextureOffsets)
+        foreach (var flareTextureOffset in FlareTextureNameOffsets)
         {
             writer.Write(flareTextureOffset);
         }
 
-        for (int i = 0; i < FlareTextureOffsets.Count(); i++) 
+        for (int i = 0; i < FlareTextureNameOffsets.Count(); i++) 
         {
-            writer.SetStreamPosition(FlareTextureOffsets[i]);
-            writer.Write(FlareTextures[i] + '\0');
+            writer.SetStreamPosition(FlareTextureNameOffsets[i]);
+            writer.Write(FlareTextures[i] + '\0', false);
         }
     }
 }

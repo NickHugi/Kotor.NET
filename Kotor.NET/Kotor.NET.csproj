@@ -9,7 +9,6 @@
   <ItemGroup>
     <Folder Include="Formats\BinaryKEY\Serialisation\" />
     <Folder Include="Formats\BinaryLTR\Serialisation\" />
-    <Folder Include="Formats\BinaryMDL\Serialisation\" />
     <Folder Include="Formats\BinaryNCS\Serialisation\" />
     <Folder Include="Formats\BinaryTGA\Serialisation\" />
   </ItemGroup>
