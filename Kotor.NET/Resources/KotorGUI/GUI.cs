@@ -1,26 +1,100 @@
 ﻿using System.Collections;
 using System.Numerics;
 using Kotor.NET.Common.Data;
-using Kotor.NET.Resources.KotorARE;
+using Kotor.NET.Formats.Binary2DA;
+using Kotor.NET.Formats.Binary2DA.Serialisation;
+using Kotor.NET.Resources.Kotor2DA;
 using Kotor.NET.Resources.KotorGFF;
+using Kotor.NET.Resources.KotorJRL;
 
 namespace Kotor.NET.Resources.KotorGUI;
 
 public class GUI
 {
-    
+    private readonly GFF _gff;
+    private GFFStruct _root => _gff.Root;
+
+    public GUIExtent Extent => new(_root);
+    public GUIBorder Border => new(_root);
+    public GUIControl Control => new(_root);
+
+    public int Type
+    {
+        get => _root.GetInt32("CONTROLTYPE") ?? throw new Exception();
+    }
+
+    public string Tag
+    {
+        get => _root.GetString("TAG") ?? "";
+        set => _root.SetString("TAG", value);
+    }
+
+    public bool Locked
+    {
+        get => _root.GetUInt8("Obj_Locked") > 0;
+        set => _root.SetUInt8("Obj_Locked", Convert.ToByte(value));
+    }
+
+    public float Alpha
+    {
+        get => _root.GetSingle("ALPHA") ?? 0.0f;
+        set => _root.SetSingle("ALPHA", value);
+    }
+
+    public Vector3 Color
+    {
+        get => _root.GetVector3("COLOR") ?? new();
+        set => _root.SetVector3("COLOR", value);
+    }
+
+    public GUI()
+    {
+        Alpha = 1.0f;
+        _root.SetStruct("BORDER");
+        Color = new();
+        _root.SetList("CONTROLS");
+        _root.SetInt32("CONTROLTYPE", 2);
+        _root.SetStruct("EXTENT");
+        Locked = false;
+        _root.SetInt32("Obj_Parent", -1);
+        Tag = "";
+    }
+    public GUI(GFF source)
+    {
+        _gff = source;
+    }
+    public static GUI FromFile(string filepath)
+    {
+        return new(GFF.FromFile(filepath));
+    }
+    public static GUI FromBytes(byte[] bytes)
+    {
+        return new(GFF.FromBytes(bytes));
+    }
+    public static GUI FromStream(Stream stream)
+    {
+        return new(GFF.FromStream(stream));
+    }
 }
 
 public class GUIControl
 {
     private readonly GFFStruct _controlStruct;
 
-    // Obj_Parent
-    // Obj_ParentID
+    public GUIExtent Extent => new(_controlStruct);
+    public GUIBorder Border => new(_controlStruct);
+    public GUIHilight Hilight => new(_controlStruct);
+    public GUIText Text => new(_controlStruct);
+    public GUIMoveTo MoveTo => new(_controlStruct);
 
-    public virtual int Type
+    public int Type
     {
         get => _controlStruct.GetInt32("CONTROLTYPE") ?? throw new Exception();
+    }
+
+    public int ID
+    {
+        get => _controlStruct.GetInt32("ID") ?? -1;
     }
 
     public string Tag
