@@ -3,6 +3,7 @@ using Kotor.NET.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,8 +34,8 @@ public class MDLBinaryTrimesh
         reader.SetStreamPosition(trimeshHeader.OffsetToVertexIndicesCountArray);
         for (int i = 0; i < trimeshHeader.VertexIndicesCountArrayCount; i++)
         {
-            var index = reader.ReadInt32();
-            VertexIndiciesCounts.Add(index);
+            var count = reader.ReadInt32();
+            VertexIndiciesCounts.Add(count);
         }
 
         reader.SetStreamPosition(trimeshHeader.OffsetToVertexIndicesOffsetArray);

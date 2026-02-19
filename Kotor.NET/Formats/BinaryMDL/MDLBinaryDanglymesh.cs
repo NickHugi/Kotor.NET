@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Common.Data;
@@ -13,6 +14,9 @@ public class MDLBinaryDanglymesh
     public List<float> Constraints { get; set; } = new();
     public List<Vector3> Data { get; set; } = new();
 
+    public MDLBinaryDanglymesh()
+    {
+    }
     public MDLBinaryDanglymesh(MDLBinaryDanglyHeader danglymeshHeader, MDLBinaryReader reader)
     {
         reader.SetStreamPosition(danglymeshHeader.OffsetToContraintArray);

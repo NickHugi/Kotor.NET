@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.NET.Common;
 using Kotor.NET.Extensions;
 
 namespace Kotor.NET.Formats.BinaryMDL;
@@ -11,15 +12,25 @@ public class MDLBinaryGeometryHeader
 {
     public static readonly int SIZE = 80;
 
-    public static readonly int K1_NORMAL_FP1 = 4273776;
-    public static readonly int K1_NORMAL_FP2 = 4216096;
-    public static readonly int K1_ANIM_FP1 = 4273392;
-    public static readonly int K1_ANIM_FP2 = 4451552;
+    public static readonly int K1_PC_MODEL_FP1 = 4273776;
+    public static readonly int K1_PC_MODEL_FP2 = 4216096;
+    public static readonly int K1_PC_ANIM_FP1 = 4273392;
+    public static readonly int K1_PC_ANIM_FP2 = 4451552;
 
-    public static readonly int K2_NORMAL_FP1 = 4285200;
-    public static readonly int K2_NORMAL_FP2 = 4216320;
-    public static readonly int K2_ANIM_FP1 = 4284816;
-    public static readonly int K2_ANIM_FP2 = 4522928;
+    public static readonly int K1_XBOX_MODEL_FP1 = 4254992;
+    public static readonly int K1_XBOX_MODEL_FP2 = 4255008;
+    public static readonly int K1_XBOX_ANIM_FP1 = 4253536;
+    public static readonly int K1_XBOX_ANIM_FP2 = 4573360;
+
+    public static readonly int K2_PC_MODEL_FP1 = 4285200;
+    public static readonly int K2_PC_MODEL_FP2 = 4216320;
+    public static readonly int K2_PC_ANIM_FP1 = 4284816;
+    public static readonly int K2_PC_ANIM_FP2 = 4522928;
+
+    public static readonly int K2_XBOX_MODEL_FP1 = 4285872;
+    public static readonly int K2_XBOX_MODEL_FP2 = 4216016;
+    public static readonly int K2_XBOX_ANIM_FP1 = 4285488;
+    public static readonly int K2_XBOX_ANIM_FP2 = 4523088;
 
     public Int32 FunctionPointer1 { get; set; }
     public Int32 FunctionPointer2 { get; set; }
@@ -79,5 +90,67 @@ public class MDLBinaryGeometryHeader
         writer.Write(Padding1);
         writer.Write(Padding2);
         writer.Write(Padding3);
+    }
+
+    public void SetFunctionPointers(GameEngine game, Platform platform, bool animated)
+    {
+        if (animated)
+        {
+            if (game == GameEngine.K1)
+            {
+                if (platform == Platform.Xbox)
+                {
+                    FunctionPointer1 = MDLBinaryGeometryHeader.K1_XBOX_ANIM_FP1;
+                    FunctionPointer2 = MDLBinaryGeometryHeader.K1_XBOX_ANIM_FP2;
+                }
+                else
+                {
+                    FunctionPointer1 = MDLBinaryGeometryHeader.K1_PC_ANIM_FP1;
+                    FunctionPointer2 = MDLBinaryGeometryHeader.K1_PC_ANIM_FP2;
+                }
+            }
+            else
+            {
+                if (platform == Platform.Xbox)
+                {
+                    FunctionPointer1 = MDLBinaryGeometryHeader.K2_XBOX_ANIM_FP1;
+                    FunctionPointer2 = MDLBinaryGeometryHeader.K2_XBOX_ANIM_FP2;
+                }
+                else
+                {
+                    FunctionPointer1 = MDLBinaryGeometryHeader.K2_PC_ANIM_FP1;
+                    FunctionPointer2 = MDLBinaryGeometryHeader.K2_PC_ANIM_FP2;
+                }
+            }
+        }
+        else
+        {
+            if (game == GameEngine.K1)
+            {
+                if (platform == Platform.Xbox)
+                {
+                    FunctionPointer1 = MDLBinaryGeometryHeader.K1_XBOX_MODEL_FP1;
+                    FunctionPointer2 = MDLBinaryGeometryHeader.K1_XBOX_MODEL_FP2;
+                }
+                else
+                {
+                    FunctionPointer1 = MDLBinaryGeometryHeader.K1_PC_MODEL_FP1;
+                    FunctionPointer2 = MDLBinaryGeometryHeader.K1_PC_MODEL_FP2;
+                }
+            }
+            else
+            {
+                if (platform == Platform.Xbox)
+                {
+                    FunctionPointer1 = MDLBinaryGeometryHeader.K2_XBOX_MODEL_FP1;
+                    FunctionPointer2 = MDLBinaryGeometryHeader.K2_XBOX_MODEL_FP2;
+                }
+                else
+                {
+                    FunctionPointer1 = MDLBinaryGeometryHeader.K2_PC_MODEL_FP1;
+                    FunctionPointer2 = MDLBinaryGeometryHeader.K2_PC_MODEL_FP2;
+                }
+            }
+        }
     }
 }

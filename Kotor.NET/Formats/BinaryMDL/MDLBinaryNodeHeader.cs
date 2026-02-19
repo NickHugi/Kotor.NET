@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Common.Data;
@@ -13,13 +14,13 @@ public class MDLBinaryNodeHeader
     public static readonly int SIZE = 80;
 
     public ushort NodeType { get; set; }
-    public ushort IndexNumber { get; set; }
-    public ushort NodeNumber { get; set; }
+    public ushort NameIndex { get; set; }
+    public ushort NodeIndex { get; set; }
     public ushort Padding { get; set; }
     public int OffsetToRootNode { get; set; }
     public int OffsetToParentNode { get; set; }
     public Vector3 Position { get; set; } = new();
-    public Vector4 Rotation { get; set; } = new();
+    public Vector4 Orientation { get; set; } = new();
     public int OffsetToChildOffsetArray { get; set; }
     public int ChildArrayCount { get; set; }
     public int ChildArrayCount2 { get; set; }
@@ -36,13 +37,13 @@ public class MDLBinaryNodeHeader
     public MDLBinaryNodeHeader(MDLBinaryReader reader)
     {
         NodeType = reader.ReadUInt16();
-        IndexNumber = reader.ReadUInt16();
-        NodeNumber = reader.ReadUInt16();
+        NodeIndex = reader.ReadUInt16();
+        NameIndex = reader.ReadUInt16();
         Padding = reader.ReadUInt16();
         OffsetToRootNode = reader.ReadInt32();
         OffsetToParentNode = reader.ReadInt32();
         Position = reader.ReadVector3();
-        Rotation = reader.ReadVector4();
+        Orientation = reader.ReadVector4();
         OffsetToChildOffsetArray = reader.ReadInt32();
         ChildArrayCount = reader.ReadInt32();
         ChildArrayCount2 = reader.ReadInt32();
@@ -57,13 +58,13 @@ public class MDLBinaryNodeHeader
     public void Write(MDLBinaryWriter writer)
     {
         writer.Write(NodeType);
-        writer.Write(IndexNumber);
-        writer.Write(NodeNumber);
+        writer.Write(NodeIndex);
+        writer.Write(NameIndex);
         writer.Write(Padding);
         writer.Write(OffsetToRootNode);
         writer.Write(OffsetToParentNode);
         writer.Write(Position);
-        writer.Write(Rotation);
+        writer.Write(Orientation, true);
         writer.Write(OffsetToChildOffsetArray);
         writer.Write(ChildArrayCount);
         writer.Write(ChildArrayCount2);

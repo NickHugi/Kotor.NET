@@ -9,6 +9,7 @@ using Kotor.NET.Exceptions;
 using Kotor.NET.Formats.BinaryGFF;
 using Kotor.NET.Helpers;
 using Kotor.NET.Resources.KotorGFF;
+using System.Numerics;
 
 namespace Kotor.NET.Formats.Binary2DA.Serialisation;
 

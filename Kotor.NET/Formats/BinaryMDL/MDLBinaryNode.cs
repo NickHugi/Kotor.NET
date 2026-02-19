@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.NET.Common;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Extensions;
 
@@ -32,7 +33,6 @@ public class MDLBinaryNode
     public MDLBinaryDanglymesh? Danglymesh { get; set; }
     public MDLBinarySabermesh? Sabermesh { get; set; }
     public MDLBinaryAABBNode? RootAABBNode { get; set; }
-    public List<MDLBinaryTrimeshFace> TrimeshFaces { get; set; } = new();
 
     public List<MDXBinaryVertex> MDXVertices { get; set; } = new();
 
@@ -142,7 +142,7 @@ public class MDLBinaryNode
             {
                 MDXVertices.Add(new());
 
-                if ((TrimeshHeader.MDXDataBitmap & (uint)MDLBinaryMDXVertexBitmask.Vertices) != 0)
+                if ((TrimeshHeader.MDXDataBitmap & (uint)MDLBinaryMDXVertexBitmask.Position) != 0)
                 {
                     mdxReader.BaseStream.Position = TrimeshHeader.MDXOffsetToData + TrimeshHeader.MDXDataSize * i + TrimeshHeader.MDXPositionStride;
                     MDXVertices[i].Position = mdxReader.ReadVector3();
@@ -313,60 +313,60 @@ public class MDLBinaryNode
         {
             for (int i = 0; i < MDXVertices.Count; i++)
             {
-                if ((TrimeshHeader.MDXDataBitmap & (uint)MDLBinaryMDXVertexBitmask.Vertices) != 0)
+                if ((TrimeshHeader.MDXDataBitmap & (uint)MDLBinaryMDXVertexBitmask.Position) != 0)
                 {
                     mdxWriter.BaseStream.Position = TrimeshHeader.MDXOffsetToData + TrimeshHeader.MDXDataSize * i + TrimeshHeader.MDXPositionStride;
-                    mdxWriter.Write(MDXVertices[i].Position!);
+                    mdxWriter.Write(MDXVertices[i].Position!.Value);
                 }
                 if ((TrimeshHeader.MDXDataBitmap & (uint)MDLBinaryMDXVertexBitmask.Normals) != 0)
                 {
                     mdxWriter.BaseStream.Position = TrimeshHeader.MDXOffsetToData + TrimeshHeader.MDXDataSize * i + TrimeshHeader.MDXNormalStride;
-                    mdxWriter.Write(MDXVertices[i].Normal!);
+                    mdxWriter.Write(MDXVertices[i].Normal!.Value);
                 }
                 if ((TrimeshHeader.MDXDataBitmap & (uint)MDLBinaryMDXVertexBitmask.UV1) != 0)
                 {
                     mdxWriter.BaseStream.Position = TrimeshHeader.MDXOffsetToData + TrimeshHeader.MDXDataSize * i + TrimeshHeader.MDXTexture1Stride;
-                    mdxWriter.Write(MDXVertices[i].UV1!);
+                    mdxWriter.Write(MDXVertices[i].UV1!.Value);
                 }
                 if ((TrimeshHeader.MDXDataBitmap & (uint)MDLBinaryMDXVertexBitmask.UV2) != 0)
                 {
                     mdxWriter.BaseStream.Position = TrimeshHeader.MDXOffsetToData + TrimeshHeader.MDXDataSize * i + TrimeshHeader.MDXTexture2Stride;
-                    mdxWriter.Write(MDXVertices[i].UV2!);
+                    mdxWriter.Write(MDXVertices[i].UV2!.Value);
                 }
                 if ((TrimeshHeader.MDXDataBitmap & (uint)MDLBinaryMDXVertexBitmask.UV3) != 0)
                 {
                     mdxWriter.BaseStream.Position = TrimeshHeader.MDXOffsetToData + TrimeshHeader.MDXDataSize * i + TrimeshHeader.MDXTexture3Stride;
-                    mdxWriter.Write(MDXVertices[i].UV3!);
+                    mdxWriter.Write(MDXVertices[i].UV3!.Value);
                 }
                 if ((TrimeshHeader.MDXDataBitmap & (uint)MDLBinaryMDXVertexBitmask.UV4) != 0)
                 {
                     mdxWriter.BaseStream.Position = TrimeshHeader.MDXOffsetToData + TrimeshHeader.MDXDataSize * i + TrimeshHeader.MDXTexture4Stride;
-                    mdxWriter.Write(MDXVertices[i].UV4!);
+                    mdxWriter.Write(MDXVertices[i].UV4!.Value);
                 }
                 if ((TrimeshHeader.MDXDataBitmap & (uint)MDLBinaryMDXVertexBitmask.Colours) != 0)
                 {
                     mdxWriter.BaseStream.Position = TrimeshHeader.MDXOffsetToData + TrimeshHeader.MDXDataSize * i + TrimeshHeader.MDXColourStride;
-                    mdxWriter.Write(MDXVertices[i].Colour!);
+                    mdxWriter.Write(MDXVertices[i].Colour!.Value);
                 }
                 if ((TrimeshHeader.MDXDataBitmap & (uint)MDLBinaryMDXVertexBitmask.Tangent1) != 0)
                 {
                     mdxWriter.BaseStream.Position = TrimeshHeader.MDXOffsetToData + TrimeshHeader.MDXDataSize * i + TrimeshHeader.MDXTangent1Stride;
-                    mdxWriter.Write(MDXVertices[i].Tangent1!);
+                    mdxWriter.Write(MDXVertices[i].Tangent1!.Value);
                 }
                 if ((TrimeshHeader.MDXDataBitmap & (uint)MDLBinaryMDXVertexBitmask.Tangent2) != 0)
                 {
                     mdxWriter.BaseStream.Position = TrimeshHeader.MDXOffsetToData + TrimeshHeader.MDXDataSize * i + TrimeshHeader.MDXTangent2Stride;
-                    mdxWriter.Write(MDXVertices[i].Tangent2!);
+                    mdxWriter.Write(MDXVertices[i].Tangent2!.Value);
                 }
                 if ((TrimeshHeader.MDXDataBitmap & (uint)MDLBinaryMDXVertexBitmask.Tangent3) != 0)
                 {
                     mdxWriter.BaseStream.Position = TrimeshHeader.MDXOffsetToData + TrimeshHeader.MDXDataSize * i + TrimeshHeader.MDXTangent3Stride;
-                    mdxWriter.Write(MDXVertices[i].Tangent3!);
+                    mdxWriter.Write(MDXVertices[i].Tangent3!.Value);
                 }
                 if ((TrimeshHeader.MDXDataBitmap & (uint)MDLBinaryMDXVertexBitmask.Tangent4) != 0)
                 {
                     mdxWriter.BaseStream.Position = TrimeshHeader.MDXOffsetToData + TrimeshHeader.MDXDataSize * i + TrimeshHeader.MDXTangent4Stride;
-                    mdxWriter.Write(MDXVertices[i].Tangent4!);
+                    mdxWriter.Write(MDXVertices[i].Tangent4!.Value);
                 }
 
                 if (SkinmeshHeader is not null)
@@ -382,6 +382,106 @@ public class MDLBinaryNode
                     mdxWriter.Write((float)MDXVertices[i].BoneIndex2!);
                     mdxWriter.Write((float)MDXVertices[i].BoneIndex3!);
                     mdxWriter.Write((float)MDXVertices[i].BoneIndex4!);
+                }
+            }
+
+            writer.SetStreamPosition(TrimeshHeader.OffsetToFaceArray);
+            foreach (var face in Trimesh.Faces)
+            {
+                face.Write(writer);
+            }
+        }
+    }
+
+    public void SetFunctionPointers(GameEngine game, Platform platform)
+    {
+        if (TrimeshHeader is null)
+            return;
+
+        if (DanglymeshHeader is not null)
+        {
+            if (game == GameEngine.K1)
+            {
+                if (platform == Platform.Xbox)
+                {
+                    TrimeshHeader.FunctionPointer1 = MDLBinaryTrimeshHeader.K1_XBOX_DANGLY_FP1;
+                    TrimeshHeader.FunctionPointer2 = MDLBinaryTrimeshHeader.K1_XBOX_DANGLY_FP2;
+                }
+                else
+                {
+                    TrimeshHeader.FunctionPointer1 = MDLBinaryTrimeshHeader.K1_PC_DANGLY_FP1;
+                    TrimeshHeader.FunctionPointer2 = MDLBinaryTrimeshHeader.K1_PC_DANGLY_FP2;
+                }
+            }
+            else
+            {
+                if (platform == Platform.Xbox)
+                {
+                    TrimeshHeader.FunctionPointer1 = MDLBinaryTrimeshHeader.K2_XBOX_DANGLY_FP1;
+                    TrimeshHeader.FunctionPointer2 = MDLBinaryTrimeshHeader.K2_XBOX_DANGLY_FP2;
+                }
+                else
+                {
+                    TrimeshHeader.FunctionPointer1 = MDLBinaryTrimeshHeader.K2_PC_DANGLY_FP1;
+                    TrimeshHeader.FunctionPointer2 = MDLBinaryTrimeshHeader.K2_PC_DANGLY_FP2;
+                }
+            }
+        }
+        else if (SkinmeshHeader is not null)
+        {
+            if (game == GameEngine.K1)
+            {
+                if (platform == Platform.Xbox)
+                {
+                    TrimeshHeader.FunctionPointer1 = MDLBinaryTrimeshHeader.K1_XBOX_SKIN_FP1;
+                    TrimeshHeader.FunctionPointer2 = MDLBinaryTrimeshHeader.K1_XBOX_SKIN_FP2;
+                }
+                else
+                {
+                    TrimeshHeader.FunctionPointer1 = MDLBinaryTrimeshHeader.K1_PC_SKIN_FP1;
+                    TrimeshHeader.FunctionPointer2 = MDLBinaryTrimeshHeader.K1_PC_SKIN_FP2;
+                }
+            }
+            else
+            {
+                if (platform == Platform.Xbox)
+                {
+                    TrimeshHeader.FunctionPointer1 = MDLBinaryTrimeshHeader.K2_XBOX_SKIN_FP1;
+                    TrimeshHeader.FunctionPointer2 = MDLBinaryTrimeshHeader.K2_XBOX_SKIN_FP2;
+                }
+                else
+                {
+                    TrimeshHeader.FunctionPointer1 = MDLBinaryTrimeshHeader.K2_PC_SKIN_FP1;
+                    TrimeshHeader.FunctionPointer2 = MDLBinaryTrimeshHeader.K2_PC_SKIN_FP2;
+                }
+            }
+        }
+        else
+        {
+            if (game == GameEngine.K1)
+            {
+                if (platform == Platform.Xbox)
+                {
+                    TrimeshHeader.FunctionPointer1 = MDLBinaryTrimeshHeader.K1_XBOX_MESH_FP1;
+                    TrimeshHeader.FunctionPointer2 = MDLBinaryTrimeshHeader.K1_XBOX_MESH_FP2;
+                }
+                else
+                {
+                    TrimeshHeader.FunctionPointer1 = MDLBinaryTrimeshHeader.K1_PC_MESH_FP1;
+                    TrimeshHeader.FunctionPointer2 = MDLBinaryTrimeshHeader.K1_PC_MESH_FP2;
+                }
+            }
+            else
+            {
+                if (platform == Platform.Xbox)
+                {
+                    TrimeshHeader.FunctionPointer1 = MDLBinaryTrimeshHeader.K2_XBOX_MESH_FP1;
+                    TrimeshHeader.FunctionPointer2 = MDLBinaryTrimeshHeader.K2_XBOX_MESH_FP2;
+                }
+                else
+                {
+                    TrimeshHeader.FunctionPointer1 = MDLBinaryTrimeshHeader.K2_PC_MESH_FP1;
+                    TrimeshHeader.FunctionPointer2 = MDLBinaryTrimeshHeader.K2_PC_MESH_FP2;
                 }
             }
         }
