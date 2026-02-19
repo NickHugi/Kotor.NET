@@ -1,11 +1,8 @@
 ﻿using System.Collections;
 using System.Numerics;
 using Kotor.NET.Common.Data;
-using Kotor.NET.Formats.Binary2DA;
-using Kotor.NET.Formats.Binary2DA.Serialisation;
-using Kotor.NET.Resources.Kotor2DA;
 using Kotor.NET.Resources.KotorGFF;
-using Kotor.NET.Resources.KotorJRL;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Kotor.NET.Resources.KotorGUI;
 
@@ -75,11 +72,44 @@ public class GUI
     {
         return new(GFF.FromStream(stream));
     }
+
+    internal IReadOnlyCollection<GUIControl> GetAllControls()
+    {
+        List<GUIControl> search = [Control];
+        List<GUIControl> controls = [];
+        while (search.Any())
+        {
+            var target = search.First();
+            controls.Add(target);
+            search.RemoveAt(0);
+
+            if (target is GUIPanel panel)
+                search.AddRange(panel.Controls);
+        }
+
+        return controls;
+    }
+
+    internal int GetNextAvailableID()
+    {
+        var controls = GetAllControls();
+
+        var set = new HashSet<int>(controls.Select(x => x.ID));
+
+        int id = 0;
+        while (true)
+        {
+            if (!set.Contains(id))
+                return id;
+
+            id++;
+        }
+    }
 }
 
 public class GUIControl
 {
-    private readonly GFFStruct _controlStruct;
+    protected readonly GFFStruct _controlStruct;
 
     public GUIExtent Extent => new(_controlStruct);
     public GUIBorder Border => new(_controlStruct);
@@ -888,12 +918,12 @@ public class GUIProtoItem : GUIControl
 
 public class GUIControlList : IEnumerable<GUIControl>
 {
-    private readonly GFFStruct _struct;
-    private GFFList? _list => _struct.GetList("Controls");
+    private readonly GFFStruct _parent;
+    private GFFList? _list => _parent.GetList("CONTROLS");
 
     public GUIControlList(GFFStruct @struct)
     {
-        _struct = @struct;
+        _parent = @struct;
     }
 
     public IEnumerator<GUIControl> GetEnumerator()
@@ -903,5 +933,10 @@ public class GUIControlList : IEnumerable<GUIControl>
     IEnumerator IEnumerable.GetEnumerator()
     {
         return _list.Select(x => new GUIControl(x)).GetEnumerator();
+    }
+
+    public void AddCheckbox()
+    {
+
     }
 }
