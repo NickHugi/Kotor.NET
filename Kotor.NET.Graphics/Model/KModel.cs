@@ -11,7 +11,7 @@ using Kotor.NET.Graphics.Model.Nodes;
 
 namespace Kotor.NET.Graphics.OpenGL.Model;
 
-public class KModel
+public class KModel : IDisposable
 {
     public BaseNode Root { get; set; }
     public ICollection<Animation> Animations { get; set; }
@@ -56,5 +56,10 @@ public class KModel
             .Where(x => !string.IsNullOrEmpty(x))
             .Where(x => x.ToUpper() != "NULL")
             .ToList();
+    }
+
+    public void Dispose()
+    {
+        GetAllNodes().ToList().ForEach(x => x.Dispose());
     }
 }

@@ -26,4 +26,9 @@ public class Texture : ITexture
         _gl.ActiveTexture(GLEnum.Texture0);
         _gl.BindTexture(TextureTarget.Texture2D, ID);
     }
+
+    public void Dispose()
+    {
+        _gl.DeleteTexture(ID);
+    }
 }

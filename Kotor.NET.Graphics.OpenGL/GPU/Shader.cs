@@ -32,6 +32,11 @@ public class Shader : IShader
         _gl.UseProgram(ID);
     }
 
+    public void Dispose()
+    {
+        _gl.DeleteShader(ID);
+    }
+
     public int GetUniformLocation(string name)
     {
         return _gl.GetUniformLocation(ID, name);

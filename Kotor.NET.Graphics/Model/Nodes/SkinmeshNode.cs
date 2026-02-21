@@ -53,4 +53,9 @@ public class SkinmeshNode : MeshNode
         var renderObject = new RenderObject(shader, texture, Mesh, WorldTransformation, entityTransform, finalBoneMatrices);
         return [renderObject];
     }
+
+    public override void Dispose()
+    {
+        Mesh.Dispose();
+    }
 }

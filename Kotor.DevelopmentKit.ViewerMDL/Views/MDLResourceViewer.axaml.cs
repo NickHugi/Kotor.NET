@@ -42,6 +42,9 @@ public partial class MDLResourceViewer : ReactiveWindow<MDLResourceViewerViewMod
 
         if (file is not null)
         {
+            if (ViewModel.AssetManager.HasModel("model"))
+                ViewModel.AssetManager.RemoveModel("model");
+
             var directory = Path.GetDirectoryName(file.Path.LocalPath);
             ViewModel.Source = new FolderEncapsulation(directory);
 

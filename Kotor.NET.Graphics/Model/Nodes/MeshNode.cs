@@ -31,4 +31,9 @@ public class MeshNode : DummyNode
         objects.Add(renderObject);
         return objects;
     }
+
+    public override void Dispose()
+    {
+        Mesh.Dispose();
+    }
 }

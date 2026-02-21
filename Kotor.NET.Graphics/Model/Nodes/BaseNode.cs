@@ -11,7 +11,7 @@ using Kotor.NET.Graphics.OpenGL.Model;
 
 namespace Kotor.NET.Graphics.Model.Nodes;
 
-public abstract class BaseNode
+public abstract class BaseNode : IDisposable
 {
     public KModel Model { get; set; }
     public BaseNode Parent { get; init; }
@@ -199,5 +199,10 @@ public abstract class BaseNode
             var q = row.Values[0].UncompressQuaternion();
             return q;
         }
+    }
+
+    public virtual void Dispose()
+    {
+
     }
 }

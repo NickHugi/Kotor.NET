@@ -33,4 +33,9 @@ public class VertexArrayObject : IVertexArrayObject
         _gl.BindVertexArray(VertexArrayID);
         _gl.DrawElements(PrimitiveType.Triangles, ElementCount, DrawElementsType.UnsignedShort, (void*)0); // TODO - make safe?
     }
+
+    public void Dispose()
+    {
+        _gl.DeleteVertexArray(VertexArrayID);
+    }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kotor.NET.Graphics.GPU;
 
-public interface ITexture
+public interface ITexture : IDisposable
 {
     public uint ID { get; }
 
