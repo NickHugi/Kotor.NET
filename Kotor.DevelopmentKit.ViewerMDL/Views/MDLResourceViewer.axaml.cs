@@ -59,13 +59,12 @@ public partial class MDLResourceViewer : ReactiveWindow<MDLResourceViewerViewMod
                 return (mdl, mdx);
             });
 
-            ViewModel.ModelEntity = new AnimatedModel()
+            ViewModel.Scene.Entities.Add(new AnimatedModel()
             {
                 Model = "model",
                 Animations = [],
                 Transformation = Matrix4x4.Identity,
-            };
-            ViewModel.Scene.Entities.Add(ViewModel.ModelEntity);
+            });
         }
     }
 
@@ -88,8 +87,29 @@ public partial class MDLResourceViewer : ReactiveWindow<MDLResourceViewerViewMod
         ViewModel.ModelEntity.Animations.ForEach(x => x.Paused = true);
     }
 
-    private void Swap_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private async void Swap_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        ViewModel.ModelEntity.Animations.ForEach(x => x.Paused = true);
+        var FilePickerOpenOptions = new FilePickerOpenOptions()
+        {
+            AllowMultiple = false,
+            Title = "Open texture",
+            FileTypeFilter =
+            [
+                new FilePickerFileType("TPC File") { Patterns = ["*.tpc"] },
+            ]
+        };
+
+        var files = await GetTopLevel(this).StorageProvider.OpenFilePickerAsync(FilePickerOpenOptions);
+        var file = files.FirstOrDefault();
+
+        if (file is not null)
+        {
+            var texture = ViewModel.SelectedTexture.Name;
+            ViewModel.AssetManager.RemoveTexture(texture);
+            ViewModel.TextureBuffer.TryAdd(texture, () =>
+            {
+                return File.ReadAllBytes(file.Path.LocalPath);  
+            });
+        }
     }
 }

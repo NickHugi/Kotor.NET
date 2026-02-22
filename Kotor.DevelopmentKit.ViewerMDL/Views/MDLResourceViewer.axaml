@@ -43,11 +43,11 @@
                 </Grid>
                 
                 <ListBox ItemsSource="{Binding Textures}"
+                         SelectedItem="{Binding SelectedTexture}"
                          Grid.Row="2">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <!--<Image IsVisible="{Binding Image}" />-->
                                 <TextBlock Text="{Binding Name}" />
                             </StackPanel>
                         </DataTemplate>

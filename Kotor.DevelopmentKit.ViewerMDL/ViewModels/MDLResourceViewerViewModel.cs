@@ -78,11 +78,9 @@ public class MDLResourceViewerViewModel : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public ConcurrentDictionary<string, Func<(byte[] MDL, byte[] MDX)>> ModelBuffer
-    {
-        get; set;
-    } = new();
-    public ConcurrentQueue<string> TextureRequests { get; } = new();
+    public ConcurrentDictionary<string, Func<(byte[] MDL, byte[] MDX)>> ModelBuffer { get; } = new();
+
+    public ConcurrentDictionary<string, Func<byte[]>> TextureBuffer { get; } = new();
 
     public string? SelectedAnimation
     {
@@ -94,7 +92,7 @@ public class MDLResourceViewerViewModel : ReactiveObject
         get => (Model is null) ? [] : Model.Animations.Select(x => x.Name).ToList();
     }
 
-    public string? SelectedTexture
+    public TextureListItem? SelectedTexture
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);

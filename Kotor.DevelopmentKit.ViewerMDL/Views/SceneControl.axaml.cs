@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using Avalonia;
@@ -107,25 +108,29 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
                     var hasTexture1 = !string.IsNullOrEmpty(mesh.Texture1) && string.Equals(mesh.Texture1, "NULL", StringComparison.OrdinalIgnoreCase);
                     if (!hasTexture1)
                     {
-                        ViewModel.TextureRequests.Enqueue(mesh.Texture1);
+                        ViewModel.TextureBuffer.TryAdd(mesh.Texture1, () =>
+                        {
+                            var textureResource = ViewModel.Source.Find(mesh.Texture1, ResourceType.TPC);
+                            return File.ReadAllBytes(textureResource.FilePath);
+                        });
                     }
                 }
             }
         }
 
-        while (ViewModel.TextureRequests.Count > 0)
+        while (ViewModel.TextureBuffer.Count > 0)
         {
-            var name = ViewModel.TextureRequests.TryDequeue(out var value) ? value : null;
+            var name = ViewModel.TextureBuffer.Keys.First();
+            var data = ViewModel.TextureBuffer.TryRemove(name, out var value) ? value() : null;
+
             if (!ViewModel.AssetManager.HasTexture(name))
             {
-                var data = ViewModel.Source.Find(name, ResourceType.TPC)
-                    ?? ViewModel.Source.Find(name, ResourceType.TGA);
-                using var stream = data.OpenStream();
+                using var stream = new MemoryStream(data);
                 var texture = new TPCTextureFactory(ViewModel.GL).FromStream(stream);
                 ViewModel.AssetManager.AddTexture(name, texture);
                 ViewModel.TextureSource.Edit(updater =>
                 {
-                    updater.AddOrUpdate(data.FilePath, name);
+                    //updater.AddOrUpdate(data.FilePath, name);
                 });
             }
         }
