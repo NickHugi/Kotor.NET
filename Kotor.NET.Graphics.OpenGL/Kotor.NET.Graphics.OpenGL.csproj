@@ -21,10 +21,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Assets\fragment.glsl">
+    <None Update="Assets\picker\fragment.glsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\vertex.glsl">
+    <None Update="Assets\picker\vertex.glsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\standard\fragment.glsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\standard\vertex.glsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

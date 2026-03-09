@@ -59,7 +59,7 @@ public partial class MDLResourceViewer : ReactiveWindow<MDLResourceViewerViewMod
                 return (mdl, mdx);
             });
 
-            ViewModel.Scene.Entities.Add(new AnimatedModel()
+            ViewModel.ModelEntity = ViewModel.Scene.AddEntity(new AnimatedModel
             {
                 Model = "model",
                 Animations = [],

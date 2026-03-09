@@ -8,7 +8,7 @@ using Kotor.NET.Graphics.Model;
 
 namespace Kotor.NET.Graphics.Entities;
 
-public class AnimatedModel : IEntity
+public class AnimatedModel : Entity
 {
     public string Model { get; set; }
 
@@ -16,16 +16,17 @@ public class AnimatedModel : IEntity
 
     public Matrix4x4 Transformation { get; set; }
 
-    public void Render(RenderFrame frame, IAssetManager assetManager)
+    public override void Render(RenderFrame frame, IAssetManager assetManager)
     {
         if (assetManager.HasModel(Model))
         {
             var objects = assetManager.GetModel(Model).Render(assetManager, Transformation, Animations);
+            objects.ToList().ForEach(x => x.EntityID = (uint)ID);
             objects.ToList().ForEach(frame.AddObject);
         }
     }
 
-    public void Update(IAssetManager assetManager, float delta)
+    public override void Update(IAssetManager assetManager, float delta)
     {
         foreach (var animation in Animations.ToList())
         {

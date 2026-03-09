@@ -8,12 +8,12 @@ using Kotor.NET.Graphics.GPU;
 
 namespace Kotor.NET.Graphics.Entities;
 
-public class StaticModel : IEntity
+public class StaticModel : Entity
 {
     public string Model { get; set; }
     public Matrix4x4 Transformation { get; set; } = Matrix4x4.Identity;
 
-    public void Render(RenderFrame frame, IAssetManager assetManager)
+    public override void Render(RenderFrame frame, IAssetManager assetManager)
     {
         if (assetManager.HasModel(Model))
         {
@@ -22,7 +22,7 @@ public class StaticModel : IEntity
         }
     }
 
-    public void Update(IAssetManager assetManager, float delta)
+    public override void Update(IAssetManager assetManager, float delta)
     {
 
     }

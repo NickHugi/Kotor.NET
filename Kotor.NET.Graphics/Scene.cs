@@ -11,22 +11,39 @@ namespace Kotor.NET.Graphics;
 
 public class Scene
 {
-    public List<IEntity> Entities { get; }
+    private readonly List<Entity> _entities;
+    public IReadOnlyList<Entity> Entities { get; }
 
     public Scene()
     {
-        Entities = new();
+        _entities = new();
+        Entities = _entities;
+    }
+
+    public T AddEntity<T>(T entity) where T : Entity
+    {
+        entity.Scene = this;
+        _entities.Add(entity);
+        return entity;
     }
 
     public void Render(IAssetManager assetManager)
     {
         var frame = new RenderFrame();
-        Entities.ForEach(x => x.Render(frame, assetManager));
+        _entities.ForEach(x => x.Render(frame, assetManager));
+        frame.Render(assetManager);
+    }
+
+    public void PickRender(IAssetManager assetManager)
+    {
+        var frame = new RenderFrame();
+        _entities.ForEach(x => x.Render(frame, assetManager));
+        frame.Objects.ToList().ForEach(x => x.Shader = assetManager.GetShader("picker"));
         frame.Render(assetManager);
     }
 
     public void Update(IAssetManager assetManager, float deltaTime)
     {
-        Entities.ForEach(x => x.Update(assetManager, deltaTime));
+        _entities.ForEach(x => x.Update(assetManager, deltaTime));
     }
 }

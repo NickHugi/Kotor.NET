@@ -10,6 +10,7 @@ namespace Kotor.NET.Graphics;
 public class RenderFrame
 {
     private List<RenderObject> _objects = new();
+    public IReadOnlyList<RenderObject> Objects => new List<RenderObject>(_objects);
 
     public void Render(IAssetManager assetManager)
     {
@@ -20,6 +21,7 @@ public class RenderFrame
             renderable.Shader.SetMatrix4x4("entity", renderable.EntityTransform);
             renderable.Shader.SetMatrix4x4("mesh", renderable.ModelTransform);
             renderable.Shader.SetMatrix4x4Array("finalBonesMatrices", renderable.FinalBoneMatrices);
+            renderable.Shader.SetUniform1("entityID", renderable.EntityID);
 
             if (renderable.Texture is not null)
             {

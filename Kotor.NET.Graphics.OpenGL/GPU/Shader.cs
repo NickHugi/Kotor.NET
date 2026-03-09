@@ -62,4 +62,10 @@ public class Shader : IShader
         var location = GetUniformLocation(name);
         _gl.Uniform1(location, 0);
     }
+
+    public void SetUniform1(string name, uint value)
+    {
+        var location = GetUniformLocation(name);
+        _gl.Uniform1(location, value);
+    }
 }

@@ -26,10 +26,7 @@ public class MeshNode : DummyNode
             : assetManager.GetTexture(Texture1);
 
         var renderObject = new RenderObject(shader, texture, Mesh, WorldTransformation, entityTransform);
-
-        var objects = base.Render(assetManager, entityTransform);
-        objects.Add(renderObject);
-        return objects;
+        return [renderObject];
     }
 
     public override void Dispose()

@@ -20,4 +20,5 @@ public interface IShader : IDisposable
     public void SetMatrix4x4Array(string name, Matrix4x4[] value);
 
     public void SetUniform1(string name, int value);
+    void SetUniform1(string name, uint value);
 }
