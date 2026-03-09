@@ -9,7 +9,7 @@ namespace Kotor.NET.Graphics.Entities;
 public abstract class Entity
 {
     public Scene Scene { get; internal set; }
-    public int ID => Scene.Entities.ToList().IndexOf(this) + 258;
+    public int ID => Scene.Entities.ToList().IndexOf(this);
 
     public abstract void Render(RenderFrame frame, IAssetManager assetManager);
 

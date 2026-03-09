@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -67,7 +68,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
     private float _pitch
     {
         get => field;
-        set => field = (float)Math.Min(Math.Max(-Math.PI/2, value), Math.PI/2);
+        set => field = (float)Math.Min(Math.Max(-Math.PI / 2, value), Math.PI / 2);
     }
     private float _zoom
     {
@@ -77,9 +78,11 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
 
     protected override void OnOpenGlRender(GlInterface gl, int fb)
     {
-        Pick(400, 350);
-        if (ViewModel.Model is not null)
-            return;
+        while (_glQueue.Count > 0)
+        {
+            var action = _glQueue.Dequeue();
+            action();
+        }
 
         var scale = TopLevel.GetTopLevel(this).RenderScaling;
         var width = (uint)(Bounds.Width * scale);
@@ -164,7 +167,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         var height = (uint)(Bounds.Height * scale);
         ViewModel.GL.Viewport(0, 0, width, height);
 
-        ViewModel.GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        ViewModel.GL.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         ViewModel.GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
         var projection = Matrix4x4.CreatePerspectiveFieldOfView((float)Math.PI / 3f, width / (float)height, 0.001f, 1000);
@@ -177,7 +180,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         ViewModel.Scene.PickRender(ViewModel.AssetManager);
 
         Span<byte> bytes = new byte[4];
-        ViewModel.GL.ReadPixels(x, y, 1, 1, PixelFormat.Rgba, PixelType.UnsignedByte, bytes);
+        ViewModel.GL.ReadPixels(x, (int)height-y, 1, 1, PixelFormat.Rgba, PixelType.UnsignedByte, bytes);
         var id = bytes[3] + (bytes[2] << 8) + (bytes[1] << 16) + (bytes[0] << 24);
 
         return ViewModel.Scene.Entities.FirstOrDefault(x => x.ID == id);
@@ -234,6 +237,35 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
     bool ICustomHitTest.HitTest(Point point)
     {
         return this.Bounds.Contains(point);
+    }
+
+    private async void PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
+    {
+        var scale = TopLevel.GetTopLevel(this).RenderScaling;
+        var pos = e.GetCurrentPoint(this).Position * scale;
+        var entity = await RunOnGLThread(() => Pick((int)pos.X, (int)pos.Y));
+    }
+
+    private readonly Queue<Action> _glQueue = new();
+    public Task<T> RunOnGLThread<T>(Func<T> action)
+    {
+        var tcs = new TaskCompletionSource<T>();
+
+        _glQueue.Enqueue(() =>
+        {
+            try
+            {
+                var result = action();
+                tcs.SetResult(result);
+            }
+            catch (Exception ex)
+            {
+                tcs.SetException(ex);
+            }
+        });
+
+        RequestNextFrameRendering();
+        return tcs.Task;
     }
 }
 

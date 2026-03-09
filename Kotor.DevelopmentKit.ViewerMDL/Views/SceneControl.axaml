@@ -6,6 +6,7 @@
              x:Class="Kotor.DevelopmentKit.ViewerMDL.Views.SceneControl"
              PointerMoved="PointerMoved"
              PointerWheelChanged="PointerWheelChanged"
+             PointerPressed="PointerPressed"
              Focusable="True">
   
 </UserControl>
