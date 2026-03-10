@@ -9,7 +9,7 @@ using Silk.NET.OpenGL;
 
 namespace Kotor.NET.Graphics.OpenGL;
 
-public class OpenGLSceneWrapper
+public class Engine
 {
     public required GL GL { get; init; }
     public required Scene Scene { get; init; }

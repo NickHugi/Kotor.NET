@@ -37,31 +37,31 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         InitializeComponent();
     }
 
-    private Entity? Pick(int x, int y)
-    {
-        var scale = TopLevel.GetTopLevel(this).RenderScaling;
-        var width = (uint)(Bounds.Width * scale);
-        var height = (uint)(Bounds.Height * scale);
-        ViewModel.GL.Viewport(0, 0, width, height);
+    //private Entity? Pick(int x, int y)
+    //{
+    //    var scale = TopLevel.GetTopLevel(this).RenderScaling;
+    //    var width = (uint)(Bounds.Width * scale);
+    //    var height = (uint)(Bounds.Height * scale);
+    //    ViewModel.GL.Viewport(0, 0, width, height);
 
-        ViewModel.GL.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-        ViewModel.GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
+    //    ViewModel.GL.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    //    ViewModel.GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
-        var projection = Matrix4x4.CreatePerspectiveFieldOfView((float)Math.PI / 3f, width / (float)height, 0.001f, 1000);
-        var view = ViewModel.SceneWrapper.Camera.GetViewTransform();
-        ViewModel.AssetManager.GetShader("picker").Activate();
-        ViewModel.AssetManager.GetShader("picker").SetMatrix4x4("projection", projection);
-        ViewModel.AssetManager.GetShader("picker").SetMatrix4x4("view", view);
-        ViewModel.AssetManager.GetShader("picker").SetMatrix4x4("mesh", Matrix4x4.Identity);
+    //    var projection = Matrix4x4.CreatePerspectiveFieldOfView((float)Math.PI / 3f, width / (float)height, 0.001f, 1000);
+    //    var view = ViewModel.SceneWrapper.Camera.GetViewTransform();
+    //    ViewModel.AssetManager.GetShader("picker").Activate();
+    //    ViewModel.AssetManager.GetShader("picker").SetMatrix4x4("projection", projection);
+    //    ViewModel.AssetManager.GetShader("picker").SetMatrix4x4("view", view);
+    //    ViewModel.AssetManager.GetShader("picker").SetMatrix4x4("mesh", Matrix4x4.Identity);
 
-        ViewModel.Scene.PickRender(ViewModel.AssetManager);
+    //    ViewModel.Scene.PickRender(ViewModel.AssetManager);
 
-        Span<byte> bytes = new byte[4];
-        ViewModel.GL.ReadPixels(x, (int)height-y, 1, 1, PixelFormat.Rgba, PixelType.UnsignedByte, bytes);
-        var id = bytes[3] + (bytes[2] << 8) + (bytes[1] << 16) + (bytes[0] << 24);
+    //    Span<byte> bytes = new byte[4];
+    //    ViewModel.GL.ReadPixels(x, (int)height-y, 1, 1, PixelFormat.Rgba, PixelType.UnsignedByte, bytes);
+    //    var id = bytes[3] + (bytes[2] << 8) + (bytes[1] << 16) + (bytes[0] << 24);
 
-        return ViewModel.Scene.Entities.FirstOrDefault(x => x.ID == id);
-    }
+    //    return ViewModel.Scene.Entities.FirstOrDefault(x => x.ID == id);
+    //}
 
     bool ICustomHitTest.HitTest(Point point)
     {
@@ -114,23 +114,23 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
     {
         await RunOnGLThread(() =>
         {
-            if (ViewModel.AssetManager.HasTexture(name))
-                ViewModel.AssetManager.RemoveTexture(name);
+            if (ViewModel.Engine.AssetManager.HasTexture(name))
+                ViewModel.Engine.AssetManager.RemoveTexture(name);
 
             using var stream = new MemoryStream(data);
             var texture = new TPCTextureFactory(ViewModel.GL).FromStream(stream);
-            ViewModel.AssetManager.AddTexture(name, texture);
+            ViewModel.Engine.AssetManager.AddTexture(name, texture);
         });
     }
     public async Task LoadModel(string name, byte[] mdlData, byte[] mdxData)
     {
         await RunOnGLThread(async () =>
         {
-            if (ViewModel.AssetManager.HasModel(name))
-                ViewModel.AssetManager.RemoveModel(name);
+            if (ViewModel.Engine.AssetManager.HasModel(name))
+                ViewModel.Engine.AssetManager.RemoveModel(name);
 
             ViewModel.Model = new ModelLoader().LoadModel(ViewModel.GL, mdlData, mdxData);
-            ViewModel.AssetManager.AddModel(name, ViewModel.Model);
+            ViewModel.Engine.AssetManager.AddModel(name, ViewModel.Model);
 
             var check = new List<BaseNode>() { ViewModel.Model.Root };
             while (check.Any())
@@ -178,19 +178,13 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         base.OnOpenGlInit(gl);
 
         var context = new AvaloniaSilkNativeContext(gl.GetProcAddress);
-        ViewModel.GL = new GL(context);
-
-        ViewModel.AssetManager = new AssetManager();
-
-        ViewModel.Scene = new();
-
-        ViewModel.SceneWrapper = new()
+        ViewModel.Engine = new()
         {
-            AssetManager = (AssetManager)ViewModel.AssetManager,
-            GL = ViewModel.GL,
-            Scene= ViewModel.Scene,
+            AssetManager = new AssetManager(),
+            GL = new GL(context),
+            Scene = new Scene(),
         };
-        ViewModel.SceneWrapper.Init();
+        ViewModel.Engine.Init();
     }
 
     protected async override void OnOpenGlRender(GlInterface gl, int fb)
@@ -202,12 +196,12 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         }
 
         var scale = TopLevel.GetTopLevel(this).RenderScaling;
-        ViewModel.SceneWrapper.Width = (uint)(Bounds.Width * scale);
-        ViewModel.SceneWrapper.Height = (uint)(Bounds.Height * scale);
+        ViewModel.Engine.Width = (uint)(Bounds.Width * scale);
+        ViewModel.Engine.Height = (uint)(Bounds.Height * scale);
 
         var delta = (float)(DateTime.Now - _lastRender).Milliseconds / 1000;
-        ViewModel.SceneWrapper.Update(delta);
-        ViewModel.SceneWrapper.Render(delta);
+        ViewModel.Engine.Update(delta);
+        ViewModel.Engine.Render(delta);
 
         _lastRender = DateTime.Now;
         RequestNextFrameRendering();
@@ -217,7 +211,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
     {
         base.OnOpenGlDeinit(gl);
 
-        ViewModel.SceneWrapper.Deinit();
+        ViewModel.Engine.Deinit();
     }
     #endregion
 
@@ -235,8 +229,8 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
 
             if (e.GetCurrentPoint(this).Properties.IsMiddleButtonPressed)
             {
-                ViewModel.SceneWrapper.Camera.Pitch += (float)deltaY / 500;
-                ViewModel.SceneWrapper.Camera.Yaw -= (float)deltaX / 500;
+                ViewModel.Engine.Camera.Pitch += (float)deltaY / 500;
+                ViewModel.Engine.Camera.Yaw -= (float)deltaX / 500;
             }
         }
 
@@ -245,14 +239,14 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
 
     private void PointerWheelChanged(object? sender, Avalonia.Input.PointerWheelEventArgs e)
     {
-        ViewModel.SceneWrapper.Camera.Distance -= (float)(e.Delta.Y / 1);
+        ViewModel.Engine.Camera.Distance -= (float)(e.Delta.Y / 1);
     }
 
     private async void PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
     {
         var scale = TopLevel.GetTopLevel(this).RenderScaling;
         var pos = e.GetCurrentPoint(this).Position * scale;
-        var entity = await RunOnGLThread(() => Pick((int)pos.X, (int)pos.Y));
+        //var entity = await RunOnGLThread(() => Pick((int)pos.X, (int)pos.Y));
     }
     #endregion
 }

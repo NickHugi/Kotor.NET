@@ -32,15 +32,9 @@ public class MDLResourceViewerViewModel : ReactiveObject
         });
     }
 
-    public OpenGLSceneWrapper SceneWrapper { get; set => this.RaiseAndSetIfChanged(ref field, value); }
+    public Engine Engine { get; set => this.RaiseAndSetIfChanged(ref field, value); }
 
     public GL GL
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public IAssetManager AssetManager
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
@@ -63,12 +57,6 @@ public class MDLResourceViewerViewModel : ReactiveObject
     }
 
     public AnimatedModel ModelEntity
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public Scene Scene
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);

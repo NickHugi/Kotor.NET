@@ -43,8 +43,8 @@ public partial class MDLResourceViewer : ReactiveWindow<MDLResourceViewerViewMod
 
         if (file is not null)
         {
-            if (ViewModel.AssetManager.HasModel("model"))
-                ViewModel.AssetManager.RemoveModel("model");
+            if (ViewModel.Engine.AssetManager.HasModel("model"))
+                ViewModel.Engine.AssetManager.RemoveModel("model");
 
             var directory = Path.GetDirectoryName(file.Path.LocalPath);
             ViewModel.Source = new FolderEncapsulation(directory);
@@ -57,7 +57,7 @@ public partial class MDLResourceViewer : ReactiveWindow<MDLResourceViewerViewMod
 
             await ViewModel.LoadModel.Handle(("model", mdl, mdx));
 
-            ViewModel.ModelEntity = ViewModel.Scene.AddEntity(new AnimatedModel
+            ViewModel.ModelEntity = ViewModel.Engine.Scene.AddEntity(new AnimatedModel
             {
                 Model = "model",
                 Animations = [],
