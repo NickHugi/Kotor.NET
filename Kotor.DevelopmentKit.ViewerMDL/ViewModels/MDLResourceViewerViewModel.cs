@@ -83,8 +83,6 @@ public class MDLResourceViewerViewModel : ReactiveObject
 
     public ConcurrentDictionary<string, Func<(byte[] MDL, byte[] MDX)>> ModelBuffer { get; } = new();
 
-    public ConcurrentDictionary<string, Func<byte[]>> TextureBuffer { get; } = new();
-
     public string? SelectedAnimation
     {
         get => field;

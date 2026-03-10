@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -88,14 +89,45 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         RequestNextFrameRendering();
         return tcs.Task;
     }
+    public Task RunOnGLThread(Action action)
+    {
+        var tcs = new TaskCompletionSource();
+
+        _glQueue.Enqueue(() =>
+        {
+            try
+            {
+                action();
+            }
+            catch (Exception ex)
+            {
+                tcs.SetException(ex);
+            }
+        });
+
+        RequestNextFrameRendering();
+        return tcs.Task;
+    }
 
     # region OpenGlControlBase
-    protected unsafe override void OnOpenGlInit(GlInterface gl)
+    protected override void OnOpenGlInit(GlInterface gl)
     {
-
         ViewModel.LoadTexture.RegisterHandler(async interaction =>
         {
-            var input = interaction.Input;
+            await RunOnGLThread(() =>
+            {
+                var name = interaction.Input.Name;
+                var data = interaction.Input.Data;
+
+                if (ViewModel.AssetManager.HasTexture(name))
+                    ViewModel.AssetManager.RemoveTexture(name);
+
+                using var stream = new MemoryStream(data);
+                var texture = new TPCTextureFactory(ViewModel.GL).FromStream(stream);
+                ViewModel.AssetManager.AddTexture(name, texture);
+            });
+
+            interaction.SetOutput(Unit.Default);
         });
 
         base.OnOpenGlInit(gl);
@@ -117,7 +149,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         ViewModel.Scene = new();
     }
 
-    protected override void OnOpenGlRender(GlInterface gl, int fb)
+    protected async override void OnOpenGlRender(GlInterface gl, int fb)
     {
         while (_glQueue.Count > 0)
         {
@@ -162,31 +194,12 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
                     var hasTexture1 = !string.IsNullOrEmpty(mesh.Texture1) && string.Equals(mesh.Texture1, "NULL", StringComparison.OrdinalIgnoreCase);
                     if (!hasTexture1)
                     {
-                        ViewModel.TextureBuffer.TryAdd(mesh.Texture1, () =>
-                        {
-                            var textureResource = ViewModel.Source.Find(mesh.Texture1, ResourceType.TPC);
-                            return File.ReadAllBytes(textureResource.FilePath);
-                        });
-                        ViewModel.LoadTexture.Handle(("Hello", new byte[0])).Wait();
+                        var textureName = mesh.Texture1;
+                        var textureResource = ViewModel.Source.Find(mesh.Texture1, ResourceType.TPC);
+                        var textureData = File.ReadAllBytes(textureResource.FilePath);
+                        await ViewModel.LoadTexture.Handle((textureName, textureData));
                     }
                 }
-            }
-        }
-
-        while (ViewModel.TextureBuffer.Count > 0)
-        {
-            var name = ViewModel.TextureBuffer.Keys.First();
-            var data = ViewModel.TextureBuffer.TryRemove(name, out var value) ? value() : null;
-
-            if (!ViewModel.AssetManager.HasTexture(name))
-            {
-                using var stream = new MemoryStream(data);
-                var texture = new TPCTextureFactory(ViewModel.GL).FromStream(stream);
-                ViewModel.AssetManager.AddTexture(name, texture);
-                ViewModel.TextureSource.Edit(updater =>
-                {
-                    //updater.AddOrUpdate(data.FilePath, name);
-                });
             }
         }
 

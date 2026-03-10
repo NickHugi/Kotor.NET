@@ -2,6 +2,7 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Reactive.Joins;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Avalonia.Controls;
@@ -104,12 +105,9 @@ public partial class MDLResourceViewer : ReactiveWindow<MDLResourceViewerViewMod
 
         if (file is not null)
         {
-            var texture = ViewModel.SelectedTexture.Name;
-            ViewModel.AssetManager.RemoveTexture(texture);
-            ViewModel.TextureBuffer.TryAdd(texture, () =>
-            {
-                return File.ReadAllBytes(file.Path.LocalPath);  
-            });
+            var name = ViewModel.SelectedTexture.Name;
+            var data = File.ReadAllBytes(file.Path.LocalPath);
+            await ViewModel.LoadTexture.Handle((name, data));
         }
     }
 }
