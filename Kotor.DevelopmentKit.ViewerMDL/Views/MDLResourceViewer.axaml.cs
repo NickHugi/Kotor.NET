@@ -49,16 +49,13 @@ public partial class MDLResourceViewer : ReactiveWindow<MDLResourceViewerViewMod
             var directory = Path.GetDirectoryName(file.Path.LocalPath);
             ViewModel.Source = new FolderEncapsulation(directory);
 
-            ViewModel.ModelBuffer.TryAdd("model", () =>
-            {
-                var mdlFilepath = file.Path.LocalPath;
-                var mdl = File.ReadAllBytes(mdlFilepath);
+            var mdlFilepath = file.Path.LocalPath;
+            var mdl = File.ReadAllBytes(mdlFilepath);
 
-                var mdxFilepath = mdlFilepath.Replace(".mdl", ".mdx");
-                var mdx = File.ReadAllBytes(mdxFilepath);
+            var mdxFilepath = mdlFilepath.Replace(".mdl", ".mdx");
+            var mdx = File.ReadAllBytes(mdxFilepath);
 
-                return (mdl, mdx);
-            });
+            await ViewModel.LoadModel.Handle(("model", mdl, mdx));
 
             ViewModel.ModelEntity = ViewModel.Scene.AddEntity(new AnimatedModel
             {

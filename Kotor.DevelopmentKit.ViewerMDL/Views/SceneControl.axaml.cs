@@ -21,6 +21,7 @@ using Kotor.NET.Graphics.Model.Nodes;
 using Kotor.NET.Graphics.OpenGL;
 using Kotor.NET.Graphics.OpenGL.Factories;
 using Silk.NET.OpenGL;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Kotor.DevelopmentKit.ViewerMDL.Views;
 
@@ -30,7 +31,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
 
     private Point? _lastPointerPosition;
     private DateTime _lastRender = DateTime.Now;
-    private OrbitCamera _camera = new();
+    private OrbitCamera _camera = new() { Distance = 1, Target = new(0, 0, 1.5f) };
 
     public SceneControl()
     {
@@ -129,6 +130,43 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
 
             interaction.SetOutput(Unit.Default);
         });
+        ViewModel.LoadModel.RegisterHandler(async interaction =>
+        {
+            await RunOnGLThread(async () =>
+            {
+                var name = interaction.Input.Name;
+                var mdlData = interaction.Input.MDLData;
+                var mdxData = interaction.Input.MDXData;
+
+                if (ViewModel.AssetManager.HasModel(name))
+                    ViewModel.AssetManager.RemoveModel(name);
+
+                ViewModel.Model = new ModelLoader().LoadModel(ViewModel.GL, mdlData, mdxData);
+                ViewModel.AssetManager.AddModel(name, ViewModel.Model);
+
+                var check = new List<BaseNode>() { ViewModel.Model.Root };
+                while (check.Any())
+                {
+                    var node = check.First();
+                    check.RemoveAt(0);
+                    check.AddRange(node.Nodes);
+
+                    if (node is MeshNode mesh)
+                    {
+                        var hasTexture1 = !string.IsNullOrEmpty(mesh.Texture1) && string.Equals(mesh.Texture1, "NULL", StringComparison.OrdinalIgnoreCase);
+                        if (!hasTexture1)
+                        {
+                            var textureName = mesh.Texture1;
+                            var textureResource = ViewModel.Source.Find(mesh.Texture1, ResourceType.TPC);
+                            var textureData = File.ReadAllBytes(textureResource.FilePath);
+                            await ViewModel.LoadTexture.Handle((textureName, textureData));
+                        }
+                    }
+                }
+            });
+
+            interaction.SetOutput(Unit.Default);
+        });
 
         base.OnOpenGlInit(gl);
 
@@ -172,36 +210,6 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         ViewModel.AssetManager.GetShader("basic").SetMatrix4x4("view", view);
         ViewModel.AssetManager.GetShader("basic").SetMatrix4x4("mesh", Matrix4x4.Identity);
         ViewModel.AssetManager.GetShader("basic").SetUniform1("texture1", 0);
-
-        while (ViewModel.ModelBuffer.Count > 0)
-        {
-            var name = ViewModel.ModelBuffer.Keys.First();
-            var data = ViewModel.ModelBuffer.TryRemove(name, out var value) ? value() : (null, null);
-
-            var model = new ModelLoader().LoadModel(ViewModel.GL, data.MDL, data.MDX);
-            ViewModel.Model = model;
-            ViewModel.AssetManager.AddModel(name, model);
-
-            var check = new List<BaseNode>() { model.Root };
-            while (check.Any())
-            {
-                var node = check.First();
-                check.RemoveAt(0);
-                check.AddRange(node.Nodes);
-
-                if (node is MeshNode mesh)
-                {
-                    var hasTexture1 = !string.IsNullOrEmpty(mesh.Texture1) && string.Equals(mesh.Texture1, "NULL", StringComparison.OrdinalIgnoreCase);
-                    if (!hasTexture1)
-                    {
-                        var textureName = mesh.Texture1;
-                        var textureResource = ViewModel.Source.Find(mesh.Texture1, ResourceType.TPC);
-                        var textureData = File.ReadAllBytes(textureResource.FilePath);
-                        await ViewModel.LoadTexture.Handle((textureName, textureData));
-                    }
-                }
-            }
-        }
 
         var delta = (float)(DateTime.Now - _lastRender).Milliseconds / 1000;
 

@@ -18,10 +18,12 @@ namespace Kotor.DevelopmentKit.ViewerMDL.ViewModels;
 public class MDLResourceViewerViewModel : ReactiveObject
 {
     public Interaction<(string Name, byte[] Data), Unit> LoadTexture;
+    public Interaction<(string Name, byte[] MDLData, byte[] MDXData), Unit> LoadModel;
 
     public MDLResourceViewerViewModel()
     {
         LoadTexture = new();
+        LoadModel = new();
 
         TextureSource.Connect().Subscribe(x =>
         {
@@ -80,8 +82,6 @@ public class MDLResourceViewerViewModel : ReactiveObject
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
-
-    public ConcurrentDictionary<string, Func<(byte[] MDL, byte[] MDX)>> ModelBuffer { get; } = new();
 
     public string? SelectedAnimation
     {
