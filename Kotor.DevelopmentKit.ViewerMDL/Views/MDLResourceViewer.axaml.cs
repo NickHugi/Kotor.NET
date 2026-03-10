@@ -47,7 +47,7 @@ public partial class MDLResourceViewer : ReactiveWindow<MDLResourceViewerViewMod
                 ViewModel.Engine.AssetManager.RemoveModel("model");
 
             var directory = Path.GetDirectoryName(file.Path.LocalPath);
-            ViewModel.Source = new FolderEncapsulation(directory);
+            ViewModel.Engine.Source = new FolderEncapsulation(directory);
 
             var mdlFilepath = file.Path.LocalPath;
             var mdl = File.ReadAllBytes(mdlFilepath);
@@ -55,7 +55,7 @@ public partial class MDLResourceViewer : ReactiveWindow<MDLResourceViewerViewMod
             var mdxFilepath = mdlFilepath.Replace(".mdl", ".mdx");
             var mdx = File.ReadAllBytes(mdxFilepath);
 
-            await ViewModel.LoadModel.Handle(("model", mdl, mdx));
+            await ViewModel.Engine.LoadModel("model", mdl, mdx);
 
             ViewModel.ModelEntity = ViewModel.Engine.Scene.AddEntity(new AnimatedModel
             {
@@ -104,7 +104,7 @@ public partial class MDLResourceViewer : ReactiveWindow<MDLResourceViewerViewMod
         {
             var name = ViewModel.SelectedTexture.Name;
             var data = File.ReadAllBytes(file.Path.LocalPath);
-            await ViewModel.LoadTexture.Handle((name, data));
+            await ViewModel.Engine.LoadTexture(name, data);
         }
     }
 }

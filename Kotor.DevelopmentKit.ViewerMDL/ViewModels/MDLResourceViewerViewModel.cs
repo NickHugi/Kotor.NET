@@ -18,14 +18,8 @@ namespace Kotor.DevelopmentKit.ViewerMDL.ViewModels;
 
 public class MDLResourceViewerViewModel : ReactiveObject
 {
-    public Interaction<(string Name, byte[] Data), Unit> LoadTexture;
-    public Interaction<(string Name, byte[] MDLData, byte[] MDXData), Unit> LoadModel;
-
     public MDLResourceViewerViewModel()
     {
-        LoadTexture = new();
-        LoadModel = new();
-
         TextureSource.Connect().Subscribe(x =>
         {
             this.RaisePropertyChanged(nameof(Textures));
@@ -33,12 +27,6 @@ public class MDLResourceViewerViewModel : ReactiveObject
     }
 
     public Engine Engine { get; set => this.RaiseAndSetIfChanged(ref field, value); }
-
-    public GL GL
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
 
     public KModel? Model
     {
@@ -57,12 +45,6 @@ public class MDLResourceViewerViewModel : ReactiveObject
     }
 
     public AnimatedModel ModelEntity
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public IEncapsulation Source
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);

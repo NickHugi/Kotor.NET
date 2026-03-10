@@ -67,114 +67,10 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
     {
         return this.Bounds.Contains(point);
     }
-
-    private readonly Queue<Action> _glQueue = new();
-    // make these interactives, move loadtexture loadmodel
-    public Task<T> RunOnGLThread<T>(Func<T> action)
-    {
-        var tcs = new TaskCompletionSource<T>();
-
-        _glQueue.Enqueue(() =>
-        {
-            try
-            {
-                var result = action();
-                tcs.SetResult(result);
-            }
-            catch (Exception ex)
-            {
-                tcs.SetException(ex);
-            }
-        });
-
-        RequestNextFrameRendering();
-        return tcs.Task;
-    }
-    public Task RunOnGLThread(Action action)
-    {
-        var tcs = new TaskCompletionSource();
-
-        _glQueue.Enqueue(() =>
-        {
-            try
-            {
-                action();
-            }
-            catch (Exception ex)
-            {
-                tcs.SetException(ex);
-            }
-        });
-
-        RequestNextFrameRendering();
-        return tcs.Task;
-    }
-
-    public async Task LoadTexture(string name, byte[] data)
-    {
-        await RunOnGLThread(() =>
-        {
-            if (ViewModel.Engine.AssetManager.HasTexture(name))
-                ViewModel.Engine.AssetManager.RemoveTexture(name);
-
-            using var stream = new MemoryStream(data);
-            var texture = new TPCTextureFactory(ViewModel.GL).FromStream(stream);
-            ViewModel.Engine.AssetManager.AddTexture(name, texture);
-        });
-    }
-    public async Task LoadModel(string name, byte[] mdlData, byte[] mdxData)
-    {
-        await RunOnGLThread(async () =>
-        {
-            if (ViewModel.Engine.AssetManager.HasModel(name))
-                ViewModel.Engine.AssetManager.RemoveModel(name);
-
-            ViewModel.Model = new ModelLoader().LoadModel(ViewModel.GL, mdlData, mdxData);
-            ViewModel.Engine.AssetManager.AddModel(name, ViewModel.Model);
-
-            var check = new List<BaseNode>() { ViewModel.Model.Root };
-            while (check.Any())
-            {
-                var node = check.First();
-                check.RemoveAt(0);
-                check.AddRange(node.Nodes);
-
-                if (node is MeshNode mesh)
-                {
-                    var hasTexture1 = !string.IsNullOrEmpty(mesh.Texture1) && string.Equals(mesh.Texture1, "NULL", StringComparison.OrdinalIgnoreCase);
-                    if (!hasTexture1)
-                    {
-                        var textureName = mesh.Texture1;
-                        var textureResource = ViewModel.Source.Find(mesh.Texture1, ResourceType.TPC);
-                        var textureData = File.ReadAllBytes(textureResource.FilePath);
-                        await ViewModel.LoadTexture.Handle((textureName, textureData));
-                    }
-                }
-            }
-        });
-    }
     
     # region OpenGlControlBase
     protected override void OnOpenGlInit(GlInterface gl)
     {
-        ViewModel.LoadTexture.RegisterHandler(async interaction =>
-        {
-            var name = interaction.Input.Name;
-            var data = interaction.Input.Data;
-            await LoadTexture(name, data);
-
-            interaction.SetOutput(Unit.Default);
-        });
-        ViewModel.LoadModel.RegisterHandler(async interaction =>
-        {
-            var name = interaction.Input.Name;
-            var mdlData = interaction.Input.MDLData;
-            var mdxData = interaction.Input.MDXData;
-            await LoadModel(name, mdlData, mdxData);
-
-            interaction.SetOutput(Unit.Default);
-        });
-
         base.OnOpenGlInit(gl);
 
         var context = new AvaloniaSilkNativeContext(gl.GetProcAddress);
@@ -189,12 +85,6 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
 
     protected async override void OnOpenGlRender(GlInterface gl, int fb)
     {
-        while (_glQueue.Count > 0)
-        {
-            var action = _glQueue.Dequeue();
-            action();
-        }
-
         var scale = TopLevel.GetTopLevel(this).RenderScaling;
         ViewModel.Engine.Width = (uint)(Bounds.Width * scale);
         ViewModel.Engine.Height = (uint)(Bounds.Height * scale);
