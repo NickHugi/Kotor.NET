@@ -70,6 +70,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
     }
 
     private readonly Queue<Action> _glQueue = new();
+    // make these interactives, move loadtexture loadmodel
     public Task<T> RunOnGLThread<T>(Func<T> action)
     {
         var tcs = new TaskCompletionSource<T>();
@@ -110,60 +111,67 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         return tcs.Task;
     }
 
+    public async Task LoadTexture(string name, byte[] data)
+    {
+        await RunOnGLThread(() =>
+        {
+            if (ViewModel.AssetManager.HasTexture(name))
+                ViewModel.AssetManager.RemoveTexture(name);
+
+            using var stream = new MemoryStream(data);
+            var texture = new TPCTextureFactory(ViewModel.GL).FromStream(stream);
+            ViewModel.AssetManager.AddTexture(name, texture);
+        });
+    }
+    public async Task LoadModel(string name, byte[] mdlData, byte[] mdxData)
+    {
+        await RunOnGLThread(async () =>
+        {
+            if (ViewModel.AssetManager.HasModel(name))
+                ViewModel.AssetManager.RemoveModel(name);
+
+            ViewModel.Model = new ModelLoader().LoadModel(ViewModel.GL, mdlData, mdxData);
+            ViewModel.AssetManager.AddModel(name, ViewModel.Model);
+
+            var check = new List<BaseNode>() { ViewModel.Model.Root };
+            while (check.Any())
+            {
+                var node = check.First();
+                check.RemoveAt(0);
+                check.AddRange(node.Nodes);
+
+                if (node is MeshNode mesh)
+                {
+                    var hasTexture1 = !string.IsNullOrEmpty(mesh.Texture1) && string.Equals(mesh.Texture1, "NULL", StringComparison.OrdinalIgnoreCase);
+                    if (!hasTexture1)
+                    {
+                        var textureName = mesh.Texture1;
+                        var textureResource = ViewModel.Source.Find(mesh.Texture1, ResourceType.TPC);
+                        var textureData = File.ReadAllBytes(textureResource.FilePath);
+                        await ViewModel.LoadTexture.Handle((textureName, textureData));
+                    }
+                }
+            }
+        });
+    }
+    
     # region OpenGlControlBase
     protected override void OnOpenGlInit(GlInterface gl)
     {
         ViewModel.LoadTexture.RegisterHandler(async interaction =>
         {
-            await RunOnGLThread(() =>
-            {
-                var name = interaction.Input.Name;
-                var data = interaction.Input.Data;
-
-                if (ViewModel.AssetManager.HasTexture(name))
-                    ViewModel.AssetManager.RemoveTexture(name);
-
-                using var stream = new MemoryStream(data);
-                var texture = new TPCTextureFactory(ViewModel.GL).FromStream(stream);
-                ViewModel.AssetManager.AddTexture(name, texture);
-            });
+            var name = interaction.Input.Name;
+            var data = interaction.Input.Data;
+            await LoadTexture(name, data);
 
             interaction.SetOutput(Unit.Default);
         });
         ViewModel.LoadModel.RegisterHandler(async interaction =>
         {
-            await RunOnGLThread(async () =>
-            {
-                var name = interaction.Input.Name;
-                var mdlData = interaction.Input.MDLData;
-                var mdxData = interaction.Input.MDXData;
-
-                if (ViewModel.AssetManager.HasModel(name))
-                    ViewModel.AssetManager.RemoveModel(name);
-
-                ViewModel.Model = new ModelLoader().LoadModel(ViewModel.GL, mdlData, mdxData);
-                ViewModel.AssetManager.AddModel(name, ViewModel.Model);
-
-                var check = new List<BaseNode>() { ViewModel.Model.Root };
-                while (check.Any())
-                {
-                    var node = check.First();
-                    check.RemoveAt(0);
-                    check.AddRange(node.Nodes);
-
-                    if (node is MeshNode mesh)
-                    {
-                        var hasTexture1 = !string.IsNullOrEmpty(mesh.Texture1) && string.Equals(mesh.Texture1, "NULL", StringComparison.OrdinalIgnoreCase);
-                        if (!hasTexture1)
-                        {
-                            var textureName = mesh.Texture1;
-                            var textureResource = ViewModel.Source.Find(mesh.Texture1, ResourceType.TPC);
-                            var textureData = File.ReadAllBytes(textureResource.FilePath);
-                            await ViewModel.LoadTexture.Handle((textureName, textureData));
-                        }
-                    }
-                }
-            });
+            var name = interaction.Input.Name;
+            var mdlData = interaction.Input.MDLData;
+            var mdxData = interaction.Input.MDXData;
+            await LoadModel(name, mdlData, mdxData);
 
             interaction.SetOutput(Unit.Default);
         });
