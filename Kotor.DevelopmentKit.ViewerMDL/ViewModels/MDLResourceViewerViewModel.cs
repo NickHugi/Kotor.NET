@@ -2,9 +2,9 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using Avalonia.Media.Imaging;
 using DynamicData;
-using Kotor.DevelopmentKit.ViewerMDL.Views;
 using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Entities;
 using Kotor.NET.Graphics.GPU;
@@ -17,14 +17,17 @@ namespace Kotor.DevelopmentKit.ViewerMDL.ViewModels;
 
 public class MDLResourceViewerViewModel : ReactiveObject
 {
+    public Interaction<(string Name, byte[] Data), Unit> LoadTexture;
+
     public MDLResourceViewerViewModel()
     {
+        LoadTexture = new();
+
         TextureSource.Connect().Subscribe(x =>
         {
             this.RaisePropertyChanged(nameof(Textures));
         });
     }
-    
 
     public AvaloniaSilkNativeContext Context
     {

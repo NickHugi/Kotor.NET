@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
@@ -18,9 +19,7 @@ using Kotor.NET.Graphics.Entities;
 using Kotor.NET.Graphics.Model.Nodes;
 using Kotor.NET.Graphics.OpenGL;
 using Kotor.NET.Graphics.OpenGL.Factories;
-using Silk.NET.Core.Contexts;
 using Silk.NET.OpenGL;
-using Vector3 = System.Numerics.Vector3;
 
 namespace Kotor.DevelopmentKit.ViewerMDL.Views;
 
@@ -28,13 +27,77 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
 {
     public MDLResourceViewerViewModel ViewModel => (MDLResourceViewerViewModel)DataContext;
 
+    private Point? _lastPointerPosition;
+    private DateTime _lastRender = DateTime.Now;
+    private OrbitCamera _camera = new();
+
     public SceneControl()
     {
         InitializeComponent();
     }
 
+    private Entity? Pick(int x, int y)
+    {
+        var scale = TopLevel.GetTopLevel(this).RenderScaling;
+        var width = (uint)(Bounds.Width * scale);
+        var height = (uint)(Bounds.Height * scale);
+        ViewModel.GL.Viewport(0, 0, width, height);
+
+        ViewModel.GL.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        ViewModel.GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
+
+        var projection = Matrix4x4.CreatePerspectiveFieldOfView((float)Math.PI / 3f, width / (float)height, 0.001f, 1000);
+        var view = _camera.GetViewTransform();
+        ViewModel.AssetManager.GetShader("picker").Activate();
+        ViewModel.AssetManager.GetShader("picker").SetMatrix4x4("projection", projection);
+        ViewModel.AssetManager.GetShader("picker").SetMatrix4x4("view", view);
+        ViewModel.AssetManager.GetShader("picker").SetMatrix4x4("mesh", Matrix4x4.Identity);
+
+        ViewModel.Scene.PickRender(ViewModel.AssetManager);
+
+        Span<byte> bytes = new byte[4];
+        ViewModel.GL.ReadPixels(x, (int)height-y, 1, 1, PixelFormat.Rgba, PixelType.UnsignedByte, bytes);
+        var id = bytes[3] + (bytes[2] << 8) + (bytes[1] << 16) + (bytes[0] << 24);
+
+        return ViewModel.Scene.Entities.FirstOrDefault(x => x.ID == id);
+    }
+
+    bool ICustomHitTest.HitTest(Point point)
+    {
+        return this.Bounds.Contains(point);
+    }
+
+    private readonly Queue<Action> _glQueue = new();
+    public Task<T> RunOnGLThread<T>(Func<T> action)
+    {
+        var tcs = new TaskCompletionSource<T>();
+
+        _glQueue.Enqueue(() =>
+        {
+            try
+            {
+                var result = action();
+                tcs.SetResult(result);
+            }
+            catch (Exception ex)
+            {
+                tcs.SetException(ex);
+            }
+        });
+
+        RequestNextFrameRendering();
+        return tcs.Task;
+    }
+
+    # region OpenGlControlBase
     protected unsafe override void OnOpenGlInit(GlInterface gl)
     {
+
+        ViewModel.LoadTexture.RegisterHandler(async interaction =>
+        {
+            var input = interaction.Input;
+        });
+
         base.OnOpenGlInit(gl);
 
         ViewModel.Context = new AvaloniaSilkNativeContext(gl.GetProcAddress);
@@ -54,28 +117,6 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         ViewModel.Scene = new();
     }
 
-    protected override void OnOpenGlDeinit(GlInterface gl)
-    {
-        base.OnOpenGlDeinit(gl);
-    }
-
-    private DateTime _lastRender = DateTime.Now;
-    private float _yaw
-    {
-        get => field;
-        set => field = value;
-    }
-    private float _pitch
-    {
-        get => field;
-        set => field = (float)Math.Min(Math.Max(-Math.PI / 2, value), Math.PI / 2);
-    }
-    private float _zoom
-    {
-        get => field;
-        set => field = Math.Max(value, 0.1f);
-    } = 2;
-
     protected override void OnOpenGlRender(GlInterface gl, int fb)
     {
         while (_glQueue.Count > 0)
@@ -93,7 +134,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         ViewModel.GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
         var projection = Matrix4x4.CreatePerspectiveFieldOfView((float)Math.PI / 3f, width / (float)height, 0.001f, 1000);
-        var view = CreateOrbitLookAt(new(0, 0, 1), _yaw, _pitch, _zoom);
+        var view = _camera.GetViewTransform();
         ViewModel.AssetManager.GetShader("basic").Activate();
         ViewModel.AssetManager.GetShader("basic").SetMatrix4x4("projection", projection);
         ViewModel.AssetManager.GetShader("basic").SetMatrix4x4("view", view);
@@ -126,6 +167,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
                             var textureResource = ViewModel.Source.Find(mesh.Texture1, ResourceType.TPC);
                             return File.ReadAllBytes(textureResource.FilePath);
                         });
+                        ViewModel.LoadTexture.Handle(("Hello", new byte[0])).Wait();
                     }
                 }
             }
@@ -158,35 +200,13 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         RequestNextFrameRendering();
     }
 
-    private Entity? Pick(int x, int y)
+    protected override void OnOpenGlDeinit(GlInterface gl)
     {
-        _zoom = 1f;
-
-        var scale = TopLevel.GetTopLevel(this).RenderScaling;
-        var width = (uint)(Bounds.Width * scale);
-        var height = (uint)(Bounds.Height * scale);
-        ViewModel.GL.Viewport(0, 0, width, height);
-
-        ViewModel.GL.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-        ViewModel.GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
-
-        var projection = Matrix4x4.CreatePerspectiveFieldOfView((float)Math.PI / 3f, width / (float)height, 0.001f, 1000);
-        var view = CreateOrbitLookAt(new(0, 0, 1), _yaw, _pitch, _zoom);
-        ViewModel.AssetManager.GetShader("picker").Activate();
-        ViewModel.AssetManager.GetShader("picker").SetMatrix4x4("projection", projection);
-        ViewModel.AssetManager.GetShader("picker").SetMatrix4x4("view", view);
-        ViewModel.AssetManager.GetShader("picker").SetMatrix4x4("mesh", Matrix4x4.Identity);
-
-        ViewModel.Scene.PickRender(ViewModel.AssetManager);
-
-        Span<byte> bytes = new byte[4];
-        ViewModel.GL.ReadPixels(x, (int)height-y, 1, 1, PixelFormat.Rgba, PixelType.UnsignedByte, bytes);
-        var id = bytes[3] + (bytes[2] << 8) + (bytes[1] << 16) + (bytes[0] << 24);
-
-        return ViewModel.Scene.Entities.FirstOrDefault(x => x.ID == id);
+        base.OnOpenGlDeinit(gl);
     }
+    #endregion
 
-    private Point? _lastPointerPosition;
+    #region Events
     private void PointerMoved(object? sender, Avalonia.Input.PointerEventArgs e)
     {
         var currentPosition = e.GetPosition(this);
@@ -200,43 +220,17 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
 
             if (e.GetCurrentPoint(this).Properties.IsMiddleButtonPressed)
             {
-                _pitch += (float)deltaY / 500;
-                _yaw -= (float)deltaX / 500;
+                _camera.Pitch += (float)deltaY / 500;
+                _camera.Yaw -= (float)deltaX / 500;
             }
         }
 
         _lastPointerPosition = currentPosition;
     }
 
-    public static Matrix4x4 CreateOrbitLookAt(Vector3 target, float yaw, float pitch, float radius)
-    {
-        pitch = Math.Clamp(pitch, -1.55f, 1.55f);
-
-        float cosPitch = MathF.Cos(pitch);
-        float sinPitch = MathF.Sin(pitch);
-        float cosYaw = MathF.Cos(yaw);
-        float sinYaw = MathF.Sin(yaw);
-
-        float x = radius * cosPitch * cosYaw;
-        float y = radius * cosPitch * sinYaw;
-        float z = radius * sinPitch;
-
-        Vector3 cameraPosition = target + new Vector3(x, y, z);
-
-        return Matrix4x4.CreateLookAt(
-            cameraPosition,
-            target,
-            Vector3.UnitZ);
-    }
-
     private void PointerWheelChanged(object? sender, Avalonia.Input.PointerWheelEventArgs e)
     {
-        _zoom -= (float)(e.Delta.Y / 1);
-    }
-
-    bool ICustomHitTest.HitTest(Point point)
-    {
-        return this.Bounds.Contains(point);
+        _camera.Distance -= (float)(e.Delta.Y / 1);
     }
 
     private async void PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
@@ -245,88 +239,5 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         var pos = e.GetCurrentPoint(this).Position * scale;
         var entity = await RunOnGLThread(() => Pick((int)pos.X, (int)pos.Y));
     }
-
-    private readonly Queue<Action> _glQueue = new();
-    public Task<T> RunOnGLThread<T>(Func<T> action)
-    {
-        var tcs = new TaskCompletionSource<T>();
-
-        _glQueue.Enqueue(() =>
-        {
-            try
-            {
-                var result = action();
-                tcs.SetResult(result);
-            }
-            catch (Exception ex)
-            {
-                tcs.SetException(ex);
-            }
-        });
-
-        RequestNextFrameRendering();
-        return tcs.Task;
-    }
-}
-
-public class AvaloniaSilkNativeContext : INativeContext
-{
-    private readonly Func<string, IntPtr> _getProcAddress;
-
-    public AvaloniaSilkNativeContext(Func<string, IntPtr> getProcAddress)
-    {
-        _getProcAddress = getProcAddress;
-    }
-
-    public void Dispose()
-    {
-
-    }
-
-    public nint GetProcAddress(string proc, int? slot = null)
-    {
-        return _getProcAddress(proc);
-    }
-
-    public bool TryGetProcAddress(string proc, out nint addr, int? slot = null)
-    {
-        addr = _getProcAddress(proc);
-        return true;
-    }
-
-    public static Matrix4x4 CreateLookAtZUp(
-        Vector3 eye,
-        Vector3 target)
-    {
-        // Forward (camera looks toward target)
-        Vector3 forward = Vector3.Normalize(eye - target);
-
-        // Z is up
-        Vector3 up = Vector3.UnitZ;
-
-        // Right = Up × Forward
-        Vector3 right = Vector3.Normalize(Vector3.Cross(up, forward));
-
-        // Recompute orthogonal up
-        Vector3 trueUp = Vector3.Cross(forward, right);
-
-        return new Matrix4x4(
-            right.X, trueUp.X, forward.X, 0f,
-            right.Y, trueUp.Y, forward.Y, 0f,
-            right.Z, trueUp.Z, forward.Z, 0f,
-            -Vector3.Dot(right, eye),
-            -Vector3.Dot(trueUp, eye),
-            -Vector3.Dot(forward, eye),
-            1f
-        );
-    }
-
-    //public IntPtr GetProcAddress(string procName)
-    //    => _getProcAddress(procName);
-
-    //public bool TryGetProcAddress(string proc, out nint address)
-    //{
-    //    address = _getProcAddress(proc);
-    //    return address != IntPtr.Zero;
-    //}
+    #endregion
 }
