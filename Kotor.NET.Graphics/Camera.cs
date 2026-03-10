@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace Kotor.DevelopmentKit.ViewerMDL;
+namespace Kotor.NET.Graphics;
 
 public abstract class Camera
 {

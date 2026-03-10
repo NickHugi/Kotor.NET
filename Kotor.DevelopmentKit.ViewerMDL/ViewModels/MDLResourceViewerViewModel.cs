@@ -8,6 +8,7 @@ using DynamicData;
 using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Entities;
 using Kotor.NET.Graphics.GPU;
+using Kotor.NET.Graphics.OpenGL;
 using Kotor.NET.Graphics.OpenGL.Model;
 using Kotor.NET.Tests.Encapsulation;
 using ReactiveUI;
@@ -31,11 +32,7 @@ public class MDLResourceViewerViewModel : ReactiveObject
         });
     }
 
-    public AvaloniaSilkNativeContext Context
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
+    public OpenGLSceneWrapper SceneWrapper { get; set => this.RaiseAndSetIfChanged(ref field, value); }
 
     public GL GL
     {

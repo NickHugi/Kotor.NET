@@ -2,7 +2,7 @@ using System;
 using System.Numerics;
 using Vector3 = System.Numerics.Vector3;
 
-namespace Kotor.DevelopmentKit.ViewerMDL;
+namespace Kotor.NET.Graphics;
 
 public class OrbitCamera : Camera
 {

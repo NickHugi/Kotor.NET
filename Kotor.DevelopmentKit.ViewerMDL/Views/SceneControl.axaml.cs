@@ -31,7 +31,6 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
 
     private Point? _lastPointerPosition;
     private DateTime _lastRender = DateTime.Now;
-    private OrbitCamera _camera = new() { Distance = 1, Target = new(0, 0, 1.5f) };
 
     public SceneControl()
     {
@@ -49,7 +48,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         ViewModel.GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
         var projection = Matrix4x4.CreatePerspectiveFieldOfView((float)Math.PI / 3f, width / (float)height, 0.001f, 1000);
-        var view = _camera.GetViewTransform();
+        var view = ViewModel.SceneWrapper.Camera.GetViewTransform();
         ViewModel.AssetManager.GetShader("picker").Activate();
         ViewModel.AssetManager.GetShader("picker").SetMatrix4x4("projection", projection);
         ViewModel.AssetManager.GetShader("picker").SetMatrix4x4("view", view);
@@ -178,21 +177,20 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
 
         base.OnOpenGlInit(gl);
 
-        ViewModel.Context = new AvaloniaSilkNativeContext(gl.GetProcAddress);
-        ViewModel.GL = new GL(ViewModel.Context);
-        ViewModel.GL.Enable(EnableCap.DepthTest);
+        var context = new AvaloniaSilkNativeContext(gl.GetProcAddress);
+        ViewModel.GL = new GL(context);
+
         ViewModel.AssetManager = new AssetManager();
 
-        var shader1 = new ShaderFactory(ViewModel.GL).FromFile("Assets/standard/vertex.glsl", "Assets/standard/fragment.glsl");
-        ViewModel.AssetManager.AddShader("basic", shader1);
-
-        var shader2 = new ShaderFactory(ViewModel.GL).FromFile("Assets/picker/vertex.glsl", "Assets/picker/fragment.glsl");
-        ViewModel.AssetManager.AddShader("picker", shader2);
-
-        var placeholderTexture = new TPCTextureFactory(ViewModel.GL).FromPlaceholder();
-        ViewModel.AssetManager.AddTexture("placeholder", placeholderTexture);
-
         ViewModel.Scene = new();
+
+        ViewModel.SceneWrapper = new()
+        {
+            AssetManager = (AssetManager)ViewModel.AssetManager,
+            GL = ViewModel.GL,
+            Scene= ViewModel.Scene,
+        };
+        ViewModel.SceneWrapper.Init();
     }
 
     protected async override void OnOpenGlRender(GlInterface gl, int fb)
@@ -204,34 +202,22 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         }
 
         var scale = TopLevel.GetTopLevel(this).RenderScaling;
-        var width = (uint)(Bounds.Width * scale);
-        var height = (uint)(Bounds.Height * scale);
-        ViewModel.GL.Viewport(0, 0, width, height);
-
-        ViewModel.GL.ClearColor(0.1f, 0.0f, 0.0f, 1.0f);
-        ViewModel.GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
-
-        var projection = Matrix4x4.CreatePerspectiveFieldOfView((float)Math.PI / 3f, width / (float)height, 0.001f, 1000);
-        var view = _camera.GetViewTransform();
-        ViewModel.AssetManager.GetShader("basic").Activate();
-        ViewModel.AssetManager.GetShader("basic").SetMatrix4x4("projection", projection);
-        ViewModel.AssetManager.GetShader("basic").SetMatrix4x4("view", view);
-        ViewModel.AssetManager.GetShader("basic").SetMatrix4x4("mesh", Matrix4x4.Identity);
-        ViewModel.AssetManager.GetShader("basic").SetUniform1("texture1", 0);
+        ViewModel.SceneWrapper.Width = (uint)(Bounds.Width * scale);
+        ViewModel.SceneWrapper.Height = (uint)(Bounds.Height * scale);
 
         var delta = (float)(DateTime.Now - _lastRender).Milliseconds / 1000;
-
-        ViewModel.Scene.Update(ViewModel.AssetManager, delta);
-        ViewModel.Scene.Render(ViewModel.AssetManager);
+        ViewModel.SceneWrapper.Update(delta);
+        ViewModel.SceneWrapper.Render(delta);
 
         _lastRender = DateTime.Now;
-
         RequestNextFrameRendering();
     }
 
     protected override void OnOpenGlDeinit(GlInterface gl)
     {
         base.OnOpenGlDeinit(gl);
+
+        ViewModel.SceneWrapper.Deinit();
     }
     #endregion
 
@@ -249,8 +235,8 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
 
             if (e.GetCurrentPoint(this).Properties.IsMiddleButtonPressed)
             {
-                _camera.Pitch += (float)deltaY / 500;
-                _camera.Yaw -= (float)deltaX / 500;
+                ViewModel.SceneWrapper.Camera.Pitch += (float)deltaY / 500;
+                ViewModel.SceneWrapper.Camera.Yaw -= (float)deltaX / 500;
             }
         }
 
@@ -259,7 +245,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
 
     private void PointerWheelChanged(object? sender, Avalonia.Input.PointerWheelEventArgs e)
     {
-        _camera.Distance -= (float)(e.Delta.Y / 1);
+        ViewModel.SceneWrapper.Camera.Distance -= (float)(e.Delta.Y / 1);
     }
 
     private async void PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
