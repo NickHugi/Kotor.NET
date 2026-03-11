@@ -19,7 +19,7 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_Open" Command="{Binding #Window.Open}" />
+                <MenuItem Header="_Open" Command="{Binding LoadModel}" />
             </MenuItem>
         </Menu>
 
@@ -34,12 +34,12 @@
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Center"
                             Content="Pause"
-                            Click="Pause_Click"/>
+                            Command="{Binding PauseAnimation}"/>
                     <Button Grid.Column="1"
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Center"
                             Content="Play"
-                            Click="Play_Click"/>
+                            Command="{Binding PlayAnimation}"/>
                 </Grid>
                 
                 <ListBox ItemsSource="{Binding Textures}"
@@ -57,7 +57,7 @@
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Center"
                         Content="Swap"
-                        Click="Swap_Click"/>
+                        Command="{Binding SwapTexture}"/>
             </Grid>
 
             <views:SceneControl />

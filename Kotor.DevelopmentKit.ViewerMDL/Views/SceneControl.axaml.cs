@@ -12,6 +12,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.OpenGL;
 using Avalonia.OpenGL.Controls;
+using Avalonia.Platform.Storage;
 using Avalonia.Rendering;
 using Kotor.DevelopmentKit.ViewerMDL.ViewModels;
 using Kotor.NET.Common.Data;
@@ -20,6 +21,7 @@ using Kotor.NET.Graphics.Entities;
 using Kotor.NET.Graphics.Model.Nodes;
 using Kotor.NET.Graphics.OpenGL;
 using Kotor.NET.Graphics.OpenGL.Factories;
+using Kotor.NET.Tests.Encapsulation;
 using Silk.NET.OpenGL;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -27,6 +29,7 @@ namespace Kotor.DevelopmentKit.ViewerMDL.Views;
 
 public partial class SceneControl : OpenGlControlBase, ICustomHitTest
 {
+    // should just be engine
     public MDLResourceViewerViewModel ViewModel => (MDLResourceViewerViewModel)DataContext;
 
     private Point? _lastPointerPosition;
@@ -35,6 +38,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
     public SceneControl()
     {
         InitializeComponent();
+
     }
 
     //private Entity? Pick(int x, int y)
@@ -63,12 +67,15 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
     //    return ViewModel.Scene.Entities.FirstOrDefault(x => x.ID == id);
     //}
 
-    bool ICustomHitTest.HitTest(Point point)
+
+    #region ICustomHitTest
+    public bool HitTest(Point point)
     {
-        return this.Bounds.Contains(point);
+        return Bounds.Contains(point);
     }
-    
-    # region OpenGlControlBase
+    #endregion
+
+    #region OpenGlControlBase
     protected override void OnOpenGlInit(GlInterface gl)
     {
         base.OnOpenGlInit(gl);

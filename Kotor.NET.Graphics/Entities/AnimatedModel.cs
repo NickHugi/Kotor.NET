@@ -10,11 +10,9 @@ namespace Kotor.NET.Graphics.Entities;
 
 public class AnimatedModel : Entity
 {
-    public string Model { get; set; }
-
+    public required string Model { get; set; }
     public List<AnimationItem> Animations { get; set; } = [];
-
-    public Matrix4x4 Transformation { get; set; }
+    public Matrix4x4 Transformation { get; set; } = Matrix4x4.Identity;
 
     public override void Render(RenderFrame frame, IAssetManager assetManager)
     {

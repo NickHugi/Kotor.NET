@@ -1,6 +1,8 @@
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Joins;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -14,6 +16,8 @@ using Kotor.NET.Encapsulations;
 using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Entities;
 using Kotor.NET.Graphics.OpenGL;
+using Kotor.NET.Tests.Encapsulation;
+using ReactiveUI;
 using Silk.NET.OpenGL;
 
 namespace Kotor.DevelopmentKit.ViewerMDL.Views;
@@ -25,11 +29,24 @@ public partial class MDLResourceViewer : ReactiveWindow<MDLResourceViewerViewMod
         InitializeComponent();
 
         ViewModel = new();
+
+        this.WhenActivated(d =>
+        {
+            ViewModel.SelectModel.RegisterHandler(async context =>
+            {
+                context.SetOutput(await SelectModel());
+            }).DisposeWith(d);
+
+            ViewModel.SelectTexture.RegisterHandler(async context =>
+            {
+                context.SetOutput(await SelectTexture());
+            }).DisposeWith(d);
+        });
     }
 
-    public async Task Open()
+    public async Task<SelectModelResult?> SelectModel()
     {
-        var FilePickerOpenOptions = new FilePickerOpenOptions()
+        var files = await GetTopLevel(this)!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
         {
             AllowMultiple = false,
             Title = "Open model",
@@ -37,74 +54,50 @@ public partial class MDLResourceViewer : ReactiveWindow<MDLResourceViewerViewMod
             [
                 new FilePickerFileType("MDL File") { Patterns = ["*.mdl"] },
             ]
-        };
-        var files = await GetTopLevel(this).StorageProvider.OpenFilePickerAsync(FilePickerOpenOptions);
+        });
+
         var file = files.FirstOrDefault();
 
         if (file is not null)
         {
-            if (ViewModel.Engine.AssetManager.HasModel("model"))
-                ViewModel.Engine.AssetManager.RemoveModel("model");
+            var mdlPath = file.Path.LocalPath;
+            var mdl = new ResourceInfo(mdlPath);
 
-            var directory = Path.GetDirectoryName(file.Path.LocalPath);
-            ViewModel.Engine.Source = new FolderEncapsulation(directory);
+            var mdxPath = Path.ChangeExtension(mdlPath, ".mdx");
+            var mdx = new ResourceInfo(mdxPath);
 
-            var mdlFilepath = file.Path.LocalPath;
-            var mdl = File.ReadAllBytes(mdlFilepath);
-
-            var mdxFilepath = mdlFilepath.Replace(".mdl", ".mdx");
-            var mdx = File.ReadAllBytes(mdxFilepath);
-
-            await ViewModel.Engine.LoadModel("model", mdl, mdx);
-
-            ViewModel.ModelEntity = ViewModel.Engine.Scene.AddEntity(new AnimatedModel
-            {
-                Model = "model",
-                Animations = [],
-                Transformation = Matrix4x4.Identity,
-            });
+            return new(mdl, mdx);
+        }
+        else
+        {
+            return null;
         }
     }
 
-    private void Play_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    public async Task<SelectTextureResult?> SelectTexture()
     {
-        ViewModel.ModelEntity.Animations.ForEach(x =>
-        {
-            x.BlendFactor = 1f;
-            x.FadeFactor = 5f;
-        });
-        ViewModel.ModelEntity.Animations.Add(new(ViewModel.SelectedAnimation)
-        {
-            BlendFactor = 1,
-            CurrentTime = ViewModel.ModelEntity.Animations.FirstOrDefault()?.CurrentTime ?? 0
-        });
-    }
-
-    private void Pause_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        ViewModel.ModelEntity.Animations.ForEach(x => x.Paused = true);
-    }
-
-    private async void Swap_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        var FilePickerOpenOptions = new FilePickerOpenOptions()
+        var files = await GetTopLevel(this)!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
             AllowMultiple = false,
-            Title = "Open texture",
+            Title = "Swap texture",
             FileTypeFilter =
             [
-                new FilePickerFileType("TPC File") { Patterns = ["*.tpc"] },
+                new FilePickerFileType("Texture File") { Patterns = ["*.tpc"] },
             ]
-        };
+        });
 
-        var files = await GetTopLevel(this).StorageProvider.OpenFilePickerAsync(FilePickerOpenOptions);
         var file = files.FirstOrDefault();
 
         if (file is not null)
         {
-            var name = ViewModel.SelectedTexture.Name;
-            var data = File.ReadAllBytes(file.Path.LocalPath);
-            await ViewModel.Engine.LoadTexture(name, data);
+            var mdlPath = file.Path.LocalPath;
+            var texture = new ResourceInfo(mdlPath);
+
+            return new(texture);
+        }
+        else
+        {
+            return null;
         }
     }
 }
