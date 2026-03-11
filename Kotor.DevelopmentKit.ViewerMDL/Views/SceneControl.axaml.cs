@@ -29,7 +29,7 @@ namespace Kotor.DevelopmentKit.ViewerMDL.Views;
 
 public partial class SceneControl : OpenGlControlBase, ICustomHitTest
 {
-    // should just be engine
+    // TODO - pass through only engine, handle init of context
     public MDLResourceViewerViewModel ViewModel => (MDLResourceViewerViewModel)DataContext;
 
     private Point? _lastPointerPosition;
@@ -40,33 +40,6 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         InitializeComponent();
 
     }
-
-    //private Entity? Pick(int x, int y)
-    //{
-    //    var scale = TopLevel.GetTopLevel(this).RenderScaling;
-    //    var width = (uint)(Bounds.Width * scale);
-    //    var height = (uint)(Bounds.Height * scale);
-    //    ViewModel.GL.Viewport(0, 0, width, height);
-
-    //    ViewModel.GL.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-    //    ViewModel.GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
-
-    //    var projection = Matrix4x4.CreatePerspectiveFieldOfView((float)Math.PI / 3f, width / (float)height, 0.001f, 1000);
-    //    var view = ViewModel.SceneWrapper.Camera.GetViewTransform();
-    //    ViewModel.AssetManager.GetShader("picker").Activate();
-    //    ViewModel.AssetManager.GetShader("picker").SetMatrix4x4("projection", projection);
-    //    ViewModel.AssetManager.GetShader("picker").SetMatrix4x4("view", view);
-    //    ViewModel.AssetManager.GetShader("picker").SetMatrix4x4("mesh", Matrix4x4.Identity);
-
-    //    ViewModel.Scene.PickRender(ViewModel.AssetManager);
-
-    //    Span<byte> bytes = new byte[4];
-    //    ViewModel.GL.ReadPixels(x, (int)height-y, 1, 1, PixelFormat.Rgba, PixelType.UnsignedByte, bytes);
-    //    var id = bytes[3] + (bytes[2] << 8) + (bytes[1] << 16) + (bytes[0] << 24);
-
-    //    return ViewModel.Scene.Entities.FirstOrDefault(x => x.ID == id);
-    //}
-
 
     #region ICustomHitTest
     public bool HitTest(Point point)
@@ -143,7 +116,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
     {
         var scale = TopLevel.GetTopLevel(this).RenderScaling;
         var pos = e.GetCurrentPoint(this).Position * scale;
-        //var entity = await RunOnGLThread(() => Pick((int)pos.X, (int)pos.Y));
+        var entity = await ViewModel.Engine.Pick((int)pos.X, (int)pos.Y);
     }
     #endregion
 }

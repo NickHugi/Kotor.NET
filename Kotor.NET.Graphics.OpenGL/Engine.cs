@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Common.Data;
+using Kotor.NET.Graphics.Entities;
 using Kotor.NET.Graphics.Model.Nodes;
 using Kotor.NET.Graphics.OpenGL.Factories;
 using Kotor.NET.Tests.Encapsulation;
@@ -73,6 +74,32 @@ public class Engine
     public void Update(float timestep)
     {
         Scene.Update(AssetManager, timestep);
+    }
+
+    public async Task<Entity?> Pick(int x, int y)
+    {
+        return await RunOnGLThread(() =>
+        {
+            GL.Viewport(0, 0, Width, Height);
+
+            GL.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+            GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
+
+            var projection = Matrix4x4.CreatePerspectiveFieldOfView((float)Math.PI / 3f, Width / (float)Height, 0.001f, 1000);
+            var view = Camera.GetViewTransform();
+            AssetManager.GetShader("picker").Activate();
+            AssetManager.GetShader("picker").SetMatrix4x4("projection", projection);
+            AssetManager.GetShader("picker").SetMatrix4x4("view", view);
+            AssetManager.GetShader("picker").SetMatrix4x4("mesh", Matrix4x4.Identity);
+
+            Scene.PickRender(AssetManager);
+
+            Span<byte> bytes = new byte[4];
+            GL.ReadPixels(x, (int)Height - y, 1, 1, PixelFormat.Rgba, PixelType.UnsignedByte, bytes);
+            var id = bytes[3] + (bytes[2] << 8) + (bytes[1] << 16) + (bytes[0] << 24);
+
+            return Scene.Entities.FirstOrDefault(x => x.ID == id);
+        });
     }
 
     public async Task LoadTexture(string name, byte[] data)
