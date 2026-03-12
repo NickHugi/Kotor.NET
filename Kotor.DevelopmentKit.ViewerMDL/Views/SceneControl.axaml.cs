@@ -17,6 +17,7 @@ using Avalonia.Rendering;
 using Kotor.DevelopmentKit.ViewerMDL.ViewModels;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Graphics;
+using Kotor.NET.Graphics.Cameras;
 using Kotor.NET.Graphics.Entities;
 using Kotor.NET.Graphics.Model.Nodes;
 using Kotor.NET.Graphics.OpenGL;
@@ -32,6 +33,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
     // TODO - pass through only engine, handle init of context
     public MDLResourceViewerViewModel ViewModel => (MDLResourceViewerViewModel)DataContext;
 
+    public OrbitCamera _camera { get; } = new();
     private Point? _lastPointerPosition;
     private DateTime _lastRender = DateTime.Now;
 
@@ -71,7 +73,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
 
         var delta = (float)(DateTime.Now - _lastRender).Milliseconds / 1000;
         ViewModel.Engine.Update(delta);
-        ViewModel.Engine.Render(delta);
+        ViewModel.Engine.Render(_camera);
 
         _lastRender = DateTime.Now;
         RequestNextFrameRendering();
@@ -99,8 +101,8 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
 
             if (e.GetCurrentPoint(this).Properties.IsMiddleButtonPressed)
             {
-                ViewModel.Engine.Camera.Pitch += (float)deltaY / 500;
-                ViewModel.Engine.Camera.Yaw -= (float)deltaX / 500;
+                _camera.Pitch += (float)deltaY / 500;
+                _camera.Yaw -= (float)deltaX / 500;
             }
         }
 
@@ -109,14 +111,14 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
 
     private void PointerWheelChanged(object? sender, Avalonia.Input.PointerWheelEventArgs e)
     {
-        ViewModel.Engine.Camera.Distance -= (float)(e.Delta.Y / 1);
+        _camera.Distance -= (float)(e.Delta.Y / 1);
     }
 
     private async void PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
     {
         var scale = TopLevel.GetTopLevel(this).RenderScaling;
         var pos = e.GetCurrentPoint(this).Position * scale;
-        var entity = await ViewModel.Engine.Pick((int)pos.X, (int)pos.Y);
+        var entity = await ViewModel.Engine.Pick((int)pos.X, (int)pos.Y, _camera);
     }
     #endregion
 }

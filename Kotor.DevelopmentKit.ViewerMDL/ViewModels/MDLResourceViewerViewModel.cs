@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using DynamicData;
+using Kotor.DevelopmentKit.ViewerMDL.DialogResults;
 using Kotor.NET.Encapsulations;
 using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Entities;

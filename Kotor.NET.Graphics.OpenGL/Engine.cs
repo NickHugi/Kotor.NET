@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Common.Data;
+using Kotor.NET.Graphics.Cameras;
 using Kotor.NET.Graphics.Entities;
 using Kotor.NET.Graphics.Model.Nodes;
 using Kotor.NET.Graphics.OpenGL.Factories;
@@ -23,8 +24,6 @@ public class Engine
     public uint Height { get; set; }
 
     public IEncapsulation Source { get; set; }
-
-    public OrbitCamera Camera = new() { Distance = 1 }; // todo: move to scene
 
     private readonly Queue<Action> _glQueue = new();
 
@@ -47,7 +46,7 @@ public class Engine
 
     }
 
-    public void Render(float delta)
+    public void Render(Camera camera)
     {
         while (_glQueue.Count > 0)
         {
@@ -60,11 +59,9 @@ public class Engine
         GL.ClearColor(0.1f, 0.0f, 0.0f, 1.0f);
         GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
-        var projection = Matrix4x4.CreatePerspectiveFieldOfView((float)Math.PI / 3f, Width / (float)Height, 0.001f, 1000);
-        var view = Camera.GetViewTransform();
         AssetManager.GetShader("basic").Activate();
-        AssetManager.GetShader("basic").SetMatrix4x4("projection", projection);
-        AssetManager.GetShader("basic").SetMatrix4x4("view", view);
+        AssetManager.GetShader("basic").SetMatrix4x4("projection", camera.GetProjectionTransform(Width, Height));
+        AssetManager.GetShader("basic").SetMatrix4x4("view", camera.GetViewTransform());
         AssetManager.GetShader("basic").SetMatrix4x4("mesh", Matrix4x4.Identity);
         AssetManager.GetShader("basic").SetUniform1("texture1", 0);
 
@@ -76,7 +73,7 @@ public class Engine
         Scene.Update(AssetManager, timestep);
     }
 
-    public async Task<Entity?> Pick(int x, int y)
+    public async Task<Entity?> Pick(int x, int y, Camera camera)
     {
         return await RunOnGLThread(() =>
         {
@@ -86,7 +83,7 @@ public class Engine
             GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
             var projection = Matrix4x4.CreatePerspectiveFieldOfView((float)Math.PI / 3f, Width / (float)Height, 0.001f, 1000);
-            var view = Camera.GetViewTransform();
+            var view = camera.GetViewTransform();
             AssetManager.GetShader("picker").Activate();
             AssetManager.GetShader("picker").SetMatrix4x4("projection", projection);
             AssetManager.GetShader("picker").SetMatrix4x4("view", view);

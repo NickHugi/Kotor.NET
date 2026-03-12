@@ -11,6 +11,7 @@ using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using Avalonia.ReactiveUI;
 using Avalonia.Threading;
+using Kotor.DevelopmentKit.ViewerMDL.DialogResults;
 using Kotor.DevelopmentKit.ViewerMDL.ViewModels;
 using Kotor.NET.Encapsulations;
 using Kotor.NET.Graphics;

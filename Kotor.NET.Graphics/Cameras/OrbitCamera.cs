@@ -2,7 +2,7 @@ using System;
 using System.Numerics;
 using Vector3 = System.Numerics.Vector3;
 
-namespace Kotor.NET.Graphics;
+namespace Kotor.NET.Graphics.Cameras;
 
 public class OrbitCamera : Camera
 {
@@ -28,6 +28,24 @@ public class OrbitCamera : Camera
         set => field = Math.Max(0, value);
     }
 
+    public float FOV
+    {
+        get;
+        set => Math.Max(0, value);
+    } = (float)(Math.PI / 3f);
+
+    public float Near
+    {
+        get;
+        set;
+    } = 0.001f;
+
+    public float Far
+    {
+        get;
+        set;
+    } = 1000.0f;
+
     public override Matrix4x4 GetViewTransform()
     {
         float cosPitch = MathF.Cos(Pitch);
@@ -42,5 +60,10 @@ public class OrbitCamera : Camera
         Vector3 cameraPosition = Target + new Vector3(x, y, z);
 
         return Matrix4x4.CreateLookAt(cameraPosition, Target, Vector3.UnitZ);
+    }
+
+    public override Matrix4x4 GetProjectionTransform(uint width, uint height)
+    {
+        return Matrix4x4.CreatePerspectiveFieldOfView(FOV, width / (float)height, 0.001f, 1000);
     }
 }
