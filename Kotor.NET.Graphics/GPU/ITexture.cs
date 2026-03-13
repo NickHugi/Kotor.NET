@@ -10,5 +10,5 @@ public interface ITexture : IDisposable
 {
     public uint ID { get; }
 
-    public void Activate();
+    public void Activate(int slot = 0);
 }

@@ -53,7 +53,7 @@ public abstract class BaseNode : IDisposable
 
     public bool Visible;
 
-    public virtual ICollection<MeshDescriptor> GetMeshDescriptors()
+    public virtual ICollection<MeshDescriptor> GetMeshDescriptors(Entity entity)
     {
         return [];
     }

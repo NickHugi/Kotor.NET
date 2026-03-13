@@ -61,14 +61,6 @@ public class Engine
         GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
         new GeometryRenderer().Render(AssetManager, Scene, camera, Width, Height);
-
-        //AssetManager.GetShader("basic").Activate();
-        //AssetManager.GetShader("basic").SetMatrix4x4("projection", camera.GetProjectionTransform(Width, Height));
-        //AssetManager.GetShader("basic").SetMatrix4x4("view", camera.GetViewTransform());
-        //AssetManager.GetShader("basic").SetMatrix4x4("mesh", Matrix4x4.Identity);
-        //AssetManager.GetShader("basic").SetUniform1("texture1", 0);
-
-        //Scene.Render(AssetManager);
     }
 
     public void Update(float timestep)
@@ -85,14 +77,7 @@ public class Engine
             GL.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
             GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
-            var projection = Matrix4x4.CreatePerspectiveFieldOfView((float)Math.PI / 3f, Width / (float)Height, 0.001f, 1000);
-            var view = camera.GetViewTransform();
-            AssetManager.GetShader("picker").Activate();
-            AssetManager.GetShader("picker").SetMatrix4x4("projection", projection);
-            AssetManager.GetShader("picker").SetMatrix4x4("view", view);
-            AssetManager.GetShader("picker").SetMatrix4x4("mesh", Matrix4x4.Identity);
-
-            Scene.PickRender(AssetManager);
+            new GeometryRenderer().Render(AssetManager, Scene, camera, Width, Height);
 
             Span<byte> bytes = new byte[4];
             GL.ReadPixels(x, (int)Height - y, 1, 1, PixelFormat.Rgba, PixelType.UnsignedByte, bytes);

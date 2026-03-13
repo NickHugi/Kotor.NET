@@ -10,15 +10,7 @@ public class GeometryRenderer : IRenderer
 {
     public void Render(IAssetManager assets, Scene scene, Camera camera, uint width, uint height)
     {
-        var descriptors = new List<MeshDescriptor>();
-
-        foreach (var entity in scene.Entities)
-        {
-            if (entity is AnimatedModel prop)
-            {
-                descriptors.AddRange(GetRenderablesForModel(assets, prop.Animations, prop.Model));
-            }
-        }
+        var descriptors = scene.Entities.SelectMany(x => x.GetMeshDescriptors(assets)).ToList();
 
         var shader = assets.GetShader("basic");
 
@@ -32,15 +24,6 @@ public class GeometryRenderer : IRenderer
         descriptors.ForEach(x => Render(assets, shader, x));
     }
 
-    private List<MeshDescriptor> GetRenderablesForModel(IAssetManager assets, ICollection<AnimationItem> animations, string modelName)
-    {
-        var model = assets.GetModel(modelName);
-        var nodes = model.GetAllNodes();
-
-        model.Root.GenerateTransform(animations);
-
-        return nodes.ToList().SelectMany(node => node.GetMeshDescriptors()).ToList();
-    }
     private void Render(IAssetManager assets, IShader shader, MeshDescriptor descriptor)
     {
         if (!descriptor.DoRender)
@@ -54,8 +37,8 @@ public class GeometryRenderer : IRenderer
         var texturePlaceholder = assets.GetTexture("placeholder");
         var texture1 = assets.GetTexture(descriptor.Texture1);
         var texture2 = assets.GetTexture(descriptor.Texture2);
-        if (texture1 is null) texturePlaceholder.Activate(); else texture1.Activate();
-        //if (texture2 is null) texturePlaceholder.Activate(); else texture2.Activate();
+        if (texture1 is null) texturePlaceholder.Activate(0); else texture1.Activate(0);
+        if (texture2 is null) texturePlaceholder.Activate(1); else texture2.Activate(1);
 
         descriptor.Mesh.Draw();
     }

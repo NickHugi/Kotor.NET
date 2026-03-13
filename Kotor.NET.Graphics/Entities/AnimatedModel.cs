@@ -12,9 +12,13 @@ public class AnimatedModel : Entity
 {
     public required string Model { get; set; }
     public List<AnimationItem> Animations { get; set; } = [];
-    public Matrix4x4 Transformation { get; set; } = Matrix4x4.Identity;
 
-    //    var objects = assetManager.GetModel(Model).Render(assetManager, Transformation, Animations);
+    public override ICollection<MeshDescriptor> GetMeshDescriptors(IAssetManager assets)
+    {
+        var model = assets.GetModel(Model);
+        model.Root.GenerateTransform(Animations);
+        return model.GetAllNodes().ToList().SelectMany(node => node.GetMeshDescriptors(this)).ToList();
+    }
 
     public override void Update(IAssetManager assetManager, float delta)
     {

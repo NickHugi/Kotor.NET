@@ -27,14 +27,6 @@ public class Scene
         return entity;
     }
 
-    public void PickRender(IAssetManager assetManager)
-    {
-        //var frame = new RenderFrame();
-        //_entities.ForEach(x => x.Render(frame, assetManager));
-        //frame.Objects.ToList().ForEach(x => x.Shader = assetManager.GetShader("picker"));
-        //frame.Render(assetManager);
-    }
-
     public void Update(IAssetManager assetManager, float deltaTime)
     {
         _entities.ForEach(x => x.Update(assetManager, deltaTime));

@@ -21,9 +21,9 @@ public class Texture : ITexture
         ID = id;
     }
 
-    public void Activate()
+    public void Activate(int slot = 0)
     {
-        _gl.ActiveTexture(GLEnum.Texture0);
+        _gl.ActiveTexture(GLEnum.Texture0 + slot);
         _gl.BindTexture(TextureTarget.Texture2D, ID);
     }
 
