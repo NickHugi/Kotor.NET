@@ -14,15 +14,7 @@ public class AnimatedModel : Entity
     public List<AnimationItem> Animations { get; set; } = [];
     public Matrix4x4 Transformation { get; set; } = Matrix4x4.Identity;
 
-    public override void Render(RenderFrame frame, IAssetManager assetManager)
-    {
-        if (assetManager.HasModel(Model))
-        {
-            var objects = assetManager.GetModel(Model).Render(assetManager, Transformation, Animations);
-            objects.ToList().ForEach(x => x.EntityID = (uint)ID);
-            objects.ToList().ForEach(frame.AddObject);
-        }
-    }
+    //    var objects = assetManager.GetModel(Model).Render(assetManager, Transformation, Animations);
 
     public override void Update(IAssetManager assetManager, float delta)
     {

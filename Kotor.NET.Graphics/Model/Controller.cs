@@ -11,9 +11,3 @@ public class Controller
     public int ControllerType { get; set; }
     public ICollection<ControllerDataRow> Data { get; set; } = [];
 }
-
-public class ControllerDataRow
-{
-    public float TimeKey { get; set; }
-    public float[] Values { get; set; } = [];
-}

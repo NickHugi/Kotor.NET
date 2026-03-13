@@ -16,22 +16,22 @@ public class KModel : IDisposable
     public BaseNode Root { get; set; }
     public ICollection<Animation> Animations { get; set; }
 
-    public ICollection<RenderObject> Render(IAssetManager assetManager, Matrix4x4 entityTransform, ICollection<AnimationItem> animations)
-    {
-        var nodes = GetAllNodes();
-        var objects = new List<RenderObject>();
+    //public ICollection<RenderObject> Render(IAssetManager assetManager, Matrix4x4 entityTransform, ICollection<AnimationItem> animations)
+    //{
+    //    var nodes = GetAllNodes();
+    //    var objects = new List<RenderObject>();
 
-        Root.GenerateTransform(animations);
+    //    Root.GenerateTransform(animations);
 
-        foreach (var node in nodes)
-        {
-            objects.AddRange(node.Render(assetManager, entityTransform));
-        }
+    //    foreach (var node in nodes)
+    //    {
+    //        objects.AddRange(node.Render(assetManager, entityTransform));
+    //    }
 
-        return objects;
-    }
+    //    return objects;
+    //}
 
-    private IEnumerable<BaseNode> GetAllNodes()
+    public IEnumerable<BaseNode> GetAllNodes()
     {
         var nodes = new List<BaseNode>();
         var iterate = new List<BaseNode>() { Root };

@@ -53,7 +53,7 @@ public abstract class BaseNode : IDisposable
 
     public bool Visible;
 
-    public virtual ICollection<RenderObject> Render(IAssetManager assetManager, Matrix4x4 entityTransform)
+    public virtual ICollection<MeshDescriptor> GetMeshDescriptors()
     {
         return [];
     }

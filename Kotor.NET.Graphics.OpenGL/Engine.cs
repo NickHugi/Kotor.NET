@@ -9,6 +9,7 @@ using Kotor.NET.Graphics.Cameras;
 using Kotor.NET.Graphics.Entities;
 using Kotor.NET.Graphics.Model.Nodes;
 using Kotor.NET.Graphics.OpenGL.Factories;
+using Kotor.NET.Graphics.OpenGL.Renderers;
 using Kotor.NET.Tests.Encapsulation;
 using Silk.NET.OpenGL;
 
@@ -59,13 +60,15 @@ public class Engine
         GL.ClearColor(0.1f, 0.0f, 0.0f, 1.0f);
         GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
-        AssetManager.GetShader("basic").Activate();
-        AssetManager.GetShader("basic").SetMatrix4x4("projection", camera.GetProjectionTransform(Width, Height));
-        AssetManager.GetShader("basic").SetMatrix4x4("view", camera.GetViewTransform());
-        AssetManager.GetShader("basic").SetMatrix4x4("mesh", Matrix4x4.Identity);
-        AssetManager.GetShader("basic").SetUniform1("texture1", 0);
+        new GeometryRenderer().Render(AssetManager, Scene, camera, Width, Height);
 
-        Scene.Render(AssetManager);
+        //AssetManager.GetShader("basic").Activate();
+        //AssetManager.GetShader("basic").SetMatrix4x4("projection", camera.GetProjectionTransform(Width, Height));
+        //AssetManager.GetShader("basic").SetMatrix4x4("view", camera.GetViewTransform());
+        //AssetManager.GetShader("basic").SetMatrix4x4("mesh", Matrix4x4.Identity);
+        //AssetManager.GetShader("basic").SetUniform1("texture1", 0);
+
+        //Scene.Render(AssetManager);
     }
 
     public void Update(float timestep)

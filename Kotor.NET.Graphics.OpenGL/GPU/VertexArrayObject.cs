@@ -9,7 +9,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Kotor.NET.Graphics.OpenGL.GPU;
 
-public class VertexArrayObject : IVertexArrayObject
+public class VertexArrayObject : IMesh
 {
     public uint VertexArrayID { get; private init; }
     public uint VertexBufferID { get; private init; }

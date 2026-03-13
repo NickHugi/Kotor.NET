@@ -27,17 +27,26 @@ public class SkinmeshNode : MeshNode
         return node;
     }
 
-    public override ICollection<RenderObject> Render(IAssetManager assetManager, Matrix4x4 entityTransform)
+    public override ICollection<MeshDescriptor> GetMeshDescriptors()
     {
-        if (!Visible)
-            return [];
-
-        var shader = assetManager.GetShader("basic");
-
-        var texture = Texture1 == "NULL" || Texture1 == ""
-            ? null
-            : assetManager.GetTexture(Texture1);
-
+        return
+        [
+            new()
+            {
+                Mesh = Mesh,
+                Texture1 = Texture1,
+                Texture2 = Texture2,
+                Transform = WorldTransformation,
+                DoRender = Visible,
+                DoShadow = false,
+                BoneTransforms = CalculateBoneTransforms(),
+                BoundingBox = null,
+                BoundingSphere = null,
+            }
+        ];
+    }
+    private Matrix4x4[] CalculateBoneTransforms()
+    {
         var finalBoneMatrices = Enumerable.Repeat(Matrix4x4.Identity, 16).ToArray();
         for (int i = 0; i < 16; i++)
         {
@@ -49,9 +58,7 @@ public class SkinmeshNode : MeshNode
 
             finalBoneMatrices[i] = bone.InverseBindMatrix * bone.WorldTransformation;
         }
-
-        var renderObject = new RenderObject(shader, texture, Mesh, WorldTransformation, entityTransform, finalBoneMatrices);
-        return [renderObject];
+        return finalBoneMatrices;
     }
 
     public override void Dispose()

@@ -10,23 +10,27 @@ namespace Kotor.NET.Graphics.Model.Nodes;
 
 public class MeshNode : DummyNode
 {
-    public IVertexArrayObject Mesh { get; set; }
+    public IMesh Mesh { get; set; }
     public string Texture1 { get; set; } = "";
     public string Texture2 { get; set; } = "";
 
-    public override ICollection<RenderObject> Render(IAssetManager assetManager, Matrix4x4 entityTransform)
+    public override ICollection<MeshDescriptor> GetMeshDescriptors()
     {
-        if (!Visible)
-            return [];
-
-        var shader = assetManager.GetShader("basic");
-
-        var texture = (Texture1 == "NULL" || Texture1 == "")
-            ? null
-            : assetManager.GetTexture(Texture1);
-
-        var renderObject = new RenderObject(shader, texture, Mesh, WorldTransformation, entityTransform);
-        return [renderObject];
+        return
+        [
+            new()
+            {
+                Mesh = Mesh,
+                Texture1 = Texture1,
+                Texture2 = Texture2,
+                Transform = WorldTransformation,
+                DoRender = Visible,
+                DoShadow = false,
+                BoneTransforms = Enumerable.Range(0, 16).Select(x => Matrix4x4.Identity).ToArray(),
+                BoundingBox = null,
+                BoundingSphere = null,
+            }
+        ];
     }
 
     public override void Dispose()

@@ -12,13 +12,13 @@ public class RenderObject
 {
     public IShader Shader { get; set; }
     public ITexture Texture { get; }
-    public IVertexArrayObject VAO { get; }
+    public IMesh VAO { get; }
     public Matrix4x4 ModelTransform { get; }
     public Matrix4x4 EntityTransform { get; }
     public Matrix4x4[] FinalBoneMatrices { get; }
     public uint EntityID { get; set; }
 
-    public RenderObject(IShader shader, ITexture texture, IVertexArrayObject vao, Matrix4x4 modelTransform, Matrix4x4 entityTransform)
+    public RenderObject(IShader shader, ITexture texture, IMesh vao, Matrix4x4 modelTransform, Matrix4x4 entityTransform)
     {
         Shader = shader;
         Texture = texture;
@@ -28,7 +28,7 @@ public class RenderObject
         FinalBoneMatrices = Enumerable.Repeat(Matrix4x4.Identity, 16).ToArray();
     }
 
-    public RenderObject(IShader shader, ITexture texture, IVertexArrayObject vao, Matrix4x4 modelTransform, Matrix4x4 entityTransform, Matrix4x4[] finalBoneMatrices)
+    public RenderObject(IShader shader, ITexture texture, IMesh vao, Matrix4x4 modelTransform, Matrix4x4 entityTransform, Matrix4x4[] finalBoneMatrices)
     {
         Shader = shader;
         Texture = texture;

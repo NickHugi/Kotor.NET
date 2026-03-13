@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kotor.NET.Graphics.GPU;
 
-public interface IVertexArrayObject : IDisposable
+public interface IMesh : IDisposable
 {
     public unsafe void Draw();
 }

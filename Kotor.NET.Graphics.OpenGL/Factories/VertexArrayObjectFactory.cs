@@ -15,7 +15,7 @@ namespace Kotor.NET.Graphics.OpenGL.Factories;
 
 public class VertexArrayObjectFactory : IVertexArrayObjectFactory
 {
-    public unsafe IVertexArrayObject FromBinary(GL gl, byte[] vertexData, byte[] elementData, uint positionStride, uint normalStride, uint uv1Stride, uint uv2Stride, uint blockSize, uint flags)
+    public unsafe IMesh FromBinary(GL gl, byte[] vertexData, byte[] elementData, uint positionStride, uint normalStride, uint uv1Stride, uint uv2Stride, uint blockSize, uint flags)
     {
         var vertexArrayObjectID = gl.GenVertexArray();
         var vertexbufferObjectID = gl.GenBuffer();
@@ -59,7 +59,7 @@ public class VertexArrayObjectFactory : IVertexArrayObjectFactory
 
         return new VertexArrayObject(gl, vertexArrayObjectID, vertexbufferObjectID, elementBufferObjectID, elementCount);
     }
-    public unsafe IVertexArrayObject SkinFromBinary(
+    public unsafe IMesh SkinFromBinary(
         GL gl,
         byte[] vertexData,
         byte[] elementData,
@@ -121,7 +121,7 @@ public class VertexArrayObjectFactory : IVertexArrayObjectFactory
         return new VertexArrayObject(gl, vertexArrayObjectID, vertexbufferObjectID, elementBufferObjectID, elementCount);
     }
 
-    public unsafe IVertexArrayObject FromXYZ(GL gl, float[] vertices, ushort[] indices)
+    public unsafe IMesh FromXYZ(GL gl, float[] vertices, ushort[] indices)
     {
         var vao = gl.GenVertexArray();
         gl.BindVertexArray(vao);
