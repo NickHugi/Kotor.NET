@@ -9,7 +9,7 @@ using Kotor.NET.Graphics.Cameras;
 using Kotor.NET.Graphics.Entities;
 using Kotor.NET.Graphics.Model.Nodes;
 using Kotor.NET.Graphics.OpenGL.Factories;
-using Kotor.NET.Graphics.OpenGL.Renderers;
+using Kotor.NET.Graphics.Renderers;
 using Kotor.NET.Tests.Encapsulation;
 using Silk.NET.OpenGL;
 
@@ -77,7 +77,7 @@ public class Engine
             GL.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
             GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
-            new GeometryRenderer().Render(AssetManager, Scene, camera, Width, Height);
+            new PickRenderer().Render(AssetManager, Scene, camera, Width, Height);
 
             Span<byte> bytes = new byte[4];
             GL.ReadPixels(x, (int)Height - y, 1, 1, PixelFormat.Rgba, PixelType.UnsignedByte, bytes);
@@ -148,7 +148,6 @@ public class Engine
             }
         });
 
-        //RequestNextFrameRendering();
         return tcs.Task;
     }
     public Task<T> RunOnGLThread<T>(Func<T> action)
@@ -168,7 +167,6 @@ public class Engine
             }
         });
 
-        //RequestNextFrameRendering();
         return tcs.Task;
     }
 }
