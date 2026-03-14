@@ -8,7 +8,7 @@ using Kotor.NET.Graphics.OpenGL.Model;
 
 namespace Kotor.NET.Graphics;
 
-public interface IAssetManager
+public interface IAssetManager : IDisposable
 {
     public KModel GetModel(string model);
     public void AddModel(string name, KModel model);

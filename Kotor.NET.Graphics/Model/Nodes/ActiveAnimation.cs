@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Graphics.Model;
 
-namespace Kotor.NET.Graphics.Entities;
+namespace Kotor.NET.Graphics.Model.Nodes;
 
-public class AnimationItem
+public class ActiveAnimation
 {
     public string Name { get; }
     public float CurrentTime { get; set; }
@@ -15,11 +15,11 @@ public class AnimationItem
     public float BlendFactor { get; set; }
     public float FadeFactor { get; set; }
 
-    public AnimationItem(Animation animation)
+    public ActiveAnimation(Animation animation)
     {
         Name = animation.Name;
     }
-    public AnimationItem(string name)
+    public ActiveAnimation(string name)
     {
         Name = name;
     }

@@ -53,12 +53,12 @@ public abstract class BaseNode : IDisposable
 
     public bool Visible;
 
-    public virtual ICollection<MeshDescriptor> GetMeshDescriptors(Entity entity)
+    public virtual ICollection<MeshDescriptor> GetMeshDescriptors(BaseEntity entity)
     {
         return [];
     }
 
-    public void GenerateTransform(ICollection<AnimationItem> animations)
+    public void GenerateTransform(ICollection<ActiveAnimation> animations)
     {
         var blendSum = animations.Sum(x => x.BlendFactor);
         var transforms = new List<Matrix4x4>();

@@ -11,8 +11,8 @@ namespace Kotor.NET.Graphics;
 
 public class Scene
 {
-    private readonly List<Entity> _entities;
-    public IReadOnlyList<Entity> Entities { get; }
+    private readonly List<BaseEntity> _entities;
+    public IReadOnlyList<BaseEntity> Entities { get; }
 
     public Scene()
     {
@@ -20,7 +20,7 @@ public class Scene
         Entities = _entities;
     }
 
-    public T AddEntity<T>(T entity) where T : Entity
+    public T AddEntity<T>(T entity) where T : BaseEntity
     {
         entity.Scene = this;
         _entities.Add(entity);

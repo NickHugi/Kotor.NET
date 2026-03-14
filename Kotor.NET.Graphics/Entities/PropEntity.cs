@@ -5,13 +5,14 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Graphics.Model;
+using Kotor.NET.Graphics.Model.Nodes;
 
 namespace Kotor.NET.Graphics.Entities;
 
-public class AnimatedModel : Entity
+public class PropEntity : BaseEntity
 {
     public required string Model { get; set; }
-    public List<AnimationItem> Animations { get; set; } = [];
+    public List<ActiveAnimation> Animations { get; set; } = [];
 
     public override ICollection<MeshDescriptor> GetMeshDescriptors(IAssetManager assets)
     {

@@ -15,7 +15,7 @@ using Silk.NET.OpenGL;
 
 namespace Kotor.NET.Graphics.OpenGL;
 
-public class Engine
+public class GLEngine
 {
     public required GL GL { get; init; }
     public required Scene Scene { get; init; }
@@ -44,7 +44,7 @@ public class Engine
 
     public void Deinit()
     {
-
+        AssetManager.Dispose();
     }
 
     public void Render(Camera camera)
@@ -68,7 +68,7 @@ public class Engine
         Scene.Update(AssetManager, timestep);
     }
 
-    public async Task<Entity?> Pick(int x, int y, Camera camera)
+    public async Task<BaseEntity?> Pick(int x, int y, Camera camera)
     {
         return await RunOnGLThread(() =>
         {

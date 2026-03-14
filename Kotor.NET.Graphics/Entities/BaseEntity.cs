@@ -8,7 +8,7 @@ using Kotor.NET.Graphics.Model;
 
 namespace Kotor.NET.Graphics.Entities;
 
-public abstract class Entity
+public abstract class BaseEntity
 {
     public Scene Scene { get; internal set; }
     public int ID => Scene.Entities.ToList().IndexOf(this);

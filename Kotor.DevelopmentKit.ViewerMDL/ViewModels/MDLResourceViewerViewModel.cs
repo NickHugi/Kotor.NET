@@ -36,7 +36,7 @@ public class MDLResourceViewerViewModel : ReactiveObject
         });
     }
 
-    public Engine Engine { get; set => this.RaiseAndSetIfChanged(ref field, value); }
+    public GLEngine Engine { get; set => this.RaiseAndSetIfChanged(ref field, value); }
 
     public KModel? Model
     {
@@ -54,7 +54,7 @@ public class MDLResourceViewerViewModel : ReactiveObject
         }
     }
 
-    public AnimatedModel ModelEntity
+    public PropEntity ModelEntity
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
@@ -105,7 +105,7 @@ public class MDLResourceViewerViewModel : ReactiveObject
             await Engine.LoadModel("model", mdl, mdx);
 
             Model = Engine.AssetManager.GetModel("model");
-            ModelEntity = Engine.Scene.AddEntity(new AnimatedModel
+            ModelEntity = Engine.Scene.AddEntity(new PropEntity
             {
                 Model = "model",
                 Animations = [],

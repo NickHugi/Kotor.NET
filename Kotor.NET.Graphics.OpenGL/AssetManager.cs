@@ -12,8 +12,8 @@ namespace Kotor.NET.Graphics.OpenGL;
 public class AssetManager : IAssetManager
 {
     private readonly Dictionary<string, KModel> _models = new();
-    private readonly Dictionary<string, IShader> _shaders = new();
     private readonly Dictionary<string, ITexture> _textures = new();
+    private readonly Dictionary<string, IShader> _shaders = new();
 
 
     public KModel GetModel(string name)
@@ -79,5 +79,13 @@ public class AssetManager : IAssetManager
     public bool HasShader(string name)
     {
         return _shaders.TryGetValue(name.ToLower(), out var _);
+    }
+
+
+    public void Dispose()
+    {
+        _models.Select(x => x.Value).ToList().ForEach(x => x.Dispose());
+        _textures.Select(x => x.Value).ToList().ForEach(x => x.Dispose());
+        _shaders.Select(x => x.Value).ToList().ForEach(x => x.Dispose());
     }
 }

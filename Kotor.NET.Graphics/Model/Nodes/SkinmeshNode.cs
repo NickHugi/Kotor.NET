@@ -28,7 +28,7 @@ public class SkinmeshNode : MeshNode
         return node;
     }
 
-    public override ICollection<MeshDescriptor> GetMeshDescriptors(Entity entity)
+    public override ICollection<MeshDescriptor> GetMeshDescriptors(BaseEntity entity)
     {
         return
         [

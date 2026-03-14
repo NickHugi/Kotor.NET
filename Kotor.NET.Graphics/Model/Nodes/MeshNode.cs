@@ -15,7 +15,7 @@ public class MeshNode : DummyNode
     public string Texture1 { get; set; } = "";
     public string Texture2 { get; set; } = "";
 
-    public override ICollection<MeshDescriptor> GetMeshDescriptors(Entity entity)
+    public override ICollection<MeshDescriptor> GetMeshDescriptors(BaseEntity entity)
     {
         return
         [
