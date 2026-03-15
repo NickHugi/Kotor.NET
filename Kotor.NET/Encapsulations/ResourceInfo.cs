@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,5 +26,27 @@ public class ResourceInfo
         Type = type;
         Size = size;
         Offset = offset;
+    }
+    [SetsRequiredMembers]
+    public ResourceInfo(string filePath)
+    {
+        FilePath = filePath;
+        ResRef = Path.GetFileNameWithoutExtension(filePath);
+        Type = ResourceType.FromFilepath(filePath);
+        Size = (int)new FileInfo(filePath).Length;
+        Offset = 0;
+    }
+
+    public Stream OpenStream()
+    {
+        return File.Open(FilePath, FileMode.Open);
+    }
+
+    public byte[] ReadData()
+    {
+        using var stream = OpenStream();
+        using var reader = new BinaryReader(stream);
+        stream.Position = Offset;
+        return reader.ReadBytes(Size);
     }
 }

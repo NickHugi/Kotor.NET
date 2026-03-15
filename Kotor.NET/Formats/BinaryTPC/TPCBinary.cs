@@ -47,7 +47,7 @@ public class TPCBinary
         }
         catch (Exception ex)
         {
-            throw new IOException("Failed to read the 2DA data.", ex);
+            throw new IOException("Failed to read the TPC data.", ex);
         }
     }
 
