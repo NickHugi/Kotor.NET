@@ -63,8 +63,7 @@ public class ShaderFactory(GL _gl) : IShaderFactory
         _gl.GetProgramInfoLog(programID, out string info);
         if (info != "")
         {
-            string infoLog = _gl.GetShaderInfoLog(programID);
-            throw new Exception(infoLog);
+            throw new Exception(info);
         }
 
         _gl.DeleteShader(vertexShaderID);

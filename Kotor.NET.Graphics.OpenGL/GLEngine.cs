@@ -120,7 +120,7 @@ public class GLEngine
                 if (node is MeshNode mesh)
                 {
                     var hasTexture1 = !string.IsNullOrEmpty(mesh.Texture1) && string.Equals(mesh.Texture1, "NULL", StringComparison.OrdinalIgnoreCase);
-                    if (!hasTexture1)
+                    if (!hasTexture1 && !AssetManager.HasTexture(mesh.Texture1))
                     {
                         var textureName = mesh.Texture1;
                         var textureResource = Source.Find(mesh.Texture1, ResourceType.TPC);
@@ -141,6 +141,7 @@ public class GLEngine
             try
             {
                 action();
+                tcs.SetResult();
             }
             catch (Exception ex)
             {

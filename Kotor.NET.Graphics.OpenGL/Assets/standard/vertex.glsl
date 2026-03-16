@@ -10,7 +10,6 @@ layout (location = 5) in vec4 weights;
 
 out vec2 texCoord1;
 out vec2 texCoord2;
-out float bug;
 
 uniform mat4 entity;
 uniform mat4 mesh;

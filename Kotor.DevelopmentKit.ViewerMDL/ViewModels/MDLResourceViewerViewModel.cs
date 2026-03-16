@@ -46,11 +46,6 @@ public class MDLResourceViewerViewModel : ReactiveObject
             this.RaiseAndSetIfChanged(ref field, value);
             this.RaisePropertyChanged(nameof(Animations));
             this.RaisePropertyChanged(nameof(Textures));
-            //Model.GetAllTextures().Select(x => new TextureListItem()
-            //{
-            //    Name = x,
-            //    Source = 
-            //});
         }
     }
 

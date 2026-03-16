@@ -1,0 +1,26 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Kotor.DevelopmentKit.AreaDesigner.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="using:Kotor.DevelopmentKit.AreaDesigner.Views"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Kotor.DevelopmentKit.AreaDesigner.Views.AreaDesignerWindow"
+        x:DataType="vm:AreaDesignerViewModel"
+        Title="Area Designer">
+
+    <Design.DataContext>
+        <vm:AreaDesignerViewModel />
+    </Design.DataContext>
+
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top"
+                    Orientation="Horizontal">
+            <Button>Begin Room</Button>
+            <Button>Extend Room</Button>
+            <Button>Switch Wall</Button>
+        </StackPanel>
+        <local:SceneControl/>
+    </DockPanel>
+
+</Window>

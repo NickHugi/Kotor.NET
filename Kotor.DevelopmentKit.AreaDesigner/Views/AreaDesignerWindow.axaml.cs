@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.Views
 {
-    public partial class MainWindow : Window
+    public partial class AreaDesignerWindow : Window
     {
-        public MainWindow()
+        public AreaDesignerWindow()
         {
             InitializeComponent();
         }
