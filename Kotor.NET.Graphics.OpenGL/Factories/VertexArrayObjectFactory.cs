@@ -35,7 +35,7 @@ public class VertexArrayObjectFactory : IVertexArrayObjectFactory
         var bitmask = (MDLBinaryMDXVertexBitmask)flags;
         if (!bitmask.Equals(0))
         {
-            if (bitmask.HasFlag(MDLBinaryMDXVertexBitmask.Vertices))
+            if (bitmask.HasFlag(MDLBinaryMDXVertexBitmask.Position))
             {
                 gl.EnableVertexAttribArray(0);
                 gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, blockSize, (void*)positionStride);
@@ -90,7 +90,7 @@ public class VertexArrayObjectFactory : IVertexArrayObjectFactory
         var bitmask = (MDLBinaryMDXVertexBitmask)flags;
         if (!bitmask.Equals(0))
         {
-            if (bitmask.HasFlag(MDLBinaryMDXVertexBitmask.Vertices))
+            if (bitmask.HasFlag(MDLBinaryMDXVertexBitmask.Position))
             {
                 gl.EnableVertexAttribArray(0);
                 gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, blockSize, (void*)positionStride);

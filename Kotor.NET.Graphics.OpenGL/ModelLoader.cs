@@ -60,7 +60,7 @@ public class ModelLoader
         BaseNode node;
 
         var position = new Vector3(dummyHeader.Position.X, dummyHeader.Position.Y, dummyHeader.Position.Z);
-        var orientation = new Quaternion(dummyHeader.Rotation.Y, dummyHeader.Rotation.Z, dummyHeader.Rotation.W, dummyHeader.Rotation.X);
+        var orientation = new Quaternion(dummyHeader.Orientation.Y, dummyHeader.Orientation.Z, dummyHeader.Orientation.W, dummyHeader.Orientation.X);
 
         MDLBinaryTrimeshHeader trimeshHeader = null;
         MDLBinarySkinmeshHeader skinmeshHeader = null;
@@ -115,7 +115,7 @@ public class ModelLoader
 
                 node = new DanglymeshNode()
                 {
-                    NodeID = dummyHeader.NodeNumber,
+                    NodeID = dummyHeader.NodeIndex,
                     Model = model,
                     Parent = parent,
                     Visible = trimeshHeader.DoesRender != 0,
@@ -158,7 +158,7 @@ public class ModelLoader
 
                 node = new SkinmeshNode()
                 {
-                    NodeID = dummyHeader.NodeNumber,
+                    NodeID = dummyHeader.NodeIndex,
                     Model = model,
                     Parent = parent,
                     Visible = trimeshHeader.DoesRender != 0,
@@ -206,7 +206,7 @@ public class ModelLoader
 
                 node = new SabermeshNode()
                 {
-                    NodeID = dummyHeader.NodeNumber,
+                    NodeID = dummyHeader.NodeIndex,
                     Model = model,
                     Parent = parent,
                     Visible = trimeshHeader.DoesRender != 0,
@@ -229,7 +229,7 @@ public class ModelLoader
 
                 node = new WalkmeshNode()
                 {
-                    NodeID = dummyHeader.NodeNumber,
+                    NodeID = dummyHeader.NodeIndex,
                     Model = model,
                     Parent = parent,
                     Visible = trimeshHeader.DoesRender != 0,
@@ -255,7 +255,7 @@ public class ModelLoader
 
                 node = new MeshNode()
                 {
-                    NodeID = dummyHeader.NodeNumber,
+                    NodeID = dummyHeader.NodeIndex,
                     Model = model,
                     Parent = parent,
                     Visible = trimeshHeader.DoesRender != 0,
@@ -271,7 +271,7 @@ public class ModelLoader
         {
             node = new LightNode()
             {
-                NodeID = dummyHeader.NodeNumber,
+                NodeID = dummyHeader.NodeIndex,
                 Model = model,
                 Parent = parent,
                 Position = position,
@@ -282,7 +282,7 @@ public class ModelLoader
         {
             node = new EmitterNode()
             {
-                NodeID = dummyHeader.NodeNumber,
+                NodeID = dummyHeader.NodeIndex,
                 Model = model,
                 Parent = parent,
                 Visible = true,
@@ -294,7 +294,7 @@ public class ModelLoader
         {
             node = new ReferenceNode()
             {
-                NodeID = dummyHeader.NodeNumber,
+                NodeID = dummyHeader.NodeIndex,
                 Model = model,
                 Parent = parent,
                 Visible = true,
@@ -306,7 +306,7 @@ public class ModelLoader
         {
             node = new DummyNode()
             {
-                NodeID = dummyHeader.NodeNumber,
+                NodeID = dummyHeader.NodeIndex,
                 Model = model,
                 Parent = parent,
                 Visible = true, 
