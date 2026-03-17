@@ -18,6 +18,7 @@ public abstract class BaseNode : IDisposable
     public readonly ICollection<BaseNode> Nodes = new List<BaseNode>();
     public ICollection<Controller> Controllers { get; set; }
     public int NodeID { get; set; }
+    public string Name { get; set; }
 
     public Vector3 Position
     {
@@ -53,7 +54,7 @@ public abstract class BaseNode : IDisposable
 
     public bool Visible;
 
-    public virtual ICollection<MeshDescriptor> GetMeshDescriptors(BaseEntity entity)
+    public virtual ICollection<MeshDescriptor> GetMeshDescriptors(Matrix4x4 transform)
     {
         return [];
     }

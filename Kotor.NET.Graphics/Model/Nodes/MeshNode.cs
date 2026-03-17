@@ -15,7 +15,7 @@ public class MeshNode : DummyNode
     public string Texture1 { get; set; } = "";
     public string Texture2 { get; set; } = "";
 
-    public override ICollection<MeshDescriptor> GetMeshDescriptors(BaseEntity entity)
+    public override ICollection<MeshDescriptor> GetMeshDescriptors(Matrix4x4 transform)
     {
         return
         [
@@ -24,13 +24,13 @@ public class MeshNode : DummyNode
                 Mesh = Mesh,
                 Texture1 = Texture1,
                 Texture2 = Texture2,
-                Transform = WorldTransformation * entity.Transformation,
+                Transform = WorldTransformation * transform,
                 DoRender = Visible,
                 DoShadow = false,
                 BoneTransforms = Enumerable.Range(0, 16).Select(x => Matrix4x4.Identity).ToArray(),
                 BoundingBox = null,
                 BoundingSphere = null,
-                EntityID = (uint)entity.ID,
+                EntityID = 0xFFFFFFFF // TODO... (uint)entity.ID,
             }
         ];
     }

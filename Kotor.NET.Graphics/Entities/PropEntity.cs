@@ -18,7 +18,9 @@ public class PropEntity : BaseEntity
     {
         var model = assets.GetModel(Model);
         model.Root.GenerateTransform(Animations);
-        return model.GetAllNodes().ToList().SelectMany(node => node.GetMeshDescriptors(this)).ToList();
+        var descriptors =  model.GetAllNodes().ToList().SelectMany(node => node.GetMeshDescriptors(Transformation)).ToList();
+
+        return descriptors;
     }
 
     public override void Update(IAssetManager assetManager, float delta)

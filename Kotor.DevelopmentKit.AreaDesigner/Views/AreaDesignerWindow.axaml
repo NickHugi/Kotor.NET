@@ -16,9 +16,12 @@
     <DockPanel>
         <StackPanel DockPanel.Dock="Top"
                     Orientation="Horizontal">
+            <Button>Delete Room</Button>
             <Button>Begin Room</Button>
             <Button>Extend Room</Button>
             <Button>Switch Wall</Button>
+            <Button>Switch Floor</Button>
+            <Button>Switch Ceiling</Button>
         </StackPanel>
         <local:SceneControl/>
     </DockPanel>

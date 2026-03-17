@@ -14,22 +14,8 @@ namespace Kotor.NET.Graphics.OpenGL.Model;
 public class KModel : IDisposable
 {
     public BaseNode Root { get; set; }
+    public string Name { get; set; }
     public ICollection<Animation> Animations { get; set; }
-
-    //public ICollection<RenderObject> Render(IAssetManager assetManager, Matrix4x4 entityTransform, ICollection<AnimationItem> animations)
-    //{
-    //    var nodes = GetAllNodes();
-    //    var objects = new List<RenderObject>();
-
-    //    Root.GenerateTransform(animations);
-
-    //    foreach (var node in nodes)
-    //    {
-    //        objects.AddRange(node.Render(assetManager, entityTransform));
-    //    }
-
-    //    return objects;
-    //}
 
     public IEnumerable<BaseNode> GetAllNodes()
     {
@@ -56,6 +42,11 @@ public class KModel : IDisposable
             .Where(x => !string.IsNullOrEmpty(x))
             .Where(x => x.ToUpper() != "NULL")
             .ToList();
+    }
+
+    public BaseNode? FindNode(string name)
+    {
+        return GetAllNodes().FirstOrDefault(x => x.Name == name);
     }
 
     public void Dispose()

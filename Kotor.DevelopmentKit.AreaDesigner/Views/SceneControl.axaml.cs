@@ -16,6 +16,7 @@ using Avalonia.OpenGL.Controls;
 using Avalonia.Platform.Storage;
 using Avalonia.Rendering;
 using Avalonia.Threading;
+using Kotor.DevelopmentKit.AreaDesigner.relocate;
 using Kotor.DevelopmentKit.AreaDesigner.ViewModels;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Graphics;
@@ -46,21 +47,36 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
     private async Task LoadDefaultResources()
     {
         _camera.Distance = 3;
-        _camera.Pitch = 0;
-        _camera.Target = new(0, 0, 1);
+        _camera.Target = new(3, 0, 2);
 
-        //await LoadTexture("LDA_flr09");
-        //await LoadTexture("LDA_flr05");
-        //await LoadModel("sandral_floor_0");
+        await LoadTexture("LDA_flr09");
+        await LoadTexture("LDA_flr05");
+        await LoadTexture("lda_grate02");
+        await LoadTexture("lda_trim01");
+        await LoadTexture("lda_trim02");
+        await LoadTexture("lda_wall03");
+        await LoadTexture("lda_wall04");
+        await LoadTexture("lda_wall05");
+        await LoadTexture("lda_light03");
+        await LoadModel("sandral_floor_0");
+        await LoadModel("sandral_wall_0");
+        await LoadModel("sandral_wall_0_door_0");
+        await LoadModel("sandral_corner_0");
 
-        await LoadTexture("n_selkath01");
-        await LoadModel("c_selkath");
+        var floor = ViewModel.Engine.AssetManager.GetModel("sandral_floor_0");
+        var magnet0 = floor.FindNode("magnet.wall.0");
+        var magnet1 = floor.FindNode("magnet.wall.1");
+        var magnet2 = floor.FindNode("magnet.wall.2");
+        var magnet3 = floor.FindNode("magnet.wall.3");
+        var magnetCorner0 = floor.FindNode("magnet.corner.0");
+        var magnetCorner1 = floor.FindNode("magnet.corner.1");
+        var magnetCorner2 = floor.FindNode("magnet.corner.2");
+        var magnetCorner3 = floor.FindNode("magnet.corner.3");
 
-        ViewModel.Engine.Scene.AddEntity(new PropEntity
-        {
-            Model = "c_selkath",
-            Animations = [],
-        });
+        var room = new Room(null);
+        room.Root.Extend(room.Root.Walls.First());
+        room.Root.Extend(room.Root.Walls.ElementAt(1));
+        ViewModel.Engine.Scene.AddEntity(new RoomEntity(room));
     }
     private async Task LoadModel(string name)
     {
@@ -103,7 +119,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
             }
             catch (Exception ex)
             {
-
+                throw;
             }
         });
     }

@@ -27,32 +27,48 @@ public class ModelLoader
         reader.SetStreamPosition(0);
         var modelHeader = new MDLBinaryModelHeader(reader);
 
+        List<int> nameOffsets = [];
+        List<string> names = [];
+        reader.SetStreamPosition(modelHeader.OffsetToNameOffsetArray);
+        for (int i = 0; i < modelHeader.NamesArrayCount; i++)
+        {
+            nameOffsets.Add(reader.ReadInt32());
+        }
+        foreach (var nameOffset in nameOffsets)
+        {
+            reader.SetStreamPosition(nameOffset);
+            var name = reader.ReadTerminatedString('\0');
+            names.Add(name);
+        }
+
         var model = new KModel();
+        model.Name = modelHeader.GeometryHeader.Name;
         model.Animations = [];
+        
         for (int i = 0; i < modelHeader.AnimationCount; i++)
         {
             reader.SetStreamPosition(modelHeader.AnimationOffsetArrayOffset + (i * 4));
             var offset = reader.ReadInt32();
-            model.Animations.Add(LoadAnimation(gl, reader, mdxReader, offset, model));
+            model.Animations.Add(LoadAnimation(gl, reader, mdxReader, offset, model, names));
         }
-        model.Root = LoadNode(gl, reader, mdxReader, modelHeader.OffsetToRootNode, null, model);
+        model.Root = LoadNode(gl, reader, mdxReader, modelHeader.OffsetToRootNode, null, model, names);
         return model;
     }
 
-    private Animation LoadAnimation(GL gl, MDLBinaryReader reader, BinaryReader mdxReader, int animOffset, KModel model)
+    private Animation LoadAnimation(GL gl, MDLBinaryReader reader, BinaryReader mdxReader, int animOffset, KModel model, List<string> names)
     {
         reader.SetStreamPosition(animOffset);
         var animationHeader = new MDLBinaryAnimationHeader(reader);
 
         var animation = new Animation();
         animation.Name = animationHeader.GeometryHeader.Name;
-        animation.Root = LoadNode(gl, reader, mdxReader, animationHeader.GeometryHeader.RootNodeOffset, null, model);
+        animation.Root = LoadNode(gl, reader, mdxReader, animationHeader.GeometryHeader.RootNodeOffset, null, model, names);
         animation.Length = animationHeader.AnimationLength;
         animation.Transition = animationHeader.TransitionTime;
         return animation;
     }
 
-    private BaseNode LoadNode(GL gl, MDLBinaryReader reader, BinaryReader mdxReader, int nodeOffset, BaseNode? parent, KModel model)
+    private BaseNode LoadNode(GL gl, MDLBinaryReader reader, BinaryReader mdxReader, int nodeOffset, BaseNode? parent, KModel model, List<string> names)
     {
         reader.SetStreamPosition(nodeOffset);
         var dummyHeader = new MDLBinaryNodeHeader(reader);
@@ -356,8 +372,10 @@ public class ModelLoader
         }
         foreach (var childOffset in childOffsets)
         {
-            node.Nodes.Add(LoadNode(gl, reader, mdxReader, childOffset, node, model));
+            node.Nodes.Add(LoadNode(gl, reader, mdxReader, childOffset, node, model, names));
         }
+
+        node.Name = names[dummyHeader.NameIndex];
 
         return node;
     }

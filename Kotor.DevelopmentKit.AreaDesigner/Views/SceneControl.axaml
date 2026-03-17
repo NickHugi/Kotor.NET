@@ -4,6 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Kotor.DevelopmentKit.AreaDesigner.Views.SceneControl"
+             PointerMoved="PointerMoved"
+             PointerWheelChanged="PointerWheelChanged"
+             PointerPressed="PointerPressed"
              Focusable="True">
   
 </UserControl>

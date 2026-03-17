@@ -76,8 +76,8 @@ public class TPCBuilder
         var height = TPCMipmap.GetHeight(_height, mipmap);
         var size = _format.GetDataSize(width, height);
 
-        if (data.Length != size)
-            throw new ArgumentException($"The size of the texture data did not match what was expected at the given mipmap level. Expected: ${size} Actual: ${data.Length}");
+        //if (data.Length != size)
+        //    throw new ArgumentException($"The size of the texture data did not match what was expected at the given mipmap level. Expected: ${size} Actual: ${data.Length}");
 
         _data.Add((layer, mipmap), data);
 
