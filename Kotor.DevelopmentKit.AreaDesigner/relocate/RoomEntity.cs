@@ -37,6 +37,24 @@ public class RoomEntity : BaseEntity
                     * Matrix4x4.CreateTranslation(wall.Template.Position);
                 descriptors.AddRange(DescriptorsForModel(assets, wall.Model, transform * tile.Transform));
             }
+            foreach (var corner in tile.InnerCorners)
+            {
+                if (tile.Walls.ElementAt(corner.Requires.IndexA).LinkedTile is not null)
+                    continue;
+                if (tile.Walls.ElementAt(corner.Requires.IndexB).LinkedTile is not null)
+                    continue;
+
+                descriptors.AddRange(DescriptorsForModel(assets, corner.Model, corner.Transform * tile.Transform));
+            }
+            foreach (var corner in tile.OuterCorners)
+            {
+                if (tile.Walls.ElementAt(corner.Requires.IndexA).LinkedTile is null)
+                    continue;
+                if (tile.Walls.ElementAt(corner.Requires.IndexB).LinkedTile is null)
+                    continue;
+
+                descriptors.AddRange(DescriptorsForModel(assets, corner.Model, corner.Transform * tile.Transform));
+            }
         }
 
         return descriptors;

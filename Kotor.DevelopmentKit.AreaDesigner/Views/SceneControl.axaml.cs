@@ -47,7 +47,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
     private async Task LoadDefaultResources()
     {
         _camera.Distance = 3;
-        _camera.Target = new(3, 0, 2);
+        _camera.Target = new(0, 0, 2);
 
         await LoadTexture("LDA_flr09");
         await LoadTexture("LDA_flr05");
@@ -61,7 +61,8 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         await LoadModel("sandral_floor_0");
         await LoadModel("sandral_wall_0");
         await LoadModel("sandral_wall_0_door_0");
-        await LoadModel("sandral_corner_0");
+        await LoadModel("sandral_icorner_0");
+        await LoadModel("sandral_ocorner_0");
 
         var floor = ViewModel.Engine.AssetManager.GetModel("sandral_floor_0");
         var magnet0 = floor.FindNode("magnet.wall.0");
@@ -73,10 +74,11 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         var magnetCorner2 = floor.FindNode("magnet.corner.2");
         var magnetCorner3 = floor.FindNode("magnet.corner.3");
 
-        var room = new Room(null);
-        room.Root.Extend(room.Root.Walls.First());
-        room.Root.Extend(room.Root.Walls.ElementAt(1));
-        ViewModel.Engine.Scene.AddEntity(new RoomEntity(room));
+        var room0 = new Room(null);
+        var room1 = room0.Root.Extend(room0.Root.Walls.First());
+        var room2 = room0.Root.Extend(room0.Root.Walls.ElementAt(1));
+        room1.SwitchWall(room1.Walls.ElementAt(0), "sandral_wall_0_door_0");
+        ViewModel.Engine.Scene.AddEntity(new RoomEntity(room0));
     }
     private async Task LoadModel(string name)
     {

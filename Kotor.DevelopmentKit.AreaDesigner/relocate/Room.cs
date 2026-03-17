@@ -43,6 +43,8 @@ public class Tile
     public TileTemplate Template { get; }
     public Floor Floor { get; }
     public IReadOnlyCollection<Wall> Walls { get; }
+    public IReadOnlyCollection<Corner> InnerCorners { get; }
+    public IReadOnlyCollection<Corner> OuterCorners { get; }
     public Matrix4x4 Transform { get; set; } = Matrix4x4.Identity;
 
     public Tile(TileTemplate template)
@@ -50,6 +52,8 @@ public class Tile
         Template = template;
         Floor = new(template.DefaultFloorModel);
         Walls = template.Walls.Select(x => new Wall(x)).ToArray();
+        InnerCorners = template.InnerCorners;
+        OuterCorners = template.OuterCorners;
     }
 
     public Tile Extend(Wall wall)
@@ -61,6 +65,11 @@ public class Tile
         adjacent.LinkedTile = this;
         newTile.Transform = Matrix4x4.CreateTranslation(wall.Template.Position - adjacent.Template.Position);
         return newTile;
+    }
+
+    public void SwitchWall(Wall wall, string model)
+    {
+        wall.Model = model;
     }
 }
 
@@ -102,6 +111,18 @@ public class RoomTile
 {
     public string FloorModel { get; set; } = "sandral_floor_0";
     public TileTemplate TileTemplate { get; set; } = TileTemplate.Sandral;
+}
 
+public class Corner
+{
+    public string Model { get; set; }
+    public Matrix4x4 Transform { get; }
+    public (int IndexA, int IndexB) Requires { get; }
 
+    public Corner(string defaultModel, Vector3 position, Quaternion orientation, (int IndexA, int IndexB) requires)
+    {
+        Model = defaultModel;
+        Transform = Matrix4x4.CreateFromQuaternion(orientation) * Matrix4x4.CreateTranslation(position);
+        Requires = requires;
+    }
 }

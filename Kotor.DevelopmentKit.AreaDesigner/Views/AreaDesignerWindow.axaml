@@ -22,6 +22,9 @@
             <Button>Switch Wall</Button>
             <Button>Switch Floor</Button>
             <Button>Switch Ceiling</Button>
+            <Button>Hide Walls</Button>
+            <Button>Hide Doors</Button>
+            <Button>Hide Ceilings</Button>
         </StackPanel>
         <local:SceneControl/>
     </DockPanel>
