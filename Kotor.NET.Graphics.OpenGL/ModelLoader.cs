@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Extensions;
 using Kotor.NET.Formats.BinaryMDL;
+using Kotor.NET.Graphics.Extensions;
 using Kotor.NET.Graphics.Model;
 using Kotor.NET.Graphics.Model.Nodes;
 using Kotor.NET.Graphics.OpenGL.Factories;
@@ -204,7 +206,9 @@ public class ModelLoader
                     ],
                     Bonemap = bonemap,
                     TBones = tbones,
-                    QBones = qbones
+                    QBones = qbones,
+                    DiffuseColor = trimeshHeader.Diffuse.ToColor(),
+                    AmbientColor = trimeshHeader.Ambient.ToColor(),
                 };
             }
             else if (sabermeshHeader is not null)
@@ -227,7 +231,9 @@ public class ModelLoader
                     Parent = parent,
                     Visible = trimeshHeader.DoesRender != 0,
                     Position = position,
-                    Orientation = orientation
+                    Orientation = orientation,
+                    DiffuseColor = trimeshHeader.Diffuse.ToColor(),
+                    AmbientColor = trimeshHeader.Ambient.ToColor(),
                 };
             }
             else if (walkmeshHeader is not null)
@@ -253,7 +259,9 @@ public class ModelLoader
                     Texture1 = trimeshHeader.Texture,
                     Texture2 = trimeshHeader.Lightmap,
                     Position = position,
-                    Orientation = orientation
+                    Orientation = orientation,
+                    DiffuseColor = trimeshHeader.Diffuse.ToColor(),
+                    AmbientColor = trimeshHeader.Ambient.ToColor(),
                 };
             }
             else
@@ -279,8 +287,11 @@ public class ModelLoader
                     Texture1 = trimeshHeader.Texture,
                     Texture2 = trimeshHeader.Lightmap,
                     Position = position,
-                    Orientation = orientation
+                    Orientation = orientation,
+                    DiffuseColor = trimeshHeader.Diffuse.ToColor(),
+                    AmbientColor = trimeshHeader.Ambient.ToColor(),
                 };
+                
             }
         }
         else if (lightHeader is not null)

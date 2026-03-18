@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -12,6 +13,8 @@ namespace Kotor.NET.Graphics.Model.Nodes;
 public class MeshNode : DummyNode
 {
     public IMesh Mesh { get; set; }
+    public Color DiffuseColor { get; set; }
+    public Color AmbientColor { get; set; }
     public string Texture1 { get; set; } = "";
     public string Texture2 { get; set; } = "";
 
@@ -30,7 +33,8 @@ public class MeshNode : DummyNode
                 BoneTransforms = Enumerable.Range(0, 16).Select(x => Matrix4x4.Identity).ToArray(),
                 BoundingBox = null,
                 BoundingSphere = null,
-                EntityID = 0xFFFFFFFF // TODO... (uint)entity.ID,
+                AmbientColor = AmbientColor,
+                DiffuseColor = AmbientColor,
             }
         ];
     }

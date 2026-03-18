@@ -43,7 +43,7 @@ public class SkinmeshNode : MeshNode
                 BoneTransforms = CalculateBoneTransforms(),
                 BoundingBox = null,
                 BoundingSphere = null,
-                EntityID = 0xFFFFFFFF // TODO... (uint)entity.ID,
+                PickerID = 0xFFFFFFFF // TODO... (uint)entity.ID,
             }
         ];
     }

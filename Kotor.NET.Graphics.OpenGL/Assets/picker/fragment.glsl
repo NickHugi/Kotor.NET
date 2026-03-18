@@ -1,7 +1,7 @@
 #version 300 es
 precision highp float;
 
-uniform uint entityID;
+uniform uint pickerID;
 
 out vec4 FragColor;
 
@@ -17,5 +17,5 @@ vec4 intToColor(uint v)
 
 void main()
 {
-    FragColor = intToColor(entityID);
+    FragColor = intToColor(pickerID);
 }

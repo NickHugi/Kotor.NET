@@ -32,7 +32,9 @@ public class GeometryRenderer : IRenderer
         shader.SetMatrix4x4("entity", Matrix4x4.Identity);
         shader.SetMatrix4x4("mesh", descriptor.Transform);
         shader.SetMatrix4x4Array("finalBonesMatrices", descriptor.BoneTransforms);
-        shader.SetUniform1("entityID", descriptor.EntityID);
+        shader.SetUniform3("diffuse", descriptor.DiffuseColor);
+        shader.SetUniform3("ambient", descriptor.AmbientColor);
+        shader.SetUniform1("pickerID", descriptor.PickerID);
 
         var texturePlaceholder = assets.GetTexture("placeholder");
         var texture1 = assets.GetTexture(descriptor.Texture1);

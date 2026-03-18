@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -67,5 +68,27 @@ public class Shader : IShader
     {
         var location = GetUniformLocation(name);
         _gl.Uniform1(location, value);
+    }
+
+    public void SetUniform3(string name, Vector3 value)
+    {
+        var location = GetUniformLocation(name);
+        _gl.Uniform3(location, value);
+    }
+    public void SetUniform3(string name, Color value)
+    {
+        var location = GetUniformLocation(name);
+        _gl.Uniform3(location, new Vector3(value.R / 255.0f, value.G / 255.0f, value.B / 255.0f));
+    }
+
+    public void SetUniform4(string name, Vector4 value)
+    {
+        var location = GetUniformLocation(name);
+        _gl.Uniform4(location, value);
+    }
+    public void SetUniform4(string name, Color value)
+    {
+        var location = GetUniformLocation(name);
+        _gl.Uniform4(location, new Vector4(value.R / 255.0f, value.G / 255.0f, value.B / 255.0f, value.A / 255.0f));
     }
 }

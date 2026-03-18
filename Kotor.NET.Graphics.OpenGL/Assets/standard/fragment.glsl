@@ -8,9 +8,11 @@ out vec4 FragColor;
 
 uniform sampler2D texture1;
 uniform sampler2D texture2;
+uniform vec3 diffuse;
+uniform vec3 ambient;
+
 
 void main()
 {
-    vec4 diffuseColor = texture(texture1, texCoord1);
-    FragColor = diffuseColor;
+    FragColor = vec4(ambient, 1.0f) * texture(texture1, texCoord1);
 } 

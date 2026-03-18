@@ -30,7 +30,7 @@ public class PickRenderer : IRenderer
         shader.SetMatrix4x4("entity", Matrix4x4.Identity);
         shader.SetMatrix4x4("mesh", descriptor.Transform);
         shader.SetMatrix4x4Array("finalBonesMatrices", descriptor.BoneTransforms);
-        shader.SetUniform1("entityID", descriptor.EntityID);
+        shader.SetUniform1("entityID", descriptor.PickerID);
 
         descriptor.Mesh.Draw();
     }
