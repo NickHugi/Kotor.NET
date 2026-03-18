@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Utils;
 using Avalonia.OpenGL;
 using Avalonia.OpenGL.Controls;
 using Avalonia.Platform.Storage;
@@ -26,6 +27,7 @@ using Kotor.NET.Graphics.Model.Nodes;
 using Kotor.NET.Graphics.OpenGL;
 using Kotor.NET.Graphics.OpenGL.Factories;
 using Kotor.NET.Tests.Encapsulation;
+using ReactiveUI;
 using Silk.NET.OpenGL;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.Views;
@@ -41,7 +43,6 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
     public SceneControl()
     {
         InitializeComponent();
-
     }
 
     private async Task LoadDefaultResources()
@@ -175,11 +176,23 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         _camera.Distance -= (float)(e.Delta.Y / 1);
     }
 
-    private async void PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
+    private void PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
     {
         var scale = TopLevel.GetTopLevel(this).RenderScaling;
         var pos = e.GetCurrentPoint(this).Position * scale;
-        var entity = await ViewModel.Engine.Pick((int)pos.X, (int)pos.Y, _camera);
+        var wall = NearestWallMagnest((int)pos.X, (int)pos.Y);
     }
     #endregion
+
+    private Wall NearestWallMagnest(int x, int y)
+    {
+        var ray = _camera.ProjectRay(x, y, ViewModel.Engine.Width, ViewModel.Engine.Height);
+
+        return ViewModel.Engine.Scene.Entities.OfType<Room>()
+            .SelectMany(x => x.GetAllTiles())
+            .SelectMany(x => x.Walls)
+            .Where(x => x.LinkedTile is null)
+            .OrderBy(x => ray.ShortestDistanceTo(x.Position))
+            .First();
+    }
 }

@@ -45,13 +45,16 @@ public class Tile
     public IReadOnlyCollection<Wall> Walls { get; }
     public IReadOnlyCollection<Corner> InnerCorners { get; }
     public IReadOnlyCollection<Corner> OuterCorners { get; }
+
+    public Vector3 Position => Matrix4x4.Decompose(Transform, out _, out _, out var value) ? value : new();
+    public Quaternion Orientatopm => Matrix4x4.Decompose(Transform, out _, out var value, out _) ? value : new();
     public Matrix4x4 Transform { get; set; } = Matrix4x4.Identity;
 
     public Tile(TileTemplate template)
     {
         Template = template;
         Floor = new(template.DefaultFloorModel);
-        Walls = template.Walls.Select(x => new Wall(x)).ToArray();
+        Walls = template.Walls.Select(x => new Wall(this, x)).ToArray();
         InnerCorners = template.InnerCorners;
         OuterCorners = template.OuterCorners;
     }
@@ -75,13 +78,17 @@ public class Tile
 
 public class Wall
 {
+    public Tile Parent { get; }
     public string Model { get; set; }
     public Room? LinkedRoom { get; set; }
     public Tile? LinkedTile { get; set; }
     public WallTemplate Template { get; set; }
 
-    public Wall(WallTemplate template)
+    public Vector3 Position => Parent.Position + Template.Position;
+
+    public Wall(Tile parent, WallTemplate template)
     {
+        Parent = parent;
         Template = template;
         Model = template.DefaultModel;
     }
