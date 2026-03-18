@@ -148,11 +148,15 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
     #region Events
     private void PointerMoved(object? sender, Avalonia.Input.PointerEventArgs e)
     {
-        var currentPosition = e.GetPosition(this);
+        var scale = TopLevel.GetTopLevel(this).RenderScaling;
+        var pos = e.GetCurrentPoint(this).Position * scale;
+
+        var mouseX = (int)pos.X;
+        var mouseY = (int)pos.Y;
 
         if (_lastPointerPosition.HasValue)
         {
-            var delta = currentPosition - _lastPointerPosition.Value;
+            var delta = pos - _lastPointerPosition.Value;
 
             double deltaX = delta.X;
             double deltaY = delta.Y;
@@ -164,7 +168,13 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
             }
         }
 
-        _lastPointerPosition = currentPosition;
+        _lastPointerPosition = pos;
+
+
+        if (ViewModel.SceneMode == SceneMode.SwitchWall)
+            RenderInterceptSwitchWall(mouseX, mouseY);
+        if (ViewModel.SceneMode == SceneMode.AddTile)
+            RenderInterceptExtendRoom(mouseX, mouseY);
     }
 
     private void PointerWheelChanged(object? sender, Avalonia.Input.PointerWheelEventArgs e)
@@ -199,11 +209,30 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         menu.Items.Add(new MenuItem() { Header = "sandral_wall_0_door_0", Command = ReactiveCommand.Create(() => wall.Parent.SwitchWall(wall, "sandral_wall_0_door_0")) });
         menu.Open(this);
     }
+    private void RenderInterceptSwitchWall(int x, int y)
+    {
+        var wall = NearestWallMagnest(x, y);
+
+        ViewModel.Engine.RenderInterceptor = descriptors =>
+        {
+            descriptors.Where(x => x.Tag == wall).ToList().ForEach(x => x.AmbientColor = new(1.5f, 1.5f, 1.5f));
+        };
+    }
+
     private void PromptExtendRoom(int x, int y)
     {
         var wall = NearestWallMagnest(x, y);
 
         wall.Parent.Extend(wall);
+    }
+    private void RenderInterceptExtendRoom(int x, int y)
+    {
+        var wall = NearestWallMagnest(x, y);
+
+        ViewModel.Engine.RenderInterceptor = descriptors =>
+        {
+            descriptors.Where(x => x.Tag == wall).ToList().ForEach(x => x.AmbientColor = new(1.5f, 1.5f, 1.5f));
+        };
     }
 
     private Wall NearestWallMagnest(int x, int y)

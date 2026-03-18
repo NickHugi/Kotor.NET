@@ -7,13 +7,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Graphics.GPU;
-using Vector3 = System.Numerics.Vector3;
 
 namespace Kotor.NET.Graphics.Model;
 
 public class MeshDescriptor
 {
-    public object Tag { get; init; }
+    public object Tag { get; set; }
     public uint PickerID { get; set; } = 0xFFFFFFFF;
 
     public IMesh Mesh { get; init; }
@@ -25,8 +24,8 @@ public class MeshDescriptor
     public bool DoRender { get; set; }
     public Matrix4x4 Transform { get; set; }
     public Matrix4x4[] BoneTransforms { get; set; }
-    public Color DiffuseColor { get; set; }
-    public Color AmbientColor { get; set; }
+    public Vector3 DiffuseColor { get; set; }
+    public Vector3 AmbientColor { get; set; }
 }
 
 public class BoundingSphere

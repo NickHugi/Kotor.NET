@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Graphics.Cameras;
 using Kotor.NET.Graphics.Entities;
+using Kotor.NET.Graphics.Model;
 using Kotor.NET.Graphics.Model.Nodes;
 using Kotor.NET.Graphics.OpenGL.Factories;
 using Kotor.NET.Graphics.Renderers;
@@ -20,6 +21,7 @@ public class GLEngine
     public required GL GL { get; init; }
     public required Scene Scene { get; init; }
     public required AssetManager AssetManager { get; init; }
+    public Action<IEnumerable<MeshDescriptor>>? RenderInterceptor { get; set;  }
 
     public uint Width { get; set; }
     public uint Height { get; set; }
@@ -60,7 +62,7 @@ public class GLEngine
         GL.ClearColor(0.1f, 0.0f, 0.0f, 1.0f);
         GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
-        new GeometryRenderer().Render(AssetManager, Scene, camera, Width, Height);
+        new GeometryRenderer().Render(AssetManager, Scene, camera, Width, Height, RenderInterceptor);
     }
 
     public void Update(float timestep)
@@ -77,7 +79,7 @@ public class GLEngine
             GL.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
             GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
-            new PickRenderer().Render(AssetManager, Scene, camera, Width, Height);
+            new PickRenderer().Render(AssetManager, Scene, camera, Width, Height, RenderInterceptor);
 
             Span<byte> bytes = new byte[4];
             GL.ReadPixels(x, (int)Height - y, 1, 1, PixelFormat.Rgba, PixelType.UnsignedByte, bytes);

@@ -207,8 +207,8 @@ public class ModelLoader
                     Bonemap = bonemap,
                     TBones = tbones,
                     QBones = qbones,
-                    DiffuseColor = trimeshHeader.Diffuse.ToColor(),
-                    AmbientColor = trimeshHeader.Ambient.ToColor(),
+                    DiffuseColor = trimeshHeader.Diffuse,
+                    AmbientColor = trimeshHeader.Ambient,
                 };
             }
             else if (sabermeshHeader is not null)
@@ -232,8 +232,8 @@ public class ModelLoader
                     Visible = trimeshHeader.DoesRender != 0,
                     Position = position,
                     Orientation = orientation,
-                    DiffuseColor = trimeshHeader.Diffuse.ToColor(),
-                    AmbientColor = trimeshHeader.Ambient.ToColor(),
+                    DiffuseColor = trimeshHeader.Diffuse,
+                    AmbientColor = trimeshHeader.Ambient,
                 };
             }
             else if (walkmeshHeader is not null)
@@ -260,8 +260,8 @@ public class ModelLoader
                     Texture2 = trimeshHeader.Lightmap,
                     Position = position,
                     Orientation = orientation,
-                    DiffuseColor = trimeshHeader.Diffuse.ToColor(),
-                    AmbientColor = trimeshHeader.Ambient.ToColor(),
+                    DiffuseColor = trimeshHeader.Diffuse,
+                    AmbientColor = trimeshHeader.Ambient,
                 };
             }
             else
@@ -288,8 +288,8 @@ public class ModelLoader
                     Texture2 = trimeshHeader.Lightmap,
                     Position = position,
                     Orientation = orientation,
-                    DiffuseColor = trimeshHeader.Diffuse.ToColor(),
-                    AmbientColor = trimeshHeader.Ambient.ToColor(),
+                    DiffuseColor = trimeshHeader.Diffuse,
+                    AmbientColor = trimeshHeader.Ambient,
                 };
                 
             }

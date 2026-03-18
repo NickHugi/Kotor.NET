@@ -13,8 +13,8 @@ namespace Kotor.NET.Graphics.Model.Nodes;
 public class MeshNode : DummyNode
 {
     public IMesh Mesh { get; set; }
-    public Color DiffuseColor { get; set; }
-    public Color AmbientColor { get; set; }
+    public Vector3 DiffuseColor { get; set; }
+    public Vector3 AmbientColor { get; set; }
     public string Texture1 { get; set; } = "";
     public string Texture2 { get; set; } = "";
 
@@ -34,7 +34,7 @@ public class MeshNode : DummyNode
                 BoundingBox = null,
                 BoundingSphere = null,
                 AmbientColor = AmbientColor,
-                DiffuseColor = AmbientColor,
+                DiffuseColor = DiffuseColor,
             }
         ];
     }

@@ -8,9 +8,12 @@ namespace Kotor.NET.Graphics.Renderers;
 
 public class GeometryRenderer : IRenderer
 {
-    public void Render(IAssetManager assets, Scene scene, Camera camera, uint width, uint height)
+    public void Render(IAssetManager assets, Scene scene, Camera camera, uint width, uint height, Action<IEnumerable<MeshDescriptor>> renderInterceptor)
     {
         var descriptors = scene.Entities.SelectMany(x => x.GetMeshDescriptors(assets)).ToList();
+
+        if (renderInterceptor is not null)
+            renderInterceptor(descriptors);
 
         var shader = assets.GetShader("basic");
 

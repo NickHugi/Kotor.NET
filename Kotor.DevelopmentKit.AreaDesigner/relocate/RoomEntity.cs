@@ -35,7 +35,7 @@ public class RoomEntity : BaseEntity
 
                 var transform = Matrix4x4.CreateFromQuaternion(wall.Template.Orientation)
                     * Matrix4x4.CreateTranslation(wall.Template.Position);
-                descriptors.AddRange(DescriptorsForModel(assets, wall.Model, transform * tile.Transform));
+                descriptors.AddRange(DescriptorsForModel(assets, wall.Model, transform * tile.Transform, wall));
             }
             foreach (var corner in tile.InnerCorners)
             {
@@ -74,10 +74,17 @@ public class RoomEntity : BaseEntity
     }
 
 
-    public ICollection<MeshDescriptor> DescriptorsForModel(IAssetManager assets, string modelName, Matrix4x4 transform)
+    public ICollection<MeshDescriptor> DescriptorsForModel(IAssetManager assets, string modelName, Matrix4x4 transform, object tag = null)
     {
         var model = assets.GetModel(modelName);
         model.Root.GenerateTransform([]);
-        return model.GetAllNodes().ToList().SelectMany(node => node.GetMeshDescriptors(transform)).ToList();
+        return model.GetAllNodes()
+            .SelectMany(node => node.GetMeshDescriptors(transform))
+            .Select(x =>
+            {
+                x.Tag = tag;
+                return x;
+            })
+            .ToList();
     }
 }
