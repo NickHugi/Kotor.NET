@@ -33,9 +33,9 @@ public class TileTemplate
         OuterCorners =
         [
             new("sandral_ocorner_0", new( 4,  4, 0), new(0, 0, 0.9238f, -0.382683f), (0, 1)),
-            //new("sandral_ocorner_0", new( 4, -4, 0), new(0, 0, 0.9238f, 0.382683f), (1, 2)),
-            //new("sandral_ocorner_0", new(-4, -4, 0), new(0, 0, -0.382683f, -0.92388f), (2, 3)),
-            //new("sandral_ocorner_0", new(-4,  4, 0), new(0, 0, 0.382683f, -0.9238f), (3, 0)),
+            new("sandral_ocorner_0", new( 4, -4, 0), new(0, 0, 0.9238f, 0.382683f), (1, 2)),
+            new("sandral_ocorner_0", new(-4, -4, 0), new(0, 0, -0.382683f, -0.92388f), (2, 3)),
+            new("sandral_ocorner_0", new(-4,  4, 0), new(0, 0, 0.382683f, -0.9238f), (3, 0)),
         ],
     };
 

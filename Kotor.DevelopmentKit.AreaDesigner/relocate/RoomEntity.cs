@@ -48,9 +48,17 @@ public class RoomEntity : BaseEntity
             }
             foreach (var corner in tile.OuterCorners)
             {
-                if (tile.Walls.ElementAt(corner.Requires.IndexA).LinkedTile is null)
+                var linkedTileA = tile.Walls.ElementAt(corner.Requires.IndexA).LinkedTile;
+                var linkedTileB = tile.Walls.ElementAt(corner.Requires.IndexB).LinkedTile;
+                if (linkedTileA is null)
                     continue;
-                if (tile.Walls.ElementAt(corner.Requires.IndexB).LinkedTile is null)
+                if (linkedTileB is null)
+                    continue;
+
+                // TODO - logic will break for non-square rooms
+                if (linkedTileA.Walls.ElementAt(corner.Requires.IndexB).LinkedTile is not null)
+                    continue;
+                if (linkedTileB.Walls.ElementAt(corner.Requires.IndexA).LinkedTile is not null)
                     continue;
 
                 descriptors.AddRange(DescriptorsForModel(assets, corner.Model, corner.Transform * tile.Transform));

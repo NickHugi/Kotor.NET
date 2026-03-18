@@ -13,13 +13,13 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate;
 
 public class Room
 {
-    public Tile Root { get; private set; } = new(TileTemplate.Sandral);
+    public Tile Root { get; private set; } 
     public Vector3 Position { get; set; } = new();
     public Quaternion Orientation { get; set; } = new();
 
     public Room(RoomTemplate template)
     {
-
+        Root = new(this, TileTemplate.Sandral);
     }
 
     public ICollection<Tile> GetAllTiles()
@@ -40,6 +40,7 @@ public class Room
 
 public class Tile
 {
+    public Room Parent { get; }
     public TileTemplate Template { get; }
     public Floor Floor { get; }
     public IReadOnlyCollection<Wall> Walls { get; }
@@ -50,8 +51,9 @@ public class Tile
     public Quaternion Orientatopm => Matrix4x4.Decompose(Transform, out _, out var value, out _) ? value : new();
     public Matrix4x4 Transform { get; set; } = Matrix4x4.Identity;
 
-    public Tile(TileTemplate template)
+    public Tile(Room parent, TileTemplate template)
     {
+        Parent = parent;
         Template = template;
         Floor = new(template.DefaultFloorModel);
         Walls = template.Walls.Select(x => new Wall(this, x)).ToArray();
@@ -61,12 +63,26 @@ public class Tile
 
     public Tile Extend(Wall wall)
     {
-        var newTile = new Tile(TileTemplate.Sandral);
-        wall.LinkedTile = newTile;
+        var newTile = new Tile(Parent, TileTemplate.Sandral);
 
+        // TODO - will need to handle this differently. only works for square rooms
         var adjacent = newTile.Walls.ElementAt((Walls.IndexOf(wall) + 2) % 4);
-        adjacent.LinkedTile = this;
-        newTile.Transform = Matrix4x4.CreateTranslation(wall.Template.Position - adjacent.Template.Position);
+        newTile.Transform = Matrix4x4.CreateTranslation(wall.Position - adjacent.Template.Position);
+
+        // Link the new tile to the old tile, as well as any other touching tiles
+        foreach (var newWall in newTile.Walls)
+        {
+            foreach (var otherTileWall in Parent.GetAllTiles().Where(x => x != newTile).SelectMany(x => x.Walls))
+            {
+                if (newWall.Position == otherTileWall.Position)
+                {
+                    newWall.LinkedTile = this;
+                    otherTileWall.LinkedTile = newTile; 
+
+                }
+            }
+        }
+
         return newTile;
     }
 

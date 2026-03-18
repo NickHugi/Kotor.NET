@@ -75,11 +75,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         var magnetCorner2 = floor.FindNode("magnet.corner.2");
         var magnetCorner3 = floor.FindNode("magnet.corner.3");
 
-        var room0 = new Room(null);
-        var room1 = room0.Root.Extend(room0.Root.Walls.First());
-        var room2 = room0.Root.Extend(room0.Root.Walls.ElementAt(1));
-        room1.SwitchWall(room1.Walls.ElementAt(0), "sandral_wall_0_door_0");
-        ViewModel.Engine.Scene.AddEntity(new RoomEntity(room0));
+        ViewModel.Engine.Scene.AddEntity(new RoomEntity(new Room(null)));
     }
     private async Task LoadModel(string name)
     {
@@ -178,18 +174,44 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
 
     private void PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
     {
+        if (!e.KeyModifiers.HasFlag(Avalonia.Input.KeyModifiers.Shift))
+            return;
+
         var scale = TopLevel.GetTopLevel(this).RenderScaling;
         var pos = e.GetCurrentPoint(this).Position * scale;
-        var wall = NearestWallMagnest((int)pos.X, (int)pos.Y);
+
+        var mouseX = (int)pos.X;
+        var mouseY = (int)pos.Y;
+
+        if (ViewModel.SceneMode == SceneMode.SwitchWall)
+            PromptSwitchWall(mouseX, mouseY);
+        if (ViewModel.SceneMode == SceneMode.AddTile)
+            PromptExtendRoom(mouseX, mouseY);
     }
     #endregion
+
+    private void PromptSwitchWall(int x, int y)
+    {
+        var wall = NearestWallMagnest(x, y);
+
+        var menu = new ContextMenu();
+        menu.Items.Add(new MenuItem() { Header = "sandral_wall_0", Command = ReactiveCommand.Create(() => wall.Parent.SwitchWall(wall, "sandral_wall_0")) });
+        menu.Items.Add(new MenuItem() { Header = "sandral_wall_0_door_0", Command = ReactiveCommand.Create(() => wall.Parent.SwitchWall(wall, "sandral_wall_0_door_0")) });
+        menu.Open(this);
+    }
+    private void PromptExtendRoom(int x, int y)
+    {
+        var wall = NearestWallMagnest(x, y);
+
+        wall.Parent.Extend(wall);
+    }
 
     private Wall NearestWallMagnest(int x, int y)
     {
         var ray = _camera.ProjectRay(x, y, ViewModel.Engine.Width, ViewModel.Engine.Height);
 
-        return ViewModel.Engine.Scene.Entities.OfType<Room>()
-            .SelectMany(x => x.GetAllTiles())
+        return ViewModel.Engine.Scene.Entities.OfType<RoomEntity>()
+            .SelectMany(x => x.Room.GetAllTiles())
             .SelectMany(x => x.Walls)
             .Where(x => x.LinkedTile is null)
             .OrderBy(x => ray.ShortestDistanceTo(x.Position))

@@ -8,5 +8,4 @@
              PointerWheelChanged="PointerWheelChanged"
              PointerPressed="PointerPressed"
              Focusable="True">
-  
 </UserControl>

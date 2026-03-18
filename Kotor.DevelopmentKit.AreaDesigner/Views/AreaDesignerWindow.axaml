@@ -16,15 +16,23 @@
     <DockPanel>
         <StackPanel DockPanel.Dock="Top"
                     Orientation="Horizontal">
-            <Button>Delete Room</Button>
-            <Button>Begin Room</Button>
-            <Button>Extend Room</Button>
-            <Button>Switch Wall</Button>
-            <Button>Switch Floor</Button>
-            <Button>Switch Ceiling</Button>
-            <Button>Hide Walls</Button>
-            <Button>Hide Doors</Button>
-            <Button>Hide Ceilings</Button>
+
+            <Button Content="Add Room" Command="{Binding SetSceneMode_AddRoom}" />
+            <Button Content="Extend Room" Command="{Binding SetSceneMode_AddTile}" />
+            <Button Content="Switch Wall" Command="{Binding SetSceneMode_SwitchWall}" />
+            <Label Content="{Binding SceneMode}" />
+
+            <DropDownButton Content="Visibility">
+                <DropDownButton.Flyout>
+                    <MenuFlyout>
+                        <MenuItem Header="Show Walls" ToggleType="CheckBox" IsChecked="{Binding ShowWalls}" />
+                        <MenuItem Header="Show Doors" ToggleType="CheckBox" IsChecked="{Binding ShowWalls}" />
+                        <MenuItem Header="Show Corners" ToggleType="CheckBox" IsChecked="{Binding ShowWalls}" />
+                        <MenuItem Header="Show Ceilings" ToggleType="CheckBox" IsChecked="{Binding ShowWalls}" />
+                    </MenuFlyout>
+                </DropDownButton.Flyout>
+            </DropDownButton>
+
         </StackPanel>
         <local:SceneControl/>
     </DockPanel>
