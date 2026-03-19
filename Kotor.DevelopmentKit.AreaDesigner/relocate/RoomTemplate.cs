@@ -41,8 +41,8 @@ public class TileTemplate
 
     public string DefaultFloorModel { get; init; }
     public WallTemplate[] Walls = [];
-    public Corner[] InnerCorners = [];
-    public Corner[] OuterCorners = [];
+    public CornerTemplate[] InnerCorners = [];
+    public CornerTemplate[] OuterCorners = [];
     public Vector3[] CeilingHooks = [];
 }
 
@@ -51,6 +51,8 @@ public class WallTemplate
     public string DefaultModel { get; }
     public Vector3 Position { get; }
     public Quaternion Orientation { get; }
+
+    public Matrix4x4 Transform => Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position);
 
     public WallTemplate(string model, Vector3 position, Quaternion orientation)
     {
@@ -67,5 +69,52 @@ public class CeilingTemplate
     public CeilingTemplate(string defaultModel)
     {
         DefaultModel = defaultModel;
+    }
+}
+
+public class CornerTemplate
+{
+    public string Model { get; }
+    public Vector3 Position { get; }
+    public Quaternion Orientation { get; }
+    public (int IndexA, int IndexB) Requires { get; }
+
+    public Matrix4x4 Transform => Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position);
+
+    public CornerTemplate(string model, Vector3 position, Quaternion orientation, (int IndexA, int IndexB) requires)
+    {
+        Model = model;
+        Position = position;
+        Orientation = orientation;
+        Requires = requires;
+    }
+}
+
+public class DoorFrameTemplate
+{
+    public static DoorFrameTemplate SandralDoor0 = new("sandral_doorframe_0",
+        [
+            new(new(0.752678f, 0, 0), new(0, 0, 0, 1)),
+            new(new(-0.334811f, 0, 0), new(0, 0, -1, 0)),
+        ]);
+
+    public string Model { get; }
+    public DoorFrameHook[] Hooks { get; }
+
+    public DoorFrameTemplate(string model, DoorFrameHook[] hooks)
+    {
+        Model = model;
+        Hooks = hooks;
+    }
+}
+public class DoorFrameHook
+{
+    public Vector3 Position { get; }
+    public Quaternion Orientation { get; }
+
+    public DoorFrameHook(Vector3 position, Quaternion orientation)
+    {
+        Position = position;
+        Orientation = orientation;
     }
 }

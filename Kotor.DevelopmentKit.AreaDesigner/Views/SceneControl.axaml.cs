@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Utils;
+using Avalonia.Input;
 using Avalonia.OpenGL;
 using Avalonia.OpenGL.Controls;
 using Avalonia.Platform.Storage;
@@ -23,6 +24,7 @@ using Kotor.NET.Common.Data;
 using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Cameras;
 using Kotor.NET.Graphics.Entities;
+using Kotor.NET.Graphics.Model;
 using Kotor.NET.Graphics.Model.Nodes;
 using Kotor.NET.Graphics.OpenGL;
 using Kotor.NET.Graphics.OpenGL.Factories;
@@ -38,7 +40,9 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
     
     public OrbitCamera _camera { get; } = new();
     private Point? _lastPointerPosition;
+    private float _scrollAngle;
     private DateTime _lastRender = DateTime.Now;
+    private AreaEntity _area => ViewModel.Engine.Scene.Entities.OfType<AreaEntity>().First();
 
     public SceneControl()
     {
@@ -59,23 +63,16 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         await LoadTexture("lda_wall04");
         await LoadTexture("lda_wall05");
         await LoadTexture("lda_light03");
+        await LoadTexture("LDA_window01");
+        await LoadTexture("LTS_unwal07");
         await LoadModel("sandral_floor_0");
         await LoadModel("sandral_wall_0");
         await LoadModel("sandral_wall_0_door_0");
         await LoadModel("sandral_icorner_0");
         await LoadModel("sandral_ocorner_0");
+        await LoadModel("sandral_doorframe_0");
 
-        var floor = ViewModel.Engine.AssetManager.GetModel("sandral_floor_0");
-        var magnet0 = floor.FindNode("magnet.wall.0");
-        var magnet1 = floor.FindNode("magnet.wall.1");
-        var magnet2 = floor.FindNode("magnet.wall.2");
-        var magnet3 = floor.FindNode("magnet.wall.3");
-        var magnetCorner0 = floor.FindNode("magnet.corner.0");
-        var magnetCorner1 = floor.FindNode("magnet.corner.1");
-        var magnetCorner2 = floor.FindNode("magnet.corner.2");
-        var magnetCorner3 = floor.FindNode("magnet.corner.3");
-
-        ViewModel.Engine.Scene.AddEntity(new RoomEntity(new Room(null)));
+        ViewModel.Engine.Scene.AddEntity(new AreaEntity());
     }
     private async Task LoadModel(string name)
     {
@@ -148,6 +145,9 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
     #region Events
     private void PointerMoved(object? sender, Avalonia.Input.PointerEventArgs e)
     {
+        var keyModifiers = e.KeyModifiers;
+        var buttonProperties = e.GetCurrentPoint(this).Properties;
+
         var scale = TopLevel.GetTopLevel(this).RenderScaling;
         var pos = e.GetCurrentPoint(this).Position * scale;
 
@@ -161,31 +161,53 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
             double deltaX = delta.X;
             double deltaY = delta.Y;
 
-            if (e.GetCurrentPoint(this).Properties.IsMiddleButtonPressed)
+            if (buttonProperties.IsMiddleButtonPressed && keyModifiers == KeyModifiers.None)
             {
                 _camera.Pitch += (float)deltaY / 500;
                 _camera.Yaw -= (float)deltaX / 500;
+            }
+            if (buttonProperties.IsMiddleButtonPressed && keyModifiers == KeyModifiers.Shift)
+            {
+                _camera.Target = new Vector3(
+                    _camera.Target.X + (float)deltaX / 50,
+                    _camera.Target.Y + (float)deltaY / 50,
+                    _camera.Target.Z);
             }
         }
 
         _lastPointerPosition = pos;
 
-
+        if (ViewModel.SceneMode == SceneMode.AddRoom)
+            RenderInterceptAddRoom(mouseX, mouseY);
         if (ViewModel.SceneMode == SceneMode.SwitchWall)
             RenderInterceptSwitchWall(mouseX, mouseY);
         if (ViewModel.SceneMode == SceneMode.AddTile)
             RenderInterceptExtendRoom(mouseX, mouseY);
+        if (ViewModel.SceneMode == SceneMode.AddRoom)
+            RenderInterceptAddRoom(mouseX, mouseY);
     }
 
     private void PointerWheelChanged(object? sender, Avalonia.Input.PointerWheelEventArgs e)
     {
-        _camera.Distance -= (float)(e.Delta.Y / 1);
+        var keyModifiers = e.KeyModifiers;
+
+        var scrollX = (float)e.Delta.X;
+        var scrollY = (float)e.Delta.Y;
+
+        if (keyModifiers == KeyModifiers.None)
+        {
+            _camera.Distance -= scrollY / 1;
+        }
+        if (keyModifiers == KeyModifiers.Control)
+        {
+            _scrollAngle -= scrollY / 1;
+        }
     }
 
     private void PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
     {
-        if (!e.KeyModifiers.HasFlag(Avalonia.Input.KeyModifiers.Shift))
-            return;
+        var keyModifiers = e.KeyModifiers;
+        var buttonProperties = e.GetCurrentPoint(this).Properties;
 
         var scale = TopLevel.GetTopLevel(this).RenderScaling;
         var pos = e.GetCurrentPoint(this).Position * scale;
@@ -193,10 +215,15 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         var mouseX = (int)pos.X;
         var mouseY = (int)pos.Y;
 
-        if (ViewModel.SceneMode == SceneMode.SwitchWall)
-            PromptSwitchWall(mouseX, mouseY);
-        if (ViewModel.SceneMode == SceneMode.AddTile)
-            PromptExtendRoom(mouseX, mouseY);
+        if (keyModifiers == KeyModifiers.None && buttonProperties.IsLeftButtonPressed)
+        {
+            if (ViewModel.SceneMode == SceneMode.AddRoom)
+                PromptAddRoom(mouseX, mouseY);
+            if (ViewModel.SceneMode == SceneMode.SwitchWall)
+                PromptSwitchWall(mouseX, mouseY);
+            if (ViewModel.SceneMode == SceneMode.AddTile)
+                PromptExtendRoom(mouseX, mouseY);
+        }
     }
     #endregion
 
@@ -235,15 +262,59 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         };
     }
 
-    private Wall NearestWallMagnest(int x, int y)
+    private void PromptAddRoom(int x, int y)
+    {
+        var ray = _camera.ProjectRay(x, y, ViewModel.Engine.Width, ViewModel.Engine.Height);
+        var point = ray.FindPointOnPlane(Axis.Z, 0);
+
+        var room = new Room(null)
+        {
+            Position = point,
+            Orientation = Quaternion.CreateFromYawPitchRoll(0, 0, _scrollAngle * (float)Math.PI / 180),
+        };
+
+        _area.Area.AddRoom(room);
+    }
+    private void RenderInterceptAddRoom(int x, int y)
+    {
+        var ray = _camera.ProjectRay(x, y, ViewModel.Engine.Width, ViewModel.Engine.Height);
+        var point = ray.FindPointOnPlane(Axis.Z, 0);
+
+        var wall = NearestWallMagnest2(x, y);
+        
+        ViewModel.Engine.RenderInterceptor = descriptors =>
+        {
+            var room = new Room(null);
+            room.Position = point;
+            room.Orientation = Quaternion.CreateFromYawPitchRoll(0, 0, _scrollAngle * (float)Math.PI / 180);
+
+            var roomMeshDescriptors = new List<MeshDescriptor>();
+            _area.RenderRoom(ViewModel.Engine.AssetManager, room, ref roomMeshDescriptors);
+            roomMeshDescriptors.ForEach(x => x.AmbientColor = new Vector3(1.5f, 1.5f, 1.5f));
+            descriptors.AddRange(roomMeshDescriptors);
+        };
+    }
+
+    private Wall? NearestWallMagnest(int x, int y)
     {
         var ray = _camera.ProjectRay(x, y, ViewModel.Engine.Width, ViewModel.Engine.Height);
 
-        return ViewModel.Engine.Scene.Entities.OfType<RoomEntity>()
-            .SelectMany(x => x.Room.GetAllTiles())
+        return _area.Area.Rooms
             .SelectMany(x => x.Walls)
             .Where(x => x.LinkedTile is null)
             .OrderBy(x => ray.ShortestDistanceTo(x.Position))
-            .First();
+            .FirstOrDefault();
+    }
+    // TODO - return raycast result class
+    private (Wall? Wall, float Distance) NearestWallMagnest2(int x, int y)
+    {
+        var ray = _camera.ProjectRay(x, y, ViewModel.Engine.Width, ViewModel.Engine.Height);
+
+        return _area.Area.Rooms
+            .SelectMany(x => x.Walls)
+            .Where(x => x.LinkedTile is null)
+            .OrderBy(x => ray.ShortestDistanceTo(x.Position))
+            .Select(x => (x, ray.ShortestDistanceTo(x.Position)))
+            .FirstOrDefault();
     }
 }

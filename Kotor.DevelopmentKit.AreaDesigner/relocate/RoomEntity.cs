@@ -11,6 +11,106 @@ using Kotor.NET.Graphics.Model;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate;
 
+public class AreaEntity : BaseEntity
+{
+    public Area Area { get; } = new();
+
+    public override ICollection<MeshDescriptor> GetMeshDescriptors(IAssetManager assets)
+    {
+        var descriptors = new List<MeshDescriptor>();
+
+        foreach (var room in Area.Rooms)
+        {
+            RenderRoom(assets, room, ref descriptors);
+        }
+
+        return descriptors;
+    }
+    public void RenderRoom(IAssetManager assets, Room room, ref List<MeshDescriptor> descriptors)
+    {
+        foreach (var tile in room.Tiles)
+        {
+            RenderTile(assets, tile, ref descriptors);
+        }
+        foreach (var wall in room.Walls)
+        {
+            RenderWall(assets, wall, ref descriptors);
+        }
+        foreach (var doorframe in room.DoorFrames)
+        {
+            RenderDoorFrame(assets, doorframe, ref descriptors);
+        }
+        foreach (var corner in room.InnerCorners)
+        {
+            RenderInnerCorner(assets, corner, ref descriptors);
+        }
+        foreach (var corner in room.OuterCorners)
+        {
+            RenderOuterCorner(assets, corner, ref descriptors);
+        }
+    }
+    private void RenderTile(IAssetManager assets, Tile tile, ref List<MeshDescriptor> descriptors)
+    {
+        descriptors.AddRange(DescriptorsForModel(assets, tile.Floor.Model, tile.Transform));
+    }
+    private void RenderWall(IAssetManager assets, Wall wall, ref List<MeshDescriptor> descriptors)
+    {
+        if (wall.LinkedTile is not null)
+            return;
+
+        descriptors.AddRange(DescriptorsForModel(assets, wall.Model, wall.Transform, wall));
+    }
+    private void RenderDoorFrame(IAssetManager assets, DoorFrame doorframe, ref List<MeshDescriptor> descriptors)
+    {
+
+    }
+    private void RenderInnerCorner(IAssetManager assets, Corner corner, ref List<MeshDescriptor> descriptors)
+    {
+        if (corner.Parent.Walls.ElementAt(corner.Template.Requires.IndexA).LinkedTile is not null)
+            return;
+        if (corner.Parent.Walls.ElementAt(corner.Template.Requires.IndexB).LinkedTile is not null)
+            return;
+
+        descriptors.AddRange(DescriptorsForModel(assets, corner.Template.Model, corner.Transform));
+    }
+    private void RenderOuterCorner(IAssetManager assets, Corner corner, ref List<MeshDescriptor> descriptors)
+    {
+        var linkedTileA = corner.Parent.Walls.ElementAt(corner.Template.Requires.IndexA).LinkedTile;
+        var linkedTileB = corner.Parent.Walls.ElementAt(corner.Template.Requires.IndexB).LinkedTile;
+        if (linkedTileA is null)
+            return;
+        if (linkedTileB is null)
+            return;
+
+        // TODO - logic will break for non-square rooms
+        if (linkedTileA.Walls.ElementAt(corner.Template.Requires.IndexB).LinkedTile is not null)
+            return;
+        if (linkedTileB.Walls.ElementAt(corner.Template.Requires.IndexA).LinkedTile is not null)
+            return;
+
+        descriptors.AddRange(DescriptorsForModel(assets, corner.Template.Model, corner.Transform));
+    }
+    // TODO - clean this up somehow
+    private ICollection<MeshDescriptor> DescriptorsForModel(IAssetManager assets, string modelName, Matrix4x4 transform, object tag = null)
+    {
+        var model = assets.GetModel(modelName);
+        model.Root.GenerateTransform([]);
+        return model.GetAllNodes()
+            .SelectMany(node => node.GetMeshDescriptors(transform))
+            .Select(x =>
+            {
+                x.Tag = tag;
+                return x;
+            })
+            .ToList();
+    }
+
+    public override void Update(IAssetManager assetManager, float delta)
+    {
+
+    }
+}
+
 public class RoomEntity : BaseEntity
 {
     public Room Room { get; }
@@ -26,42 +126,15 @@ public class RoomEntity : BaseEntity
 
         foreach (var tile in Room.GetAllTiles())
         {
-            descriptors.AddRange(DescriptorsForModel(assets, tile.Floor.Model, tile.Transform));
 
             foreach (var wall in tile.Walls)
             {
-                if (wall.LinkedTile is not null)
-                    continue;
-
-                var transform = Matrix4x4.CreateFromQuaternion(wall.Template.Orientation)
-                    * Matrix4x4.CreateTranslation(wall.Template.Position);
-                descriptors.AddRange(DescriptorsForModel(assets, wall.Model, transform * tile.Transform, wall));
             }
             foreach (var corner in tile.InnerCorners)
             {
-                if (tile.Walls.ElementAt(corner.Requires.IndexA).LinkedTile is not null)
-                    continue;
-                if (tile.Walls.ElementAt(corner.Requires.IndexB).LinkedTile is not null)
-                    continue;
-
-                descriptors.AddRange(DescriptorsForModel(assets, corner.Model, corner.Transform * tile.Transform));
             }
             foreach (var corner in tile.OuterCorners)
             {
-                var linkedTileA = tile.Walls.ElementAt(corner.Requires.IndexA).LinkedTile;
-                var linkedTileB = tile.Walls.ElementAt(corner.Requires.IndexB).LinkedTile;
-                if (linkedTileA is null)
-                    continue;
-                if (linkedTileB is null)
-                    continue;
-
-                // TODO - logic will break for non-square rooms
-                if (linkedTileA.Walls.ElementAt(corner.Requires.IndexB).LinkedTile is not null)
-                    continue;
-                if (linkedTileB.Walls.ElementAt(corner.Requires.IndexA).LinkedTile is not null)
-                    continue;
-
-                descriptors.AddRange(DescriptorsForModel(assets, corner.Model, corner.Transform * tile.Transform));
             }
         }
 
@@ -73,18 +146,4 @@ public class RoomEntity : BaseEntity
 
     }
 
-
-    public ICollection<MeshDescriptor> DescriptorsForModel(IAssetManager assets, string modelName, Matrix4x4 transform, object tag = null)
-    {
-        var model = assets.GetModel(modelName);
-        model.Root.GenerateTransform([]);
-        return model.GetAllNodes()
-            .SelectMany(node => node.GetMeshDescriptors(transform))
-            .Select(x =>
-            {
-                x.Tag = tag;
-                return x;
-            })
-            .ToList();
-    }
 }

@@ -21,7 +21,7 @@ public class GLEngine
     public required GL GL { get; init; }
     public required Scene Scene { get; init; }
     public required AssetManager AssetManager { get; init; }
-    public Action<IEnumerable<MeshDescriptor>>? RenderInterceptor { get; set;  }
+    public Action<List<MeshDescriptor>>? RenderInterceptor { get; set;  }
 
     public uint Width { get; set; }
     public uint Height { get; set; }

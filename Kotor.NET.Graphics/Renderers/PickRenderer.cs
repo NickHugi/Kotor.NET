@@ -8,7 +8,7 @@ namespace Kotor.NET.Graphics.Renderers;
 
 public class PickRenderer : IRenderer
 {
-    public void Render(IAssetManager assets, Scene scene, Camera camera, uint width, uint height, Action<IEnumerable<MeshDescriptor>> renderInterceptor)
+    public void Render(IAssetManager assets, Scene scene, Camera camera, uint width, uint height, Action<List<MeshDescriptor>> renderInterceptor)
     {
         var descriptors = scene.Entities.SelectMany(x => x.GetMeshDescriptors(assets)).ToList();
 

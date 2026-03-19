@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Avalonia.Markup.Xaml.Templates;
 using DynamicData;
 using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Entities;
@@ -11,11 +12,31 @@ using Kotor.NET.Graphics.Model;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate;
 
+public class Area
+{
+    private List<Room> _rooms = new();
+    public IReadOnlyList<Room> Rooms => _rooms.AsReadOnly();
+
+    public void AddRoom(Room room)
+    {
+        _rooms.Add(room);
+    }
+}
+
 public class Room
 {
-    public Tile Root { get; private set; } 
+    public Tile Root { get; private set; }
+
     public Vector3 Position { get; set; } = new();
     public Quaternion Orientation { get; set; } = new();
+    public Matrix4x4 Transform => Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position);
+
+    public ICollection<Tile> Tiles => GetAllTiles();
+    public ICollection<Wall> Walls => Tiles.SelectMany(x => x.Walls).ToList();
+    public ICollection<Corner> Corners => Tiles.SelectMany(x => x.InnerCorners).Concat(Tiles.SelectMany(x => x.OuterCorners)).ToList();
+    public ICollection<Corner> InnerCorners => Tiles.SelectMany(x => x.InnerCorners).ToList();
+    public ICollection<Corner> OuterCorners => Tiles.SelectMany(x => x.OuterCorners).ToList();
+    public ICollection<DoorFrame> DoorFrames => Walls.Select(x => x.DoorFrame).ToList();
 
     public Room(RoomTemplate template)
     {
@@ -47,9 +68,12 @@ public class Tile
     public IReadOnlyCollection<Corner> InnerCorners { get; }
     public IReadOnlyCollection<Corner> OuterCorners { get; }
 
-    public Vector3 Position => Matrix4x4.Decompose(Transform, out _, out _, out var value) ? value : new();
-    public Quaternion Orientatopm => Matrix4x4.Decompose(Transform, out _, out var value, out _) ? value : new();
-    public Matrix4x4 Transform { get; set; } = Matrix4x4.Identity;
+    public Vector3 LocalPosition { get; set; }
+    public Quaternion LocalOrientation { get; set; }
+
+    public Vector3 Position => Parent.Position + LocalPosition;
+    public Quaternion Orientation => Parent.Orientation * LocalOrientation;
+    public Matrix4x4 Transform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition) * Parent.Transform;
 
     public Tile(Room parent, TileTemplate template)
     {
@@ -57,8 +81,8 @@ public class Tile
         Template = template;
         Floor = new(template.DefaultFloorModel);
         Walls = template.Walls.Select(x => new Wall(this, x)).ToArray();
-        InnerCorners = template.InnerCorners;
-        OuterCorners = template.OuterCorners;
+        InnerCorners = template.InnerCorners.Select(x => new Corner(this, x)).ToArray();
+        OuterCorners = template.OuterCorners.Select(x => new Corner(this, x)).ToArray();
     }
 
     public Tile Extend(Wall wall)
@@ -67,7 +91,7 @@ public class Tile
 
         // TODO - will need to handle this differently. only works for square rooms
         var adjacent = newTile.Walls.ElementAt((Walls.IndexOf(wall) + 2) % 4);
-        newTile.Transform = Matrix4x4.CreateTranslation(wall.Position - adjacent.Template.Position);
+        newTile.LocalPosition = wall.LocalPosition - adjacent.Template.Position;
 
         // Link the new tile to the old tile, as well as any other touching tiles
         foreach (var newWall in newTile.Walls)
@@ -98,9 +122,13 @@ public class Wall
     public string Model { get; set; }
     public Room? LinkedRoom { get; set; }
     public Tile? LinkedTile { get; set; }
+    public DoorFrame DoorFrame { get; set; }
     public WallTemplate Template { get; set; }
 
-    public Vector3 Position => Parent.Position + Template.Position;
+    public Vector3 LocalPosition => Parent.LocalPosition + Template.Position;
+    public Vector3 Position =>  Parent.Position + Template.Position;
+    public Quaternion Orientation => Parent.Orientation * Template.Orientation;
+    public Matrix4x4 Transform => Template.Transform * Parent.Transform;
 
     public Wall(Tile parent, WallTemplate template)
     {
@@ -130,22 +158,34 @@ public class Ceiling
     }
 }
 
-public class RoomTile
-{
-    public string FloorModel { get; set; } = "sandral_floor_0";
-    public TileTemplate TileTemplate { get; set; } = TileTemplate.Sandral;
-}
-
 public class Corner
 {
-    public string Model { get; set; }
-    public Matrix4x4 Transform { get; }
-    public (int IndexA, int IndexB) Requires { get; }
+    public Tile Parent { get; }
+    public CornerTemplate Template { get; set; }
 
-    public Corner(string defaultModel, Vector3 position, Quaternion orientation, (int IndexA, int IndexB) requires)
+    public Vector3 Position => Template.Position;
+    public Quaternion Orientation => Template.Orientation;
+    public Matrix4x4 Transform => Template.Transform * Parent.Transform;
+
+    public Corner(Tile parent, CornerTemplate template)
     {
-        Model = defaultModel;
-        Transform = Matrix4x4.CreateFromQuaternion(orientation) * Matrix4x4.CreateTranslation(position);
-        Requires = requires;
+        Parent = parent;
+        Template = template;
+    }
+}
+
+public class DoorFrame
+{
+    public Wall Parent { get; }
+    public DoorFrameTemplate Template { get; set; }
+
+    public Vector3 Position => new();
+    public Quaternion Orientation => new();
+    public Matrix4x4 Transform => new();
+
+    public DoorFrame(Wall parent, DoorFrameTemplate template)
+    {
+        Parent = parent;
+        Template = template;
     }
 }

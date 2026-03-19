@@ -35,4 +35,9 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Assets\billboard\" />
+    <Folder Include="Assets\particle\" />
+  </ItemGroup>
+
 </Project>

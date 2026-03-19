@@ -10,5 +10,5 @@ namespace Kotor.NET.Graphics.Renderers;
 
 public interface IRenderer
 {
-    public void Render(IAssetManager assets, Scene scene, Camera camera, uint width, uint height, Action<IEnumerable<MeshDescriptor>> renderInterceptor);
+    public void Render(IAssetManager assets, Scene scene, Camera camera, uint width, uint height, Action<List<MeshDescriptor>> renderInterceptor);
 }
