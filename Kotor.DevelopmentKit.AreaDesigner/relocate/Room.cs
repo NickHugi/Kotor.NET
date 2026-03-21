@@ -36,7 +36,7 @@ public class Room
     public ICollection<Corner> Corners => Tiles.SelectMany(x => x.InnerCorners).Concat(Tiles.SelectMany(x => x.OuterCorners)).ToList();
     public ICollection<Corner> InnerCorners => Tiles.SelectMany(x => x.InnerCorners).ToList();
     public ICollection<Corner> OuterCorners => Tiles.SelectMany(x => x.OuterCorners).ToList();
-    public ICollection<DoorFrame> DoorFrames => Walls.Select(x => x.DoorFrame).ToList();
+    public ICollection<DoorFrame> DoorFrames => Walls.Select(x => x.DoorFrame).Where(x => x is not null).ToList();
 
     public Room(RoomTemplate template)
     {
@@ -69,7 +69,7 @@ public class Tile
     public IReadOnlyCollection<Corner> OuterCorners { get; }
 
     public Vector3 LocalPosition { get; set; }
-    public Quaternion LocalOrientation { get; set; }
+    public Quaternion LocalOrientation { get; set; } = new(0, 0, 0, 1);
 
     public Vector3 Position => Parent.Position + LocalPosition;
     public Quaternion Orientation => Parent.Orientation * LocalOrientation;
@@ -126,7 +126,7 @@ public class Wall
     public WallTemplate Template { get; set; }
 
     public Vector3 LocalPosition => Parent.LocalPosition + Template.Position;
-    public Vector3 Position =>  Parent.Position + Template.Position;
+    public Vector3 Position => Matrix4x4.Decompose(Transform, out _, out _, out var value) ? value : new(); //Parent.Position + Template.Position;
     public Quaternion Orientation => Parent.Orientation * Template.Orientation;
     public Matrix4x4 Transform => Template.Transform * Parent.Transform;
 
@@ -178,6 +178,7 @@ public class DoorFrame
 {
     public Wall Parent { get; }
     public DoorFrameTemplate Template { get; set; }
+    public bool Enabled { get; set; } = true;
 
     public Vector3 Position => new();
     public Quaternion Orientation => new();

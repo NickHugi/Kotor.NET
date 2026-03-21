@@ -62,7 +62,10 @@ public class AreaEntity : BaseEntity
     }
     private void RenderDoorFrame(IAssetManager assets, DoorFrame doorframe, ref List<MeshDescriptor> descriptors)
     {
+        if (!doorframe.Enabled)
+            return;
 
+        descriptors.AddRange(DescriptorsForModel(assets, doorframe.Template.Model, doorframe.Transform, doorframe));
     }
     private void RenderInnerCorner(IAssetManager assets, Corner corner, ref List<MeshDescriptor> descriptors)
     {

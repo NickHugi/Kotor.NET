@@ -51,7 +51,8 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
 
     private async Task LoadDefaultResources()
     {
-        _camera.Distance = 3;
+        _camera.Distance = 5;
+        _camera.Pitch = 1;
         _camera.Target = new(0, 0, 2);
 
         await LoadTexture("LDA_flr09");
@@ -68,6 +69,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         await LoadModel("sandral_floor_0");
         await LoadModel("sandral_wall_0");
         await LoadModel("sandral_wall_0_door_0");
+        await LoadModel("sandral_wall_0_door_1");
         await LoadModel("sandral_icorner_0");
         await LoadModel("sandral_ocorner_0");
         await LoadModel("sandral_doorframe_0");
@@ -200,7 +202,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         }
         if (keyModifiers == KeyModifiers.Control)
         {
-            _scrollAngle -= scrollY / 1;
+            _scrollAngle -= scrollY * 5;
         }
     }
 
@@ -229,7 +231,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
 
     private void PromptSwitchWall(int x, int y)
     {
-        var wall = NearestWallMagnest(x, y);
+        var wall = NearestWallMagnest(x, y).Result;
 
         var menu = new ContextMenu();
         menu.Items.Add(new MenuItem() { Header = "sandral_wall_0", Command = ReactiveCommand.Create(() => wall.Parent.SwitchWall(wall, "sandral_wall_0")) });
@@ -248,7 +250,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
 
     private void PromptExtendRoom(int x, int y)
     {
-        var wall = NearestWallMagnest(x, y);
+        var wall = NearestWallMagnest(x, y).Result;
 
         wall.Parent.Extend(wall);
     }
@@ -280,13 +282,22 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         var ray = _camera.ProjectRay(x, y, ViewModel.Engine.Width, ViewModel.Engine.Height);
         var point = ray.FindPointOnPlane(Axis.Z, 0);
 
-        var wall = NearestWallMagnest2(x, y);
         
         ViewModel.Engine.RenderInterceptor = descriptors =>
         {
-            var room = new Room(null);
+            var room = new Room(null); 
             room.Position = point;
             room.Orientation = Quaternion.CreateFromYawPitchRoll(0, 0, _scrollAngle * (float)Math.PI / 180);
+
+            (var newHook, var oldHook, var distance) = NearestAdjacentWall(room);
+            if (oldHook is not null)
+            {
+                //oldHook.Model = "sandral_wall_0_door_0";
+                newHook.Model = "sandral_wall_0_door_0";
+
+                room.Orientation = oldHook.Parent.Orientation;
+                room.Position = oldHook.Position + Vector3.Transform(-newHook.Template.Position, oldHook.Parent.Parent.Orientation);
+            }
 
             var roomMeshDescriptors = new List<MeshDescriptor>();
             _area.RenderRoom(ViewModel.Engine.AssetManager, room, ref roomMeshDescriptors);
@@ -295,7 +306,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         };
     }
 
-    private Wall? NearestWallMagnest(int x, int y)
+    private RaycastResult<Wall>? NearestWallMagnest(int x, int y)
     {
         var ray = _camera.ProjectRay(x, y, ViewModel.Engine.Width, ViewModel.Engine.Height);
 
@@ -303,18 +314,29 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
             .SelectMany(x => x.Walls)
             .Where(x => x.LinkedTile is null)
             .OrderBy(x => ray.ShortestDistanceTo(x.Position))
+            .Select(x => new RaycastResult<Wall>(x, ray.ShortestDistanceTo(x.Position)))
             .FirstOrDefault();
     }
-    // TODO - return raycast result class
-    private (Wall? Wall, float Distance) NearestWallMagnest2(int x, int y)
+    private (Wall ThisHook, Wall OtherHook, float distance) NearestAdjacentWall(Room room)
     {
-        var ray = _camera.ProjectRay(x, y, ViewModel.Engine.Width, ViewModel.Engine.Height);
+        var near = new List<(Wall NewHook, Wall OldHook, float distance)>();
+        var otherWalls = _area.Area.Rooms.SelectMany(x => x.Walls).ToList();
 
-        return _area.Area.Rooms
-            .SelectMany(x => x.Walls)
-            .Where(x => x.LinkedTile is null)
-            .OrderBy(x => ray.ShortestDistanceTo(x.Position))
-            .Select(x => (x, ray.ShortestDistanceTo(x.Position)))
-            .FirstOrDefault();
+        foreach (var wall in room.Walls)
+        {
+            var match = otherWalls
+                .Where(x => Vector3.Distance(wall.Position, x.Position) < 3)
+                .OrderBy(x => Vector3.Distance(wall.Position, x.Position))
+                .Select(x => (wall, x, Vector3.Distance(wall.Position, x.Position)))
+                .ToList();
+
+            if (match.Count > 0)
+                near.AddRange(match);
+
+            //if (match.wall is not null)
+            //    return match;
+        }
+
+        return near.OrderBy(x => x.distance).FirstOrDefault();
     }
 }
