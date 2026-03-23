@@ -22,6 +22,7 @@ public class ExtendRoomMode : BaseMode
     public override string Name => "Extend Room";
 
     private Wall? _wall;
+    private bool validWall => _wall?.DoorFrame is null;
 
     public ExtendRoomMode(GLEngine engine, Area area) : base(engine, area)
     {
@@ -32,11 +33,17 @@ public class ExtendRoomMode : BaseMode
         _wall = NearestWallMagnest(camera, (int)mouse.X, (int)mouse.Y)?.Result;
 
         if (_wall is not null)
-            descriptors.Where(x => x.Tag == _wall).ToList().ForEach(x => x.AmbientColor = new(1.5f, 1.5f, 1.5f));
+        {
+            if (!validWall)
+                descriptors.Where(x => x.Tag == _wall).ToList().ForEach(x => x.AmbientColor = new(1.5f, 0.5f, 0.5f));
+            else
+                descriptors.Where(x => x.Tag == _wall).ToList().ForEach(x => x.AmbientColor = new(1.5f, 1.5f, 1.5f));
+        }
     }
 
     public override async Task Trigger()
     {
-        _wall?.Extend();
+        if (validWall)
+            _wall?.Extend();
     }
 }
