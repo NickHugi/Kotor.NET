@@ -20,7 +20,7 @@
             <Button Content="Add Room" Command="{Binding SetSceneMode_AddRoom}" />
             <Button Content="Extend Room" Command="{Binding SetSceneMode_AddTile}" />
             <Button Content="Switch Wall" Command="{Binding SetSceneMode_SwitchWall}" />
-            <Label Content="{Binding SceneMode}" />
+            <Label Content="{Binding Mode.Name}" />
 
             <DropDownButton Content="Visibility">
                 <DropDownButton.Flyout>

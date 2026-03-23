@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Resources;
 using System.Threading;
@@ -30,23 +31,27 @@ using Kotor.NET.Graphics.OpenGL;
 using Kotor.NET.Graphics.OpenGL.Factories;
 using Kotor.NET.Tests.Encapsulation;
 using ReactiveUI;
+using Silk.NET.Core.Native;
 using Silk.NET.OpenGL;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.Views;
 
-public partial class SceneControl : OpenGlControlBase, ICustomHitTest
+public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivatableView
 {
     public AreaDesignerViewModel ViewModel => (AreaDesignerViewModel)DataContext;
     
     public OrbitCamera _camera { get; } = new();
     private Point? _lastPointerPosition;
-    private float _scrollAngle;
     private DateTime _lastRender = DateTime.Now;
-    private AreaEntity _area => ViewModel.Engine.Scene.Entities.OfType<AreaEntity>().First();
 
     public SceneControl()
     {
         InitializeComponent();
+
+        this.WhenActivated(d =>
+        {
+            ViewModel.SelectWallTemplate.RegisterHandler(SelectWallTemplate).DisposeWith(d);
+        });
     }
 
     private async Task LoadDefaultResources()
@@ -75,6 +80,10 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         await LoadModel("sandral_doorframe_0");
 
         ViewModel.Engine.Scene.AddEntity(new AreaEntity());
+        ViewModel.Engine.RenderInterceptor = descriptors =>
+        {
+            ViewModel.Mode?.RenderIntercept(_camera, _lastPointerPosition.GetValueOrDefault(), descriptors);
+        };
     }
     private async Task LoadModel(string name)
     {
@@ -190,15 +199,6 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         }
 
         _lastPointerPosition = pos;
-
-        if (ViewModel.SceneMode == SceneMode.AddRoom)
-            RenderInterceptAddRoom(mouseX, mouseY);
-        if (ViewModel.SceneMode == SceneMode.SwitchWall)
-            RenderInterceptSwitchWall(mouseX, mouseY);
-        if (ViewModel.SceneMode == SceneMode.AddTile)
-            RenderInterceptExtendRoom(mouseX, mouseY);
-        if (ViewModel.SceneMode == SceneMode.AddRoom)
-            RenderInterceptAddRoom(mouseX, mouseY);
     }
 
     private void PointerWheelChanged(object? sender, Avalonia.Input.PointerWheelEventArgs e)
@@ -214,7 +214,6 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         }
         if (keyModifiers == KeyModifiers.Control)
         {
-            _scrollAngle -= scrollY * 5;
         }
     }
 
@@ -231,134 +230,33 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
 
         if (keyModifiers == KeyModifiers.None && buttonProperties.IsLeftButtonPressed)
         {
-            if (ViewModel.SceneMode == SceneMode.AddRoom)
-                PromptAddRoom(mouseX, mouseY);
-            if (ViewModel.SceneMode == SceneMode.SwitchWall)
-                PromptSwitchWall(mouseX, mouseY);
-            if (ViewModel.SceneMode == SceneMode.AddTile)
-                PromptExtendRoom(mouseX, mouseY);
+            ViewModel.Mode?.Trigger();
         }
     }
     #endregion
 
-    private void PromptSwitchWall(int x, int y)
+    public async Task SelectWallTemplate(IInteractionContext<Unit, WallTemplate> context)
     {
-        var wall = NearestWallMagnest(x, y).Result;
+        var tcs = new TaskCompletionSource<WallTemplate?>(TaskCreationOptions.RunContinuationsAsynchronously);
 
         var menu = new ContextMenu();
-        menu.Items.Add(new MenuItem() { Header = "Wall", Command = ReactiveCommand.Create(() => wall.Parent.SwitchWall(wall, WallTemplate.SandralWall0a)) });
-        menu.Items.Add(new MenuItem() { Header = "Large Door", Command = ReactiveCommand.Create(() => wall.Parent.SwitchWall(wall, WallTemplate.SandralWall0b)) });
-        menu.Items.Add(new MenuItem() { Header = "Small Door", Command = ReactiveCommand.Create(() => wall.Parent.SwitchWall(wall, WallTemplate.SandralWall0c)) });
+        menu.Items.Add(new MenuItem() { Header = "Wall", Command = ReactiveCommand.Create(() => tcs.TrySetResult(WallTemplate.SandralWall0a)) });
+        menu.Items.Add(new MenuItem() { Header = "Large Door", Command = ReactiveCommand.Create(() => tcs.TrySetResult(WallTemplate.SandralWall0b)) });
+        menu.Items.Add(new MenuItem() { Header = "Small Door", Command = ReactiveCommand.Create(() => tcs.TrySetResult(WallTemplate.SandralWall0c)) });
+        menu.Closed += (_, __) =>
+        {
+            tcs.TrySetCanceled();
+        };
         menu.Open(this);
-    }
-    private void RenderInterceptSwitchWall(int x, int y)
-    {
-        var wall = NearestWallMagnest(x, y).Result;
 
-        ViewModel.Engine.RenderInterceptor = descriptors =>
+        try
         {
-            descriptors.Where(x => x.Tag == wall).ToList().ForEach(x => x.AmbientColor = new(1.5f, 1.5f, 1.5f));
-        };
-    }
-
-    private void PromptExtendRoom(int x, int y)
-    {
-        var wall = NearestWallMagnest(x, y).Result;
-
-        wall.Parent.Extend(wall);
-    }
-    private void RenderInterceptExtendRoom(int x, int y)
-    {
-        var wall = NearestWallMagnest(x, y).Result;
-
-        ViewModel.Engine.RenderInterceptor = descriptors =>
-        {
-            descriptors.Where(x => x.Tag == wall).ToList().ForEach(x => x.AmbientColor = new(1.5f, 1.5f, 1.5f));
-        };
-    }
-
-    private Room _addRoomRoom = new Room(null);
-    private void PromptAddRoom(int x, int y)
-    {
-        var ray = _camera.ProjectRay(x, y, ViewModel.Engine.Width, ViewModel.Engine.Height);
-        var point = ray.FindPointOnPlane(Axis.Z, 0);
-
-        _area.Area.AddRoom(_addRoomRoom);
-    }
-    private void RenderInterceptAddRoom(int x, int y)
-    {
-        var ray = _camera.ProjectRay(x, y, ViewModel.Engine.Width, ViewModel.Engine.Height);
-        var point = ray.FindPointOnPlane(Axis.Z, 0);
-
-        ViewModel.Engine.RenderInterceptor = descriptors =>
-        {
-            _addRoomRoom = new Room(null); 
-            _addRoomRoom.Position = point;
-            _addRoomRoom.Orientation = Quaternion.CreateFromYawPitchRoll(0, 0, _scrollAngle * (float)Math.PI / 180);
-
-            (var newWall, var oldWall, var distance) = NearestAdjacentWall(_addRoomRoom);
-            if (oldWall is not null)
-            {
-                newWall.Template = WallTemplate.SandralWall0b;
-
-                _addRoomRoom.Orientation = Quaternion.CreateFromYawPitchRoll(0, 0, MathF.PI / 2) / newWall.Orientation;//oldWall.Parent.Orientation;
-                newWall.DoorFrame.Enabled = false;
-
-                if (oldWall.DoorFrame is not null)
-                {
-                    _addRoomRoom.Position = oldWall.Position;
-
-                    var emptyHook = newWall.Template.DoorFrame.Hooks.First();
-                    var takenHook = newWall.Template.DoorFrame.Hooks.Last();
-
-                    var rotate = Quaternion.CreateFromYawPitchRoll(0,0,-MathF.PI/2) * newWall.Orientation;
-
-                    var pos = Vector3.Transform(newWall.DoorFrame.Position - newWall.Parent.Position, rotate);
-                    pos += Vector3.Transform(emptyHook.Position, oldWall.Orientation);
-                    _addRoomRoom.Position -= pos;
-                }
-                else
-                {
-                    _addRoomRoom.Position = new(-1000, 0, 0);
-                }
-            }
-
-            var roomMeshDescriptors = new List<MeshDescriptor>();
-            _area.RenderRoom(ViewModel.Engine.AssetManager, _addRoomRoom, ref roomMeshDescriptors);
-            roomMeshDescriptors.ForEach(x => x.AmbientColor = new Vector3(1.5f, 1.5f, 1.5f));
-            descriptors.AddRange(roomMeshDescriptors);
-        };
-    }
-
-    private RaycastResult<Wall>? NearestWallMagnest(int x, int y)
-    {
-        var ray = _camera.ProjectRay(x, y, ViewModel.Engine.Width, ViewModel.Engine.Height);
-
-        return _area.Area.Rooms
-            .SelectMany(x => x.Walls)
-            .Where(x => x.LinkedTile is null)
-            .OrderBy(x => ray.ShortestDistanceTo(x.Position))
-            .Select(x => new RaycastResult<Wall>(x, ray.ShortestDistanceTo(x.Position)))
-            .FirstOrDefault();
-    }
-    private (Wall ThisHook, Wall OtherHook, float distance) NearestAdjacentWall(Room room)
-    {
-        var near = new List<(Wall NewHook, Wall OldHook, float distance)>();
-        var otherWalls = _area.Area.Rooms.SelectMany(x => x.Walls).ToList();
-
-        foreach (var wall in room.Walls)
-        {
-            var match = otherWalls
-                .Where(x => x.DoorFrame is not null)
-                .Where(x => Vector3.Distance(wall.Position, x.Position) < 3)
-                .OrderBy(x => Vector3.Distance(wall.Position, x.Position))
-                .Select(x => (wall, x, Vector3.Distance(wall.Position, x.Position)))
-                .ToList();
-
-            if (match.Count > 0)
-                near.AddRange(match);
+            var result = await tcs.Task;
+            context.SetOutput(result);
         }
-
-        return near.OrderBy(x => x.distance).FirstOrDefault();
+        catch (TaskCanceledException)
+        {
+            context.SetOutput(null);
+        }
     }
 }

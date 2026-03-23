@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -9,6 +10,7 @@ using Avalonia.Platform.Storage;
 using Kotor.DevelopmentKit.EditorGFF.EventArgs;
 using Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
 using Kotor.DevelopmentKit.EditorGFF.ViewModels.FieldPanel;
+using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.EditorGFF.Views;
 
@@ -19,7 +21,6 @@ public partial class FieldBinaryPanel : EditFieldPanel<BinaryGFFNode, byte[], Bi
         get => (DataContext as BinaryPanelViewModel)!;
         set => DataContext = value;
     }
-
 
     public FieldBinaryPanel() : base()
     {

@@ -135,7 +135,6 @@ public class Wall
     }
     public WallHook Hook { get; set; }
     
-
     public Vector3 LocalPosition => Parent.LocalPosition + Hook.Position;
     public Vector3 Position => Matrix4x4.Decompose(Transform, out _, out _, out var value) ? value : new();
     public Quaternion Orientation => Parent.Orientation * Hook.Orientation;
@@ -146,6 +145,11 @@ public class Wall
         Parent = parent;
         Template = template;
         Hook = hook;
+    }
+
+    public void Extend()
+    {
+        Parent.Extend(this);
     }
 }
 

@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
+using Avalonia;
+using Kotor.DevelopmentKit.AreaDesigner.relocate;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
 using Kotor.NET.Graphics.OpenGL;
 using ReactiveUI;
 
@@ -10,13 +14,12 @@ namespace Kotor.DevelopmentKit.AreaDesigner.ViewModels;
 
 public class AreaDesignerViewModel : ReactiveObject
 {
+    public Interaction<Unit, Point> GetMousePoint = new();
+    public Interaction<Unit, WallTemplate> SelectWallTemplate = new();
+
     public GLEngine Engine { get; set => this.RaiseAndSetIfChanged(ref field, value); }
 
-    public SceneMode SceneMode
-    {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    } = SceneMode.None;
+    public BaseMode Mode { get; private set => this.RaiseAndSetIfChanged(ref field, value); }
 
     public bool ShowWalls
     {
@@ -44,32 +47,36 @@ public class AreaDesignerViewModel : ReactiveObject
 
     public void SetSceneMode_AddRoom()
     {
-        SceneMode = SceneMode.AddRoom;
+        var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
+        Mode = new AddRoomMode(Engine, area)
+        {
+
+        };
     }
     public void SetSceneMode_DeleteRoom()
     {
-        SceneMode = SceneMode.DeleteRoom;
+
     }
     public void SetSceneMode_AddTile()
     {
-        SceneMode = SceneMode.AddTile;
+        var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
+        Mode = new ExtendRoomMode(Engine, area)
+        {
+            GetMousePoint = GetMousePoint,
+            SelectWallTemplate = SelectWallTemplate,
+        };
     }
     public void SetSceneMode_DeleteTile()
     {
-        SceneMode = SceneMode.DeleteTile;
+
     }
     public void SetSceneMode_SwitchWall()
     {
-        SceneMode = SceneMode.SwitchWall;
+        var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
+        Mode = new SwitchWallMode(Engine, area)
+        {
+            GetMousePoint = GetMousePoint,
+            SelectWallTemplate = SelectWallTemplate,
+        };
     }
-}
-
-public enum SceneMode
-{
-    None,
-    AddRoom,
-    DeleteRoom,
-    AddTile,
-    DeleteTile,
-    SwitchWall,
 }
