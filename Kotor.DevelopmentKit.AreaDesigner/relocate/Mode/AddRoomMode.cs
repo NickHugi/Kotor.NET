@@ -35,23 +35,14 @@ public class AddRoomMode : BaseMode
         (var newWall, var oldWall, var distance) = NearestAdjacentWall(_addRoomRoom);
         if (oldWall is not null)
         {
-            newWall.Template = WallTemplate.SandralWall0b;
-
-            _addRoomRoom.Orientation = Quaternion.CreateFromYawPitchRoll(0, 0, MathF.PI / 2) / newWall.Orientation;//oldWall.Parent.Orientation;
+            newWall.Template = oldWall.Template;
             newWall.DoorFrame.Enabled = false;
 
             if (oldWall.DoorFrame is not null)
             {
-                _addRoomRoom.Position = oldWall.Position;
-
-                var emptyHook = newWall.Template.DoorFrame.Hooks.First();
-                var takenHook = newWall.Template.DoorFrame.Hooks.Last();
-
-                var rotate = Quaternion.CreateFromYawPitchRoll(0, 0, -MathF.PI / 2) * newWall.Orientation;
-
-                var pos = Vector3.Transform(newWall.DoorFrame.Position - newWall.Parent.Position, rotate);
-                pos += Vector3.Transform(emptyHook.Position, oldWall.Orientation);
-                _addRoomRoom.Position -= pos;
+                _addRoomRoom.Orientation = oldWall.Orientation / newWall.Orientation * Quaternion.CreateFromYawPitchRoll(0, 0, MathF.PI);
+                _addRoomRoom.Position = oldWall.DoorFrame.Hooks.First().Position;
+                _addRoomRoom.Position += newWall.Parent.Position - newWall.DoorFrame.Hooks.Last().Position;
             }
             else
             {

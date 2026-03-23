@@ -92,20 +92,20 @@ public class DoorFrameTemplate
         ]);
 
     public string Model { get; }
-    public DoorFrameHook[] Hooks { get; }
+    public DoorFrameHookTemplate[] Hooks { get; }
 
-    public DoorFrameTemplate(string model, DoorFrameHook[] hooks)
+    public DoorFrameTemplate(string model, DoorFrameHookTemplate[] hooks)
     {
         Model = model;
         Hooks = hooks;
     }
 }
-public class DoorFrameHook
+public class DoorFrameHookTemplate
 {
     public Vector3 Position { get; }
     public Quaternion Orientation { get; }
 
-    public DoorFrameHook(Vector3 position, Quaternion orientation)
+    public DoorFrameHookTemplate(Vector3 position, Quaternion orientation)
     {
         Position = position;
         Orientation = orientation;
