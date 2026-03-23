@@ -14,6 +14,5 @@ uniform vec3 ambient;
 
 void main()
 {
-    //FragColor = vec4(texCoord1, 0.0f, 0.0f) + vec4(ambient, 1.0f) * texture(texture1, texCoord1);
     FragColor = vec4(ambient, 1.0f) * texture(texture1, texCoord1);
 } 

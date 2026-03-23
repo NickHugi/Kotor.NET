@@ -301,14 +301,20 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
             {
                 newWall.Template = WallTemplate.SandralWall0b;
 
-                _addRoomRoom.Orientation = oldWall.Parent.Orientation;
+                _addRoomRoom.Orientation = Quaternion.CreateFromYawPitchRoll(0, 0, MathF.PI / 2) / newWall.Orientation;//oldWall.Parent.Orientation;
+                newWall.DoorFrame.Enabled = false;
 
                 if (oldWall.DoorFrame is not null)
                 {
                     _addRoomRoom.Position = oldWall.Position;
 
-                    var pos = newWall.DoorFrame.Position - newWall.Parent.Position;
-                    pos += Vector3.Transform(newWall.Template.DoorFrame.Hooks.First().Position, oldWall.Orientation);
+                    var emptyHook = newWall.Template.DoorFrame.Hooks.First();
+                    var takenHook = newWall.Template.DoorFrame.Hooks.Last();
+
+                    var rotate = Quaternion.CreateFromYawPitchRoll(0,0,-MathF.PI/2) * newWall.Orientation;
+
+                    var pos = Vector3.Transform(newWall.DoorFrame.Position - newWall.Parent.Position, rotate);
+                    pos += Vector3.Transform(emptyHook.Position, oldWall.Orientation);
                     _addRoomRoom.Position -= pos;
                 }
                 else
