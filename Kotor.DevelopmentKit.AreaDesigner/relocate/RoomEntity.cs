@@ -58,7 +58,7 @@ public class AreaEntity : BaseEntity
         if (wall.LinkedTile is not null)
             return;
 
-        descriptors.AddRange(DescriptorsForModel(assets, wall.Model, wall.Transform, wall));
+        descriptors.AddRange(DescriptorsForModel(assets, wall.Template.Model, wall.Transform, wall));
     }
     private void RenderDoorFrame(IAssetManager assets, DoorFrame doorframe, ref List<MeshDescriptor> descriptors)
     {

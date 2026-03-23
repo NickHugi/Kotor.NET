@@ -2,13 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using Avalonia.Markup.Xaml.Templates;
 using DynamicData;
-using Kotor.NET.Graphics;
-using Kotor.NET.Graphics.Entities;
-using Kotor.NET.Graphics.Model;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate;
 
@@ -80,7 +74,7 @@ public class Tile
         Parent = parent;
         Template = template;
         Floor = new(template.DefaultFloorModel);
-        Walls = template.Walls.Select(x => new Wall(this, x)).ToArray();
+        Walls = template.Walls.Select(x => new Wall(this, x.DefaultTemplate, x)).ToArray();
         InnerCorners = template.InnerCorners.Select(x => new Corner(this, x)).ToArray();
         OuterCorners = template.OuterCorners.Select(x => new Corner(this, x)).ToArray();
     }
@@ -91,18 +85,17 @@ public class Tile
 
         // TODO - will need to handle this differently. only works for square rooms
         var adjacent = newTile.Walls.ElementAt((Walls.IndexOf(wall) + 2) % 4);
-        newTile.LocalPosition = wall.LocalPosition - adjacent.Template.Position;
+        newTile.LocalPosition = wall.LocalPosition - adjacent.Hook.Position;
 
         // Link the new tile to the old tile, as well as any other touching tiles
         foreach (var newWall in newTile.Walls)
         {
             foreach (var otherTileWall in Parent.GetAllTiles().Where(x => x != newTile).SelectMany(x => x.Walls))
             {
-                if (newWall.Position == otherTileWall.Position)
+                if (Vector3.Distance(newWall.Position, otherTileWall.Position) < 0.01f)
                 {
                     newWall.LinkedTile = this;
                     otherTileWall.LinkedTile = newTile; 
-
                 }
             }
         }
@@ -110,31 +103,49 @@ public class Tile
         return newTile;
     }
 
-    public void SwitchWall(Wall wall, string model)
+    public void SwitchWall(Wall wall, WallTemplate template)
     {
-        wall.Model = model;
+        wall.Template = template;
+
+        if (template.DoorFrame is not null)
+        {
+            wall.DoorFrame = new(wall, template.DoorFrame);
+        }
+        else
+        {
+            wall.DoorFrame = null;
+        }
     }
 }
 
 public class Wall
 {
     public Tile Parent { get; }
-    public string Model { get; set; }
     public Room? LinkedRoom { get; set; }
     public Tile? LinkedTile { get; set; }
-    public DoorFrame DoorFrame { get; set; }
-    public WallTemplate Template { get; set; }
+    public DoorFrame? DoorFrame { get; set; }
+    public WallTemplate Template
+    {
+        get;
+        set
+        {
+            field = value;
+            DoorFrame = (value.DoorFrame is null) ? null : new(this, value.DoorFrame);
+        }
+    }
+    public WallHook Hook { get; set; }
+    
 
-    public Vector3 LocalPosition => Parent.LocalPosition + Template.Position;
-    public Vector3 Position => Matrix4x4.Decompose(Transform, out _, out _, out var value) ? value : new(); //Parent.Position + Template.Position;
-    public Quaternion Orientation => Parent.Orientation * Template.Orientation;
-    public Matrix4x4 Transform => Template.Transform * Parent.Transform;
+    public Vector3 LocalPosition => Parent.LocalPosition + Hook.Position;
+    public Vector3 Position => Matrix4x4.Decompose(Transform, out _, out _, out var value) ? value : new();
+    public Quaternion Orientation => Parent.Orientation * Hook.Orientation;
+    public Matrix4x4 Transform => Hook.Transform * Parent.Transform;
 
-    public Wall(Tile parent, WallTemplate template)
+    public Wall(Tile parent, WallTemplate template, WallHook hook)
     {
         Parent = parent;
         Template = template;
-        Model = template.DefaultModel;
+        Hook = hook;
     }
 }
 
@@ -180,9 +191,13 @@ public class DoorFrame
     public DoorFrameTemplate Template { get; set; }
     public bool Enabled { get; set; } = true;
 
-    public Vector3 Position => new();
-    public Quaternion Orientation => new();
-    public Matrix4x4 Transform => new();
+    public Vector3 LocalPosition => Template.Hooks.Last().Position;
+    public Quaternion LocalOrientation => Template.Hooks.Last().Orientation;
+    public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
+
+    public Vector3 Position => Matrix4x4.Decompose(Transform, out _, out _, out var value) ? value : new();
+    //public Quaternion Orientation => new();
+    public Matrix4x4 Transform => LocalTransform * Parent.Transform;
 
     public DoorFrame(Wall parent, DoorFrameTemplate template)
     {

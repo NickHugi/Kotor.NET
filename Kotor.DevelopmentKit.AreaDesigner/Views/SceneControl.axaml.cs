@@ -160,8 +160,8 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         {
             var delta = pos - _lastPointerPosition.Value;
 
-            double deltaX = delta.X;
-            double deltaY = delta.Y;
+            float deltaX = (float)delta.X;
+            float deltaY = (float)delta.Y;
 
             if (buttonProperties.IsMiddleButtonPressed && keyModifiers == KeyModifiers.None)
             {
@@ -170,10 +170,22 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
             }
             if (buttonProperties.IsMiddleButtonPressed && keyModifiers == KeyModifiers.Shift)
             {
-                _camera.Target = new Vector3(
-                    _camera.Target.X + (float)deltaX / 50,
-                    _camera.Target.Y + (float)deltaY / 50,
-                    _camera.Target.Z);
+                Vector3 forward = new Vector3(
+                    MathF.Cos(_camera.Pitch) * MathF.Cos(_camera.Yaw),
+                    MathF.Cos(_camera.Pitch) * MathF.Sin(_camera.Yaw),
+                    MathF.Sin(_camera.Pitch));
+
+                forward = Vector3.Normalize(forward);
+
+                Vector3 worldUp = Vector3.UnitZ;
+                Vector3 right = Vector3.Normalize(Vector3.Cross(forward, worldUp));
+                Vector3 flatForward = new Vector3(forward.X, forward.Y, 0f);
+
+                if (flatForward.LengthSquared() > 0)
+                    flatForward = Vector3.Normalize(flatForward);
+
+                Vector3 movement = (-right * deltaX + flatForward * deltaY) * 0.01f;
+                _camera.Target -= movement;
             }
         }
 
@@ -234,13 +246,14 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         var wall = NearestWallMagnest(x, y).Result;
 
         var menu = new ContextMenu();
-        menu.Items.Add(new MenuItem() { Header = "sandral_wall_0", Command = ReactiveCommand.Create(() => wall.Parent.SwitchWall(wall, "sandral_wall_0")) });
-        menu.Items.Add(new MenuItem() { Header = "sandral_wall_0_door_0", Command = ReactiveCommand.Create(() => wall.Parent.SwitchWall(wall, "sandral_wall_0_door_0")) });
+        menu.Items.Add(new MenuItem() { Header = "Wall", Command = ReactiveCommand.Create(() => wall.Parent.SwitchWall(wall, WallTemplate.SandralWall0a)) });
+        menu.Items.Add(new MenuItem() { Header = "Large Door", Command = ReactiveCommand.Create(() => wall.Parent.SwitchWall(wall, WallTemplate.SandralWall0b)) });
+        menu.Items.Add(new MenuItem() { Header = "Small Door", Command = ReactiveCommand.Create(() => wall.Parent.SwitchWall(wall, WallTemplate.SandralWall0c)) });
         menu.Open(this);
     }
     private void RenderInterceptSwitchWall(int x, int y)
     {
-        var wall = NearestWallMagnest(x, y);
+        var wall = NearestWallMagnest(x, y).Result;
 
         ViewModel.Engine.RenderInterceptor = descriptors =>
         {
@@ -256,7 +269,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
     }
     private void RenderInterceptExtendRoom(int x, int y)
     {
-        var wall = NearestWallMagnest(x, y);
+        var wall = NearestWallMagnest(x, y).Result;
 
         ViewModel.Engine.RenderInterceptor = descriptors =>
         {
@@ -264,43 +277,48 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         };
     }
 
+    private Room _addRoomRoom = new Room(null);
     private void PromptAddRoom(int x, int y)
     {
         var ray = _camera.ProjectRay(x, y, ViewModel.Engine.Width, ViewModel.Engine.Height);
         var point = ray.FindPointOnPlane(Axis.Z, 0);
 
-        var room = new Room(null)
-        {
-            Position = point,
-            Orientation = Quaternion.CreateFromYawPitchRoll(0, 0, _scrollAngle * (float)Math.PI / 180),
-        };
-
-        _area.Area.AddRoom(room);
+        _area.Area.AddRoom(_addRoomRoom);
     }
     private void RenderInterceptAddRoom(int x, int y)
     {
         var ray = _camera.ProjectRay(x, y, ViewModel.Engine.Width, ViewModel.Engine.Height);
         var point = ray.FindPointOnPlane(Axis.Z, 0);
 
-        
         ViewModel.Engine.RenderInterceptor = descriptors =>
         {
-            var room = new Room(null); 
-            room.Position = point;
-            room.Orientation = Quaternion.CreateFromYawPitchRoll(0, 0, _scrollAngle * (float)Math.PI / 180);
+            _addRoomRoom = new Room(null); 
+            _addRoomRoom.Position = point;
+            _addRoomRoom.Orientation = Quaternion.CreateFromYawPitchRoll(0, 0, _scrollAngle * (float)Math.PI / 180);
 
-            (var newHook, var oldHook, var distance) = NearestAdjacentWall(room);
-            if (oldHook is not null)
+            (var newWall, var oldWall, var distance) = NearestAdjacentWall(_addRoomRoom);
+            if (oldWall is not null)
             {
-                //oldHook.Model = "sandral_wall_0_door_0";
-                newHook.Model = "sandral_wall_0_door_0";
+                newWall.Template = WallTemplate.SandralWall0b;
 
-                room.Orientation = oldHook.Parent.Orientation;
-                room.Position = oldHook.Position + Vector3.Transform(-newHook.Template.Position, oldHook.Parent.Parent.Orientation);
+                _addRoomRoom.Orientation = oldWall.Parent.Orientation;
+
+                if (oldWall.DoorFrame is not null)
+                {
+                    _addRoomRoom.Position = oldWall.Position;
+
+                    var pos = newWall.DoorFrame.Position - newWall.Parent.Position;
+                    pos += Vector3.Transform(newWall.Template.DoorFrame.Hooks.First().Position, oldWall.Orientation);
+                    _addRoomRoom.Position -= pos;
+                }
+                else
+                {
+                    _addRoomRoom.Position = new(-1000, 0, 0);
+                }
             }
 
             var roomMeshDescriptors = new List<MeshDescriptor>();
-            _area.RenderRoom(ViewModel.Engine.AssetManager, room, ref roomMeshDescriptors);
+            _area.RenderRoom(ViewModel.Engine.AssetManager, _addRoomRoom, ref roomMeshDescriptors);
             roomMeshDescriptors.ForEach(x => x.AmbientColor = new Vector3(1.5f, 1.5f, 1.5f));
             descriptors.AddRange(roomMeshDescriptors);
         };
@@ -325,6 +343,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
         foreach (var wall in room.Walls)
         {
             var match = otherWalls
+                .Where(x => x.DoorFrame is not null)
                 .Where(x => Vector3.Distance(wall.Position, x.Position) < 3)
                 .OrderBy(x => Vector3.Distance(wall.Position, x.Position))
                 .Select(x => (wall, x, Vector3.Distance(wall.Position, x.Position)))
@@ -332,9 +351,6 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
 
             if (match.Count > 0)
                 near.AddRange(match);
-
-            //if (match.wall is not null)
-            //    return match;
         }
 
         return near.OrderBy(x => x.distance).FirstOrDefault();
