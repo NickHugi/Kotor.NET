@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Avalonia;
@@ -17,12 +18,12 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
 public class ExtendRoomMode : BaseMode
 {
     public required Interaction<Unit, Point> GetMousePoint { get; init; }
-    public required Interaction<Unit, WallTemplate> SelectWallTemplate { get; init; }
+    public required Interaction<Unit, TileTemplate?> SelectTileTemplate { get; init; }
 
     public override string Name => "Extend Room";
 
     private Wall? _wall;
-    private bool validWall => _wall?.DoorFrame is null;
+    private bool validWall => _wall is not null && _wall.DoorFrame is null;
 
     public ExtendRoomMode(GLEngine engine, Area area) : base(engine, area)
     {
@@ -44,6 +45,19 @@ public class ExtendRoomMode : BaseMode
     public override async Task Trigger()
     {
         if (validWall)
-            _wall?.Extend();
+            _wall!.Extend(TileTemplate.Sandral8x8);
+    }
+
+    public override async Task AlternativeTrigger()
+    {
+        if (!validWall)
+            return;
+
+        var template = await SelectTileTemplate.Handle(Unit.Default);
+
+        if (template is null)
+            return;
+
+        var tile = _wall!.Extend(template);
     }
 }

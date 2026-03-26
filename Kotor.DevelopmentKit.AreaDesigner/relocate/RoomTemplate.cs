@@ -13,8 +13,9 @@ public class RoomTemplate
 
 public class TileTemplate
 {
-    public static TileTemplate Sandral = new TileTemplate
+    public static TileTemplate Sandral8x8 = new TileTemplate
     {
+        ID = "sandral_floor_0",
         DefaultFloorModel = "sandral_floor_0",
         Walls =
         [
@@ -38,7 +39,24 @@ public class TileTemplate
             new("sandral_ocorner_0", new(-4,  4, 0), new(0, 0, 0.382683f, -0.9238f), (3, 0)),
         ],
     };
+    public static TileTemplate SandralCap = new TileTemplate
+    {
+        DefaultFloorModel = "sandral_floor_1",
+        Walls =
+        [
+            new(WallTemplate.SandralWall0a, new(0, 0, 0), new(0, 0, 0, 1)),
+            new(WallTemplate.SandralWall1a, new(-1.23328f, 0, 0), new(0, 0, 0, 1)),
+        ],
+        InnerCorners =
+        [
+        ],
+        OuterCorners =
+        [
+        ],
+    };
 
+
+    public string ID { get; init; }
     public string DefaultFloorModel { get; init; }
     public WallHook[] Walls = [];
     public CornerTemplate[] InnerCorners = [];
@@ -50,23 +68,30 @@ public class WallHook
 {
     public WallTemplate DefaultTemplate { get; set; }
 
-    public Vector3 Position { get; }
-    public Quaternion Orientation { get; }
-    public Matrix4x4 Transform => Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position);
+    public Vector3 LocalPosition { get; }
+    public Quaternion LocalOrientation { get; }
+    public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
 
-    public WallHook(WallTemplate defaultTemplate, Vector3 position, Quaternion orientation)
+    public ICollection<string> CompatibleWallTemplates { get; }
+    public ICollection<string> CompatibleTileTemplates { get; }
+
+    public WallHook(WallTemplate defaultTemplate, Vector3 position, Quaternion orientation, ICollection<string> compatibleWallTemplates, ICollection<string> compatibleTileTemplates)
     {
         DefaultTemplate = defaultTemplate;
-        Position = position;
-        Orientation = orientation;
+        LocalPosition = position;
+        LocalOrientation = orientation;
+        CompatibleWallTemplates = compatibleWallTemplates;
+        CompatibleTileTemplates = compatibleTileTemplates;
     }
 }
 public class WallTemplate
 {
     public static WallTemplate SandralWall0a = new("sandral_wall_0", null);
     public static WallTemplate SandralWall0b = new("sandral_wall_0_door_0", DoorFrameTemplate.SandralDoor0);
-    public static WallTemplate SandralWall0c = new("sandral_wall_0_door_1", DoorFrameTemplate.SandralDoor0);
+    public static WallTemplate SandralWall0c = new("sandral_wall_0_door_1", DoorFrameTemplate.SandralDoor1);
+    public static WallTemplate SandralWall1a = new("sandral_wall_1", null);
 
+    public string ID { get; }
     public string Model { get; }
     public DoorFrameTemplate? DoorFrame { get; }
     public bool CanBeDoor => DoorFrame is not null;

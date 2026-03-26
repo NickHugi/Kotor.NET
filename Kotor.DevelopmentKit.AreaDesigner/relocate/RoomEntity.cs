@@ -55,40 +55,28 @@ public class AreaEntity : BaseEntity
     }
     private void RenderWall(IAssetManager assets, Wall wall, ref List<MeshDescriptor> descriptors)
     {
-        if (wall.LinkedTile is not null)
+        if (!wall.Visible)
             return;
 
         descriptors.AddRange(DescriptorsForModel(assets, wall.Template.Model, wall.Transform, wall));
     }
     private void RenderDoorFrame(IAssetManager assets, DoorFrame doorframe, ref List<MeshDescriptor> descriptors)
     {
-        if (!doorframe.Enabled)
+        if (!doorframe.Visible)
             return;
 
         descriptors.AddRange(DescriptorsForModel(assets, doorframe.Template.Model, doorframe.Transform, doorframe));
     }
     private void RenderInnerCorner(IAssetManager assets, Corner corner, ref List<MeshDescriptor> descriptors)
     {
-        if (corner.Parent.Walls.ElementAt(corner.Template.Requires.IndexA).LinkedTile is not null)
-            return;
-        if (corner.Parent.Walls.ElementAt(corner.Template.Requires.IndexB).LinkedTile is not null)
+        if (!corner.VisibleInner)
             return;
 
         descriptors.AddRange(DescriptorsForModel(assets, corner.Template.Model, corner.Transform));
     }
     private void RenderOuterCorner(IAssetManager assets, Corner corner, ref List<MeshDescriptor> descriptors)
     {
-        var linkedTileA = corner.Parent.Walls.ElementAt(corner.Template.Requires.IndexA).LinkedTile;
-        var linkedTileB = corner.Parent.Walls.ElementAt(corner.Template.Requires.IndexB).LinkedTile;
-        if (linkedTileA is null)
-            return;
-        if (linkedTileB is null)
-            return;
-
-        // TODO - logic will break for non-square rooms
-        if (linkedTileA.Walls.ElementAt(corner.Template.Requires.IndexB).LinkedTile is not null)
-            return;
-        if (linkedTileB.Walls.ElementAt(corner.Template.Requires.IndexA).LinkedTile is not null)
+        if (!corner.VisibleOuter)
             return;
 
         descriptors.AddRange(DescriptorsForModel(assets, corner.Template.Model, corner.Transform));
@@ -112,41 +100,4 @@ public class AreaEntity : BaseEntity
     {
 
     }
-}
-
-public class RoomEntity : BaseEntity
-{
-    public Room Room { get; }
-
-    public RoomEntity(Room room)
-    {
-        Room = room;
-    }
-
-    public override ICollection<MeshDescriptor> GetMeshDescriptors(IAssetManager assets)
-    {
-        List<MeshDescriptor> descriptors = [];
-
-        foreach (var tile in Room.GetAllTiles())
-        {
-
-            foreach (var wall in tile.Walls)
-            {
-            }
-            foreach (var corner in tile.InnerCorners)
-            {
-            }
-            foreach (var corner in tile.OuterCorners)
-            {
-            }
-        }
-
-        return descriptors;
-    }
-
-    public override void Update(IAssetManager assetManager, float delta)
-    {
-
-    }
-
 }

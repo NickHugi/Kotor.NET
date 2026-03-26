@@ -28,12 +28,19 @@ public class BaseMode
         _area = area;
     }
 
-    public virtual async Task RenderIntercept(OrbitCamera camera, Point mouse, List<MeshDescriptor> descriptors)
+    public virtual Task RenderIntercept(OrbitCamera camera, Point mouse, List<MeshDescriptor> descriptors)
     {
+        return Task.CompletedTask;
     }
 
-    public virtual async Task Trigger()
+    public virtual Task Trigger()
     {
+        return Task.CompletedTask;
+    }
+
+    public virtual Task AlternativeTrigger()
+    {
+        return Task.CompletedTask;
     }
 
     protected RaycastResult<Wall>? NearestWallMagnest(OrbitCamera camera, double x, double y)

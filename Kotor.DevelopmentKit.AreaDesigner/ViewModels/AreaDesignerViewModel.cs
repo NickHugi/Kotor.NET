@@ -15,7 +15,8 @@ namespace Kotor.DevelopmentKit.AreaDesigner.ViewModels;
 public class AreaDesignerViewModel : ReactiveObject
 {
     public Interaction<Unit, Point> GetMousePoint = new();
-    public Interaction<Unit, WallTemplate> SelectWallTemplate = new();
+    public Interaction<Unit, WallTemplate?> SelectWallTemplate = new();
+    public Interaction<Unit, TileTemplate?> SelectTileTemplate = new();
 
     public GLEngine Engine { get; set => this.RaiseAndSetIfChanged(ref field, value); }
 
@@ -63,7 +64,7 @@ public class AreaDesignerViewModel : ReactiveObject
         Mode = new ExtendRoomMode(Engine, area)
         {
             GetMousePoint = GetMousePoint,
-            SelectWallTemplate = SelectWallTemplate,
+            SelectTileTemplate = SelectTileTemplate,
         };
     }
     public void SetSceneMode_DeleteTile()

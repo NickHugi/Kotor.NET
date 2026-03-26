@@ -25,7 +25,7 @@ public class Room
     public Quaternion Orientation { get; set; } = new();
     public Matrix4x4 Transform => Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position);
 
-    public ICollection<Tile> Tiles => GetAllTiles();
+    public ICollection<Tile> Tiles { get; } = new List<Tile>();//GetAllTiles();
     public ICollection<Wall> Walls => Tiles.SelectMany(x => x.Walls).ToList();
     public ICollection<Corner> Corners => Tiles.SelectMany(x => x.InnerCorners).Concat(Tiles.SelectMany(x => x.OuterCorners)).ToList();
     public ICollection<Corner> InnerCorners => Tiles.SelectMany(x => x.InnerCorners).ToList();
@@ -34,10 +34,11 @@ public class Room
 
     public Room(RoomTemplate template)
     {
-        Root = new(this, TileTemplate.Sandral);
+        //Root = new(this, TileTemplate.Sandral8x8);
+        Tiles.Add(new(this, TileTemplate.Sandral8x8));
     }
 
-    public ICollection<Tile> GetAllTiles()
+    private ICollection<Tile> GetAllTiles()
     {
         List<Tile> found = [];
         List<Tile> scan = [Root];
@@ -51,22 +52,64 @@ public class Room
         }
         return found;
     }
+
+
+
+    public void FixWalls()
+    {
+        foreach (var tileA in Tiles)
+        {
+            foreach (var tileB in Tiles)
+            {
+                if (tileA == tileB)
+                    continue;
+
+                foreach (var adjacent in GetCombinations(tileA.Walls, tileB.Walls))
+                {
+                    if (Vector3.Distance(adjacent.Item1.Position, adjacent.Item2.Position) < 0.01f)
+                    {
+                        adjacent.Item1.LinkedTile = tileB;
+                        adjacent.Item2.LinkedTile = tileA;
+                    }
+                }
+            }
+        }
+    }
+
+    private List<(T Item1, T Item2)> GetCombinations<T>(IEnumerable<T> listA, IEnumerable<T> listB)
+    {
+        // TODO convert to list extensions method?
+
+        List<(T A, T B)> combinations = new();
+
+        foreach (var a in listA)
+        {
+            foreach (var b in listB)
+            {
+                var tuple = (a, b);
+                if (!combinations.Contains(tuple))
+                    combinations.Add(tuple);
+            }
+        }
+
+        return combinations;
+    }
 }
 
 public class Tile
 {
     public Room Parent { get; }
-    public TileTemplate Template { get; }
-    public Floor Floor { get; }
-    public IReadOnlyCollection<Wall> Walls { get; }
-    public IReadOnlyCollection<Corner> InnerCorners { get; }
-    public IReadOnlyCollection<Corner> OuterCorners { get; }
+    public TileTemplate Template { get; private set; }
+    public Floor Floor { get; private set; }
+    public IReadOnlyCollection<Wall> Walls { get; private set; }
+    public IReadOnlyCollection<Corner> InnerCorners { get; private set; }
+    public IReadOnlyCollection<Corner> OuterCorners { get; private set; }
 
     public Vector3 LocalPosition { get; set; }
     public Quaternion LocalOrientation { get; set; } = new(0, 0, 0, 1);
 
-    public Vector3 Position => Parent.Position + LocalPosition;
-    public Quaternion Orientation => Parent.Orientation * LocalOrientation;
+    public Vector3 Position => Matrix4x4.Decompose(Transform, out _, out _, out var value) ? value : new();
+    public Quaternion Orientation => Matrix4x4.Decompose(Transform, out _, out var value, out _) ? value : new();
     public Matrix4x4 Transform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition) * Parent.Transform;
 
     public Tile(Room parent, TileTemplate template)
@@ -79,26 +122,23 @@ public class Tile
         OuterCorners = template.OuterCorners.Select(x => new Corner(this, x)).ToArray();
     }
 
-    public Tile Extend(Wall wall)
+    public Tile Extend(Wall wall, TileTemplate template)
     {
-        var newTile = new Tile(Parent, TileTemplate.Sandral);
+        var newTile = new Tile(Parent, template);
 
-        // TODO - will need to handle this differently. only works for square rooms
-        var adjacent = newTile.Walls.ElementAt((Walls.IndexOf(wall) + 2) % 4);
-        newTile.LocalPosition = wall.LocalPosition - adjacent.Hook.Position;
+        var adjacent = newTile.Walls.ElementAt(0);
+        var rotate = Quaternion.Identity;
+        newTile.LocalOrientation = wall.Orientation * adjacent.Hook.LocalOrientation;
+        newTile.LocalPosition = (wall.Position - Parent.Position);
+
+        var pos = Vector3.Transform(adjacent.LocalPosition, Quaternion.Inverse(wall.Hook.LocalOrientation));
+
+        newTile.LocalPosition -= Vector3.Transform(adjacent.Hook.LocalPosition, newTile.LocalOrientation);
+
+        Parent.Tiles.Add(newTile);
 
         // Link the new tile to the old tile, as well as any other touching tiles
-        foreach (var newWall in newTile.Walls)
-        {
-            foreach (var otherTileWall in Parent.GetAllTiles().Where(x => x != newTile).SelectMany(x => x.Walls))
-            {
-                if (Vector3.Distance(newWall.Position, otherTileWall.Position) < 0.01f)
-                {
-                    newWall.LinkedTile = this;
-                    otherTileWall.LinkedTile = newTile; 
-                }
-            }
-        }
+        Parent.FixWalls();
 
         return newTile;
     }
@@ -115,6 +155,15 @@ public class Tile
         {
             wall.DoorFrame = null;
         }
+    }
+
+    public void SwitchTemplate(TileTemplate template)
+    {
+        Template = template;
+        Floor = new(template.DefaultFloorModel);
+        Walls = template.Walls.Select(x => new Wall(this, x.DefaultTemplate, x)).ToArray();
+        InnerCorners = template.InnerCorners.Select(x => new Corner(this, x)).ToArray();
+        OuterCorners = template.OuterCorners.Select(x => new Corner(this, x)).ToArray();
     }
 }
 
@@ -134,11 +183,13 @@ public class Wall
         }
     }
     public WallHook Hook { get; set; }
-    
-    public Vector3 LocalPosition => Parent.LocalPosition + Hook.Position;
+
+    public Vector3 LocalPosition => Hook.LocalPosition;
     public Vector3 Position => Matrix4x4.Decompose(Transform, out _, out _, out var value) ? value : new();
-    public Quaternion Orientation => Parent.Orientation * Hook.Orientation;
-    public Matrix4x4 Transform => Hook.Transform * Parent.Transform;
+    public Quaternion Orientation => Matrix4x4.Decompose(Transform, out _, out var value, out _) ? value : new();
+    public Matrix4x4 Transform => Hook.LocalTransform * Parent.Transform;
+
+    public bool Visible => LinkedTile is null;
 
     public Wall(Tile parent, WallTemplate template, WallHook hook)
     {
@@ -147,9 +198,9 @@ public class Wall
         Hook = hook;
     }
 
-    public void Extend()
+    public Tile Extend(TileTemplate template)
     {
-        Parent.Extend(this);
+        return Parent.Extend(this, template);
     }
 }
 
@@ -182,6 +233,41 @@ public class Corner
     public Quaternion Orientation => Template.Orientation;
     public Matrix4x4 Transform => Template.Transform * Parent.Transform;
 
+    public bool VisibleInner
+    {
+        get
+        {
+            if (Parent.Walls.ElementAt(Template.Requires.IndexA).LinkedTile is not null)
+                return false;
+            if (Parent.Walls.ElementAt(Template.Requires.IndexB).LinkedTile is not null)
+                return false;
+
+            return true;
+        }
+    }
+    public bool VisibleOuter
+    {
+        get
+        {
+            return false;
+
+            var linkedTileA = Parent.Walls.ElementAt(Template.Requires.IndexA).LinkedTile;
+            var linkedTileB = Parent.Walls.ElementAt(Template.Requires.IndexB).LinkedTile;
+            if (linkedTileA is null)
+                return false;
+            if (linkedTileB is null)
+                return false;
+
+            // TODO - logic will break for non-square rooms
+            if (linkedTileA.Walls.ElementAt(Template.Requires.IndexB).LinkedTile is not null)
+                return false;
+            if (linkedTileB.Walls.ElementAt(Template.Requires.IndexA).LinkedTile is not null)
+                return false;
+
+            return true;
+        }
+    }
+
     public Corner(Tile parent, CornerTemplate template)
     {
         Parent = parent;
@@ -204,6 +290,8 @@ public class DoorFrame
     public Vector3 Position => Matrix4x4.Decompose(Transform, out _, out _, out var value) ? value : new();
     public Quaternion Orientation => Matrix4x4.Decompose(Transform, out _, out var value, out _) ? value : new();
     public Matrix4x4 Transform => LocalTransform * Parent.Transform;
+
+    public bool Visible => Enabled;
 
     public DoorFrame(Wall parent, DoorFrameTemplate template)
     {

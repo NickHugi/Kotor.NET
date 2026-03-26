@@ -51,6 +51,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         this.WhenActivated(d =>
         {
             ViewModel.SelectWallTemplate.RegisterHandler(SelectWallTemplate).DisposeWith(d);
+            ViewModel.SelectTileTemplate.RegisterHandler(SelectTileTemplate).DisposeWith(d);
         });
     }
 
@@ -72,7 +73,9 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         await LoadTexture("LDA_window01");
         await LoadTexture("LTS_unwal07");
         await LoadModel("sandral_floor_0");
+        await LoadModel("sandral_floor_1");
         await LoadModel("sandral_wall_0");
+        await LoadModel("sandral_wall_1");
         await LoadModel("sandral_wall_0_door_0");
         await LoadModel("sandral_wall_0_door_1");
         await LoadModel("sandral_icorner_0");
@@ -232,10 +235,14 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         {
             ViewModel.Mode?.Trigger();
         }
+        if (keyModifiers == KeyModifiers.None && buttonProperties.IsRightButtonPressed)
+        {
+            ViewModel.Mode?.AlternativeTrigger();
+        }
     }
     #endregion
 
-    public async Task SelectWallTemplate(IInteractionContext<Unit, WallTemplate> context)
+    public async Task SelectWallTemplate(IInteractionContext<Unit, WallTemplate?> context)
     {
         var tcs = new TaskCompletionSource<WallTemplate?>(TaskCreationOptions.RunContinuationsAsynchronously);
 
@@ -243,10 +250,28 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         menu.Items.Add(new MenuItem() { Header = "Wall", Command = ReactiveCommand.Create(() => tcs.TrySetResult(WallTemplate.SandralWall0a)) });
         menu.Items.Add(new MenuItem() { Header = "Large Door", Command = ReactiveCommand.Create(() => tcs.TrySetResult(WallTemplate.SandralWall0b)) });
         menu.Items.Add(new MenuItem() { Header = "Small Door", Command = ReactiveCommand.Create(() => tcs.TrySetResult(WallTemplate.SandralWall0c)) });
-        menu.Closed += (_, __) =>
+        menu.Closed += (_, __) => tcs.TrySetCanceled();
+        menu.Open(this);
+
+        try
         {
-            tcs.TrySetCanceled();
-        };
+            var result = await tcs.Task;
+            context.SetOutput(result);
+        }
+        catch (TaskCanceledException)
+        {
+            context.SetOutput(null);
+        }
+    }
+
+    public async Task SelectTileTemplate(IInteractionContext<Unit, TileTemplate?> context)
+    {
+        var tcs = new TaskCompletionSource<TileTemplate?>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        var menu = new ContextMenu();
+        menu.Items.Add(new MenuItem() { Header = "8x8 Floor", Command = ReactiveCommand.Create(() => tcs.TrySetResult(TileTemplate.Sandral8x8)) });
+        menu.Items.Add(new MenuItem() { Header = "Cap", Command = ReactiveCommand.Create(() => tcs.TrySetResult(TileTemplate.SandralCap)) });
+        menu.Closed += (_, __) => tcs.TrySetCanceled();
         menu.Open(this);
 
         try
