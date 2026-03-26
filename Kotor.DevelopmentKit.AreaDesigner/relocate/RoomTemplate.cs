@@ -7,161 +7,106 @@ using System.Threading.Tasks;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate;
 
+public class Templates
+{
+    public static Templates Store { get; } = new();
+    public ICollection<FloorTemplate> Floors { get; } = [];
+    public ICollection<TileTemplate> Tiles { get; } = [];
+    public ICollection<WallTemplate> Walls { get; } = [];
+    public ICollection<DoorFrameTemplate> DoorFrames { get; } = [];
+    public ICollection<CeilingTemplate> Ceilings { get; } = [];
+    public ICollection<CornerTemplate> InsideCorners { get; } = [];
+    public ICollection<CornerTemplate> OutsideCorners { get; } = [];
+
+    public FloorTemplate Floor(string id) => Floors.Single(x => x.ID == id);
+    public TileTemplate Tile(string id) => Tiles.Single(x => x.ID == id);
+    public WallTemplate Wall(string id) => Walls.Single(x => x.ID == id);
+    public DoorFrameTemplate DoorFrame(string id) => DoorFrames.Single(x => x.ID == id);
+    public CeilingTemplate Ceiling(string id) => Ceilings.Single(x => x.ID == id);
+    public CornerTemplate InsideCorner(string id) => InsideCorners.Single(x => x.ID == id);
+    public CornerTemplate OutsideCorner(string id) => OutsideCorners.Single(x => x.ID == id);
+}
+
 public class RoomTemplate
 {
 }
 
+public class FloorTemplate
+{
+    public required string ID { get; init; }
+    public required string Name { get; init; }
+    public required string Model { get; init; }
+}
+
 public class TileTemplate
 {
-    public static TileTemplate Sandral8x8 = new TileTemplate
-    {
-        ID = "sandral_floor_0",
-        DefaultFloorModel = "sandral_floor_0",
-        Walls =
-        [
-            new(WallTemplate.SandralWall0a, new( 0,  4, 0), new(0, 0, -0.707f, 0.707f)),
-            new(WallTemplate.SandralWall0a, new( 4,  0, 0), new(0, 0, -1, 0)),
-            new(WallTemplate.SandralWall0a, new( 0, -4, 0), new(0, 0, 0.707f, 0.707f)),
-            new(WallTemplate.SandralWall0a, new(-4,  0, 0), new(0, 0, 0, 1)),
-        ],
-        InnerCorners =
-        [
-            new("sandral_icorner_0", new( 4,  4, 0), new(0, 0, 0.9238f, -0.382683f), (0, 1)),
-            new("sandral_icorner_0", new( 4, -4, 0), new(0, 0, 0.9238f, 0.382683f), (1, 2)),
-            new("sandral_icorner_0", new(-4, -4, 0), new(0, 0, -0.382683f, -0.92388f), (2, 3)),
-            new("sandral_icorner_0", new(-4,  4, 0), new(0, 0, 0.382683f, -0.9238f), (3, 0)),
-        ],
-        OuterCorners =
-        [
-            new("sandral_ocorner_0", new( 4,  4, 0), new(0, 0, 0.9238f, -0.382683f), (0, 1)),
-            new("sandral_ocorner_0", new( 4, -4, 0), new(0, 0, 0.9238f, 0.382683f), (1, 2)),
-            new("sandral_ocorner_0", new(-4, -4, 0), new(0, 0, -0.382683f, -0.92388f), (2, 3)),
-            new("sandral_ocorner_0", new(-4,  4, 0), new(0, 0, 0.382683f, -0.9238f), (3, 0)),
-        ],
-    };
-    public static TileTemplate SandralCap = new TileTemplate
-    {
-        DefaultFloorModel = "sandral_floor_1",
-        Walls =
-        [
-            new(WallTemplate.SandralWall0a, new(0, 0, 0), new(0, 0, 0, 1)),
-            new(WallTemplate.SandralWall1a, new(-1.23328f, 0, 0), new(0, 0, 0, 1)),
-        ],
-        InnerCorners =
-        [
-        ],
-        OuterCorners =
-        [
-        ],
-    };
+    public required string ID { get; init; }
+    public required string Name { get; init; }
+    public required string FloorID { get; init; }
+    public required WallHook[] Walls { get; init; }
+    public required CornerTemplate[] InnerCorners { get; init; }
+    public required CornerTemplate[] OuterCorners { get; init; }
+    public required Vector3[] CeilingHooks { get; init; }
 
-
-    public string ID { get; init; }
-    public string DefaultFloorModel { get; init; }
-    public WallHook[] Walls = [];
-    public CornerTemplate[] InnerCorners = [];
-    public CornerTemplate[] OuterCorners = [];
-    public Vector3[] CeilingHooks = [];
+    public FloorTemplate Floor => Templates.Store.Floor(FloorID);
 }
 
 public class WallHook
 {
-    public WallTemplate DefaultTemplate { get; set; }
+    public required string DefaultWallID { get; init; }
+    public WallTemplate DefaultTemplate => Templates.Store.Wall(DefaultWallID);
 
-    public Vector3 LocalPosition { get; }
-    public Quaternion LocalOrientation { get; }
+    public required Vector3 LocalPosition { get; init; }
+    public required Quaternion LocalOrientation { get; init; }
     public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
 
-    public ICollection<string> CompatibleWallTemplates { get; }
-    public ICollection<string> CompatibleTileTemplates { get; }
-
-    public WallHook(WallTemplate defaultTemplate, Vector3 position, Quaternion orientation, ICollection<string> compatibleWallTemplates, ICollection<string> compatibleTileTemplates)
-    {
-        DefaultTemplate = defaultTemplate;
-        LocalPosition = position;
-        LocalOrientation = orientation;
-        CompatibleWallTemplates = compatibleWallTemplates;
-        CompatibleTileTemplates = compatibleTileTemplates;
-    }
+    //public ICollection<string> CompatibleWallTemplates { get; }
+    //public ICollection<string> CompatibleTileTemplates { get; }
 }
 public class WallTemplate
 {
-    public static WallTemplate SandralWall0a = new("sandral_wall_0", null);
-    public static WallTemplate SandralWall0b = new("sandral_wall_0_door_0", DoorFrameTemplate.SandralDoor0);
-    public static WallTemplate SandralWall0c = new("sandral_wall_0_door_1", DoorFrameTemplate.SandralDoor1);
-    public static WallTemplate SandralWall1a = new("sandral_wall_1", null);
+    public required string ID { get; init; }
+    public required string Name { get; init; }
+    public required string Model { get; init; }
+    public required string DoorFrameID { get; init; }
 
-    public string ID { get; }
-    public string Model { get; }
-    public DoorFrameTemplate? DoorFrame { get; }
+    public DoorFrameTemplate? DoorFrame => (DoorFrameID is not null) ? Templates.Store.DoorFrame(DoorFrameID) : null;
     public bool CanBeDoor => DoorFrame is not null;
-
-    public WallTemplate(string model, DoorFrameTemplate? doorframe)
-    {
-        Model = model;
-        DoorFrame = doorframe;
-    }
 }
 
 public class DoorFrameTemplate
 {
-    public static DoorFrameTemplate SandralDoor0 = new("sandral_doorframe_0",
-        [
-            new(new(0.752678f, 0, 0), new(0, 0, 0, 1)),
-            new(new(-0.334811f, 0, 0), new(0, 0, -1, 0)),
-        ]);
-    public static DoorFrameTemplate SandralDoor1 = new("sandral_doorframe_0",
-        [ // todo
-            new(new(0.752678f, 0, 0), new(0, 0, 0, 1)),
-            new(new(-0.334811f, 0, 0), new(0, 0, -1, 0)),
-        ]);
-
-    public string Model { get; }
-    public DoorFrameHookTemplate[] Hooks { get; }
-
-    public DoorFrameTemplate(string model, DoorFrameHookTemplate[] hooks)
-    {
-        Model = model;
-        Hooks = hooks;
-    }
+    public required string ID { get; init; }
+    public required string Name { get; init; }
+    public required string Model { get; init; }
+    public required DoorFrameHookTemplate[] Hooks { get; init; }
 }
 public class DoorFrameHookTemplate
 {
-    public Vector3 Position { get; }
-    public Quaternion Orientation { get; }
-
-    public DoorFrameHookTemplate(Vector3 position, Quaternion orientation)
-    {
-        Position = position;
-        Orientation = orientation;
-    }
+    public required Vector3 Position { get; init; }
+    public required Quaternion Orientation { get; init; }
 }
 
 
 public class CeilingTemplate
 {
-    public string DefaultModel { get; }
+    public string ID { get; }
+    public string Model { get; }
 
-    public CeilingTemplate(string defaultModel)
+    public CeilingTemplate(string model)
     {
-        DefaultModel = defaultModel;
+        Model = model;
     }
 }
 
 public class CornerTemplate
 {
-    public string Model { get; }
-    public Vector3 Position { get; }
-    public Quaternion Orientation { get; }
-    public (int IndexA, int IndexB) Requires { get; }
+    public required string ID { get; init; }
+    public string Model => ID; // todo
+    public required Vector3 Position { get; init; }
+    public required Quaternion Orientation { get; init; }
+    public (int IndexA, int IndexB) Requires { get; } = (0, 0);
 
     public Matrix4x4 Transform => Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position);
 
-    public CornerTemplate(string model, Vector3 position, Quaternion orientation, (int IndexA, int IndexB) requires)
-    {
-        Model = model;
-        Position = position;
-        Orientation = orientation;
-        Requires = requires;
-    }
 }

@@ -19,8 +19,6 @@ public class Area
 
 public class Room
 {
-    public Tile Root { get; private set; }
-
     public Vector3 Position { get; set; } = new();
     public Quaternion Orientation { get; set; } = new();
     public Matrix4x4 Transform => Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position);
@@ -34,26 +32,9 @@ public class Room
 
     public Room(RoomTemplate template)
     {
-        //Root = new(this, TileTemplate.Sandral8x8);
-        Tiles.Add(new(this, TileTemplate.Sandral8x8));
+        Tiles.Add(new(this, Templates.Store.Tiles.First()));
+        //Tiles.Add(new(this, TileTemplate.Sandral8x8));
     }
-
-    private ICollection<Tile> GetAllTiles()
-    {
-        List<Tile> found = [];
-        List<Tile> scan = [Root];
-        while (scan.Any())
-        {
-            var tile = scan.First();
-            found.Add(tile);
-
-            scan.RemoveAt(0);
-            scan.AddRange(tile.Walls.Select(x => x.LinkedTile).Where(x => x is not null).Where(x => !found.Contains(x))!);
-        }
-        return found;
-    }
-
-
 
     public void FixWalls()
     {
@@ -116,7 +97,7 @@ public class Tile
     {
         Parent = parent;
         Template = template;
-        Floor = new(template.DefaultFloorModel);
+        Floor = new(template.Floor);
         Walls = template.Walls.Select(x => new Wall(this, x.DefaultTemplate, x)).ToArray();
         InnerCorners = template.InnerCorners.Select(x => new Corner(this, x)).ToArray();
         OuterCorners = template.OuterCorners.Select(x => new Corner(this, x)).ToArray();
@@ -127,7 +108,6 @@ public class Tile
         var newTile = new Tile(Parent, template);
 
         var adjacent = newTile.Walls.ElementAt(0);
-        var rotate = Quaternion.Identity;
         newTile.LocalOrientation = wall.Orientation * adjacent.Hook.LocalOrientation;
         newTile.LocalPosition = (wall.Position - Parent.Position);
 
@@ -160,7 +140,7 @@ public class Tile
     public void SwitchTemplate(TileTemplate template)
     {
         Template = template;
-        Floor = new(template.DefaultFloorModel);
+        Floor = new(template.Floor);
         Walls = template.Walls.Select(x => new Wall(this, x.DefaultTemplate, x)).ToArray();
         InnerCorners = template.InnerCorners.Select(x => new Corner(this, x)).ToArray();
         OuterCorners = template.OuterCorners.Select(x => new Corner(this, x)).ToArray();
@@ -206,11 +186,11 @@ public class Wall
 
 public class Floor
 {
-    public string Model { get; set; }
+    public FloorTemplate Template { get; set; }
 
-    public Floor(string model)
+    public Floor(FloorTemplate template)
     {
-        Model = model;
+        Template = template;
     }
 }
 

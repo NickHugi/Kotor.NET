@@ -44,8 +44,8 @@ public class ExtendRoomMode : BaseMode
 
     public override async Task Trigger()
     {
-        if (validWall)
-            _wall!.Extend(TileTemplate.Sandral8x8);
+        //if (validWall)
+        //    _wall!.Extend(TileTemplate.Sandral8x8);
     }
 
     public override async Task AlternativeTrigger()
@@ -59,5 +59,5 @@ public class ExtendRoomMode : BaseMode
             return;
 
         var tile = _wall!.Extend(template);
-    }
+LoaderOptimization f    }
 }

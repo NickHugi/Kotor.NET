@@ -76,11 +76,13 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         await LoadModel("sandral_floor_1");
         await LoadModel("sandral_wall_0");
         await LoadModel("sandral_wall_1");
-        await LoadModel("sandral_wall_0_door_0");
-        await LoadModel("sandral_wall_0_door_1");
+        await LoadModel("sandral_wall_2");
+        await LoadModel("sandral_wall_3");
         await LoadModel("sandral_icorner_0");
         await LoadModel("sandral_ocorner_0");
         await LoadModel("sandral_doorframe_0");
+
+        KitLoader.Load($@"C:\Users\hugin\Desktop\KotOR Modding Stuff\Area Designer\Sandral Estate\sandral.json");
 
         ViewModel.Engine.Scene.AddEntity(new AreaEntity());
         ViewModel.Engine.RenderInterceptor = descriptors =>
@@ -247,9 +249,14 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         var tcs = new TaskCompletionSource<WallTemplate?>(TaskCreationOptions.RunContinuationsAsynchronously);
 
         var menu = new ContextMenu();
-        menu.Items.Add(new MenuItem() { Header = "Wall", Command = ReactiveCommand.Create(() => tcs.TrySetResult(WallTemplate.SandralWall0a)) });
-        menu.Items.Add(new MenuItem() { Header = "Large Door", Command = ReactiveCommand.Create(() => tcs.TrySetResult(WallTemplate.SandralWall0b)) });
-        menu.Items.Add(new MenuItem() { Header = "Small Door", Command = ReactiveCommand.Create(() => tcs.TrySetResult(WallTemplate.SandralWall0c)) });
+        Templates.Store.Walls.ToList().ForEach(template =>
+        {
+            menu.Items.Add(new MenuItem
+            {
+                Header = template.Name,
+                Command = ReactiveCommand.Create(() => tcs.TrySetResult(template))
+            });
+        });
         menu.Closed += (_, __) => tcs.TrySetCanceled();
         menu.Open(this);
 
@@ -269,8 +276,14 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         var tcs = new TaskCompletionSource<TileTemplate?>(TaskCreationOptions.RunContinuationsAsynchronously);
 
         var menu = new ContextMenu();
-        menu.Items.Add(new MenuItem() { Header = "8x8 Floor", Command = ReactiveCommand.Create(() => tcs.TrySetResult(TileTemplate.Sandral8x8)) });
-        menu.Items.Add(new MenuItem() { Header = "Cap", Command = ReactiveCommand.Create(() => tcs.TrySetResult(TileTemplate.SandralCap)) });
+        Templates.Store.Tiles.ToList().ForEach(template =>
+        {
+            menu.Items.Add(new MenuItem
+            {
+                Header = template.Name,
+                Command = ReactiveCommand.Create(() => tcs.TrySetResult(template))
+            });
+        });
         menu.Closed += (_, __) => tcs.TrySetCanceled();
         menu.Open(this);
 
