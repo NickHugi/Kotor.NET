@@ -73,12 +73,14 @@ public class KitLoader
                 InnerCorners = ((JArray)tile.insideCorner).Select(x => (dynamic)x).Select(hook => new CornerTemplate
                 {
                     ID = hook.id.Value,
+                    Adjacent = hook.adjacent?.ToObject<int[]>() ?? new int[0],
                     Position = new Vector3(hook.position.ToObject<float[]>()),
                     Orientation = QuaternionFromArray(hook.orientation.ToObject<float[]>())
                 }).ToArray(),
                 OuterCorners = ((JArray)tile.outsideCorner).Select(x => (dynamic)x).Select(hook => new CornerTemplate
                 {
                     ID = hook.id.Value,
+                    Adjacent = hook.adjacent?.ToObject<int[]>() ?? new int[0],
                     Position = new Vector3(hook.position.ToObject<float[]>()),
                     Orientation = QuaternionFromArray(hook.orientation.ToObject<float[]>())
                 }).ToArray(),

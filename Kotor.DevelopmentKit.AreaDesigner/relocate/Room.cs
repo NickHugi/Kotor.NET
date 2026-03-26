@@ -217,34 +217,23 @@ public class Corner
     {
         get
         {
-            if (Parent.Walls.ElementAt(Template.Requires.IndexA).LinkedTile is not null)
-                return false;
-            if (Parent.Walls.ElementAt(Template.Requires.IndexB).LinkedTile is not null)
-                return false;
-
-            return true;
+            return Template.Adjacent.Any() && Template.Adjacent.All(x => Parent.Walls.ElementAt(x).LinkedTile is null);
         }
     }
     public bool VisibleOuter
     {
         get
         {
-            return false;
-
-            var linkedTileA = Parent.Walls.ElementAt(Template.Requires.IndexA).LinkedTile;
-            var linkedTileB = Parent.Walls.ElementAt(Template.Requires.IndexB).LinkedTile;
-            if (linkedTileA is null)
+            if(Template.Adjacent.Count() != 2)
                 return false;
-            if (linkedTileB is null)
+            if(Template.Adjacent.Any(x => Parent.Walls.ElementAt(x).LinkedTile is null))
                 return false;
 
-            // TODO - logic will break for non-square rooms
-            if (linkedTileA.Walls.ElementAt(Template.Requires.IndexB).LinkedTile is not null)
-                return false;
-            if (linkedTileB.Walls.ElementAt(Template.Requires.IndexA).LinkedTile is not null)
-                return false;
+            var a = Parent.Walls.ElementAt(Template.Adjacent[0]).LinkedTile!.Walls.Select(x => x.LinkedTile).Where(x => x != Parent);
+            var b = Parent.Walls.ElementAt(Template.Adjacent[1]).LinkedTile!.Walls.Select(x => x.LinkedTile).Where(x => x != Parent);
 
-            return true;
+            var circuit = a.Intersect(b).Any();
+            return !circuit;
         }
     }
 

@@ -59,5 +59,5 @@ public class ExtendRoomMode : BaseMode
             return;
 
         var tile = _wall!.Extend(template);
-LoaderOptimization f    }
+    }
 }

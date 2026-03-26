@@ -60,6 +60,8 @@ public class WallHook
     public required Quaternion LocalOrientation { get; init; }
     public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
 
+    public int[] AdjacentWalls { get; init; } = [];
+
     //public ICollection<string> CompatibleWallTemplates { get; }
     //public ICollection<string> CompatibleTileTemplates { get; }
 }
@@ -105,7 +107,7 @@ public class CornerTemplate
     public string Model => ID; // todo
     public required Vector3 Position { get; init; }
     public required Quaternion Orientation { get; init; }
-    public (int IndexA, int IndexB) Requires { get; } = (0, 0);
+    public required int[] Adjacent { get; init; }
 
     public Matrix4x4 Transform => Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position);
 
