@@ -70,17 +70,22 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         await LoadTexture("lda_wall04");
         await LoadTexture("lda_wall05");
         await LoadTexture("lda_light03");
-        await LoadTexture("LDA_window01");
+        await LoadTexture("lda_stone02");
+        await LoadTexture("lda_ivy02");
+        await LoadTexture("lda_window01");
         await LoadTexture("LTS_unwal07");
         await LoadModel("sandral_floor_0");
         await LoadModel("sandral_floor_1");
+        await LoadModel("sandral_floor_2");
         await LoadModel("sandral_wall_0");
         await LoadModel("sandral_wall_1");
         await LoadModel("sandral_wall_2");
         await LoadModel("sandral_wall_3");
+        await LoadModel("sandral_wall_4");
         await LoadModel("sandral_icorner_0");
         await LoadModel("sandral_ocorner_0");
         await LoadModel("sandral_doorframe_0");
+        await LoadModel("sandral_object_0");
 
         KitLoader.Load($@"C:\Users\hugin\Desktop\KotOR Modding Stuff\Area Designer\Sandral Estate\sandral.json");
 

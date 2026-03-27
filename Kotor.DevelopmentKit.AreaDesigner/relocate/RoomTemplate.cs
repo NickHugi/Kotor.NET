@@ -17,6 +17,7 @@ public class Templates
     public ICollection<CeilingTemplate> Ceilings { get; } = [];
     public ICollection<CornerTemplate> InsideCorners { get; } = [];
     public ICollection<CornerTemplate> OutsideCorners { get; } = [];
+    public ICollection<ObjectTemplate> Objects { get; } = [];
 
     public FloorTemplate Floor(string id) => Floors.Single(x => x.ID == id);
     public TileTemplate Tile(string id) => Tiles.Single(x => x.ID == id);
@@ -25,6 +26,7 @@ public class Templates
     public CeilingTemplate Ceiling(string id) => Ceilings.Single(x => x.ID == id);
     public CornerTemplate InsideCorner(string id) => InsideCorners.Single(x => x.ID == id);
     public CornerTemplate OutsideCorner(string id) => OutsideCorners.Single(x => x.ID == id);
+    public ObjectTemplate Object(string id) => Objects.Single(x => x.ID == id);
 }
 
 public class RoomTemplate
@@ -111,4 +113,10 @@ public class CornerTemplate
 
     public Matrix4x4 Transform => Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position);
 
+}
+
+public class ObjectTemplate
+{
+    public required string ID { get; init; }
+    public required string Model { get; init; }
 }

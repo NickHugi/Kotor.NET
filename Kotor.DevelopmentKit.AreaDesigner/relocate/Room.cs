@@ -107,13 +107,22 @@ public class Tile
     {
         var newTile = new Tile(Parent, template);
 
-        var adjacent = newTile.Walls.ElementAt(0);
+        // todo - first compatible
+        var adjacent = newTile.Walls.Last(x => x.Template.ID == wall.Template.ID);
         newTile.LocalOrientation = wall.Orientation * adjacent.Hook.LocalOrientation;
         newTile.LocalPosition = (wall.Position - Parent.Position);
 
         var pos = Vector3.Transform(adjacent.LocalPosition, Quaternion.Inverse(wall.Hook.LocalOrientation));
+        var pos2 = Vector3.Transform(adjacent.Hook.LocalPosition, Quaternion.Inverse(wall.Hook.LocalOrientation));
+        var pos3 = -Vector3.Transform(adjacent.Hook.LocalPosition, newTile.LocalOrientation);
 
-        newTile.LocalPosition -= Vector3.Transform(adjacent.Hook.LocalPosition, newTile.LocalOrientation);
+        //newTile.LocalPosition -= pos;
+
+        // Find the difference between the old wall and new wall in room-space
+        var oldWallPos = wall.Position;
+        var newWallPos = adjacent.Position;
+        var diff = oldWallPos - newWallPos;
+        newTile.LocalPosition -= diff;
 
         Parent.Tiles.Add(newTile);
 
@@ -287,4 +296,13 @@ public class DoorFrameHook
         Parent = parent;
         Template = template;
     }
+}
+
+public class Object
+{
+    public string TemplateID { get; set; }
+    public ObjectTemplate Template => Templates.Store.Object(TemplateID);
+
+    public Vector3 Position { get; set; }
+    public Quaternion Orientation { get; set; }
 }
