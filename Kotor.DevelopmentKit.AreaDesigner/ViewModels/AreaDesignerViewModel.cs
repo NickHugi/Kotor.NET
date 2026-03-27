@@ -80,4 +80,9 @@ public class AreaDesignerViewModel : ReactiveObject
             SelectWallTemplate = SelectWallTemplate,
         };
     }
+    public void SetSceneMode_AddObject()
+    {
+        var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
+        Mode = new AddObjectMode(Engine, area);
+    }
 }

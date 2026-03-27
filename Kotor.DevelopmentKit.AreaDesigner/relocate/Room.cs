@@ -29,6 +29,7 @@ public class Room
     public ICollection<Corner> InnerCorners => Tiles.SelectMany(x => x.InnerCorners).ToList();
     public ICollection<Corner> OuterCorners => Tiles.SelectMany(x => x.OuterCorners).ToList();
     public ICollection<DoorFrame> DoorFrames => Walls.Select(x => x.DoorFrame).Where(x => x is not null).ToList();
+    public ICollection<Object> Objects = [];
 
     public Room(RoomTemplate template)
     {
@@ -57,6 +58,12 @@ public class Room
         }
     }
 
+    public void AddObject(Object @object)
+    {
+        Objects.Add(@object);
+    }
+
+    // todo ienumerable extension
     private List<(T Item1, T Item2)> GetCombinations<T>(IEnumerable<T> listA, IEnumerable<T> listB)
     {
         // TODO convert to list extensions method?
@@ -305,4 +312,6 @@ public class Object
 
     public Vector3 Position { get; set; }
     public Quaternion Orientation { get; set; }
+    public Matrix4x4 Transform => Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position);
+
 }

@@ -48,6 +48,10 @@ public class AreaEntity : BaseEntity
         {
             RenderOuterCorner(assets, corner, ref descriptors);
         }
+        foreach (var @object in room.Objects)
+        {
+            RenderObject(assets, @object, ref descriptors);
+        }
     }
     private void RenderTile(IAssetManager assets, Tile tile, ref List<MeshDescriptor> descriptors)
     {
@@ -80,6 +84,10 @@ public class AreaEntity : BaseEntity
             return;
 
         descriptors.AddRange(DescriptorsForModel(assets, corner.Template.Model, corner.Transform));
+    }
+    public void RenderObject(IAssetManager assets, Object @object, ref List<MeshDescriptor> descriptors)
+    {
+        descriptors.AddRange(DescriptorsForModel(assets, @object.Template.Model, @object.Transform));
     }
     // TODO - clean this up somehow
     private ICollection<MeshDescriptor> DescriptorsForModel(IAssetManager assets, string modelName, Matrix4x4 transform, object tag = null)

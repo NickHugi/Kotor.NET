@@ -87,6 +87,15 @@ public class KitLoader
                 CeilingHooks = []
             });
         }
+
+        foreach (var @object in data.objects)
+        {
+            Templates.Store.Objects.Add(new ObjectTemplate
+            {
+                ID = @object.id.Value,
+                Model = @object.model.Value,
+            });
+        }
     }
 
     private static Quaternion QuaternionFromArray(float[] array)
