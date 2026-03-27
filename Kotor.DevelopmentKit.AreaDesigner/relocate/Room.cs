@@ -115,21 +115,16 @@ public class Tile
         var newTile = new Tile(Parent, template);
 
         // todo - first compatible
-        var adjacent = newTile.Walls.Last(x => x.Template.ID == wall.Template.ID);
-        newTile.LocalOrientation = wall.Orientation * adjacent.Hook.LocalOrientation;
+        var adjacent = newTile.Walls.Where(x => x.Template.ID == wall.Template.ID).First();
+        newTile.LocalOrientation = wall.Orientation / adjacent.Hook.LocalOrientation * Quaternion.CreateFromYawPitchRoll(0, 0, MathF.PI);
         newTile.LocalPosition = (wall.Position - Parent.Position);
 
-        var pos = Vector3.Transform(adjacent.LocalPosition, Quaternion.Inverse(wall.Hook.LocalOrientation));
-        var pos2 = Vector3.Transform(adjacent.Hook.LocalPosition, Quaternion.Inverse(wall.Hook.LocalOrientation));
-        var pos3 = -Vector3.Transform(adjacent.Hook.LocalPosition, newTile.LocalOrientation);
-
-        //newTile.LocalPosition -= pos;
 
         // Find the difference between the old wall and new wall in room-space
-        var oldWallPos = wall.Position;
-        var newWallPos = adjacent.Position;
+        var oldWallPos = wall.Position - Parent.Position;
+        var newWallPos = adjacent.Position - Parent.Position;
         var diff = oldWallPos - newWallPos;
-        newTile.LocalPosition -= diff;
+        newTile.LocalPosition += diff;
 
         Parent.Tiles.Add(newTile);
 
