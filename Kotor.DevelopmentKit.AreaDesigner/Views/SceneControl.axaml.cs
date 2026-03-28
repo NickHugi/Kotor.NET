@@ -61,33 +61,8 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         _camera.Pitch = 1;
         _camera.Target = new(0, 0, 2);
 
-        await LoadTexture("LDA_flr09");
-        await LoadTexture("LDA_flr05");
-        await LoadTexture("lda_grate02");
-        await LoadTexture("lda_trim01");
-        await LoadTexture("lda_trim02");
-        await LoadTexture("lda_wall03");
-        await LoadTexture("lda_wall04");
-        await LoadTexture("lda_wall05");
-        await LoadTexture("lda_light03");
-        await LoadTexture("lda_stone02");
-        await LoadTexture("lda_ivy02");
-        await LoadTexture("lda_window01");
-        await LoadTexture("LTS_unwal07");
-        await LoadModel("sandral_floor_0");
-        await LoadModel("sandral_floor_1");
-        await LoadModel("sandral_floor_2");
-        await LoadModel("sandral_wall_0");
-        await LoadModel("sandral_wall_1");
-        await LoadModel("sandral_wall_2");
-        await LoadModel("sandral_wall_3");
-        await LoadModel("sandral_wall_4");
-        await LoadModel("sandral_icorner_0");
-        await LoadModel("sandral_ocorner_0");
-        await LoadModel("sandral_doorframe_0");
-        await LoadModel("sandral_object_0");
-
         KitLoader.Load($@"C:\Users\hugin\Desktop\KotOR Modding Stuff\Area Designer\Sandral Estate\sandral.json");
+        await LoadRequiredDataForKits();
 
         ViewModel.Engine.Scene.AddEntity(new AreaEntity());
         ViewModel.Engine.RenderInterceptor = descriptors =>
@@ -95,6 +70,28 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
             ViewModel.Mode?.RenderIntercept(_camera, _lastPointerPosition.GetValueOrDefault(), descriptors);
         };
     }
+
+    private async Task LoadRequiredDataForKits()
+    {
+        Task[] loadModels =
+        [
+            .. Templates.Store.Ceilings.Select(x => LoadModel(x.Model)),
+            .. Templates.Store.DoorFrames.Select(x => LoadModel(x.Model)),
+            .. Templates.Store.Floors.Select(x => LoadModel(x.Model)),
+            .. Templates.Store.InsideCorners.Select(x => LoadModel(x.Model)),
+            .. Templates.Store.OutsideCorners.Select(x => LoadModel(x.Model)),
+            .. Templates.Store.Walls.Select(x => LoadModel(x.Model)),
+
+            // todo - move to templates
+            .. Templates.Store.Tiles.SelectMany(x => x.InnerCorners).Select(x => LoadModel(x.Model)),
+            .. Templates.Store.Tiles.SelectMany(x => x.OuterCorners).Select(x => LoadModel(x.Model)),
+        ];
+        await Task.WhenAll(loadModels);
+
+        var loadTextures = ViewModel.Engine.AssetManager.Models.SelectMany(x => x.Value.GetAllTextures()).Select(x => LoadTexture(x));
+        await Task.WhenAll(loadTextures);
+    }
+
     private async Task LoadModel(string name)
     {
         var mdl = File.ReadAllBytes($@"C:\Users\hugin\Desktop\KotOR Modding Stuff\Area Designer\Sandral Estate\{name}.mdl");
@@ -103,7 +100,11 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
     }
     private async Task LoadTexture(string name)
     {
-        var texture = File.ReadAllBytes($@"C:\Users\hugin\Desktop\KotOR Modding Stuff\Area Designer\Sandral Estate\{name}.tpc");
+        var filepath = $@"C:\Users\hugin\Desktop\KotOR Modding Stuff\Area Designer\Sandral Estate\{name}.tpc";
+        if (!File.Exists(filepath))
+            return;
+
+        var texture = File.ReadAllBytes(filepath);
         await ViewModel.Engine.LoadTexture(name, texture);
     }
 

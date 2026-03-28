@@ -15,6 +15,8 @@ public class AssetManager : IAssetManager
     private readonly Dictionary<string, ITexture> _textures = new();
     private readonly Dictionary<string, IShader> _shaders = new();
 
+    public IReadOnlyCollection<KeyValuePair<string, KModel>> Models => _models.ToList();
+
 
     public KModel GetModel(string name)
     {

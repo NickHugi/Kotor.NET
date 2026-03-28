@@ -112,6 +112,9 @@ public class GLEngine
             var model = new ModelLoader().LoadModel(GL, mdlData, mdxData);
             AssetManager.AddModel(name, model);
 
+            if (Source is null)
+                return;
+
             var check = new List<BaseNode>() { model.Root };
             while (check.Any())
             {
