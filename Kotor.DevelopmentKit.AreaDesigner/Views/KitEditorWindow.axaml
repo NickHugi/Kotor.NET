@@ -1,0 +1,44 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Kotor.DevelopmentKit.AreaDesigner.KitEditorWindow"
+        Title="KitEditorWindow">
+    <TabControl>
+        <TabItem Header="Tiles">
+            <StackPanel Orientation="Horizontal" Spacing="4">
+                <StackPanel Background="LightGray">
+                    <Label Target="idBox" Content="_ID" />
+                    <TextBox x:Name="idBox" Margin="0 0 0 10" />
+
+                    <Label Target="nameBox" Content="_Name" />
+                    <TextBox x:Name="nameBox" Margin="0 0 0 10" />
+
+                    <Label Target="defaultFloorBox" Content="_Default Floor ID" />
+                    <TextBox x:Name="defaultFloorBox" Margin="0 0 0 10" />
+
+                    <Label Target="defaultCeilingBox" Content="_Default Ceiling ID" />
+                    <TextBox x:Name="defaultCeilingBox" Margin="0 0 0 10" />
+                </StackPanel>
+                <StackPanel MinWidth="200" Background="LightGray">
+                    <ListBox />
+                    <Button Content="Add" />
+                    <Button Content="Delete" />
+                </StackPanel>
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="Walls">
+            
+        </TabItem>
+        <TabItem Header="Door Frames">
+            
+        </TabItem>
+        <TabItem Header="Ceilings">
+            
+        </TabItem>
+        <TabItem Header="Objects">
+            
+        </TabItem>
+    </TabControl>
+</Window>
