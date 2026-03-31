@@ -33,7 +33,7 @@ public class Room
 
     public Room(RoomTemplate template)
     {
-        Tiles.Add(new(this, Templates.Store.Tiles.First()));
+        Tiles.Add(new(this, Kit.Manager.Get("sandral").Tiles.First()));
         //Tiles.Add(new(this, TileTemplate.Sandral8x8));
     }
 
@@ -173,7 +173,7 @@ public class Wall
             DoorFrame = (value.DoorFrame is null) ? null : new(this, value.DoorFrame);
         }
     }
-    public WallHook Hook { get; set; }
+    public WallHookTemplate Hook { get; set; }
 
     public Vector3 LocalPosition => Hook.LocalPosition;
     public Vector3 Position => Matrix4x4.Decompose(Transform, out _, out _, out var value) ? value : new();
@@ -182,7 +182,7 @@ public class Wall
 
     public bool Visible => LinkedTile is null;
 
-    public Wall(Tile parent, WallTemplate template, WallHook hook)
+    public Wall(Tile parent, WallTemplate template, WallHookTemplate hook)
     {
         Parent = parent;
         Template = template;
@@ -303,7 +303,7 @@ public class DoorFrameHook
 public class Object
 {
     public string TemplateID { get; set; }
-    public ObjectTemplate Template => Templates.Store.Object(TemplateID);
+    public ObjectTemplate Template => Kit.Manager.Get("sandral").Object(TemplateID);
 
     public Vector3 Position { get; set; }
     public Quaternion Orientation { get; set; }

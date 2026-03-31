@@ -5,6 +5,7 @@
         xmlns:local="using:Kotor.DevelopmentKit.AreaDesigner.Views"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Name="Window"
         x:Class="Kotor.DevelopmentKit.AreaDesigner.Views.AreaDesignerWindow"
         x:DataType="vm:AreaDesignerViewModel"
         Title="Area Designer">
@@ -21,6 +22,7 @@
             <Button Content="Extend Room" Command="{Binding SetSceneMode_AddTile}" />
             <Button Content="Switch Wall" Command="{Binding SetSceneMode_SwitchWall}" />
             <Button Content="Add Object" Command="{Binding SetSceneMode_AddObject}" />
+            <Button Content="Kit Editor" Command="{Binding #Window.OpenKitEditor}" />
             <Label Content="{Binding Mode.Name}" />
 
             <DropDownButton Content="Visibility">

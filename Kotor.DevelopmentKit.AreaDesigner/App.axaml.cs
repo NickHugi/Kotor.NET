@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Kotor.DevelopmentKit.AreaDesigner.relocate;
 using Kotor.DevelopmentKit.AreaDesigner.ViewModels;
 using Kotor.DevelopmentKit.AreaDesigner.Views;
 
@@ -19,7 +20,10 @@ namespace Kotor.DevelopmentKit.AreaDesigner
             {
                 desktop.MainWindow = new AreaDesignerWindow
                 {
-                    DataContext = new AreaDesignerViewModel(),
+                    DataContext = new AreaDesignerViewModel()
+                    {
+                        SelectedKit = KitLoader.Load($@"C:\Users\hugin\Desktop\KotOR Modding Stuff\Area Designer\Sandral Estate\sandral.json")
+                    },
                 };
             }
 

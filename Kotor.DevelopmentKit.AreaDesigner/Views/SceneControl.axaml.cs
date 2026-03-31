@@ -61,7 +61,8 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         _camera.Pitch = 1;
         _camera.Target = new(0, 0, 2);
 
-        KitLoader.Load($@"C:\Users\hugin\Desktop\KotOR Modding Stuff\Area Designer\Sandral Estate\sandral.json");
+        var kit = KitLoader.Load($@"C:\Users\hugin\Desktop\KotOR Modding Stuff\Area Designer\Sandral Estate\sandral.json");
+        Kit.Manager.Add(kit);
         await LoadRequiredDataForKits();
 
         ViewModel.Engine.Scene.AddEntity(new AreaEntity());
@@ -75,16 +76,16 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
     {
         Task[] loadModels =
         [
-            .. Templates.Store.Ceilings.Select(x => LoadModel(x.Model)),
-            .. Templates.Store.DoorFrames.Select(x => LoadModel(x.Model)),
-            .. Templates.Store.Floors.Select(x => LoadModel(x.Model)),
-            .. Templates.Store.InsideCorners.Select(x => LoadModel(x.Model)),
-            .. Templates.Store.OutsideCorners.Select(x => LoadModel(x.Model)),
-            .. Templates.Store.Walls.Select(x => LoadModel(x.Model)),
+            .. Kit.Manager.Get("sandral").Ceilings.Select(x => LoadModel(x.Model)),
+            .. Kit.Manager.Get("sandral").DoorFrames.Select(x => LoadModel(x.Model)),
+            .. Kit.Manager.Get("sandral").Floors.Select(x => LoadModel(x.Model)),
+            .. Kit.Manager.Get("sandral").InsideCorners.Select(x => LoadModel(x.Model)),
+            .. Kit.Manager.Get("sandral").OutsideCorners.Select(x => LoadModel(x.Model)),
+            .. Kit.Manager.Get("sandral").Walls.Select(x => LoadModel(x.Model)),
 
             // todo - move to templates
-            .. Templates.Store.Tiles.SelectMany(x => x.InnerCorners).Select(x => LoadModel(x.Model)),
-            .. Templates.Store.Tiles.SelectMany(x => x.OuterCorners).Select(x => LoadModel(x.Model)),
+            .. Kit.Manager.Get("sandral").Tiles.SelectMany(x => x.InnerCorners).Select(x => LoadModel(x.Model)),
+            .. Kit.Manager.Get("sandral").Tiles.SelectMany(x => x.OuterCorners).Select(x => LoadModel(x.Model)),
         ];
         await Task.WhenAll(loadModels);
 
@@ -255,7 +256,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         var tcs = new TaskCompletionSource<WallTemplate?>(TaskCreationOptions.RunContinuationsAsynchronously);
 
         var menu = new ContextMenu();
-        Templates.Store.Walls.ToList().ForEach(template =>
+        Kit.Manager.Get("sandral").Walls.ToList().ForEach(template =>
         {
             menu.Items.Add(new MenuItem
             {
@@ -282,7 +283,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         var tcs = new TaskCompletionSource<TileTemplate?>(TaskCreationOptions.RunContinuationsAsynchronously);
 
         var menu = new ContextMenu();
-        Templates.Store.Tiles.ToList().ForEach(template =>
+        Kit.Manager.Get("sandral").Tiles.ToList().ForEach(template =>
         {
             menu.Items.Add(new MenuItem
             {

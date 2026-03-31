@@ -9,7 +9,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.Base.ReactiveObjects;
 
-public class Vector4ViewModel : ReactiveObject
+public class ReactiveVector4 : ReactiveObject
 {
     private float _x;
     public float X
@@ -47,4 +47,9 @@ public class Vector4ViewModel : ReactiveObject
     {
         return new() { X = _x, Y = _y, Z = _z, W = _w };
     }
+}
+
+[Obsolete]
+public class Vector4ViewModel : ReactiveVector4
+{
 }

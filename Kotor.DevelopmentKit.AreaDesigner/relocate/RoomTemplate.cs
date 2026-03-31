@@ -7,28 +7,6 @@ using System.Threading.Tasks;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate;
 
-public class Templates
-{
-    public static Templates Store { get; } = new();
-    public ICollection<FloorTemplate> Floors { get; } = [];
-    public ICollection<TileTemplate> Tiles { get; } = [];
-    public ICollection<WallTemplate> Walls { get; } = [];
-    public ICollection<DoorFrameTemplate> DoorFrames { get; } = [];
-    public ICollection<CeilingTemplate> Ceilings { get; } = [];
-    public ICollection<CornerTemplate> InsideCorners { get; } = [];
-    public ICollection<CornerTemplate> OutsideCorners { get; } = [];
-    public ICollection<ObjectTemplate> Objects { get; } = [];
-
-    public FloorTemplate Floor(string id) => Floors.Single(x => x.ID == id);
-    public TileTemplate Tile(string id) => Tiles.Single(x => x.ID == id);
-    public WallTemplate Wall(string id) => Walls.Single(x => x.ID == id);
-    public DoorFrameTemplate DoorFrame(string id) => DoorFrames.Single(x => x.ID == id);
-    public CeilingTemplate Ceiling(string id) => Ceilings.Single(x => x.ID == id);
-    public CornerTemplate InsideCorner(string id) => InsideCorners.Single(x => x.ID == id);
-    public CornerTemplate OutsideCorner(string id) => OutsideCorners.Single(x => x.ID == id);
-    public ObjectTemplate Object(string id) => Objects.Single(x => x.ID == id);
-}
-
 public class RoomTemplate
 {
 }
@@ -44,19 +22,20 @@ public class TileTemplate
 {
     public required string ID { get; init; }
     public required string Name { get; init; }
-    public required string FloorID { get; init; }
-    public required WallHook[] Walls { get; init; }
+    public required string DefaultFloorID { get; init; }
+    public required string DefaultCeilingID { get; init; }
+    public required WallHookTemplate[] Walls { get; init; }
     public required CornerTemplate[] InnerCorners { get; init; }
     public required CornerTemplate[] OuterCorners { get; init; }
     public required Vector3[] CeilingHooks { get; init; }
 
-    public FloorTemplate Floor => Templates.Store.Floor(FloorID);
+    public FloorTemplate Floor => Kit.Manager.Get("sandral").Floor(DefaultFloorID);
 }
 
-public class WallHook
+public class WallHookTemplate
 {
     public required string DefaultWallID { get; init; }
-    public WallTemplate DefaultTemplate => Templates.Store.Wall(DefaultWallID);
+    public WallTemplate DefaultTemplate => Kit.Manager.Get("sandral").Wall(DefaultWallID);
 
     public required Vector3 LocalPosition { get; init; }
     public required Quaternion LocalOrientation { get; init; }
@@ -74,7 +53,7 @@ public class WallTemplate
     public required string Model { get; init; }
     public required string DoorFrameID { get; init; }
 
-    public DoorFrameTemplate? DoorFrame => (DoorFrameID is not null) ? Templates.Store.DoorFrame(DoorFrameID) : null;
+    public DoorFrameTemplate? DoorFrame => (DoorFrameID is not null) ? Kit.Manager.Get("sandral").DoorFrame(DoorFrameID) : null;
     public bool CanBeDoor => DoorFrame is not null;
 }
 

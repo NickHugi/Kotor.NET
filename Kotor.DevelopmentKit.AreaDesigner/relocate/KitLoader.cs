@@ -16,14 +16,16 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate;
 
 public class KitLoader
 {
-    public static void Load(string filepath)
+    public static Kit Load(string filepath)
     {
         var json = File.ReadAllText(filepath);
         dynamic data = JsonConvert.DeserializeObject(json);
 
+        var kit = new Kit(data.name.Value);
+
         foreach (var floor in data.floors)
         {
-            Templates.Store.Floors.Add(new FloorTemplate
+            kit.Floors.Add(new FloorTemplate
             {
                 ID = floor.id.Value,
                 Name = floor.name.Value,
@@ -33,7 +35,7 @@ public class KitLoader
 
         foreach (var door in data.doorframes)
         {
-            Templates.Store.DoorFrames.Add(new DoorFrameTemplate
+            kit.DoorFrames.Add(new DoorFrameTemplate
             {
                 ID = door.id.Value,
                 Name = door.name.Value,
@@ -48,7 +50,7 @@ public class KitLoader
 
         foreach (var wall in data.walls)
         {
-            Templates.Store.Walls.Add(new WallTemplate
+            kit.Walls.Add(new WallTemplate
             {
                 ID = wall.id.Value,
                 Name = wall.name.Value,
@@ -59,12 +61,13 @@ public class KitLoader
 
         foreach (var tile in data.tiles)
         {
-            Templates.Store.Tiles.Add(new TileTemplate
+            kit.Tiles.Add(new TileTemplate
             {
                 ID = tile.id.Value,
                 Name = tile.name.Value,
-                FloorID = tile.defaultFloor.Value,
-                Walls = ((JArray)tile.walls).Select(x => (dynamic)x).Select(hook => new WallHook
+                DefaultFloorID = tile.defaultFloor.Value,
+                DefaultCeilingID = "", // todo - tile.defaultCeiling.Value,
+                Walls = ((JArray)tile.walls).Select(x => (dynamic)x).Select(hook => new WallHookTemplate
                 {
                     DefaultWallID = hook.defaultWall,
                     LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
@@ -90,12 +93,14 @@ public class KitLoader
 
         foreach (var @object in data.objects)
         {
-            Templates.Store.Objects.Add(new ObjectTemplate
+            kit.Objects.Add(new ObjectTemplate
             {
                 ID = @object.id.Value,
                 Model = @object.model.Value,
             });
         }
+
+        return kit;
     }
 
     private static Quaternion QuaternionFromArray(float[] array)

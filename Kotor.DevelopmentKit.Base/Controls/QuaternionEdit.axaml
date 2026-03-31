@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="100"
+             x:Class="Kotor.DevelopmentKit.Base.Controls.QuaternionEdit"
+             x:Name="Root">
+  
+  <StackPanel>
+        <TextBlock Text="{Binding Label, ElementName=Root}" />
+          <Grid ColumnDefinitions="*,*,*,*">
+                <NumericUpDown Grid.Column="0"
+                               Value="{Binding Value.X, ElementName=Root}"
+                               ShowButtonSpinner="False" />
+                <NumericUpDown Grid.Column="1"
+                               Value="{Binding Value.Y, ElementName=Root}" 
+                               ShowButtonSpinner="False" />
+                <NumericUpDown Grid.Column="2"
+                               Value="{Binding Value.Z, ElementName=Root}"
+                               ShowButtonSpinner="False" />
+                <NumericUpDown Grid.Column="3"
+                               Value="{Binding Value.W, ElementName=Root}"
+                               ShowButtonSpinner="False" />
+          </Grid>
+  </StackPanel>
+</UserControl>

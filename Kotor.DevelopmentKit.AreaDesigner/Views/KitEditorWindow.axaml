@@ -2,43 +2,103 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:Kotor.DevelopmentKit.AreaDesigner.ViewModels"
+        xmlns:core="using:Kotor.DevelopmentKit.Base.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Kotor.DevelopmentKit.AreaDesigner.KitEditorWindow"
+        x:DataType="vm:KitEditorViewModel"
         Title="KitEditorWindow">
+    <Window.Styles>
+        <!--<Style Selector=":is(TextBox)">
+            <Setter Property="Margin" Value="0 0 0 10" />
+            <Setter Property="Width" Value="200" />
+        </Style>-->
+    </Window.Styles>
+
     <TabControl>
         <TabItem Header="Tiles">
-            <StackPanel Orientation="Horizontal" Spacing="4">
-                <StackPanel Background="LightGray">
-                    <Label Target="idBox" Content="_ID" />
-                    <TextBox x:Name="idBox" Margin="0 0 0 10" />
-
-                    <Label Target="nameBox" Content="_Name" />
-                    <TextBox x:Name="nameBox" Margin="0 0 0 10" />
-
-                    <Label Target="defaultFloorBox" Content="_Default Floor ID" />
-                    <TextBox x:Name="defaultFloorBox" Margin="0 0 0 10" />
-
-                    <Label Target="defaultCeilingBox" Content="_Default Ceiling ID" />
-                    <TextBox x:Name="defaultCeilingBox" Margin="0 0 0 10" />
+            <Grid ColumnDefinitions="*, *, *">
+                <Border Grid.Column="0" Padding="4" Background="#bbb">
+                <StackPanel>
+					<core:LabeledTextBox Label="Default WallID"
+									     Text="{Binding SelectedWallHookItem.DefaultWallID}" />
+					<core:Vector3Edit Label="Position"
+									  Value="{Binding SelectedWallHookItem.Position}" />
+					<core:QuaternionEdit Label="Orientation"
+										 Value="{Binding SelectedWallHookItem.Orientation}" />
                 </StackPanel>
-                <StackPanel MinWidth="200" Background="LightGray">
-                    <ListBox />
-                    <Button Content="Add" />
-                    <Button Content="Delete" />
+                </Border>
+                
+                <ScrollViewer Grid.Column="1">
+                    <Border Padding="4" Background="#ddd">
+                    <StackPanel Background="#ddd" Spacing="4">
+                        <Border Padding="4" Background="#bbb">
+                        <StackPanel HorizontalAlignment="Left">
+							<core:LabeledTextBox Label="ID"
+												 Text="{Binding SelectedTileItem.ID}" />
+							<core:LabeledTextBox Label="Name"
+												 Text="{Binding SelectedTileItem.Name}" />
+							<core:LabeledTextBox Label="Default Floor ID"
+												 Text="{Binding SelectedTileItem.DefaultFloorID}" />
+							<core:LabeledTextBox Label="Default Ceiling ID"
+												 Text="{Binding SelectedTileItem.DefaultCeilingID}" />
+                        </StackPanel>
+                        </Border>
+
+                        <Border Padding="4" Background="#bbb">
+                        <StackPanel>
+                            <ListBox ItemsSource="{Binding SelectedTileItem.Walls}"
+									 SelectedItem="{Binding SelectedWallHookItem}"
+									 Height="100">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding Name}" />
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+                            </ListBox>
+							<StackPanel Orientation="Horizontal">
+								<Button Content="Add"  />
+								<Button Content="Remove" Command="{Binding DeleteSelectedWallHook}" />
+							</StackPanel>
+                        </StackPanel>
+                        </Border>
+                        
+                    </StackPanel>
+                    </Border>
+                </ScrollViewer>
+
+                <StackPanel Grid.Column="2" MinWidth="200" Background="LightGray" DockPanel.Dock="Right">
+                    <ListBox ItemsSource="{Binding TileItems}" SelectedItem="{Binding SelectedTileItem}">
+						<ListBox.ItemTemplate>
+                            <DataTemplate>
+								<StackPanel>
+									<TextBlock Text="{Binding Name}" FontWeight="Bold" />
+									<TextBlock Text="{Binding ID}" FontSize="10" />
+								</StackPanel>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+					<StackPanel Orientation="Horizontal">
+						<Button Content="Add" />
+						<Button Content="Delete" Command="{Binding DeleteSelectedTile}" />
+					</StackPanel>
                 </StackPanel>
-            </StackPanel>
+            </Grid>
         </TabItem>
+        
+        <TabItem Header="Floors">
+        </TabItem>
+
         <TabItem Header="Walls">
-            
         </TabItem>
+
         <TabItem Header="Door Frames">
-            
         </TabItem>
+
         <TabItem Header="Ceilings">
-            
         </TabItem>
+
         <TabItem Header="Objects">
-            
         </TabItem>
     </TabControl>
 </Window>

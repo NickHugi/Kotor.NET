@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Kotor.DevelopmentKit.Base\Kotor.DevelopmentKit.Base.csproj" />
     <ProjectReference Include="..\Kotor.NET.Graphics.OpenGL\Kotor.NET.Graphics.OpenGL.csproj" />
     <ProjectReference Include="..\Kotor.NET.Graphics\Kotor.NET.Graphics.csproj" />
   </ItemGroup>

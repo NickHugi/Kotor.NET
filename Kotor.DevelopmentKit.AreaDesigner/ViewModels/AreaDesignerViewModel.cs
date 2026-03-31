@@ -18,6 +18,12 @@ public class AreaDesignerViewModel : ReactiveObject
     public Interaction<Unit, WallTemplate?> SelectWallTemplate = new();
     public Interaction<Unit, TileTemplate?> SelectTileTemplate = new();
 
+    public Kit? SelectedKit
+    {
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
     public GLEngine Engine { get; set => this.RaiseAndSetIfChanged(ref field, value); }
 
     public BaseMode Mode { get; private set => this.RaiseAndSetIfChanged(ref field, value); }
