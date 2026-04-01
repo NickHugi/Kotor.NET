@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Markup.Xaml;
 
 namespace Kotor.DevelopmentKit.Base.Controls;
@@ -10,7 +11,7 @@ public partial class LabeledTextBox : UserControl
         AvaloniaProperty.Register<LabeledTextBox, string>(nameof(Label));
 
     public static readonly StyledProperty<string> TextProperty =
-        AvaloniaProperty.Register<LabeledTextBox, string>(nameof(Text));
+        AvaloniaProperty.Register<LabeledTextBox, string>(nameof(Text), defaultBindingMode: BindingMode.TwoWay);
 
     public string Label
     {

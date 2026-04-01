@@ -10,6 +10,9 @@
 
   <ItemGroup>
     <Folder Include="Assets\" />
+    <Folder Include="KitEditor\ReactiveObjects\" />
+    <Folder Include="KitEditor\ViewModels\" />
+    <Folder Include="KitEditor\Views\" />
     <Folder Include="Models\" />
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
