@@ -14,9 +14,6 @@ namespace Kotor.DevelopmentKit.AreaDesigner.ViewModels;
 
 public class KitEditorViewModel : ReactiveObject
 {
-    private readonly CompositeDisposable _disposables = new CompositeDisposable();
-    private object lol;
-
     public ObservableCollection<TileItem> TileItems { get; }
     public TileItem? SelectedTileItem
     {

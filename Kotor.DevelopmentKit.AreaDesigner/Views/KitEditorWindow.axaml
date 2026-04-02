@@ -15,6 +15,27 @@
         </Style>-->
     </Window.Styles>
 
+	<Window.Resources>
+        <DataTemplate x:Key="TileItemTemplate" x:DataType="vm:TileItem">
+			<StackPanel>
+				<TextBlock Text="{Binding Name}" FontWeight="Bold" />
+				<TextBlock Text="{Binding ID}" FontSize="10" />
+			</StackPanel>
+		</DataTemplate>
+
+        <DataTemplate x:Key="WallHookItemTemplate" x:DataType="vm:WallHookItem">
+			<StackPanel>
+				<TextBlock Text="{Binding Name}" />
+			</StackPanel>
+		</DataTemplate>
+
+        <DataTemplate x:Key="CornerItemTemplate" x:DataType="vm:CornerItem">
+			<StackPanel>
+				<TextBlock Text="{Binding Name}" />
+			</StackPanel>
+		</DataTemplate>
+	</Window.Resources>
+
     <TabControl>
         <TabItem Header="Tiles">
             <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
@@ -73,15 +94,10 @@
 
                         <Border Padding="4" Background="#bbb">
                         <StackPanel>
-                            <ListBox ItemsSource="{Binding SelectedTileItem.Walls}"
+                            <ListBox ItemTemplate="{StaticResource WallHookItemTemplate}"
+                                     ItemsSource="{Binding SelectedTileItem.Walls}"
 									 SelectedItem="{Binding SelectedWallHookItem}"
-									 Height="100">
-								<ListBox.ItemTemplate>
-									<DataTemplate>
-										<TextBlock Text="{Binding Name}" />
-									</DataTemplate>
-								</ListBox.ItemTemplate>
-                            </ListBox>
+									 Height="100" />
 							<StackPanel Orientation="Horizontal">
 								<Button Content="Add"  />
 								<Button Content="Remove" Command="{Binding DeleteSelectedWallHook}" />
@@ -91,15 +107,10 @@
 
                         <Border Padding="4" Background="#bbb">
                         <StackPanel>
-                            <ListBox ItemsSource="{Binding SelectedTileItem.InnerCorners}"
+                            <ListBox ItemTemplate="{StaticResource CornerItemTemplate}"
+                                     ItemsSource="{Binding SelectedTileItem.InnerCorners}"
 									 SelectedItem="{Binding SelectedCornerItem}"
-									 Height="100">
-								<ListBox.ItemTemplate>
-									<DataTemplate>
-										<TextBlock Text="{Binding Name}" />
-									</DataTemplate>
-								</ListBox.ItemTemplate>
-                            </ListBox>
+									 Height="100" />
 							<StackPanel Orientation="Horizontal">
 								<Button Content="Add"  />
 								<Button Content="Remove" />
@@ -113,16 +124,9 @@
 
 				<!--Tile List-->
                 <StackPanel Grid.Column="2" MinWidth="200" Background="LightGray" DockPanel.Dock="Right">
-                    <ListBox ItemsSource="{Binding TileItems}" SelectedItem="{Binding SelectedTileItem}">
-						<ListBox.ItemTemplate>
-                            <DataTemplate>
-								<StackPanel>
-									<TextBlock Text="{Binding Name}" FontWeight="Bold" />
-									<TextBlock Text="{Binding ID}" FontSize="10" />
-								</StackPanel>
-							</DataTemplate>
-						</ListBox.ItemTemplate>
-					</ListBox>
+                    <ListBox ItemTemplate="{StaticResource TileItemTemplate}"
+                             ItemsSource="{Binding TileItems}"
+                             SelectedItem="{Binding SelectedTileItem}" />
 					<StackPanel Orientation="Horizontal">
 						<Button Content="Add" />
 						<Button Content="Delete" Command="{Binding DeleteSelectedTile}" />
