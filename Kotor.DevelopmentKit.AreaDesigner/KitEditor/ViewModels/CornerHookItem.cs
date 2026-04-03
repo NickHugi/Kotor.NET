@@ -1,11 +1,12 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using Kotor.DevelopmentKit.AreaDesigner.relocate;
 using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
-public class CornerItem : ReactiveObject
+public class CornerHookItem : ReactiveObject
 {
     public string Name => $"Hook ({Position.Z:F2}, {Position.Y:F2}, {Position.Z:F2})";
 
@@ -33,18 +34,29 @@ public class CornerItem : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public CornerItem()
+    public CornerHookItem()
     {
         DefaultCornerID = "";
         Position = new();
         Orientation = new();
         AdjacentWalls = [];
     }
-    public CornerItem(CornerTemplate template)
+    public CornerHookItem(CornerTemplate template)
     {
         DefaultCornerID = template.ID;
         Position = new(template.Position);
         Orientation = new(template.Orientation);
         AdjacentWalls = new(template.Adjacent);
+    }
+
+    public CornerTemplate ToModel()
+    {
+        return new CornerTemplate
+        {
+            ID = DefaultCornerID,
+            Adjacent = AdjacentWalls.ToArray(),
+            Position = Position.ToModel(),
+            Orientation = Orientation.ToModel(),
+        };
     }
 }

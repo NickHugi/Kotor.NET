@@ -27,6 +27,7 @@ public class ObjectItem : ReactiveObject
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
+
     public ObjectItem()
     {
         ID = "";
@@ -38,5 +39,15 @@ public class ObjectItem : ReactiveObject
         ID = template.ID;
         Name = template.Name;
         Model = template.Model;
+    }
+
+    public ObjectTemplate ToModel()
+    {
+        return new ObjectTemplate
+        {
+            ID = ID,
+            Name = Name,
+            Model = Model,
+        };
     }
 }

@@ -37,4 +37,13 @@ public class DoorFrameHookItem : ReactiveObject
         Position = new(template.Position);
         Orientation = new(template.Orientation);
     }
+
+    public DoorFrameHookTemplate ToModel()
+    {
+        return new DoorFrameHookTemplate
+        {
+            Position = Position.ToModel(),
+            Orientation = Orientation.ToModel(),
+        };
+    }
 }

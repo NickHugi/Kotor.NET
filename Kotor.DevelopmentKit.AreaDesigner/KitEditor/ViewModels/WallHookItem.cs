@@ -50,4 +50,14 @@ public class WallHookItem : ReactiveObject
         Orientation = new(wallHook.LocalOrientation);
         AdjacentWalls = new(wallHook.AdjacentWalls);
     }
+
+    public WallHookTemplate ToModel()
+    {
+        return new WallHookTemplate
+        {
+            DefaultWallID = DefaultWallID,
+            LocalPosition = Position.ToModel(),
+            LocalOrientation = Orientation.ToModel(),
+        };
+    }
 }

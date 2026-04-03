@@ -49,4 +49,15 @@ public class DoorFrameItem : ReactiveObject
         Model = template.Model;
         Hooks = new(template.Hooks.Select(x => new DoorFrameHookItem(x)));
     }
+
+    public DoorFrameTemplate ToModel()
+    {
+        return new DoorFrameTemplate
+        {
+            ID = ID,
+            Name = Name,
+            Model = Model,
+            Hooks = Hooks.Select(x => x.ToModel()).ToArray(),
+        };
+    }
 }

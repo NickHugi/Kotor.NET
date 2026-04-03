@@ -29,7 +29,7 @@
 			</StackPanel>
 		</DataTemplate>
 
-        <DataTemplate x:Key="CornerItemTemplate" x:DataType="vm:CornerItem">
+        <DataTemplate x:Key="CornerHookItemTemplate" x:DataType="vm:CornerHookItem">
 			<StackPanel>
 				<TextBlock Text="{Binding Name}" />
 			</StackPanel>
@@ -78,6 +78,16 @@
 	</Window.Resources>
 
     <TabControl>
+        <TabItem Header="Kit">
+            <StackPanel>
+			    <core:LabeledTextBox Label="Name"
+								     Text="{Binding Name}" />
+                <Button Content="Save" />
+                <Button Content="Save As" />
+            </StackPanel>
+        </TabItem>
+
+
         <TabItem Header="Tiles">
             <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
                 <Border Grid.Column="0" Padding="4" Background="#ddd">
@@ -97,7 +107,7 @@
 						    </Border>
                         </DataTemplate>
 
-                        <DataTemplate DataType="vm:CornerItem">
+                        <DataTemplate DataType="vm:CornerHookItem">
 						    <Border Grid.Column="0" Padding="4" Background="#bbb">
 						    <StackPanel>
 							    <core:LabeledTextBox Label="Default Corner ID"
@@ -148,7 +158,7 @@
                         <Border Padding="4" Background="#bbb">
                         <StackPanel>
                             <TextBlock Text="Inner Corner Hooks" />
-                            <ListBox ItemTemplate="{StaticResource CornerItemTemplate}"
+                            <ListBox ItemTemplate="{StaticResource CornerHookItemTemplate}"
                                      ItemsSource="{Binding TileTab.SelectedTileItem.InnerCorners}"
 									 SelectedItem="{Binding TileTab.SelectedTileChildItem}"
 									 Height="100" />
@@ -162,7 +172,7 @@
                         <Border Padding="4" Background="#bbb">
                         <StackPanel>
                             <TextBlock Text="Outer Corner Hooks" />
-                            <ListBox ItemTemplate="{StaticResource CornerItemTemplate}"
+                            <ListBox ItemTemplate="{StaticResource CornerHookItemTemplate}"
                                      ItemsSource="{Binding TileTab.SelectedTileItem.OuterCorners}"
 									 SelectedItem="{Binding TileTab.SelectedTileChildItem}"
 									 Height="100" />

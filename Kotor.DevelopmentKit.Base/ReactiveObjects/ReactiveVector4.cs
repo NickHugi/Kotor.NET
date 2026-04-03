@@ -56,6 +56,11 @@ public class ReactiveVector3 : ReactiveObject
     {
         return new() { X = _x, Y = _y, Z = _z };
     }
+
+    public Vector3 ToModel()
+    {
+        return new(X, Y, Z);
+    }
 }
 
 public class Vector3ViewModel : ReactiveVector3

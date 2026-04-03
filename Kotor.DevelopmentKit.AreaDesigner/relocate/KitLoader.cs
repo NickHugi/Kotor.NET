@@ -21,7 +21,7 @@ public class KitLoader
         var json = File.ReadAllText(filepath);
         dynamic data = JsonConvert.DeserializeObject(json);
 
-        var kit = new Kit(data.name.Value);
+        var kit = new Kit(data.id.Value, data.name.Value);
 
         foreach (var floor in data.floors)
         {

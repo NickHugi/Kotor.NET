@@ -40,4 +40,14 @@ public class FloorItem : ReactiveObject
         Name = template.Name;
         Model = template.Model;
     }
+
+    public FloorTemplate ToModel()
+    {
+        return new FloorTemplate
+        {
+            ID = ID,
+            Name = Name,
+            Model = Model,
+        };
+    }
 }

@@ -10,15 +10,16 @@ public class Kit
 {
     public static KitManager Manager { get; } = new();
 
+    public string ID { get; }
     public string Name { get; }
-    public ICollection<FloorTemplate> Floors { get; } = [];
-    public ICollection<TileTemplate> Tiles { get; } = [];
-    public ICollection<WallTemplate> Walls { get; } = [];
-    public ICollection<DoorFrameTemplate> DoorFrames { get; } = [];
-    public ICollection<CeilingTemplate> Ceilings { get; } = [];
-    public ICollection<CornerTemplate> InsideCorners { get; } = [];
-    public ICollection<CornerTemplate> OutsideCorners { get; } = [];
-    public ICollection<ObjectTemplate> Objects { get; } = [];
+    public ICollection<FloorTemplate> Floors { get; init; } = [];
+    public ICollection<TileTemplate> Tiles { get; init; } = [];
+    public ICollection<WallTemplate> Walls { get; init; } = [];
+    public ICollection<DoorFrameTemplate> DoorFrames { get; init; } = [];
+    public ICollection<CeilingTemplate> Ceilings { get; init; } = [];
+    public ICollection<CornerTemplate> InsideCorners { get; init; } = [];
+    public ICollection<CornerTemplate> OutsideCorners { get; init; } = [];
+    public ICollection<ObjectTemplate> Objects { get; init; } = [];
 
     public FloorTemplate Floor(string id) => Floors.Single(x => x.ID == id);
     public TileTemplate Tile(string id) => Tiles.Single(x => x.ID == id);
@@ -29,8 +30,9 @@ public class Kit
     public CornerTemplate OutsideCorner(string id) => OutsideCorners.Single(x => x.ID == id);
     public ObjectTemplate Object(string id) => Objects.Single(x => x.ID == id);
 
-    public Kit(string name)
+    public Kit(string id, string name)
     {
+        ID = id;
         Name = name;
     }   
 }

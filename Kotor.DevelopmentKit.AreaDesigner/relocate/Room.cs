@@ -207,10 +207,14 @@ public class Floor
 
 public class Ceiling
 {
+    public string ID { get; set; }
+    public string Name { get; set; }
     public string Model { get; set; }
 
-    public Ceiling(string model)
+    public Ceiling(string id, string name, string model)
     {
+        ID = id;
+        Name = name;
         Model = model;
     }
 }

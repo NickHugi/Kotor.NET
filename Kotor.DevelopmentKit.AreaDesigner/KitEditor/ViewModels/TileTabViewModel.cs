@@ -75,7 +75,7 @@ public class TileTabViewModel : ReactiveObject
 
     public void DeleteSelectedInnerCorner()
     {
-        if (SelectedTileChildItem is CornerItem corner && corner is not null)
+        if (SelectedTileChildItem is CornerHookItem corner && corner is not null)
         {
             SelectedTileItem!.InnerCorners.Remove(corner);
         }
@@ -91,7 +91,7 @@ public class TileTabViewModel : ReactiveObject
 
     public void DeleteSelectedOuterCorner()
     {
-        if (SelectedTileChildItem is CornerItem corner && corner is not null)
+        if (SelectedTileChildItem is CornerHookItem corner && corner is not null)
         {
             SelectedTileItem!.OuterCorners.Remove(corner);
         }

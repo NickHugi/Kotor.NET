@@ -37,12 +37,12 @@ public class TileItem : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public ObservableCollection<CornerItem> InnerCorners
+    public ObservableCollection<CornerHookItem> InnerCorners
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
-    public ObservableCollection<CornerItem> OuterCorners
+    public ObservableCollection<CornerHookItem> OuterCorners
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
@@ -65,7 +65,22 @@ public class TileItem : ReactiveObject
         DefaultFloorID = tile.DefaultFloorID;
         DefaultCeilingID = tile.DefaultCeilingID;
         Walls = new(tile.Walls.Select(x => new WallHookItem(x)));
-        InnerCorners = new(tile.InnerCorners.Select(x => new CornerItem(x)));
-        OuterCorners = new(tile.OuterCorners.Select(x => new CornerItem(x)));
+        InnerCorners = new(tile.InnerCorners.Select(x => new CornerHookItem(x)));
+        OuterCorners = new(tile.OuterCorners.Select(x => new CornerHookItem(x)));
+    }
+
+    public TileTemplate ToModel()
+    {
+        return new TileTemplate
+        {
+            ID = ID,
+            Name = Name,
+            DefaultFloorID = DefaultFloorID,
+            DefaultCeilingID = DefaultCeilingID,
+            Walls = Walls.Select(x => x.ToModel()).ToArray(),
+            InnerCorners = InnerCorners.Select(x => x.ToModel()).ToArray(),
+            OuterCorners = OuterCorners.Select(x => x.ToModel()).ToArray(),
+            CeilingHooks = [], // TODO
+        };
     }
 }

@@ -46,4 +46,9 @@ public class ReactiveQuaternion : ReactiveObject
         Z = z;
         W = w;
     }
+
+    public Quaternion ToModel()
+    {
+        return new Quaternion(X, Y, Z, W);
+    }
 }

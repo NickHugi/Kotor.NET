@@ -24,6 +24,7 @@ public class CeilingItem : ReactiveObject
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
+
     public CeilingItem()
     {
         ID = "";
@@ -35,5 +36,15 @@ public class CeilingItem : ReactiveObject
         ID = template.ID;
         Name = template.Name;
         Model = template.Model;
+    }
+
+    public CeilingTemplate ToModel()
+    {
+        return new CeilingTemplate
+        {
+            ID = ID,
+            Name = Name,
+            Model = Model
+        };
     }
 }

@@ -73,10 +73,13 @@ public class DoorFrameHookTemplate
 
 public class CeilingTemplate
 {
-    public string ID { get; }
-    public string Name { get; }
-    public string Model { get; }
+    public required string ID { get; init; }
+    public required string Name { get; init; }
+    public required string Model { get; init; }
 
+    public CeilingTemplate()
+    {
+    }
     public CeilingTemplate(string id, string name, string model)
     {
         ID = id;
