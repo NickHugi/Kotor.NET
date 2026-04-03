@@ -41,6 +41,13 @@
 				<TextBlock Text="{Binding ID}" FontSize="10" />
 			</StackPanel>
 		</DataTemplate>
+        
+        <DataTemplate x:Key="WallItemTemplate" x:DataType="vm:WallItem">
+			<StackPanel>
+				<TextBlock Text="{Binding Name}" FontWeight="Bold" />
+				<TextBlock Text="{Binding ID}" FontSize="10" />
+			</StackPanel>
+		</DataTemplate>
 	</Window.Resources>
 
     <TabControl>
@@ -187,6 +194,25 @@
         <TabItem Header="Walls">
             <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
                 
+                <Border Grid.Column="2" Padding="4" Background="#ddd">
+                <Grid RowDefinitions="Auto, *, Auto" Background="#bbb" RowSpacing="4">
+                    <TextBlock Grid.Row="0"
+                               Text="Tiles" />
+                    <ListBox Grid.Row="1"
+                             ItemTemplate="{StaticResource WallItemTemplate}"
+                             ItemsSource="{Binding WallTab.WallItems}"
+                             SelectedItem="{Binding WallTab.SelectedWallItem}" />
+					<StackPanel Grid.Row="2"
+                                Orientation="Horizontal"
+                                Spacing="4">
+						<Button Content="Add"
+                                Command="{Binding WallTab.AddWall}" />
+						<Button Content="Delete"
+                                Command="{Binding WallTab.DeleteSelectedWall}" />
+					</StackPanel>
+                </Grid>
+                </Border>
+
             </Grid>
         </TabItem>
 

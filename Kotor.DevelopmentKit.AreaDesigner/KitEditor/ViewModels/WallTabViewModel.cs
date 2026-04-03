@@ -26,4 +26,17 @@ public class WallTabViewModel : ReactiveObject
     {
         WallItems = new ObservableCollection<WallItem>(kit.Walls.Select(x => new WallItem(x)));
     }
+
+    public void AddWall()
+    {
+        WallItems.Add(new());
+    }
+
+    public void DeleteSelectedWall()
+    {
+        if (SelectedWallItem is null)
+            return;
+
+        WallItems.Remove(SelectedWallItem);
+    }
 }
