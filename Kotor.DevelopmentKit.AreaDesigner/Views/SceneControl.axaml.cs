@@ -61,8 +61,6 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         _camera.Pitch = 1;
         _camera.Target = new(0, 0, 2);
 
-        var kit = KitLoader.Load($@"C:\Users\hugin\Desktop\KotOR Modding Stuff\Area Designer\Sandral Estate\sandral.json");
-        Kit.Manager.Add(kit);
         await LoadRequiredDataForKits();
 
         ViewModel.Engine.Scene.AddEntity(new AreaEntity());

@@ -22,7 +22,6 @@
             <Button Content="Extend Room" Command="{Binding SetSceneMode_AddTile}" />
             <Button Content="Switch Wall" Command="{Binding SetSceneMode_SwitchWall}" />
             <Button Content="Add Object" Command="{Binding SetSceneMode_AddObject}" />
-            <Button Content="Kit Editor" Command="{Binding #Window.OpenKitEditor}" />
             <Label Content="{Binding Mode.Name}" />
 
             <DropDownButton Content="Visibility">
@@ -36,6 +35,25 @@
                 </DropDownButton.Flyout>
             </DropDownButton>
 
+        </StackPanel>
+        <StackPanel DockPanel.Dock="Left"
+                    Width="250">
+            <Grid ColumnDefinitions="*, Auto">
+                <ComboBox ItemsSource="{Binding Kits}"
+                          SelectedItem="{Binding SelectedKit}"
+                          Grid.Column="0"
+                          HorizontalAlignment="Stretch">
+                    <ComboBox.ItemTemplate>
+                      <DataTemplate>
+                        <TextBlock Text="{Binding Name}" />
+                      </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button Grid.Column="1"
+                        Content="Edit Kit"
+                        Command="{Binding #Window.OpenKitEditor}" />
+            </Grid>
+            <ListBox Height="200"/>
         </StackPanel>
         <local:SceneControl/>
     </DockPanel>

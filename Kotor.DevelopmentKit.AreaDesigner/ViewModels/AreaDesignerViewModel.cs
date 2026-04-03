@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Text;
@@ -18,6 +19,7 @@ public class AreaDesignerViewModel : ReactiveObject
     public Interaction<Unit, WallTemplate?> SelectWallTemplate = new();
     public Interaction<Unit, TileTemplate?> SelectTileTemplate = new();
 
+    public ObservableCollection<Kit> Kits { get; } = new();
     public Kit? SelectedKit
     {
         get => field;
@@ -90,5 +92,17 @@ public class AreaDesignerViewModel : ReactiveObject
     {
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
         Mode = new AddObjectMode(Engine, area);
+    }
+
+    public void ReloadKit(string filepath)
+    {
+        
+    }
+
+    public AreaDesignerViewModel()
+    {
+        var kit = KitLoader.Load($@"C:\Users\hugin\Desktop\KotOR Modding Stuff\Area Designer\Sandral Estate\sandral.json");
+        Kit.Manager.Add(kit);
+        Kits = new(Kit.Manager.Kits);
     }
 }
