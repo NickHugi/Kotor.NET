@@ -133,7 +133,7 @@
 									 SelectedItem="{Binding TileTab.SelectedTileChildItem}"
 									 Height="100" />
 							<StackPanel Orientation="Horizontal" Spacing="4">
-								<Button Content="Add" />
+								<Button Content="Add" Command="{Binding TileTab.AddWallHook}" />
 								<Button Content="Remove" Command="{Binding TileTab.DeleteSelectedWallHook}" />
 							</StackPanel>
                         </StackPanel>
@@ -147,8 +147,8 @@
 									 SelectedItem="{Binding TileTab.SelectedTileChildItem}"
 									 Height="100" />
 							<StackPanel Orientation="Horizontal" Spacing="4">
-								<Button Content="Add" />
-								<Button Content="Remove" />
+								<Button Content="Add" Command="{Binding TileTab.AddInnerCorner}" />
+								<Button Content="Remove" Command="{Binding TileTab.DeleteSelectedInnerCorner}" />
 							</StackPanel>
                         </StackPanel>
                         </Border>
@@ -161,8 +161,8 @@
 									 SelectedItem="{Binding TileTab.SelectedTileChildItem}"
 									 Height="100" />
 							<StackPanel Orientation="Horizontal" Spacing="4">
-								<Button Content="Add" />
-								<Button Content="Remove" />
+								<Button Content="Add" Command="{Binding TileTab.AddOuterCorner}" />
+								<Button Content="Remove" Command="{Binding TileTab.DeleteSelectedOuterCorner}" />
 							</StackPanel>
                         </StackPanel>
                         </Border>
@@ -178,17 +178,38 @@
                              ItemsSource="{Binding TileTab.TileItems}"
                              SelectedItem="{Binding TileTab.SelectedTileItem}" />
 					<StackPanel Orientation="Horizontal" Spacing="4">
-						<Button Content="Add" />
+						<Button Content="Add" Command="{Binding TileTab.AddTile}" />
 						<Button Content="Delete" Command="{Binding TileTab.DeleteSelectedTile}" />
 					</StackPanel>
                 </StackPanel>
                 </Border>
             </Grid>
         </TabItem>
-        
+
+
         <TabItem Header="Floors">
             <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
                 
+                
+				<!--Floor Editor Panel-->
+                <Border Grid.Column="1" Padding="4" Background="#ddd">
+                <ScrollViewer>
+                    <StackPanel Background="#ddd" Spacing="4">
+                        <Border Padding="4" Background="#bbb">
+                        <StackPanel HorizontalAlignment="Left">
+							<core:LabeledTextBox Label="ID"
+												 Text="{Binding FloorTab.SelectedFloorItem.ID}" />
+							<core:LabeledTextBox Label="Name"
+												 Text="{Binding FloorTab.SelectedFloorItem.Name}" />
+							<core:LabeledTextBox Label="Model"
+												 Text="{Binding FloorTab.SelectedFloorItem.Model}" />
+                        </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+                </Border>
+
+                <!--Floor List Panel-->
                 <Border Grid.Column="2" Padding="4" Background="#ddd">
                 <Grid RowDefinitions="Auto, *, Auto" Background="#bbb" RowSpacing="4">
                     <TextBlock Grid.Row="0"

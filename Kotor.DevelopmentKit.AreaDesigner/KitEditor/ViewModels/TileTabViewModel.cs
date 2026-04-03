@@ -13,7 +13,7 @@ public class TileTabViewModel : ReactiveObject
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
-    public object SelectedTileChildItem
+    public object? SelectedTileChildItem
     {
         get;
         set
@@ -32,6 +32,15 @@ public class TileTabViewModel : ReactiveObject
         TileItems = new ObservableCollection<TileItem>(kit.Tiles.Select(x => new TileItem(x)));
     }
 
+    public void AddTile()
+    {
+        TileItems.Add(new()
+        {
+            ID = $"KitID_tile_{TileItems.Count}",
+            Name = "New Tile",
+        });
+    }
+
     public void DeleteSelectedTile()
     {
         if (SelectedTileItem is null)
@@ -40,11 +49,51 @@ public class TileTabViewModel : ReactiveObject
         TileItems.Remove(SelectedTileItem);
     }
 
+    public void AddWallHook()
+    {
+        if (SelectedTileItem is null)
+            return;
+
+        SelectedTileItem.Walls.Add(new());
+    }
+
     public void DeleteSelectedWallHook()
     {
         if (SelectedTileChildItem is WallHookItem wallHook && wallHook is not null)
         {
             SelectedTileItem!.Walls.Remove(wallHook);
+        }
+    }
+
+    public void AddInnerCorner()
+    {
+        if (SelectedTileItem is null)
+            return;
+
+        SelectedTileItem.InnerCorners.Add(new());
+    }
+
+    public void DeleteSelectedInnerCorner()
+    {
+        if (SelectedTileChildItem is CornerItem corner && corner is not null)
+        {
+            SelectedTileItem!.InnerCorners.Remove(corner);
+        }
+    }
+
+    public void AddOuterCorner()
+    {
+        if (SelectedTileItem is null)
+            return;
+
+        SelectedTileItem.OuterCorners.Add(new());
+    }
+
+    public void DeleteSelectedOuterCorner()
+    {
+        if (SelectedTileChildItem is CornerItem corner && corner is not null)
+        {
+            SelectedTileItem!.OuterCorners.Remove(corner);
         }
     }
 }
