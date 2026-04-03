@@ -37,7 +37,7 @@
 	</Window.Resources>
 
     <TabControl>
-        <TabItem Header="Tiles">
+        <TabItem Header="Tiles" DataContext="{Binding TileTab}">
             <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
                 <Border Grid.Column="0" Padding="4" Background="#ddd">
 				<ContentControl Content="{Binding SelectedTileChildItem}">

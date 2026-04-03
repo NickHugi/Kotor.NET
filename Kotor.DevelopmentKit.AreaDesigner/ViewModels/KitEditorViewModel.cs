@@ -14,6 +14,21 @@ namespace Kotor.DevelopmentKit.AreaDesigner.ViewModels;
 
 public class KitEditorViewModel : ReactiveObject
 {
+    public TileTabViewModel TileTab { get; }
+
+    public KitEditorViewModel()
+    {
+        TileTab = new();
+    }
+    public KitEditorViewModel(Kit kit) : this()
+    {
+        TileTab = new(kit);
+    }
+
+}
+
+public class TileTabViewModel : ReactiveObject
+{
     public ObservableCollection<TileItem> TileItems { get; }
     public TileItem? SelectedTileItem
     {
@@ -23,17 +38,18 @@ public class KitEditorViewModel : ReactiveObject
     public object SelectedTileChildItem
     {
         get;
-        set {
+        set
+        {
             this.RaiseAndSetIfChanged(ref field, null);
             this.RaiseAndSetIfChanged(ref field, value);
         }
     }
 
-    public KitEditorViewModel()
+    public TileTabViewModel()
     {
         TileItems = [];
     }
-    public KitEditorViewModel(Kit kit) : this()
+    public TileTabViewModel(Kit kit) : this()
     {
         TileItems = new ObservableCollection<TileItem>(kit.Tiles.Select(x => new TileItem(x)));
     }

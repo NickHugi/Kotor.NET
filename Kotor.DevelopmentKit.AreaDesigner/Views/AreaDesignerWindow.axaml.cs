@@ -15,6 +15,9 @@ public partial class AreaDesignerWindow : ReactiveWindow<AreaDesignerViewModel>
 
     public async Task OpenKitEditor()
     {
+        if (ViewModel.SelectedKit is null)
+            return;
+
         var dialog = new KitEditorWindow();
         dialog.ViewModel = new(ViewModel.SelectedKit);
         // todo - save changes
