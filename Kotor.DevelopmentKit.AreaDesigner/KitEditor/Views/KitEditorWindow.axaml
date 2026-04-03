@@ -239,7 +239,7 @@
         <TabItem Header="Walls">
             <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
 
-				<!--Floor Editor Panel-->
+				<!--Walls Editor Panel-->
                 <Border Grid.Column="1" Padding="4" Background="#ddd">
                 <ScrollViewer>
                     <StackPanel Background="#ddd" Spacing="4">
@@ -262,7 +262,7 @@
                 <Border Grid.Column="2" Padding="4" Background="#ddd">
                 <Grid RowDefinitions="Auto, *, Auto" Background="#bbb" RowSpacing="4">
                     <TextBlock Grid.Row="0"
-                               Text="Tiles" />
+                               Text="Walls" />
                     <ListBox Grid.Row="1"
                              ItemTemplate="{StaticResource WallItemTemplate}"
                              ItemsSource="{Binding WallTab.WallItems}"
@@ -358,10 +358,29 @@
         <TabItem Header="Ceilings">
             <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
                 
+				<!--Ceiling Editor Panel-->
+                <Border Grid.Column="1" Padding="4" Background="#ddd">
+                <ScrollViewer>
+                    <StackPanel Background="#ddd" Spacing="4">
+                        <Border Padding="4" Background="#bbb">
+                        <StackPanel HorizontalAlignment="Left">
+							<core:LabeledTextBox Label="ID"
+												 Text="{Binding CeilingTab.SelectedCeilingItem.ID}" />
+							<core:LabeledTextBox Label="Name"
+												 Text="{Binding CeilingTab.SelectedCeilingItem.Name}" />
+							<core:LabeledTextBox Label="Model"
+												 Text="{Binding CeilingTab.SelectedCeilingItem.Model}" />
+                        </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+                </Border>
+
+                <!--Ceiling List Panel-->
                 <Border Grid.Column="2" Padding="4" Background="#ddd">
                 <Grid RowDefinitions="Auto, *, Auto" Background="#bbb" RowSpacing="4">
                     <TextBlock Grid.Row="0"
-                               Text="Walls" />
+                               Text="Ceilings" />
                     <ListBox Grid.Row="1"
                              ItemTemplate="{StaticResource CeilingItemTemplate}"
                              ItemsSource="{Binding CeilingTab.CeilingItems}"
