@@ -26,4 +26,17 @@ public class ObjectTabViewModel : ReactiveObject
     {
         ObjectItems = new ObservableCollection<ObjectItem>(kit.Objects.Select(x => new ObjectItem(x)));
     }
+
+    public void AddObject()
+    {
+        ObjectItems.Add(new());
+    }
+
+    public void DeleteSelectedObject()
+    {
+        if (SelectedObjectItem is null)
+            return;
+
+        ObjectItems.Remove(SelectedObjectItem);
+    }
 }
