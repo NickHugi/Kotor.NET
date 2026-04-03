@@ -20,29 +20,18 @@ public class KitEditorViewModel : ReactiveObject
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
-    public WallHookItem? SelectedWallHookItem
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-    public CornerItem? SelectedCornerItem
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public int LeftPanelSelectedIndex
+    public object SelectedTileChildItem
     {
         get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
+        set {
+            this.RaiseAndSetIfChanged(ref field, null);
+            this.RaiseAndSetIfChanged(ref field, value);
+        }
     }
 
     public KitEditorViewModel()
     {
         TileItems = [];
-
-        this.WhenAnyValue(x => x.SelectedWallHookItem).Subscribe(value => LeftPanelSelectedIndex = 0);
-        this.WhenAnyValue(x => x.SelectedCornerItem).Subscribe(value => LeftPanelSelectedIndex = 1);
     }
     public KitEditorViewModel(Kit kit) : this()
     {
@@ -59,12 +48,10 @@ public class KitEditorViewModel : ReactiveObject
 
     public void DeleteSelectedWallHook()
     {
-        if (SelectedTileItem is null)
-            return;
-        if (SelectedWallHookItem is null)
-            return;
-
-        SelectedTileItem.Walls.Remove(SelectedWallHookItem);
+        if (SelectedTileChildItem is WallHookItem wallHook && wallHook is not null)
+        {
+            SelectedTileItem!.Walls.Remove(wallHook);
+        }
     }
 }
 
@@ -179,7 +166,7 @@ public class WallHookItem : ReactiveObject
 
 public class CornerItem : ReactiveObject
 {
-    public string Name => $"CHook ({Position.Z:F2}, {Position.Y:F2}, {Position.Z:F2})";
+    public string Name => $"Hook ({Position.Z:F2}, {Position.Y:F2}, {Position.Z:F2})";
 
     public string DefaultCornerID
     {

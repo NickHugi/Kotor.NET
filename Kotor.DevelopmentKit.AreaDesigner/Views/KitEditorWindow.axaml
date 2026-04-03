@@ -39,40 +39,38 @@
     <TabControl>
         <TabItem Header="Tiles">
             <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
-				
                 <Border Grid.Column="0" Padding="4" Background="#ddd">
-				<TabControl SelectedIndex="{Binding LeftPanelSelectedIndex}">
-					<TabControl.Styles>
-						<Style Selector="TabItem">
-							<Setter Property="IsVisible" Value="False"/>
-						</Style>
-					</TabControl.Styles>
+				<ContentControl Content="{Binding SelectedTileChildItem}">
+                    <ContentControl.DataTemplates>
 
-					<TabItem Header="Wall Hook">
-						<Border Grid.Column="0" Padding="4" Background="#bbb">
-						<StackPanel>
-							<core:LabeledTextBox Label="Default Wall ID"
-												 Text="{Binding SelectedWallHookItem.DefaultWallID}" />
-							<core:Vector3Edit Label="Position"
-											  Value="{Binding SelectedWallHookItem.Position}" />
-							<core:QuaternionEdit Label="Orientation"
-												 Value="{Binding SelectedWallHookItem.Orientation}" />
-						</StackPanel>
-						</Border>
-					</TabItem>
-					<TabItem Header="Corner">
-						<Border Grid.Column="0" Padding="4" Background="#bbb">
-						<StackPanel>
-							<core:LabeledTextBox Label="Default Corner ID"
-											     Text="{Binding SelectedCornerItem.DefaultCornerID}" />
-							<core:Vector3Edit Label="Position"
-											  Value="{Binding SelectedCornerItem.Position}" />
-							<core:QuaternionEdit Label="Orientation"
-												 Value="{Binding SelectedCornerItem.Orientation}" />
-						</StackPanel>
-						</Border>
-					</TabItem>
-				</TabControl>
+                        <DataTemplate DataType="vm:WallHookItem">
+						    <Border Grid.Column="0" Padding="4" Background="#bbb">
+						    <StackPanel>
+							    <core:LabeledTextBox Label="Default Wall ID"
+												     Text="{Binding DefaultWallID}" />
+							    <core:Vector3Edit Label="Position"
+											      Value="{Binding Position}" />
+							    <core:QuaternionEdit Label="Orientation"
+												     Value="{Binding Orientation}" />
+						    </StackPanel>
+						    </Border>
+                        </DataTemplate>
+
+                        <DataTemplate DataType="vm:CornerItem">
+						    <Border Grid.Column="0" Padding="4" Background="#bbb">
+						    <StackPanel>
+							    <core:LabeledTextBox Label="Default Corner ID"
+											         Text="{Binding DefaultCornerID}" />
+							    <core:Vector3Edit Label="Position"
+											      Value="{Binding Position}" />
+							    <core:QuaternionEdit Label="Orientation"
+												     Value="{Binding Orientation}" />
+						    </StackPanel>
+						    </Border>
+                        </DataTemplate>
+
+                    </ContentControl.DataTemplates>
+                </ContentControl>
 				</Border>
 
 				<!--Tile Panel-->
@@ -94,12 +92,13 @@
 
                         <Border Padding="4" Background="#bbb">
                         <StackPanel>
+                            <TextBlock Text="Wall Hooks" />
                             <ListBox ItemTemplate="{StaticResource WallHookItemTemplate}"
                                      ItemsSource="{Binding SelectedTileItem.Walls}"
-									 SelectedItem="{Binding SelectedWallHookItem}"
+									 SelectedItem="{Binding SelectedTileChildItem}"
 									 Height="100" />
-							<StackPanel Orientation="Horizontal">
-								<Button Content="Add"  />
+							<StackPanel Orientation="Horizontal" Spacing="4">
+								<Button Content="Add" />
 								<Button Content="Remove" Command="{Binding DeleteSelectedWallHook}" />
 							</StackPanel>
                         </StackPanel>
@@ -107,31 +106,48 @@
 
                         <Border Padding="4" Background="#bbb">
                         <StackPanel>
+                            <TextBlock Text="Inner Corner Hooks" />
                             <ListBox ItemTemplate="{StaticResource CornerItemTemplate}"
                                      ItemsSource="{Binding SelectedTileItem.InnerCorners}"
-									 SelectedItem="{Binding SelectedCornerItem}"
+									 SelectedItem="{Binding SelectedTileChildItem}"
 									 Height="100" />
-							<StackPanel Orientation="Horizontal">
-								<Button Content="Add"  />
+							<StackPanel Orientation="Horizontal" Spacing="4">
+								<Button Content="Add" />
 								<Button Content="Remove" />
 							</StackPanel>
                         </StackPanel>
                         </Border>
                         
+                        <Border Padding="4" Background="#bbb">
+                        <StackPanel>
+                            <TextBlock Text="Outer Corner Hooks" />
+                            <ListBox ItemTemplate="{StaticResource CornerItemTemplate}"
+                                     ItemsSource="{Binding SelectedTileItem.OuterCorners}"
+									 SelectedItem="{Binding SelectedTileChildItem}"
+									 Height="100" />
+							<StackPanel Orientation="Horizontal" Spacing="4">
+								<Button Content="Add" />
+								<Button Content="Remove" />
+							</StackPanel>
+                        </StackPanel>
+                        </Border>
                     </StackPanel>
                 </ScrollViewer>
                 </Border>
 
 				<!--Tile List-->
-                <StackPanel Grid.Column="2" MinWidth="200" Background="LightGray" DockPanel.Dock="Right">
+                <Border Grid.Column="2" Padding="4" Background="#ddd">
+                <StackPanel Background="#bbb" Spacing="4">
+                    <TextBlock Text="Tiles" />
                     <ListBox ItemTemplate="{StaticResource TileItemTemplate}"
                              ItemsSource="{Binding TileItems}"
                              SelectedItem="{Binding SelectedTileItem}" />
-					<StackPanel Orientation="Horizontal">
+					<StackPanel Orientation="Horizontal" Spacing="4">
 						<Button Content="Add" />
 						<Button Content="Delete" Command="{Binding DeleteSelectedTile}" />
 					</StackPanel>
                 </StackPanel>
+                </Border>
             </Grid>
         </TabItem>
         
