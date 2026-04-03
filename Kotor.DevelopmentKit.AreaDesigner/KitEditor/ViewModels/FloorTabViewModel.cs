@@ -26,4 +26,17 @@ public class FloorTabViewModel : ReactiveObject
     {
         FloorItems = new ObservableCollection<FloorItem>(kit.Floors.Select(x => new FloorItem(x)));
     }
+
+    public void AddFloor()
+    {
+        FloorItems.Add(new());
+    }
+
+    public void DeleteSelectedFloor()
+    {
+        if (SelectedFloorItem is null)
+            return;
+
+        FloorItems.Remove(SelectedFloorItem);
+    }
 }
