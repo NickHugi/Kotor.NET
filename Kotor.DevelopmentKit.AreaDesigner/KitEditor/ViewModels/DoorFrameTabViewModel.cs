@@ -17,6 +17,11 @@ public class DoorFrameTabViewModel : ReactiveObject
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
+    public DoorFrameHookItem? SelectedDoorFrameHookItem
+    {
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
 
     public DoorFrameTabViewModel()
     {
@@ -38,5 +43,21 @@ public class DoorFrameTabViewModel : ReactiveObject
             return;
 
         DoorFrameItems.Remove(SelectedDoorFrameItem);
+    }
+
+    public void AddDoorFrameHook()
+    {
+        if (SelectedDoorFrameItem is null)
+            return;
+
+        SelectedDoorFrameItem.Hooks.Add(new());
+    }
+
+    public void DeleteSelectedDoorFrameHook()
+    {
+        if (SelectedDoorFrameItem is null)
+            return;
+
+        SelectedDoorFrameItem.Hooks.Remove(SelectedDoorFrameHookItem);
     }
 }

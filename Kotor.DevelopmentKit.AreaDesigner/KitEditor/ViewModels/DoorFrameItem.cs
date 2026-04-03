@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ public class DoorFrameItem : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public DoorFrameHookItem[] Hooks
+    public ObservableCollection<DoorFrameHookItem> Hooks
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
@@ -46,6 +47,6 @@ public class DoorFrameItem : ReactiveObject
         ID = template.ID;
         Name = template.Name;
         Model = template.Model;
-        Hooks = template.Hooks.Select(x => new DoorFrameHookItem(x)).ToArray();
+        Hooks = new(template.Hooks.Select(x => new DoorFrameHookItem(x)));
     }
 }

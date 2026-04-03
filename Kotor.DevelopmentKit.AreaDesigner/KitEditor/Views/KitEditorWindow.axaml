@@ -56,6 +56,12 @@
 			</StackPanel>
 		</DataTemplate>
         
+        <DataTemplate x:Key="DoorFrameHookItemTemplate" x:DataType="vm:DoorFrameHookItem">
+			<StackPanel>
+				<TextBlock Text="{Binding Name}" />
+			</StackPanel>
+		</DataTemplate>
+        
         <DataTemplate x:Key="CeilingItemTemplate" x:DataType="vm:CeilingItem">
 			<StackPanel>
 				<TextBlock Text="{Binding Name}" FontWeight="Bold" />
@@ -189,8 +195,6 @@
 
         <TabItem Header="Floors">
             <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
-                
-                
 				<!--Floor Editor Panel-->
                 <Border Grid.Column="1" Padding="4" Background="#ddd">
                 <ScrollViewer>
@@ -228,7 +232,6 @@
 					</StackPanel>
                 </Grid>
                 </Border>
-
             </Grid>
         </TabItem>
 
@@ -262,10 +265,57 @@
         <TabItem Header="Door Frames">
             <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
                 
+                <Border Grid.Column="0" Padding="4" Background="#ddd">
+                <StackPanel Background="#ddd" Spacing="4">
+					<Border Grid.Column="0" Padding="4" Background="#bbb">
+					<StackPanel>
+						<core:Vector3Edit Label="Position"
+										  Value="{Binding DoorFrameTab.SelectedDoorFrameHookItem.Position}" />
+						<core:QuaternionEdit Label="Orientation"
+											 Value="{Binding DoorFrameTab.SelectedDoorFrameHookItem.Orientation}" />
+					</StackPanel>
+					</Border>
+                </StackPanel>
+				</Border>
+                
+				<!--Doorframe Editor Panel-->
+                <Border Grid.Column="1" Padding="4" Background="#ddd">
+                <ScrollViewer>
+                    <StackPanel Background="#ddd" Spacing="4">
+                        <Border Padding="4" Background="#bbb">
+                        <StackPanel HorizontalAlignment="Left">
+							<core:LabeledTextBox Label="ID"
+												 Text="{Binding DoorFrameTab.SelectedDoorFrameItem.ID}" />
+							<core:LabeledTextBox Label="Name"
+												 Text="{Binding DoorFrameTab.SelectedDoorFrameItem.Name}" />
+							<core:LabeledTextBox Label="Model"
+												 Text="{Binding DoorFrameTab.SelectedDoorFrameItem.Model}" />
+                        </StackPanel>
+                        </Border>
+
+                        <Border Padding="4" Background="#bbb">
+                        <StackPanel>
+                            <TextBlock Text="Wall Hooks" />
+                            <ListBox ItemTemplate="{StaticResource DoorFrameHookItemTemplate}"
+                                     ItemsSource="{Binding DoorFrameTab.SelectedDoorFrameItem.Hooks}"
+									 SelectedItem="{Binding DoorFrameTab.SelectedDoorFrameHookItem}"
+									 Height="100" />
+							<StackPanel Orientation="Horizontal" Spacing="4">
+								<Button Content="Add" Command="{Binding TileTab.AddWallHook}" />
+								<Button Content="Remove" Command="{Binding TileTab.DeleteSelectedWallHook}" />
+							</StackPanel>
+                        </StackPanel>
+                        </Border>
+
+                    </StackPanel>
+                </ScrollViewer>
+                </Border>
+
+                <!--Doorframe List Panel-->
                 <Border Grid.Column="2" Padding="4" Background="#ddd">
                 <Grid RowDefinitions="Auto, *, Auto" Background="#bbb" RowSpacing="4">
                     <TextBlock Grid.Row="0"
-                               Text="Tiles" />
+                               Text="Door Frames" />
                     <ListBox Grid.Row="1"
                              ItemTemplate="{StaticResource DoorFrameItemTemplate}"
                              ItemsSource="{Binding DoorFrameTab.DoorFrameItems}"

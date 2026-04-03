@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using Kotor.DevelopmentKit.AreaDesigner.relocate;
 using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using ReactiveUI;
@@ -7,7 +8,7 @@ namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
 public class WallHookItem : ReactiveObject
 {
-    public string Name => $"Hook ({Position.Z:F2}, {Position.Y:F2}, {Position.Z:F2})";
+    public string Name => $"Hook ({Position.X:F2}, {Position.Y:F2}, {Position.Z:F2})";
 
     public string DefaultWallID
     {
@@ -39,8 +40,10 @@ public class WallHookItem : ReactiveObject
         Position = new();
         Orientation = new();
         AdjacentWalls = [];
+
+        this.WhenAnyValue(x => x.Position).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
     }
-    public WallHookItem(WallHookTemplate wallHook)
+    public WallHookItem(WallHookTemplate wallHook) : this()
     {
         DefaultWallID = wallHook.DefaultWallID;
         Position = new(wallHook.LocalPosition);

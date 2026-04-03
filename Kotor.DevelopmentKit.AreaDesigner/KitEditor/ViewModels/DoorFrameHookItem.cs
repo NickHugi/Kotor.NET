@@ -11,6 +11,8 @@ namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
 public class DoorFrameHookItem : ReactiveObject
 {
+    public string Name => $"Hook ({Position.X:F2}, {Position.Y:F2}, {Position.Z:F2})";
+
     public ReactiveVector3 Position
     {
         get => field;
@@ -27,8 +29,10 @@ public class DoorFrameHookItem : ReactiveObject
     {
         Position = new();
         Orientation = new();
+
+        this.WhenAnyValue(x => x.Position).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
     }
-    public DoorFrameHookItem(DoorFrameHookTemplate template)
+    public DoorFrameHookItem(DoorFrameHookTemplate template) : this()
     {
         Position = new(template.Position);
         Orientation = new(template.Orientation);
