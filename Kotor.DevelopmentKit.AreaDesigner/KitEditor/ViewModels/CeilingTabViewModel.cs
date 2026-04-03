@@ -26,4 +26,17 @@ public class CeilingTabViewModel : ReactiveObject
     {
         CeilingItems = new ObservableCollection<CeilingItem>(kit.Ceilings.Select(x => new CeilingItem(x)));
     }
+
+    public void AddCeiling()
+    {
+        CeilingItems.Add(new());
+    }
+
+    public void DeleteSelectedCeiling()
+    {
+        if (SelectedCeilingItem is null)
+            return;
+
+        CeilingItems.Remove(SelectedCeilingItem);
+    }
 }

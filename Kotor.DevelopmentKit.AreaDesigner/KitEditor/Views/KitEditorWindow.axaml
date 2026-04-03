@@ -55,6 +55,13 @@
 				<TextBlock Text="{Binding ID}" FontSize="10" />
 			</StackPanel>
 		</DataTemplate>
+        
+        <DataTemplate x:Key="CeilingItemTemplate" x:DataType="vm:CeilingItem">
+			<StackPanel>
+				<TextBlock Text="{Binding Name}" FontWeight="Bold" />
+				<TextBlock Text="{Binding ID}" FontSize="10" />
+			</StackPanel>
+		</DataTemplate>
 	</Window.Resources>
 
     <TabControl>
@@ -252,6 +259,25 @@
 
         <TabItem Header="Ceilings">
             <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
+                
+                <Border Grid.Column="2" Padding="4" Background="#ddd">
+                <Grid RowDefinitions="Auto, *, Auto" Background="#bbb" RowSpacing="4">
+                    <TextBlock Grid.Row="0"
+                               Text="Tiles" />
+                    <ListBox Grid.Row="1"
+                             ItemTemplate="{StaticResource CeilingItemTemplate}"
+                             ItemsSource="{Binding CeilingTab.CeilingItems}"
+                             SelectedItem="{Binding CeilingTab.SelectedCeilingItem}" />
+					<StackPanel Grid.Row="2"
+                                Orientation="Horizontal"
+                                Spacing="4">
+						<Button Content="Add"
+                                Command="{Binding CeilingTab.AddCeiling}" />
+						<Button Content="Delete"
+                                Command="{Binding CeilingTab.DeleteSelectedCeiling}" />
+					</StackPanel>
+                </Grid>
+                </Border>
                 
             </Grid>
         </TabItem>
