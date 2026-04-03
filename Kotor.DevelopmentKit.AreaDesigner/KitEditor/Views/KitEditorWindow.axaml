@@ -2,10 +2,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:vm="using:Kotor.DevelopmentKit.AreaDesigner.ViewModels"
+        xmlns:vm="using:Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels"
         xmlns:core="using:Kotor.DevelopmentKit.Base.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="Kotor.DevelopmentKit.AreaDesigner.KitEditorWindow"
+        x:Class="Kotor.DevelopmentKit.AreaDesigner.KitEditor.Views.KitEditorWindow"
         x:DataType="vm:KitEditorViewModel"
         Title="KitEditorWindow">
     <Window.Styles>

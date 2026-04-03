@@ -2,6 +2,8 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.ReactiveUI;
 using Kotor.DevelopmentKit.AreaDesigner.relocate;
+using Kotor.DevelopmentKit.AreaDesigner.KitEditor.Views;
+using Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 using Kotor.DevelopmentKit.AreaDesigner.ViewModels;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.Views;
