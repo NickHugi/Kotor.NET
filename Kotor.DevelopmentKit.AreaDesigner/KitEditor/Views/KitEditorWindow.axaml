@@ -37,10 +37,10 @@
 	</Window.Resources>
 
     <TabControl>
-        <TabItem Header="Tiles" DataContext="{Binding TileTab}">
+        <TabItem Header="Tiles">
             <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
                 <Border Grid.Column="0" Padding="4" Background="#ddd">
-				<ContentControl Content="{Binding SelectedTileChildItem}">
+				<ContentControl Content="{Binding TileTab.SelectedTileChildItem}">
                     <ContentControl.DataTemplates>
 
                         <DataTemplate DataType="vm:WallHookItem">
@@ -73,20 +73,20 @@
                 </ContentControl>
 				</Border>
 
-				<!--Tile Panel-->
+				<!--Tile Editor Panel-->
                 <Border Grid.Column="1" Padding="4" Background="#ddd">
                 <ScrollViewer>
                     <StackPanel Background="#ddd" Spacing="4">
                         <Border Padding="4" Background="#bbb">
                         <StackPanel HorizontalAlignment="Left">
 							<core:LabeledTextBox Label="ID"
-												 Text="{Binding SelectedTileItem.ID}" />
+												 Text="{Binding TileTab.SelectedTileItem.ID}" />
 							<core:LabeledTextBox Label="Name"
-												 Text="{Binding SelectedTileItem.Name}" />
+												 Text="{Binding TileTab.SelectedTileItem.Name}" />
 							<core:LabeledTextBox Label="Default Floor ID"
-												 Text="{Binding SelectedTileItem.DefaultFloorID}" />
+												 Text="{Binding TileTab.SelectedTileItem.DefaultFloorID}" />
 							<core:LabeledTextBox Label="Default Ceiling ID"
-												 Text="{Binding SelectedTileItem.DefaultCeilingID}" />
+												 Text="{Binding TileTab.SelectedTileItem.DefaultCeilingID}" />
                         </StackPanel>
                         </Border>
 
@@ -94,12 +94,12 @@
                         <StackPanel>
                             <TextBlock Text="Wall Hooks" />
                             <ListBox ItemTemplate="{StaticResource WallHookItemTemplate}"
-                                     ItemsSource="{Binding SelectedTileItem.Walls}"
-									 SelectedItem="{Binding SelectedTileChildItem}"
+                                     ItemsSource="{Binding TileTab.SelectedTileItem.Walls}"
+									 SelectedItem="{Binding TileTab.SelectedTileChildItem}"
 									 Height="100" />
 							<StackPanel Orientation="Horizontal" Spacing="4">
 								<Button Content="Add" />
-								<Button Content="Remove" Command="{Binding DeleteSelectedWallHook}" />
+								<Button Content="Remove" Command="{Binding TileTab.DeleteSelectedWallHook}" />
 							</StackPanel>
                         </StackPanel>
                         </Border>
@@ -108,8 +108,8 @@
                         <StackPanel>
                             <TextBlock Text="Inner Corner Hooks" />
                             <ListBox ItemTemplate="{StaticResource CornerItemTemplate}"
-                                     ItemsSource="{Binding SelectedTileItem.InnerCorners}"
-									 SelectedItem="{Binding SelectedTileChildItem}"
+                                     ItemsSource="{Binding TileTab.SelectedTileItem.InnerCorners}"
+									 SelectedItem="{Binding TileTab.SelectedTileChildItem}"
 									 Height="100" />
 							<StackPanel Orientation="Horizontal" Spacing="4">
 								<Button Content="Add" />
@@ -122,8 +122,8 @@
                         <StackPanel>
                             <TextBlock Text="Outer Corner Hooks" />
                             <ListBox ItemTemplate="{StaticResource CornerItemTemplate}"
-                                     ItemsSource="{Binding SelectedTileItem.OuterCorners}"
-									 SelectedItem="{Binding SelectedTileChildItem}"
+                                     ItemsSource="{Binding TileTab.SelectedTileItem.OuterCorners}"
+									 SelectedItem="{Binding TileTab.SelectedTileChildItem}"
 									 Height="100" />
 							<StackPanel Orientation="Horizontal" Spacing="4">
 								<Button Content="Add" />
@@ -135,16 +135,16 @@
                 </ScrollViewer>
                 </Border>
 
-				<!--Tile List-->
+				<!--Tile List Panel-->
                 <Border Grid.Column="2" Padding="4" Background="#ddd">
                 <StackPanel Background="#bbb" Spacing="4">
                     <TextBlock Text="Tiles" />
                     <ListBox ItemTemplate="{StaticResource TileItemTemplate}"
-                             ItemsSource="{Binding TileItems}"
-                             SelectedItem="{Binding SelectedTileItem}" />
+                             ItemsSource="{Binding TileTab.TileItems}"
+                             SelectedItem="{Binding TileTab.SelectedTileItem}" />
 					<StackPanel Orientation="Horizontal" Spacing="4">
 						<Button Content="Add" />
-						<Button Content="Delete" Command="{Binding DeleteSelectedTile}" />
+						<Button Content="Delete" Command="{Binding TileTab.DeleteSelectedTile}" />
 					</StackPanel>
                 </StackPanel>
                 </Border>

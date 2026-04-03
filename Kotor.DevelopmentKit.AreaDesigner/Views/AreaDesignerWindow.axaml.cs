@@ -20,9 +20,12 @@ public partial class AreaDesignerWindow : ReactiveWindow<AreaDesignerViewModel>
         if (ViewModel.SelectedKit is null)
             return;
 
-        var dialog = new KitEditorWindow();
-        dialog.ViewModel = new(ViewModel.SelectedKit);
+        var dialog = new KitEditorWindow()
+        {
+            ViewModel = new KitEditorViewModel(ViewModel.SelectedKit)
+        };
+
         // todo - save changes
-        ViewModel.SelectedKit = await dialog.ShowDialog<Kit>(this);
+        await dialog.ShowDialog<Kit>(this);
     }
 }
