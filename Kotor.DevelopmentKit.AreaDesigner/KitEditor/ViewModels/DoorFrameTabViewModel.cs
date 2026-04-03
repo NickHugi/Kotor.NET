@@ -26,4 +26,17 @@ public class DoorFrameTabViewModel : ReactiveObject
     {
         DoorFrameItems = new ObservableCollection<DoorFrameItem>(kit.DoorFrames.Select(x => new DoorFrameItem(x)));
     }
+
+    public void AddDoorFrame()
+    {
+        DoorFrameItems.Add(new());
+    }
+
+    public void DeleteSelectedDoorFrame()
+    {
+        if (SelectedDoorFrameItem is null)
+            return;
+
+        DoorFrameItems.Remove(SelectedDoorFrameItem);
+    }
 }
