@@ -251,7 +251,7 @@
 												 Text="{Binding WallTab.SelectedWallItem.Name}" />
 							<core:LabeledTextBox Label="Model"
 												 Text="{Binding WallTab.SelectedWallItem.Model}" />
-							<core:LabeledTextBox Label="Model"
+							<core:LabeledTextBox Label="Door Frame ID"
 												 Text="{Binding WallTab.SelectedWallItem.DoorFrameID}" />
                         </StackPanel>
                         </Border>
@@ -403,10 +403,29 @@
         <TabItem Header="Objects">
             <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
                 
+				<!--Ceiling Editor Panel-->
+                <Border Grid.Column="1" Padding="4" Background="#ddd">
+                <ScrollViewer>
+                    <StackPanel Background="#ddd" Spacing="4">
+                        <Border Padding="4" Background="#bbb">
+                        <StackPanel HorizontalAlignment="Left">
+							<core:LabeledTextBox Label="ID"
+												 Text="{Binding ObjectTab.SelectedObjectItem.ID}" />
+							<core:LabeledTextBox Label="Name"
+												 Text="{Binding ObjectTab.SelectedObjectItem.Name}" />
+							<core:LabeledTextBox Label="Model"
+												 Text="{Binding ObjectTab.SelectedObjectItem.Model}" />
+                        </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+                </Border>
+
+                <!--Object List Panel-->
                 <Border Grid.Column="2" Padding="4" Background="#ddd">
                 <Grid RowDefinitions="Auto, *, Auto" Background="#bbb" RowSpacing="4">
                     <TextBlock Grid.Row="0"
-                               Text="Tiles" />
+                               Text="Objects" />
                     <ListBox Grid.Row="1"
                              ItemTemplate="{StaticResource ObjectItemTemplate}"
                              ItemsSource="{Binding ObjectTab.ObjectItems}"
