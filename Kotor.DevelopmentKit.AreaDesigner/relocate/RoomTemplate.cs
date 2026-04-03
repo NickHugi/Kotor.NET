@@ -74,10 +74,13 @@ public class DoorFrameHookTemplate
 public class CeilingTemplate
 {
     public string ID { get; }
+    public string Name { get; }
     public string Model { get; }
 
-    public CeilingTemplate(string model)
+    public CeilingTemplate(string id, string name, string model)
     {
+        ID = id;
+        Name = name;
         Model = model;
     }
 }
@@ -97,5 +100,6 @@ public class CornerTemplate
 public class ObjectTemplate
 {
     public required string ID { get; init; }
+    public required string Name { get; init; }
     public required string Model { get; init; }
 }

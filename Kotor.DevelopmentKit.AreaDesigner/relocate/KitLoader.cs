@@ -96,6 +96,7 @@ public class KitLoader
             kit.Objects.Add(new ObjectTemplate
             {
                 ID = @object.id.Value,
+                Name = @object.name.Value,
                 Model = @object.model.Value,
             });
         }

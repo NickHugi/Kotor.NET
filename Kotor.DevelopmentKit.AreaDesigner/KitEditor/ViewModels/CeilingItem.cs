@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using Kotor.DevelopmentKit.AreaDesigner.relocate;
+using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
-public class ObjectItem : ReactiveObject
+public class CeilingItem : ReactiveObject
 {
     public string ID
     {
@@ -27,13 +24,13 @@ public class ObjectItem : ReactiveObject
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
-    public ObjectItem()
+    public CeilingItem()
     {
         ID = "";
         Name = "";
         Model = "";
     }
-    public ObjectItem(ObjectTemplate template)
+    public CeilingItem(CeilingTemplate template)
     {
         ID = template.ID;
         Name = template.Name;
