@@ -9,10 +9,15 @@
         x:DataType="vm:KitEditorViewModel"
         Title="KitEditorWindow">
     <Window.Styles>
-        <!--<Style Selector=":is(TextBox)">
-            <Setter Property="Margin" Value="0 0 0 10" />
-            <Setter Property="Width" Value="200" />
-        </Style>-->
+        <!--Tab Control Styles-->
+        <Style Selector="TabItem">
+            <Setter Property="Padding" Value="6,2" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="MinHeight" Value="26" />
+        </Style>
+        <Style Selector="TabItem /template/ ContentPresenter">
+            <Setter Property="FontSize" Value="14" />
+        </Style>
     </Window.Styles>
 
 	<Window.Resources>
