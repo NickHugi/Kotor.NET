@@ -9,13 +9,14 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.KitSerializer;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
 public class KitEditorViewModel : ReactiveObject
 {
-    public Interaction<Unit, string> SaveAsKitFile { get; } = new();
+    public Interaction<Unit, string?> SelectKitSaveFile { get; } = new();
 
     public string Name
     {
@@ -24,6 +25,12 @@ public class KitEditorViewModel : ReactiveObject
     }
 
     public string KitID
+    {
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
+    public int Version
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
@@ -70,7 +77,7 @@ public class KitEditorViewModel : ReactiveObject
 
     public Kit ToModel()
     {
-        return new Kit(FilePath, KitID, Name)
+        return new Kit(FilePath, KitID, Version, Name)
         {
             Tiles = TileTab.TileItems.Select(x => x.ToModel()).ToList(),
             Floors = FloorTab.FloorItems.Select(x => x.ToModel()).ToList(),
@@ -90,14 +97,15 @@ public class KitEditorViewModel : ReactiveObject
 
     public async Task SaveAs()
     {
-        var filepath = await SaveAsKitFile.Handle(Unit.Default);
+        var filepath = await SelectKitSaveFile.Handle(Unit.Default);
 
         if (string.IsNullOrEmpty(filepath) == true)
             return;
 
         FilePath = filepath;
         KitID = Path.GetFileNameWithoutExtension(filepath);
+        Version++;
 
-        KitLoader.Save(filepath, ToModel());
+        KitSerializer.Save(filepath, ToModel());
     }
 }

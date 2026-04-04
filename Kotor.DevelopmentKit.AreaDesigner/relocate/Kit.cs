@@ -13,6 +13,7 @@ public class Kit
     public string ID { get; }
     public string Name { get; }
     public string FilePath { get; }
+    public int Version { get; }
     public ICollection<FloorTemplate> Floors { get; init; } = [];
     public ICollection<TileTemplate> Tiles { get; init; } = [];
     public ICollection<WallTemplate> Walls { get; init; } = [];
@@ -31,10 +32,12 @@ public class Kit
     public CornerTemplate OutsideCorner(string id) => OutsideCorners.Single(x => x.ID == id);
     public ObjectTemplate Object(string id) => Objects.Single(x => x.ID == id);
 
-    public Kit(string filepath, string id, string name)
+    public Kit(string filepath, string id, int version, string name)
     {
+        FilePath = filepath;
         ID = id;
         Name = name;
+        Version = version;
     }   
 }
 

@@ -1,4 +1,5 @@
-﻿using System.Dynamic;
+﻿using System;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -6,16 +7,23 @@ using Kotor.NET.Graphics.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Kotor.DevelopmentKit.AreaDesigner.relocate;
+namespace Kotor.DevelopmentKit.AreaDesigner.relocate.KitSerializer;
 
-public class KitLoaderV_0_1
+public class KitSerializerV_0_1
 {
     public static Kit Load(string filepath)
     {
         var json = File.ReadAllText(filepath);
         dynamic data = JsonConvert.DeserializeObject(json);
 
-        var kit = new Kit(filepath, data.id.Value, data.name.Value);
+        string kitName = data.name.Value;
+        string kitID = data.id.Value;
+        int kitVersion = (int)data.version.Value;
+
+        if (kitID != Path.GetFileNameWithoutExtension(filepath))
+            throw new ArgumentException($"Kit ID {kitID} does not match filename {Path.GetFileName(filepath)}.");
+
+        var kit = new Kit(filepath, kitID, kitVersion, kitName);
 
         foreach (var floor in data.floors)
         {
@@ -49,7 +57,7 @@ public class KitLoaderV_0_1
                 ID = wall.id.Value,
                 Name = wall.name.Value,
                 Model = wall.model.Value,
-                DoorFrameID = wall.doorframe?.Value,
+                DoorFrameID = wall.doorframeID?.Value,
             });
         }
 
@@ -59,25 +67,25 @@ public class KitLoaderV_0_1
             {
                 ID = tile.id.Value,
                 Name = tile.name.Value,
-                DefaultFloorID = tile.defaultFloor.Value,
-                DefaultCeilingID = "", // todo - tile.defaultCeiling.Value,
-                Walls = ((JArray)tile.walls).Select(x => (dynamic)x).Select(hook => new WallHookTemplate
+                DefaultFloorID = tile.defaultFloorID.Value,
+                DefaultCeilingID = tile.defaultCeilingID?.Value ?? "",
+                Walls = ((JArray)tile.wallHooks).Select(x => (dynamic)x).Select(hook => new WallHookTemplate
                 {
-                    DefaultWallID = hook.defaultWall,
+                    DefaultWallID = hook.defaultWallID,
                     LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
                     LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
                 }).ToArray(),
-                InnerCorners = ((JArray)tile.insideCorner).Select(x => (dynamic)x).Select(hook => new CornerTemplate
+                InnerCorners = ((JArray)tile.innerCornerHooks).Select(x => (dynamic)x).Select(hook => new CornerTemplate
                 {
-                    ID = hook.id.Value,
-                    Adjacent = hook.adjacent?.ToObject<int[]>() ?? new int[0],
+                    ID = hook.defaultInnerCornerID.Value,
+                    Adjacent = hook.adjacencies?.ToObject<int[]>() ?? new int[0],
                     Position = new Vector3(hook.position.ToObject<float[]>()),
                     Orientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
                 }).ToArray(),
-                OuterCorners = ((JArray)tile.outsideCorner).Select(x => (dynamic)x).Select(hook => new CornerTemplate
+                OuterCorners = ((JArray)tile.outerCornerHooks).Select(x => (dynamic)x).Select(hook => new CornerTemplate
                 {
-                    ID = hook.id.Value,
-                    Adjacent = hook.adjacent?.ToObject<int[]>() ?? new int[0],
+                    ID = hook.defaultOuterCornerID.Value,
+                    Adjacent = hook.adjacencies?.ToObject<int[]>() ?? new int[0],
                     Position = new Vector3(hook.position.ToObject<float[]>()),
                     Orientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
                 }).ToArray(),
@@ -103,6 +111,8 @@ public class KitLoaderV_0_1
         dynamic data = new ExpandoObject();
 
         data.id = kit.ID;
+        data.version = kit.Version;
+        data.name = kit.Name;
 
         data.tiles = kit.Tiles.Select(tile => new
         {
@@ -110,25 +120,25 @@ public class KitLoaderV_0_1
             name = tile.Name,
             defaultFloorID = tile.DefaultFloorID,
             defaultCeilingID = tile.DefaultCeilingID,
-            walls = tile.Walls.Select(x => new
+            wallHooks = tile.Walls.Select(x => new
             {
-                defaultWall = x.DefaultWallID,
-                position = x.LocalPosition,
-                orientation = x.LocalOrientation,
+                defaultWallID = x.DefaultWallID,
+                position = x.LocalPosition.ToFloatArray(),
+                orientation = x.LocalOrientation.ToFloatArray(),
             }),
-            insideCorner = tile.InnerCorners.Select(x => new
+            innerCornerHooks = tile.InnerCorners.Select(x => new
             {
-                id = x.ID,
-                position = x.Position,
-                orientation = x.Orientation,
-                adjacent = x.Adjacent,
+                defaultInnerCornerID = x.ID,
+                position = x.Position.ToFloatArray(),
+                orientation = x.Orientation.ToFloatArray(),
+                adjacencies = x.Adjacent,
             }),
-            outsideCorner = tile.OuterCorners.Select(x => new
+            outerCornerHooks = tile.OuterCorners.Select(x => new
             {
-                id = x.ID,
-                position = x.Position,
-                orientation = x.Orientation,
-                adjacent = x.Adjacent,
+                defaultOuterCornerID = x.ID,
+                position = x.Position.ToFloatArray(),
+                orientation = x.Orientation.ToFloatArray(),
+                adjacencies = x.Adjacent,
             }),
         });
 
@@ -146,8 +156,8 @@ public class KitLoaderV_0_1
             model = doorframe.Model,
             hooks = doorframe.Hooks.Select(hook => new
             {
-                position = hook.Position,
-                orientation = hook.Orientation,
+                position = hook.Position.ToFloatArray(),
+                orientation = hook.Orientation.ToFloatArray(),
             })
         });
 
@@ -156,6 +166,7 @@ public class KitLoaderV_0_1
             id = wall.ID,
             name = wall.Name,
             model = wall.Model,
+            doorframeID = wall.DoorFrameID,
         });
 
         data.objects = kit.Objects.Select(obj => new
@@ -167,18 +178,5 @@ public class KitLoaderV_0_1
 
         var json = JsonConvert.SerializeObject(data, Formatting.Indented);
         File.WriteAllText(filepath, json);
-    }
-}
-
-public class KitLoader
-{
-    public static Kit Load(string filepath)
-    {
-        return KitLoaderV_0_1.Load(filepath);
-    }
-
-    public static void Save(string filepath, Kit kit)
-    {
-        KitLoaderV_0_1.Save(filepath, kit);
     }
 }

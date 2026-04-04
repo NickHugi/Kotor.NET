@@ -55,4 +55,9 @@ public static class QuaternionExtensions
 
         return new Quaternion(components[0], components[1], components[2], components[3]);
     }
+
+    public static float[] ToFloatArray(this Quaternion value)
+    {
+        return [value.X, value.Y, value.Z, value.W];
+    }
 }

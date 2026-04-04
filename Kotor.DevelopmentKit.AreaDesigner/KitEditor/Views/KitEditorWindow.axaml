@@ -85,11 +85,16 @@
 			    <core:LabeledTextBox Label="ID"
 								     Text="{Binding KitID}"
                                      IsReadOnly="True" />
+			    <core:LabeledTextBox Label="Version"
+								     Text="{Binding Version}"
+                                     IsReadOnly="True" />
 			    <core:LabeledTextBox Label="FilePath"
 								     Text="{Binding FilePath}"
                                      IsReadOnly="True" />
-                <Button Content="Save" />
-                <Button Content="Save As" />
+                <Button Content="Save"
+                        Command="{Binding Save}" />
+                <Button Content="Save As"
+                        Command="{Binding SaveAs}" />
             </StackPanel>
         </TabItem>
 

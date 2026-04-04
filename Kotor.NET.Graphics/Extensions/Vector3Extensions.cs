@@ -17,4 +17,9 @@ public static class Vector3Extensions
         var blue = (int)(value.Z * 255);
         return Color.FromArgb(red, green, blue);
     }
+
+    public static float[] ToFloatArray(this Vector3 value)
+    {
+        return [value.X, value.Y, value.Z];
+    }
 }

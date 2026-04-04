@@ -21,9 +21,6 @@ namespace Kotor.DevelopmentKit.AreaDesigner
                 desktop.MainWindow = new AreaDesignerWindow
                 {
                     DataContext = new AreaDesignerViewModel()
-                    {
-                        SelectedKit = KitLoader.Load($@"C:\Users\hugin\Desktop\KotOR Modding Stuff\Area Designer\Sandral Estate\sandral.json")
-                    },
                 };
             }
 

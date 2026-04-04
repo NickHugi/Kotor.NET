@@ -182,12 +182,12 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
             float deltaX = (float)delta.X;
             float deltaY = (float)delta.Y;
 
-            if (buttonProperties.IsMiddleButtonPressed && keyModifiers == KeyModifiers.None)
+            if (buttonProperties.IsRightButtonPressed && keyModifiers == KeyModifiers.None)
             {
                 _camera.Pitch += (float)deltaY / 500;
                 _camera.Yaw -= (float)deltaX / 500;
             }
-            if (buttonProperties.IsMiddleButtonPressed && keyModifiers == KeyModifiers.Shift)
+            if (buttonProperties.IsLeftButtonPressed && keyModifiers == KeyModifiers.Shift)
             {
                 Vector3 forward = new Vector3(
                     MathF.Cos(_camera.Pitch) * MathF.Cos(_camera.Yaw),
