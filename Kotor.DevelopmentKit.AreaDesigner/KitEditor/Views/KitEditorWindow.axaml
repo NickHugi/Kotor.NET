@@ -82,6 +82,12 @@
             <StackPanel>
 			    <core:LabeledTextBox Label="Name"
 								     Text="{Binding Name}" />
+			    <core:LabeledTextBox Label="ID"
+								     Text="{Binding KitID}"
+                                     IsReadOnly="True" />
+			    <core:LabeledTextBox Label="FilePath"
+								     Text="{Binding FilePath}"
+                                     IsReadOnly="True" />
                 <Button Content="Save" />
                 <Button Content="Save As" />
             </StackPanel>

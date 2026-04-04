@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate;
@@ -12,6 +15,8 @@ namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
 public class KitEditorViewModel : ReactiveObject
 {
+    public Interaction<Unit, string> SaveAsKitFile { get; } = new();
+
     public string Name
     {
         get => field;
@@ -52,6 +57,9 @@ public class KitEditorViewModel : ReactiveObject
     }
     public KitEditorViewModel(Kit kit) : this()
     {
+        Name = kit.Name;
+        KitID = kit.ID;
+
         TileTab = new(kit);
         FloorTab = new(kit);
         WallTab = new(kit);
@@ -62,7 +70,7 @@ public class KitEditorViewModel : ReactiveObject
 
     public Kit ToModel()
     {
-        return new Kit(KitID, Name)
+        return new Kit(FilePath, KitID, Name)
         {
             Tiles = TileTab.TileItems.Select(x => x.ToModel()).ToList(),
             Floors = FloorTab.FloorItems.Select(x => x.ToModel()).ToList(),
@@ -80,8 +88,16 @@ public class KitEditorViewModel : ReactiveObject
 
     }
 
-    public void SaveAs()
+    public async Task SaveAs()
     {
+        var filepath = await SaveAsKitFile.Handle(Unit.Default);
 
+        if (string.IsNullOrEmpty(filepath) == true)
+            return;
+
+        FilePath = filepath;
+        KitID = Path.GetFileNameWithoutExtension(filepath);
+
+        KitLoader.Save(filepath, ToModel());
     }
 }

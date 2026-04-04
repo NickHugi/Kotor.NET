@@ -8,6 +8,7 @@
   
   <StackPanel>
     <TextBlock Text="{Binding Label, ElementName=Root}" />
-    <TextBox Text="{Binding Text, ElementName=Root}" />
+    <TextBox Text="{Binding Text, ElementName=Root}"
+             IsReadOnly="{Binding IsReadOnly, ElementName=Root}" />
   </StackPanel>
 </UserControl>

@@ -12,6 +12,7 @@ public class Kit
 
     public string ID { get; }
     public string Name { get; }
+    public string FilePath { get; }
     public ICollection<FloorTemplate> Floors { get; init; } = [];
     public ICollection<TileTemplate> Tiles { get; init; } = [];
     public ICollection<WallTemplate> Walls { get; init; } = [];
@@ -30,7 +31,7 @@ public class Kit
     public CornerTemplate OutsideCorner(string id) => OutsideCorners.Single(x => x.ID == id);
     public ObjectTemplate Object(string id) => Objects.Single(x => x.ID == id);
 
-    public Kit(string id, string name)
+    public Kit(string filepath, string id, string name)
     {
         ID = id;
         Name = name;
@@ -42,5 +43,5 @@ public class KitManager
     public ICollection<Kit> Kits { get; } = [];
 
     public void Add(Kit kit) => Kits.Add(kit);
-    public Kit Get(string name) => Kits.Single(x => x.Name == name);
+    public Kit Get(string id) => Kits.Single(x => x.ID == id);
 }

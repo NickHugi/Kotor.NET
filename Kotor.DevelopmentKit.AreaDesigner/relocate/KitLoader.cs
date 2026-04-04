@@ -1,27 +1,21 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Text.Json.Serialization.Metadata;
-using System.Threading.Tasks;
+using Kotor.NET.Graphics.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate;
 
-public class KitLoader
+public class KitLoaderV_0_1
 {
     public static Kit Load(string filepath)
     {
         var json = File.ReadAllText(filepath);
         dynamic data = JsonConvert.DeserializeObject(json);
 
-        var kit = new Kit(data.id.Value, data.name.Value);
+        var kit = new Kit(filepath, data.id.Value, data.name.Value);
 
         foreach (var floor in data.floors)
         {
@@ -43,7 +37,7 @@ public class KitLoader
                 Hooks = ((JArray)door.hooks).Select(x => (dynamic)x).Select(hook => new DoorFrameHookTemplate
                 {
                     Position = new Vector3(hook.position.ToObject<float[]>()),
-                    Orientation = QuaternionFromArray(hook.orientation.ToObject<float[]>())
+                    Orientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
                 }).ToArray()
             });
         }
@@ -71,21 +65,21 @@ public class KitLoader
                 {
                     DefaultWallID = hook.defaultWall,
                     LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
-                    LocalOrientation = QuaternionFromArray(hook.orientation.ToObject<float[]>())
+                    LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
                 }).ToArray(),
                 InnerCorners = ((JArray)tile.insideCorner).Select(x => (dynamic)x).Select(hook => new CornerTemplate
                 {
                     ID = hook.id.Value,
                     Adjacent = hook.adjacent?.ToObject<int[]>() ?? new int[0],
                     Position = new Vector3(hook.position.ToObject<float[]>()),
-                    Orientation = QuaternionFromArray(hook.orientation.ToObject<float[]>())
+                    Orientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
                 }).ToArray(),
                 OuterCorners = ((JArray)tile.outsideCorner).Select(x => (dynamic)x).Select(hook => new CornerTemplate
                 {
                     ID = hook.id.Value,
                     Adjacent = hook.adjacent?.ToObject<int[]>() ?? new int[0],
                     Position = new Vector3(hook.position.ToObject<float[]>()),
-                    Orientation = QuaternionFromArray(hook.orientation.ToObject<float[]>())
+                    Orientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
                 }).ToArray(),
                 CeilingHooks = []
             });
@@ -104,8 +98,87 @@ public class KitLoader
         return kit;
     }
 
-    private static Quaternion QuaternionFromArray(float[] array)
+    public static void Save(string filepath, Kit kit)
     {
-        return new Quaternion(array[0], array[1], array[2], array[3]);
+        dynamic data = new ExpandoObject();
+
+        data.id = kit.ID;
+
+        data.tiles = kit.Tiles.Select(tile => new
+        {
+            id = tile.ID,
+            name = tile.Name,
+            defaultFloorID = tile.DefaultFloorID,
+            defaultCeilingID = tile.DefaultCeilingID,
+            walls = tile.Walls.Select(x => new
+            {
+                defaultWall = x.DefaultWallID,
+                position = x.LocalPosition,
+                orientation = x.LocalOrientation,
+            }),
+            insideCorner = tile.InnerCorners.Select(x => new
+            {
+                id = x.ID,
+                position = x.Position,
+                orientation = x.Orientation,
+                adjacent = x.Adjacent,
+            }),
+            outsideCorner = tile.OuterCorners.Select(x => new
+            {
+                id = x.ID,
+                position = x.Position,
+                orientation = x.Orientation,
+                adjacent = x.Adjacent,
+            }),
+        });
+
+        data.floors = kit.Floors.Select(floor => new
+        {
+            id = floor.ID,
+            name = floor.Name,
+            model = floor.Model,
+        });
+
+        data.doorframes = kit.DoorFrames.Select(doorframe => new
+        {
+            id = doorframe.ID,
+            name = doorframe.Name,
+            model = doorframe.Model,
+            hooks = doorframe.Hooks.Select(hook => new
+            {
+                position = hook.Position,
+                orientation = hook.Orientation,
+            })
+        });
+
+        data.walls = kit.Walls.Select(wall => new
+        {
+            id = wall.ID,
+            name = wall.Name,
+            model = wall.Model,
+        });
+
+        data.objects = kit.Objects.Select(obj => new
+        {
+            id = obj.ID,
+            name = obj.Name,
+            model = obj.Model,
+        });
+
+        var json = JsonConvert.SerializeObject(data, Formatting.Indented);
+        File.WriteAllText(filepath, json);
+    }
+}
+
+public class KitLoader
+{
+    public static Kit Load(string filepath)
+    {
+        return KitLoaderV_0_1.Load(filepath);
+    }
+
+    public static void Save(string filepath, Kit kit)
+    {
+        KitLoaderV_0_1.Save(filepath, kit);
     }
 }

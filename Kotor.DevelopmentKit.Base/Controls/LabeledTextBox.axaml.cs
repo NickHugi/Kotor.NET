@@ -13,6 +13,9 @@ public partial class LabeledTextBox : UserControl
     public static readonly StyledProperty<string> TextProperty =
         AvaloniaProperty.Register<LabeledTextBox, string>(nameof(Text), defaultBindingMode: BindingMode.TwoWay);
 
+    public static readonly StyledProperty<bool> IsReadOnlyProperty =
+        AvaloniaProperty.Register<LabeledTextBox, bool>(nameof(IsReadOnly), defaultBindingMode: BindingMode.OneWay);
+
     public string Label
     {
         get => GetValue(LabelProperty);
@@ -23,6 +26,12 @@ public partial class LabeledTextBox : UserControl
     {
         get => GetValue(TextProperty);
         set => SetValue(TextProperty, value);
+    }
+
+    public bool IsReadOnly
+    {
+        get => GetValue(IsReadOnlyProperty);
+        set => SetValue(IsReadOnlyProperty, value);
     }
 
     public LabeledTextBox()

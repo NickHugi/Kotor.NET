@@ -45,4 +45,14 @@ public static class QuaternionExtensions
         }
         return Quaternion.Normalize(tmpQuat);
     }
+
+    public static Quaternion ToQuaternion(this IEnumerable<float> data)
+    {
+        var components = data.ToArray();
+
+        if (components.Length != 4)
+            throw new ArgumentException("Float array must have four elements.");
+
+        return new Quaternion(components[0], components[1], components[2], components[3]);
+    }
 }
