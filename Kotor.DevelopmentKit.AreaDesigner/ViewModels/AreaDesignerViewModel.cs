@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Avalonia;
 using Kotor.DevelopmentKit.AreaDesigner.relocate;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.KitSerializer;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.KitSerialization;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
 using Kotor.NET.Graphics.OpenGL;
 using ReactiveUI;
@@ -102,8 +102,7 @@ public class AreaDesignerViewModel : ReactiveObject
 
     public AreaDesignerViewModel()
     {
-        var kit = KitSerializer.Load($@"C:\Kits\sandral.kit");
-        Kit.Manager.Add(kit);
+        Kit.Manager.Refresh();
         Kits = new(Kit.Manager.Kits);
     }
 }

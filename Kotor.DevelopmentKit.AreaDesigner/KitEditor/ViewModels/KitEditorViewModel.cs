@@ -9,7 +9,7 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.KitSerializer;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.KitSerialization;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;

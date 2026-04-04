@@ -7,10 +7,12 @@ using Kotor.NET.Graphics.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Kotor.DevelopmentKit.AreaDesigner.relocate.KitSerializer;
+namespace Kotor.DevelopmentKit.AreaDesigner.relocate.KitSerialization;
 
 public class KitSerializerV_0_1
 {
+    public const string FormatID = "0.1";
+
     public static Kit Load(string filepath)
     {
         var json = File.ReadAllText(filepath);
@@ -113,6 +115,7 @@ public class KitSerializerV_0_1
         data.id = kit.ID;
         data.version = kit.Version;
         data.name = kit.Name;
+        data.format = FormatID;
 
         data.tiles = kit.Tiles.Select(tile => new
         {

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.KitSerialization;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate;
 
@@ -45,6 +47,10 @@ public class KitManager
 {
     public ICollection<Kit> Kits { get; } = [];
 
-    public void Add(Kit kit) => Kits.Add(kit);
+    public void Refresh()
+    {
+        Kits.Clear();
+        Directory.GetFiles(@"C:\Kits").Select(KitSerializer.Load).ToList().ForEach(Kits.Add);
+    }
     public Kit Get(string id) => Kits.Single(x => x.ID == id);
 }
