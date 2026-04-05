@@ -41,10 +41,11 @@ public class ObjectItem : ReactiveObject
         Model = template.Model;
     }
 
-    public ObjectTemplate ToModel()
+    public ObjectTemplate ToModel(string kitID)
     {
         return new ObjectTemplate
         {
+            KitID = kitID,
             ID = ID,
             Name = Name,
             Model = Model,

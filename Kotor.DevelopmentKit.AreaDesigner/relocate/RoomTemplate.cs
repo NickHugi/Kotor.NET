@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.DevelopmentKit.AreaDesigner.relocate;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate;
 
@@ -13,6 +14,7 @@ public class RoomTemplate
 
 public class FloorTemplate
 {
+    public required string KitID { get; init; }
     public required string ID { get; init; }
     public required string Name { get; init; }
     public required string Model { get; init; }
@@ -20,18 +22,31 @@ public class FloorTemplate
 
 public class TileTemplate
 {
+    public required string KitID { get; init; }
     public required string ID { get; init; }
     public required string Name { get; init; }
     public required string DefaultFloorID { get; init; }
     public required string DefaultCeilingID { get; init; }
     public required WallHookTemplate[] Walls { get; init; }
-    public required CornerTemplate[] InnerCorners { get; init; }
-    public required CornerTemplate[] OuterCorners { get; init; }
+    public required CornerHookTemplate[] InnerCorners { get; init; }
+    public required CornerHookTemplate[] OuterCorners { get; init; }
     public required Vector3[] CeilingHooks { get; init; }
 
-    public FloorTemplate Floor => Kit.Manager.Get("sandral").Floor(DefaultFloorID);
+    public FloorTemplate Floor => Kit.Manager.Get(KitID).Floor(DefaultFloorID);
 }
 
+
+public class WallTemplate
+{
+    public required string KitID { get; init; }
+    public required string ID { get; init; }
+    public required string Name { get; init; }
+    public required string Model { get; init; }
+    public required string DoorFrameID { get; init; }
+
+    public DoorFrameTemplate? DoorFrame => (DoorFrameID is not null) ? Kit.Manager.Get(KitID).DoorFrame(DoorFrameID) : null;
+    public bool CanBeDoor => DoorFrame is not null;
+}
 public class WallHookTemplate
 {
     public required string DefaultWallID { get; init; }
@@ -46,49 +61,7 @@ public class WallHookTemplate
     //public ICollection<string> CompatibleWallTemplates { get; }
     //public ICollection<string> CompatibleTileTemplates { get; }
 }
-public class WallTemplate
-{
-    public required string ID { get; init; }
-    public required string Name { get; init; }
-    public required string Model { get; init; }
-    public required string DoorFrameID { get; init; }
-
-    public DoorFrameTemplate? DoorFrame => (DoorFrameID is not null) ? Kit.Manager.Get("sandral").DoorFrame(DoorFrameID) : null;
-    public bool CanBeDoor => DoorFrame is not null;
-}
-
-public class DoorFrameTemplate
-{
-    public required string ID { get; init; }
-    public required string Name { get; init; }
-    public required string Model { get; init; }
-    public required DoorFrameHookTemplate[] Hooks { get; init; }
-}
-public class DoorFrameHookTemplate
-{
-    public required Vector3 Position { get; init; }
-    public required Quaternion Orientation { get; init; }
-}
-
-
-public class CeilingTemplate
-{
-    public required string ID { get; init; }
-    public required string Name { get; init; }
-    public required string Model { get; init; }
-
-    public CeilingTemplate()
-    {
-    }
-    public CeilingTemplate(string id, string name, string model)
-    {
-        ID = id;
-        Name = name;
-        Model = model;
-    }
-}
-
-public class CornerTemplate
+public class CornerHookTemplate
 {
     public required string ID { get; init; }
     public string Model => ID; // todo
@@ -100,8 +73,31 @@ public class CornerTemplate
 
 }
 
+public class DoorFrameTemplate
+{
+    public required string KitID { get; init; }
+    public required string ID { get; init; }
+    public required string Name { get; init; }
+    public required string Model { get; init; }
+    public required DoorFrameHookTemplate[] Hooks { get; init; }
+}
+public class DoorFrameHookTemplate
+{
+    public required Vector3 Position { get; init; }
+    public required Quaternion Orientation { get; init; }
+}
+
+public class CeilingTemplate
+{
+    public required string KitID { get; init; }
+    public required string ID { get; init; }
+    public required string Name { get; init; }
+    public required string Model { get; init; }
+}
+
 public class ObjectTemplate
 {
+    public required string KitID { get; init; }
     public required string ID { get; init; }
     public required string Name { get; init; }
     public required string Model { get; init; }

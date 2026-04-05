@@ -79,14 +79,14 @@ public class KitEditorViewModel : ReactiveObject
     {
         return new Kit(FilePath, KitID, Version, Name)
         {
-            Tiles = TileTab.TileItems.Select(x => x.ToModel()).ToList(),
-            Floors = FloorTab.FloorItems.Select(x => x.ToModel()).ToList(),
-            Walls = WallTab.WallItems.Select(x => x.ToModel()).ToList(),
-            DoorFrames = DoorFrameTab.DoorFrameItems.Select(x => x.ToModel()).ToList(),
+            Tiles = TileTab.TileItems.Select(x => x.ToModel(KitID)).ToList(),
+            Floors = FloorTab.FloorItems.Select(x => x.ToModel(KitID)).ToList(),
+            Walls = WallTab.WallItems.Select(x => x.ToModel(KitID)).ToList(),
+            DoorFrames = DoorFrameTab.DoorFrameItems.Select(x => x.ToModel(KitID)).ToList(),
             //InsideCorners = .TileItems.Select(x => x.ToModel()).ToList(),
             //OutsideCorners = OuterCornerTab.TileItems.Select(x => x.ToModel()).ToList(),
-            Ceilings = CeilingTab.CeilingItems.Select(x => x.ToModel()).ToList(),
-            Objects = ObjectTab.ObjectItems.Select(x => x.ToModel()).ToList(),
+            Ceilings = CeilingTab.CeilingItems.Select(x => x.ToModel(KitID)).ToList(),
+            Objects = ObjectTab.ObjectItems.Select(x => x.ToModel(KitID)).ToList(),
         };
     }
 

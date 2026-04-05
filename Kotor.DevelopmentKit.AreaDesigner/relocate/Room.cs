@@ -23,7 +23,7 @@ public class Room
     public Quaternion Orientation { get; set; } = new();
     public Matrix4x4 Transform => Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position);
 
-    public ICollection<Tile> Tiles { get; } = new List<Tile>();//GetAllTiles();
+    public ICollection<Tile> Tiles { get; } = new List<Tile>();
     public ICollection<Wall> Walls => Tiles.SelectMany(x => x.Walls).ToList();
     public ICollection<Corner> Corners => Tiles.SelectMany(x => x.InnerCorners).Concat(Tiles.SelectMany(x => x.OuterCorners)).ToList();
     public ICollection<Corner> InnerCorners => Tiles.SelectMany(x => x.InnerCorners).ToList();
@@ -222,7 +222,7 @@ public class Ceiling
 public class Corner
 {
     public Tile Parent { get; }
-    public CornerTemplate Template { get; set; }
+    public CornerHookTemplate Template { get; set; }
 
     public Vector3 Position => Template.Position;
     public Quaternion Orientation => Template.Orientation;
@@ -252,7 +252,7 @@ public class Corner
         }
     }
 
-    public Corner(Tile parent, CornerTemplate template)
+    public Corner(Tile parent, CornerHookTemplate template)
     {
         Parent = parent;
         Template = template;

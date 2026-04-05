@@ -38,10 +38,11 @@ public class CeilingItem : ReactiveObject
         Model = template.Model;
     }
 
-    public CeilingTemplate ToModel()
+    public CeilingTemplate ToModel(string kitID)
     {
         return new CeilingTemplate
         {
+            KitID = kitID,
             ID = ID,
             Name = Name,
             Model = Model

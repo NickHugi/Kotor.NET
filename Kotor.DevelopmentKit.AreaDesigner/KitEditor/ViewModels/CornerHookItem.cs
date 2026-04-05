@@ -41,7 +41,7 @@ public class CornerHookItem : ReactiveObject
         Orientation = new();
         AdjacentWalls = [];
     }
-    public CornerHookItem(CornerTemplate template)
+    public CornerHookItem(CornerHookTemplate template)
     {
         DefaultCornerID = template.ID;
         Position = new(template.Position);
@@ -49,9 +49,9 @@ public class CornerHookItem : ReactiveObject
         AdjacentWalls = new(template.Adjacent);
     }
 
-    public CornerTemplate ToModel()
+    public CornerHookTemplate ToModel()
     {
-        return new CornerTemplate
+        return new CornerHookTemplate
         {
             ID = DefaultCornerID,
             Adjacent = AdjacentWalls.ToArray(),

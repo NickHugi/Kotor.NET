@@ -41,10 +41,11 @@ public class FloorItem : ReactiveObject
         Model = template.Model;
     }
 
-    public FloorTemplate ToModel()
+    public FloorTemplate ToModel(string kitID)
     {
         return new FloorTemplate
         {
+            KitID = kitID,
             ID = ID,
             Name = Name,
             Model = Model,

@@ -69,10 +69,11 @@ public class TileItem : ReactiveObject
         OuterCorners = new(tile.OuterCorners.Select(x => new CornerHookItem(x)));
     }
 
-    public TileTemplate ToModel()
+    public TileTemplate ToModel(string kitID)
     {
         return new TileTemplate
         {
+            KitID = kitID,
             ID = ID,
             Name = Name,
             DefaultFloorID = DefaultFloorID,

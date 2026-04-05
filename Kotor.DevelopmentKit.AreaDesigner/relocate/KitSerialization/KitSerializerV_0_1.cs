@@ -31,6 +31,7 @@ public class KitSerializerV_0_1
         {
             kit.Floors.Add(new FloorTemplate
             {
+                KitID = kitID,
                 ID = floor.id.Value,
                 Name = floor.name.Value,
                 Model = floor.model.Value,
@@ -41,6 +42,7 @@ public class KitSerializerV_0_1
         {
             kit.DoorFrames.Add(new DoorFrameTemplate
             {
+                KitID = kitID,
                 ID = door.id.Value,
                 Name = door.name.Value,
                 Model = door.model.Value,
@@ -56,6 +58,7 @@ public class KitSerializerV_0_1
         {
             kit.Walls.Add(new WallTemplate
             {
+                KitID = kitID,
                 ID = wall.id.Value,
                 Name = wall.name.Value,
                 Model = wall.model.Value,
@@ -67,6 +70,7 @@ public class KitSerializerV_0_1
         {
             kit.Tiles.Add(new TileTemplate
             {
+                KitID = kitID,
                 ID = tile.id.Value,
                 Name = tile.name.Value,
                 DefaultFloorID = tile.defaultFloorID.Value,
@@ -77,14 +81,14 @@ public class KitSerializerV_0_1
                     LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
                     LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
                 }).ToArray(),
-                InnerCorners = ((JArray)tile.innerCornerHooks).Select(x => (dynamic)x).Select(hook => new CornerTemplate
+                InnerCorners = ((JArray)tile.innerCornerHooks).Select(x => (dynamic)x).Select(hook => new CornerHookTemplate
                 {
                     ID = hook.defaultInnerCornerID.Value,
                     Adjacent = hook.adjacencies?.ToObject<int[]>() ?? new int[0],
                     Position = new Vector3(hook.position.ToObject<float[]>()),
                     Orientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
                 }).ToArray(),
-                OuterCorners = ((JArray)tile.outerCornerHooks).Select(x => (dynamic)x).Select(hook => new CornerTemplate
+                OuterCorners = ((JArray)tile.outerCornerHooks).Select(x => (dynamic)x).Select(hook => new CornerHookTemplate
                 {
                     ID = hook.defaultOuterCornerID.Value,
                     Adjacent = hook.adjacencies?.ToObject<int[]>() ?? new int[0],
@@ -99,6 +103,7 @@ public class KitSerializerV_0_1
         {
             kit.Objects.Add(new ObjectTemplate
             {
+                KitID = kitID,
                 ID = @object.id.Value,
                 Name = @object.name.Value,
                 Model = @object.model.Value,

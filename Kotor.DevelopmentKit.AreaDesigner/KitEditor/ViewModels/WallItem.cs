@@ -49,10 +49,11 @@ public class WallItem : ReactiveObject
         DoorFrameID = template.DoorFrameID;
     }
 
-    public WallTemplate ToModel()
+    public WallTemplate ToModel(string kitID)
     {
         return new WallTemplate
         {
+            KitID = kitID,
             ID = ID,
             Name = Name,
             Model = Model,
