@@ -64,6 +64,7 @@ public class KitEditorViewModel : ReactiveObject
     }
     public KitEditorViewModel(Kit kit) : this()
     {
+        FilePath = kit.FilePath;
         Name = kit.Name;
         KitID = kit.ID;
 
@@ -92,14 +93,18 @@ public class KitEditorViewModel : ReactiveObject
 
     public void Save()
     {
+        if (!File.Exists(FilePath))
+            return;
 
+        Version++;
+        KitSerializer.Save(FilePath, ToModel());
     }
 
     public async Task SaveAs()
     {
         var filepath = await SelectKitSaveFile.Handle(Unit.Default);
 
-        if (string.IsNullOrEmpty(filepath) == true)
+        if (string.IsNullOrEmpty(filepath))
             return;
 
         FilePath = filepath;
