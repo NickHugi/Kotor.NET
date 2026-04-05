@@ -34,7 +34,8 @@ public class AddRoomMode : BaseMode
         (var newWall, var oldWall, var distance) = NearestAdjacentWall(_addRoomRoom);
         if (oldWall is not null)
         {
-            newWall.Template = oldWall.Template;
+            newWall.KitID = oldWall.Template.KitID;
+            newWall.TemplateID = oldWall.Template.ID;
             newWall.DoorFrame.Enabled = false;
 
             if (oldWall.DoorFrame is not null)

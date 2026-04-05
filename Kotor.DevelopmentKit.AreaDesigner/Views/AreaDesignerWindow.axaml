@@ -18,6 +18,8 @@
         <StackPanel DockPanel.Dock="Top"
                     Orientation="Horizontal">
 
+            <Button Content="Load" Command="{Binding LoadArea}" />
+            <Button Content="Save As" Command="{Binding SaveAreaAs}" />
             <Button Content="Add Room" Command="{Binding SetSceneMode_AddRoom}" />
             <Button Content="Extend Room" Command="{Binding SetSceneMode_AddTile}" />
             <Button Content="Switch Wall" Command="{Binding SetSceneMode_SwitchWall}" />

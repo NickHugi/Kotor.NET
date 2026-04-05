@@ -52,6 +52,8 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         {
             ViewModel.SelectWallTemplate.RegisterHandler(SelectWallTemplate).DisposeWith(d);
             ViewModel.SelectTileTemplate.RegisterHandler(SelectTileTemplate).DisposeWith(d);
+            ViewModel.SelectSaveFilepathForArea.RegisterHandler(SelectSaveFilepathForArea).DisposeWith(d);
+            ViewModel.SelectLoadFilepathForArea.RegisterHandler(SelectLoadFilepathForArea).DisposeWith(d);
         });
     }
 
@@ -300,6 +302,55 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         catch (TaskCanceledException)
         {
             context.SetOutput(null);
+        }
+    }
+
+    public async Task SelectSaveFilepathForArea(IInteractionContext<Unit, string?> context)
+    {
+        var file = await TopLevel.GetTopLevel(this)!.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions()
+        {
+            Title = "Save Area As",
+            FileTypeChoices =
+            [
+                new FilePickerFileType("Area File") { Patterns = ["*.area"] },
+            ]
+        });
+
+        if (file is not null)
+        {
+            context.SetOutput(file.Path.LocalPath);
+            return;
+        }
+        else
+        {
+            context.SetOutput(null);
+            return;
+        }
+    }
+
+    public async Task SelectLoadFilepathForArea(IInteractionContext<Unit, string?> context)
+    {
+        var files = await TopLevel.GetTopLevel(this)!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
+        {
+            Title = "Load Area",
+            AllowMultiple = false,
+            FileTypeFilter =
+            [
+                new FilePickerFileType("Area File") { Patterns = ["*.area"] },
+            ]
+        });
+
+        var file = files.FirstOrDefault();
+
+        if (file is not null)
+        {
+            context.SetOutput(file.Path.LocalPath);
+            return;
+        }
+        else
+        {
+            context.SetOutput(null);
+            return;
         }
     }
 }

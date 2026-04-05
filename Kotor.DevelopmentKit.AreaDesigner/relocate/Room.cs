@@ -31,6 +31,9 @@ public class Room
     public ICollection<DoorFrame> DoorFrames => Walls.Select(x => x.DoorFrame).Where(x => x is not null).ToList();
     public ICollection<Object> Objects = [];
 
+    public Room()
+    {
+    }
     public Room(RoomTemplate template)
     {
         Tiles.Add(new(this, Kit.Manager.Get("sandral").Tiles.First()));
@@ -87,23 +90,30 @@ public class Room
 public class Tile
 {
     public Room Parent { get; }
-    public TileTemplate Template { get; private set; }
+
     public Floor Floor { get; private set; }
+    public Ceiling Ceiling { get; private set; }
     public IReadOnlyCollection<Wall> Walls { get; private set; }
     public IReadOnlyCollection<Corner> InnerCorners { get; private set; }
     public IReadOnlyCollection<Corner> OuterCorners { get; private set; }
 
+    public string KitID { get; private set; }
+    public string TemplateID { get; private set; }
+    public TileTemplate Template => Kit.Manager.Get(KitID).Tile(TemplateID);
+
     public Vector3 LocalPosition { get; set; }
     public Quaternion LocalOrientation { get; set; } = new(0, 0, 0, 1);
+    public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
 
     public Vector3 Position => Matrix4x4.Decompose(Transform, out _, out _, out var value) ? value : new();
     public Quaternion Orientation => Matrix4x4.Decompose(Transform, out _, out var value, out _) ? value : new();
-    public Matrix4x4 Transform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition) * Parent.Transform;
+    public Matrix4x4 Transform => LocalTransform * Parent.Transform;
 
     public Tile(Room parent, TileTemplate template)
     {
         Parent = parent;
-        Template = template;
+        KitID = template.KitID;
+        TemplateID = template.ID;
         Floor = new(template.Floor);
         Walls = template.Walls.Select(x => new Wall(this, x.DefaultTemplate, x)).ToArray();
         InnerCorners = template.InnerCorners.Select(x => new Corner(this, x)).ToArray();
@@ -136,7 +146,8 @@ public class Tile
 
     public void SwitchWall(Wall wall, WallTemplate template)
     {
-        wall.Template = template;
+        wall.KitID = template.KitID;
+        wall.TemplateID = template.ID;
 
         if (template.DoorFrame is not null)
         {
@@ -150,7 +161,9 @@ public class Tile
 
     public void SwitchTemplate(TileTemplate template)
     {
-        Template = template;
+        //Template = template;
+        KitID = template.KitID;
+        TemplateID = template.ID;
         Floor = new(template.Floor);
         Walls = template.Walls.Select(x => new Wall(this, x.DefaultTemplate, x)).ToArray();
         InnerCorners = template.InnerCorners.Select(x => new Corner(this, x)).ToArray();
@@ -164,16 +177,11 @@ public class Wall
     public Room? LinkedRoom { get; set; }
     public Tile? LinkedTile { get; set; }
     public DoorFrame? DoorFrame { get; set; }
-    public WallTemplate Template
-    {
-        get;
-        set
-        {
-            field = value;
-            DoorFrame = (value.DoorFrame is null) ? null : new(this, value.DoorFrame);
-        }
-    }
     public WallHookTemplate Hook { get; set; }
+
+    public string KitID { get; set;}
+    public string TemplateID { get; set; }
+    public WallTemplate Template => Kit.Manager.Get(KitID).Wall(TemplateID);
 
     public Vector3 LocalPosition => Hook.LocalPosition;
     public Vector3 Position => Matrix4x4.Decompose(Transform, out _, out _, out var value) ? value : new();
@@ -185,8 +193,9 @@ public class Wall
     public Wall(Tile parent, WallTemplate template, WallHookTemplate hook)
     {
         Parent = parent;
-        Template = template;
         Hook = hook;
+        KitID = template.KitID;
+        TemplateID = template.ID;
     }
 
     public Tile Extend(TileTemplate template)
@@ -197,25 +206,38 @@ public class Wall
 
 public class Floor
 {
-    public FloorTemplate Template { get; set; }
+    public string KitID { get; private set; } = "";
+    public string TemplateID { get; private set; } = "";
+    public FloorTemplate Template => Kit.Manager.Get(KitID).Floor(TemplateID);
 
     public Floor(FloorTemplate template)
     {
-        Template = template;
+        SwitchTemplate(template);
+    }
+
+    public void SwitchTemplate(FloorTemplate template)
+    {
+        KitID = template.KitID;
+        TemplateID = template.ID;
     }
 }
 
 public class Ceiling
 {
-    public string ID { get; set; }
-    public string Name { get; set; }
-    public string Model { get; set; }
+    public string KitID { get; private set; } = "";
+    public string TemplateID { get; private set; } = "";
+    public CeilingTemplate Template => Kit.Manager.Get(KitID).Ceiling(TemplateID);
 
-    public Ceiling(string id, string name, string model)
+    public Ceiling(CeilingTemplate template)
     {
-        ID = id;
-        Name = name;
-        Model = model;
+        KitID = template.KitID;
+        TemplateID = template.ID;
+    }
+
+    public void SwitchTemplate(CeilingTemplate template)
+    {
+        KitID = template.KitID;
+        TemplateID = template.ID;
     }
 }
 

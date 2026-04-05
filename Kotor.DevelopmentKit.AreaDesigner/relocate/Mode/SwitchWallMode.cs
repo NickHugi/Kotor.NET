@@ -41,6 +41,9 @@ public class SwitchWallMode : BaseMode
         var template = await SelectWallTemplate.Handle(Unit.Default);
 
         if (_wall is not null && template is not null)
-            _wall.Template = template;
+        {
+            _wall.KitID = template.KitID;
+            _wall.TemplateID = template.ID;
+        }
     }
 }

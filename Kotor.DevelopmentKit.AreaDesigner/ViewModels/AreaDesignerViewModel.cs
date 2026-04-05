@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Avalonia;
 using Kotor.DevelopmentKit.AreaDesigner.relocate;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaSerialization;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.KitSerialization;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
 using Kotor.NET.Graphics.OpenGL;
@@ -19,12 +21,24 @@ public class AreaDesignerViewModel : ReactiveObject
     public Interaction<Unit, Point> GetMousePoint = new();
     public Interaction<Unit, WallTemplate?> SelectWallTemplate = new();
     public Interaction<Unit, TileTemplate?> SelectTileTemplate = new();
+    public Interaction<Unit, string?> SelectSaveFilepathForArea = new();
+    public Interaction<Unit, string?> SelectLoadFilepathForArea = new();
 
     public ObservableCollection<Kit> Kits { get; } = new();
     public Kit? SelectedKit
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
+    public Area Area
+    {
+        get => Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
+        set
+        {
+            Engine.Scene.Entities.OfType<AreaEntity>().Single().Area = value;
+            this.RaisePropertyChanged(nameof(Area));
+        }
     }
 
     public GLEngine Engine { get; set => this.RaiseAndSetIfChanged(ref field, value); }
@@ -41,7 +55,7 @@ public class AreaDesignerViewModel : ReactiveObject
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
-    } = true;
+    } = true; 
 
     public bool ShowCorners
     {
@@ -98,6 +112,26 @@ public class AreaDesignerViewModel : ReactiveObject
     public void ReloadKit(string filepath)
     {
         
+    }
+
+    public async Task SaveAreaAs()
+    {
+        var filepath = await SelectSaveFilepathForArea.Handle(Unit.Default);
+
+        if (string.IsNullOrEmpty(filepath))
+            return;
+
+        AreaSerializer.Save(filepath, Area);
+    }
+
+    public async Task LoadArea()
+    {
+        var filepath = await SelectLoadFilepathForArea.Handle(Unit.Default);
+
+        if (string.IsNullOrEmpty(filepath))
+            return;
+
+        Area = AreaSerializer.Load(filepath);
     }
 
     public AreaDesignerViewModel()

@@ -13,7 +13,7 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate;
 
 public class AreaEntity : BaseEntity
 {
-    public Area Area { get; } = new();
+    public Area Area { get; set; } = new();
 
     public override ICollection<MeshDescriptor> GetMeshDescriptors(IAssetManager assets)
     {

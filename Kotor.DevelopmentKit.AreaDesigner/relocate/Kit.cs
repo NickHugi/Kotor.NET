@@ -50,7 +50,11 @@ public class KitManager
     public void Refresh()
     {
         Kits.Clear();
-        Directory.GetFiles(@"C:\Kits").Select(KitSerializer.Load).ToList().ForEach(Kits.Add);
+        Directory.GetFiles(@"C:\Kits")
+            .Where(x => Path.GetExtension(x).ToLower() == ".kit")
+            .Select(KitSerializer.Load)
+            .ToList()
+            .ForEach(Kits.Add);
     }
     public Kit Get(string id) => Kits.Single(x => x.ID == id);
 }

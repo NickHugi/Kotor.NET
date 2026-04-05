@@ -14,13 +14,13 @@ public class KitSerializer
 
         return format switch
         {
-            "0.1" => KitSerializerV_0_1.Load(filepath),
+            "0.1" => KitSerializer_V0_1.Load(filepath),
             _ => throw new ArgumentException("Kit version is unsupported.")
         };
     }
 
     public static void Save(string filepath, Kit kit)
     {
-        KitSerializerV_0_1.Save(filepath, kit);
+        KitSerializer_V0_1.Save(filepath, kit);
     }
 }

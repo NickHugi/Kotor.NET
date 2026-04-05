@@ -5,6 +5,8 @@ using Kotor.DevelopmentKit.AreaDesigner.relocate;
 using Kotor.DevelopmentKit.AreaDesigner.KitEditor.Views;
 using Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 using Kotor.DevelopmentKit.AreaDesigner.ViewModels;
+using ReactiveUI;
+using System.Reactive;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.Views;
 

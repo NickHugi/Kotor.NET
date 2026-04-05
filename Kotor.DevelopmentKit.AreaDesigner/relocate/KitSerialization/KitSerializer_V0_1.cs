@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.KitSerialization;
 
-public class KitSerializerV_0_1
+public class KitSerializer_V0_1
 {
     public const string FormatID = "0.1";
 
