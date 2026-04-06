@@ -92,21 +92,43 @@ public class KitSerializer_V0_1
                     LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
                     LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
                 }).ToArray(),
-                InnerCorners = ((JArray)tile.innerCornerHooks).Select(x => (dynamic)x).Select(hook => new CornerHookTemplate
+                InnerCorners = ((JArray)tile.innerCornerHooks).Select(x => (dynamic)x).Select(hook => new InnerCornerHookTemplate
                 {
-                    ID = hook.defaultInnerCornerID.Value,
+                    DefaultCornerID = hook.defaultInnerCornerID.Value,
                     Adjacent = hook.adjacencies?.ToObject<int[]>() ?? new int[0],
-                    Position = new Vector3(hook.position.ToObject<float[]>()),
-                    Orientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
+                    LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
+                    LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
                 }).ToArray(),
-                OuterCorners = ((JArray)tile.outerCornerHooks).Select(x => (dynamic)x).Select(hook => new CornerHookTemplate
+                OuterCorners = ((JArray)tile.outerCornerHooks).Select(x => (dynamic)x).Select(hook => new OuterCornerHookTemplate
                 {
-                    ID = hook.defaultOuterCornerID.Value,
+                    DefaultCornerID = hook.defaultOuterCornerID.Value,
                     Adjacent = hook.adjacencies?.ToObject<int[]>() ?? new int[0],
-                    Position = new Vector3(hook.position.ToObject<float[]>()),
-                    Orientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
+                    LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
+                    LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
                 }).ToArray(),
                 CeilingHooks = []
+            });
+        }
+
+        foreach (var innerCorner in data.innerCorners)
+        {
+            kit.InnerCorners.Add(new InnerCornerTemplate
+            {
+                KitID = kitID,
+                ID = innerCorner.id.Value,
+                Name = innerCorner.name.Value,
+                Model = innerCorner.model.Value,
+            });
+        }
+
+        foreach (var outerCorner in data.outerCorners)
+        {
+            kit.OuterCorners.Add(new OuterCornerTemplate
+            {
+                KitID = kitID,
+                ID = outerCorner.id.Value,
+                Name = outerCorner.name.Value,
+                Model = outerCorner.model.Value,
             });
         }
 
@@ -147,16 +169,16 @@ public class KitSerializer_V0_1
             }),
             innerCornerHooks = tile.InnerCorners.Select(x => new
             {
-                defaultInnerCornerID = x.ID,
-                position = x.Position.ToFloatArray(),
-                orientation = x.Orientation.ToFloatArray(),
+                defaultInnerCornerID = x.DefaultCornerID,
+                position = x.LocalPosition.ToFloatArray(),
+                orientation = x.LocalOrientation.ToFloatArray(),
                 adjacencies = x.Adjacent,
             }),
             outerCornerHooks = tile.OuterCorners.Select(x => new
             {
-                defaultOuterCornerID = x.ID,
-                position = x.Position.ToFloatArray(),
-                orientation = x.Orientation.ToFloatArray(),
+                defaultOuterCornerID = x.DefaultCornerID,
+                position = x.LocalPosition.ToFloatArray(),
+                orientation = x.LocalOrientation.ToFloatArray(),
                 adjacencies = x.Adjacent,
             }),
         });
@@ -193,6 +215,20 @@ public class KitSerializer_V0_1
             name = wall.Name,
             model = wall.Model,
             doorframeID = wall.DoorFrameID,
+        });
+
+        data.innerCorners = kit.InnerCorners.Select(obj => new
+        {
+            id = obj.ID,
+            name = obj.Name,
+            model = obj.Model,
+        });
+
+        data.outerCorners = kit.OuterCorners.Select(obj => new
+        {
+            id = obj.ID,
+            name = obj.Name,
+            model = obj.Model,
         });
 
         data.objects = kit.Objects.Select(obj => new

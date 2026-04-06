@@ -6,7 +6,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
-public class CornerHookItem : ReactiveObject
+public class InnerCornerHookItem : ReactiveObject
 {
     public string Name => $"Hook ({Position.Z:F2}, {Position.Y:F2}, {Position.Z:F2})";
 
@@ -34,29 +34,29 @@ public class CornerHookItem : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public CornerHookItem()
+    public InnerCornerHookItem()
     {
         DefaultCornerID = "";
         Position = new();
         Orientation = new();
         AdjacentWalls = [];
     }
-    public CornerHookItem(CornerHookTemplate template)
+    public InnerCornerHookItem(InnerCornerHookTemplate template)
     {
-        DefaultCornerID = template.ID;
-        Position = new(template.Position);
-        Orientation = new(template.Orientation);
+        DefaultCornerID = template.DefaultCornerID;
+        Position = new(template.LocalPosition);
+        Orientation = new(template.LocalOrientation);
         AdjacentWalls = new(template.Adjacent);
     }
 
-    public CornerHookTemplate ToModel()
+    public InnerCornerHookTemplate ToModel()
     {
-        return new CornerHookTemplate
+        return new InnerCornerHookTemplate
         {
-            ID = DefaultCornerID,
+            DefaultCornerID = DefaultCornerID,
             Adjacent = AdjacentWalls.ToArray(),
-            Position = Position.ToModel(),
-            Orientation = Orientation.ToModel(),
+            LocalPosition = Position.ToModel(),
+            LocalOrientation = Orientation.ToModel(),
         };
     }
 }

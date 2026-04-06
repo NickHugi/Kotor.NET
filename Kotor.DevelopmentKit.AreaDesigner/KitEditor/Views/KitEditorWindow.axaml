@@ -34,7 +34,13 @@
 			</StackPanel>
 		</DataTemplate>
 
-        <DataTemplate x:Key="CornerHookItemTemplate" x:DataType="vm:CornerHookItem">
+        <DataTemplate x:Key="InnerCornerHookItemTemplate" x:DataType="vm:InnerCornerHookItem">
+			<StackPanel>
+				<TextBlock Text="{Binding Name}" />
+			</StackPanel>
+		</DataTemplate>
+
+        <DataTemplate x:Key="OuterCornerHookItemTemplate" x:DataType="vm:OuterCornerHookItem">
 			<StackPanel>
 				<TextBlock Text="{Binding Name}" />
 			</StackPanel>
@@ -123,7 +129,20 @@
 						    </Border>
                         </DataTemplate>
 
-                        <DataTemplate DataType="vm:CornerHookItem">
+                        <DataTemplate DataType="vm:InnerCornerHookItem">
+						    <Border Grid.Column="0" Padding="4" Background="#bbb">
+						    <StackPanel>
+							    <core:LabeledTextBox Label="Default Corner ID"
+											         Text="{Binding DefaultCornerID}" />
+							    <core:Vector3Edit Label="Position"
+											      Value="{Binding Position}" />
+							    <core:QuaternionEdit Label="Orientation"
+												     Value="{Binding Orientation}" />
+						    </StackPanel>
+						    </Border>
+                        </DataTemplate>
+
+                        <DataTemplate DataType="vm:OuterCornerHookItem">
 						    <Border Grid.Column="0" Padding="4" Background="#bbb">
 						    <StackPanel>
 							    <core:LabeledTextBox Label="Default Corner ID"

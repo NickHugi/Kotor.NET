@@ -23,6 +23,7 @@ public static class AreaExporter
             //mdl.Root.Children.Add(CeilingToMDLNode(tile.Ceiling));
             mdl.Root.Children.AddRange(tile.Walls.Where(x => x.Visible).Select(WallToMDLNode));
             mdl.Root.Children.AddRange(tile.Walls.Select(x => x.DoorFrame).Where(x => x?.Visible == true).Select(DoorFrameToMDLNode));
+            mdl.Root.Children.AddRange(tile.InnerCorners.Where(x => x.Visible == true).Select(InnerCornerToMDLNode));
         }
 
         mdl.Root.GetAllDescendants().Select((x, i) => x.Name = i.ToString()).ToArray();
@@ -60,5 +61,13 @@ public static class AreaExporter
         doorframeMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(doorframe.Position));
         doorframeMDL.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(doorframe.Orientation));
         return doorframeMDL.Root;
+    }
+
+    private static MDLNode InnerCornerToMDLNode(InnerCorner corner)
+    {
+        var cornerMDL = MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{corner.KitID}/{corner.Template.Model}.mdl");
+        cornerMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(corner.Position));
+        cornerMDL.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(corner.Orientation));
+        return cornerMDL.Root;
     }
 }

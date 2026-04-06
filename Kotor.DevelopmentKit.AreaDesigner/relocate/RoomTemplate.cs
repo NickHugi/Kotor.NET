@@ -28,8 +28,8 @@ public class TileTemplate
     public required string DefaultFloorID { get; init; }
     public required string DefaultCeilingID { get; init; }
     public required WallHookTemplate[] Walls { get; init; }
-    public required CornerHookTemplate[] InnerCorners { get; init; }
-    public required CornerHookTemplate[] OuterCorners { get; init; }
+    public required InnerCornerHookTemplate[] InnerCorners { get; init; }
+    public required OuterCornerHookTemplate[] OuterCorners { get; init; }
     public required Vector3[] CeilingHooks { get; init; }
 
     public FloorTemplate Floor => Kit.Manager.Get(KitID).Floor(DefaultFloorID);
@@ -50,7 +50,7 @@ public class WallTemplate
 public class WallHookTemplate
 {
     public required string DefaultWallID { get; init; }
-    public WallTemplate DefaultTemplate => Kit.Manager.Get("sandral").Wall(DefaultWallID);
+    public WallTemplate DefaultTemplate => Kit.Manager.Get("sandral").Wall(DefaultWallID); // todo - remove hardcoding
 
     public required Vector3 LocalPosition { get; init; }
     public required Quaternion LocalOrientation { get; init; }
@@ -61,15 +61,28 @@ public class WallHookTemplate
     //public ICollection<string> CompatibleWallTemplates { get; }
     //public ICollection<string> CompatibleTileTemplates { get; }
 }
-public class CornerHookTemplate
+public class InnerCornerHookTemplate
 {
-    public required string ID { get; init; }
-    public string Model => ID; // todo
-    public required Vector3 Position { get; init; }
-    public required Quaternion Orientation { get; init; }
+    public required string DefaultCornerID { get; init; }
+    public InnerCornerTemplate DefaultTemplate => Kit.Manager.Get("sandral").InnerCorner(DefaultCornerID); // todo - remove hardcoding
+
     public required int[] Adjacent { get; init; }
 
-    public Matrix4x4 Transform => Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position);
+    public required Vector3 LocalPosition { get; init; }
+    public required Quaternion LocalOrientation { get; init; }
+    public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
+
+}
+public class OuterCornerHookTemplate
+{
+    public required string DefaultCornerID { get; init; }
+    public OuterCornerTemplate DefaultTemplate => Kit.Manager.Get("sandral").OuterCorner(DefaultCornerID); // todo - remove hardcoding
+
+    public required int[] Adjacent { get; init; }
+
+    public required Vector3 LocalPosition { get; init; }
+    public required Quaternion LocalOrientation { get; init; }
+    public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
 
 }
 
@@ -96,6 +109,23 @@ public class CeilingTemplate
 }
 
 public class ObjectTemplate
+{
+    public required string KitID { get; init; }
+    public required string ID { get; init; }
+    public required string Name { get; init; }
+    public required string Model { get; init; }
+}
+
+
+public class InnerCornerTemplate
+{
+    public required string KitID { get; init; }
+    public required string ID { get; init; }
+    public required string Name { get; init; }
+    public required string Model { get; init; }
+}
+
+public class OuterCornerTemplate
 {
     public required string KitID { get; init; }
     public required string ID { get; init; }

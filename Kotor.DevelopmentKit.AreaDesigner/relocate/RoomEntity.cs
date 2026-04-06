@@ -71,16 +71,16 @@ public class AreaEntity : BaseEntity
 
         descriptors.AddRange(DescriptorsForModel(assets, doorframe.Template.Model, doorframe.Transform, doorframe));
     }
-    private void RenderInnerCorner(IAssetManager assets, Corner corner, ref List<MeshDescriptor> descriptors)
+    private void RenderInnerCorner(IAssetManager assets, InnerCorner corner, ref List<MeshDescriptor> descriptors)
     {
-        if (!corner.VisibleInner)
+        if (!corner.Visible)
             return;
 
         descriptors.AddRange(DescriptorsForModel(assets, corner.Template.Model, corner.Transform));
     }
-    private void RenderOuterCorner(IAssetManager assets, Corner corner, ref List<MeshDescriptor> descriptors)
+    private void RenderOuterCorner(IAssetManager assets, OuterCorner corner, ref List<MeshDescriptor> descriptors)
     {
-        if (!corner.VisibleOuter)
+        if (!corner.Visible)
             return;
 
         descriptors.AddRange(DescriptorsForModel(assets, corner.Template.Model, corner.Transform));

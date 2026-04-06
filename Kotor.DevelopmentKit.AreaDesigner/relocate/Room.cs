@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Avalonia.Markup.Xaml.Templates;
 using DynamicData;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate;
@@ -25,9 +26,8 @@ public class Room
 
     public ICollection<Tile> Tiles { get; } = new List<Tile>();
     public ICollection<Wall> Walls => Tiles.SelectMany(x => x.Walls).ToList();
-    public ICollection<Corner> Corners => Tiles.SelectMany(x => x.InnerCorners).Concat(Tiles.SelectMany(x => x.OuterCorners)).ToList();
-    public ICollection<Corner> InnerCorners => Tiles.SelectMany(x => x.InnerCorners).ToList();
-    public ICollection<Corner> OuterCorners => Tiles.SelectMany(x => x.OuterCorners).ToList();
+    public ICollection<InnerCorner> InnerCorners => Tiles.SelectMany(x => x.InnerCorners).ToList();
+    public ICollection<OuterCorner> OuterCorners => Tiles.SelectMany(x => x.OuterCorners).ToList();
     public ICollection<DoorFrame> DoorFrames => Walls.Select(x => x.DoorFrame).Where(x => x is not null).ToList();
     public ICollection<Object> Objects = [];
 
@@ -93,8 +93,8 @@ public class Tile
     public Floor Floor { get; private set; }
     public Ceiling Ceiling { get; private set; }
     public IReadOnlyCollection<Wall> Walls { get; private set; }
-    public IReadOnlyCollection<Corner> InnerCorners { get; private set; }
-    public IReadOnlyCollection<Corner> OuterCorners { get; private set; }
+    public IReadOnlyCollection<InnerCorner> InnerCorners { get; private set; }
+    public IReadOnlyCollection<OuterCorner> OuterCorners { get; private set; }
 
     public string KitID { get; private set; }
     public string TemplateID { get; private set; }
@@ -115,8 +115,8 @@ public class Tile
         TemplateID = template.ID;
         Floor = new(this, template.Floor);
         Walls = template.Walls.Select(x => new Wall(this, x.DefaultTemplate, x)).ToArray();
-        InnerCorners = template.InnerCorners.Select(x => new Corner(this, x)).ToArray();
-        OuterCorners = template.OuterCorners.Select(x => new Corner(this, x)).ToArray();
+        InnerCorners = template.InnerCorners.Select(x => new InnerCorner(this, x.DefaultTemplate, x)).ToArray();
+        OuterCorners = template.OuterCorners.Select(x => new OuterCorner(this, x.DefaultTemplate, x)).ToArray();
     }
 
     public Tile Extend(Wall wall, TileTemplate template)
@@ -154,8 +154,8 @@ public class Tile
         TemplateID = template.ID;
         Floor = new(this, template.Floor);
         Walls = template.Walls.Select(x => new Wall(this, x.DefaultTemplate, x)).ToArray();
-        InnerCorners = template.InnerCorners.Select(x => new Corner(this, x)).ToArray();
-        OuterCorners = template.OuterCorners.Select(x => new Corner(this, x)).ToArray();
+        InnerCorners = template.InnerCorners.Select(x => new InnerCorner(this, x.DefaultTemplate, x)).ToArray();
+        OuterCorners = template.OuterCorners.Select(x => new OuterCorner(this, x.DefaultTemplate, x)).ToArray();
     }
 }
 
@@ -259,43 +259,85 @@ public class Ceiling
     }
 }
 
-public class Corner
+public class InnerCorner
 {
     public Tile Parent { get; }
-    public CornerHookTemplate Template { get; set; }
+    public InnerCornerHookTemplate Hook { get; }
 
-    public Vector3 Position => Template.Position;
-    public Quaternion Orientation => Template.Orientation;
-    public Matrix4x4 Transform => Template.Transform * Parent.Transform;
+    public string KitID { get; private set; } = "";
+    public string TemplateID { get; private set; } = "";
+    public InnerCornerTemplate Template => Kit.Manager.Get(KitID).InnerCorner(TemplateID);
 
-    public bool VisibleInner
+    public Vector3 LocalPosition => Hook.LocalPosition;
+    public Quaternion LocalOrientation => Hook.LocalOrientation;
+
+    public Vector3 Position => Matrix4x4.Decompose(Transform, out _, out _, out var value) ? value : new();
+    public Quaternion Orientation => Matrix4x4.Decompose(Transform, out _, out var value, out _) ? value : new();
+    public Matrix4x4 Transform => Hook.LocalTransform * Parent.Transform;
+
+    public bool Visible
     {
         get
         {
-            return Template.Adjacent.Any() && Template.Adjacent.All(x => Parent.Walls.ElementAt(x).LinkedTile is null);
+            return Hook.Adjacent.Any() && Hook.Adjacent.All(x => Parent.Walls.ElementAt(x).LinkedTile is null);
         }
     }
-    public bool VisibleOuter
+    
+    public InnerCorner(Tile parent, InnerCornerTemplate template, InnerCornerHookTemplate hook)
+    {
+        Parent = parent;
+        Hook = hook;
+        SwitchTemplate(template);
+    }
+
+    public void SwitchTemplate(InnerCornerTemplate template)
+    {
+        KitID = template.KitID;
+        TemplateID = template.ID;
+    }
+}
+
+public class OuterCorner
+{
+    public Tile Parent { get; }
+    public OuterCornerHookTemplate Hook { get; }
+
+    public string KitID { get; private set; } = "";
+    public string TemplateID { get; private set; } = "";
+    public OuterCornerTemplate Template => Kit.Manager.Get(KitID).OuterCorner(TemplateID);
+
+    public Vector3 Position => Hook.LocalPosition;
+    public Quaternion Orientation => Hook.LocalOrientation;
+    public Matrix4x4 Transform => Hook.LocalTransform * Parent.Transform;
+
+    public bool Visible
     {
         get
         {
-            if(Template.Adjacent.Count() != 2)
+            if (Hook.Adjacent.Count() != 2)
                 return false;
-            if(Template.Adjacent.Any(x => Parent.Walls.ElementAt(x).LinkedTile is null))
+            if (Hook.Adjacent.Any(x => Parent.Walls.ElementAt(x).LinkedTile is null))
                 return false;
 
-            var a = Parent.Walls.ElementAt(Template.Adjacent[0]).LinkedTile!.Walls.Select(x => x.LinkedTile).Where(x => x != Parent);
-            var b = Parent.Walls.ElementAt(Template.Adjacent[1]).LinkedTile!.Walls.Select(x => x.LinkedTile).Where(x => x != Parent);
+            var a = Parent.Walls.ElementAt(Hook.Adjacent[0]).LinkedTile!.Walls.Select(x => x.LinkedTile).Where(x => x != Parent);
+            var b = Parent.Walls.ElementAt(Hook.Adjacent[1]).LinkedTile!.Walls.Select(x => x.LinkedTile).Where(x => x != Parent);
 
             var circuit = a.Intersect(b).Any();
             return !circuit;
         }
     }
 
-    public Corner(Tile parent, CornerHookTemplate template)
+    public OuterCorner(Tile parent, OuterCornerTemplate template, OuterCornerHookTemplate hook)
     {
         Parent = parent;
-        Template = template;
+        Hook = hook;
+        SwitchTemplate(template);
+    }
+
+    public void SwitchTemplate(OuterCornerTemplate template)
+    {
+        KitID = template.KitID;
+        TemplateID = template.ID;
     }
 }
 
