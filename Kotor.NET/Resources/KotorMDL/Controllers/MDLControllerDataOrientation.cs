@@ -32,6 +32,13 @@ public class MDLControllerDataOrientation : BaseMDLControllerData
         Z = vector4.Z;
         W = vector4.W;
     }
+    public MDLControllerDataOrientation(Quaternion quaternion)
+    {
+        X = quaternion.X;
+        Y = quaternion.Y;
+        Z = quaternion.Z;
+        W = quaternion.W;
+    }
 
     public override string ToString()
     {

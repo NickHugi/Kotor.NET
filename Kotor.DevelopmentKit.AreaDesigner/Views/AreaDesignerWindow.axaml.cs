@@ -7,6 +7,10 @@ using Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 using Kotor.DevelopmentKit.AreaDesigner.ViewModels;
 using ReactiveUI;
 using System.Reactive;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaExportation;
+using System.Linq;
+using Kotor.NET.Resources.KotorMDL;
+using Kotor.NET.Common;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.Views;
 
@@ -27,7 +31,7 @@ public partial class AreaDesignerWindow : ReactiveWindow<AreaDesignerViewModel>
             ViewModel = new KitEditorViewModel(ViewModel.SelectedKit)
         };
 
-        // todo - save changes
+        // todo - refresh after save changes
         await dialog.ShowDialog<Kit>(this);
     }
 }

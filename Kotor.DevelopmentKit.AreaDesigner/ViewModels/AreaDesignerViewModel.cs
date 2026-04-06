@@ -8,10 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Avalonia;
 using Kotor.DevelopmentKit.AreaDesigner.relocate;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaExportation;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaSerialization;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.KitSerialization;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
+using Kotor.NET.Common;
 using Kotor.NET.Graphics.OpenGL;
+using Kotor.NET.Resources.KotorMDL;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.ViewModels;
@@ -138,5 +141,11 @@ public class AreaDesignerViewModel : ReactiveObject
     {
         Kit.Manager.Refresh();
         Kits = new(Kit.Manager.Kits);
+    }
+
+    public async Task Export()
+    {
+        var mdl = AreaExporter.RoomToMDL(Area.Rooms.First());
+        MDL.ToFile(mdl, $"{Kit.Manager.ActiveDirectory}/test.mdl", GameEngine.K1, Platform.Windows);
     }
 }

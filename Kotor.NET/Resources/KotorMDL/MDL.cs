@@ -26,6 +26,13 @@ public class MDL
     public BoundingBox BoundingBox { get; set; } = new();
     public float Radius { get; set; }
 
+    public static MDL FromFile(string mdlFilepath)
+    {
+        var mdxFilepath = Path.ChangeExtension(mdlFilepath, ".mdx");
+        using var mdlStream = File.OpenRead(mdlFilepath);
+        using var mdxStream = File.OpenRead(mdxFilepath);
+        return FromStream(mdlStream, mdxStream);
+    }
     public static MDL FromFile(string mdlFilepath, string mdxFilepath)
     {
         using var mdlStream = File.OpenRead(mdlFilepath);
@@ -63,5 +70,17 @@ public class MDL
     {
         var binary = new MDLBinarySerializer(mdl).Serialize(game, platform);
         binary.Write(mdlStream, mdxStream);
+    }
+
+    public void RedoNodeNumbers()
+    {
+        Root.NodeIndex = 0;
+
+        var index = 1;
+        Root.GetAllDescendants().ToList().ForEach(x =>
+        {
+            x.NodeIndex = (ushort)index;
+            index++;
+        });
     }
 }

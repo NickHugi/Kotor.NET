@@ -114,7 +114,7 @@ public class Tile
         Parent = parent;
         KitID = template.KitID;
         TemplateID = template.ID;
-        Floor = new(template.Floor);
+        Floor = new(this, template.Floor);
         Walls = template.Walls.Select(x => new Wall(this, x.DefaultTemplate, x)).ToArray();
         InnerCorners = template.InnerCorners.Select(x => new Corner(this, x)).ToArray();
         OuterCorners = template.OuterCorners.Select(x => new Corner(this, x)).ToArray();
@@ -164,7 +164,7 @@ public class Tile
         //Template = template;
         KitID = template.KitID;
         TemplateID = template.ID;
-        Floor = new(template.Floor);
+        Floor = new(this, template.Floor);
         Walls = template.Walls.Select(x => new Wall(this, x.DefaultTemplate, x)).ToArray();
         InnerCorners = template.InnerCorners.Select(x => new Corner(this, x)).ToArray();
         OuterCorners = template.OuterCorners.Select(x => new Corner(this, x)).ToArray();
@@ -206,12 +206,19 @@ public class Wall
 
 public class Floor
 {
+    public Tile Parent { get; }
+
     public string KitID { get; private set; } = "";
     public string TemplateID { get; private set; } = "";
     public FloorTemplate Template => Kit.Manager.Get(KitID).Floor(TemplateID);
 
-    public Floor(FloorTemplate template)
+    public Vector3 Position => Matrix4x4.Decompose(Transform, out _, out _, out var value) ? value : new();
+    public Quaternion Orientation => Matrix4x4.Decompose(Transform, out _, out var value, out _) ? value : new();
+    public Matrix4x4 Transform => Parent.Transform;
+
+    public Floor(Tile parent, FloorTemplate template)
     {
+        Parent = parent;
         SwitchTemplate(template);
     }
 
@@ -224,14 +231,20 @@ public class Floor
 
 public class Ceiling
 {
+    public Tile Parent { get; }
+
     public string KitID { get; private set; } = "";
     public string TemplateID { get; private set; } = "";
     public CeilingTemplate Template => Kit.Manager.Get(KitID).Ceiling(TemplateID);
 
-    public Ceiling(CeilingTemplate template)
+    public Vector3 Position => Matrix4x4.Decompose(Transform, out _, out _, out var value) ? value : new();
+    public Quaternion Orientation => Matrix4x4.Decompose(Transform, out _, out var value, out _) ? value : new();
+    public Matrix4x4 Transform => Parent.Transform;
+
+    public Ceiling(Tile parent, CeilingTemplate template)
     {
-        KitID = template.KitID;
-        TemplateID = template.ID;
+        Parent = parent;
+        SwitchTemplate(template);
     }
 
     public void SwitchTemplate(CeilingTemplate template)

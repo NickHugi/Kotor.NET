@@ -34,10 +34,10 @@ public class MDLNode
         return controllers;
     }
 
-    public IEnumerable<MDLNode> GetAllAncestors()
+    public IEnumerable<MDLNode> GetAllDescendants()
     {
         var ancestors = Children.ToList();
-        return ancestors.Concat(ancestors.SelectMany(x => x.GetAllAncestors()));
+        return ancestors.Concat(ancestors.SelectMany(x => x.GetAllDescendants()));
     }
 
     public override string ToString()

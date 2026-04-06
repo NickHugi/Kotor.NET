@@ -29,7 +29,7 @@ public class MDLBinarySerializer
 
         binary.ModelHeader.GeometryHeader.Name = _mdl.Name;
         binary.ModelHeader.GeometryHeader.GeometryType = 2;
-        binary.ModelHeader.GeometryHeader.NodeCount = _mdl.Root.GetAllAncestors().Count() + 1;
+        binary.ModelHeader.GeometryHeader.NodeCount = _mdl.Root.GetAllDescendants().Count() + 1;
         binary.ModelHeader.ModelType = _mdl.ModelType;
         binary.ModelHeader.Fog = Convert.ToByte(_mdl.AffectedByFog);
         binary.ModelHeader.BoundingBoxMin = _mdl.BoundingBox.Min;
@@ -41,8 +41,8 @@ public class MDLBinarySerializer
         names =
         [
             _mdl.Root.Name,
-            .. _mdl.Root.GetAllAncestors().Select(x => x.Name).ToList(),
-            .. _mdl.Animations.SelectMany(x => x.RootNode.GetAllAncestors().Select(x => x.Name)),
+            .. _mdl.Root.GetAllDescendants().Select(x => x.Name).ToList(),
+            .. _mdl.Animations.SelectMany(x => x.RootNode.GetAllDescendants().Select(x => x.Name)),
             .. _mdl.Animations.Select(x => x.RootNode.Name),
         ];
         binary.Names = names.Distinct().ToList();
