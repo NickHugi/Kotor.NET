@@ -74,29 +74,34 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
 
     private async Task LoadRequiredDataForKits()
     {
-        Task[] loadModels =
-        [
-            .. Kit.Manager.Get("sandral").Ceilings.Select(x => LoadModel(x.Model)),
-            .. Kit.Manager.Get("sandral").DoorFrames.Select(x => LoadModel(x.Model)),
-            .. Kit.Manager.Get("sandral").Floors.Select(x => LoadModel(x.Model)),
-            .. Kit.Manager.Get("sandral").InsideCorners.Select(x => LoadModel(x.Model)),
-            .. Kit.Manager.Get("sandral").OutsideCorners.Select(x => LoadModel(x.Model)),
-            .. Kit.Manager.Get("sandral").Walls.Select(x => LoadModel(x.Model)),
+        //Task[] loadModels =
+        //[
+        //    .. Kit.Manager.Get("sandral").Ceilings.Select(x => LoadModel(x.Model)),
+        //    .. Kit.Manager.Get("sandral").DoorFrames.Select(x => LoadModel(x.Model)),
+        //    .. Kit.Manager.Get("sandral").Floors.Select(x => LoadModel(x.Model)),
+        //    .. Kit.Manager.Get("sandral").InsideCorners.Select(x => LoadModel(x.Model)),
+        //    .. Kit.Manager.Get("sandral").OutsideCorners.Select(x => LoadModel(x.Model)),
+        //    .. Kit.Manager.Get("sandral").Walls.Select(x => LoadModel(x.Model)),
 
-            // todo - move to templates
-            .. Kit.Manager.Get("sandral").Tiles.SelectMany(x => x.InnerCorners).Select(x => LoadModel(x.Model)),
-            .. Kit.Manager.Get("sandral").Tiles.SelectMany(x => x.OuterCorners).Select(x => LoadModel(x.Model)),
-        ];
+        //    // todo - move to templates
+        //    .. Kit.Manager.Get("sandral").Tiles.SelectMany(x => x.InnerCorners).Select(x => LoadModel(x.Model)),
+        //    .. Kit.Manager.Get("sandral").Tiles.SelectMany(x => x.OuterCorners).Select(x => LoadModel(x.Model)),
+        //];
+        var loadModels = Kit.Manager.Kits
+            .SelectMany(kit => Directory.GetFiles($@"C:\Kits\{kit.ID}")
+                .Where(x => string.Equals(Path.GetExtension(x), ".mdl", StringComparison.InvariantCultureIgnoreCase))
+                .Select(x => LoadModel(kit.ID, Path.GetFileNameWithoutExtension(x))))
+            .ToArray();
         await Task.WhenAll(loadModels);
 
         var loadTextures = ViewModel.Engine.AssetManager.Models.SelectMany(x => x.Value.GetAllTextures()).Select(x => LoadTexture(x));
         await Task.WhenAll(loadTextures);
     }
 
-    private async Task LoadModel(string name)
+    private async Task LoadModel(string kitID, string name)
     {
-        var mdl = File.ReadAllBytes($@"C:\Users\hugin\Desktop\KotOR Modding Stuff\Area Designer\Sandral Estate\{name}.mdl");
-        var mdx = File.ReadAllBytes($@"C:\Users\hugin\Desktop\KotOR Modding Stuff\Area Designer\Sandral Estate\{name}.mdx");
+        var mdl = File.ReadAllBytes($@"C:\Kits\{kitID}\{name}.mdl");
+        var mdx = File.ReadAllBytes($@"C:\Kits\{kitID}\{name}.mdx");
         await ViewModel.Engine.LoadModel(name, mdl, mdx);
     }
     private async Task LoadTexture(string name)
