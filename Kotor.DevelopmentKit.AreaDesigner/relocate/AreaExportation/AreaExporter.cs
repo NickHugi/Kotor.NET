@@ -21,7 +21,8 @@ public static class AreaExporter
         {
             mdl.Root.Children.Add(FloorToMDLNode(tile.Floor));
             //mdl.Root.Children.Add(CeilingToMDLNode(tile.Ceiling));
-            mdl.Root.Children.AddRange(tile.Walls.Select(WallToMDLNode).Where(x => x is not null));
+            mdl.Root.Children.AddRange(tile.Walls.Where(x => x.Visible).Select(WallToMDLNode));
+            mdl.Root.Children.AddRange(tile.Walls.Select(x => x.DoorFrame).Where(x => x?.Visible == true).Select(DoorFrameToMDLNode));
         }
 
         mdl.Root.GetAllDescendants().Select((x, i) => x.Name = i.ToString()).ToArray();
@@ -47,12 +48,17 @@ public static class AreaExporter
 
     private static MDLNode WallToMDLNode(Wall wall)
     {
-        if (!wall.Visible)
-            return null;
-
         var wallMDL = MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{wall.KitID}/{wall.Template.Model}.mdl");
         wallMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(wall.Position));
         wallMDL.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(wall.Orientation));
         return wallMDL.Root;
+    }
+
+    private static MDLNode DoorFrameToMDLNode(DoorFrame doorframe)
+    {
+        var doorframeMDL = MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{doorframe.KitID}/{doorframe.Template.Model}.mdl");
+        doorframeMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(doorframe.Position));
+        doorframeMDL.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(doorframe.Orientation));
+        return doorframeMDL.Root;
     }
 }

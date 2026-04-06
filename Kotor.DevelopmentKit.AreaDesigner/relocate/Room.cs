@@ -302,7 +302,11 @@ public class Corner
 public class DoorFrame
 {
     public Wall Parent { get; }
-    public DoorFrameTemplate Template { get; set; }
+
+    public string KitID { get; private set; } = "";
+    public string TemplateID { get; private set; } = "";
+    public DoorFrameTemplate Template => Kit.Manager.Get(KitID).DoorFrame(TemplateID);
+
     public bool Enabled { get; set; } = true;
 
     public IEnumerable<DoorFrameHook> Hooks => Template.Hooks.Select(x => new DoorFrameHook(this, x));
@@ -320,7 +324,13 @@ public class DoorFrame
     public DoorFrame(Wall parent, DoorFrameTemplate template)
     {
         Parent = parent;
-        Template = template;
+        SwitchTemplate(template);
+    }
+
+    public void SwitchTemplate(DoorFrameTemplate template)
+    {
+        KitID = template.KitID;
+        TemplateID = template.ID;
     }
 }
 
