@@ -87,7 +87,7 @@ public class AreaEntity : BaseEntity
     }
     public void RenderObject(IAssetManager assets, Object @object, ref List<MeshDescriptor> descriptors)
     {
-        descriptors.AddRange(DescriptorsForModel(assets, @object.Template.Model, @object.Transform));
+        descriptors.AddRange(DescriptorsForModel(assets, @object.Template.Model, @object.LocalTransform));
     }
     // TODO - clean this up somehow
     private ICollection<MeshDescriptor> DescriptorsForModel(IAssetManager assets, string modelName, Matrix4x4 transform, object tag = null)

@@ -398,11 +398,25 @@ public class DoorFrameHook
 
 public class Object
 {
-    public string TemplateID { get; set; }
-    public ObjectTemplate Template => Kit.Manager.Get("sandral").Object(TemplateID);
+    public Room Parent { get; }
 
-    public Vector3 Position { get; set; }
-    public Quaternion Orientation { get; set; }
-    public Matrix4x4 Transform => Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position);
+    public string KitID { get; private set; }
+    public string TemplateID { get; private set; }
+    public ObjectTemplate Template => Kit.Manager.Get(KitID).Object(TemplateID);
 
+    public Vector3 LocalPosition { get; set; }
+    public Quaternion LocalOrientation { get; set; }
+    public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
+
+    public Object(Room parent, ObjectTemplate template)
+    {
+        Parent = parent;
+        SwitchTemplate(template);
+    }
+
+    public void SwitchTemplate(ObjectTemplate template)
+    {
+        KitID = template.KitID;
+        TemplateID = template.ID;
+    }
 }

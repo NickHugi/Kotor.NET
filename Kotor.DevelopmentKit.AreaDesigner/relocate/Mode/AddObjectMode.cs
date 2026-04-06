@@ -27,10 +27,11 @@ public class AddObjectMode : BaseMode
         var ray = camera.ProjectRay((int)mouse.X, (int)mouse.Y, _engine.Width, _engine.Height);
         var point = ray.FindPointOnPlane(Axis.Z, 0);
 
-        _addObject = new();
-        _addObject.TemplateID = "sandral_object_0";
-        _addObject.Position = point;
-        _addObject.Orientation = Quaternion.CreateFromYawPitchRoll(0, 0, angle * (float)Math.PI / 180);
+        // todo - should be placed in room where walkmesh intersects.
+        // todo - should not be hardcoded
+        _addObject = new(_area.Rooms.Last(), Kit.Manager.Get("sandral").Object("sandral_object_0")); 
+        _addObject.LocalPosition = point;
+        _addObject.LocalOrientation = Quaternion.CreateFromYawPitchRoll(0, 0, angle * (float)Math.PI / 180);
 
         var roomMeshDescriptors = new List<MeshDescriptor>();
         _areaEntity.RenderObject(_engine.AssetManager, _addObject, ref roomMeshDescriptors);
