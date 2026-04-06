@@ -38,6 +38,17 @@ public class KitSerializer_V0_1
             });
         }
 
+        foreach (var ceiling in data.ceilings)
+        {
+            kit.Ceilings.Add(new CeilingTemplate
+            {
+                KitID = kitID,
+                ID = ceiling.id.Value,
+                Name = ceiling.name.Value,
+                Model = ceiling.model.Value,
+            });
+        }
+
         foreach (var door in data.doorframes)
         {
             kit.DoorFrames.Add(new DoorFrameTemplate
@@ -155,6 +166,13 @@ public class KitSerializer_V0_1
             id = floor.ID,
             name = floor.Name,
             model = floor.Model,
+        });
+
+        data.ceilings = kit.Ceilings.Select(ceiling => new
+        {
+            id = ceiling.ID,
+            name = ceiling.Name,
+            model = ceiling.Model,
         });
 
         data.doorframes = kit.DoorFrames.Select(doorframe => new
