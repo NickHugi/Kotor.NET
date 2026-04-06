@@ -67,6 +67,7 @@ public class KitEditorViewModel : ReactiveObject
         FilePath = kit.FilePath;
         Name = kit.Name;
         KitID = kit.ID;
+        Version = kit.Version;
 
         TileTab = new(kit);
         FloorTab = new(kit);
