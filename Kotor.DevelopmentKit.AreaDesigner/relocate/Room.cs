@@ -36,8 +36,7 @@ public class Room
     }
     public Room(RoomTemplate template)
     {
-        Tiles.Add(new(this, Kit.Manager.Get("sandral").Tiles.First()));
-        //Tiles.Add(new(this, TileTemplate.Sandral8x8));
+        Tiles.Add(new(this, Kit.Manager.Get("sandral").Tiles.ElementAt(0)));
     }
 
     public void FixWalls()
@@ -125,16 +124,20 @@ public class Tile
         var newTile = new Tile(Parent, template);
 
         // todo - first compatible
-        var adjacent = newTile.Walls.Where(x => x.Template.ID == wall.Template.ID).First();
-        newTile.LocalOrientation = wall.Orientation / adjacent.Hook.LocalOrientation * Quaternion.CreateFromYawPitchRoll(0, 0, MathF.PI);
-        newTile.LocalPosition = (wall.Position - Parent.Position);
+        var adjacent = newTile.Walls
+            .Where(x => x.Template.ID == wall.Template.ID)
+            //.OrderBy(x => x.LocalOrientaiton == wall.LocalOrientaiton)
+            .First();
 
+        newTile.LocalOrientation = wall.LocalOrientation
+            / adjacent.Hook.LocalOrientation
+            * Quaternion.CreateFromYawPitchRoll(0, 0, MathF.PI)
+            * Orientation
+            / Parent.Orientation;
 
-        // Find the difference between the old wall and new wall in room-space
-        var oldWallPos = wall.Position - Parent.Position;
-        var newWallPos = adjacent.Position - Parent.Position;
-        var diff = oldWallPos - newWallPos;
-        newTile.LocalPosition += diff;
+        newTile.LocalPosition = LocalPosition
+            + Vector3.Transform(wall.LocalPosition, LocalOrientation)
+            - Vector3.Transform(adjacent.LocalPosition, newTile.LocalOrientation);
 
         Parent.Tiles.Add(newTile);
 
@@ -184,6 +187,8 @@ public class Wall
     public WallTemplate Template => Kit.Manager.Get(KitID).Wall(TemplateID);
 
     public Vector3 LocalPosition => Hook.LocalPosition;
+    public Quaternion LocalOrientation => Hook.LocalOrientation;
+
     public Vector3 Position => Matrix4x4.Decompose(Transform, out _, out _, out var value) ? value : new();
     public Quaternion Orientation => Matrix4x4.Decompose(Transform, out _, out var value, out _) ? value : new();
     public Matrix4x4 Transform => Hook.LocalTransform * Parent.Transform;

@@ -148,4 +148,9 @@ public class AreaDesignerViewModel : ReactiveObject
         var mdl = AreaExporter.RoomToMDL(Area.Rooms.First());
         MDL.ToFile(mdl, $"{Kit.Manager.ActiveDirectory}/test.mdl", GameEngine.K1, Platform.Windows);
     }
+
+    public async Task NewArea()
+    {
+        Area = new();
+    }
 }

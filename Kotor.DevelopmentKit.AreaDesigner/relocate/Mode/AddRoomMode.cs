@@ -16,7 +16,7 @@ public class AddRoomMode : BaseMode
     public override string Name => "Add Room";
 
     private Room _addRoomRoom = new Room(null);
-    private float angle = 0;
+    private float angle = 30;
 
     public AddRoomMode(GLEngine engine, Area area) : base(engine, area)
     {

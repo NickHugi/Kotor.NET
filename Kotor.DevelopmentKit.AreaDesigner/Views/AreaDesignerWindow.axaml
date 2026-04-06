@@ -18,6 +18,7 @@
         <StackPanel DockPanel.Dock="Top"
                     Orientation="Horizontal">
 
+            <Button Content="New" Command="{Binding NewArea}" />
             <Button Content="Load" Command="{Binding LoadArea}" />
             <Button Content="Save As" Command="{Binding SaveAreaAs}" />
             <Button Content="Export" Command="{Binding Export}" />
