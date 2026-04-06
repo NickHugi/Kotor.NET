@@ -42,8 +42,7 @@ public class SwitchWallMode : BaseMode
 
         if (_wall is not null && template is not null)
         {
-            _wall.KitID = template.KitID;
-            _wall.TemplateID = template.ID;
+            _wall.SwitchTemplate(template);
         }
     }
 }

@@ -16,7 +16,7 @@ public class AddRoomMode : BaseMode
     public override string Name => "Add Room";
 
     private Room _addRoomRoom = new Room(null);
-    private float angle = 30;
+    private float angle = 0;
 
     public AddRoomMode(GLEngine engine, Area area) : base(engine, area)
     {
@@ -34,8 +34,7 @@ public class AddRoomMode : BaseMode
         (var newWall, var oldWall, var distance) = NearestAdjacentWall(_addRoomRoom);
         if (oldWall is not null)
         {
-            newWall.KitID = oldWall.Template.KitID;
-            newWall.TemplateID = oldWall.Template.ID;
+            newWall.SwitchTemplate(oldWall.Template);
             newWall.DoorFrame.Enabled = false;
 
             if (oldWall.DoorFrame is not null)

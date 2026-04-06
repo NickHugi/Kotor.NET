@@ -147,21 +147,6 @@ public class Tile
         return newTile;
     }
 
-    public void SwitchWall(Wall wall, WallTemplate template)
-    {
-        wall.KitID = template.KitID;
-        wall.TemplateID = template.ID;
-
-        if (template.DoorFrame is not null)
-        {
-            wall.DoorFrame = new(wall, template.DoorFrame);
-        }
-        else
-        {
-            wall.DoorFrame = null;
-        }
-    }
-
     public void SwitchTemplate(TileTemplate template)
     {
         //Template = template;
@@ -182,8 +167,8 @@ public class Wall
     public DoorFrame? DoorFrame { get; set; }
     public WallHookTemplate Hook { get; set; }
 
-    public string KitID { get; set;}
-    public string TemplateID { get; set; }
+    public string KitID { get; private set;}
+    public string TemplateID { get; private set; }
     public WallTemplate Template => Kit.Manager.Get(KitID).Wall(TemplateID);
 
     public Vector3 LocalPosition => Hook.LocalPosition;
@@ -206,6 +191,21 @@ public class Wall
     public Tile Extend(TileTemplate template)
     {
         return Parent.Extend(this, template);
+    }
+
+    public void SwitchTemplate(WallTemplate template)
+    {
+        KitID = template.KitID;
+        TemplateID = template.ID;
+
+        if (template.DoorFrame is not null)
+        {
+            DoorFrame = new(this, template.DoorFrame);
+        }
+        else
+        {
+            DoorFrame = null;
+        }
     }
 }
 

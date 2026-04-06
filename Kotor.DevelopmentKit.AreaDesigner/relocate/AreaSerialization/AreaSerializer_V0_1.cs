@@ -46,9 +46,9 @@ public class AreaSerializer_V0_1
                 for (int i = 0; i < tileData.walls.Count; i++)
                 {
                     var wallData = tileData.walls[i];
+                    var wallTemplate = Kit.Manager.Get(wallData.kitID.Value).Wall(wallData.templateID.Value);
                     var wall = tile.Walls.ElementAt(i);
-                    wall.KitID = wallData.kitID;
-                    wall.TemplateID = wallData.templateID;
+                    wall.SwitchTemplate(wallTemplate);
                 }
 
                 room.Tiles.Add(tile);
