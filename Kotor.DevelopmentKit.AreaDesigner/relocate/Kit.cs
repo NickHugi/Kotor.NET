@@ -45,12 +45,13 @@ public class Kit
 
 public class KitManager
 {
+    public string ActiveDirectory = @"C:/Kits";
     public ICollection<Kit> Kits { get; } = [];
 
     public void Refresh()
     {
         Kits.Clear();
-        Directory.GetFiles(@"C:\Kits")
+        Directory.GetFiles(Kit.Manager.ActiveDirectory)
             .Where(x => Path.GetExtension(x).ToLower() == ".kit")
             .Select(KitSerializer.Load)
             .ToList()

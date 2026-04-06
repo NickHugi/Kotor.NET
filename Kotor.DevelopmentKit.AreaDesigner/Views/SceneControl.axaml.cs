@@ -88,7 +88,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         //    .. Kit.Manager.Get("sandral").Tiles.SelectMany(x => x.OuterCorners).Select(x => LoadModel(x.Model)),
         //];
         var loadModels = Kit.Manager.Kits
-            .SelectMany(kit => Directory.GetFiles($@"C:\Kits\{kit.ID}")
+            .SelectMany(kit => Directory.GetFiles($@"{Kit.Manager.ActiveDirectory}/{kit.ID}")
                 .Where(x => string.Equals(Path.GetExtension(x), ".mdl", StringComparison.InvariantCultureIgnoreCase))
                 .Select(x => LoadModel(kit.ID, Path.GetFileNameWithoutExtension(x))))
             .ToArray();
@@ -100,8 +100,8 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
 
     private async Task LoadModel(string kitID, string name)
     {
-        var mdl = File.ReadAllBytes($@"C:\Kits\{kitID}\{name}.mdl");
-        var mdx = File.ReadAllBytes($@"C:\Kits\{kitID}\{name}.mdx");
+        var mdl = File.ReadAllBytes($@"{Kit.Manager.ActiveDirectory}/{kitID}/{name}.mdl");
+        var mdx = File.ReadAllBytes($@"{Kit.Manager.ActiveDirectory}/{kitID}/{name}.mdx");
         await ViewModel.Engine.LoadModel(name, mdl, mdx);
     }
     private async Task LoadTexture(string name)
