@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Common;
@@ -24,6 +25,9 @@ public class MDL
     public string Name { get; set; } = "model";
 
     public BoundingBox BoundingBox { get; set; } = new();
+    // todo - could have sworn I made a BoundingRadius(avgpoint, radius) class already 
+    //public BoundingRadius BoundingRadius { get; set; } = new();
+    [Obsolete]
     public float Radius { get; set; }
 
     public static MDL FromFile(string mdlFilepath)
@@ -72,6 +76,9 @@ public class MDL
         binary.Write(mdlStream, mdxStream);
     }
 
+    /// <summary>
+    /// Resets all node indices and assigns them a unique number counting from 0.
+    /// </summary>
     public void RedoNodeNumbers()
     {
         Root.NodeIndex = 0;
@@ -82,5 +89,47 @@ public class MDL
             x.NodeIndex = (ushort)index;
             index++;
         });
+    }
+
+    /// <summary>
+    /// Deletes all walkmeshe nodes from the MDL hierarchy.
+    /// </summary>
+    public void DeleteWalkmesh()
+    {
+        var scan = new List<MDLNode>() { Root };
+        MDLNode node;
+        while (scan.Count > 0)
+        {
+            node = scan.First();
+            scan.RemoveAt(0);
+
+            node.Children.RemoveAll(x => x is MDLWalkmeshNode);
+            scan.AddRange(node.Children);
+        }
+    }
+
+    public void RecalculateBounds()
+    {
+        // todo
+        throw new NotImplementedException();
+    }
+
+    public MDLNode[] GetPathToNode(MDLNode node)
+    {
+        return GetPathToNode([Root], node).ToArray();
+    }
+    private List<MDLNode>? GetPathToNode(List<MDLNode> from, MDLNode to)
+    {
+        if (from.Last() == to)
+            return from;
+
+        foreach (var child in from.Last().Children)
+        {
+            var path = GetPathToNode([.. from, child], to);
+            if (path is not null)
+                return path;
+        }
+
+        return null;
     }
 }

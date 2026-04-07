@@ -48,4 +48,8 @@ public class MDLControllerDataOrientation : BaseMDLControllerData
     {
         return new Vector4(X, Y, Z, W);
     }
+    public Quaternion ToQuaternion()
+    {
+        return new Quaternion(X, Y, Z, W);
+    }
 }

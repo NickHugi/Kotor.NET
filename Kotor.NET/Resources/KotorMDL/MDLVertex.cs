@@ -73,4 +73,11 @@ public class MDLVertex
             //&& vertex.Dangly.Equals(Dangly)
             //&& vertex.Skin.Equals(Skin);
     }
+
+    // todo
+    public MDLVertex SetPosition(Vector3 position)
+    {
+        _position = position;
+        return this;
+    }
 }
