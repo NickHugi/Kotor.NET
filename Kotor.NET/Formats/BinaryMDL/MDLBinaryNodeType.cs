@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Kotor.NET.Formats.BinaryMDL;
 
-public enum MDLBinaryNodeType
+[Flags]
+public enum MDLBinaryNodeType : ushort
 {
     NodeFlag = 0x00000001,
     LightFlag = 0x00000002,

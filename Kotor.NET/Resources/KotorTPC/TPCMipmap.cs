@@ -5,7 +5,7 @@ public class TPCMipmap
     public int Width => TPCMipmap.GetWidth(_tpc.Width, Level);
     public int Height => TPCMipmap.GetHeight(_tpc.Width, Level);
     public int Level => _layer._mipmaps.IndexOf(this);
-    public byte[] Data { get; }
+    public byte[] Data { get; internal set; }
 
     private TPC _tpc;
     private TPCLayer _layer;

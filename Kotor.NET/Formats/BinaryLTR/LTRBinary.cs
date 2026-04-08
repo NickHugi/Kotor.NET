@@ -23,51 +23,65 @@ public class LTRBinary
     }
     public LTRBinary(Stream stream)
     {
-        var reader = new BinaryReader(stream);
-
-        FileHeader = new(reader);
-
-        Singles = new(reader, FileHeader.LetterCount);
-
-        Doubles = new LTRBinaryBlock[FileHeader.LetterCount]; 
-        for (int i = 0; i < FileHeader.LetterCount; i++)
+        try
         {
-            Doubles[i] = new LTRBinaryBlock(reader, FileHeader.LetterCount);
-        }
+            var reader = new BinaryReader(stream);
 
-        Triples = new LTRBinaryBlock[FileHeader.LetterCount][];
-        for (int i = 0; i < FileHeader.LetterCount; i++)
-        {
-            Triples[i] = new LTRBinaryBlock[FileHeader.LetterCount];
-            for (int j = 0; j < FileHeader.LetterCount; j++)
+            FileHeader = new(reader);
+
+            Singles = new(reader, FileHeader.LetterCount);
+
+            Doubles = new LTRBinaryBlock[FileHeader.LetterCount];
+            for (int i = 0; i < FileHeader.LetterCount; i++)
             {
-                Triples[i][j] = new LTRBinaryBlock(reader, FileHeader.LetterCount);
+                Doubles[i] = new LTRBinaryBlock(reader, FileHeader.LetterCount);
             }
+
+            Triples = new LTRBinaryBlock[FileHeader.LetterCount][];
+            for (int i = 0; i < FileHeader.LetterCount; i++)
+            {
+                Triples[i] = new LTRBinaryBlock[FileHeader.LetterCount];
+                for (int j = 0; j < FileHeader.LetterCount; j++)
+                {
+                    Triples[i][j] = new LTRBinaryBlock(reader, FileHeader.LetterCount);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new IOException("Failed to read the 2DA data.", ex);
         }
     }
 
     public void Write(Stream stream)
     {
-        var writer = new BinaryWriter(stream);
-
-        FileHeader.Write(writer);
-
-        Singles.Write(writer);
-
-        Doubles = new LTRBinaryBlock[FileHeader.LetterCount];
-        for (int i = 0; i < FileHeader.LetterCount; i++)
+        try
         {
-            Doubles[i].Write(writer);
-        }
+            var writer = new BinaryWriter(stream);
 
-        Triples = new LTRBinaryBlock[FileHeader.LetterCount][];
-        for (int i = 0; i < FileHeader.LetterCount; i++)
-        {
-            Triples[i] = new LTRBinaryBlock[FileHeader.LetterCount];
-            for (int j = 0; j < FileHeader.LetterCount; j++)
+            FileHeader.Write(writer);
+
+            Singles.Write(writer);
+
+            Doubles = new LTRBinaryBlock[FileHeader.LetterCount];
+            for (int i = 0; i < FileHeader.LetterCount; i++)
             {
-                Triples[i][j].Write(writer);
+                Doubles[i].Write(writer);
             }
+
+            Triples = new LTRBinaryBlock[FileHeader.LetterCount][];
+            for (int i = 0; i < FileHeader.LetterCount; i++)
+            {
+                Triples[i] = new LTRBinaryBlock[FileHeader.LetterCount];
+                for (int j = 0; j < FileHeader.LetterCount; j++)
+                {
+                    Triples[i][j].Write(writer);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new IOException("Failed to write the 2DA data.", ex);
         }
     }
 

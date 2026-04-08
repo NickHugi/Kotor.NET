@@ -1,0 +1,44 @@
+﻿using Avalonia.Platform.Storage;
+
+namespace Kotor.DevelopmentKit.Base.Common;
+
+public static class FilePickerTypes
+{
+    public static readonly FilePickerFileType TwoDA = new FilePickerFileType("2DA File")
+    {
+        Patterns = ["*.2da"],
+    };
+    public static readonly FilePickerFileType GFF = new FilePickerFileType("GFF File")
+    {
+        Patterns = ["*.gff", "*.utc", "*.utd", "*.ute", "*.uti", "*.utm", "*.uts", "*.utt", "*.utw",
+        "*.ifo", "*.are", "*.git", "*.jrl", "*.dlg", "*.fac", "*.pth", "*.gui"],
+    };
+
+    public static readonly FilePickerFileType ERF = new FilePickerFileType("ERF File")
+    {
+        Patterns = ["*.erf"],
+    };
+    public static readonly FilePickerFileType MOD = new FilePickerFileType("MOD File")
+    {
+        Patterns = ["*.mod"],
+    };
+    public static readonly FilePickerFileType RIM = new FilePickerFileType("RIM File")
+    {
+        Patterns = ["*.rim"],
+    };
+
+
+    public static readonly FilePickerFileType EncapsulatedWriteable = new FilePickerFileType("Encapsulated Resource")
+    {
+        Patterns = ["*.erf", "*.mod", "*.rim"],
+    };
+    public static readonly FilePickerFileType Encapsulated = new FilePickerFileType("Encapsulated Resource")
+    {
+        Patterns = ["*.key", ..EncapsulatedWriteable.Patterns],
+    };
+
+    public static readonly FilePickerFileType All = new FilePickerFileType("All")
+    {
+        Patterns = ["*.*"],
+    };
+}

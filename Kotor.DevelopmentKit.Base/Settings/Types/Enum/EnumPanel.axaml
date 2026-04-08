@@ -1,0 +1,29 @@
+
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="250" d:DesignHeight="80"
+             
+             xmlns:vm="using:Kotor.DevelopmentKit.Base.Settings.Types.Enum"
+             
+             x:DataType="vm:EnumPanelViewModel"
+             x:Class="Kotor.DevelopmentKit.Base.Settings.Types.Enum.EnumPanel">
+    <StackPanel Spacing="2">
+        <TextBlock FontWeight="Bold"
+                   Text="{Binding Name}"
+                   />
+        <TextBlock Text="{Binding Description}"
+                   VerticalAlignment="Center"
+                   TextWrapping="Wrap"
+                   />
+        <ComboBox ItemsSource="{Binding Options}"
+                  SelectedItem="{Binding SelectedItem}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="{x:Type vm:ComboBoxOption}">
+                    <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+    </StackPanel>
+</UserControl>

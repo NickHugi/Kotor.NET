@@ -1,4 +1,5 @@
-﻿using Kotor.NET.Common.Data;
+﻿using System.Numerics;
+using Kotor.NET.Common.Data;
 
 namespace Kotor.NET.Resources.KotorGFF;
 
@@ -6,7 +7,7 @@ public class GFFStruct
 {
     internal Dictionary<string, object> _data = new();
 
-    public uint ID { get; set; }
+    public GFFStructID ID { get; set; }
 
     public GFFStruct()
     {
@@ -149,7 +150,7 @@ public class GFFStruct
     {
         SetValue<GFFStruct>(fieldName, value);
     }
-    public GFFStruct SetStruct(string fieldName, uint structID = 0)
+    public GFFStruct SetStruct(string fieldName, GFFStructID structID = new())
     {
         var value = new GFFStruct(structID);
         SetValue<GFFStruct>(fieldName, value);
@@ -190,6 +191,13 @@ public class GFFStruct
     {
         if (_data.ContainsKey(fieldName))
             _data.Remove(fieldName);
+    }
+    public IEnumerable<(string Label, object value)> GetFields()
+    {
+        foreach (var entry in _data)
+        {
+            yield return (entry.Key, entry.Value);
+        }
     }
 
     public override string ToString()

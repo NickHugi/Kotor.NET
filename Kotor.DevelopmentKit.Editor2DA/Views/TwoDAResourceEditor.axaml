@@ -1,0 +1,71 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        Width="1200" Height="600"
+        xmlns:vm="using:Kotor.DevelopmentKit.Editor2DA.ViewModels"
+        x:DataType="vm:TwoDAResourceEditorViewModel"
+        x:Class="Kotor.DevelopmentKit.Editor2DA.Views.TwoDAResourceEditor"
+        x:Name="Window"
+        Title="{Binding WindowTitle}">    
+    <DockPanel>
+        <Menu DockPanel.Dock="Top" BorderThickness="0 0 0 1" BorderBrush="LightGray">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New" Command="{Binding #Window.NewFile}" InputGesture="Ctrl+N" HotKey="Ctrl+N"/>
+                <MenuItem Header="_Open" Command="{Binding #Window.OpenFile}" InputGesture="Ctrl+O" HotKey="Ctrl+O"/>
+                <MenuItem Header="_Save" Command="{Binding #Window.SaveFile}" InputGesture="Ctrl+S" HotKey="Ctrl+S" IsEnabled="{Binding FilePathAssigned}"/>
+                <MenuItem Header="_Save As" Command="{Binding #Window.SaveFileAs}" InputGesture="Ctrl+Shift+S" HotKey="Ctrl+Shift+S" />
+                <MenuItem Header="_Reset" Command="{Binding #Window.ResetFile}" InputGesture="Ctrl+R" HotKey="Ctrl+R" />
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="_Undo" Command="{Binding #Window.Undo}" InputGesture="Ctrl+Z" HotKey="Ctrl+Z" IsEnabled="{Binding History.CanUndo}" />
+                <MenuItem Header="_Redo" Command="{Binding #Window.Redo}" InputGesture="Ctrl+Y" HotKey="Ctrl+Y" IsEnabled="{Binding History.CanRedo}" />
+                <Separator/>
+                <MenuItem Header="_Copy" Command="{Binding #Window.CopySelectedCell}" InputGesture="Ctrl+C" />
+                <MenuItem Header="_Paste" Command="{Binding #Window.PasteSelectedCell}" InputGesture="Ctrl+V" />
+                <Separator/> 
+                <MenuItem Header="_Add Row" Command="{Binding #Window.AddRow}" InputGesture="Ctrl+I" HotKey="Ctrl+I" />
+                <MenuItem Header="_Add Column" Command="{Binding #Window.AddColumn}" />
+                <MenuItem Header="_Reset Row Headers" Command="{Binding #Window.ResetRowHeaders}" />
+            </MenuItem>
+            <MenuItem Header="_View">
+                <MenuItem Header="_Reset Sorting" Command="{Binding #Window.ResetSorting}" InputGesture="Ctrl+Alt+S" HotKey="Ctrl+Alt+S"/>
+                <MenuItem Header="_Toggle Filter" Command="{Binding #Window.ToggleFilter}" InputGesture="Ctrl+F" HotKey="Ctrl+F"/>
+            </MenuItem>
+        </Menu>
+
+        <StackPanel DockPanel.Dock="Top" Margin="20 10 20 0" IsVisible="{Binding ShowFilter}">
+            <TextBlock Foreground="Gray">Filter</TextBlock>
+            <TextBox Text="{Binding Resource.Filter}" />
+        </StackPanel>
+        
+        <DataGrid
+            Margin="20"
+            ItemsSource="{Binding Resource.Rows, Mode=TwoWay}"
+            SelectedItem="{Binding SelectedRow, Mode=TwoWay}"
+            Name="TwodaDataGrid"
+            AutoGenerateColumns="False"
+            IsReadOnly="False"
+            GridLinesVisibility="All"
+            FrozenColumnCount="1"
+            BorderThickness="1"
+            BorderBrush="Gray"
+            ClipboardCopyMode="None"
+            KeyUp="DataGrid_KeyUp"
+            BeginningEdit="DataGrid_BeginningEdit"
+            PointerReleased="DataGrid_PointerReleased"
+            CellEditEnded="DataGrid_CellEditEnded"
+        >
+            <DataGrid.Styles>
+                <Style Selector="DataGridRow:nth-child(odd)">
+                    <Setter Property="Background" Value="#FAFAFA"/>
+                </Style>
+            </DataGrid.Styles>
+            
+            <DataGrid.Columns>
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </DockPanel>
+</Window>

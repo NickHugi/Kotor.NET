@@ -32,4 +32,9 @@ public class TPC
             _layers.Add(new(this, mipmaps));
         }
     }
+
+    public byte[] GetData(int layer, int mipmap)
+    {
+        return _layers[layer]._mipmaps[mipmap].Data;
+    }
 }

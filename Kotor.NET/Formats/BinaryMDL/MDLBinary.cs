@@ -1,10 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.PortableExecutable;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using Kotor.NET.Common;
+using Kotor.NET.Common.Data;
 using Kotor.NET.Extensions;
+using Kotor.NET.Resources.KotorMDL;
+using Kotor.NET.Resources.KotorMDL.Controllers;
+using Kotor.NET.Resources.KotorMDL.Nodes;
+using Kotor.NET.Resources.KotorMDL.VertexData;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Kotor.NET.Formats.BinaryMDL;
 
@@ -18,88 +28,106 @@ public class MDLBinary
     public List<MDLBinaryAnimation> Animations { get; set; } = new();
     public MDLBinaryNode RootNode { get; set; } = new();
 
-    public bool IsTSL => false;
-
     public MDLBinary()
     {
     }
     public MDLBinary(Stream stream, Stream mdxStream)
     {
-        var reader = new MDLBinaryReader(stream);
-        var mdxReader = new BinaryReader(mdxStream);
-
-        FileHeader = new(reader);
-        ModelHeader = new(reader);
-
-        reader.SetStreamPosition(ModelHeader.OffsetToNameOffsetArray);
-        for (int i = 0; i < ModelHeader.NamesArrayCount; i++)
+        try
         {
-            var offset = reader.ReadInt32();
-            NamesOffset.Add(offset);
-        }
+            var reader = new MDLBinaryReader(stream);
+            var mdxReader = new BinaryReader(mdxStream);
 
-        foreach (var nameOffset in NamesOffset)
+            FileHeader = new(reader);
+            ModelHeader = new(reader);
+
+            reader.SetStreamPosition(ModelHeader.OffsetToNameOffsetArray);
+            for (int i = 0; i < ModelHeader.NamesArrayCount; i++)
+            {
+                var offset = reader.ReadInt32();
+                NamesOffset.Add(offset);
+            }
+
+            foreach (var nameOffset in NamesOffset)
+            {
+                reader.SetStreamPosition(nameOffset);
+                var name = reader.ReadTerminatedString('\0');
+                Names.Add(name);
+            }
+
+            reader.SetStreamPosition(ModelHeader.AnimationOffsetArrayOffset);
+            for (int i = 0; i < ModelHeader.AnimationCount; i++)
+            {
+                var offset = reader.ReadInt32();
+                AnimationOffsets.Add(offset);
+            }
+
+            foreach (var offset in AnimationOffsets)
+            {
+                reader.SetStreamPosition(offset);
+                var animation = new MDLBinaryAnimation(reader, mdxReader);
+                Animations.Add(animation);
+            }
+
+            reader.SetStreamPosition(ModelHeader.OffsetToRootNode);
+            RootNode = new(reader, mdxReader);
+        }
+        catch (Exception ex)
         {
-            reader.SetStreamPosition(nameOffset);
-            var name = reader.ReadTerminatedString('\0');
-            Names.Add(name);
+            throw new IOException("Failed to read the 2DA data.", ex);
         }
-
-        reader.SetStreamPosition(ModelHeader.AnimationOffsetArrayOffset);
-        for (int i = 0; i < ModelHeader.AnimationCount; i++)
-        {
-            var offset = reader.ReadInt32();
-            AnimationOffsets.Add(offset);
-        }
-
-        foreach (var offset in AnimationOffsets)
-        {
-            reader.SetStreamPosition(offset);
-            var animation = new MDLBinaryAnimation(reader, mdxReader);
-            Animations.Add(animation);
-        }
-
-        reader.SetStreamPosition(ModelHeader.OffsetToRootNode);
-        RootNode = new(reader, mdxReader);
     }
 
     public void Write(Stream stream, Stream mdxStream)
     {
-        var writer = new MDLBinaryWriter(stream);
-        var mdxWriter = new BinaryWriter(mdxStream);
-
-        FileHeader.Write(writer);
-        ModelHeader.Write(writer);
-
-        writer.SetStreamPosition(ModelHeader.OffsetToNameOffsetArray);
-        foreach (var nameOffset in NamesOffset)
+        try
         {
-            writer.Write(nameOffset);
-        }
+            var writer = new MDLBinaryWriter(stream);
+            var mdxWriter = new BinaryWriter(mdxStream);
 
-        for (int i = 0; i < Names.Count(); i ++)
-        {
-            writer.SetStreamPosition(NamesOffset[i]);
-            writer.Write(Names[i] + "\0", 0);
-        }
+            FileHeader.Write(writer);
+            ModelHeader.Write(writer);
 
-        writer.SetStreamPosition(ModelHeader.AnimationOffsetArrayOffset);
-        foreach (var animationOffset in AnimationOffsets)
-        {
-            writer.Write(animationOffset);
-        }
-        for (int i = 0; i < AnimationOffsets.Count(); i ++)
-        {
-            writer.SetStreamPosition(AnimationOffsets[i]);
-            Animations[i].Write(writer, mdxWriter);
-        }
+            writer.SetStreamPosition(ModelHeader.OffsetToNameOffsetArray);
+            foreach (var nameOffset in NamesOffset)
+            {
+                writer.Write(nameOffset);
+            }
+            for (int i = 0; i < Names.Count(); i++)
+            {
+                writer.SetStreamPosition(NamesOffset[i]);
+                writer.Write(Names[i] + "\0", 0);
+            }
 
-        writer.SetStreamPosition(ModelHeader.OffsetToRootNode);
-        RootNode.Write(writer, mdxWriter);
+            writer.SetStreamPosition(ModelHeader.AnimationOffsetArrayOffset);
+            foreach (var animationOffset in AnimationOffsets)
+            {
+                writer.Write(animationOffset);
+            }
+            for (int i = 0; i < AnimationOffsets.Count(); i++)
+            {
+                writer.SetStreamPosition(AnimationOffsets[i]);
+                Animations[i].Write(writer, mdxWriter);
+            }
+
+            writer.SetStreamPosition(ModelHeader.OffsetToRootNode);
+            RootNode.Write(writer, mdxWriter);
+        }
+        catch (Exception ex)
+        {
+            throw new IOException("Failed to write the 2DA data.", ex);
+        }
     }
 
-    public void Recalculate()
+    public void Recalculate(GameEngine game, Platform platform)
     {
+        ModelHeader.GeometryHeader.NodeCount = RecalculateNodeCount(RootNode);
+        ModelHeader.GeometryHeader.GeometryType = 2;
+        ModelHeader.NamesArrayCount = Names.Count();
+        ModelHeader.NamesArrayCount2 = Names.Count();
+        ModelHeader.AnimationCount = Animations.Count();
+        ModelHeader.AnimationCount2 = Animations.Count();
+
         var mdxOffset = 0;
 
         var offset = MDLBinaryModelHeader.SIZE;
@@ -115,36 +143,41 @@ public class MDLBinary
 
         ModelHeader.AnimationOffsetArrayOffset = offset;
 
-        offset += 4 * AnimationOffsets.Count();
+        offset += 4 * Animations.Count();
         AnimationOffsets = new();
         foreach (var animation in Animations)
         {
             AnimationOffsets.Add(offset);
-            Recalculate(animation, ref offset, ref mdxOffset);
+            Recalculate(animation, ref offset, ref mdxOffset, game, platform);
         }
 
         ModelHeader.OffsetToRootNode = offset;
         ModelHeader.GeometryHeader.RootNodeOffset = offset;
-        Recalculate(RootNode, ref offset, ref mdxOffset, 0, 0);
+        Recalculate(RootNode, ref offset, ref mdxOffset, 0, 0, game, platform);
 
         FileHeader.MDLSize = offset;
         FileHeader.MDXSize = mdxOffset;
+        ModelHeader.MDXSize = mdxOffset;
+
+        SetFunctionPointers(game, platform);
     }
-    private void Recalculate(MDLBinaryAnimation animation, ref int offset, ref int mdxOffset)
+    private void Recalculate(MDLBinaryAnimation animation, ref int offset, ref int mdxOffset, GameEngine game, Platform platform)
     {
-        var animationOffset = offset;
         animation.AnimationHeader.EventCount = animation.Events.Count;
         animation.AnimationHeader.EventCount2 = animation.Events.Count;
+        animation.AnimationHeader.GeometryHeader.NodeCount = RecalculateNodeCount(animation.RootNode);
+
+        var animationOffset = offset;
 
         offset += MDLBinaryAnimationHeader.SIZE;
         animation.AnimationHeader.GeometryHeader.RootNodeOffset = offset;
 
-        Recalculate(animation.RootNode, ref offset, ref mdxOffset, animationOffset, 0);
-        animation.AnimationHeader.OffsetToEventArray = offset;
+        Recalculate(animation.RootNode, ref offset, ref mdxOffset, animationOffset, 0, game, platform);
+        animation.AnimationHeader.OffsetToEventArray = (animation.Events.Count() == 0) ? 0 : offset;
 
         offset += MDLBinaryAnimationEvent.SIZE * animation.Events.Count;
     }
-    private void Recalculate(MDLBinaryNode node, ref int offset, ref int mdxOffset, int offsetToRoot, int offsetToParent)
+    private void Recalculate(MDLBinaryNode node, ref int offset, ref int mdxOffset, int offsetToRoot, int offsetToParent, GameEngine game, Platform platform)
     {
         var nodeOffset = offset;
 
@@ -157,7 +190,7 @@ public class MDLBinary
         if (node.ReferenceHeader is not null)
             offset += MDLBinaryReferenceHeader.SIZE;
         if (node.TrimeshHeader is not null)
-            offset += IsTSL ? MDLBinaryTrimeshHeader.K2_SIZE : MDLBinaryTrimeshHeader.K1_SIZE;
+            offset += (game == GameEngine.K2) ? MDLBinaryTrimeshHeader.K2_SIZE : MDLBinaryTrimeshHeader.K1_SIZE;
         if (node.SkinmeshHeader is not null)
             offset += MDLBinarySkinmeshHeader.SIZE;
         if (node.DanglymeshHeader is not null)
@@ -178,7 +211,7 @@ public class MDLBinary
 
             node.NodeHeader.OffsetToRootNode = offsetToRoot;
             node.NodeHeader.OffsetToParentNode = offsetToParent;
-            
+
             node.NodeHeader.OffsetToChildOffsetArray = offset;
 
             offset += 4 * node.Children.Count;
@@ -193,45 +226,120 @@ public class MDLBinary
         if (node.LightHeader is not null)
         {
             node.LightHeader.UnknownArrayCount = 0;
+            node.LightHeader.UnknownArrayCount2 = 0;
             node.LightHeader.FlareSizeArrayCount = node.Light.FlareSizes.Count;
+            node.LightHeader.FlareSizeArrayCount2 = node.Light.FlareSizes.Count;
             node.LightHeader.FlarePositionArrayCount = node.Light.FlarePositions.Count;
+            node.LightHeader.FlarePositionArrayCount2 = node.Light.FlarePositions.Count;
             node.LightHeader.FlareColorShiftArrayCount = node.Light.FlareColourShifts.Count;
-            node.LightHeader.FlareTextureNameCount = node.Light.FlareTextureOffsets.Count;
+            node.LightHeader.FlareColorShiftArrayCount2 = node.Light.FlareColourShifts.Count;
+            node.LightHeader.FlareTextureNameCount = node.Light.FlareTextures.Count;
+            node.LightHeader.FlareTextureNameCount2 = node.Light.FlareTextures.Count;
 
-            node.LightHeader.OffsetToUnknownArray = offset;
+            var hasFlares = node.Light.FlareSizes.Any();
+            node.LightHeader.OffsetToUnknownArray = hasFlares ? offset : 0;
 
             offset += 0;
-            node.LightHeader.OffsetToFlareSizeArray = offset;
+            node.LightHeader.OffsetToFlareSizeArray = hasFlares ? offset : 0;
 
             offset += 4 * node.Light.FlareSizes.Count;
-            node.LightHeader.OffsetToFlarePositionArray = offset;
+            node.LightHeader.OffsetToFlarePositionArray = hasFlares ? offset : 0;
 
             offset += 4 * node.Light.FlarePositions.Count;
-            node.LightHeader.OffsetToFlareColorShiftArray = offset;
+            node.LightHeader.OffsetToFlareColorShiftArray = hasFlares ? offset : 0;
 
             offset += 12 * node.Light.FlareColourShifts.Count;
-            node.LightHeader.OffsetToFlareTextureNameOffsetsArray = offset;
+            node.LightHeader.OffsetToFlareTextureNameOffsetsArray = hasFlares ? offset : 0;
 
             offset += 4 * node.Light.FlareTextures.Count;
             foreach (var name in node.Light.FlareTextures)
             {
-                node.Light.FlareTextureOffsets.Add(offset);
+                node.Light.FlareTextureNameOffsets.Add(offset);
                 offset += name.Length + 1;
             }
         }
 
         if (node.TrimeshHeader is not null)
         {
+            // MDX
+            node.TrimeshHeader.MDXDataSize = 0;
+
+            node.TrimeshHeader.MDXOffsetToData = mdxOffset;
+
+            var hasPosition = node.MDXVertices.ElementAtOrDefault(0)?.Position is not null;
+            node.TrimeshHeader.MDXPositionStride = hasPosition ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataSize += hasPosition ? 12 : 0;
+            node.TrimeshHeader.MDXDataBitmap |= hasPosition ? (uint)MDLBinaryMDXVertexBitmask.Position : 0;
+
+            var hasNormal = node.MDXVertices.ElementAtOrDefault(0)?.Normal is not null;
+            node.TrimeshHeader.MDXNormalStride = hasNormal ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataSize += hasNormal ? 12 : 0;
+            node.TrimeshHeader.MDXDataBitmap |= hasNormal ? (uint)MDLBinaryMDXVertexBitmask.Normals : 0;
+
+            node.TrimeshHeader.MDXColourStride = -1;
+
+            var hasUV1 = node.MDXVertices.ElementAtOrDefault(0)?.UV1 is not null;
+            node.TrimeshHeader.MDXTexture1Stride = hasUV1 ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataSize += hasUV1 ? 8 : 0;
+            node.TrimeshHeader.MDXDataBitmap |= hasUV1 ? (uint)MDLBinaryMDXVertexBitmask.UV1 : 0;
+
+            var hasUV2 = node.MDXVertices.ElementAtOrDefault(0)?.UV2 is not null;
+            node.TrimeshHeader.MDXTexture2Stride = hasUV2 ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataSize += hasUV2 ? 8 : 0;
+            node.TrimeshHeader.MDXDataBitmap |= hasUV2 ? (uint)MDLBinaryMDXVertexBitmask.UV2 : 0;
+
+            var hasUV3 = node.MDXVertices.ElementAtOrDefault(0)?.UV3 is not null;
+            node.TrimeshHeader.MDXTexture3Stride = hasUV3 ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataSize += hasUV3 ? 8 : 0;
+            node.TrimeshHeader.MDXDataBitmap |= hasUV3 ? (uint)MDLBinaryMDXVertexBitmask.UV3 : 0;
+
+            var hasUV4 = node.MDXVertices.ElementAtOrDefault(0)?.UV4 is not null;
+            node.TrimeshHeader.MDXTexture4Stride = hasUV4 ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataSize += hasUV4 ? 8 : 0;
+            node.TrimeshHeader.MDXDataBitmap |= hasUV4 ? (uint)MDLBinaryMDXVertexBitmask.UV4 : 0;
+
+            var hasTangent1 = node.MDXVertices.ElementAtOrDefault(0)?.Tangent1 is not null;
+            node.TrimeshHeader.MDXTangent1Stride = hasTangent1 ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataSize += hasTangent1 ? 8 : 0;
+            node.TrimeshHeader.MDXDataBitmap |= hasTangent1 ? (uint)MDLBinaryMDXVertexBitmask.Tangent1 : 0;
+
+            var hasTangent2 = node.MDXVertices.ElementAtOrDefault(0)?.Tangent2 is not null;
+            node.TrimeshHeader.MDXTangent2Stride = hasTangent2 ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataSize += hasTangent2 ? 8 : 0;
+            node.TrimeshHeader.MDXDataBitmap |= hasTangent2 ? (uint)MDLBinaryMDXVertexBitmask.Tangent2 : 0;
+
+            var hasTangent3 = node.MDXVertices.ElementAtOrDefault(0)?.Tangent3 is not null;
+            node.TrimeshHeader.MDXTangent3Stride = hasTangent3 ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataSize += hasTangent3 ? 8 : 0;
+            node.TrimeshHeader.MDXDataBitmap |= hasTangent3 ? (uint)MDLBinaryMDXVertexBitmask.Tangent3 : 0;
+
+            var hasTangent4 = node.MDXVertices.ElementAtOrDefault(0)?.Tangent4 is not null;
+            node.TrimeshHeader.MDXTangent4Stride = hasTangent4 ? node.TrimeshHeader.MDXDataSize : -1;
+            node.TrimeshHeader.MDXDataSize += hasTangent4 ? 8 : 0;
+            node.TrimeshHeader.MDXDataBitmap |= hasTangent4 ? (uint)MDLBinaryMDXVertexBitmask.Tangent4 : 0;
+
+            if (node.SkinmeshHeader is not null)
+            {
+                node.SkinmeshHeader.MDXWeightValueStride = node.TrimeshHeader.MDXDataSize;
+                node.TrimeshHeader.MDXDataSize += 16;
+
+                node.SkinmeshHeader.MDXWeightIndexStride = node.TrimeshHeader.MDXDataSize;
+                node.TrimeshHeader.MDXDataSize += 16;
+            }
+
+            mdxOffset += node.TrimeshHeader.MDXDataSize * node.MDXVertices.Count();
+
+            // MDL
+            node.Trimesh.VertexIndiciesCounts = node.Trimesh.VertexIndices.Select(x => x.Count()).ToList();
             node.TrimeshHeader.FaceArrayCount = node.Trimesh.Faces.Count;
             node.TrimeshHeader.FaceArrayCount2 = node.Trimesh.Faces.Count;
             node.TrimeshHeader.InvertedCounterArrayCount = node.Trimesh.InvertedCounters.Count;
             node.TrimeshHeader.InvertedCounterArrayCount2 = node.Trimesh.InvertedCounters.Count;
             node.TrimeshHeader.VertexIndicesCountArrayCount = node.Trimesh.VertexIndiciesCounts.Count;
             node.TrimeshHeader.VertexIndicesCountArrayCount2 = node.Trimesh.VertexIndiciesCounts.Count;
-            node.TrimeshHeader.VertexIndicesOffsetArrayCount = node.Trimesh.VertexIndicesOffsets.Count;
-            node.TrimeshHeader.VertexIndicesOffsetArrayCount2 = node.Trimesh.VertexIndicesOffsets.Count;
+            node.TrimeshHeader.VertexIndicesOffsetArrayCount = node.Trimesh.VertexIndiciesCounts.Count;
+            node.TrimeshHeader.VertexIndicesOffsetArrayCount2 = node.Trimesh.VertexIndiciesCounts.Count;
             node.TrimeshHeader.VertexCount = (ushort)node.Trimesh.Vertices.Count;
-            node.Trimesh.VertexIndiciesCounts = node.Trimesh.VertexIndices.Select(x => x.Count()).ToList();
 
             node.TrimeshHeader.OffsetToFaceArray = offset;
 
@@ -244,19 +352,17 @@ public class MDLBinary
             offset += 4 * node.Trimesh.VertexIndiciesCounts.Count;
             node.TrimeshHeader.OffsetToVertexIndicesOffsetArray = offset;
 
-            offset += 4 * node.Trimesh.VertexIndicesOffsets.Count;
+            offset += 4 * node.Trimesh.VertexIndiciesCounts.Count;
             node.TrimeshHeader.OffsetToVertexArray = offset;
 
             offset += 12 * node.Trimesh.Vertices.Count;
+            node.Trimesh.VertexIndicesOffsets = Enumerable.Range(0, node.Trimesh.VertexIndiciesCounts.Count).ToList();
             for (int i = 0; i < node.Trimesh.VertexIndicesOffsets.Count; i++)
             {
                 node.Trimesh.VertexIndicesOffsets[i] = offset;
 
                 offset += 2 * node.Trimesh.VertexIndiciesCounts[i];
             }
-
-            node.TrimeshHeader.MDXOffsetToData = mdxOffset;
-            mdxOffset += node.TrimeshHeader.MDXDataSize * (node.Trimesh.Vertices.Count() + 1);
         }
 
         if (node.SkinmeshHeader is not null)
@@ -314,10 +420,11 @@ public class MDLBinary
             Recalculate(node.RootAABBNode, ref offset);
         }
 
+        node.ChildrenOffsets = Enumerable.Range(0, node.Children.Count).Select(x => 0).ToList();
         for (int i = 0; i < node.Children.Count; i++)
         {
             node.ChildrenOffsets[i] = offset;
-            Recalculate(node.Children[i], ref offset, ref mdxOffset, offsetToRoot, nodeOffset);
+            Recalculate(node.Children[i], ref offset, ref mdxOffset, offsetToRoot, nodeOffset, game, platform);
         }
     }
     private void Recalculate(MDLBinaryAABBNode aabb, ref int offset)
@@ -331,5 +438,28 @@ public class MDLBinary
         aabb.RightChildOffset = (aabb.RightNode is null) ? 0 : offset;
         if (aabb.RightNode is not null)
             Recalculate(aabb.RightNode, ref offset);
+    }
+    private int RecalculateNodeCount(MDLBinaryNode node)
+    {
+        int count = 1;
+        count += node.Children.Sum(RecalculateNodeCount);
+        return count;
+    }
+
+    public void SetFunctionPointers(GameEngine game, Platform platform)
+    {
+        ModelHeader.GeometryHeader.SetFunctionPointers(game, platform, false);
+
+        Animations.ForEach(x => x.AnimationHeader.GeometryHeader.SetFunctionPointers(game, platform, true));
+
+        var nodes = new List<MDLBinaryNode>();
+        while (nodes.Any())
+        {
+            var target = nodes.First();
+            nodes.RemoveAt(0);
+            nodes.AddRange(target.Children);
+
+            target.SetFunctionPointers(game, platform);
+        }
     }
 }

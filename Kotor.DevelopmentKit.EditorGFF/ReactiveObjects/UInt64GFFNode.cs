@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DynamicData;
+using ReactiveUI;
+
+namespace Kotor.DevelopmentKit.EditorGFF.ReactiveObjects;
+
+public class UInt64GFFNode : BaseFieldGFFNodeViewModel<ulong>
+{
+    public override string DisplayType => "UInt64";
+
+    public UInt64GFFNode(IGFFNode parent, string label, ulong value = 0) : base(parent, label)
+    {
+        FieldValue = value;
+    }
+}
+

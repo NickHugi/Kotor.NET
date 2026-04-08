@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,33 +29,35 @@ public class BWMBinary
     }
     public BWMBinary(Stream stream)
     {
-        var reader = new BinaryReader(stream);
-
-        FileHeader = new BWMBinaryFileHeader(reader);
-
-        reader.BaseStream.Position = FileHeader.OffsetToVertices;
-        for (int i = 0; i < FileHeader.VertexCount; i++)
+        try
         {
-            Vertices.Add(reader.ReadVector3());
-        }
+            var reader = new BinaryReader(stream);
 
-        reader.BaseStream.Position = FileHeader.OffsetToFaceIndices;
-        for (int i = 0; i < FileHeader.FaceCount; i++)
-        {
-            FaceIndices.Add(new BWMBinaryFaceIndices(reader));
-        }
+            FileHeader = new BWMBinaryFileHeader(reader);
 
-        reader.BaseStream.Position = FileHeader.OffsetToFaceMaterials;
-        for (int i = 0; i < FileHeader.FaceCount; i++)
-        {
-            FaceMaterials.Add(reader.ReadInt32());
-        }
+            reader.BaseStream.Position = FileHeader.OffsetToVertices;
+            for (int i = 0; i < FileHeader.VertexCount; i++)
+            {
+                Vertices.Add(reader.ReadVector3());
+            }
 
-        reader.BaseStream.Position = FileHeader.OffsetToFaceNormals;
-        for (int i = 0; i < FileHeader.FaceCount; i++)
-        {
-            FaceNormals.Add(reader.ReadVector3());
-        }
+            reader.BaseStream.Position = FileHeader.OffsetToFaceIndices;
+            for (int i = 0; i < FileHeader.FaceCount; i++)
+            {
+                FaceIndices.Add(new BWMBinaryFaceIndices(reader));
+            }
+
+            reader.BaseStream.Position = FileHeader.OffsetToFaceMaterials;
+            for (int i = 0; i < FileHeader.FaceCount; i++)
+            {
+                FaceMaterials.Add(reader.ReadInt32());
+            }
+
+            reader.BaseStream.Position = FileHeader.OffsetToFaceNormals;
+            for (int i = 0; i < FileHeader.FaceCount; i++)
+            {
+                FaceNormals.Add(reader.ReadVector3());
+            }
 
         reader.BaseStream.Position = FileHeader.OffsetToFaceCoefficients;
         for (int i = 0; i < FileHeader.FaceCount; i++)
@@ -62,60 +65,67 @@ public class BWMBinary
             FacePlaneDistances.Add(reader.ReadSingle());
         }
 
-        reader.BaseStream.Position = FileHeader.OffsetToAABBs;
-        for (int i = 0; i < FileHeader.AABBCount; i++)
-        {
-            AABBs.Add(new BWMBinaryAABBNode(reader));
-        }
+            reader.BaseStream.Position = FileHeader.OffsetToAABBs;
+            for (int i = 0; i < FileHeader.AABBCount; i++)
+            {
+                AABBs.Add(new BWMBinaryAABBNode(reader));
+            }
 
-        reader.BaseStream.Position = FileHeader.OffsetToAdjacencies;
-        for (int i = 0; i < FileHeader.AdjacencyCount; i++)
-        {
-            Adjacencies.Add(new BWMBinaryAdjacency(reader));
-        }
+            reader.BaseStream.Position = FileHeader.OffsetToAdjacencies;
+            for (int i = 0; i < FileHeader.AdjacencyCount; i++)
+            {
+                Adjacencies.Add(new BWMBinaryAdjacency(reader));
+            }
 
-        reader.BaseStream.Position = FileHeader.OffsetToEdges;
-        for (int i = 0; i < FileHeader.EdgeCount; i++)
-        {
-            Edges.Add(new BWMBinaryEdge(reader));
-        }
+            reader.BaseStream.Position = FileHeader.OffsetToEdges;
+            for (int i = 0; i < FileHeader.EdgeCount; i++)
+            {
+                Edges.Add(new BWMBinaryEdge(reader));
+            }
 
-        reader.BaseStream.Position = FileHeader.OffsetToPerimeters;
-        for (int i = 0; i < FileHeader.PerimeterCount; i++)
+            reader.BaseStream.Position = FileHeader.OffsetToPerimeters;
+            for (int i = 0; i < FileHeader.PerimeterCount; i++)
+            {
+                Perimeters.Add(reader.ReadInt32());
+            }
+        }
+        catch (Exception ex)
         {
-            Perimeters.Add(reader.ReadInt32());
+            throw new IOException("Failed to read the 2DA data.", ex);
         }
     }
 
     public void Write(Stream stream)
     {
-        var writer = new BinaryWriter(stream);
-
-        FileHeader.Write(writer);
-
-        writer.BaseStream.Position = FileHeader.OffsetToVertices;
-        foreach (var vertex in Vertices)
+        try
         {
-            writer.Write(vertex);
-        }
+            var writer = new BinaryWriter(stream);
 
-        writer.BaseStream.Position = FileHeader.OffsetToFaceIndices;
-        foreach (var indices in FaceIndices)
-        {
-            indices.Write(writer);
-        }
+            FileHeader.Write(writer);
 
-        writer.BaseStream.Position = FileHeader.OffsetToFaceMaterials;
-        foreach (var material in FaceMaterials)
-        {
-            writer.Write(material);
-        }
+            writer.BaseStream.Position = FileHeader.OffsetToVertices;
+            foreach (var vertex in Vertices)
+            {
+                writer.Write(vertex);
+            }
 
-        writer.BaseStream.Position = FileHeader.OffsetToFaceNormals;
-        foreach (var normal in FaceNormals)
-        {
-            writer.Write(normal);
-        }
+            writer.BaseStream.Position = FileHeader.OffsetToFaceIndices;
+            foreach (var indices in FaceIndices)
+            {
+                indices.Write(writer);
+            }
+
+            writer.BaseStream.Position = FileHeader.OffsetToFaceMaterials;
+            foreach (var material in FaceMaterials)
+            {
+                writer.Write(material);
+            }
+
+            writer.BaseStream.Position = FileHeader.OffsetToFaceNormals;
+            foreach (var normal in FaceNormals)
+            {
+                writer.Write(normal);
+            }
 
         writer.BaseStream.Position = FileHeader.OffsetToFaceCoefficients;
         foreach (var coeff in FacePlaneDistances)
@@ -123,28 +133,33 @@ public class BWMBinary
             writer.Write(coeff);
         }
 
-        writer.BaseStream.Position = FileHeader.OffsetToAABBs;
-        foreach (var aabb in AABBs)
-        {
-            aabb.Write(writer);
-        }
+            writer.BaseStream.Position = FileHeader.OffsetToAABBs;
+            foreach (var aabb in AABBs)
+            {
+                aabb.Write(writer);
+            }
 
-        writer.BaseStream.Position = FileHeader.OffsetToAdjacencies;
-        foreach (var adjacency in Adjacencies)
-        {
-            adjacency.Write(writer);
-        }
+            writer.BaseStream.Position = FileHeader.OffsetToAdjacencies;
+            foreach (var adjacency in Adjacencies)
+            {
+                adjacency.Write(writer);
+            }
 
-        writer.BaseStream.Position = FileHeader.OffsetToEdges;
-        foreach (var edge in Edges)
-        {
-            edge.Write(writer);
-        }
+            writer.BaseStream.Position = FileHeader.OffsetToEdges;
+            foreach (var edge in Edges)
+            {
+                edge.Write(writer);
+            }
 
-        writer.BaseStream.Position = FileHeader.OffsetToPerimeters;
-        foreach (var perimeter in Perimeters)
+            writer.BaseStream.Position = FileHeader.OffsetToPerimeters;
+            foreach (var perimeter in Perimeters)
+            {
+                writer.Write(perimeter);
+            }
+        }
+        catch (Exception ex)
         {
-            writer.Write(perimeter);
+            throw new IOException("Failed to write the 2DA data.", ex);
         }
     }
 

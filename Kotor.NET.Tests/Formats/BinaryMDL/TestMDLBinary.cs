@@ -1,8 +1,13 @@
 using System.ComponentModel.DataAnnotations;
 using System.Reflection.PortableExecutable;
+using System.Security.Cryptography;
+using Kotor.NET.Common;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Extensions;
 using Kotor.NET.Formats.BinaryMDL;
+using Kotor.NET.Formats.BinaryMDL.Serialisation;
+using Kotor.NET.Resources.KotorMDL;
+using Kotor.NET.Resources.KotorMDL.Nodes;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Resources;
 using Xunit;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -77,7 +82,7 @@ public class TestMDLBinary
     public void Test_RecalculateFile1()
     {
         var binaryMDL = GetBinaryMDL(File1Filepath);
-        binaryMDL.Recalculate();
+        binaryMDL.Recalculate(GameEngine.K1, Platform.Windows);
 
         var stream = new MemoryStream();
         var mdxStream = new MemoryStream();
@@ -99,7 +104,7 @@ public class TestMDLBinary
     public void Test_RecalculateFile2()
     {
         var binaryMDL = GetBinaryMDL(File2Filepath);
-        binaryMDL.Recalculate();
+        binaryMDL.Recalculate(GameEngine.K1, Platform.Windows);
 
         var stream = new MemoryStream();
         var mdxStream = new MemoryStream();
@@ -117,7 +122,7 @@ public class TestMDLBinary
     public void Test_RecalculateFile3()
     {
         var binaryMDL = GetBinaryMDL(File3Filepath);
-        binaryMDL.Recalculate();
+        binaryMDL.Recalculate(GameEngine.K1, Platform.Windows);
 
         var stream = new MemoryStream();
         var mdxStream = new MemoryStream();
@@ -135,7 +140,7 @@ public class TestMDLBinary
     public void Test_RecalculateFile4()
     {
         var binaryMDL = GetBinaryMDL(File4Filepath);
-        binaryMDL.Recalculate();
+        binaryMDL.Recalculate(GameEngine.K1, Platform.Windows);
 
         var stream = new MemoryStream();
         var mdxStream = new MemoryStream();

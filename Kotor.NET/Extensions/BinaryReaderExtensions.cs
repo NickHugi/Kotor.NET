@@ -1,9 +1,10 @@
-﻿using Kotor.NET.Common.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.NET.Common.Data;
 
 namespace Kotor.NET.Extensions;
 
@@ -31,13 +32,13 @@ public static class BinaryReaderExtensions
     /// <returns>The string read from the stream.</returns>
     public static string ReadString(this BinaryReader reader, int length, bool nullTerminated = true, Encoding? encoding = null)
     {
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         var data = reader.ReadBytes(length);
         if (encoding is null)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             encoding = Encoding.GetEncoding(1252);
         }
-        var text = Encoding.GetEncoding(1252).GetString(data);
+        var text = encoding.GetString(data);
         if (nullTerminated)
         {
             text = text.Split('\0').First();
@@ -100,6 +101,30 @@ public static class BinaryReaderExtensions
         else
         {
             return new Vector4()
+            {
+                X = reader.ReadSingle(),
+                Y = reader.ReadSingle(),
+                Z = reader.ReadSingle(),
+                W = reader.ReadSingle()
+            };
+        }
+    }
+
+    public static System.Numerics.Quaternion ReadQuaternion(this BinaryReader reader, bool startWithWComponent = false)
+    {
+        if (startWithWComponent)
+        {
+            return new System.Numerics.Quaternion()
+            {
+                W = reader.ReadSingle(),
+                X = reader.ReadSingle(),
+                Y = reader.ReadSingle(),
+                Z = reader.ReadSingle()
+            };
+        }
+        else
+        {
+            return new System.Numerics.Quaternion()
             {
                 X = reader.ReadSingle(),
                 Y = reader.ReadSingle(),

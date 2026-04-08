@@ -1,0 +1,58 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="400"
+        Width="350" Height="400"
+        xmlns:vm="using:Kotor.DevelopmentKit.Base.ViewModels"
+        xmlns:controls="using:Kotor.DevelopmentKit.Base.Views"
+        x:DataType="vm:EncapsulatedResourcePickerDialogViewModel"
+        x:Class="Kotor.DevelopmentKit.Base.Windows.EncapsulatedResourcePickerDialog"
+        Title="Select a resource to load from">
+    <Grid RowDefinitions="Auto, *, 40, 35" Margin="10">
+
+        <ProgressBar
+            Grid.Row="0"
+            Margin="0 0 0 10"
+            IsVisible="{Binding ResourceList.Loading}"
+            IsIndeterminate="True"
+        />
+
+        <controls:EncapsulatedResourceList
+            Grid.Row="1"
+            Margin="0 0 0 10"
+            DataContext="{Binding ResourceList}"
+        />
+
+        <Grid
+            Grid.Row="2"
+            Margin="0 0 0 10"
+            ColumnDefinitions="*, 100"
+        >
+            <TextBox
+                Grid.Column="0"
+                Margin="0 0 10 0"
+                Text="{Binding ResourceList.ResRefFilter, Mode=TwoWay}"
+                Height="20"
+            />
+            
+            <ComboBox
+                Grid.Column="1"
+                ItemsSource="{Binding ResourceTypeOptions}"
+                SelectedItem="{Binding ResourceType, Mode=TwoWay}"
+                HorizontalAlignment="Stretch"
+                Height="10"
+            />
+        </Grid>
+        
+        <StackPanel
+            Grid.Row="3"
+            Orientation="Horizontal"
+            Spacing="10"
+        >
+            <Button Click="Cancel_Click">Cancel</Button>
+            <Button Click="Load_Click" IsEnabled="{Binding !ResourceList.Loading}">Load</Button>
+        </StackPanel>
+        
+    </Grid>
+</Window>

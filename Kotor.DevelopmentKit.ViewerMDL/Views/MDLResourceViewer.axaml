@@ -1,0 +1,67 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Kotor.DevelopmentKit.ViewerMDL.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:Kotor.DevelopmentKit.ViewerMDL.Views"
+
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Kotor.DevelopmentKit.ViewerMDL.Views.MDLResourceViewer"
+        x:DataType="vm:MDLResourceViewerViewModel"
+        x:Name="Window"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Kotor.DevelopmentKit.MDLResourceViewer">
+
+    <Design.DataContext>
+        <vm:MDLResourceViewerViewModel/>
+    </Design.DataContext>
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open" Command="{Binding LoadModel}" />
+            </MenuItem>
+        </Menu>
+
+        <DockPanel>
+            <Grid DockPanel.Dock="Right" Width="250" RowDefinitions="*,Auto,*,Auto">
+                <ListBox ItemsSource="{Binding Animations}"
+                         SelectedItem="{Binding SelectedAnimation}"
+                         Grid.Row="0"
+                         ScrollViewer.VerticalScrollBarVisibility="Visible"/>
+                <Grid Grid.Row="1" ColumnDefinitions="*, *">
+                    <Button Grid.Column="0"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            Content="Pause"
+                            Command="{Binding PauseAnimation}"/>
+                    <Button Grid.Column="1"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            Content="Play"
+                            Command="{Binding PlayAnimation}"/>
+                </Grid>
+                
+                <ListBox ItemsSource="{Binding Textures}"
+                         SelectedItem="{Binding SelectedTexture}"
+                         Grid.Row="2">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Name}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Button Grid.Row="3"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        Content="Swap"
+                        Command="{Binding SwapTexture}"/>
+            </Grid>
+
+            <views:SceneControl />
+        </DockPanel>
+    </DockPanel>
+
+</Window>
