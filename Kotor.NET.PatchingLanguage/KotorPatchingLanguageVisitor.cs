@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from c:/Users/hugin/source/repos/Kotor.NET/Kotor.NET.PatchingLanguage/KotorPatchingLanguage.g4 by ANTLR 4.13.1
+// Generated from c:/Users/hugin/source/repos/NickHugi/KotorDotNET/Kotor.NET.PatchingLanguage/KotorPatchingLanguage.g4 by ANTLR 4.13.1
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -32,21 +32,73 @@ using IToken = Antlr4.Runtime.IToken;
 [System.CLSCompliant(false)]
 public interface IKotorPatchingLanguageVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.root"/>.
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.script"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitRoot([NotNull] KotorPatchingLanguageParser.RootContext context);
+	Result VisitScript([NotNull] KotorPatchingLanguageParser.ScriptContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.edit_appearance_row"/>.
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.instruction"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitEdit_appearance_row([NotNull] KotorPatchingLanguageParser.Edit_appearance_rowContext context);
+	Result VisitInstruction([NotNull] KotorPatchingLanguageParser.InstructionContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.edit_appearance_row_mod"/>.
+	/// Visit a parse tree produced by the <c>TwoDAAssignCell</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.twoda_assign_cell"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitEdit_appearance_row_mod([NotNull] KotorPatchingLanguageParser.Edit_appearance_row_modContext context);
+	Result VisitTwoDAAssignCell([NotNull] KotorPatchingLanguageParser.TwoDAAssignCellContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>TwoDAOverrideRow</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.twoda_override_row"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitTwoDAOverrideRow([NotNull] KotorPatchingLanguageParser.TwoDAOverrideRowContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>TwoDACopyRow</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.twoda_copy_row"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitTwoDACopyRow([NotNull] KotorPatchingLanguageParser.TwoDACopyRowContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.gff_copy_template"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitGff_copy_template([NotNull] KotorPatchingLanguageParser.Gff_copy_templateContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EditAppearance</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_appearance"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEditAppearance([NotNull] KotorPatchingLanguageParser.EditAppearanceContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.edit_appearance_mod"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEdit_appearance_mod([NotNull] KotorPatchingLanguageParser.Edit_appearance_modContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.edit_creature"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEdit_creature([NotNull] KotorPatchingLanguageParser.Edit_creatureContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.edit_creature_mod"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEdit_creature_mod([NotNull] KotorPatchingLanguageParser.Edit_creature_modContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.edit_creature_field_appearance"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEdit_creature_field_appearance([NotNull] KotorPatchingLanguageParser.Edit_creature_field_appearanceContext context);
 }

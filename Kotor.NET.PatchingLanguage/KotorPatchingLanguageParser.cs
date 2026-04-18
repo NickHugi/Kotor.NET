@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from c:/Users/hugin/source/repos/Kotor.NET/Kotor.NET.PatchingLanguage/KotorPatchingLanguage.g4 by ANTLR 4.13.1
+// Generated from c:/Users/hugin/source/repos/NickHugi/KotorDotNET/Kotor.NET.PatchingLanguage/KotorPatchingLanguage.g4 by ANTLR 4.13.1
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -36,21 +36,29 @@ public partial class KotorPatchingLanguageParser : Parser {
 	protected static DFA[] decisionToDFA;
 	protected static PredictionContextCache sharedContextCache = new PredictionContextCache();
 	public const int
-		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, IDENTIFIER=8, 
-		STRING_LITERAL=9, WHITESPACE=10;
+		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
+		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, STRING_LITERAL=16, 
+		INT_LITERAL=17, FLOAT_LITERAL=18, BOOL_LITERAL=19, IDENTIFIER=20, WHITESPACE=21;
 	public const int
-		RULE_root = 0, RULE_edit_appearance_row = 1, RULE_edit_appearance_row_mod = 2;
+		RULE_script = 0, RULE_instruction = 1, RULE_twoda_assign_cell = 2, RULE_twoda_override_row = 3, 
+		RULE_twoda_copy_row = 4, RULE_gff_copy_template = 5, RULE_edit_appearance = 6, 
+		RULE_edit_appearance_mod = 7, RULE_edit_creature = 8, RULE_edit_creature_mod = 9, 
+		RULE_edit_creature_field_appearance = 10;
 	public static readonly string[] ruleNames = {
-		"root", "edit_appearance_row", "edit_appearance_row_mod"
+		"script", "instruction", "twoda_assign_cell", "twoda_override_row", "twoda_copy_row", 
+		"gff_copy_template", "edit_appearance", "edit_appearance_mod", "edit_creature", 
+		"edit_creature_mod", "edit_creature_field_appearance"
 	};
 
 	private static readonly string[] _LiteralNames = {
-		null, "'edit'", "'appearance'", "'row'", "'end'", "'assign'", "'column'", 
-		"'value'"
+		null, "'assign'", "'column'", "'value'", "'override'", "'row'", "'where'", 
+		"'equals'", "'copy'", "'from'", "'template'", "'edit'", "'appearance'", 
+		"'end'", "'creature'", "'set'"
 	};
 	private static readonly string[] _SymbolicNames = {
-		null, null, null, null, null, null, null, null, "IDENTIFIER", "STRING_LITERAL", 
-		"WHITESPACE"
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, null, null, null, "STRING_LITERAL", "INT_LITERAL", "FLOAT_LITERAL", 
+		"BOOL_LITERAL", "IDENTIFIER", "WHITESPACE"
 	};
 	public static readonly IVocabulary DefaultVocabulary = new Vocabulary(_LiteralNames, _SymbolicNames);
 
@@ -84,34 +92,50 @@ public partial class KotorPatchingLanguageParser : Parser {
 		Interpreter = new ParserATNSimulator(this, _ATN, decisionToDFA, sharedContextCache);
 	}
 
-	public partial class RootContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public Edit_appearance_rowContext edit_appearance_row() {
-			return GetRuleContext<Edit_appearance_rowContext>(0);
-		}
+	public partial class ScriptContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Eof() { return GetToken(KotorPatchingLanguageParser.Eof, 0); }
-		public RootContext(ParserRuleContext parent, int invokingState)
+		[System.Diagnostics.DebuggerNonUserCode] public InstructionContext[] instruction() {
+			return GetRuleContexts<InstructionContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public InstructionContext instruction(int i) {
+			return GetRuleContext<InstructionContext>(i);
+		}
+		public ScriptContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_root; } }
+		public override int RuleIndex { get { return RULE_script; } }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitRoot(this);
+			if (typedVisitor != null) return typedVisitor.VisitScript(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public RootContext root() {
-		RootContext _localctx = new RootContext(Context, State);
-		EnterRule(_localctx, 0, RULE_root);
+	public ScriptContext script() {
+		ScriptContext _localctx = new ScriptContext(Context, State);
+		EnterRule(_localctx, 0, RULE_script);
+		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 6;
-			edit_appearance_row();
-			State = 7;
+			State = 25;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			while (_la==T__10) {
+				{
+				{
+				State = 22;
+				instruction();
+				}
+				}
+				State = 27;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+			}
+			State = 28;
 			Match(Eof);
 			}
 		}
@@ -126,58 +150,48 @@ public partial class KotorPatchingLanguageParser : Parser {
 		return _localctx;
 	}
 
-	public partial class Edit_appearance_rowContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public Edit_appearance_row_modContext[] edit_appearance_row_mod() {
-			return GetRuleContexts<Edit_appearance_row_modContext>();
+	public partial class InstructionContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public Edit_appearanceContext edit_appearance() {
+			return GetRuleContext<Edit_appearanceContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public Edit_appearance_row_modContext edit_appearance_row_mod(int i) {
-			return GetRuleContext<Edit_appearance_row_modContext>(i);
+		[System.Diagnostics.DebuggerNonUserCode] public Edit_creatureContext edit_creature() {
+			return GetRuleContext<Edit_creatureContext>(0);
 		}
-		public Edit_appearance_rowContext(ParserRuleContext parent, int invokingState)
+		public InstructionContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_edit_appearance_row; } }
+		public override int RuleIndex { get { return RULE_instruction; } }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitEdit_appearance_row(this);
+			if (typedVisitor != null) return typedVisitor.VisitInstruction(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public Edit_appearance_rowContext edit_appearance_row() {
-		Edit_appearance_rowContext _localctx = new Edit_appearance_rowContext(Context, State);
-		EnterRule(_localctx, 2, RULE_edit_appearance_row);
-		int _la;
+	public InstructionContext instruction() {
+		InstructionContext _localctx = new InstructionContext(Context, State);
+		EnterRule(_localctx, 2, RULE_instruction);
 		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 9;
-			Match(T__0);
-			State = 10;
-			Match(T__1);
-			State = 11;
-			Match(T__2);
-			State = 15;
+			State = 32;
 			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			while (_la==T__4) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,1,Context) ) {
+			case 1:
+				EnterOuterAlt(_localctx, 1);
 				{
+				State = 30;
+				edit_appearance();
+				}
+				break;
+			case 2:
+				EnterOuterAlt(_localctx, 2);
 				{
-				State = 12;
-				edit_appearance_row_mod();
+				State = 31;
+				edit_creature();
 				}
-				}
-				State = 17;
-				ErrorHandler.Sync(this);
-				_la = TokenStream.LA(1);
-			}
-			State = 18;
-			Match(T__3);
-			State = 19;
-			Match(T__0);
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -191,41 +205,514 @@ public partial class KotorPatchingLanguageParser : Parser {
 		return _localctx;
 	}
 
-	public partial class Edit_appearance_row_modContext : ParserRuleContext {
+	public partial class Twoda_assign_cellContext : ParserRuleContext {
+		public Twoda_assign_cellContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_twoda_assign_cell; } }
+	 
+		public Twoda_assign_cellContext() { }
+		public virtual void CopyFrom(Twoda_assign_cellContext context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class TwoDAAssignCellContext : Twoda_assign_cellContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] STRING_LITERAL() { return GetTokens(KotorPatchingLanguageParser.STRING_LITERAL); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL(int i) {
 			return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, i);
 		}
-		public Edit_appearance_row_modContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_edit_appearance_row_mod; } }
+		public TwoDAAssignCellContext(Twoda_assign_cellContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitEdit_appearance_row_mod(this);
+			if (typedVisitor != null) return typedVisitor.VisitTwoDAAssignCell(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public Edit_appearance_row_modContext edit_appearance_row_mod() {
-		Edit_appearance_row_modContext _localctx = new Edit_appearance_row_modContext(Context, State);
-		EnterRule(_localctx, 4, RULE_edit_appearance_row_mod);
+	public Twoda_assign_cellContext twoda_assign_cell() {
+		Twoda_assign_cellContext _localctx = new Twoda_assign_cellContext(Context, State);
+		EnterRule(_localctx, 4, RULE_twoda_assign_cell);
+		try {
+			_localctx = new TwoDAAssignCellContext(_localctx);
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 34;
+			Match(T__0);
+			State = 35;
+			Match(T__1);
+			State = 36;
+			Match(STRING_LITERAL);
+			State = 37;
+			Match(T__2);
+			State = 38;
+			Match(STRING_LITERAL);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Twoda_override_rowContext : ParserRuleContext {
+		public Twoda_override_rowContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_twoda_override_row; } }
+	 
+		public Twoda_override_rowContext() { }
+		public virtual void CopyFrom(Twoda_override_rowContext context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class TwoDAOverrideRowContext : Twoda_override_rowContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] STRING_LITERAL() { return GetTokens(KotorPatchingLanguageParser.STRING_LITERAL); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL(int i) {
+			return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, i);
+		}
+		public TwoDAOverrideRowContext(Twoda_override_rowContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitTwoDAOverrideRow(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Twoda_override_rowContext twoda_override_row() {
+		Twoda_override_rowContext _localctx = new Twoda_override_rowContext(Context, State);
+		EnterRule(_localctx, 6, RULE_twoda_override_row);
+		try {
+			_localctx = new TwoDAOverrideRowContext(_localctx);
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 40;
+			Match(T__3);
+			State = 41;
+			Match(T__4);
+			State = 42;
+			Match(T__5);
+			State = 43;
+			Match(STRING_LITERAL);
+			State = 44;
+			Match(T__6);
+			State = 45;
+			Match(STRING_LITERAL);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Twoda_copy_rowContext : ParserRuleContext {
+		public Twoda_copy_rowContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_twoda_copy_row; } }
+	 
+		public Twoda_copy_rowContext() { }
+		public virtual void CopyFrom(Twoda_copy_rowContext context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class TwoDACopyRowContext : Twoda_copy_rowContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] STRING_LITERAL() { return GetTokens(KotorPatchingLanguageParser.STRING_LITERAL); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL(int i) {
+			return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, i);
+		}
+		public TwoDACopyRowContext(Twoda_copy_rowContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitTwoDACopyRow(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Twoda_copy_rowContext twoda_copy_row() {
+		Twoda_copy_rowContext _localctx = new Twoda_copy_rowContext(Context, State);
+		EnterRule(_localctx, 8, RULE_twoda_copy_row);
+		try {
+			_localctx = new TwoDACopyRowContext(_localctx);
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 47;
+			Match(T__7);
+			State = 48;
+			Match(T__4);
+			State = 49;
+			Match(T__5);
+			State = 50;
+			Match(STRING_LITERAL);
+			State = 51;
+			Match(T__6);
+			State = 52;
+			Match(STRING_LITERAL);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Gff_copy_templateContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL() { return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, 0); }
+		public Gff_copy_templateContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_gff_copy_template; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitGff_copy_template(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Gff_copy_templateContext gff_copy_template() {
+		Gff_copy_templateContext _localctx = new Gff_copy_templateContext(Context, State);
+		EnterRule(_localctx, 10, RULE_gff_copy_template);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 21;
-			Match(T__4);
-			State = 22;
-			Match(T__5);
-			State = 23;
+			State = 54;
+			Match(T__7);
+			State = 55;
+			Match(T__8);
+			State = 56;
+			Match(T__9);
+			State = 57;
 			Match(STRING_LITERAL);
-			State = 24;
-			Match(T__6);
-			State = 25;
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Edit_appearanceContext : ParserRuleContext {
+		public Edit_appearanceContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_edit_appearance; } }
+	 
+		public Edit_appearanceContext() { }
+		public virtual void CopyFrom(Edit_appearanceContext context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class EditAppearanceContext : Edit_appearanceContext {
+		[System.Diagnostics.DebuggerNonUserCode] public Edit_appearance_modContext[] edit_appearance_mod() {
+			return GetRuleContexts<Edit_appearance_modContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public Edit_appearance_modContext edit_appearance_mod(int i) {
+			return GetRuleContext<Edit_appearance_modContext>(i);
+		}
+		public EditAppearanceContext(Edit_appearanceContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitEditAppearance(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Edit_appearanceContext edit_appearance() {
+		Edit_appearanceContext _localctx = new Edit_appearanceContext(Context, State);
+		EnterRule(_localctx, 12, RULE_edit_appearance);
+		int _la;
+		try {
+			_localctx = new EditAppearanceContext(_localctx);
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 59;
+			Match(T__10);
+			State = 60;
+			Match(T__11);
+			State = 64;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 274L) != 0)) {
+				{
+				{
+				State = 61;
+				edit_appearance_mod();
+				}
+				}
+				State = 66;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+			}
+			State = 67;
+			Match(T__12);
+			State = 68;
+			Match(T__10);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Edit_appearance_modContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public Twoda_override_rowContext twoda_override_row() {
+			return GetRuleContext<Twoda_override_rowContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public Twoda_copy_rowContext twoda_copy_row() {
+			return GetRuleContext<Twoda_copy_rowContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public Twoda_assign_cellContext twoda_assign_cell() {
+			return GetRuleContext<Twoda_assign_cellContext>(0);
+		}
+		public Edit_appearance_modContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_edit_appearance_mod; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitEdit_appearance_mod(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Edit_appearance_modContext edit_appearance_mod() {
+		Edit_appearance_modContext _localctx = new Edit_appearance_modContext(Context, State);
+		EnterRule(_localctx, 14, RULE_edit_appearance_mod);
+		try {
+			State = 73;
+			ErrorHandler.Sync(this);
+			switch (TokenStream.LA(1)) {
+			case T__3:
+				EnterOuterAlt(_localctx, 1);
+				{
+				State = 70;
+				twoda_override_row();
+				}
+				break;
+			case T__7:
+				EnterOuterAlt(_localctx, 2);
+				{
+				State = 71;
+				twoda_copy_row();
+				}
+				break;
+			case T__0:
+				EnterOuterAlt(_localctx, 3);
+				{
+				State = 72;
+				twoda_assign_cell();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Edit_creatureContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL() { return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public Edit_creature_modContext[] edit_creature_mod() {
+			return GetRuleContexts<Edit_creature_modContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public Edit_creature_modContext edit_creature_mod(int i) {
+			return GetRuleContext<Edit_creature_modContext>(i);
+		}
+		public Edit_creatureContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_edit_creature; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitEdit_creature(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Edit_creatureContext edit_creature() {
+		Edit_creatureContext _localctx = new Edit_creatureContext(Context, State);
+		EnterRule(_localctx, 16, RULE_edit_creature);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 75;
+			Match(T__10);
+			State = 76;
+			Match(T__13);
+			State = 77;
 			Match(STRING_LITERAL);
+			State = 81;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			while (_la==T__7 || _la==T__14) {
+				{
+				{
+				State = 78;
+				edit_creature_mod();
+				}
+				}
+				State = 83;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+			}
+			State = 84;
+			Match(T__12);
+			State = 85;
+			Match(T__10);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Edit_creature_modContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public Gff_copy_templateContext gff_copy_template() {
+			return GetRuleContext<Gff_copy_templateContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public Edit_creature_field_appearanceContext edit_creature_field_appearance() {
+			return GetRuleContext<Edit_creature_field_appearanceContext>(0);
+		}
+		public Edit_creature_modContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_edit_creature_mod; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitEdit_creature_mod(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Edit_creature_modContext edit_creature_mod() {
+		Edit_creature_modContext _localctx = new Edit_creature_modContext(Context, State);
+		EnterRule(_localctx, 18, RULE_edit_creature_mod);
+		try {
+			State = 89;
+			ErrorHandler.Sync(this);
+			switch (TokenStream.LA(1)) {
+			case T__7:
+				EnterOuterAlt(_localctx, 1);
+				{
+				State = 87;
+				gff_copy_template();
+				}
+				break;
+			case T__14:
+				EnterOuterAlt(_localctx, 2);
+				{
+				State = 88;
+				edit_creature_field_appearance();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Edit_creature_field_appearanceContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode INT_LITERAL() { return GetToken(KotorPatchingLanguageParser.INT_LITERAL, 0); }
+		public Edit_creature_field_appearanceContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_edit_creature_field_appearance; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitEdit_creature_field_appearance(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Edit_creature_field_appearanceContext edit_creature_field_appearance() {
+		Edit_creature_field_appearanceContext _localctx = new Edit_creature_field_appearanceContext(Context, State);
+		EnterRule(_localctx, 20, RULE_edit_creature_field_appearance);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 91;
+			Match(T__14);
+			State = 92;
+			Match(T__11);
+			State = 93;
+			Match(INT_LITERAL);
 			}
 		}
 		catch (RecognitionException re) {
@@ -240,13 +727,32 @@ public partial class KotorPatchingLanguageParser : Parser {
 	}
 
 	private static int[] _serializedATN = {
-		4,1,10,28,2,0,7,0,2,1,7,1,2,2,7,2,1,0,1,0,1,0,1,1,1,1,1,1,1,1,5,1,14,8,
-		1,10,1,12,1,17,9,1,1,1,1,1,1,1,1,2,1,2,1,2,1,2,1,2,1,2,1,2,0,0,3,0,2,4,
-		0,0,25,0,6,1,0,0,0,2,9,1,0,0,0,4,21,1,0,0,0,6,7,3,2,1,0,7,8,5,0,0,1,8,
-		1,1,0,0,0,9,10,5,1,0,0,10,11,5,2,0,0,11,15,5,3,0,0,12,14,3,4,2,0,13,12,
-		1,0,0,0,14,17,1,0,0,0,15,13,1,0,0,0,15,16,1,0,0,0,16,18,1,0,0,0,17,15,
-		1,0,0,0,18,19,5,4,0,0,19,20,5,1,0,0,20,3,1,0,0,0,21,22,5,5,0,0,22,23,5,
-		6,0,0,23,24,5,9,0,0,24,25,5,7,0,0,25,26,5,9,0,0,26,5,1,0,0,0,1,15
+		4,1,21,96,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
+		7,7,2,8,7,8,2,9,7,9,2,10,7,10,1,0,5,0,24,8,0,10,0,12,0,27,9,0,1,0,1,0,
+		1,1,1,1,3,1,33,8,1,1,2,1,2,1,2,1,2,1,2,1,2,1,3,1,3,1,3,1,3,1,3,1,3,1,3,
+		1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,5,1,5,1,5,1,5,1,5,1,6,1,6,1,6,5,6,63,8,6,
+		10,6,12,6,66,9,6,1,6,1,6,1,6,1,7,1,7,1,7,3,7,74,8,7,1,8,1,8,1,8,1,8,5,
+		8,80,8,8,10,8,12,8,83,9,8,1,8,1,8,1,8,1,9,1,9,3,9,90,8,9,1,10,1,10,1,10,
+		1,10,1,10,0,0,11,0,2,4,6,8,10,12,14,16,18,20,0,0,91,0,25,1,0,0,0,2,32,
+		1,0,0,0,4,34,1,0,0,0,6,40,1,0,0,0,8,47,1,0,0,0,10,54,1,0,0,0,12,59,1,0,
+		0,0,14,73,1,0,0,0,16,75,1,0,0,0,18,89,1,0,0,0,20,91,1,0,0,0,22,24,3,2,
+		1,0,23,22,1,0,0,0,24,27,1,0,0,0,25,23,1,0,0,0,25,26,1,0,0,0,26,28,1,0,
+		0,0,27,25,1,0,0,0,28,29,5,0,0,1,29,1,1,0,0,0,30,33,3,12,6,0,31,33,3,16,
+		8,0,32,30,1,0,0,0,32,31,1,0,0,0,33,3,1,0,0,0,34,35,5,1,0,0,35,36,5,2,0,
+		0,36,37,5,16,0,0,37,38,5,3,0,0,38,39,5,16,0,0,39,5,1,0,0,0,40,41,5,4,0,
+		0,41,42,5,5,0,0,42,43,5,6,0,0,43,44,5,16,0,0,44,45,5,7,0,0,45,46,5,16,
+		0,0,46,7,1,0,0,0,47,48,5,8,0,0,48,49,5,5,0,0,49,50,5,6,0,0,50,51,5,16,
+		0,0,51,52,5,7,0,0,52,53,5,16,0,0,53,9,1,0,0,0,54,55,5,8,0,0,55,56,5,9,
+		0,0,56,57,5,10,0,0,57,58,5,16,0,0,58,11,1,0,0,0,59,60,5,11,0,0,60,64,5,
+		12,0,0,61,63,3,14,7,0,62,61,1,0,0,0,63,66,1,0,0,0,64,62,1,0,0,0,64,65,
+		1,0,0,0,65,67,1,0,0,0,66,64,1,0,0,0,67,68,5,13,0,0,68,69,5,11,0,0,69,13,
+		1,0,0,0,70,74,3,6,3,0,71,74,3,8,4,0,72,74,3,4,2,0,73,70,1,0,0,0,73,71,
+		1,0,0,0,73,72,1,0,0,0,74,15,1,0,0,0,75,76,5,11,0,0,76,77,5,14,0,0,77,81,
+		5,16,0,0,78,80,3,18,9,0,79,78,1,0,0,0,80,83,1,0,0,0,81,79,1,0,0,0,81,82,
+		1,0,0,0,82,84,1,0,0,0,83,81,1,0,0,0,84,85,5,13,0,0,85,86,5,11,0,0,86,17,
+		1,0,0,0,87,90,3,10,5,0,88,90,3,20,10,0,89,87,1,0,0,0,89,88,1,0,0,0,90,
+		19,1,0,0,0,91,92,5,15,0,0,92,93,5,12,0,0,93,94,5,17,0,0,94,21,1,0,0,0,
+		6,25,32,64,73,81,89
 	};
 
 	public static readonly ATN _ATN =

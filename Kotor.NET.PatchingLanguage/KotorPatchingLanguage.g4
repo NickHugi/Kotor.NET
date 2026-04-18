@@ -1,32 +1,82 @@
-﻿grammar KotorPatchingLanguage;
+grammar KotorPatchingLanguage;
 
 /*
  * Parser Rules
  */
  
-root                        : edit_appearance_row EOF ;
-edit_appearance_row         : 'edit' 'appearance' 'row' edit_appearance_row_mod* 'end' 'edit' ;
-edit_appearance_row_mod     : 'assign' 'column' STRING_LITERAL 'value' STRING_LITERAL  ;
+script                        
+    : instruction* EOF
+    ;
+
+instruction                 
+    : edit_appearance
+    | edit_creature
+    ;
+
+twoda_assign_cell
+    : 'assign' 'column' STRING_LITERAL 'value' STRING_LITERAL                   # TwoDAAssignCell
+    ;
+twoda_override_row
+    : 'override' 'row' 'where' STRING_LITERAL 'equals' STRING_LITERAL           # TwoDAOverrideRow
+    ;
+twoda_copy_row
+    : 'copy' 'row' 'where' STRING_LITERAL 'equals' STRING_LITERAL               # TwoDACopyRow
+    ;
+
+gff_copy_template
+    : 'copy' 'from' 'template' STRING_LITERAL                                  
+    ;
+
+edit_appearance        
+    : 'edit' 'appearance' edit_appearance_mod* 'end' 'edit'                     # EditAppearance
+    ;
+edit_appearance_mod
+    : twoda_override_row                                                        # EditAppearanceMod_TwoDAOverrideRow
+    | twoda_copy_row                                                # EditAppearanceMod_TwoDACopyRow                                    
+    | twoda_assign_cell
+    ;
+
+edit_creature
+    : 'edit' 'creature' STRING_LITERAL edit_creature_mod* 'end' 'edit'
+    ;
+edit_creature_mod
+    : gff_copy_template
+    | edit_creature_field_appearance
+    ;
+edit_creature_field_appearance
+    : 'set' 'appearance' INT_LITERAL
+    ;
 
 /*
  * Lexer Rules
  */
-IDENTIFIER                  : ([a-z] | [A-Z]) ([a-z] | [A-Z] | [0-9])* ;
-STRING_LITERAL              : '"' ( ~["\\] | '\\' . )* '"' ;
-WHITESPACE                  : (' ' | '\t' | '\r\n' | '\n' | '\r')+ -> skip ;
 
-// WHITESPACE                  : (' ' | '\t' | NEWLINE)+ -> skip ;
-// NEWLINE                     : ('\r'? '\n' | '\r')+ -> skip ;
+STRING_LITERAL              
+    : '"' ( ~["\\] | '\\' . )* '"'
+    ;
 
-/*
-fragment A          : ('A'|'a') ;
-fragment S          : ('S'|'s') ;
-fragment Y          : ('Y'|'y') ;
-fragment LOWERCASE  : [a-z] ;
-fragment UPPERCASE  : [A-Z] ;
-SAYS                : S A Y S ;
-WORD                : (LOWERCASE | UPPERCASE)+ ;
-TEXT                : '"' .*? '"' ;
-WHITESPACE          : (' '|'\t')+ -> skip ;
-NEWLINE             : ('\r'? '\n' | '\r')+ ;
-*/
+INT_LITERAL                 
+    : '-'? [0-9]+
+    ;
+
+FLOAT_LITERAL
+    : [0-9]+ '.' [0-9]* EXPONENT?
+    | '.' [0-9]+ EXPONENT?
+    | [0-9]+ EXPONENT
+    ;
+fragment EXPONENT
+    : [eE] [+-]? [0-9]+
+    ;
+
+BOOL_LITERAL
+    : 'true'
+    | 'false'
+    ;
+
+IDENTIFIER
+    : [a-zA-Z_] [a-zA-Z0-9_]*
+    ;
+
+WHITESPACE                  
+    : [ \t\r\n]+ -> skip
+    ;

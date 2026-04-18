@@ -11,4 +11,9 @@
     <PackageReference Include="Antlr4BuildTasks" Version="12.14.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Kotor.NET.Patcher\Kotor.NET.Patcher.csproj" />
+    <ProjectReference Include="..\Kotor.NET\Kotor.NET.csproj" />
+  </ItemGroup>
+
 </Project>

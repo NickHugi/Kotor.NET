@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from c:/Users/hugin/source/repos/Kotor.NET/Kotor.NET.PatchingLanguage/KotorPatchingLanguage.g4 by ANTLR 4.13.1
+// Generated from c:/Users/hugin/source/repos/NickHugi/KotorDotNET/Kotor.NET.PatchingLanguage/KotorPatchingLanguage.g4 by ANTLR 4.13.1
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -35,7 +35,7 @@ using ParserRuleContext = Antlr4.Runtime.ParserRuleContext;
 [System.CLSCompliant(false)]
 public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTreeVisitor<Result>, IKotorPatchingLanguageVisitor<Result> {
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.root"/>.
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.script"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -43,9 +43,9 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitRoot([NotNull] KotorPatchingLanguageParser.RootContext context) { return VisitChildren(context); }
+	public virtual Result VisitScript([NotNull] KotorPatchingLanguageParser.ScriptContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.edit_appearance_row"/>.
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.instruction"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -53,9 +53,10 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitEdit_appearance_row([NotNull] KotorPatchingLanguageParser.Edit_appearance_rowContext context) { return VisitChildren(context); }
+	public virtual Result VisitInstruction([NotNull] KotorPatchingLanguageParser.InstructionContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.edit_appearance_row_mod"/>.
+	/// Visit a parse tree produced by the <c>TwoDAAssignCell</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.twoda_assign_cell"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -63,5 +64,88 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitEdit_appearance_row_mod([NotNull] KotorPatchingLanguageParser.Edit_appearance_row_modContext context) { return VisitChildren(context); }
+	public virtual Result VisitTwoDAAssignCell([NotNull] KotorPatchingLanguageParser.TwoDAAssignCellContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>TwoDAOverrideRow</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.twoda_override_row"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitTwoDAOverrideRow([NotNull] KotorPatchingLanguageParser.TwoDAOverrideRowContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>TwoDACopyRow</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.twoda_copy_row"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitTwoDACopyRow([NotNull] KotorPatchingLanguageParser.TwoDACopyRowContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.gff_copy_template"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGff_copy_template([NotNull] KotorPatchingLanguageParser.Gff_copy_templateContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EditAppearance</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_appearance"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitEditAppearance([NotNull] KotorPatchingLanguageParser.EditAppearanceContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.edit_appearance_mod"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitEdit_appearance_mod([NotNull] KotorPatchingLanguageParser.Edit_appearance_modContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.edit_creature"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitEdit_creature([NotNull] KotorPatchingLanguageParser.Edit_creatureContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.edit_creature_mod"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitEdit_creature_mod([NotNull] KotorPatchingLanguageParser.Edit_creature_modContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.edit_creature_field_appearance"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitEdit_creature_field_appearance([NotNull] KotorPatchingLanguageParser.Edit_creature_field_appearanceContext context) { return VisitChildren(context); }
 }

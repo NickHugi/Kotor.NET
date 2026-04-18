@@ -27,6 +27,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kotor.DevelopmentKit.Editor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kotor.NET.PatchingLanguage", "Kotor.NET.PatchingLanguage\Kotor.NET.PatchingLanguage.csproj", "{D1BEF69E-F56A-47BE-A142-C151A878B671}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kotor.NET.Patcher", "Kotor.NET.Patcher\Kotor.NET.Patcher.csproj", "{FCD30D9D-FB06-4B27-88CF-261B3F60331C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kotor.NET.Patcher.Console", "Kotor.NET.Patcher.Console\Kotor.NET.Patcher.Console.csproj", "{F7E994F5-3FA6-4E49-B199-3919C2AFCF8D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +73,14 @@ Global
 		{D1BEF69E-F56A-47BE-A142-C151A878B671}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1BEF69E-F56A-47BE-A142-C151A878B671}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1BEF69E-F56A-47BE-A142-C151A878B671}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCD30D9D-FB06-4B27-88CF-261B3F60331C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCD30D9D-FB06-4B27-88CF-261B3F60331C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCD30D9D-FB06-4B27-88CF-261B3F60331C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCD30D9D-FB06-4B27-88CF-261B3F60331C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7E994F5-3FA6-4E49-B199-3919C2AFCF8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7E994F5-3FA6-4E49-B199-3919C2AFCF8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7E994F5-3FA6-4E49-B199-3919C2AFCF8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7E994F5-3FA6-4E49-B199-3919C2AFCF8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,6 +96,8 @@ Global
 		{E2450DE8-4A1D-47B5-9930-0893C2F4E3C5} = {739D01ED-DE35-4946-8809-424A58B8D01C}
 		{55CF0D51-B431-4426-8942-29F70E4D1CF7} = {739D01ED-DE35-4946-8809-424A58B8D01C}
 		{D1BEF69E-F56A-47BE-A142-C151A878B671} = {5A80EBC7-36DC-4E56-A52B-3C3547E0F912}
+		{FCD30D9D-FB06-4B27-88CF-261B3F60331C} = {5A80EBC7-36DC-4E56-A52B-3C3547E0F912}
+		{F7E994F5-3FA6-4E49-B199-3919C2AFCF8D} = {739D01ED-DE35-4946-8809-424A58B8D01C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C3B4FE44-EA0E-476F-8106-438E6CC691A7}
