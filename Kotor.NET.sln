@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kotor.DevelopmentKit.Viewer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kotor.DevelopmentKit.EditorGFF", "Kotor.DevelopmentKit.EditorGFF\Kotor.DevelopmentKit.EditorGFF.csproj", "{55CF0D51-B431-4426-8942-29F70E4D1CF7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kotor.NET.PatchingLanguage", "Kotor.NET.PatchingLanguage\Kotor.NET.PatchingLanguage.csproj", "{D1BEF69E-F56A-47BE-A142-C151A878B671}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{55CF0D51-B431-4426-8942-29F70E4D1CF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55CF0D51-B431-4426-8942-29F70E4D1CF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55CF0D51-B431-4426-8942-29F70E4D1CF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1BEF69E-F56A-47BE-A142-C151A878B671}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1BEF69E-F56A-47BE-A142-C151A878B671}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1BEF69E-F56A-47BE-A142-C151A878B671}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1BEF69E-F56A-47BE-A142-C151A878B671}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -77,6 +83,7 @@ Global
 		{32559C1E-FA8B-4383-A046-E6D9834F91C5} = {5A80EBC7-36DC-4E56-A52B-3C3547E0F912}
 		{E2450DE8-4A1D-47B5-9930-0893C2F4E3C5} = {739D01ED-DE35-4946-8809-424A58B8D01C}
 		{55CF0D51-B431-4426-8942-29F70E4D1CF7} = {739D01ED-DE35-4946-8809-424A58B8D01C}
+		{D1BEF69E-F56A-47BE-A142-C151A878B671} = {5A80EBC7-36DC-4E56-A52B-3C3547E0F912}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C3B4FE44-EA0E-476F-8106-438E6CC691A7}

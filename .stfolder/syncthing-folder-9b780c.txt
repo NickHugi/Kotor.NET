@@ -1,0 +1,5 @@
+# This directory is a Syncthing folder marker.
+# Do not delete.
+
+folderID: omxdu-gtffb
+created: 2026-04-18T18:47:27+08:00
