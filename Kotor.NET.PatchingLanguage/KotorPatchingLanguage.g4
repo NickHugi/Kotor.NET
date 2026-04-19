@@ -14,13 +14,13 @@ instruction
     ;
 
 twoda_assign_cell
-    : 'assign' 'column' STRING_LITERAL 'value' STRING_LITERAL                   # TwoDAAssignCell
+    : 'assign' 'cell' 'set' STRING_LITERAL 'to' STRING_LITERAL              # TwoDAAssignCell
     ;
-twoda_override_row
-    : 'override' 'row' 'where' STRING_LITERAL 'equals' STRING_LITERAL           # TwoDAOverrideRow
+twoda_target_row
+    : 'target' 'row' 'where' STRING_LITERAL 'is' STRING_LITERAL             # TwoDATargetRow
     ;
 twoda_copy_row
-    : 'copy' 'row' 'where' STRING_LITERAL 'equals' STRING_LITERAL               # TwoDACopyRow
+    : 'copy' 'row' 'where' STRING_LITERAL 'is' STRING_LITERAL               # TwoDACopyRow
     ;
 
 gff_copy_template
@@ -28,12 +28,12 @@ gff_copy_template
     ;
 
 edit_appearance        
-    : 'edit' 'appearance' edit_appearance_mod* 'end' 'edit'                     # EditAppearance
+: 'edit' 'appearance' edit_appearance_mod* 'end' 'edit'                     # EditAppearance
     ;
-edit_appearance_mod
-    : twoda_override_row                                                        # EditAppearanceMod_TwoDAOverrideRow
-    | twoda_copy_row                                                # EditAppearanceMod_TwoDACopyRow                                    
-    | twoda_assign_cell
+edit_appearance_mod 
+    : twoda_target_row                                                        
+    | twoda_copy_row                                                                                 
+    | twoda_assign_cell                                                         
     ;
 
 edit_creature

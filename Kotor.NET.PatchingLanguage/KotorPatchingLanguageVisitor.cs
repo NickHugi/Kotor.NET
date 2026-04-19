@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from c:/Users/hugin/source/repos/NickHugi/KotorDotNET/Kotor.NET.PatchingLanguage/KotorPatchingLanguage.g4 by ANTLR 4.13.1
+// Generated from c:/Users/hugin/source/repos/Kotor.NET/Kotor.NET.PatchingLanguage/KotorPatchingLanguage.g4 by ANTLR 4.13.1
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -51,12 +51,12 @@ public interface IKotorPatchingLanguageVisitor<Result> : IParseTreeVisitor<Resul
 	/// <return>The visitor result.</return>
 	Result VisitTwoDAAssignCell([NotNull] KotorPatchingLanguageParser.TwoDAAssignCellContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>TwoDAOverrideRow</c>
-	/// labeled alternative in <see cref="KotorPatchingLanguageParser.twoda_override_row"/>.
+	/// Visit a parse tree produced by the <c>TwoDATargetRow</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.twoda_target_row"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitTwoDAOverrideRow([NotNull] KotorPatchingLanguageParser.TwoDAOverrideRowContext context);
+	Result VisitTwoDATargetRow([NotNull] KotorPatchingLanguageParser.TwoDATargetRowContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>TwoDACopyRow</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.twoda_copy_row"/>.

@@ -6,22 +6,44 @@ namespace Kotor.NET.Patcher.For2DA;
 public interface ILocateFile
 {
     public string Locate();
+    public byte[] Load();
+    public void Save(byte[] data);
 }
 public class HardcodedFile : ILocateFile
 {
-    public string FilePath = @"C:\Program Files (x86)\Steam\steamapps\common\Knights of the Old Republic II\override";
+    public string FilePath = @"C:\Program Files (x86)\Steam\steamapps\common\Knights of the Old Republic II\override\appearance.2da";
 
     public string Locate()
     {
         return FilePath;
     }
+    public byte[] Load()
+    {
+        return File.ReadAllBytes(FilePath);
+    }
+    public void Save(byte[] data)
+    {
+        File.WriteAllBytes(FilePath, data);
+    }
 }
 
-public class Patch2DA
+public class Patch2DA : IPatch
 {
     public required ILocateFile TakeFrom { get; set; }
     public required ILocateFile SaveTo { get; set; }
     public ICollection<IModifier> Modifiers { get; set; } = [];
+
+    public void Apply(PatcherMemory memory)
+    {
+        var twoda = TwoDA.FromBytes(TakeFrom.Load());
+
+        foreach (var modifier in Modifiers)
+        {
+            modifier.Apply(twoda, memory);
+        }
+
+        SaveTo.Save(TwoDA.ToBytes(twoda));
+    }
 }
 
 public interface IRowLocator

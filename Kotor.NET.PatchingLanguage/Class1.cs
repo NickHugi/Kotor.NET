@@ -1,4 +1,6 @@
-﻿using Antlr4.Runtime.Misc;
+﻿using System.Linq;
+using Antlr4.Runtime.Misc;
+using Kotor.NET.Patcher;
 using Kotor.NET.Patcher.For2DA;
 
 namespace Kotor.NET.PatchingLanguage;
@@ -6,14 +8,8 @@ namespace Kotor.NET.PatchingLanguage;
 public class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVisitor<object>
 {
     public override object VisitScript(KotorPatchingLanguageParser.ScriptContext context)
-    {     
-        
-        // NameContext name = context.name();
-        // OpinionContext opinion = context.opinion();
-        // SpeakLine line = new SpeakLine() { Person = name.GetText(), Text = opinion.GetText().Trim('"') };
-        // Lines.Add(line);
-        // return line;
-        return null;
+    {
+        return context.instruction().Select(Visit).ToList();
     }
 
     #region 2DA
@@ -29,7 +25,7 @@ public class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVisitor<obj
         };
     }
 
-    public override object VisitTwoDAOverrideRow([NotNull] KotorPatchingLanguageParser.TwoDAOverrideRowContext context)
+    public override object VisitTwoDATargetRow([NotNull] KotorPatchingLanguageParser.TwoDATargetRowContext context)
     {
         return new ByCellValueRowLocator
         {
@@ -47,18 +43,34 @@ public class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVisitor<obj
                 Column = Unquote(context.STRING_LITERAL(0).GetText()),
                 Value = Unquote(context.STRING_LITERAL(1).GetText()),
             }
-        }
+        };
     }
     #endregion
 
     #region Appearance
     public override object VisitEditAppearance([NotNull] KotorPatchingLanguageParser.EditAppearanceContext context)
     {
+        var targetRow = context.edit_appearance_mod().Select(Visit).OfType<IRowLocator>().SingleOrDefault() ?? new NoRowLocator();
+        var assignments = context.edit_appearance_mod().Select(Visit).OfType<IAssignment>().ToList();
+
+        if (targetRow is ByCellValueRowLocator rowLocator)
+        {
+            assignments.Add(new EditCellAssignment
+            {
+                Column = rowLocator.Column,
+                CellValue = new ConstantValue { Text = rowLocator.Value },
+            });
+        }
+
         return new EditAppearance
         {
             TakeFrom = new HardcodedFile(),
             SaveTo = new HardcodedFile(),
-            Modifiers = context.edit_appearance_mod()
+            Modifiers = [new RowModifier
+            {
+                TargetRow = targetRow,
+                Assignments = assignments,
+            }]
         };
     }
     #endregion
@@ -71,5 +83,4 @@ public class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVisitor<obj
             return str.Substring(1, str.Length - 2);
         return str;
     }
-}
 }

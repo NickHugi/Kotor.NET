@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from c:/Users/hugin/source/repos/NickHugi/KotorDotNET/Kotor.NET.PatchingLanguage/KotorPatchingLanguage.g4 by ANTLR 4.13.1
+// Generated from c:/Users/hugin/source/repos/Kotor.NET/Kotor.NET.PatchingLanguage/KotorPatchingLanguage.g4 by ANTLR 4.13.1
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -40,20 +40,20 @@ public partial class KotorPatchingLanguageParser : Parser {
 		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, STRING_LITERAL=16, 
 		INT_LITERAL=17, FLOAT_LITERAL=18, BOOL_LITERAL=19, IDENTIFIER=20, WHITESPACE=21;
 	public const int
-		RULE_script = 0, RULE_instruction = 1, RULE_twoda_assign_cell = 2, RULE_twoda_override_row = 3, 
+		RULE_script = 0, RULE_instruction = 1, RULE_twoda_assign_cell = 2, RULE_twoda_target_row = 3, 
 		RULE_twoda_copy_row = 4, RULE_gff_copy_template = 5, RULE_edit_appearance = 6, 
 		RULE_edit_appearance_mod = 7, RULE_edit_creature = 8, RULE_edit_creature_mod = 9, 
 		RULE_edit_creature_field_appearance = 10;
 	public static readonly string[] ruleNames = {
-		"script", "instruction", "twoda_assign_cell", "twoda_override_row", "twoda_copy_row", 
+		"script", "instruction", "twoda_assign_cell", "twoda_target_row", "twoda_copy_row", 
 		"gff_copy_template", "edit_appearance", "edit_appearance_mod", "edit_creature", 
 		"edit_creature_mod", "edit_creature_field_appearance"
 	};
 
 	private static readonly string[] _LiteralNames = {
-		null, "'assign'", "'column'", "'value'", "'override'", "'row'", "'where'", 
-		"'equals'", "'copy'", "'from'", "'template'", "'edit'", "'appearance'", 
-		"'end'", "'creature'", "'set'"
+		null, "'assign'", "'cell'", "'set'", "'to'", "'target'", "'row'", "'where'", 
+		"'is'", "'copy'", "'from'", "'template'", "'edit'", "'appearance'", "'end'", 
+		"'creature'"
 	};
 	private static readonly string[] _SymbolicNames = {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
@@ -124,7 +124,7 @@ public partial class KotorPatchingLanguageParser : Parser {
 			State = 25;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while (_la==T__10) {
+			while (_la==T__11) {
 				{
 				{
 				State = 22;
@@ -244,10 +244,12 @@ public partial class KotorPatchingLanguageParser : Parser {
 			State = 35;
 			Match(T__1);
 			State = 36;
-			Match(STRING_LITERAL);
-			State = 37;
 			Match(T__2);
+			State = 37;
+			Match(STRING_LITERAL);
 			State = 38;
+			Match(T__3);
+			State = 39;
 			Match(STRING_LITERAL);
 			}
 		}
@@ -262,51 +264,51 @@ public partial class KotorPatchingLanguageParser : Parser {
 		return _localctx;
 	}
 
-	public partial class Twoda_override_rowContext : ParserRuleContext {
-		public Twoda_override_rowContext(ParserRuleContext parent, int invokingState)
+	public partial class Twoda_target_rowContext : ParserRuleContext {
+		public Twoda_target_rowContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_twoda_override_row; } }
+		public override int RuleIndex { get { return RULE_twoda_target_row; } }
 	 
-		public Twoda_override_rowContext() { }
-		public virtual void CopyFrom(Twoda_override_rowContext context) {
+		public Twoda_target_rowContext() { }
+		public virtual void CopyFrom(Twoda_target_rowContext context) {
 			base.CopyFrom(context);
 		}
 	}
-	public partial class TwoDAOverrideRowContext : Twoda_override_rowContext {
+	public partial class TwoDATargetRowContext : Twoda_target_rowContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] STRING_LITERAL() { return GetTokens(KotorPatchingLanguageParser.STRING_LITERAL); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL(int i) {
 			return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, i);
 		}
-		public TwoDAOverrideRowContext(Twoda_override_rowContext context) { CopyFrom(context); }
+		public TwoDATargetRowContext(Twoda_target_rowContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitTwoDAOverrideRow(this);
+			if (typedVisitor != null) return typedVisitor.VisitTwoDATargetRow(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public Twoda_override_rowContext twoda_override_row() {
-		Twoda_override_rowContext _localctx = new Twoda_override_rowContext(Context, State);
-		EnterRule(_localctx, 6, RULE_twoda_override_row);
+	public Twoda_target_rowContext twoda_target_row() {
+		Twoda_target_rowContext _localctx = new Twoda_target_rowContext(Context, State);
+		EnterRule(_localctx, 6, RULE_twoda_target_row);
 		try {
-			_localctx = new TwoDAOverrideRowContext(_localctx);
+			_localctx = new TwoDATargetRowContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 40;
-			Match(T__3);
 			State = 41;
 			Match(T__4);
 			State = 42;
 			Match(T__5);
 			State = 43;
-			Match(STRING_LITERAL);
-			State = 44;
 			Match(T__6);
+			State = 44;
+			Match(STRING_LITERAL);
 			State = 45;
+			Match(T__7);
+			State = 46;
 			Match(STRING_LITERAL);
 			}
 		}
@@ -355,17 +357,17 @@ public partial class KotorPatchingLanguageParser : Parser {
 			_localctx = new TwoDACopyRowContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 47;
-			Match(T__7);
 			State = 48;
-			Match(T__4);
+			Match(T__8);
 			State = 49;
 			Match(T__5);
 			State = 50;
-			Match(STRING_LITERAL);
-			State = 51;
 			Match(T__6);
+			State = 51;
+			Match(STRING_LITERAL);
 			State = 52;
+			Match(T__7);
+			State = 53;
 			Match(STRING_LITERAL);
 			}
 		}
@@ -402,13 +404,13 @@ public partial class KotorPatchingLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 54;
-			Match(T__7);
 			State = 55;
 			Match(T__8);
 			State = 56;
 			Match(T__9);
 			State = 57;
+			Match(T__10);
+			State = 58;
 			Match(STRING_LITERAL);
 			}
 		}
@@ -460,28 +462,28 @@ public partial class KotorPatchingLanguageParser : Parser {
 			_localctx = new EditAppearanceContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 59;
-			Match(T__10);
 			State = 60;
 			Match(T__11);
-			State = 64;
+			State = 61;
+			Match(T__12);
+			State = 65;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 274L) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 546L) != 0)) {
 				{
 				{
-				State = 61;
+				State = 62;
 				edit_appearance_mod();
 				}
 				}
-				State = 66;
+				State = 67;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 67;
-			Match(T__12);
 			State = 68;
-			Match(T__10);
+			Match(T__13);
+			State = 69;
+			Match(T__11);
 			}
 		}
 		catch (RecognitionException re) {
@@ -496,8 +498,8 @@ public partial class KotorPatchingLanguageParser : Parser {
 	}
 
 	public partial class Edit_appearance_modContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public Twoda_override_rowContext twoda_override_row() {
-			return GetRuleContext<Twoda_override_rowContext>(0);
+		[System.Diagnostics.DebuggerNonUserCode] public Twoda_target_rowContext twoda_target_row() {
+			return GetRuleContext<Twoda_target_rowContext>(0);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public Twoda_copy_rowContext twoda_copy_row() {
 			return GetRuleContext<Twoda_copy_rowContext>(0);
@@ -523,27 +525,27 @@ public partial class KotorPatchingLanguageParser : Parser {
 		Edit_appearance_modContext _localctx = new Edit_appearance_modContext(Context, State);
 		EnterRule(_localctx, 14, RULE_edit_appearance_mod);
 		try {
-			State = 73;
+			State = 74;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
-			case T__3:
+			case T__4:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 70;
-				twoda_override_row();
+				State = 71;
+				twoda_target_row();
 				}
 				break;
-			case T__7:
+			case T__8:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 71;
+				State = 72;
 				twoda_copy_row();
 				}
 				break;
 			case T__0:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 72;
+				State = 73;
 				twoda_assign_cell();
 				}
 				break;
@@ -591,30 +593,30 @@ public partial class KotorPatchingLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 75;
-			Match(T__10);
 			State = 76;
-			Match(T__13);
+			Match(T__11);
 			State = 77;
+			Match(T__14);
+			State = 78;
 			Match(STRING_LITERAL);
-			State = 81;
+			State = 82;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while (_la==T__7 || _la==T__14) {
+			while (_la==T__2 || _la==T__8) {
 				{
 				{
-				State = 78;
+				State = 79;
 				edit_creature_mod();
 				}
 				}
-				State = 83;
+				State = 84;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 84;
-			Match(T__12);
 			State = 85;
-			Match(T__10);
+			Match(T__13);
+			State = 86;
+			Match(T__11);
 			}
 		}
 		catch (RecognitionException re) {
@@ -653,20 +655,20 @@ public partial class KotorPatchingLanguageParser : Parser {
 		Edit_creature_modContext _localctx = new Edit_creature_modContext(Context, State);
 		EnterRule(_localctx, 18, RULE_edit_creature_mod);
 		try {
-			State = 89;
+			State = 90;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
-			case T__7:
+			case T__8:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 87;
+				State = 88;
 				gff_copy_template();
 				}
 				break;
-			case T__14:
+			case T__2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 88;
+				State = 89;
 				edit_creature_field_appearance();
 				}
 				break;
@@ -707,11 +709,11 @@ public partial class KotorPatchingLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 91;
-			Match(T__14);
 			State = 92;
-			Match(T__11);
+			Match(T__2);
 			State = 93;
+			Match(T__12);
+			State = 94;
 			Match(INT_LITERAL);
 			}
 		}
@@ -727,32 +729,32 @@ public partial class KotorPatchingLanguageParser : Parser {
 	}
 
 	private static int[] _serializedATN = {
-		4,1,21,96,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
+		4,1,21,97,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
 		7,7,2,8,7,8,2,9,7,9,2,10,7,10,1,0,5,0,24,8,0,10,0,12,0,27,9,0,1,0,1,0,
-		1,1,1,1,3,1,33,8,1,1,2,1,2,1,2,1,2,1,2,1,2,1,3,1,3,1,3,1,3,1,3,1,3,1,3,
-		1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,5,1,5,1,5,1,5,1,5,1,6,1,6,1,6,5,6,63,8,6,
-		10,6,12,6,66,9,6,1,6,1,6,1,6,1,7,1,7,1,7,3,7,74,8,7,1,8,1,8,1,8,1,8,5,
-		8,80,8,8,10,8,12,8,83,9,8,1,8,1,8,1,8,1,9,1,9,3,9,90,8,9,1,10,1,10,1,10,
-		1,10,1,10,0,0,11,0,2,4,6,8,10,12,14,16,18,20,0,0,91,0,25,1,0,0,0,2,32,
-		1,0,0,0,4,34,1,0,0,0,6,40,1,0,0,0,8,47,1,0,0,0,10,54,1,0,0,0,12,59,1,0,
-		0,0,14,73,1,0,0,0,16,75,1,0,0,0,18,89,1,0,0,0,20,91,1,0,0,0,22,24,3,2,
-		1,0,23,22,1,0,0,0,24,27,1,0,0,0,25,23,1,0,0,0,25,26,1,0,0,0,26,28,1,0,
-		0,0,27,25,1,0,0,0,28,29,5,0,0,1,29,1,1,0,0,0,30,33,3,12,6,0,31,33,3,16,
-		8,0,32,30,1,0,0,0,32,31,1,0,0,0,33,3,1,0,0,0,34,35,5,1,0,0,35,36,5,2,0,
-		0,36,37,5,16,0,0,37,38,5,3,0,0,38,39,5,16,0,0,39,5,1,0,0,0,40,41,5,4,0,
-		0,41,42,5,5,0,0,42,43,5,6,0,0,43,44,5,16,0,0,44,45,5,7,0,0,45,46,5,16,
-		0,0,46,7,1,0,0,0,47,48,5,8,0,0,48,49,5,5,0,0,49,50,5,6,0,0,50,51,5,16,
-		0,0,51,52,5,7,0,0,52,53,5,16,0,0,53,9,1,0,0,0,54,55,5,8,0,0,55,56,5,9,
-		0,0,56,57,5,10,0,0,57,58,5,16,0,0,58,11,1,0,0,0,59,60,5,11,0,0,60,64,5,
-		12,0,0,61,63,3,14,7,0,62,61,1,0,0,0,63,66,1,0,0,0,64,62,1,0,0,0,64,65,
-		1,0,0,0,65,67,1,0,0,0,66,64,1,0,0,0,67,68,5,13,0,0,68,69,5,11,0,0,69,13,
-		1,0,0,0,70,74,3,6,3,0,71,74,3,8,4,0,72,74,3,4,2,0,73,70,1,0,0,0,73,71,
-		1,0,0,0,73,72,1,0,0,0,74,15,1,0,0,0,75,76,5,11,0,0,76,77,5,14,0,0,77,81,
-		5,16,0,0,78,80,3,18,9,0,79,78,1,0,0,0,80,83,1,0,0,0,81,79,1,0,0,0,81,82,
-		1,0,0,0,82,84,1,0,0,0,83,81,1,0,0,0,84,85,5,13,0,0,85,86,5,11,0,0,86,17,
-		1,0,0,0,87,90,3,10,5,0,88,90,3,20,10,0,89,87,1,0,0,0,89,88,1,0,0,0,90,
-		19,1,0,0,0,91,92,5,15,0,0,92,93,5,12,0,0,93,94,5,17,0,0,94,21,1,0,0,0,
-		6,25,32,64,73,81,89
+		1,1,1,1,3,1,33,8,1,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,3,1,3,1,3,1,3,1,3,1,3,
+		1,3,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,5,1,5,1,5,1,5,1,5,1,6,1,6,1,6,5,6,64,
+		8,6,10,6,12,6,67,9,6,1,6,1,6,1,6,1,7,1,7,1,7,3,7,75,8,7,1,8,1,8,1,8,1,
+		8,5,8,81,8,8,10,8,12,8,84,9,8,1,8,1,8,1,8,1,9,1,9,3,9,91,8,9,1,10,1,10,
+		1,10,1,10,1,10,0,0,11,0,2,4,6,8,10,12,14,16,18,20,0,0,92,0,25,1,0,0,0,
+		2,32,1,0,0,0,4,34,1,0,0,0,6,41,1,0,0,0,8,48,1,0,0,0,10,55,1,0,0,0,12,60,
+		1,0,0,0,14,74,1,0,0,0,16,76,1,0,0,0,18,90,1,0,0,0,20,92,1,0,0,0,22,24,
+		3,2,1,0,23,22,1,0,0,0,24,27,1,0,0,0,25,23,1,0,0,0,25,26,1,0,0,0,26,28,
+		1,0,0,0,27,25,1,0,0,0,28,29,5,0,0,1,29,1,1,0,0,0,30,33,3,12,6,0,31,33,
+		3,16,8,0,32,30,1,0,0,0,32,31,1,0,0,0,33,3,1,0,0,0,34,35,5,1,0,0,35,36,
+		5,2,0,0,36,37,5,3,0,0,37,38,5,16,0,0,38,39,5,4,0,0,39,40,5,16,0,0,40,5,
+		1,0,0,0,41,42,5,5,0,0,42,43,5,6,0,0,43,44,5,7,0,0,44,45,5,16,0,0,45,46,
+		5,8,0,0,46,47,5,16,0,0,47,7,1,0,0,0,48,49,5,9,0,0,49,50,5,6,0,0,50,51,
+		5,7,0,0,51,52,5,16,0,0,52,53,5,8,0,0,53,54,5,16,0,0,54,9,1,0,0,0,55,56,
+		5,9,0,0,56,57,5,10,0,0,57,58,5,11,0,0,58,59,5,16,0,0,59,11,1,0,0,0,60,
+		61,5,12,0,0,61,65,5,13,0,0,62,64,3,14,7,0,63,62,1,0,0,0,64,67,1,0,0,0,
+		65,63,1,0,0,0,65,66,1,0,0,0,66,68,1,0,0,0,67,65,1,0,0,0,68,69,5,14,0,0,
+		69,70,5,12,0,0,70,13,1,0,0,0,71,75,3,6,3,0,72,75,3,8,4,0,73,75,3,4,2,0,
+		74,71,1,0,0,0,74,72,1,0,0,0,74,73,1,0,0,0,75,15,1,0,0,0,76,77,5,12,0,0,
+		77,78,5,15,0,0,78,82,5,16,0,0,79,81,3,18,9,0,80,79,1,0,0,0,81,84,1,0,0,
+		0,82,80,1,0,0,0,82,83,1,0,0,0,83,85,1,0,0,0,84,82,1,0,0,0,85,86,5,14,0,
+		0,86,87,5,12,0,0,87,17,1,0,0,0,88,91,3,10,5,0,89,91,3,20,10,0,90,88,1,
+		0,0,0,90,89,1,0,0,0,91,19,1,0,0,0,92,93,5,3,0,0,93,94,5,13,0,0,94,95,5,
+		17,0,0,95,21,1,0,0,0,6,25,32,65,74,82,90
 	};
 
 	public static readonly ATN _ATN =

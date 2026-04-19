@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from c:/Users/hugin/source/repos/NickHugi/KotorDotNET/Kotor.NET.PatchingLanguage/KotorPatchingLanguage.g4 by ANTLR 4.13.1
+// Generated from c:/Users/hugin/source/repos/Kotor.NET/Kotor.NET.PatchingLanguage/KotorPatchingLanguage.g4 by ANTLR 4.13.1
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -66,8 +66,8 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// <return>The visitor result.</return>
 	public virtual Result VisitTwoDAAssignCell([NotNull] KotorPatchingLanguageParser.TwoDAAssignCellContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by the <c>TwoDAOverrideRow</c>
-	/// labeled alternative in <see cref="KotorPatchingLanguageParser.twoda_override_row"/>.
+	/// Visit a parse tree produced by the <c>TwoDATargetRow</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.twoda_target_row"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -75,7 +75,7 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitTwoDAOverrideRow([NotNull] KotorPatchingLanguageParser.TwoDAOverrideRowContext context) { return VisitChildren(context); }
+	public virtual Result VisitTwoDATargetRow([NotNull] KotorPatchingLanguageParser.TwoDATargetRowContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by the <c>TwoDACopyRow</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.twoda_copy_row"/>.

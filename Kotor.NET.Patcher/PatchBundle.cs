@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kotor.NET.Patcher;
 
-public class Patch
+public class PatchBundle
 {
-    public ICollection<Patch> Patches { get; set; } = [];
+    public ICollection<IPatch> Patches { get; set; } = [];
 }
