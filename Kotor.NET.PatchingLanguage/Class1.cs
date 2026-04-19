@@ -64,14 +64,24 @@ public class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVisitor<obj
 
         return new EditAppearance
         {
-            TakeFrom = new HardcodedFile(),
-            SaveTo = new HardcodedFile(),
+            TakeFrom = new HardcodedLocateResource(),
+            SaveTo = new HardcodedLocateResource(),
             Modifiers = [new RowModifier
             {
                 TargetRow = targetRow,
                 Assignments = assignments,
             }]
         };
+    }
+    #endregion
+
+    #region Creature
+    public override object VisitEditCreature([NotNull] KotorPatchingLanguageParser.EditCreatureContext context)
+    {
+        return new EditCreature
+        {
+
+        }
     }
     #endregion
 

@@ -3,34 +3,10 @@ using Kotor.NET.Resources.Kotor2DA;
 
 namespace Kotor.NET.Patcher.For2DA;
 
-public interface ILocateFile
-{
-    public string Locate();
-    public byte[] Load();
-    public void Save(byte[] data);
-}
-public class HardcodedFile : ILocateFile
-{
-    public string FilePath = @"C:\Program Files (x86)\Steam\steamapps\common\Knights of the Old Republic II\override\appearance.2da";
-
-    public string Locate()
-    {
-        return FilePath;
-    }
-    public byte[] Load()
-    {
-        return File.ReadAllBytes(FilePath);
-    }
-    public void Save(byte[] data)
-    {
-        File.WriteAllBytes(FilePath, data);
-    }
-}
-
 public class Patch2DA : IPatch
 {
-    public required ILocateFile TakeFrom { get; set; }
-    public required ILocateFile SaveTo { get; set; }
+    public required ILocateResource TakeFrom { get; set; }
+    public required ILocateResource SaveTo { get; set; }
     public ICollection<IModifier> Modifiers { get; set; } = [];
 
     public void Apply(PatcherMemory memory)
@@ -74,7 +50,7 @@ public interface IValue
 }
 public class ConstantValue : IValue
 {
-    public string Text { get; set; }
+    public required string Text { get; set; }
 
     public string Get(TwoDA twoda, PatcherMemory memory)
     {
@@ -145,7 +121,7 @@ public class EditAppearance : Patch2DA
 {
     public EditAppearance()
     {
-        TakeFrom = new HardcodedFile();
-        SaveTo = new HardcodedFile();
+        TakeFrom = new HardcodedLocateResource();
+        SaveTo = new HardcodedLocateResource();
     }
 }

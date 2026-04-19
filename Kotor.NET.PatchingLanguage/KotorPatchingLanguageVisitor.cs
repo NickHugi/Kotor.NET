@@ -71,6 +71,118 @@ public interface IKotorPatchingLanguageVisitor<Result> : IParseTreeVisitor<Resul
 	/// <return>The visitor result.</return>
 	Result VisitGff_copy_template([NotNull] KotorPatchingLanguageParser.Gff_copy_templateContext context);
 	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFAssignUInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_uint8"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitGFFAssignUInt8([NotNull] KotorPatchingLanguageParser.GFFAssignUInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFAssignUInt16</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_uint16"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitGFFAssignUInt16([NotNull] KotorPatchingLanguageParser.GFFAssignUInt16Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFAssignUInt32</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_uint32"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitGFFAssignUInt32([NotNull] KotorPatchingLanguageParser.GFFAssignUInt32Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFAssignUInt64</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_uint64"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitGFFAssignUInt64([NotNull] KotorPatchingLanguageParser.GFFAssignUInt64Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFAssignInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_int8"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitGFFAssignInt8([NotNull] KotorPatchingLanguageParser.GFFAssignInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFAssignInt16</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_int16"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitGFFAssignInt16([NotNull] KotorPatchingLanguageParser.GFFAssignInt16Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFAssignInt32</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_int32"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitGFFAssignInt32([NotNull] KotorPatchingLanguageParser.GFFAssignInt32Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFAssignInt64</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_int64"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitGFFAssignInt64([NotNull] KotorPatchingLanguageParser.GFFAssignInt64Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFAssignFloat</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_float"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitGFFAssignFloat([NotNull] KotorPatchingLanguageParser.GFFAssignFloatContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFAssignDouble</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_double"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitGFFAssignDouble([NotNull] KotorPatchingLanguageParser.GFFAssignDoubleContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFAssignResRef</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_resref"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitGFFAssignResRef([NotNull] KotorPatchingLanguageParser.GFFAssignResRefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFAssignString</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_string"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitGFFAssignString([NotNull] KotorPatchingLanguageParser.GFFAssignStringContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFAssignBinary</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_binary"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitGFFAssignBinary([NotNull] KotorPatchingLanguageParser.GFFAssignBinaryContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFAssignLocalizedString</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_locstring"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitGFFAssignLocalizedString([NotNull] KotorPatchingLanguageParser.GFFAssignLocalizedStringContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFAssignVector3</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_vector3"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitGFFAssignVector3([NotNull] KotorPatchingLanguageParser.GFFAssignVector3Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFAssignVector4</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_vector4"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitGFFAssignVector4([NotNull] KotorPatchingLanguageParser.GFFAssignVector4Context context);
+	/// <summary>
 	/// Visit a parse tree produced by the <c>EditAppearance</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_appearance"/>.
 	/// </summary>
@@ -84,11 +196,12 @@ public interface IKotorPatchingLanguageVisitor<Result> : IParseTreeVisitor<Resul
 	/// <return>The visitor result.</return>
 	Result VisitEdit_appearance_mod([NotNull] KotorPatchingLanguageParser.Edit_appearance_modContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.edit_creature"/>.
+	/// Visit a parse tree produced by the <c>EditCreature</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_creature"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitEdit_creature([NotNull] KotorPatchingLanguageParser.Edit_creatureContext context);
+	Result VisitEditCreature([NotNull] KotorPatchingLanguageParser.EditCreatureContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.edit_creature_mod"/>.
 	/// </summary>

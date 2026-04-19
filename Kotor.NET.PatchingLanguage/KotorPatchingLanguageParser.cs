@@ -37,28 +37,44 @@ public partial class KotorPatchingLanguageParser : Parser {
 	protected static PredictionContextCache sharedContextCache = new PredictionContextCache();
 	public const int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
-		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, STRING_LITERAL=16, 
-		INT_LITERAL=17, FLOAT_LITERAL=18, BOOL_LITERAL=19, IDENTIFIER=20, WHITESPACE=21;
+		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
+		T__17=18, T__18=19, T__19=20, T__20=21, T__21=22, T__22=23, T__23=24, 
+		T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, T__29=30, T__30=31, 
+		VECTOR3_LITERAL=32, VECTOR4_LITERAL=33, STRING_LITERAL=34, INT_LITERAL=35, 
+		FLOAT_LITERAL=36, BOOL_LITERAL=37, IDENTIFIER=38, WHITESPACE=39;
 	public const int
 		RULE_script = 0, RULE_instruction = 1, RULE_twoda_assign_cell = 2, RULE_twoda_target_row = 3, 
-		RULE_twoda_copy_row = 4, RULE_gff_copy_template = 5, RULE_edit_appearance = 6, 
-		RULE_edit_appearance_mod = 7, RULE_edit_creature = 8, RULE_edit_creature_mod = 9, 
-		RULE_edit_creature_field_appearance = 10;
+		RULE_twoda_copy_row = 4, RULE_gff_copy_template = 5, RULE_gff_assign_uint8 = 6, 
+		RULE_gff_assign_uint16 = 7, RULE_gff_assign_uint32 = 8, RULE_gff_assign_uint64 = 9, 
+		RULE_gff_assign_int8 = 10, RULE_gff_assign_int16 = 11, RULE_gff_assign_int32 = 12, 
+		RULE_gff_assign_int64 = 13, RULE_gff_assign_float = 14, RULE_gff_assign_double = 15, 
+		RULE_gff_assign_resref = 16, RULE_gff_assign_string = 17, RULE_gff_assign_binary = 18, 
+		RULE_gff_assign_locstring = 19, RULE_gff_assign_vector3 = 20, RULE_gff_assign_vector4 = 21, 
+		RULE_edit_appearance = 22, RULE_edit_appearance_mod = 23, RULE_edit_creature = 24, 
+		RULE_edit_creature_mod = 25, RULE_edit_creature_field_appearance = 26;
 	public static readonly string[] ruleNames = {
 		"script", "instruction", "twoda_assign_cell", "twoda_target_row", "twoda_copy_row", 
-		"gff_copy_template", "edit_appearance", "edit_appearance_mod", "edit_creature", 
+		"gff_copy_template", "gff_assign_uint8", "gff_assign_uint16", "gff_assign_uint32", 
+		"gff_assign_uint64", "gff_assign_int8", "gff_assign_int16", "gff_assign_int32", 
+		"gff_assign_int64", "gff_assign_float", "gff_assign_double", "gff_assign_resref", 
+		"gff_assign_string", "gff_assign_binary", "gff_assign_locstring", "gff_assign_vector3", 
+		"gff_assign_vector4", "edit_appearance", "edit_appearance_mod", "edit_creature", 
 		"edit_creature_mod", "edit_creature_field_appearance"
 	};
 
 	private static readonly string[] _LiteralNames = {
 		null, "'assign'", "'cell'", "'set'", "'to'", "'target'", "'row'", "'where'", 
-		"'is'", "'copy'", "'from'", "'template'", "'edit'", "'appearance'", "'end'", 
-		"'creature'"
+		"'is'", "'copy'", "'from'", "'template'", "'uint8'", "'uint16'", "'uint32'", 
+		"'uint64'", "'int8'", "'int16'", "'int32'", "'int64'", "'float'", "'double'", 
+		"'resref'", "'string'", "'binary'", "'locstring'", "'vector3'", "'vector4'", 
+		"'edit'", "'appearance'", "'end'", "'creature'"
 	};
 	private static readonly string[] _SymbolicNames = {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
-		null, null, null, null, "STRING_LITERAL", "INT_LITERAL", "FLOAT_LITERAL", 
-		"BOOL_LITERAL", "IDENTIFIER", "WHITESPACE"
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, null, null, null, null, null, null, null, "VECTOR3_LITERAL", "VECTOR4_LITERAL", 
+		"STRING_LITERAL", "INT_LITERAL", "FLOAT_LITERAL", "BOOL_LITERAL", "IDENTIFIER", 
+		"WHITESPACE"
 	};
 	public static readonly IVocabulary DefaultVocabulary = new Vocabulary(_LiteralNames, _SymbolicNames);
 
@@ -121,21 +137,21 @@ public partial class KotorPatchingLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 25;
+			State = 57;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while (_la==T__11) {
+			while (_la==T__27) {
 				{
 				{
-				State = 22;
+				State = 54;
 				instruction();
 				}
 				}
-				State = 27;
+				State = 59;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 28;
+			State = 60;
 			Match(Eof);
 			}
 		}
@@ -175,20 +191,20 @@ public partial class KotorPatchingLanguageParser : Parser {
 		InstructionContext _localctx = new InstructionContext(Context, State);
 		EnterRule(_localctx, 2, RULE_instruction);
 		try {
-			State = 32;
+			State = 64;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,1,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 30;
+				State = 62;
 				edit_appearance();
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 31;
+				State = 63;
 				edit_creature();
 				}
 				break;
@@ -239,17 +255,17 @@ public partial class KotorPatchingLanguageParser : Parser {
 			_localctx = new TwoDAAssignCellContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 34;
+			State = 66;
 			Match(T__0);
-			State = 35;
+			State = 67;
 			Match(T__1);
-			State = 36;
+			State = 68;
 			Match(T__2);
-			State = 37;
+			State = 69;
 			Match(STRING_LITERAL);
-			State = 38;
+			State = 70;
 			Match(T__3);
-			State = 39;
+			State = 71;
 			Match(STRING_LITERAL);
 			}
 		}
@@ -298,17 +314,17 @@ public partial class KotorPatchingLanguageParser : Parser {
 			_localctx = new TwoDATargetRowContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 41;
+			State = 73;
 			Match(T__4);
-			State = 42;
+			State = 74;
 			Match(T__5);
-			State = 43;
+			State = 75;
 			Match(T__6);
-			State = 44;
+			State = 76;
 			Match(STRING_LITERAL);
-			State = 45;
+			State = 77;
 			Match(T__7);
-			State = 46;
+			State = 78;
 			Match(STRING_LITERAL);
 			}
 		}
@@ -357,17 +373,17 @@ public partial class KotorPatchingLanguageParser : Parser {
 			_localctx = new TwoDACopyRowContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 48;
+			State = 80;
 			Match(T__8);
-			State = 49;
+			State = 81;
 			Match(T__5);
-			State = 50;
+			State = 82;
 			Match(T__6);
-			State = 51;
+			State = 83;
 			Match(STRING_LITERAL);
-			State = 52;
+			State = 84;
 			Match(T__7);
-			State = 53;
+			State = 85;
 			Match(STRING_LITERAL);
 			}
 		}
@@ -404,14 +420,932 @@ public partial class KotorPatchingLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 55;
+			State = 87;
 			Match(T__8);
-			State = 56;
+			State = 88;
 			Match(T__9);
-			State = 57;
+			State = 89;
 			Match(T__10);
-			State = 58;
+			State = 90;
 			Match(STRING_LITERAL);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Gff_assign_uint8Context : ParserRuleContext {
+		public Gff_assign_uint8Context(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_gff_assign_uint8; } }
+	 
+		public Gff_assign_uint8Context() { }
+		public virtual void CopyFrom(Gff_assign_uint8Context context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class GFFAssignUInt8Context : Gff_assign_uint8Context {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL() { return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode INT_LITERAL() { return GetToken(KotorPatchingLanguageParser.INT_LITERAL, 0); }
+		public GFFAssignUInt8Context(Gff_assign_uint8Context context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitGFFAssignUInt8(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Gff_assign_uint8Context gff_assign_uint8() {
+		Gff_assign_uint8Context _localctx = new Gff_assign_uint8Context(Context, State);
+		EnterRule(_localctx, 12, RULE_gff_assign_uint8);
+		try {
+			_localctx = new GFFAssignUInt8Context(_localctx);
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 92;
+			Match(T__0);
+			State = 93;
+			Match(T__11);
+			State = 94;
+			Match(T__2);
+			State = 95;
+			Match(STRING_LITERAL);
+			State = 96;
+			Match(T__3);
+			State = 97;
+			Match(INT_LITERAL);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Gff_assign_uint16Context : ParserRuleContext {
+		public Gff_assign_uint16Context(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_gff_assign_uint16; } }
+	 
+		public Gff_assign_uint16Context() { }
+		public virtual void CopyFrom(Gff_assign_uint16Context context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class GFFAssignUInt16Context : Gff_assign_uint16Context {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL() { return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode INT_LITERAL() { return GetToken(KotorPatchingLanguageParser.INT_LITERAL, 0); }
+		public GFFAssignUInt16Context(Gff_assign_uint16Context context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitGFFAssignUInt16(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Gff_assign_uint16Context gff_assign_uint16() {
+		Gff_assign_uint16Context _localctx = new Gff_assign_uint16Context(Context, State);
+		EnterRule(_localctx, 14, RULE_gff_assign_uint16);
+		try {
+			_localctx = new GFFAssignUInt16Context(_localctx);
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 99;
+			Match(T__0);
+			State = 100;
+			Match(T__12);
+			State = 101;
+			Match(T__2);
+			State = 102;
+			Match(STRING_LITERAL);
+			State = 103;
+			Match(T__3);
+			State = 104;
+			Match(INT_LITERAL);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Gff_assign_uint32Context : ParserRuleContext {
+		public Gff_assign_uint32Context(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_gff_assign_uint32; } }
+	 
+		public Gff_assign_uint32Context() { }
+		public virtual void CopyFrom(Gff_assign_uint32Context context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class GFFAssignUInt32Context : Gff_assign_uint32Context {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL() { return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode INT_LITERAL() { return GetToken(KotorPatchingLanguageParser.INT_LITERAL, 0); }
+		public GFFAssignUInt32Context(Gff_assign_uint32Context context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitGFFAssignUInt32(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Gff_assign_uint32Context gff_assign_uint32() {
+		Gff_assign_uint32Context _localctx = new Gff_assign_uint32Context(Context, State);
+		EnterRule(_localctx, 16, RULE_gff_assign_uint32);
+		try {
+			_localctx = new GFFAssignUInt32Context(_localctx);
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 106;
+			Match(T__0);
+			State = 107;
+			Match(T__13);
+			State = 108;
+			Match(T__2);
+			State = 109;
+			Match(STRING_LITERAL);
+			State = 110;
+			Match(T__3);
+			State = 111;
+			Match(INT_LITERAL);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Gff_assign_uint64Context : ParserRuleContext {
+		public Gff_assign_uint64Context(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_gff_assign_uint64; } }
+	 
+		public Gff_assign_uint64Context() { }
+		public virtual void CopyFrom(Gff_assign_uint64Context context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class GFFAssignUInt64Context : Gff_assign_uint64Context {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL() { return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode INT_LITERAL() { return GetToken(KotorPatchingLanguageParser.INT_LITERAL, 0); }
+		public GFFAssignUInt64Context(Gff_assign_uint64Context context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitGFFAssignUInt64(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Gff_assign_uint64Context gff_assign_uint64() {
+		Gff_assign_uint64Context _localctx = new Gff_assign_uint64Context(Context, State);
+		EnterRule(_localctx, 18, RULE_gff_assign_uint64);
+		try {
+			_localctx = new GFFAssignUInt64Context(_localctx);
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 113;
+			Match(T__0);
+			State = 114;
+			Match(T__14);
+			State = 115;
+			Match(T__2);
+			State = 116;
+			Match(STRING_LITERAL);
+			State = 117;
+			Match(T__3);
+			State = 118;
+			Match(INT_LITERAL);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Gff_assign_int8Context : ParserRuleContext {
+		public Gff_assign_int8Context(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_gff_assign_int8; } }
+	 
+		public Gff_assign_int8Context() { }
+		public virtual void CopyFrom(Gff_assign_int8Context context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class GFFAssignInt8Context : Gff_assign_int8Context {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL() { return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode INT_LITERAL() { return GetToken(KotorPatchingLanguageParser.INT_LITERAL, 0); }
+		public GFFAssignInt8Context(Gff_assign_int8Context context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitGFFAssignInt8(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Gff_assign_int8Context gff_assign_int8() {
+		Gff_assign_int8Context _localctx = new Gff_assign_int8Context(Context, State);
+		EnterRule(_localctx, 20, RULE_gff_assign_int8);
+		try {
+			_localctx = new GFFAssignInt8Context(_localctx);
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 120;
+			Match(T__0);
+			State = 121;
+			Match(T__15);
+			State = 122;
+			Match(T__2);
+			State = 123;
+			Match(STRING_LITERAL);
+			State = 124;
+			Match(T__3);
+			State = 125;
+			Match(INT_LITERAL);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Gff_assign_int16Context : ParserRuleContext {
+		public Gff_assign_int16Context(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_gff_assign_int16; } }
+	 
+		public Gff_assign_int16Context() { }
+		public virtual void CopyFrom(Gff_assign_int16Context context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class GFFAssignInt16Context : Gff_assign_int16Context {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL() { return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode INT_LITERAL() { return GetToken(KotorPatchingLanguageParser.INT_LITERAL, 0); }
+		public GFFAssignInt16Context(Gff_assign_int16Context context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitGFFAssignInt16(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Gff_assign_int16Context gff_assign_int16() {
+		Gff_assign_int16Context _localctx = new Gff_assign_int16Context(Context, State);
+		EnterRule(_localctx, 22, RULE_gff_assign_int16);
+		try {
+			_localctx = new GFFAssignInt16Context(_localctx);
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 127;
+			Match(T__0);
+			State = 128;
+			Match(T__16);
+			State = 129;
+			Match(T__2);
+			State = 130;
+			Match(STRING_LITERAL);
+			State = 131;
+			Match(T__3);
+			State = 132;
+			Match(INT_LITERAL);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Gff_assign_int32Context : ParserRuleContext {
+		public Gff_assign_int32Context(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_gff_assign_int32; } }
+	 
+		public Gff_assign_int32Context() { }
+		public virtual void CopyFrom(Gff_assign_int32Context context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class GFFAssignInt32Context : Gff_assign_int32Context {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL() { return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode INT_LITERAL() { return GetToken(KotorPatchingLanguageParser.INT_LITERAL, 0); }
+		public GFFAssignInt32Context(Gff_assign_int32Context context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitGFFAssignInt32(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Gff_assign_int32Context gff_assign_int32() {
+		Gff_assign_int32Context _localctx = new Gff_assign_int32Context(Context, State);
+		EnterRule(_localctx, 24, RULE_gff_assign_int32);
+		try {
+			_localctx = new GFFAssignInt32Context(_localctx);
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 134;
+			Match(T__0);
+			State = 135;
+			Match(T__17);
+			State = 136;
+			Match(T__2);
+			State = 137;
+			Match(STRING_LITERAL);
+			State = 138;
+			Match(T__3);
+			State = 139;
+			Match(INT_LITERAL);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Gff_assign_int64Context : ParserRuleContext {
+		public Gff_assign_int64Context(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_gff_assign_int64; } }
+	 
+		public Gff_assign_int64Context() { }
+		public virtual void CopyFrom(Gff_assign_int64Context context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class GFFAssignInt64Context : Gff_assign_int64Context {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL() { return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode INT_LITERAL() { return GetToken(KotorPatchingLanguageParser.INT_LITERAL, 0); }
+		public GFFAssignInt64Context(Gff_assign_int64Context context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitGFFAssignInt64(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Gff_assign_int64Context gff_assign_int64() {
+		Gff_assign_int64Context _localctx = new Gff_assign_int64Context(Context, State);
+		EnterRule(_localctx, 26, RULE_gff_assign_int64);
+		try {
+			_localctx = new GFFAssignInt64Context(_localctx);
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 141;
+			Match(T__0);
+			State = 142;
+			Match(T__18);
+			State = 143;
+			Match(T__2);
+			State = 144;
+			Match(STRING_LITERAL);
+			State = 145;
+			Match(T__3);
+			State = 146;
+			Match(INT_LITERAL);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Gff_assign_floatContext : ParserRuleContext {
+		public Gff_assign_floatContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_gff_assign_float; } }
+	 
+		public Gff_assign_floatContext() { }
+		public virtual void CopyFrom(Gff_assign_floatContext context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class GFFAssignFloatContext : Gff_assign_floatContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL() { return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode FLOAT_LITERAL() { return GetToken(KotorPatchingLanguageParser.FLOAT_LITERAL, 0); }
+		public GFFAssignFloatContext(Gff_assign_floatContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitGFFAssignFloat(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Gff_assign_floatContext gff_assign_float() {
+		Gff_assign_floatContext _localctx = new Gff_assign_floatContext(Context, State);
+		EnterRule(_localctx, 28, RULE_gff_assign_float);
+		try {
+			_localctx = new GFFAssignFloatContext(_localctx);
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 148;
+			Match(T__0);
+			State = 149;
+			Match(T__19);
+			State = 150;
+			Match(T__2);
+			State = 151;
+			Match(STRING_LITERAL);
+			State = 152;
+			Match(T__3);
+			State = 153;
+			Match(FLOAT_LITERAL);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Gff_assign_doubleContext : ParserRuleContext {
+		public Gff_assign_doubleContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_gff_assign_double; } }
+	 
+		public Gff_assign_doubleContext() { }
+		public virtual void CopyFrom(Gff_assign_doubleContext context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class GFFAssignDoubleContext : Gff_assign_doubleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL() { return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode FLOAT_LITERAL() { return GetToken(KotorPatchingLanguageParser.FLOAT_LITERAL, 0); }
+		public GFFAssignDoubleContext(Gff_assign_doubleContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitGFFAssignDouble(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Gff_assign_doubleContext gff_assign_double() {
+		Gff_assign_doubleContext _localctx = new Gff_assign_doubleContext(Context, State);
+		EnterRule(_localctx, 30, RULE_gff_assign_double);
+		try {
+			_localctx = new GFFAssignDoubleContext(_localctx);
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 155;
+			Match(T__0);
+			State = 156;
+			Match(T__20);
+			State = 157;
+			Match(T__2);
+			State = 158;
+			Match(STRING_LITERAL);
+			State = 159;
+			Match(T__3);
+			State = 160;
+			Match(FLOAT_LITERAL);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Gff_assign_resrefContext : ParserRuleContext {
+		public Gff_assign_resrefContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_gff_assign_resref; } }
+	 
+		public Gff_assign_resrefContext() { }
+		public virtual void CopyFrom(Gff_assign_resrefContext context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class GFFAssignResRefContext : Gff_assign_resrefContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] STRING_LITERAL() { return GetTokens(KotorPatchingLanguageParser.STRING_LITERAL); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL(int i) {
+			return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, i);
+		}
+		public GFFAssignResRefContext(Gff_assign_resrefContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitGFFAssignResRef(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Gff_assign_resrefContext gff_assign_resref() {
+		Gff_assign_resrefContext _localctx = new Gff_assign_resrefContext(Context, State);
+		EnterRule(_localctx, 32, RULE_gff_assign_resref);
+		try {
+			_localctx = new GFFAssignResRefContext(_localctx);
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 162;
+			Match(T__0);
+			State = 163;
+			Match(T__21);
+			State = 164;
+			Match(T__2);
+			State = 165;
+			Match(STRING_LITERAL);
+			State = 166;
+			Match(T__3);
+			State = 167;
+			Match(STRING_LITERAL);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Gff_assign_stringContext : ParserRuleContext {
+		public Gff_assign_stringContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_gff_assign_string; } }
+	 
+		public Gff_assign_stringContext() { }
+		public virtual void CopyFrom(Gff_assign_stringContext context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class GFFAssignStringContext : Gff_assign_stringContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] STRING_LITERAL() { return GetTokens(KotorPatchingLanguageParser.STRING_LITERAL); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL(int i) {
+			return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, i);
+		}
+		public GFFAssignStringContext(Gff_assign_stringContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitGFFAssignString(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Gff_assign_stringContext gff_assign_string() {
+		Gff_assign_stringContext _localctx = new Gff_assign_stringContext(Context, State);
+		EnterRule(_localctx, 34, RULE_gff_assign_string);
+		try {
+			_localctx = new GFFAssignStringContext(_localctx);
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 169;
+			Match(T__0);
+			State = 170;
+			Match(T__22);
+			State = 171;
+			Match(T__2);
+			State = 172;
+			Match(STRING_LITERAL);
+			State = 173;
+			Match(T__3);
+			State = 174;
+			Match(STRING_LITERAL);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Gff_assign_binaryContext : ParserRuleContext {
+		public Gff_assign_binaryContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_gff_assign_binary; } }
+	 
+		public Gff_assign_binaryContext() { }
+		public virtual void CopyFrom(Gff_assign_binaryContext context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class GFFAssignBinaryContext : Gff_assign_binaryContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] STRING_LITERAL() { return GetTokens(KotorPatchingLanguageParser.STRING_LITERAL); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL(int i) {
+			return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, i);
+		}
+		public GFFAssignBinaryContext(Gff_assign_binaryContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitGFFAssignBinary(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Gff_assign_binaryContext gff_assign_binary() {
+		Gff_assign_binaryContext _localctx = new Gff_assign_binaryContext(Context, State);
+		EnterRule(_localctx, 36, RULE_gff_assign_binary);
+		try {
+			_localctx = new GFFAssignBinaryContext(_localctx);
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 176;
+			Match(T__0);
+			State = 177;
+			Match(T__23);
+			State = 178;
+			Match(T__2);
+			State = 179;
+			Match(STRING_LITERAL);
+			State = 180;
+			Match(T__3);
+			State = 181;
+			Match(STRING_LITERAL);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Gff_assign_locstringContext : ParserRuleContext {
+		public Gff_assign_locstringContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_gff_assign_locstring; } }
+	 
+		public Gff_assign_locstringContext() { }
+		public virtual void CopyFrom(Gff_assign_locstringContext context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class GFFAssignLocalizedStringContext : Gff_assign_locstringContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL() { return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode INT_LITERAL() { return GetToken(KotorPatchingLanguageParser.INT_LITERAL, 0); }
+		public GFFAssignLocalizedStringContext(Gff_assign_locstringContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitGFFAssignLocalizedString(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Gff_assign_locstringContext gff_assign_locstring() {
+		Gff_assign_locstringContext _localctx = new Gff_assign_locstringContext(Context, State);
+		EnterRule(_localctx, 38, RULE_gff_assign_locstring);
+		try {
+			_localctx = new GFFAssignLocalizedStringContext(_localctx);
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 183;
+			Match(T__0);
+			State = 184;
+			Match(T__24);
+			State = 185;
+			Match(T__2);
+			State = 186;
+			Match(STRING_LITERAL);
+			State = 187;
+			Match(T__3);
+			State = 188;
+			Match(INT_LITERAL);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Gff_assign_vector3Context : ParserRuleContext {
+		public Gff_assign_vector3Context(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_gff_assign_vector3; } }
+	 
+		public Gff_assign_vector3Context() { }
+		public virtual void CopyFrom(Gff_assign_vector3Context context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class GFFAssignVector3Context : Gff_assign_vector3Context {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL() { return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode VECTOR3_LITERAL() { return GetToken(KotorPatchingLanguageParser.VECTOR3_LITERAL, 0); }
+		public GFFAssignVector3Context(Gff_assign_vector3Context context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitGFFAssignVector3(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Gff_assign_vector3Context gff_assign_vector3() {
+		Gff_assign_vector3Context _localctx = new Gff_assign_vector3Context(Context, State);
+		EnterRule(_localctx, 40, RULE_gff_assign_vector3);
+		try {
+			_localctx = new GFFAssignVector3Context(_localctx);
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 190;
+			Match(T__0);
+			State = 191;
+			Match(T__25);
+			State = 192;
+			Match(T__2);
+			State = 193;
+			Match(STRING_LITERAL);
+			State = 194;
+			Match(T__3);
+			State = 195;
+			Match(VECTOR3_LITERAL);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Gff_assign_vector4Context : ParserRuleContext {
+		public Gff_assign_vector4Context(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_gff_assign_vector4; } }
+	 
+		public Gff_assign_vector4Context() { }
+		public virtual void CopyFrom(Gff_assign_vector4Context context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class GFFAssignVector4Context : Gff_assign_vector4Context {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL() { return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode VECTOR4_LITERAL() { return GetToken(KotorPatchingLanguageParser.VECTOR4_LITERAL, 0); }
+		public GFFAssignVector4Context(Gff_assign_vector4Context context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitGFFAssignVector4(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Gff_assign_vector4Context gff_assign_vector4() {
+		Gff_assign_vector4Context _localctx = new Gff_assign_vector4Context(Context, State);
+		EnterRule(_localctx, 42, RULE_gff_assign_vector4);
+		try {
+			_localctx = new GFFAssignVector4Context(_localctx);
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 197;
+			Match(T__0);
+			State = 198;
+			Match(T__26);
+			State = 199;
+			Match(T__2);
+			State = 200;
+			Match(STRING_LITERAL);
+			State = 201;
+			Match(T__3);
+			State = 202;
+			Match(VECTOR4_LITERAL);
 			}
 		}
 		catch (RecognitionException re) {
@@ -456,34 +1390,34 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Edit_appearanceContext edit_appearance() {
 		Edit_appearanceContext _localctx = new Edit_appearanceContext(Context, State);
-		EnterRule(_localctx, 12, RULE_edit_appearance);
+		EnterRule(_localctx, 44, RULE_edit_appearance);
 		int _la;
 		try {
 			_localctx = new EditAppearanceContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 60;
-			Match(T__11);
-			State = 61;
-			Match(T__12);
-			State = 65;
+			State = 204;
+			Match(T__27);
+			State = 205;
+			Match(T__28);
+			State = 209;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 546L) != 0)) {
 				{
 				{
-				State = 62;
+				State = 206;
 				edit_appearance_mod();
 				}
 				}
-				State = 67;
+				State = 211;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 68;
-			Match(T__13);
-			State = 69;
-			Match(T__11);
+			State = 212;
+			Match(T__29);
+			State = 213;
+			Match(T__27);
 			}
 		}
 		catch (RecognitionException re) {
@@ -523,29 +1457,29 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Edit_appearance_modContext edit_appearance_mod() {
 		Edit_appearance_modContext _localctx = new Edit_appearance_modContext(Context, State);
-		EnterRule(_localctx, 14, RULE_edit_appearance_mod);
+		EnterRule(_localctx, 46, RULE_edit_appearance_mod);
 		try {
-			State = 74;
+			State = 218;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case T__4:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 71;
+				State = 215;
 				twoda_target_row();
 				}
 				break;
 			case T__8:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 72;
+				State = 216;
 				twoda_copy_row();
 				}
 				break;
 			case T__0:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 73;
+				State = 217;
 				twoda_assign_cell();
 				}
 				break;
@@ -565,6 +1499,18 @@ public partial class KotorPatchingLanguageParser : Parser {
 	}
 
 	public partial class Edit_creatureContext : ParserRuleContext {
+		public Edit_creatureContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_edit_creature; } }
+	 
+		public Edit_creatureContext() { }
+		public virtual void CopyFrom(Edit_creatureContext context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class EditCreatureContext : Edit_creatureContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL() { return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public Edit_creature_modContext[] edit_creature_mod() {
 			return GetRuleContexts<Edit_creature_modContext>();
@@ -572,15 +1518,11 @@ public partial class KotorPatchingLanguageParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public Edit_creature_modContext edit_creature_mod(int i) {
 			return GetRuleContext<Edit_creature_modContext>(i);
 		}
-		public Edit_creatureContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_edit_creature; } }
+		public EditCreatureContext(Edit_creatureContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitEdit_creature(this);
+			if (typedVisitor != null) return typedVisitor.VisitEditCreature(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
@@ -588,35 +1530,36 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Edit_creatureContext edit_creature() {
 		Edit_creatureContext _localctx = new Edit_creatureContext(Context, State);
-		EnterRule(_localctx, 16, RULE_edit_creature);
+		EnterRule(_localctx, 48, RULE_edit_creature);
 		int _la;
 		try {
+			_localctx = new EditCreatureContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 76;
-			Match(T__11);
-			State = 77;
-			Match(T__14);
-			State = 78;
+			State = 220;
+			Match(T__27);
+			State = 221;
+			Match(T__30);
+			State = 222;
 			Match(STRING_LITERAL);
-			State = 82;
+			State = 226;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==T__2 || _la==T__8) {
 				{
 				{
-				State = 79;
+				State = 223;
 				edit_creature_mod();
 				}
 				}
-				State = 84;
+				State = 228;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 85;
-			Match(T__13);
-			State = 86;
-			Match(T__11);
+			State = 229;
+			Match(T__29);
+			State = 230;
+			Match(T__27);
 			}
 		}
 		catch (RecognitionException re) {
@@ -653,22 +1596,22 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Edit_creature_modContext edit_creature_mod() {
 		Edit_creature_modContext _localctx = new Edit_creature_modContext(Context, State);
-		EnterRule(_localctx, 18, RULE_edit_creature_mod);
+		EnterRule(_localctx, 50, RULE_edit_creature_mod);
 		try {
-			State = 90;
+			State = 234;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case T__8:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 88;
+				State = 232;
 				gff_copy_template();
 				}
 				break;
 			case T__2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 89;
+				State = 233;
 				edit_creature_field_appearance();
 				}
 				break;
@@ -705,15 +1648,15 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Edit_creature_field_appearanceContext edit_creature_field_appearance() {
 		Edit_creature_field_appearanceContext _localctx = new Edit_creature_field_appearanceContext(Context, State);
-		EnterRule(_localctx, 20, RULE_edit_creature_field_appearance);
+		EnterRule(_localctx, 52, RULE_edit_creature_field_appearance);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 92;
+			State = 236;
 			Match(T__2);
-			State = 93;
-			Match(T__12);
-			State = 94;
+			State = 237;
+			Match(T__28);
+			State = 238;
 			Match(INT_LITERAL);
 			}
 		}
@@ -729,32 +1672,73 @@ public partial class KotorPatchingLanguageParser : Parser {
 	}
 
 	private static int[] _serializedATN = {
-		4,1,21,97,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
-		7,7,2,8,7,8,2,9,7,9,2,10,7,10,1,0,5,0,24,8,0,10,0,12,0,27,9,0,1,0,1,0,
-		1,1,1,1,3,1,33,8,1,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,3,1,3,1,3,1,3,1,3,1,3,
-		1,3,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,5,1,5,1,5,1,5,1,5,1,6,1,6,1,6,5,6,64,
-		8,6,10,6,12,6,67,9,6,1,6,1,6,1,6,1,7,1,7,1,7,3,7,75,8,7,1,8,1,8,1,8,1,
-		8,5,8,81,8,8,10,8,12,8,84,9,8,1,8,1,8,1,8,1,9,1,9,3,9,91,8,9,1,10,1,10,
-		1,10,1,10,1,10,0,0,11,0,2,4,6,8,10,12,14,16,18,20,0,0,92,0,25,1,0,0,0,
-		2,32,1,0,0,0,4,34,1,0,0,0,6,41,1,0,0,0,8,48,1,0,0,0,10,55,1,0,0,0,12,60,
-		1,0,0,0,14,74,1,0,0,0,16,76,1,0,0,0,18,90,1,0,0,0,20,92,1,0,0,0,22,24,
-		3,2,1,0,23,22,1,0,0,0,24,27,1,0,0,0,25,23,1,0,0,0,25,26,1,0,0,0,26,28,
-		1,0,0,0,27,25,1,0,0,0,28,29,5,0,0,1,29,1,1,0,0,0,30,33,3,12,6,0,31,33,
-		3,16,8,0,32,30,1,0,0,0,32,31,1,0,0,0,33,3,1,0,0,0,34,35,5,1,0,0,35,36,
-		5,2,0,0,36,37,5,3,0,0,37,38,5,16,0,0,38,39,5,4,0,0,39,40,5,16,0,0,40,5,
-		1,0,0,0,41,42,5,5,0,0,42,43,5,6,0,0,43,44,5,7,0,0,44,45,5,16,0,0,45,46,
-		5,8,0,0,46,47,5,16,0,0,47,7,1,0,0,0,48,49,5,9,0,0,49,50,5,6,0,0,50,51,
-		5,7,0,0,51,52,5,16,0,0,52,53,5,8,0,0,53,54,5,16,0,0,54,9,1,0,0,0,55,56,
-		5,9,0,0,56,57,5,10,0,0,57,58,5,11,0,0,58,59,5,16,0,0,59,11,1,0,0,0,60,
-		61,5,12,0,0,61,65,5,13,0,0,62,64,3,14,7,0,63,62,1,0,0,0,64,67,1,0,0,0,
-		65,63,1,0,0,0,65,66,1,0,0,0,66,68,1,0,0,0,67,65,1,0,0,0,68,69,5,14,0,0,
-		69,70,5,12,0,0,70,13,1,0,0,0,71,75,3,6,3,0,72,75,3,8,4,0,73,75,3,4,2,0,
-		74,71,1,0,0,0,74,72,1,0,0,0,74,73,1,0,0,0,75,15,1,0,0,0,76,77,5,12,0,0,
-		77,78,5,15,0,0,78,82,5,16,0,0,79,81,3,18,9,0,80,79,1,0,0,0,81,84,1,0,0,
-		0,82,80,1,0,0,0,82,83,1,0,0,0,83,85,1,0,0,0,84,82,1,0,0,0,85,86,5,14,0,
-		0,86,87,5,12,0,0,87,17,1,0,0,0,88,91,3,10,5,0,89,91,3,20,10,0,90,88,1,
-		0,0,0,90,89,1,0,0,0,91,19,1,0,0,0,92,93,5,3,0,0,93,94,5,13,0,0,94,95,5,
-		17,0,0,95,21,1,0,0,0,6,25,32,65,74,82,90
+		4,1,39,241,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
+		7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,14,
+		2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,2,19,7,19,2,20,7,20,2,21,7,21,
+		2,22,7,22,2,23,7,23,2,24,7,24,2,25,7,25,2,26,7,26,1,0,5,0,56,8,0,10,0,
+		12,0,59,9,0,1,0,1,0,1,1,1,1,3,1,65,8,1,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,3,
+		1,3,1,3,1,3,1,3,1,3,1,3,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,5,1,5,1,5,1,5,1,
+		5,1,6,1,6,1,6,1,6,1,6,1,6,1,6,1,7,1,7,1,7,1,7,1,7,1,7,1,7,1,8,1,8,1,8,
+		1,8,1,8,1,8,1,8,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,10,1,10,1,10,1,10,1,10,1,
+		10,1,10,1,11,1,11,1,11,1,11,1,11,1,11,1,11,1,12,1,12,1,12,1,12,1,12,1,
+		12,1,12,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,14,1,14,1,14,1,14,1,14,1,
+		14,1,14,1,15,1,15,1,15,1,15,1,15,1,15,1,15,1,16,1,16,1,16,1,16,1,16,1,
+		16,1,16,1,17,1,17,1,17,1,17,1,17,1,17,1,17,1,18,1,18,1,18,1,18,1,18,1,
+		18,1,18,1,19,1,19,1,19,1,19,1,19,1,19,1,19,1,20,1,20,1,20,1,20,1,20,1,
+		20,1,20,1,21,1,21,1,21,1,21,1,21,1,21,1,21,1,22,1,22,1,22,5,22,208,8,22,
+		10,22,12,22,211,9,22,1,22,1,22,1,22,1,23,1,23,1,23,3,23,219,8,23,1,24,
+		1,24,1,24,1,24,5,24,225,8,24,10,24,12,24,228,9,24,1,24,1,24,1,24,1,25,
+		1,25,3,25,235,8,25,1,26,1,26,1,26,1,26,1,26,0,0,27,0,2,4,6,8,10,12,14,
+		16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,0,0,220,0,57,
+		1,0,0,0,2,64,1,0,0,0,4,66,1,0,0,0,6,73,1,0,0,0,8,80,1,0,0,0,10,87,1,0,
+		0,0,12,92,1,0,0,0,14,99,1,0,0,0,16,106,1,0,0,0,18,113,1,0,0,0,20,120,1,
+		0,0,0,22,127,1,0,0,0,24,134,1,0,0,0,26,141,1,0,0,0,28,148,1,0,0,0,30,155,
+		1,0,0,0,32,162,1,0,0,0,34,169,1,0,0,0,36,176,1,0,0,0,38,183,1,0,0,0,40,
+		190,1,0,0,0,42,197,1,0,0,0,44,204,1,0,0,0,46,218,1,0,0,0,48,220,1,0,0,
+		0,50,234,1,0,0,0,52,236,1,0,0,0,54,56,3,2,1,0,55,54,1,0,0,0,56,59,1,0,
+		0,0,57,55,1,0,0,0,57,58,1,0,0,0,58,60,1,0,0,0,59,57,1,0,0,0,60,61,5,0,
+		0,1,61,1,1,0,0,0,62,65,3,44,22,0,63,65,3,48,24,0,64,62,1,0,0,0,64,63,1,
+		0,0,0,65,3,1,0,0,0,66,67,5,1,0,0,67,68,5,2,0,0,68,69,5,3,0,0,69,70,5,34,
+		0,0,70,71,5,4,0,0,71,72,5,34,0,0,72,5,1,0,0,0,73,74,5,5,0,0,74,75,5,6,
+		0,0,75,76,5,7,0,0,76,77,5,34,0,0,77,78,5,8,0,0,78,79,5,34,0,0,79,7,1,0,
+		0,0,80,81,5,9,0,0,81,82,5,6,0,0,82,83,5,7,0,0,83,84,5,34,0,0,84,85,5,8,
+		0,0,85,86,5,34,0,0,86,9,1,0,0,0,87,88,5,9,0,0,88,89,5,10,0,0,89,90,5,11,
+		0,0,90,91,5,34,0,0,91,11,1,0,0,0,92,93,5,1,0,0,93,94,5,12,0,0,94,95,5,
+		3,0,0,95,96,5,34,0,0,96,97,5,4,0,0,97,98,5,35,0,0,98,13,1,0,0,0,99,100,
+		5,1,0,0,100,101,5,13,0,0,101,102,5,3,0,0,102,103,5,34,0,0,103,104,5,4,
+		0,0,104,105,5,35,0,0,105,15,1,0,0,0,106,107,5,1,0,0,107,108,5,14,0,0,108,
+		109,5,3,0,0,109,110,5,34,0,0,110,111,5,4,0,0,111,112,5,35,0,0,112,17,1,
+		0,0,0,113,114,5,1,0,0,114,115,5,15,0,0,115,116,5,3,0,0,116,117,5,34,0,
+		0,117,118,5,4,0,0,118,119,5,35,0,0,119,19,1,0,0,0,120,121,5,1,0,0,121,
+		122,5,16,0,0,122,123,5,3,0,0,123,124,5,34,0,0,124,125,5,4,0,0,125,126,
+		5,35,0,0,126,21,1,0,0,0,127,128,5,1,0,0,128,129,5,17,0,0,129,130,5,3,0,
+		0,130,131,5,34,0,0,131,132,5,4,0,0,132,133,5,35,0,0,133,23,1,0,0,0,134,
+		135,5,1,0,0,135,136,5,18,0,0,136,137,5,3,0,0,137,138,5,34,0,0,138,139,
+		5,4,0,0,139,140,5,35,0,0,140,25,1,0,0,0,141,142,5,1,0,0,142,143,5,19,0,
+		0,143,144,5,3,0,0,144,145,5,34,0,0,145,146,5,4,0,0,146,147,5,35,0,0,147,
+		27,1,0,0,0,148,149,5,1,0,0,149,150,5,20,0,0,150,151,5,3,0,0,151,152,5,
+		34,0,0,152,153,5,4,0,0,153,154,5,36,0,0,154,29,1,0,0,0,155,156,5,1,0,0,
+		156,157,5,21,0,0,157,158,5,3,0,0,158,159,5,34,0,0,159,160,5,4,0,0,160,
+		161,5,36,0,0,161,31,1,0,0,0,162,163,5,1,0,0,163,164,5,22,0,0,164,165,5,
+		3,0,0,165,166,5,34,0,0,166,167,5,4,0,0,167,168,5,34,0,0,168,33,1,0,0,0,
+		169,170,5,1,0,0,170,171,5,23,0,0,171,172,5,3,0,0,172,173,5,34,0,0,173,
+		174,5,4,0,0,174,175,5,34,0,0,175,35,1,0,0,0,176,177,5,1,0,0,177,178,5,
+		24,0,0,178,179,5,3,0,0,179,180,5,34,0,0,180,181,5,4,0,0,181,182,5,34,0,
+		0,182,37,1,0,0,0,183,184,5,1,0,0,184,185,5,25,0,0,185,186,5,3,0,0,186,
+		187,5,34,0,0,187,188,5,4,0,0,188,189,5,35,0,0,189,39,1,0,0,0,190,191,5,
+		1,0,0,191,192,5,26,0,0,192,193,5,3,0,0,193,194,5,34,0,0,194,195,5,4,0,
+		0,195,196,5,32,0,0,196,41,1,0,0,0,197,198,5,1,0,0,198,199,5,27,0,0,199,
+		200,5,3,0,0,200,201,5,34,0,0,201,202,5,4,0,0,202,203,5,33,0,0,203,43,1,
+		0,0,0,204,205,5,28,0,0,205,209,5,29,0,0,206,208,3,46,23,0,207,206,1,0,
+		0,0,208,211,1,0,0,0,209,207,1,0,0,0,209,210,1,0,0,0,210,212,1,0,0,0,211,
+		209,1,0,0,0,212,213,5,30,0,0,213,214,5,28,0,0,214,45,1,0,0,0,215,219,3,
+		6,3,0,216,219,3,8,4,0,217,219,3,4,2,0,218,215,1,0,0,0,218,216,1,0,0,0,
+		218,217,1,0,0,0,219,47,1,0,0,0,220,221,5,28,0,0,221,222,5,31,0,0,222,226,
+		5,34,0,0,223,225,3,50,25,0,224,223,1,0,0,0,225,228,1,0,0,0,226,224,1,0,
+		0,0,226,227,1,0,0,0,227,229,1,0,0,0,228,226,1,0,0,0,229,230,5,30,0,0,230,
+		231,5,28,0,0,231,49,1,0,0,0,232,235,3,10,5,0,233,235,3,52,26,0,234,232,
+		1,0,0,0,234,233,1,0,0,0,235,51,1,0,0,0,236,237,5,3,0,0,237,238,5,29,0,
+		0,238,239,5,35,0,0,239,53,1,0,0,0,6,57,64,209,218,226,234
 	};
 
 	public static readonly ATN _ATN =

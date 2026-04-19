@@ -10,6 +10,12 @@ try
 		copy row where "label" is "Creature_Dewback" 
 		assign cell set "race" to "c_tauntaun"
 	end edit
+
+	edit creature "c_tauntaun"
+		target override 
+		copy from template "c_dewback"
+		set appearance 0
+	end edit
 	""";
 
 

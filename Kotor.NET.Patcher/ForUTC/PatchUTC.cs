@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kotor.NET.Patcher;
+namespace Kotor.NET.Patcher.ForUTC;
 
-public interface IPatch
+public class PatchUTC
 {
-    void Apply(PatcherMemory memory);
 }
