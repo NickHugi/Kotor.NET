@@ -21,6 +21,15 @@ public class Patch2DA : IPatch
         SaveTo.Save(TwoDA.ToBytes(twoda));
     }
 }
+public class EditAppearance : Patch2DA
+{
+    public EditAppearance()
+    {
+        TakeFrom = new HardcodedLocateResource();
+        SaveTo = new HardcodedLocateResource();
+    }
+}
+
 
 public interface IRowLocator
 {
@@ -112,16 +121,5 @@ public class CopyRowAssignment : IAssignment
             var value = source.GetCell(column).AsString();
             target.GetCell(column).SetString(value);
         }
-    }
-}
-
-
-
-public class EditAppearance : Patch2DA
-{
-    public EditAppearance()
-    {
-        TakeFrom = new HardcodedLocateResource();
-        SaveTo = new HardcodedLocateResource();
     }
 }

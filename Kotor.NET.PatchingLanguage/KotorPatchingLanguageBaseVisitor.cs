@@ -98,6 +98,17 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// <return>The visitor result.</return>
 	public virtual Result VisitGff_copy_template([NotNull] KotorPatchingLanguageParser.Gff_copy_templateContext context) { return VisitChildren(context); }
 	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFLocateField</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_locate_field"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFLocateField([NotNull] KotorPatchingLanguageParser.GFFLocateFieldContext context) { return VisitChildren(context); }
+	/// <summary>
 	/// Visit a parse tree produced by the <c>GFFAssignUInt8</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_uint8"/>.
 	/// <para>
@@ -108,6 +119,39 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	public virtual Result VisitGFFAssignUInt8([NotNull] KotorPatchingLanguageParser.GFFAssignUInt8Context context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueUInt8Literal</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_uint8"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueUInt8Literal([NotNull] KotorPatchingLanguageParser.GFFValueUInt8LiteralContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueUInt8Token</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_uint8"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueUInt8Token([NotNull] KotorPatchingLanguageParser.GFFValueUInt8TokenContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueUInt8From2DA</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_uint8"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueUInt8From2DA([NotNull] KotorPatchingLanguageParser.GFFValueUInt8From2DAContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by the <c>GFFAssignUInt16</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_uint16"/>.
@@ -120,6 +164,39 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// <return>The visitor result.</return>
 	public virtual Result VisitGFFAssignUInt16([NotNull] KotorPatchingLanguageParser.GFFAssignUInt16Context context) { return VisitChildren(context); }
 	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueUInt16Literal</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_uint16"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueUInt16Literal([NotNull] KotorPatchingLanguageParser.GFFValueUInt16LiteralContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueUInt16Token</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_uint16"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueUInt16Token([NotNull] KotorPatchingLanguageParser.GFFValueUInt16TokenContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueUInt16From2DA</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_uint16"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueUInt16From2DA([NotNull] KotorPatchingLanguageParser.GFFValueUInt16From2DAContext context) { return VisitChildren(context); }
+	/// <summary>
 	/// Visit a parse tree produced by the <c>GFFAssignUInt32</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_uint32"/>.
 	/// <para>
@@ -130,6 +207,39 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	public virtual Result VisitGFFAssignUInt32([NotNull] KotorPatchingLanguageParser.GFFAssignUInt32Context context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueUInt32Literal</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_uint32"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueUInt32Literal([NotNull] KotorPatchingLanguageParser.GFFValueUInt32LiteralContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueUInt32Token</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_uint32"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueUInt32Token([NotNull] KotorPatchingLanguageParser.GFFValueUInt32TokenContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueUInt32From2DA</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_uint32"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueUInt32From2DA([NotNull] KotorPatchingLanguageParser.GFFValueUInt32From2DAContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by the <c>GFFAssignUInt64</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_uint64"/>.
@@ -142,6 +252,39 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// <return>The visitor result.</return>
 	public virtual Result VisitGFFAssignUInt64([NotNull] KotorPatchingLanguageParser.GFFAssignUInt64Context context) { return VisitChildren(context); }
 	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueUInt64Literal</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_uint64"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueUInt64Literal([NotNull] KotorPatchingLanguageParser.GFFValueUInt64LiteralContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueUInt64Token</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_uint64"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueUInt64Token([NotNull] KotorPatchingLanguageParser.GFFValueUInt64TokenContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueUInt64From2DA</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_uint64"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueUInt64From2DA([NotNull] KotorPatchingLanguageParser.GFFValueUInt64From2DAContext context) { return VisitChildren(context); }
+	/// <summary>
 	/// Visit a parse tree produced by the <c>GFFAssignInt8</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_int8"/>.
 	/// <para>
@@ -152,6 +295,39 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	public virtual Result VisitGFFAssignInt8([NotNull] KotorPatchingLanguageParser.GFFAssignInt8Context context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueInt8Literal</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_int8"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueInt8Literal([NotNull] KotorPatchingLanguageParser.GFFValueInt8LiteralContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueInt8Token</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_int8"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueInt8Token([NotNull] KotorPatchingLanguageParser.GFFValueInt8TokenContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueInt8From2DA</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_int8"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueInt8From2DA([NotNull] KotorPatchingLanguageParser.GFFValueInt8From2DAContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by the <c>GFFAssignInt16</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_int16"/>.
@@ -164,6 +340,39 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// <return>The visitor result.</return>
 	public virtual Result VisitGFFAssignInt16([NotNull] KotorPatchingLanguageParser.GFFAssignInt16Context context) { return VisitChildren(context); }
 	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueInt16Literal</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_int16"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueInt16Literal([NotNull] KotorPatchingLanguageParser.GFFValueInt16LiteralContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueInt16Token</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_int16"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueInt16Token([NotNull] KotorPatchingLanguageParser.GFFValueInt16TokenContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueInt16From2DA</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_int16"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueInt16From2DA([NotNull] KotorPatchingLanguageParser.GFFValueInt16From2DAContext context) { return VisitChildren(context); }
+	/// <summary>
 	/// Visit a parse tree produced by the <c>GFFAssignInt32</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_int32"/>.
 	/// <para>
@@ -174,6 +383,39 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	public virtual Result VisitGFFAssignInt32([NotNull] KotorPatchingLanguageParser.GFFAssignInt32Context context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueInt32Literal</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_int32"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueInt32Literal([NotNull] KotorPatchingLanguageParser.GFFValueInt32LiteralContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueInt32Token</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_int32"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueInt32Token([NotNull] KotorPatchingLanguageParser.GFFValueInt32TokenContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueInt32From2DA</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_int32"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueInt32From2DA([NotNull] KotorPatchingLanguageParser.GFFValueInt32From2DAContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by the <c>GFFAssignInt64</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_int64"/>.
@@ -186,8 +428,8 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// <return>The visitor result.</return>
 	public virtual Result VisitGFFAssignInt64([NotNull] KotorPatchingLanguageParser.GFFAssignInt64Context context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by the <c>GFFAssignFloat</c>
-	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_float"/>.
+	/// Visit a parse tree produced by the <c>GFFValueInt64Literal</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_int64"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -195,7 +437,73 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitGFFAssignFloat([NotNull] KotorPatchingLanguageParser.GFFAssignFloatContext context) { return VisitChildren(context); }
+	public virtual Result VisitGFFValueInt64Literal([NotNull] KotorPatchingLanguageParser.GFFValueInt64LiteralContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueInt64Token</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_int64"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueInt64Token([NotNull] KotorPatchingLanguageParser.GFFValueInt64TokenContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueInt64From2DA</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_int64"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueInt64From2DA([NotNull] KotorPatchingLanguageParser.GFFValueInt64From2DAContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFAssignSingle</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_single"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFAssignSingle([NotNull] KotorPatchingLanguageParser.GFFAssignSingleContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueSingleLiteral</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_single"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueSingleLiteral([NotNull] KotorPatchingLanguageParser.GFFValueSingleLiteralContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueSingleToken</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_single"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueSingleToken([NotNull] KotorPatchingLanguageParser.GFFValueSingleTokenContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueSingleFrom2DA</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_single"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueSingleFrom2DA([NotNull] KotorPatchingLanguageParser.GFFValueSingleFrom2DAContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by the <c>GFFAssignDouble</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_double"/>.
@@ -208,6 +516,39 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// <return>The visitor result.</return>
 	public virtual Result VisitGFFAssignDouble([NotNull] KotorPatchingLanguageParser.GFFAssignDoubleContext context) { return VisitChildren(context); }
 	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueDoubleLiteral</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_double"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueDoubleLiteral([NotNull] KotorPatchingLanguageParser.GFFValueDoubleLiteralContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueDoubleToken</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_double"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueDoubleToken([NotNull] KotorPatchingLanguageParser.GFFValueDoubleTokenContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueDoubleFrom2DA</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_double"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueDoubleFrom2DA([NotNull] KotorPatchingLanguageParser.GFFValueDoubleFrom2DAContext context) { return VisitChildren(context); }
+	/// <summary>
 	/// Visit a parse tree produced by the <c>GFFAssignResRef</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_resref"/>.
 	/// <para>
@@ -218,6 +559,39 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	public virtual Result VisitGFFAssignResRef([NotNull] KotorPatchingLanguageParser.GFFAssignResRefContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueResRefLiteral</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_resref"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueResRefLiteral([NotNull] KotorPatchingLanguageParser.GFFValueResRefLiteralContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueResRefToken</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_resref"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueResRefToken([NotNull] KotorPatchingLanguageParser.GFFValueResRefTokenContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueResRefFrom2DA</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_resref"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueResRefFrom2DA([NotNull] KotorPatchingLanguageParser.GFFValueResRefFrom2DAContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by the <c>GFFAssignString</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_string"/>.
@@ -230,6 +604,39 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// <return>The visitor result.</return>
 	public virtual Result VisitGFFAssignString([NotNull] KotorPatchingLanguageParser.GFFAssignStringContext context) { return VisitChildren(context); }
 	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueStringLiteral</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_string"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueStringLiteral([NotNull] KotorPatchingLanguageParser.GFFValueStringLiteralContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueStringToken</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_string"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueStringToken([NotNull] KotorPatchingLanguageParser.GFFValueStringTokenContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueStringFrom2DA</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_string"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueStringFrom2DA([NotNull] KotorPatchingLanguageParser.GFFValueStringFrom2DAContext context) { return VisitChildren(context); }
+	/// <summary>
 	/// Visit a parse tree produced by the <c>GFFAssignBinary</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_binary"/>.
 	/// <para>
@@ -241,7 +648,18 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// <return>The visitor result.</return>
 	public virtual Result VisitGFFAssignBinary([NotNull] KotorPatchingLanguageParser.GFFAssignBinaryContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by the <c>GFFAssignLocalizedString</c>
+	/// Visit a parse tree produced by the <c>GFFValueBinaryBase64</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_binary"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueBinaryBase64([NotNull] KotorPatchingLanguageParser.GFFValueBinaryBase64Context context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFAssignLocalizedStringStringRef</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_locstring"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
@@ -250,7 +668,7 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitGFFAssignLocalizedString([NotNull] KotorPatchingLanguageParser.GFFAssignLocalizedStringContext context) { return VisitChildren(context); }
+	public virtual Result VisitGFFAssignLocalizedStringStringRef([NotNull] KotorPatchingLanguageParser.GFFAssignLocalizedStringStringRefContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by the <c>GFFAssignVector3</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_vector3"/>.
@@ -263,6 +681,17 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// <return>The visitor result.</return>
 	public virtual Result VisitGFFAssignVector3([NotNull] KotorPatchingLanguageParser.GFFAssignVector3Context context) { return VisitChildren(context); }
 	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueVector3Literal</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_vector3"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueVector3Literal([NotNull] KotorPatchingLanguageParser.GFFValueVector3LiteralContext context) { return VisitChildren(context); }
+	/// <summary>
 	/// Visit a parse tree produced by the <c>GFFAssignVector4</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_vector4"/>.
 	/// <para>
@@ -273,6 +702,17 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	public virtual Result VisitGFFAssignVector4([NotNull] KotorPatchingLanguageParser.GFFAssignVector4Context context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueVector4Literal</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_vector4"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValueVector4Literal([NotNull] KotorPatchingLanguageParser.GFFValueVector4LiteralContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by the <c>EditAppearance</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_appearance"/>.
@@ -316,7 +756,8 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// <return>The visitor result.</return>
 	public virtual Result VisitEdit_creature_mod([NotNull] KotorPatchingLanguageParser.Edit_creature_modContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.edit_creature_field_appearance"/>.
+	/// Visit a parse tree produced by the <c>EditCreatureAppearance</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_creature_field_appearance"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -324,5 +765,60 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitEdit_creature_field_appearance([NotNull] KotorPatchingLanguageParser.Edit_creature_field_appearanceContext context) { return VisitChildren(context); }
+	public virtual Result VisitEditCreatureAppearance([NotNull] KotorPatchingLanguageParser.EditCreatureAppearanceContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EditCreatureAppearanceFromLabel</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_creature_field_appearance"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitEditCreatureAppearanceFromLabel([NotNull] KotorPatchingLanguageParser.EditCreatureAppearanceFromLabelContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EditCreaturePortrait</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_creature_field_portrait"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitEditCreaturePortrait([NotNull] KotorPatchingLanguageParser.EditCreaturePortraitContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EditCreaturePortraitFromLabel</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_creature_field_portrait"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitEditCreaturePortraitFromLabel([NotNull] KotorPatchingLanguageParser.EditCreaturePortraitFromLabelContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EditCreatureGender</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_creature_field_gender"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitEditCreatureGender([NotNull] KotorPatchingLanguageParser.EditCreatureGenderContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EditCreatureGenderFromKeyword</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_creature_field_gender"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitEditCreatureGenderFromKeyword([NotNull] KotorPatchingLanguageParser.EditCreatureGenderFromKeywordContext context) { return VisitChildren(context); }
 }

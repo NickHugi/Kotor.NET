@@ -1,22 +1,22 @@
 ﻿using Antlr4.Runtime;
 using Kotor.NET.Patcher;
-using Kotor.NET.PatchingLanguage;
+using Kotor.NET.PatchingLanguage.Visitor;
 
 try
 {
     string text = """ 
-	edit appearance
-		target row where "label" is "Creature_Tauntaun" 
-		copy row where "label" is "Creature_Dewback" 
-		assign cell set "race" to "c_tauntaun"
-	end edit
+    edit appearance
+        target row where "label" is "Creature_Tauntaun" 
+        copy row where "label" is "Creature_Dewback" 
+        assign cell set "race" to "c_tauntaun"
+    end edit
 
-	edit creature "c_tauntaun"
-		target override 
-		copy from template "c_dewback"
-		set appearance 0
-	end edit
-	""";
+    edit creature "c_tauntaun"
+        copy from template "c_dewback"
+        assign uint16 set "Appearance_Type" to 123
+        set appearance from label "Creature_Dewback"
+    end edit
+    """;
 
 
     AntlrInputStream inputStream = new AntlrInputStream(text);
