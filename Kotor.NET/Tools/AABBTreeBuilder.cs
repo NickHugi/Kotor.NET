@@ -12,7 +12,7 @@ public class AABBTreeBuilder : IAABBTreeBuilder
 
     private AABBNode BuildNode(List<Face> faces)
     {
-        var boundingBox = Face.BuildBuildingBoxFromFaces(faces);
+        var boundingBox = new BoundingBox(faces);
 
         if (faces.Count == 1)
         {

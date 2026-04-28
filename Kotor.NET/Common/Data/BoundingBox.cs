@@ -38,6 +38,28 @@ public class BoundingBox
         Min = min;
         Max = max;
     }
+    public BoundingBox(IEnumerable<Face> faces)
+    {
+        List<Vector3> points =
+        [
+            ..faces.Select(x => x.Point1),
+            ..faces.Select(x => x.Point2),
+            ..faces.Select(x => x.Point3),
+        ];
+
+        Min = new Vector3
+        {
+            X = points.Min(point => point.X),
+            Y = points.Min(point => point.Y),
+            Z = points.Min(point => point.Z),
+        };
+        Max = new Vector3
+        {
+            X = points.Min(point => point.X),
+            Y = points.Min(point => point.Y),
+            Z = points.Min(point => point.Z),
+        };
+    }
 
     public Axis GetLongestAxis()
     {

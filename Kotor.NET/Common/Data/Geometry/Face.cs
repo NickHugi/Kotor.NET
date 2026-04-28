@@ -45,30 +45,5 @@ public class Face
     {
         _collection = collection;
     }
-
-    public static BoundingBox BuildBuildingBoxFromFaces(List<Face> faces)
-    {
-        List<Vector3> points =
-        [
-            ..faces.Select(x => x.Point1),
-            ..faces.Select(x => x.Point2),
-            ..faces.Select(x => x.Point3),
-        ];
-
-        return new()
-        {
-            Min =
-            {
-                X = points.Min(point => point.X),
-                Y = points.Min(point => point.Y),
-                Z = points.Min(point => point.Z),
-            },
-            Max =
-            {
-                X = points.Min(point => point.X),
-                Y = points.Min(point => point.Y),
-                Z = points.Min(point => point.Z),
-            }
-        };
     }
 }
