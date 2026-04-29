@@ -1,4 +1,6 @@
-﻿namespace Kotor.NET.Common.Data.Geometry;
+﻿using System.Numerics;
+
+namespace Kotor.NET.Common.Data.Geometry;
 
 public class Face
 {
@@ -34,7 +36,7 @@ public class Face
     {
         get
         {
-            return -1 * Normal.Dot(Point1);
+            return -1 * Vector3.Dot(Normal, Point1);
         }
     }
 
