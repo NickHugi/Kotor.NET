@@ -1,5 +1,6 @@
 ﻿using Kotor.NET.Common.Data;
 using Kotor.NET.Common.Data.Geometry;
+using Kotor.NET.Extensions;
 
 namespace Kotor.NET.Tools;
 
@@ -53,7 +54,7 @@ public class AABBTreeBuilder : IAABBTreeBuilder
 
         foreach (var face in faces)
         {
-            if (face.Centre[axis] < boundingBox.Centre[axis])
+            if (face.Centre.GetComponent(axis) < boundingBox.Centre.GetComponent(axis))
             {
                 left.Add(face);
             }
