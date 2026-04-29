@@ -1,4 +1,7 @@
-﻿namespace Kotor.NET.Common.Data.Geometry;
+﻿using System.Numerics;
+using Kotor.NET.Extensions;
+
+namespace Kotor.NET.Common.Data.Geometry;
 
 public class Edge
 {
@@ -38,8 +41,8 @@ public class Edge
     }
     public bool Equals(Edge other)
     {
-        var match1 = Point1.Equals(other.Point1, 0.01f) || Point1.Equals(other.Point2, 0.01f);
-        var match2 = Point2.Equals(other.Point1, 0.01f) || Point2.Equals(other.Point2, 0.01f);
+        var match1 = Point1.ApproximatelyEquals(other.Point1) || Point1.ApproximatelyEquals(other.Point2);
+        var match2 = Point2.ApproximatelyEquals(other.Point1) || Point2.ApproximatelyEquals(other.Point2);
         return match1 && match2;
     }
 }

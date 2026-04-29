@@ -2,8 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.NET.Extensions;
 
 namespace Kotor.NET.Common.Data.Geometry;
 
@@ -40,18 +42,18 @@ public class FaceCollection : IEnumerable<Face>
             var matching1 = false;
             var matching2 = false;
 
-            if (face.Point1.Equals(checking.Point1, 0.01f))
+            if (face.Point1.ApproximatelyEquals(checking.Point1))
                 matching1 = true;
-            if (face.Point1.Equals(checking.Point2, 0.01f))
+            if (face.Point1.ApproximatelyEquals(checking.Point2))
                 matching1 = true;
-            if (face.Point1.Equals(checking.Point3, 0.01f))
+            if (face.Point1.ApproximatelyEquals(checking.Point3))
                 matching1 = true;
 
-            if (face.Point2.Equals(checking.Point1, 0.01f))
+            if (face.Point2.ApproximatelyEquals(checking.Point1))
                 matching2 = true;
-            if (face.Point2.Equals(checking.Point2, 0.01f))
+            if (face.Point2.ApproximatelyEquals(checking.Point2))
                 matching2 = true;
-            if (face.Point2.Equals(checking.Point3, 0.01f))
+            if (face.Point2.ApproximatelyEquals(checking.Point3))
                 matching2 = true;
 
             if (matching1 && matching2)
@@ -72,18 +74,18 @@ public class FaceCollection : IEnumerable<Face>
             var matching1 = false;
             var matching2 = false;
 
-            if (edge.Point1.Equals(checking.Point1, 0.01f))
+            if (edge.Point1.ApproximatelyEquals(checking.Point1))
                 matching1 = true;
-            if (edge.Point1.Equals(checking.Point2, 0.01f))
+            if (edge.Point1.ApproximatelyEquals(checking.Point2))
                 matching1 = true;
-            if (edge.Point1.Equals(checking.Point3, 0.01f))
+            if (edge.Point1.ApproximatelyEquals(checking.Point3))
                 matching1 = true;
 
-            if (edge.Point2.Equals(checking.Point1, 0.01f))
+            if (edge.Point2.ApproximatelyEquals(checking.Point1))
                 matching2 = true;
-            if (edge.Point2.Equals(checking.Point2, 0.01f))
+            if (edge.Point2.ApproximatelyEquals(checking.Point2))
                 matching2 = true;
-            if (edge.Point2.Equals(checking.Point3, 0.01f))
+            if (edge.Point2.ApproximatelyEquals(checking.Point3))
                 matching2 = true;
 
             if (matching1 && matching2)

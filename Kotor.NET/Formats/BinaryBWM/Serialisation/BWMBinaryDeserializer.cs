@@ -25,9 +25,9 @@ public class BWMBinaryDeserializer
         {
             var indices = _binary.FaceIndices[i];
             bwm.Faces.Add(
-                _binary.Vertices[indices.Index1].Clone(),
-                _binary.Vertices[indices.Index2].Clone(),
-                _binary.Vertices[indices.Index3].Clone(),
+                _binary.Vertices[indices.Index1],
+                _binary.Vertices[indices.Index2],
+                _binary.Vertices[indices.Index3],
                 (SurfaceMaterial)_binary.FaceMaterials[i]
             );
         }

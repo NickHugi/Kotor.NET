@@ -90,7 +90,7 @@ public class AABBTreeBuilder : IAABBTreeBuilder
     {
 
         var coplanar = true;
-        faces.ForEach(face => coplanar = coplanar && face.Centre.Equals(boundingBox.Centre, 1e-4f));
+        faces.ForEach(face => coplanar = coplanar && face.Centre.ApproximatelyEquals(boundingBox.Centre));
         return coplanar;
     }
 }

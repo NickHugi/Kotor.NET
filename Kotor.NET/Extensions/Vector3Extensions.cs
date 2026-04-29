@@ -23,4 +23,9 @@ public static class Vector3Extensions
             _ => throw new InvalidOperationException("Tried to get component using invalid axis.")
         };
     }
+
+    public static bool ApproximatelyEquals(this Vector3 vector, Vector3 other, float epsilon = 1e4f)
+    {
+        return vector.X.Equals(other.X, epsilon) && vector.Y.Equals(other.Y, epsilon) && vector.Z.Equals(other.Z, epsilon);
+    }
 }
