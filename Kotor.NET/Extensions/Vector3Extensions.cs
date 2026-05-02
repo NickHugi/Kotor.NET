@@ -24,7 +24,7 @@ public static class Vector3Extensions
         };
     }
 
-    public static bool ApproximatelyEquals(this Vector3 vector, Vector3 other, float epsilon = 1e4f)
+    public static bool ApproximatelyEquals(this Vector3 vector, Vector3 other, float epsilon = 1e-4f)
     {
         return vector.X.Equals(other.X, epsilon) && vector.Y.Equals(other.Y, epsilon) && vector.Z.Equals(other.Z, epsilon);
     }

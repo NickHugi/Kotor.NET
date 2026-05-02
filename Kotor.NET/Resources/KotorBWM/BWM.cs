@@ -3,16 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Kotor.NET.Formats.BinaryBWM.Serialisation;
-using Kotor.NET.Formats.BinaryBWM;
-using Kotor.NET.Resources.KotorBWM;
+using Kotor.NET.Common.Data;
 using Kotor.NET.Common.Data.Geometry;
+using Kotor.NET.Formats.BinaryBWM;
+using Kotor.NET.Formats.BinaryBWM.Serialisation;
+using Kotor.NET.Formats.BinaryERF.Serialisation;
+using Kotor.NET.Resources.KotorBWM;
+using Kotor.NET.Resources.KotorERF;
+using Kotor.NET.Tools;
 
 namespace Kotor.NET.Resources.KotorBWM;
 
 public class BWM
 {
-    public FaceCollection Faces { get; set; }
+    public FaceCollection Faces { get; }
 
     public BWM()
     {
@@ -33,5 +37,30 @@ public class BWM
         var binary = new BWMBinary(stream);
         var deserializer = new BWMBinaryDeserializer(binary);
         return deserializer.Deserialize();
+    }
+
+    public static void ToFile(BWM bwm, string filepath)
+    {
+        using var stream = File.OpenWrite(filepath);
+        new BWMBinarySerializer(bwm).Serialize().Write(stream);
+    }
+    public static byte[] ToBytes(BWM bwm)
+    {
+        using var stream = new MemoryStream();
+        new BWMBinarySerializer(bwm).Serialize().Write(stream);
+        return stream.ToArray();
+    }
+    public static void ToStream(BWM bwm, Stream stream)
+    {
+        new BWMBinarySerializer(bwm).Serialize().Write(stream);
+    }
+
+    public AABBNode GenerateTree()
+    {
+        return GenerateTree(new AABBTreeBuilder());
+    }
+    public AABBNode GenerateTree(IAABBTreeBuilder builder)
+    {
+        return builder.Build(Faces.ToList());
     }
 }

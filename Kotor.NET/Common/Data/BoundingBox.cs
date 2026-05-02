@@ -49,15 +49,15 @@ public class BoundingBox
 
         Min = new Vector3
         {
-            X = points.Min(point => point.X),
-            Y = points.Min(point => point.Y),
-            Z = points.Min(point => point.Z),
+            X = points.DefaultIfEmpty().Min(point => point.X),
+            Y = points.DefaultIfEmpty().Min(point => point.Y),
+            Z = points.DefaultIfEmpty().Min(point => point.Z),
         };
         Max = new Vector3
         {
-            X = points.Min(point => point.X),
-            Y = points.Min(point => point.Y),
-            Z = points.Min(point => point.Z),
+            X = points.DefaultIfEmpty().Max(point => point.X),
+            Y = points.DefaultIfEmpty().Max(point => point.Y),
+            Z = points.DefaultIfEmpty().Max(point => point.Z),
         };
     }
 

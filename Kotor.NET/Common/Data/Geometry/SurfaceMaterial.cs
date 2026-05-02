@@ -25,3 +25,27 @@ public enum SurfaceMaterial
     Trigger = 30,
 }
 
+public static class SurfaceMaterialExtension
+{
+    public static bool IsWalkable(this SurfaceMaterial material)
+    {
+        return material switch
+        {
+            SurfaceMaterial.Dirt => true,
+            SurfaceMaterial.Grass => true,
+            SurfaceMaterial.Stone => true,
+            SurfaceMaterial.Wood => true,
+            SurfaceMaterial.Water => true,
+            SurfaceMaterial.Carpet => true,
+            SurfaceMaterial.Metal => true,
+            SurfaceMaterial.Puddles => true,
+            SurfaceMaterial.Swamp => true,
+            SurfaceMaterial.Mud => true,
+            SurfaceMaterial.Leaves => true,
+            SurfaceMaterial.BottomlessPit => true,
+            SurfaceMaterial.Door => true,
+            SurfaceMaterial.Trigger => true,
+            _ => false
+        };
+    }
+}

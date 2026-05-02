@@ -39,23 +39,40 @@ public class BWMBinarySerializer
             binary.Perimeters.Add(binary.Edges.Count);
         }
 
-        var aabbBuilder = new AABBTreeBuilder();
-        var rootAABB = aabbBuilder.Build(_bwm.Faces.ToList());
-        var flatten = new List<AABBNode>() { rootAABB };
-        var checkNext = new List<AABBNode>() { rootAABB };
-        while (checkNext.Count > 0)
+        var aabbs = _bwm.GenerateTree().GetDescendants().ToList();
+        binary.AABBs = aabbs.Select(x =>
         {
-            var node = checkNext.First();
-            checkNext.RemoveAt(0);
-
-            flatten.Add(node);
-
-            if (node.LeftNode is not null)
-                checkNext.Add(node.LeftNode);
-            if (node.RightNode is not null)
-                checkNext.Add(node.RightNode);
-        }
-        
+            if (x is AABBNodeBranch branch)
+            {
+                return new BWMBinaryAABBNode()
+                {
+                    FaceIndex = -1,
+                    BoundingBoxMin = branch.BoundingBox.Min,
+                    BoundingBoxMax = branch.BoundingBox.Max,
+                    LeftChildIndex = aabbs.IndexOf(branch.LeftNode),
+                    RightChildIndex = aabbs.IndexOf(branch.RightNode),
+                    MostSignificantPlane = (int)branch.MostSignificantPlane,
+                    UnknownAlways4 = 4
+                };
+            }
+            else if (x is AABBNodeLeaf leaf)
+            {
+                return new BWMBinaryAABBNode()
+                {
+                    FaceIndex = _bwm.Faces.IndexOf(leaf.Face),
+                    BoundingBoxMin = leaf.BoundingBox.Min,
+                    BoundingBoxMax = leaf.BoundingBox.Max,
+                    LeftChildIndex = -1,
+                    RightChildIndex = -1,
+                    MostSignificantPlane = 0,
+                    UnknownAlways4 = 4
+                };
+            }
+            else
+            {
+                throw new InvalidOperationException("Invalid AABB node type");
+            }
+        }).ToList();
 
         List<Vector3> vertices =
         [
@@ -86,70 +103,62 @@ public class BWMBinarySerializer
         return binary;
     }
 
+    private List<List<Face>> GetWalkableIslands()
+    {
+        var islands = new List<List<Face>>();
+        var pending = _bwm.Faces.Where(x => x.Material.IsWalkable()).ToList();
+
+        while (pending.Count > 0)
+        {
+            var island = new List<Face>();
+            islands.Add(island);
+
+            var scan = new List<Face>() { pending.First() };
+
+            while (scan.Count > 0)
+            {
+                var face = scan.First();
+                scan.RemoveAt(0);
+                pending.Remove(face);
+
+                island.Add(face);
+
+                if (face.Edge1.Adjacent?.Material.IsWalkable() == true && !island.Contains(face.Edge1.Adjacent) && !scan.Contains(face.Edge1.Adjacent))
+                    scan.Add(face.Edge1.Adjacent);
+                if (face.Edge2.Adjacent?.Material.IsWalkable() == true && !island.Contains(face.Edge2.Adjacent) && !scan.Contains(face.Edge2.Adjacent))
+                    scan.Add(face.Edge2.Adjacent);
+                if (face.Edge3.Adjacent?.Material.IsWalkable() == true && !island.Contains(face.Edge3.Adjacent) && !scan.Contains(face.Edge3.Adjacent))
+                    scan.Add(face.Edge3.Adjacent);
+            }
+        }
+
+        return islands;
+    }
+
     private List<List<Edge>> GetPerimeters()
     {
         var perimeters = new List<List<Edge>>();
-        var walkable = _bwm.Faces.ToList();
-        var pending = walkable.ToList();
+        var islands = GetWalkableIslands();
 
-        while (true)
+        while (islands.Count > 0)
         {
-            var face = GetBestStartingFace(pending);
-            if (face is null)
-                break;
+            var island = islands.First();
+            islands.RemoveAt(0);
 
             var perimeter = new List<Edge>();
+            perimeters.Add(perimeter);
 
-            var hasBorder = face.Edge1.Adjacent is null || face.Edge2.Adjacent is null || face.Edge3.Adjacent is null;
-            var hadBorder = hasBorder;
-
-            while (hasBorder)
+            while (island.Count > 0)
             {
-                pending.RemoveAt(0);
+                var face = island.First();
+                island.RemoveAt(0);
 
-                if (face.Edge1.Adjacent is null)
-                {
+                if (face.Edge1.Adjacent is null || !face.Edge1.Adjacent.Material.IsWalkable())
                     perimeter.Add(face.Edge1);
-                }
-                if (face.Edge2.Adjacent is null)
-                {
+                if (face.Edge2.Adjacent is null || !face.Edge2.Adjacent.Material.IsWalkable())
                     perimeter.Add(face.Edge2);
-                }
-                if (face.Edge3.Adjacent is null)
-                {
+                if (face.Edge3.Adjacent is null || !face.Edge3.Adjacent.Material.IsWalkable())
                     perimeter.Add(face.Edge3);
-                }
-
-                if (face.Edge1.Adjacent is not null && pending.Contains(face.Edge1.Adjacent))
-                {
-                    if (pending.Contains(face.Edge1.Adjacent))
-                        face = face.Edge1.Adjacent;
-                }
-                else if (face.Edge2.Adjacent is not null && pending.Contains(face.Edge2.Adjacent))
-                {
-                    if (pending.Contains(face.Edge2.Adjacent))
-                        face = face.Edge2.Adjacent;
-                }
-                else if (face.Edge3.Adjacent is not null && pending.Contains(face.Edge3.Adjacent))
-                {
-                    if (pending.Contains(face.Edge3.Adjacent))
-                        face = face.Edge3.Adjacent;
-                }
-                else
-                {
-                    break;
-                }
-
-                //var deadend1 = face.Edge1.Adjacent is null || (face.Edge1.Adjacent is not null && !pending.Contains(face.Edge1.Adjacent));
-                //var deadend2 = face.Edge2.Adjacent is null || (face.Edge2.Adjacent is not null && !pending.Contains(face.Edge2.Adjacent));
-                //var deadend3 = face.Edge3.Adjacent is null || (face.Edge3.Adjacent is not null && !pending.Contains(face.Edge3.Adjacent));
-                //if (deadend1 && deadend2 && deadend3)
-                //    break;
-            }
-
-            if (hadBorder)
-            {
-                perimeters.Add(perimeter);
             }
         }
 
