@@ -24,7 +24,33 @@ public class Edge
         get => _face._transition[_index];
         set => _face._transition[_index] = value;
     }
-    public Face? Adjacent => _face._collection.FindAdjacentFace(this);
+
+    public Face Face => _face;
+
+    public Face? AdjacentFace => _face._collection.FindAdjacentFace(this);
+    public Edge? AdjacentEdge
+    {
+        get
+        {
+            var adjacentFace = AdjacentFace;
+            if (adjacentFace is null)
+                return null;
+
+            var adjacentEdge = adjacentFace.Edge1;
+            if (this.Equals(adjacentFace.Edge1))
+                return adjacentEdge;
+
+            adjacentEdge = adjacentFace.Edge2;
+            if (this.Equals(adjacentEdge))
+                return adjacentEdge;
+
+            adjacentEdge = adjacentFace.Edge3;
+            if (this.Equals(adjacentEdge))
+                return adjacentEdge;
+
+            return null;
+        }
+    }
 
     internal readonly Face _face;
     internal readonly int _index;

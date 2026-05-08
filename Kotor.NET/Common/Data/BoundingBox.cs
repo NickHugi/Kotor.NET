@@ -38,7 +38,7 @@ public class BoundingBox
         Min = min;
         Max = max;
     }
-    public BoundingBox(IEnumerable<Face> faces, float padding = 1e-1f)
+    public BoundingBox(IEnumerable<Face> faces, float padding = 0)
     {
         List<Vector3> points =
         [

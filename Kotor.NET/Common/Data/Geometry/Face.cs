@@ -26,7 +26,7 @@ public class Face
     {
         get
         {
-            return Vector3.Normalize(Vector3.Cross(Point1, Point2));
+            return Vector3.Normalize(Vector3.Cross(Point2 - Point1, Point3 - Point1));
         }
     }
     public float Distance

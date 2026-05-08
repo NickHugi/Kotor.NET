@@ -28,7 +28,8 @@ public class BWMBinarySerializer
         binary.FileHeader.Position = _bwm.Position;
         binary.FileHeader.WalkmeshType = _bwm.WalkmeshType == BWMWalkmeshType.Area ? 1 : 0;
 
-        var aabbs = _bwm.GenerateTree()?.GetDescendants()?.ToList() ?? [];
+        var rootAABB = _bwm.GenerateTree();
+        List<AABBNode> aabbs = (rootAABB is null) ? [] : [rootAABB, .. rootAABB.GetDescendants()];
         binary.AABBs = aabbs.Select(x =>
         {
             if (x is AABBNodeBranch branch)
@@ -65,9 +66,7 @@ public class BWMBinarySerializer
 
         binary.Vertices =
         [
-            .._bwm.Faces.Select(x => x.Point1),
-            .._bwm.Faces.Select(x => x.Point2),
-            .._bwm.Faces.Select(x => x.Point3),
+            .. _bwm.Faces.SelectMany(x => new List<Vector3>() {x.Point1, x.Point2, x.Point3 })
         ];
         binary.Vertices = binary.Vertices.Distinct().ToList();
 
@@ -89,9 +88,9 @@ public class BWMBinarySerializer
             {
                 binary.Adjacencies.Add(new()
                 {
-                    Index1 = (face.Edge1.Adjacent is null) ? -1 : _bwm.Faces.IndexOf(face.Edge1.Adjacent),
-                    Index2 = (face.Edge2.Adjacent is null) ? -1 : _bwm.Faces.IndexOf(face.Edge2.Adjacent),
-                    Index3 = (face.Edge3.Adjacent is null) ? -1 : _bwm.Faces.IndexOf(face.Edge3.Adjacent),
+                    Index1 = (face.Edge1.AdjacentEdge is null || !face.Edge1.AdjacentFace!.Material.IsWalkable()) ? -1 : (_bwm.Faces.IndexOf(face.Edge1.AdjacentEdge.Face) * 3) + face.Edge1.AdjacentEdge._index,
+                    Index2 = (face.Edge2.AdjacentEdge is null || !face.Edge2.AdjacentFace!.Material.IsWalkable()) ? -1 : (_bwm.Faces.IndexOf(face.Edge2.AdjacentEdge.Face) * 3) + face.Edge2.AdjacentEdge._index,
+                    Index3 = (face.Edge3.AdjacentEdge is null || !face.Edge3.AdjacentFace!.Material.IsWalkable()) ? -1 : (_bwm.Faces.IndexOf(face.Edge3.AdjacentEdge.Face) * 3) + face.Edge3.AdjacentEdge._index,
                 });
             }
         }
@@ -104,7 +103,7 @@ public class BWMBinarySerializer
                 binary.Edges.Add(new()
                 {
                     EdgeIndex = (_bwm.Faces.IndexOf(edge._face) * 3) + edge._index,
-                    Transition = (edge.Adjacent is not null) ? -1 : edge.Transition
+                    Transition = (edge.AdjacentFace is not null) ? -1 : edge.Transition
                 });
             }
             binary.Perimeters.Add(binary.Edges.Count);
@@ -115,44 +114,12 @@ public class BWMBinarySerializer
         return binary;
     }
 
-    private List<List<Face>> GetWalkableIslands()
-    {
-        var islands = new List<List<Face>>();
-        var pending = _bwm.Faces.Where(x => x.Material.IsWalkable()).ToList();
-
-        while (pending.Count > 0)
-        {
-            var island = new List<Face>();
-            islands.Add(island);
-
-            var scan = new List<Face>() { pending.First() };
-
-            while (scan.Count > 0)
-            {
-                var face = scan.First();
-                scan.RemoveAt(0);
-                pending.Remove(face);
-
-                island.Add(face);
-
-                if (face.Edge1.Adjacent?.Material.IsWalkable() == true && !island.Contains(face.Edge1.Adjacent) && !scan.Contains(face.Edge1.Adjacent))
-                    scan.Add(face.Edge1.Adjacent);
-                if (face.Edge2.Adjacent?.Material.IsWalkable() == true && !island.Contains(face.Edge2.Adjacent) && !scan.Contains(face.Edge2.Adjacent))
-                    scan.Add(face.Edge2.Adjacent);
-                if (face.Edge3.Adjacent?.Material.IsWalkable() == true && !island.Contains(face.Edge3.Adjacent) && !scan.Contains(face.Edge3.Adjacent))
-                    scan.Add(face.Edge3.Adjacent);
-            }
-        }
-
-        return islands;
-    }
-
     private List<List<Edge>> GetPerimeters()
     {
         var pending = _bwm.Faces
             .Where(x => x.Material.IsWalkable())
             .SelectMany(x => new[] { x.Edge1, x.Edge2, x.Edge3 })
-            .Where(e => e.Adjacent is null || !e.Adjacent.Material.IsWalkable())
+            .Where(e => e.AdjacentFace is null || !e.AdjacentFace.Material.IsWalkable())
             .ToList();
 
         var result = new List<List<Edge>>();
@@ -244,11 +211,11 @@ public class BWMBinarySerializer
         foreach (var face in faces)
         {
             int adjacencies = 0;
-            if (face.Edge1.Adjacent is not null)
+            if (face.Edge1.AdjacentFace is not null)
                 adjacencies++;
-            if (face.Edge2.Adjacent is not null)
+            if (face.Edge2.AdjacentFace is not null)
                 adjacencies++;
-            if (face.Edge3.Adjacent is not null)
+            if (face.Edge3.AdjacentFace is not null)
                 adjacencies++;
 
             if (adjacencies < minAdajacencies)
@@ -262,8 +229,8 @@ public class BWMBinarySerializer
     }
     private bool IsAllAdjacentWalkable(Face face)
     {
-        return face.Edge1.Adjacent?.Material.IsWalkable() == true
-            && face.Edge2.Adjacent?.Material.IsWalkable() == true
-            && face.Edge3.Adjacent?.Material.IsWalkable() == true;
+        return face.Edge1.AdjacentFace?.Material.IsWalkable() == true
+            && face.Edge2.AdjacentFace?.Material.IsWalkable() == true
+            && face.Edge3.AdjacentFace?.Material.IsWalkable() == true;
     }
 }
