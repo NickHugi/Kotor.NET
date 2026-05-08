@@ -38,7 +38,7 @@ public class BoundingBox
         Min = min;
         Max = max;
     }
-    public BoundingBox(IEnumerable<Face> faces)
+    public BoundingBox(IEnumerable<Face> faces, float padding = 1e-1f)
     {
         List<Vector3> points =
         [
@@ -49,15 +49,15 @@ public class BoundingBox
 
         Min = new Vector3
         {
-            X = points.DefaultIfEmpty().Min(point => point.X),
-            Y = points.DefaultIfEmpty().Min(point => point.Y),
-            Z = points.DefaultIfEmpty().Min(point => point.Z),
+            X = points.DefaultIfEmpty().Min(point => point.X) - padding,
+            Y = points.DefaultIfEmpty().Min(point => point.Y) - padding,
+            Z = points.DefaultIfEmpty().Min(point => point.Z) - padding,
         };
         Max = new Vector3
         {
-            X = points.DefaultIfEmpty().Max(point => point.X),
-            Y = points.DefaultIfEmpty().Max(point => point.Y),
-            Z = points.DefaultIfEmpty().Max(point => point.Z),
+            X = points.DefaultIfEmpty().Max(point => point.X) + padding,
+            Y = points.DefaultIfEmpty().Max(point => point.Y) + padding,
+            Z = points.DefaultIfEmpty().Max(point => point.Z) + padding,
         };
     }
 

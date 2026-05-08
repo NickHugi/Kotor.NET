@@ -19,7 +19,12 @@ public class BWMBinaryDeserializer
 
     public BWM Deserialize()
     {
-        var bwm = new BWM();
+        var type = _binary.FileHeader.WalkmeshType == 1
+            ? BWMWalkmeshType.Area
+            : BWMWalkmeshType.Placeable;
+
+        var bwm = new BWM(type);
+        bwm.Position = _binary.FileHeader.Position;
 
         for (int i = 0; i < _binary.FaceIndices.Count; i ++)
         {
@@ -32,12 +37,17 @@ public class BWMBinaryDeserializer
             );
         }
 
-        for (int i = 0; i < _binary.Edges.Count / 3; i++)
+        foreach (var edge in _binary.Edges)
         {
-            var edge = i * 3;
-            bwm.Faces[i].Edge1.Transition = _binary.Edges[edge+0].Transition;
-            bwm.Faces[i].Edge2.Transition = _binary.Edges[edge+1].Transition;
-            bwm.Faces[i].Edge3.Transition = _binary.Edges[edge+2].Transition;
+            var faceIndex = edge.EdgeIndex / 3;
+            var edgeIndex = edge.EdgeIndex % 3;
+
+            if (edgeIndex == 0)
+                bwm.Faces[faceIndex].Edge1.Transition = edge.Transition;
+            if (edgeIndex == 1)
+                bwm.Faces[faceIndex].Edge2.Transition = edge.Transition;
+            if (edgeIndex == 2)
+                bwm.Faces[faceIndex].Edge3.Transition = edge.Transition;
         }
 
         return bwm;

@@ -1,4 +1,5 @@
-﻿using Kotor.NET.Common.Data;
+﻿using System.Numerics;
+using Kotor.NET.Common.Data;
 using Kotor.NET.Common.Data.Geometry;
 using Kotor.NET.Extensions;
 
@@ -8,6 +9,9 @@ public class AABBTreeBuilder : IAABBTreeBuilder
 {
     public AABBNode Build(List<Face> faces)
     {
+        if (faces.Count == 0)
+            return null;
+
         return BuildNode(faces);
     }
 
@@ -26,8 +30,7 @@ public class AABBTreeBuilder : IAABBTreeBuilder
 
     // Tries each axis in order of preference, falling back to an even split if
     // no axis produces a non-degenerate partition.
-    private (List<Face> Left, List<Face> Right, Axis Axis) SplitFaces(
-        List<Face> faces, BoundingBox boundingBox)
+    private (List<Face> Left, List<Face> Right, Axis Axis) SplitFaces(List<Face> faces, BoundingBox boundingBox)
     {
         var axis = GetBestAxisToSplit(boundingBox, faces);
 
@@ -48,8 +51,7 @@ public class AABBTreeBuilder : IAABBTreeBuilder
         return (evenLeft, evenRight, axis);             // FIX: was (left, left, axis)
     }
 
-    private (List<Face> Left, List<Face> Right) SplitFacesByAxis(
-        List<Face> faces, Axis axis, BoundingBox boundingBox)
+    private (List<Face> Left, List<Face> Right) SplitFacesByAxis(List<Face> faces, Axis axis, BoundingBox boundingBox)
     {
         var midpoint = boundingBox.Centre.GetComponent(axis);
         var left = new List<Face>();
@@ -88,6 +90,9 @@ public class AABBTreeBuilder : IAABBTreeBuilder
     // meaning a split on that axis would place every face on one side.
     private bool AreFacesCoplanarOnAxis(List<Face> faces, Axis axis) // FIX: was comparing 3D centres and ignoring axis
     {
+        if (faces.Count == 0)
+            return true;
+
         var reference = faces[0].Centre.GetComponent(axis);
         return faces.All(face => face.Centre.GetComponent(axis).Equals(reference, 1e-4f));
     }

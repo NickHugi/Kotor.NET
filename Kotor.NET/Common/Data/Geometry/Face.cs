@@ -26,10 +26,7 @@ public class Face
     {
         get
         {
-            var x = (Point1.Y * Point2.Z) - (Point1.Z * Point2.Y);
-            var y = (Point1.Z * Point2.X) - (Point1.X * Point2.Z);
-            var z = (Point1.X * Point2.Y) - (Point1.Y * Point2.X);
-            return new(x, y, z);
+            return Vector3.Normalize(Vector3.Cross(Point1, Point2));
         }
     }
     public float Distance

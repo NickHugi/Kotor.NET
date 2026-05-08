@@ -59,11 +59,11 @@ public class BWMBinary
                 FaceNormals.Add(reader.ReadVector3());
             }
 
-        reader.BaseStream.Position = FileHeader.OffsetToFaceCoefficients;
-        for (int i = 0; i < FileHeader.FaceCount; i++)
-        {
-            FacePlaneDistances.Add(reader.ReadSingle());
-        }
+            reader.BaseStream.Position = FileHeader.OffsetToFaceCoefficients;
+            for (int i = 0; i < FileHeader.FaceCount; i++)
+            {
+                FacePlaneDistances.Add(reader.ReadSingle());
+            }
 
             reader.BaseStream.Position = FileHeader.OffsetToAABBs;
             for (int i = 0; i < FileHeader.AABBCount; i++)
@@ -127,11 +127,11 @@ public class BWMBinary
                 writer.Write(normal);
             }
 
-        writer.BaseStream.Position = FileHeader.OffsetToFaceCoefficients;
-        foreach (var coeff in FacePlaneDistances)
-        {
-            writer.Write(coeff);
-        }
+            writer.BaseStream.Position = FileHeader.OffsetToFaceCoefficients;
+            foreach (var coeff in FacePlaneDistances)
+            {
+                writer.Write(coeff);
+            }
 
             writer.BaseStream.Position = FileHeader.OffsetToAABBs;
             foreach (var aabb in AABBs)

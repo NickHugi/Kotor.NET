@@ -11,7 +11,7 @@ namespace Kotor.NET.Formats.BinaryBWM;
 
 public class BWMBinaryFileHeader
 {
-    public static readonly int SIZE = 134;
+    public static readonly int SIZE = 136;
     public static readonly IReadOnlyList<string> FILE_TYPES = new List<string>()
     {
         "BWM ",

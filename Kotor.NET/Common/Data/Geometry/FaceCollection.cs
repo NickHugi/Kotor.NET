@@ -12,24 +12,25 @@ namespace Kotor.NET.Common.Data.Geometry;
 public class FaceCollection : IEnumerable<Face>
 {
     private readonly List<Face> _faces = new();
+    private List<Face> _sortedFaces => _faces.OrderByDescending(x => x.Material.IsWalkable() ? 1 : 0).ToList();
 
     public int Count => _faces.Count;
     public bool IsReadOnly => false;
 
     public Face this[int index]
     {
-        get => _faces[index];
+        get => _sortedFaces[index];
     }
 
     public void Add(Vector3 point1, Vector3 point2, Vector3 point3, SurfaceMaterial material) => _faces.Add(new(this) { Point1=point1, Point2=point2, Point3=point3, Material=material });
-    public void Clear() => throw new NotImplementedException();
-    public bool Contains(Face item) => throw new NotImplementedException();
-    public IEnumerator<Face> GetEnumerator() => _faces.GetEnumerator();
-    IEnumerator IEnumerable.GetEnumerator() => _faces.GetEnumerator();
+    public void Clear() => _faces.Clear();
+    public bool Contains(Face item) => _faces.Contains(item);
+    public IEnumerator<Face> GetEnumerator() => _sortedFaces.GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => _sortedFaces.GetEnumerator();
 
     public int IndexOf(Face face)
     {
-        return _faces.IndexOf(face);
+        return _sortedFaces.IndexOf(face);
     }
 
     public Face? FindAdjacentFace(Face face)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Common.Data;
@@ -16,10 +17,13 @@ namespace Kotor.NET.Resources.KotorBWM;
 
 public class BWM
 {
+    public BWMWalkmeshType WalkmeshType { get; set; }
+    public Vector3 Position { get; set; }
     public FaceCollection Faces { get; }
 
-    public BWM()
+    public BWM(BWMWalkmeshType walkmeshType)
     {
+        WalkmeshType = walkmeshType;
         Faces = new();
     }
     public static BWM FromFile(string filepath)
@@ -63,4 +67,10 @@ public class BWM
     {
         return builder.Build(Faces.ToList());
     }
+}
+
+public enum BWMWalkmeshType
+{
+    Area,
+    Placeable
 }
