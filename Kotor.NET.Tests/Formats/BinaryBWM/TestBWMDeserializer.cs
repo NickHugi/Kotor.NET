@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Kotor.NET.Formats.BinaryBWM;
 using Kotor.NET.Formats.BinaryBWM.Serialisation;
 
@@ -15,13 +16,11 @@ public class TestBWMDeserializer
     [Fact]
     public void Test_ReadFile1()
     {
-        using var stream = File.OpenRead("C:\\Users\\hugin\\Desktop\\ext\\untitled.wok");
+        using var stream = File.OpenRead(File1Filepath);
         var binary = new BWMBinary(stream);
         var deserializer = new BWMBinaryDeserializer(binary);
         var bwm = deserializer.Deserialize();
 
-        var serializer = new BWMBinarySerializer(bwm);
-        serializer.Serialize();
-
+        bwm.Faces.Count.Should().Be(4);
     }
 }
