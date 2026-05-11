@@ -21,4 +21,6 @@ public interface IShader : IDisposable
 
     public void SetUniform1(string name, int value);
     void SetUniform1(string name, uint value);
+
+    void SetUniform2(string name, Vector2 value);
 }
