@@ -76,7 +76,7 @@ public class BWMBinarySerializer
 
             binary.FaceMaterials.Add((int)face.Material);
             binary.FaceNormals.Add(face.Normal);
-            binary.FacePlaneDistances.Add(face.Distance);
+            binary.FacePlaneDistances.Add(face.PlaneDistance);
             binary.FaceIndices.Add(new()
             {
                 Index1 = binary.Vertices.IndexOf(face.Point1),

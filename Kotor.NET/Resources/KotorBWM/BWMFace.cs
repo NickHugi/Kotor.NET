@@ -4,7 +4,7 @@ using Kotor.NET.Common.Data.Geometry;
 
 namespace Kotor.NET.Resources.KotorBWM;
 
-public class BWMFace
+public class BWMFace : IFace
 {
     public required Vector3 Point1 { get; set; }
     public required Vector3 Point2 { get; set; }
@@ -14,6 +14,7 @@ public class BWMFace
     public BWMEdge Edge1 => new(this, 0);
     public BWMEdge Edge2 => new(this, 1);
     public BWMEdge Edge3 => new(this, 2);
+
     public Vector3 Centre
     {
         get
@@ -24,6 +25,7 @@ public class BWMFace
             return new Vector3(x, y, z);
         }
     }
+
     public Vector3 Normal
     {
         get
@@ -31,7 +33,8 @@ public class BWMFace
             return Vector3.Normalize(Vector3.Cross(Point2 - Point1, Point3 - Point1));
         }
     }
-    public float Distance
+
+    public float PlaneDistance
     {
         get
         {
