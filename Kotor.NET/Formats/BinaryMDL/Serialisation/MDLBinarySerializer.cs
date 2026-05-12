@@ -9,6 +9,7 @@ using Kotor.NET.Resources.KotorMDL;
 using System.Security.Cryptography;
 using Kotor.NET.Formats.BinaryLIP;
 using Kotor.NET.Common;
+using Kotor.NET.Common.Data.Geometry;
 
 namespace Kotor.NET.Formats.BinaryMDL.Serialisation;
 
@@ -881,15 +882,33 @@ public class MDLBinarySerializer
             binaryControllerData.Add(BitConverter.GetBytes(selfIllumination.Blue));
         }
     }
-    private MDLBinaryAABBNode SerializeAABBNode(MDLWalkmeshNode walkmeshNode, MDLWalkmeshAABBNode aabbNode)
+    private MDLBinaryAABBNode SerializeAABBNode(MDLWalkmeshNode walkmeshNode, AABBNode aabbNode)
     {
-        return new MDLBinaryAABBNode()
+        if (aabbNode is AABBNodeBranch branch)
         {
-            BoundingBox = aabbNode.BoundingBox,
-            FaceIndex = (aabbNode.Face is null) ? -1 : walkmeshNode.Faces.IndexOf(aabbNode.Face),
-            MostSiginificantPlane = (int)aabbNode.MostSignificantPlane,
-            LeftNode = (aabbNode.LeftChild is null) ? null : SerializeAABBNode(walkmeshNode, aabbNode.LeftChild),
-            RightNode = (aabbNode.RightChild is null) ? null : SerializeAABBNode(walkmeshNode, aabbNode.RightChild),
-        };
+            return new MDLBinaryAABBNode()
+            {
+                BoundingBox = aabbNode.BoundingBox,
+                FaceIndex = -1,
+                MostSiginificantPlane = (int)branch.MostSignificantPlane,
+                LeftNode = SerializeAABBNode(walkmeshNode, branch.LeftNode),
+                RightNode = SerializeAABBNode(walkmeshNode, branch.RightNode),
+            };
+        }
+        else if (aabbNode is AABBNodeLeaf leaf)
+        {
+            return new MDLBinaryAABBNode()
+            {
+                BoundingBox = aabbNode.BoundingBox,
+                FaceIndex =  walkmeshNode.Faces.IndexOf((MDLFace)leaf.Face),
+                MostSiginificantPlane = 0,
+                LeftNode = null,
+                RightNode = null
+            };
+        }
+        else
+        {
+            throw new InvalidOperationException();
+        }
     }
 }

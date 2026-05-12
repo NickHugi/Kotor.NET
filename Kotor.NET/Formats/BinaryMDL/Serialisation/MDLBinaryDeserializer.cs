@@ -430,15 +430,22 @@ public class MDLBinaryDeserializer
             _ => throw new ArgumentException("Unknown Controller Type"),
         };
     }
-    private MDLWalkmeshAABBNode DeserializeAABB(MDLTrimeshNode node, MDLBinaryAABBNode binaryAABB)
+    private AABBNode DeserializeAABB(MDLTrimeshNode node, MDLBinaryAABBNode binaryAABB)
     {
         var boundingBox = binaryAABB.BoundingBox;
-        var face = node.Faces.ElementAtOrDefault(binaryAABB.FaceIndex);
-        var mostSignificantPlane = (MDLWalkmeshAABBNodeMostSignificantPlane)binaryAABB.MostSiginificantPlane;
-        var leftChild = (binaryAABB.FaceIndex == -1) ? DeserializeAABB(node, binaryAABB.LeftNode) : null;
-        var rightChild = (binaryAABB.FaceIndex == -1) ? DeserializeAABB(node, binaryAABB.RightNode) : null;
 
-        return new MDLWalkmeshAABBNode(boundingBox, face, leftChild, rightChild, mostSignificantPlane);
+        if (binaryAABB.FaceIndex == -1)
+        {
+            var mostSignificantPlane = (Axis)binaryAABB.MostSiginificantPlane;
+            var left = (binaryAABB.FaceIndex == -1) ? DeserializeAABB(node, binaryAABB.LeftNode) : null;
+            var right = (binaryAABB.FaceIndex == -1) ? DeserializeAABB(node, binaryAABB.RightNode) : null;
+            return new AABBNodeBranch(boundingBox, left, right, mostSignificantPlane);
+        }
+        else
+        {
+            var face = node.Faces.ElementAtOrDefault(binaryAABB.FaceIndex);
+            return new AABBNodeLeaf(boundingBox, face);
+        }
     }
     private MDLControllerDataOrientation DeserializeControllerOrientationData(IEnumerable<byte[]> data)
     {
