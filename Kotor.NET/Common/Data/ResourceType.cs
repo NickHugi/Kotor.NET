@@ -62,6 +62,7 @@ public class ResourceType
     public static ResourceType RIM = new ResourceType(3002, "rim", "Modules");
     public static ResourceType PTH = new ResourceType(3003, "pth", "Paths");
     public static ResourceType LIP = new ResourceType(3004, "lip", "LIPs");
+    public static ResourceType TXB = new ResourceType(3006, "txb", "Xbox Textures");
     public static ResourceType TPC = new ResourceType(3007, "tpc", "Textures");
     public static ResourceType MDX = new ResourceType(3008, "mdx", "Models");
     public static ResourceType ERF = new ResourceType(9997, "erf", "Modules");

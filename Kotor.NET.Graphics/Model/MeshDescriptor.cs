@@ -28,19 +28,4 @@ public class MeshDescriptor
     public Vector3 AmbientColor { get; set; }
 }
 
-public class BoundingSphere
-{
-    public Vector3 Center { get; set; }
-    public float Radius { get; set; }
 
-    public BoundingSphere()
-    {
-        Center = new Vector3();
-        Radius = 0.0f;
-    }
-    public BoundingSphere(Vector3 center, float radius)
-    {
-        Center = center;
-        Radius = radius;
-    }
-}

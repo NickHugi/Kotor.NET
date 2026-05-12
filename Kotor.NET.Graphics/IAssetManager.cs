@@ -10,6 +10,8 @@ namespace Kotor.NET.Graphics;
 
 public interface IAssetManager : IDisposable
 {
+    IMesh Quad { get; }
+
     public KModel GetModel(string model);
     public void AddModel(string name, KModel model);
     public void RemoveModel(string name);

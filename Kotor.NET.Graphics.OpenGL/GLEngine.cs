@@ -42,6 +42,8 @@ public class GLEngine
 
         var placeholderTexture = new TPCTextureFactory(GL).FromPlaceholder();
         AssetManager.AddTexture("placeholder", placeholderTexture);
+
+        AssetManager.Quad = new VertexArrayObjectFactory().NewQuad(GL);
     }
 
     public void Deinit()
@@ -62,7 +64,8 @@ public class GLEngine
         GL.ClearColor(0.1f, 0.0f, 0.0f, 1.0f);
         GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
-        new GeometryRenderer().Render(AssetManager, Scene, camera, Width, Height, RenderInterceptor);
+        new GeometryRenderer().Render(AssetManager, Scene, camera, Width, Height);
+        new ImageRenderer().Render(AssetManager, Scene, camera, Width, Height);
     }
 
     public void Update(float timestep)
