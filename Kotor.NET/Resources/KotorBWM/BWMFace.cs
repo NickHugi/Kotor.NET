@@ -15,7 +15,14 @@ public class BWMFace : IFace
     public BWMEdge Edge2 => new(this, 1);
     public BWMEdge Edge3 => new(this, 2);
 
-    public Vector3 Centre
+    public float PlaneDistance
+    {
+        get
+        {
+            return -1 * Vector3.Dot(Normal, Point1);
+        }
+    }
+    public Vector3 Center
     {
         get
         {
@@ -25,20 +32,11 @@ public class BWMFace : IFace
             return new Vector3(x, y, z);
         }
     }
-
     public Vector3 Normal
     {
         get
         {
             return Vector3.Normalize(Vector3.Cross(Point2 - Point1, Point3 - Point1));
-        }
-    }
-
-    public float PlaneDistance
-    {
-        get
-        {
-            return -1 * Vector3.Dot(Normal, Point1);
         }
     }
 

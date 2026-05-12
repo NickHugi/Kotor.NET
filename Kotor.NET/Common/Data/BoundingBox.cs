@@ -18,7 +18,7 @@ public class BoundingBox
     public float YLength => Math.Abs(Max.Y - Min.Y);
     public float ZLength => Math.Abs(Max.Z - Min.Z);
 
-    public Vector3 Centre
+    public Vector3 Center
     {
         get
         {
@@ -39,7 +39,7 @@ public class BoundingBox
         Min = min;
         Max = max;
     }
-    public BoundingBox(IEnumerable<BWMFace> faces, float padding = 0)
+    public BoundingBox(IEnumerable<IFace> faces, float padding = 0)
     {
         List<Vector3> points =
         [

@@ -5,6 +5,6 @@ namespace Kotor.NET.Tools;
 
 public interface IAABBTreeBuilder
 {
-    public AABBNode Build(List<BWMFace> faces);
+    public AABBNode Build(List<IFace> faces);
 }
 

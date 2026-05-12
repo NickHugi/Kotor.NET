@@ -4,9 +4,9 @@ namespace Kotor.NET.Common.Data.Geometry;
 
 public class AABBNodeLeaf : AABBNode
 {
-    public BWMFace Face { get; init; }
+    public IFace Face { get; init; }
 
-    public AABBNodeLeaf(BoundingBox boundingBox, BWMFace face) : base(boundingBox)
+    public AABBNodeLeaf(BoundingBox boundingBox, IFace face) : base(boundingBox)
     {
         Face = face;
     }

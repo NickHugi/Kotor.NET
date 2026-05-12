@@ -49,7 +49,7 @@ public class BWMBinarySerializer
             {
                 return new BWMBinaryAABBNode()
                 {
-                    FaceIndex = _bwm.Faces.IndexOf(leaf.Face),
+                    FaceIndex = _bwm.Faces.IndexOf((BWMFace)leaf.Face),
                     BoundingBoxMin = leaf.BoundingBox.Min,
                     BoundingBoxMax = leaf.BoundingBox.Max,
                     LeftChildIndex = -1,

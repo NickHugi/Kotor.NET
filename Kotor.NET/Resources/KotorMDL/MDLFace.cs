@@ -23,5 +23,6 @@ public class MDLFace : IFace
 
     public SurfaceMaterial Material { get; set; }
     public Vector3 Normal { get; set; } = new();
+    public Vector3 Center { get; set; } = new();
     public float PlaneDistance { get; set; }
 }

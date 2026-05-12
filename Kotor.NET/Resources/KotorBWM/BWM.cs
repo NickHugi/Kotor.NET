@@ -64,6 +64,6 @@ public class BWM
     }
     public AABBNode GenerateTree(IAABBTreeBuilder builder)
     {
-        return builder.Build(Faces.ToList());
+        return builder.Build(Faces.OfType<IFace>().ToList());
     }
 }

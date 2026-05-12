@@ -13,10 +13,6 @@ public class AABBNodeBranch : AABBNode
         MostSignificantPlane = mostSignificantPlane;
     }
 
-    public AABBNodeBranch(BoundingBox boundingBox) : base(boundingBox)
-    {
-    }
-
     public override IEnumerable<AABBNode> GetDescendants()
     {
         if (LeftNode != null)

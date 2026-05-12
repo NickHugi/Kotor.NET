@@ -9,11 +9,12 @@ namespace Kotor.NET.Common.Data.Geometry;
 
 public interface IFace
 {
-    public abstract Vector3 Point1 { get; }
-    public abstract Vector3 Point2 { get; }
-    public abstract Vector3 Point3 { get; }
+    public Vector3 Point1 { get; }
+    public Vector3 Point2 { get; }
+    public Vector3 Point3 { get; }
 
-    public abstract SurfaceMaterial Material { get; }
-    public abstract Vector3 Normal { get; }
-    public abstract float PlaneDistance { get; }
+    public SurfaceMaterial Material { get; }
+    public float PlaneDistance { get; }
+    public Vector3 Normal { get; }
+    public Vector3 Center { get; }
 }

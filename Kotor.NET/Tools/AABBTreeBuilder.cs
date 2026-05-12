@@ -8,7 +8,7 @@ namespace Kotor.NET.Tools;
 
 public class AABBTreeBuilder : IAABBTreeBuilder
 {
-    public AABBNode Build(List<BWMFace> faces)
+    public AABBNode Build(List<IFace> faces)
     {
         if (faces.Count == 0)
             return null;
@@ -16,7 +16,7 @@ public class AABBTreeBuilder : IAABBTreeBuilder
         return BuildNode(faces);
     }
 
-    private AABBNode BuildNode(List<BWMFace> faces)
+    private AABBNode BuildNode(List<IFace> faces)
     {
         var boundingBox = new BoundingBox(faces);
 
@@ -29,9 +29,7 @@ public class AABBTreeBuilder : IAABBTreeBuilder
         return new AABBNodeBranch(boundingBox, BuildNode(left), BuildNode(right), axis);
     }
 
-    // Tries each axis in order of preference, falling back to an even split if
-    // no axis produces a non-degenerate partition.
-    private (List<BWMFace> Left, List<BWMFace> Right, Axis Axis) SplitFaces(List<BWMFace> faces, BoundingBox boundingBox)
+    private (List<IFace> Left, List<IFace> Right, Axis Axis) SplitFaces(List<IFace> faces, BoundingBox boundingBox)
     {
         var axis = GetBestAxisToSplit(boundingBox, faces);
 
@@ -39,28 +37,27 @@ public class AABBTreeBuilder : IAABBTreeBuilder
         {
             var (left, right) = SplitFacesByAxis(faces, axis, boundingBox);
 
-            if (left.Count > 0 && right.Count > 0)   // FIX: was inverted — good split, return it
+            if (left.Count > 0 && right.Count > 0)  
             {
                 return (left, right, axis);
             }
 
-            axis = (Axis)(((int)axis + 1) % 3);       // try the next axis
+            axis = (Axis)(((int)axis + 1) % 3); 
         }
 
-        // No axis produced a valid split; divide the list in half
         var (evenLeft, evenRight) = SplitFacesEvenly(faces, axis);
-        return (evenLeft, evenRight, axis);             // FIX: was (left, left, axis)
+        return (evenLeft, evenRight, axis);
     }
 
-    private (List<BWMFace> Left, List<BWMFace> Right) SplitFacesByAxis(List<BWMFace> faces, Axis axis, BoundingBox boundingBox)
+    private (List<IFace> Left, List<IFace> Right) SplitFacesByAxis(List<IFace> faces, Axis axis, BoundingBox boundingBox)
     {
-        var midpoint = boundingBox.Centre.GetComponent(axis);
-        var left = new List<BWMFace>();
-        var right = new List<BWMFace>();
+        var midpoint = boundingBox.Center.GetComponent(axis);
+        var left = new List<IFace>();
+        var right = new List<IFace>();
 
         foreach (var face in faces)
         {
-            if (face.Centre.GetComponent(axis) < midpoint)
+            if (face.Center.GetComponent(axis) < midpoint)
                 left.Add(face);
             else
                 right.Add(face);
@@ -69,13 +66,13 @@ public class AABBTreeBuilder : IAABBTreeBuilder
         return (left, right);
     }
 
-    private (List<BWMFace> Left, List<BWMFace> Right) SplitFacesEvenly(List<BWMFace> faces, Axis axis)
+    private (List<IFace> Left, List<IFace> Right) SplitFacesEvenly(List<IFace> faces, Axis axis)
     {
         var split = faces.Count / 2;
         return (faces.Take(split).ToList(), faces.Skip(split).ToList());
     }
 
-    private Axis GetBestAxisToSplit(BoundingBox boundingBox, List<BWMFace> faces)
+    private Axis GetBestAxisToSplit(BoundingBox boundingBox, List<IFace> faces)
     {
         var axis = boundingBox.GetLongestAxis();
 
@@ -87,14 +84,12 @@ public class AABBTreeBuilder : IAABBTreeBuilder
         return axis;
     }
 
-    // Returns true when all face centres share the same position along `axis`,
-    // meaning a split on that axis would place every face on one side.
-    private bool AreFacesCoplanarOnAxis(List<BWMFace> faces, Axis axis) // FIX: was comparing 3D centres and ignoring axis
+    private bool AreFacesCoplanarOnAxis(List<IFace> faces, Axis axis)
     {
         if (faces.Count == 0)
             return true;
 
-        var reference = faces[0].Centre.GetComponent(axis);
-        return faces.All(face => face.Centre.GetComponent(axis).Equals(reference, 1e-4f));
+        var reference = faces[0].Center.GetComponent(axis);
+        return faces.All(face => face.Center.GetComponent(axis).Equals(reference, 1e-4f));
     }
 }
