@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.NET.Formats.BinaryTPC;
+using Kotor.NET.Formats.BinaryTPC.Serialisation;
 using Kotor.NET.Resources.KotorTPC.TextureFormats;
 
 namespace Kotor.NET.Resources.KotorTPC;
@@ -31,6 +33,22 @@ public class TPC
         {
             _layers.Add(new(this, mipmaps));
         }
+    }
+    public static TPC FromFile(string filepath)
+    {
+        using var stream = File.OpenRead(filepath);
+        return FromStream(stream);
+    }
+    public static TPC FromBytes(byte[] bytes)
+    {
+        using var stream = new MemoryStream(bytes);
+        return FromStream(stream);
+    }
+    public static TPC FromStream(Stream stream)
+    {
+        var binary = new TPCBinary(stream);
+        var deserializer = new TPCBinaryDeserializer(binary);
+        return deserializer.Deserialize();
     }
 
     public byte[] GetData(int layer, int mipmap)

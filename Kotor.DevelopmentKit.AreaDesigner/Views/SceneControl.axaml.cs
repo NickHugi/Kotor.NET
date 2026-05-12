@@ -30,6 +30,7 @@ using Kotor.NET.Graphics.Model.Nodes;
 using Kotor.NET.Graphics.OpenGL;
 using Kotor.NET.Graphics.OpenGL.Factories;
 using Kotor.NET.Tests.Encapsulation;
+using Kotor.NET.Tools;
 using ReactiveUI;
 using Silk.NET.Core.Native;
 using Silk.NET.OpenGL;
@@ -43,6 +44,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
     public OrbitCamera _camera { get; } = new();
     private Point? _lastPointerPosition;
     private DateTime _lastRender = DateTime.Now;
+    private DesignerResourceManager _resourceManager = new DesignerResourceManager(@"C:\Kits");
 
     public SceneControl()
     {
@@ -74,19 +76,6 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
 
     private async Task LoadRequiredDataForKits()
     {
-        //Task[] loadModels =
-        //[
-        //    .. Kit.Manager.Get("sandral").Ceilings.Select(x => LoadModel(x.Model)),
-        //    .. Kit.Manager.Get("sandral").DoorFrames.Select(x => LoadModel(x.Model)),
-        //    .. Kit.Manager.Get("sandral").Floors.Select(x => LoadModel(x.Model)),
-        //    .. Kit.Manager.Get("sandral").InsideCorners.Select(x => LoadModel(x.Model)),
-        //    .. Kit.Manager.Get("sandral").OutsideCorners.Select(x => LoadModel(x.Model)),
-        //    .. Kit.Manager.Get("sandral").Walls.Select(x => LoadModel(x.Model)),
-
-        //    // todo - move to templates
-        //    .. Kit.Manager.Get("sandral").Tiles.SelectMany(x => x.InnerCorners).Select(x => LoadModel(x.Model)),
-        //    .. Kit.Manager.Get("sandral").Tiles.SelectMany(x => x.OuterCorners).Select(x => LoadModel(x.Model)),
-        //];
         var loadModels = Kit.Manager.Kits
             .SelectMany(kit => Directory.GetFiles($@"{Kit.Manager.ActiveDirectory}/{kit.ID}")
                 .Where(x => string.Equals(Path.GetExtension(x), ".mdl", StringComparison.InvariantCultureIgnoreCase))
@@ -106,7 +95,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
     }
     private async Task LoadTexture(string name)
     {
-        var filepath = $@"C:\Users\hugin\Desktop\KotOR Modding Stuff\Area Designer\Sandral Estate\{name}.tpc";
+        var filepath = $@"C:\Kits\sandral\{name}.tpc";
         if (!File.Exists(filepath))
             return;
 
