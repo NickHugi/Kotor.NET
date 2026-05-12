@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Common;
 using Kotor.NET.Common.Data;
+using Kotor.NET.Common.Data.Geometry;
 using Kotor.NET.Resources.KotorMDL.Nodes;
 
 namespace Kotor.NET.Resources.KotorMDL;
@@ -25,7 +26,7 @@ public class MDLFaceCollection(MDLTrimeshNode node) : ICollection<MDLFace>
             Vertex1 = SanitizeVertex(vertex1),
             Vertex2 = SanitizeVertex(vertex2),
             Vertex3 = SanitizeVertex(vertex3),
-            Material = SurfaceMaterial.Undefined,
+            Material = SurfaceMaterial.NotDefined,
             Normal = new(0, 0, 1),
             PlaneDistance = 0,
         });

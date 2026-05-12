@@ -1,17 +1,19 @@
 ﻿using System.Numerics;
+using Kotor.NET.Common;
+using Kotor.NET.Common.Data.Geometry;
 
-namespace Kotor.NET.Common.Data.Geometry;
+namespace Kotor.NET.Resources.KotorBWM;
 
-public class Face
+public class BWMFace
 {
     public required Vector3 Point1 { get; set; }
     public required Vector3 Point2 { get; set; }
     public required Vector3 Point3 { get; set; }
     public required SurfaceMaterial Material { get; set; }
 
-    public Edge Edge1 => new(this, 0);
-    public Edge Edge2 => new(this, 1);
-    public Edge Edge3 => new(this, 2);
+    public BWMEdge Edge1 => new(this, 0);
+    public BWMEdge Edge2 => new(this, 1);
+    public BWMEdge Edge3 => new(this, 2);
     public Vector3 Centre
     {
         get
@@ -37,10 +39,10 @@ public class Face
         }
     }
 
-    internal readonly int[] _transition = new int[] { Edge.NoTransition, Edge.NoTransition, Edge.NoTransition };
-    internal FaceCollection _collection = null;
+    internal readonly int[] _transition = new int[] { BWMEdge.NoTransition, BWMEdge.NoTransition, BWMEdge.NoTransition };
+    internal BWMFaceCollection _collection = null;
 
-    internal Face(FaceCollection collection)
+    internal BWMFace(BWMFaceCollection collection)
     {
         _collection = collection;
     }

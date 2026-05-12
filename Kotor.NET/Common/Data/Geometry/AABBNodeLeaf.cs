@@ -1,10 +1,12 @@
-﻿namespace Kotor.NET.Common.Data.Geometry;
+﻿using Kotor.NET.Resources.KotorBWM;
+
+namespace Kotor.NET.Common.Data.Geometry;
 
 public class AABBNodeLeaf : AABBNode
 {
-    public Face Face { get; init; }
+    public BWMFace Face { get; init; }
 
-    public AABBNodeLeaf(BoundingBox boundingBox, Face face) : base(boundingBox)
+    public AABBNodeLeaf(BoundingBox boundingBox, BWMFace face) : base(boundingBox)
     {
         Face = face;
     }

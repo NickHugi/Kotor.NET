@@ -9,7 +9,6 @@ using Kotor.NET.Common.Data.Geometry;
 using Kotor.NET.Formats.BinaryBWM;
 using Kotor.NET.Formats.BinaryBWM.Serialisation;
 using Kotor.NET.Formats.BinaryERF.Serialisation;
-using Kotor.NET.Resources.KotorBWM;
 using Kotor.NET.Resources.KotorERF;
 using Kotor.NET.Tools;
 
@@ -19,7 +18,7 @@ public class BWM
 {
     public BWMWalkmeshType WalkmeshType { get; set; }
     public Vector3 Position { get; set; }
-    public FaceCollection Faces { get; }
+    public BWMFaceCollection Faces { get; }
 
     public BWM(BWMWalkmeshType walkmeshType)
     {
@@ -67,10 +66,4 @@ public class BWM
     {
         return builder.Build(Faces.ToList());
     }
-}
-
-public enum BWMWalkmeshType
-{
-    Area,
-    Placeable
 }

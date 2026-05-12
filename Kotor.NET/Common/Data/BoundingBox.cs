@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Common.Data.Geometry;
+using Kotor.NET.Resources.KotorBWM;
 
 namespace Kotor.NET.Common.Data;
 
@@ -38,7 +39,7 @@ public class BoundingBox
         Min = min;
         Max = max;
     }
-    public BoundingBox(IEnumerable<Face> faces, float padding = 0)
+    public BoundingBox(IEnumerable<BWMFace> faces, float padding = 0)
     {
         List<Vector3> points =
         [

@@ -8,6 +8,7 @@ using Kotor.NET.Resources.KotorMDL.Nodes;
 using Kotor.NET.Resources.KotorMDL.VertexData;
 using Kotor.NET.Resources.KotorMDL;
 using Kotor.NET.Common;
+using Kotor.NET.Common.Data.Geometry;
 
 namespace Kotor.NET.Formats.BinaryMDL.Serialisation;
 

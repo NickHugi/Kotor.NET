@@ -114,7 +114,7 @@ public class BWMBinarySerializer
         return binary;
     }
 
-    private List<List<Edge>> GetPerimeters()
+    private List<List<BWMEdge>> GetPerimeters()
     {
         var pending = _bwm.Faces
             .Where(x => x.Material.IsWalkable())
@@ -122,11 +122,11 @@ public class BWMBinarySerializer
             .Where(e => e.AdjacentFace is null || !e.AdjacentFace.Material.IsWalkable())
             .ToList();
 
-        var result = new List<List<Edge>>();
+        var result = new List<List<BWMEdge>>();
 
         while (pending.Count > 0)
         {
-            var perimeter = new List<Edge>();
+            var perimeter = new List<BWMEdge>();
             result.Add(perimeter);
 
             var target = pending.First();

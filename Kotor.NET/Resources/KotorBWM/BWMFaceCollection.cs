@@ -5,35 +5,37 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.NET.Common;
+using Kotor.NET.Common.Data.Geometry;
 using Kotor.NET.Extensions;
 
-namespace Kotor.NET.Common.Data.Geometry;
+namespace Kotor.NET.Resources.KotorBWM;
 
-public class FaceCollection : IEnumerable<Face>
+public class BWMFaceCollection : IEnumerable<BWMFace>
 {
-    private readonly List<Face> _faces = new();
-    private List<Face> _sortedFaces => _faces.OrderByDescending(x => x.Material.IsWalkable() ? 1 : 0).ToList();
+    private readonly List<BWMFace> _faces = new();
+    private List<BWMFace> _sortedFaces => _faces.OrderByDescending(x => x.Material.IsWalkable() ? 1 : 0).ToList();
 
     public int Count => _faces.Count;
     public bool IsReadOnly => false;
 
-    public Face this[int index]
+    public BWMFace this[int index]
     {
         get => _sortedFaces[index];
     }
 
     public void Add(Vector3 point1, Vector3 point2, Vector3 point3, SurfaceMaterial material) => _faces.Add(new(this) { Point1=point1, Point2=point2, Point3=point3, Material=material });
     public void Clear() => _faces.Clear();
-    public bool Contains(Face item) => _faces.Contains(item);
-    public IEnumerator<Face> GetEnumerator() => _sortedFaces.GetEnumerator();
+    public bool Contains(BWMFace item) => _faces.Contains(item);
+    public IEnumerator<BWMFace> GetEnumerator() => _sortedFaces.GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => _sortedFaces.GetEnumerator();
 
-    public int IndexOf(Face face)
+    public int IndexOf(BWMFace face)
     {
         return _sortedFaces.IndexOf(face);
     }
 
-    public Face? FindAdjacentFace(Face face)
+    public BWMFace? FindAdjacentFace(BWMFace face)
     {
         foreach (var checking in _faces)
         {
@@ -63,7 +65,7 @@ public class FaceCollection : IEnumerable<Face>
 
         return null;
     }
-    public Face? FindAdjacentFace(Edge edge)
+    public BWMFace? FindAdjacentFace(BWMEdge edge)
     {
         foreach (var checking in _faces)
         {

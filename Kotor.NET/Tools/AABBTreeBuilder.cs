@@ -2,12 +2,13 @@
 using Kotor.NET.Common.Data;
 using Kotor.NET.Common.Data.Geometry;
 using Kotor.NET.Extensions;
+using Kotor.NET.Resources.KotorBWM;
 
 namespace Kotor.NET.Tools;
 
 public class AABBTreeBuilder : IAABBTreeBuilder
 {
-    public AABBNode Build(List<Face> faces)
+    public AABBNode Build(List<BWMFace> faces)
     {
         if (faces.Count == 0)
             return null;
@@ -15,7 +16,7 @@ public class AABBTreeBuilder : IAABBTreeBuilder
         return BuildNode(faces);
     }
 
-    private AABBNode BuildNode(List<Face> faces)
+    private AABBNode BuildNode(List<BWMFace> faces)
     {
         var boundingBox = new BoundingBox(faces);
 
@@ -30,7 +31,7 @@ public class AABBTreeBuilder : IAABBTreeBuilder
 
     // Tries each axis in order of preference, falling back to an even split if
     // no axis produces a non-degenerate partition.
-    private (List<Face> Left, List<Face> Right, Axis Axis) SplitFaces(List<Face> faces, BoundingBox boundingBox)
+    private (List<BWMFace> Left, List<BWMFace> Right, Axis Axis) SplitFaces(List<BWMFace> faces, BoundingBox boundingBox)
     {
         var axis = GetBestAxisToSplit(boundingBox, faces);
 
@@ -51,11 +52,11 @@ public class AABBTreeBuilder : IAABBTreeBuilder
         return (evenLeft, evenRight, axis);             // FIX: was (left, left, axis)
     }
 
-    private (List<Face> Left, List<Face> Right) SplitFacesByAxis(List<Face> faces, Axis axis, BoundingBox boundingBox)
+    private (List<BWMFace> Left, List<BWMFace> Right) SplitFacesByAxis(List<BWMFace> faces, Axis axis, BoundingBox boundingBox)
     {
         var midpoint = boundingBox.Centre.GetComponent(axis);
-        var left = new List<Face>();
-        var right = new List<Face>();
+        var left = new List<BWMFace>();
+        var right = new List<BWMFace>();
 
         foreach (var face in faces)
         {
@@ -68,13 +69,13 @@ public class AABBTreeBuilder : IAABBTreeBuilder
         return (left, right);
     }
 
-    private (List<Face> Left, List<Face> Right) SplitFacesEvenly(List<Face> faces, Axis axis)
+    private (List<BWMFace> Left, List<BWMFace> Right) SplitFacesEvenly(List<BWMFace> faces, Axis axis)
     {
         var split = faces.Count / 2;
         return (faces.Take(split).ToList(), faces.Skip(split).ToList());
     }
 
-    private Axis GetBestAxisToSplit(BoundingBox boundingBox, List<Face> faces)
+    private Axis GetBestAxisToSplit(BoundingBox boundingBox, List<BWMFace> faces)
     {
         var axis = boundingBox.GetLongestAxis();
 
@@ -88,7 +89,7 @@ public class AABBTreeBuilder : IAABBTreeBuilder
 
     // Returns true when all face centres share the same position along `axis`,
     // meaning a split on that axis would place every face on one side.
-    private bool AreFacesCoplanarOnAxis(List<Face> faces, Axis axis) // FIX: was comparing 3D centres and ignoring axis
+    private bool AreFacesCoplanarOnAxis(List<BWMFace> faces, Axis axis) // FIX: was comparing 3D centres and ignoring axis
     {
         if (faces.Count == 0)
             return true;

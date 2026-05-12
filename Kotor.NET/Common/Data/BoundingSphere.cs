@@ -1,5 +1,5 @@
 ﻿using System.Numerics;
-using Kotor.NET.Common.Data.Geometry;
+using Kotor.NET.Resources.KotorBWM;
 
 namespace Kotor.NET.Common.Data;
 
@@ -18,7 +18,7 @@ public class BoundingSphere
         Center = center;
         Radius = radius;
     }
-    public BoundingSphere(IEnumerable<Face> faces)
+    public BoundingSphere(IEnumerable<BWMFace> faces)
     {
         List<Vector3> points =
         [

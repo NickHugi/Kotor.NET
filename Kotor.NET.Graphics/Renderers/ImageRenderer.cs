@@ -13,7 +13,7 @@ namespace Kotor.NET.Graphics.Renderers;
 
 public class ImageRenderer : IRenderer
 {
-    public void Render(IAssetManager assets, Scene scene, Camera camera, uint width, uint height)
+    public void Render(IAssetManager assets, Scene scene, Camera camera, uint width, uint height, Action<List<MeshDescriptor>> renderInterceptor)
     {
         var descriptors = scene.Controls.SelectMany(x => x.GetImageDescriptors(assets)).ToList();
 
