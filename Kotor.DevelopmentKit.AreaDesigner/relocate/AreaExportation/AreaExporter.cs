@@ -33,13 +33,19 @@ public static class AreaExporter
         }
 
         var walkmeshes = mdl.Root.GetAllDescendants().OfType<MDLWalkmeshNode>();
-        var finalWalkmesh = WalkmeshBuilder.Instance.Bake(walkmeshes);
-        mdl.DeleteWalkmesh();
-        mdl.Root.Children.Add(finalWalkmesh);
+        DeleteWalkmeshesRecursive(mdl.Root);
+        var newWalkmesh = MergeWalkmeshes(walkmeshes.ToList());
+        mdl.Root.Children.Add(newWalkmesh);
+
+        //var walkmeshes = mdl.Root.GetAllDescendants().OfType<MDLWalkmeshNode>();
+        //var finalWalkmesh = WalkmeshBuilder.Instance.Bake(walkmeshes);
+        //mdl.DeleteWalkmesh();
+        //mdl.Root.Children.Add(finalWalkmesh);
 
         mdl.Root.GetAllDescendants().OfType<MDLTrimeshNode>().ToList().ForEach(x => x.LightmapTexture = "");
         mdl.Root.GetAllDescendants().Select((x, i) => x.Name = i.ToString()).ToArray();
         mdl.RedoNodeNumbers();
+
         return mdl;
     }
 
@@ -93,6 +99,37 @@ public static class AreaExporter
         objectMDL.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(@object.LocalOrientation));
         AdjustWalkmesh(objectMDL, objectMDL.Root.GetAllDescendants().OfType<MDLWalkmeshNode>().First());
         return objectMDL.Root;
+    }
+
+    private static void DeleteWalkmeshesRecursive(MDLNode node)
+    {
+        foreach (var child in node.Children.ToArray())
+        {
+            if (node is MDLWalkmeshNode)
+                node.Children.Remove(child);
+            else
+                DeleteWalkmeshesRecursive(child);
+        }
+    }
+
+    private static MDLWalkmeshNode MergeWalkmeshes(List<MDLWalkmeshNode> walkmeshes)
+    {
+        var final = new MDLWalkmeshNode("walkmesh");
+
+        foreach (var walkmesh in walkmeshes)
+        {
+            foreach (var face in walkmesh.Faces)
+            {
+                final.Faces.Add(new MDLFace()
+                {
+                    Vertex1 = new MDLVertex().SetPosition(face.Vertex1.Position.Value),
+                    Vertex2 = new MDLVertex().SetPosition(face.Vertex2.Position.Value),
+                    Vertex3 = new MDLVertex().SetPosition(face.Vertex3.Position.Value),
+                });
+            }
+        }
+
+        return final;
     }
 
     private static void AdjustWalkmesh(MDL mdl, MDLTrimeshNode node)

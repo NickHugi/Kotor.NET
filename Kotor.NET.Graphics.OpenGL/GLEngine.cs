@@ -34,11 +34,9 @@ public class GLEngine
     {
         GL.Enable(EnableCap.DepthTest);
 
-        var shader1 = new ShaderFactory(GL).FromFile("Assets/standard/vertex.glsl", "Assets/standard/fragment.glsl");
-        AssetManager.AddShader("basic", shader1);
-
-        var shader2 = new ShaderFactory(GL).FromFile("Assets/picker/vertex.glsl", "Assets/picker/fragment.glsl");
-        AssetManager.AddShader("picker", shader2);
+        AssetManager.AddShader("basic", new ShaderFactory(GL).FromFile("Assets/standard/vertex.glsl", "Assets/standard/fragment.glsl"));
+        AssetManager.AddShader("picker", new ShaderFactory(GL).FromFile("Assets/picker/vertex.glsl", "Assets/picker/fragment.glsl"));
+        AssetManager.AddShader("image", new ShaderFactory(GL).FromFile("Assets/image/vertex.glsl", "Assets/image/fragment.glsl"));
 
         var placeholderTexture = new TPCTextureFactory(GL).FromPlaceholder();
         AssetManager.AddTexture("placeholder", placeholderTexture);
