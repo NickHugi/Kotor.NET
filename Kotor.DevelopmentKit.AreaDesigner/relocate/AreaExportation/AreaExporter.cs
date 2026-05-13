@@ -8,10 +8,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Clipper2Lib;
 using DynamicData;
+using Kotor.NET.Common.Data.Geometry;
 using Kotor.NET.Graphics.GPU;
 using Kotor.NET.Resources.KotorMDL;
 using Kotor.NET.Resources.KotorMDL.Controllers;
 using Kotor.NET.Resources.KotorMDL.Nodes;
+using Kotor.NET.Tools;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaExportation;
 
@@ -33,8 +35,9 @@ public static class AreaExporter
         }
 
         var walkmeshes = mdl.Root.GetAllDescendants().OfType<MDLWalkmeshNode>();
-        DeleteWalkmeshesRecursive(mdl.Root);
         var newWalkmesh = MergeWalkmeshes(walkmeshes.ToList());
+        DeleteWalkmeshesRecursive(mdl.Root); // move method to mdl
+        newWalkmesh.RootNode = new AABBTreeBuilder().Build(newWalkmesh.Faces.OfType<IFace>().ToList());
         mdl.Root.Children.Add(newWalkmesh);
 
         //var walkmeshes = mdl.Root.GetAllDescendants().OfType<MDLWalkmeshNode>();
@@ -44,6 +47,7 @@ public static class AreaExporter
 
         mdl.Root.GetAllDescendants().OfType<MDLTrimeshNode>().ToList().ForEach(x => x.LightmapTexture = "");
         mdl.Root.GetAllDescendants().Select((x, i) => x.Name = i.ToString()).ToArray();
+        newWalkmesh.Name = "walkmesh";
         mdl.RedoNodeNumbers();
 
         return mdl;
@@ -105,7 +109,7 @@ public static class AreaExporter
     {
         foreach (var child in node.Children.ToArray())
         {
-            if (node is MDLWalkmeshNode)
+            if (child is MDLWalkmeshNode)
                 node.Children.Remove(child);
             else
                 DeleteWalkmeshesRecursive(child);
@@ -115,16 +119,18 @@ public static class AreaExporter
     private static MDLWalkmeshNode MergeWalkmeshes(List<MDLWalkmeshNode> walkmeshes)
     {
         var final = new MDLWalkmeshNode("walkmesh");
+        final.EnableVertices();
 
         foreach (var walkmesh in walkmeshes)
         {
             foreach (var face in walkmesh.Faces)
             {
+                //final.Faces.Add(face);
                 final.Faces.Add(new MDLFace()
                 {
-                    Vertex1 = new MDLVertex().SetPosition(face.Vertex1.Position.Value),
-                    Vertex2 = new MDLVertex().SetPosition(face.Vertex2.Position.Value),
-                    Vertex3 = new MDLVertex().SetPosition(face.Vertex3.Position.Value),
+                    Vertex1 = new MDLVertex().SetPosition(face.Point1),
+                    Vertex2 = new MDLVertex().SetPosition(face.Point2),
+                    Vertex3 = new MDLVertex().SetPosition(face.Point3),
                 });
             }
         }
