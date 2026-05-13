@@ -36,14 +36,9 @@ public static class AreaExporter
 
         var walkmeshes = mdl.Root.GetAllDescendants().OfType<MDLWalkmeshNode>();
         var newWalkmesh = MergeWalkmeshes(walkmeshes.ToList());
-        DeleteWalkmeshesRecursive(mdl.Root); // move method to mdl
+        DeleteWalkmeshesRecursive(mdl.Root); // TODO - move method to mdl
         newWalkmesh.RootNode = new AABBTreeBuilder().Build(newWalkmesh.Faces.OfType<IFace>().ToList());
         mdl.Root.Children.Add(newWalkmesh);
-
-        //var walkmeshes = mdl.Root.GetAllDescendants().OfType<MDLWalkmeshNode>();
-        //var finalWalkmesh = WalkmeshBuilder.Instance.Bake(walkmeshes);
-        //mdl.DeleteWalkmesh();
-        //mdl.Root.Children.Add(finalWalkmesh);
 
         mdl.Root.GetAllDescendants().OfType<MDLTrimeshNode>().ToList().ForEach(x => x.LightmapTexture = "");
         mdl.Root.GetAllDescendants().Select((x, i) => x.Name = i.ToString()).ToArray();

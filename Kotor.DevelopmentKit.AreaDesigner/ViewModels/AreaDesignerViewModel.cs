@@ -14,6 +14,7 @@ using Kotor.DevelopmentKit.AreaDesigner.relocate.KitSerialization;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
 using Kotor.NET.Common;
 using Kotor.NET.Graphics.OpenGL;
+using Kotor.NET.Resources.KotorBWM;
 using Kotor.NET.Resources.KotorMDL;
 using ReactiveUI;
 
@@ -149,6 +150,9 @@ public class AreaDesignerViewModel : ReactiveObject
         {
             var mdl = AreaExporter.RoomToMDL(Area.Rooms.First());
             MDL.ToFile(mdl, $"{Kit.Manager.ActiveDirectory}/test.mdl", GameEngine.K1, Platform.Windows);
+
+            var wok = mdl.GetWalkmesh().GenerateBWM();
+            BWM.ToFile(wok, $"{Kit.Manager.ActiveDirectory}/test.wok");
         }
         catch (Exception e)
         {

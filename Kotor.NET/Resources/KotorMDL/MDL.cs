@@ -8,6 +8,7 @@ using Kotor.NET.Common;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Formats.BinaryMDL;
 using Kotor.NET.Formats.BinaryMDL.Serialisation;
+using Kotor.NET.Resources.KotorBWM;
 using Kotor.NET.Resources.KotorMDL.Nodes;
 
 namespace Kotor.NET.Resources.KotorMDL;
@@ -106,6 +107,11 @@ public class MDL
             node.Children.RemoveAll(x => x is MDLWalkmeshNode);
             scan.AddRange(node.Children);
         }
+    }
+
+    public MDLWalkmeshNode GetWalkmesh()
+    {
+        return Root.GetAllDescendants().FirstOrDefault(x => x is MDLWalkmeshNode) as MDLWalkmeshNode;
     }
 
     public void RecalculateBounds()

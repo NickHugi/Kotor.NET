@@ -22,6 +22,7 @@ public class MDLWalkmeshNode : MDLTrimeshNode
 
         foreach (var face in Faces)
         {
+            face.Material = SurfaceMaterial.Grass; // todo
             bwm.Faces.Add(face.Point1, face.Point2, face.Point3, face.Material);
         }
 
