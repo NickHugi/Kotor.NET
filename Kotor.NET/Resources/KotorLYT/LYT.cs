@@ -39,6 +39,23 @@ public class LYT
         return deserializer.Deserialize();
     }
 
+    public static void ToFile(LYT lyt, string filepath)
+    {
+        using var stream = File.OpenWrite(filepath);
+        ToStream(lyt, stream);
+    }
+    public static byte[] ToBytes(LYT lyt)
+    {
+        using var stream = new MemoryStream();
+        ToStream(lyt, stream);
+        return stream.ToArray();
+    }
+    public static void ToStream(LYT lyt, Stream stream)
+    {
+        var binary = new LYTAsciiSerializer(lyt).Serialize();
+        binary.Write(stream);
+    }
+
     public LYTRoomCollection Rooms => new(this);
     public LYTDoorHookCollection DoorHooks => new(this);
     public LYTTrackCollection Tracks => new(this);

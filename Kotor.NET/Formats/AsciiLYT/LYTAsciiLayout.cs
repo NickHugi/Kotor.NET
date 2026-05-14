@@ -60,5 +60,6 @@ public class LYTAsciiLayout
         DoorHooks.ForEach(doorhook => doorhook.Write(writer));
 
         writer.WriteLine($"donelayout");
+        writer.Flush();
     }
 }

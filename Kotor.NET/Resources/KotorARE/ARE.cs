@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Common.Data;
+using Kotor.NET.Formats.Binary2DA.Serialisation;
 using Kotor.NET.Resources.KotorGFF;
 
 namespace Kotor.NET.Resources.KotorARE;
@@ -15,6 +16,30 @@ public class ARE
     public ARE()
     {
         Source = new();
+        Source.Type = GFFType.ARE;
+
+        AlphaTest = 0.2f;
+        CameraStyle = 0;
+        ChanceLightning = 0;
+        ChanceRain = 0;
+        ChanceSnow = 0;
+        Comments = "";
+        CreatorID = 0;
+        DefaultEnvironmentMap = "";
+        DisableTransit = false;
+        DynAmbientColor = 0xFFFFFFFF;
+        SunFogNear = 0;
+        SunFogFar = 0;
+        SunFogOn = false;
+        SunFogColour = 0xFFFFFFFF;
+        SunAmbientColour = 0xFFFFFFFF;
+        SunDiffuseColour = 0xFFFFFFFF;
+        SunShadows = true;
+        OnEnter = "";
+        OnExit = "";
+        OnHeartbeat = "";
+        OnUserDefined = "";
+        Tag = "";
     }
     public ARE(GFF source)
     {
@@ -31,6 +56,23 @@ public class ARE
     public static ARE FromStream(Stream stream)
     {
         return new(GFF.FromStream(stream));
+    }
+
+    public static void ToFile(ARE are, string filepath)
+    {
+        using var stream = File.OpenWrite(filepath);
+        ToStream(are, stream);
+    }
+    public static byte[] ToBytes(ARE are)
+    {
+        using var stream = new MemoryStream();
+        ToStream(are, stream);
+        return stream.ToArray();
+    }
+    public static void ToStream(ARE are, Stream stream)
+    {
+        var binary = new GFFBinarySerializer(are.Source).Serialize();
+        binary.Write(stream);
     }
 
     /// <summary>

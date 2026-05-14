@@ -16,6 +16,8 @@ namespace Kotor.NET.Resources.KotorERF;
 /// </summary>
 public class ERF : IEnumerable<ERFResource>
 {
+    public ERFType Type { get; set; }
+
     internal List<ERFResource> _resources;
 
     /// <summary>
@@ -23,6 +25,11 @@ public class ERF : IEnumerable<ERFResource>
     /// </summary>
     public ERF()
     {
+        _resources = new();
+    }
+    public ERF(ERFType type)
+    {
+        Type = type;
         _resources = new();
     }
 
@@ -143,4 +150,12 @@ public class ERF : IEnumerable<ERFResource>
         _resources.Add(resource);
         return resource;
     }
+}
+
+public enum ERFType
+{
+    ERF,
+    MOD,
+    HAK,
+    SAV,
 }

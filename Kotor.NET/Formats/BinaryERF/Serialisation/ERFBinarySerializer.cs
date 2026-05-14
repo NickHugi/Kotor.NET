@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ public class ERFBinarySerializer
         {
             var binary = new ERFBinary();
 
-            binary.FileHeader.FileType = ERFBinaryFileHeader.FILE_TYPES[0];
+            binary.FileHeader.FileType = _erf.Type.ToBinaryHeaderString();
             binary.FileHeader.FileVersion = ERFBinaryFileHeader.FILE_VERSION;
 
             foreach (var resource in _erf)
@@ -46,5 +47,20 @@ public class ERFBinarySerializer
         {
             throw new SerializationException("Failed to serialize the ERF data.", e);
         }
+    }
+}
+
+public static class ERFBinaryFileHeaderExtensions
+{
+    public static string ToBinaryHeaderString(this ERFType header)
+    {
+        return header switch
+        {
+            ERFType.ERF => "ERF ",
+            ERFType.MOD => "MOD ",
+            ERFType.HAK => "HAK ",
+            ERFType.SAV => "SAV ",
+            _ => throw new InvalidEnumArgumentException(nameof(header), (int)header, typeof(ERFType)),
+        };
     }
 }

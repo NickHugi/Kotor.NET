@@ -43,7 +43,7 @@ public class LYTAsciiRoom
 
     public void Write(StreamWriter writer)
     {
-        var line = string.Join("  ", _tokens);
+        var line = string.Join(" ", _tokens);
         writer.WriteLine("      " + line);
     }
 }

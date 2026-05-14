@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Common.Data;
+using Kotor.NET.Formats.Binary2DA.Serialisation;
 using Kotor.NET.Resources.KotorGFF;
 
 namespace Kotor.NET.Resources.KotorIFO;
@@ -15,6 +16,30 @@ public class IFO
     public IFO()
     {
         Source = new();
+        Source.Type = GFFType.IFO;
+
+        VoiceOverID = "";
+        Name = new();
+        Tag = "";
+        ModEntryX = 0; // TODO - make a Vector3
+        ModEntryY = 0; //
+        ModEntryZ = 0; //
+        ModEntryDirectionX = 0; // TODO - make a Vector2
+        ModEntryDirectionY = 1; //
+        XPScale = 10;
+        OnHeartbeat = "";
+        OnModLoad = "";
+        OnModStart = "";
+        OnClientEnter = "";
+        OnClientLeave = "";
+        OnActivateItem = "";
+        OnAcquireItem = "";
+        OnUserDefined = "";
+        OnUnAcquireItem = "";
+        OnPlayerDeath = "";
+        OnPlayerDying = "";
+        OnPlayerLevelUp = "";
+        ModAreaList.Clear();
     }
     public IFO(GFF source)
     {
@@ -31,6 +56,23 @@ public class IFO
     public static IFO FromStream(Stream stream)
     {
         return new(GFF.FromStream(stream));
+    }
+
+    public static void ToFile(IFO ifo, string filepath)
+    {
+        using var stream = File.OpenWrite(filepath);
+        ToStream(ifo, stream);
+    }
+    public static byte[] ToBytes(IFO ifo)
+    {
+        using var stream = new MemoryStream();
+        ToStream(ifo, stream);
+        return stream.ToArray(); ;
+    }
+    public static void ToStream(IFO ifo, Stream stream)
+    {
+        var binary = new GFFBinarySerializer(ifo.Source).Serialize();
+        binary.Write(stream);
     }
 
     /// <remarks>

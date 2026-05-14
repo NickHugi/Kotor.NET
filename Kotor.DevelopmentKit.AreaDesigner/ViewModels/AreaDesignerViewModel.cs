@@ -13,8 +13,14 @@ using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaSerialization;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.KitSerialization;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
 using Kotor.NET.Common;
+using Kotor.NET.Common.Data;
 using Kotor.NET.Graphics.OpenGL;
+using Kotor.NET.Resources.KotorARE;
 using Kotor.NET.Resources.KotorBWM;
+using Kotor.NET.Resources.KotorERF;
+using Kotor.NET.Resources.KotorGFF;
+using Kotor.NET.Resources.KotorIFO;
+using Kotor.NET.Resources.KotorLYT;
 using Kotor.NET.Resources.KotorMDL;
 using ReactiveUI;
 
@@ -149,10 +155,49 @@ public class AreaDesignerViewModel : ReactiveObject
         try
         {
             var mdl = AreaExporter.RoomToMDL(Area.Rooms.First());
-            MDL.ToFile(mdl, $"{Kit.Manager.ActiveDirectory}/test.mdl", GameEngine.K1, Platform.Windows);
-
             var wok = mdl.GetWalkmesh().GenerateBWM();
-            BWM.ToFile(wok, $"{Kit.Manager.ActiveDirectory}/test.wok");
+            (var mdlData, var mdxData) = MDL.ToBytes(mdl, GameEngine.K1, Platform.Windows);
+
+            var ifo = new IFO();
+            ifo.ModAreaList.Add("test");
+            ifo.EntryArea = "test";
+            ifo.Source.Root.SetList("Mod_GVar_List");
+            ifo.Source.Root.SetList("Mod_Expan_List");
+            ifo.Source.Root.SetList("Mod_CutSceneList");
+            ifo.Source.Root.SetInt32("Mod_Creator_ID", 2);
+            ifo.Source.Root.SetUInt32("Mod_Version", 3);
+            ifo.Source.Root.SetLocalisedString("Mod_Description", new(-1));
+            ifo.Source.Root.SetUInt8("Mod_DawnHour", 0);
+            ifo.Source.Root.SetUInt8("Mod_DuskHour", 0);
+            ifo.Source.Root.SetUInt8("Mod_IsSaveGame", 0);
+            ifo.Source.Root.SetUInt8("Mod_MinPerHour", 0);
+            ifo.Source.Root.SetUInt32("Mod_StartYear", 0);
+            ifo.Source.Root.SetUInt8("Mod_StartDay", 1);
+            ifo.Source.Root.SetUInt8("Mod_StartHour", 13);
+            ifo.Source.Root.SetUInt8("Mod_StartMonth", 6);
+            ifo.Source.Root.SetString("Mod_Hak", "");
+            ifo.Source.Root.SetResRef("Mod_StartMovie", "");
+            ifo.Source.Root.SetBinary("Mod_ID", Enumerable.Range(0, 16).Select(_ => (byte)0).ToArray());
+            IFO.ToFile(ifo, $"{Kit.Manager.ActiveDirectory}/test.ifo");
+
+            var are = new ARE();
+            
+            var git = new GFF();
+            git.Type = GFFType.GIT;
+
+            var lyt = new LYT();
+            lyt.Rooms.Add("test01", 0, 0, 0);
+
+            var erf = new ERF(ERFType.MOD);
+            erf.Add("test", ResourceType.IFO, IFO.ToBytes(ifo));
+            erf.Add("test", ResourceType.ARE, ARE.ToBytes(are));
+            erf.Add("test", ResourceType.GIT, GFF.ToBytes(git));
+            erf.Add("test", ResourceType.LYT, LYT.ToBytes(lyt));
+            erf.Add("test01", ResourceType.MDL, mdlData);
+            erf.Add("test01", ResourceType.MDX, mdxData);
+            erf.Add("test01", ResourceType.WOK, BWM.ToBytes(wok));
+            //ERF.ToFile(erf, $"{Kit.Manager.ActiveDirectory}/test.mod");
+            ERF.ToFile(erf, $@"C:\Program Files (x86)\Steam\steamapps\common\swkotor\modules\test.mod");
         }
         catch (Exception e)
         {
