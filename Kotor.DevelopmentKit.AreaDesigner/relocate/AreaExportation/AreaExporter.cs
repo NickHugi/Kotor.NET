@@ -115,6 +115,7 @@ public static class AreaExporter
     {
         var final = new MDLWalkmeshNode("walkmesh");
         final.EnableVertices();
+        final.EnableNormals();
 
         foreach (var walkmesh in walkmeshes)
         {
@@ -123,10 +124,11 @@ public static class AreaExporter
                 //final.Faces.Add(face);
                 final.Faces.Add(new MDLFace()
                 {
-                    Vertex1 = new MDLVertex().SetPosition(face.Point1),
-                    Vertex2 = new MDLVertex().SetPosition(face.Point2),
-                    Vertex3 = new MDLVertex().SetPosition(face.Point3),
+                    Vertex1 = new MDLVertex().SetPosition(face.Point1).SetNormal(Vector3.One),
+                    Vertex2 = new MDLVertex().SetPosition(face.Point2).SetNormal(Vector3.One),
+                    Vertex3 = new MDLVertex().SetPosition(face.Point3).SetNormal(Vector3.One)
                 });
+                final.Faces.Last().Material = face.Material;
             }
         }
 

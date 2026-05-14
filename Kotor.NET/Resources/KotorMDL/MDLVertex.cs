@@ -74,10 +74,15 @@ public class MDLVertex
             //&& vertex.Skin.Equals(Skin);
     }
 
-    // todo
     public MDLVertex SetPosition(Vector3 position)
     {
         _position = position;
+        return this;
+    }
+
+    public MDLVertex SetNormal(Vector3 normal)
+    {
+        _normal = normal;
         return this;
     }
 }

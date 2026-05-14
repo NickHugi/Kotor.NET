@@ -161,6 +161,7 @@ public class AreaDesignerViewModel : ReactiveObject
             var ifo = new IFO();
             ifo.ModAreaList.Add("test");
             ifo.EntryArea = "test";
+            ifo.Source.Root.SetUInt16("Expansion_Pack", 0);
             ifo.Source.Root.SetList("Mod_GVar_List");
             ifo.Source.Root.SetList("Mod_Expan_List");
             ifo.Source.Root.SetList("Mod_CutSceneList");
@@ -170,15 +171,17 @@ public class AreaDesignerViewModel : ReactiveObject
             ifo.Source.Root.SetUInt8("Mod_DawnHour", 0);
             ifo.Source.Root.SetUInt8("Mod_DuskHour", 0);
             ifo.Source.Root.SetUInt8("Mod_IsSaveGame", 0);
-            ifo.Source.Root.SetUInt8("Mod_MinPerHour", 0);
+            ifo.Source.Root.SetUInt8("Mod_MinPerHour", 1);
             ifo.Source.Root.SetUInt32("Mod_StartYear", 0);
             ifo.Source.Root.SetUInt8("Mod_StartDay", 1);
             ifo.Source.Root.SetUInt8("Mod_StartHour", 13);
             ifo.Source.Root.SetUInt8("Mod_StartMonth", 6);
             ifo.Source.Root.SetString("Mod_Hak", "");
+            ifo.Source.Root.SetString("Mod_Tag", "MODULE");
             ifo.Source.Root.SetResRef("Mod_StartMovie", "");
+            ifo.Source.Root.SetResRef("Mod_OnSpawnBtnDn", "");
+            ifo.Source.Root.SetResRef("Mod_OnPlrRest", "");
             ifo.Source.Root.SetBinary("Mod_ID", Enumerable.Range(0, 16).Select(_ => (byte)0).ToArray());
-            IFO.ToFile(ifo, $"{Kit.Manager.ActiveDirectory}/test.ifo");
 
             var are = new ARE();
             
@@ -189,14 +192,13 @@ public class AreaDesignerViewModel : ReactiveObject
             lyt.Rooms.Add("test01", 0, 0, 0);
 
             var erf = new ERF(ERFType.MOD);
-            erf.Add("test", ResourceType.IFO, IFO.ToBytes(ifo));
+            erf.Add("module", ResourceType.IFO, IFO.ToBytes(ifo));
             erf.Add("test", ResourceType.ARE, ARE.ToBytes(are));
             erf.Add("test", ResourceType.GIT, GFF.ToBytes(git));
             erf.Add("test", ResourceType.LYT, LYT.ToBytes(lyt));
             erf.Add("test01", ResourceType.MDL, mdlData);
             erf.Add("test01", ResourceType.MDX, mdxData);
             erf.Add("test01", ResourceType.WOK, BWM.ToBytes(wok));
-            //ERF.ToFile(erf, $"{Kit.Manager.ActiveDirectory}/test.mod");
             ERF.ToFile(erf, $@"C:\Program Files (x86)\Steam\steamapps\common\swkotor\modules\test.mod");
         }
         catch (Exception e)
