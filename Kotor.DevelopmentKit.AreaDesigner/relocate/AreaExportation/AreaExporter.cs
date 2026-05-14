@@ -36,7 +36,8 @@ public static class AreaExporter
 
         var walkmeshes = mdl.Root.GetAllDescendants().OfType<MDLWalkmeshNode>();
         var newWalkmesh = MergeWalkmeshes(walkmeshes.ToList());
-        DeleteWalkmeshesRecursive(mdl.Root); // TODO - move method to mdl
+        MergeVerticesByDistance(newWalkmesh, 0.1f);
+        mdl.DeleteWalkmesh();
         newWalkmesh.RootNode = new AABBTreeBuilder().Build(newWalkmesh.Faces.OfType<IFace>().ToList());
         mdl.Root.Children.Add(newWalkmesh);
 
@@ -121,7 +122,6 @@ public static class AreaExporter
         {
             foreach (var face in walkmesh.Faces)
             {
-                //final.Faces.Add(face);
                 final.Faces.Add(new MDLFace()
                 {
                     Vertex1 = new MDLVertex().SetPosition(face.Point1).SetNormal(Vector3.One),
@@ -133,6 +133,37 @@ public static class AreaExporter
         }
 
         return final;
+    }
+
+    private static void MergeVerticesByDistance(MDLTrimeshNode trimesh, float threshold)
+    {
+        var vertices = trimesh.Faces.SelectMany(x => new List<MDLVertex>() { x.Vertex1, x.Vertex2, x.Vertex3 }).ToList();
+
+        while (true)
+        {
+            var edited = false;
+
+            foreach (var v1 in vertices)
+            {
+                foreach (var v2 in vertices)
+                {
+                    if (v1 == v2)
+                        continue;
+
+                    var distance = Vector3.Distance(v1.Position.Value, v2.Position.Value);
+                    if (distance < threshold && distance > 0)
+                    {
+                        var middle = (v1.Position.Value + v2.Position.Value) / 2;
+                        v1.SetPosition(middle);
+                        v2.SetPosition(middle);
+                        edited = true;
+                    }
+                }
+            }
+
+            if (!edited)
+                break;
+        }
     }
 
     private static void AdjustWalkmesh(MDL mdl, MDLTrimeshNode node)

@@ -22,6 +22,7 @@ using Kotor.NET.Resources.KotorGFF;
 using Kotor.NET.Resources.KotorIFO;
 using Kotor.NET.Resources.KotorLYT;
 using Kotor.NET.Resources.KotorMDL;
+using Kotor.NET.Resources.KotorMDL.Nodes;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.ViewModels;
@@ -157,6 +158,7 @@ public class AreaDesignerViewModel : ReactiveObject
             var mdl = AreaExporter.RoomToMDL(Area.Rooms.First());
             var wok = mdl.GetWalkmesh().GenerateBWM();
             (var mdlData, var mdxData) = MDL.ToBytes(mdl, GameEngine.K1, Platform.Windows);
+            MDL.ToFile(mdl, @"C:\Kits\test.mdl", GameEngine.K1, Platform.Windows);
 
             var ifo = new IFO();
             ifo.ModAreaList.Add("test");
