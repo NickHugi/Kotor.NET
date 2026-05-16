@@ -15,13 +15,24 @@
     </Design.DataContext>
 
     <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New" Command="{Binding NewArea}" />
+                <MenuItem Header="_Load" Command="{Binding LoadArea}" />
+                <MenuItem Header="_Save" />
+                <MenuItem Header="_Save As" Command="{Binding SaveAreaAs}" />
+                <Separator/>
+                <MenuItem Header="_Settings" Command="{Binding EditSettings}" />
+                <Separator/>
+                <MenuItem Header="_Exit" />
+            </MenuItem>
+            <MenuItem Header="_Export">
+                <MenuItem Header="_To KotOR 1" Command="{Binding ExportK1}" />
+                <MenuItem Header="_To KotOR 2" Command="{Binding ExportK2}" />
+            </MenuItem>
+        </Menu>
         <StackPanel DockPanel.Dock="Top"
                     Orientation="Horizontal">
-
-            <Button Content="New" Command="{Binding NewArea}" />
-            <Button Content="Load" Command="{Binding LoadArea}" />
-            <Button Content="Save As" Command="{Binding SaveAreaAs}" />
-            <Button Content="Export" Command="{Binding Export}" />
             <Button Content="Add Room" Command="{Binding SetSceneMode_AddRoom}" />
             <Button Content="Extend Room" Command="{Binding SetSceneMode_AddTile}" />
             <Button Content="Switch Wall" Command="{Binding SetSceneMode_SwitchWall}" />

@@ -34,6 +34,7 @@ public static class ServiceCollectionExtensions
         {
             return x.GetService<ISettingsImporter>()!.Load<TSettings>(DefaultSettingsRoot.SettingsFilepath);
         });
+        services.AddSingleton<TSettings>(x => x.GetService<DefaultSettingsRoot>() as TSettings);
 
         return services;
     }

@@ -28,7 +28,7 @@ public partial class AreaDesignerWindow : ReactiveWindow<AreaDesignerViewModel>
 
         var dialog = new KitEditorWindow()
         {
-            ViewModel = new KitEditorViewModel(ViewModel.SelectedKit)
+            DataContext = new KitEditorViewModel(ViewModel.SelectedKit)
         };
 
         // todo - refresh after save changes

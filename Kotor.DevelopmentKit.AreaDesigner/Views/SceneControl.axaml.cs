@@ -21,6 +21,8 @@ using Avalonia.Rendering;
 using Avalonia.Threading;
 using Kotor.DevelopmentKit.AreaDesigner.relocate;
 using Kotor.DevelopmentKit.AreaDesigner.ViewModels;
+using Kotor.DevelopmentKit.Base;
+using Kotor.DevelopmentKit.Base.Settings.ViewModels;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Cameras;
@@ -31,6 +33,7 @@ using Kotor.NET.Graphics.OpenGL;
 using Kotor.NET.Graphics.OpenGL.Factories;
 using Kotor.NET.Tests.Encapsulation;
 using Kotor.NET.Tools;
+using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 using Silk.NET.Core.Native;
 using Silk.NET.OpenGL;
@@ -56,6 +59,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
             ViewModel.SelectTileTemplate.RegisterHandler(SelectTileTemplate).DisposeWith(d);
             ViewModel.SelectSaveFilepathForArea.RegisterHandler(SelectSaveFilepathForArea).DisposeWith(d);
             ViewModel.SelectLoadFilepathForArea.RegisterHandler(SelectLoadFilepathForArea).DisposeWith(d);
+            ViewModel.PromptEditSettings.RegisterHandler(EditSettings).DisposeWith(d);
         });
     }
 
@@ -346,5 +350,15 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
             context.SetOutput(null);
             return;
         }
+    }
+
+    public async Task EditSettings(IInteractionContext<Unit, Unit> context)
+    {
+        var dialog = new SettingsDialog()
+        {
+            DataContext = App.ServiceProvider.GetService<SettingsDialogViewModel>()
+        };
+        await dialog.ShowDialog((Window)TopLevel.GetTopLevel(this)!);
+        context.SetOutput(Unit.Default);
     }
 }
