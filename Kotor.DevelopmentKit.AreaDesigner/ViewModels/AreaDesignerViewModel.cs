@@ -43,13 +43,11 @@ public class AreaDesignerViewModel : ReactiveObject
     public Kit? SelectedKit
     {
         get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public AreaDesignerViewModel()
-    {
-        Kit.Manager.Refresh();
-        Kits = new(Kit.Manager.Kits);
+        set
+        {
+            Mode?.SelectedKit = value;
+            this.RaiseAndSetIfChanged(ref field, value);
+        }
     }
 
     public Area Area
@@ -61,42 +59,48 @@ public class AreaDesignerViewModel : ReactiveObject
             this.RaisePropertyChanged(nameof(Area));
         }
     }
-
-    public GLEngine Engine { get; set => this.RaiseAndSetIfChanged(ref field, value); }
-
-    public BaseMode Mode { get; private set => this.RaiseAndSetIfChanged(ref field, value); }
+    public GLEngine Engine
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+    public BaseMode Mode
+    {
+        get;
+        private set => this.RaiseAndSetIfChanged(ref field, value);
+    }
 
     public bool ShowWalls
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = true;
-
     public bool ShowDoors
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
-    } = true; 
-
+    } = true;
     public bool ShowCorners
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = true;
-
     public bool ShowCeilings
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     } = false;
 
+    public AreaDesignerViewModel()
+    {
+        Kit.Manager.Refresh();
+        Kits = new(Kit.Manager.Kits);
+    }
+
     public void SetSceneMode_AddRoom()
     {
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
-        Mode = new AddRoomMode(Engine, area)
-        {
-
-        };
+        Mode = new AddRoomMode(Engine, area, SelectedKit);
     }
     public void SetSceneMode_DeleteRoom()
     {
@@ -105,7 +109,7 @@ public class AreaDesignerViewModel : ReactiveObject
     public void SetSceneMode_AddTile()
     {
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
-        Mode = new ExtendRoomMode(Engine, area)
+        Mode = new ExtendRoomMode(Engine, area, SelectedKit)
         {
             GetMousePoint = GetMousePoint,
             SelectTileTemplate = SelectTileTemplate,
@@ -118,7 +122,7 @@ public class AreaDesignerViewModel : ReactiveObject
     public void SetSceneMode_SwitchWall()
     {
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
-        Mode = new SwitchWallMode(Engine, area)
+        Mode = new SwitchWallMode(Engine, area, SelectedKit)
         {
             GetMousePoint = GetMousePoint,
             SelectWallTemplate = SelectWallTemplate,
@@ -127,7 +131,7 @@ public class AreaDesignerViewModel : ReactiveObject
     public void SetSceneMode_AddObject()
     {
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
-        Mode = new AddObjectMode(Engine, area);
+        Mode = new AddObjectMode(Engine, area, SelectedKit);
     }
 
     public void ReloadKit(string filepath)

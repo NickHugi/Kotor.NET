@@ -24,7 +24,7 @@ public class SwitchWallMode : BaseMode
 
     private Wall? _wall;
 
-    public SwitchWallMode(GLEngine engine, Area area) : base(engine, area)
+    public SwitchWallMode(GLEngine engine, Area area, Kit kit) : base(engine, area, kit)
     {
     }
 

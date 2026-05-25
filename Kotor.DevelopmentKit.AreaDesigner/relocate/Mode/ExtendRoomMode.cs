@@ -25,7 +25,7 @@ public class ExtendRoomMode : BaseMode
     private Wall? _wall;
     private bool validWall => _wall is not null && _wall.DoorFrame is null;
 
-    public ExtendRoomMode(GLEngine engine, Area area) : base(engine, area)
+    public ExtendRoomMode(GLEngine engine, Area area, Kit kit) : base(engine, area, kit)
     {
     }
 

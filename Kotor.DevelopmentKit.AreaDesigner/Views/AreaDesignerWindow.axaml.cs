@@ -34,4 +34,8 @@ public partial class AreaDesignerWindow : ReactiveWindow<AreaDesignerViewModel>
         // todo - refresh after save changes
         await dialog.ShowDialog<Kit>(this);
     }
+
+    private void ListBox_Initialized(object? sender, System.EventArgs e)
+    {
+    }
 }

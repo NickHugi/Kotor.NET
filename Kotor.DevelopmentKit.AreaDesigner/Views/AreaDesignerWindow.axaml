@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Kotor.DevelopmentKit.AreaDesigner.ViewModels"
+        xmlns:mode="using:Kotor.DevelopmentKit.AreaDesigner.relocate.Mode"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="using:Kotor.DevelopmentKit.AreaDesigner.Views"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -68,8 +69,27 @@
                         Content="Edit Kit"
                         Command="{Binding #Window.OpenKitEditor}" />
             </Grid>
-            <ListBox Height="200"/>
+
+            <ContentControl Content="{Binding Mode}">
+                <ContentControl.DataTemplates>
+                    <DataTemplate DataType="{x:Type mode:AddRoomMode}">
+                        <ListBox ItemsSource="{Binding TileTemplates}"
+                                 SelectedItem="{Binding SelectedTileTemplate}"
+                                 Height="200">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Name}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DataTemplate>
+                </ContentControl.DataTemplates>
+            </ContentControl>
+            
         </StackPanel>
+
         <local:SceneControl/>
     </DockPanel>
 

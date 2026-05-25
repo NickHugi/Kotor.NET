@@ -34,9 +34,9 @@ public class Room
     public Room()
     {
     }
-    public Room(RoomTemplate template)
+    public Room(TileTemplate template)
     {
-        Tiles.Add(new(this, Kit.Manager.Get("sandral").Tiles.ElementAt(0)));
+        Tiles.Add(new(this, template));
     }
 
     public void FixWalls()

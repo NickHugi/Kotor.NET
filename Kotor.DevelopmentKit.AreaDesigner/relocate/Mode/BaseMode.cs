@@ -10,20 +10,24 @@ using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Cameras;
 using Kotor.NET.Graphics.Model;
 using Kotor.NET.Graphics.OpenGL;
+using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
 
-public class BaseMode
+public class BaseMode : ReactiveObject
 {
-    public virtual string Name { get; }
+    public virtual string Name { get; } = "";
+
+    public Kit SelectedKit { get; set; }
 
     protected readonly GLEngine _engine;
     protected readonly Area _area;
 
     protected AreaEntity _areaEntity => _engine.Scene.Entities.OfType<AreaEntity>().Single(x => x.Area == _area);
 
-    public BaseMode(GLEngine engine, Area area)
+    public BaseMode(GLEngine engine, Area area, Kit selectedKit)
     {
+        SelectedKit = selectedKit;
         _engine = engine;
         _area = area;
     }
