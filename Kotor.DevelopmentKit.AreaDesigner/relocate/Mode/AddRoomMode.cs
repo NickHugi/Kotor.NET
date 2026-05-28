@@ -41,6 +41,7 @@ public class AddRoomMode : BaseMode
 
         var ray = camera.ProjectRay((int)mouse.X, (int)mouse.Y, _engine.Width, _engine.Height);
         var point = ray.FindPointOnPlane(Axis.Z, 0);
+        var render = true;
 
         _addRoomRoom = new Room(SelectedTileTemplate);
         _addRoomRoom.Position = point;
@@ -49,6 +50,9 @@ public class AddRoomMode : BaseMode
         var result = NearestAdjacentWall(_addRoomRoom);
         if (result is not null)
         {
+            // Target is existing wall
+            // Source is cursor
+
             if (result.Target.DoorFrame is not null)
             {
                 result.Source.SwitchTemplate(result.Target.Template);
@@ -58,13 +62,27 @@ public class AddRoomMode : BaseMode
                 _addRoomRoom.Position = result.Target.DoorFrame.Hooks.First().Position;
                 _addRoomRoom.Position += result.Source.Parent.Position - result.Source.DoorFrame.Hooks.Last().Position;
 
+                RenderRoom(descriptors);
             }
             else
             {
+                _addRoomRoom.Orientation = result.Target.Orientation / result.Source.Orientation * Quaternion.CreateFromYawPitchRoll(0, 0, MathF.PI);
+                _addRoomRoom.Position = result.Target.Position;
+                _addRoomRoom.Position += result.Source.Parent.Position - result.Source.Position;
 
+                RenderRoom(descriptors);
+
+                descriptors.RemoveAll(x => x.Tag == result.Target);
+                descriptors.RemoveAll(x => x.Tag == result.Source);
             }
         }
-
+        else
+        {
+            RenderRoom(descriptors);
+        }
+    }
+    private void RenderRoom(List<MeshDescriptor> descriptors)
+    {
         var roomMeshDescriptors = new List<MeshDescriptor>();
         _areaEntity.RenderRoom(_engine.AssetManager, _addRoomRoom, ref roomMeshDescriptors);
         roomMeshDescriptors.ForEach(x => x.AmbientColor += new Vector3(0.5f, 0.5f, 0.5f));
@@ -76,6 +94,14 @@ public class AddRoomMode : BaseMode
         if (SelectedTileTemplate is null)
             return;
 
-        _area.AddRoom(_addRoomRoom);
+        var result = NearestAdjacentWall(_addRoomRoom);
+        if (result is not null && result.Target.DoorFrame is null)
+        {
+            result.Target.Extend(_addRoomRoom.Tiles.First().Template);
+        }
+        else
+        {
+            _area.AddRoom(_addRoomRoom);
+        }
     }
 }
