@@ -12,7 +12,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
 
-public class AddRoomMode : BaseMode
+public class AddTileMode : BaseMode
 {
     public override string Name => "Add Room";
 
@@ -26,7 +26,7 @@ public class AddRoomMode : BaseMode
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public AddRoomMode(GLEngine engine, Area area, Kit kit) : base(engine, area, kit)
+    public AddTileMode(GLEngine engine, Area area, Kit kit) : base(engine, area, kit)
     {
         this.WhenAnyValue(x => x.SelectedKit).Subscribe(_ =>
         {
@@ -72,6 +72,7 @@ public class AddRoomMode : BaseMode
 
                 RenderRoom(descriptors);
 
+                // TODO: More accurately predict/visualize placement result
                 descriptors.RemoveAll(x => x.Tag == result.Target);
                 descriptors.RemoveAll(x => x.Tag == result.Source);
             }

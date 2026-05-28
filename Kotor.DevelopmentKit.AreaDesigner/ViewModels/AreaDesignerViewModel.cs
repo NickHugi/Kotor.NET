@@ -120,7 +120,7 @@ public class AreaDesignerViewModel : ReactiveObject
     public void SetSceneMode_AddRoom()
     {
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
-        Mode = new AddRoomMode(Engine, area, SelectedKit);
+        Mode = new AddTileMode(Engine, area, SelectedKit);
     }
     public void SetSceneMode_DeleteRoom()
     {

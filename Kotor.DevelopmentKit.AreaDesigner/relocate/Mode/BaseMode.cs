@@ -60,7 +60,7 @@ public class BaseMode : ReactiveObject
             .Where(x => x.Distance < 3)
             .FirstOrDefault();
     }
-
+    
     protected MagnetResult<Wall>? NearestAdjacentWall(Room room)
     {
         var near = new List<MagnetResult<Wall>>();
