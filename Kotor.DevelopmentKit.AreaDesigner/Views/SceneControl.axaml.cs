@@ -74,7 +74,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         ViewModel.Engine.Scene.AddEntity(new AreaEntity());
         ViewModel.Engine.RenderInterceptor = descriptors =>
         {
-            ViewModel.Mode?.RenderIntercept(_camera, _lastPointerPosition.GetValueOrDefault(), descriptors);
+            ViewModel.RenderIntercept(_camera, _lastPointerPosition.GetValueOrDefault(), descriptors).Wait();
         };
     }
 

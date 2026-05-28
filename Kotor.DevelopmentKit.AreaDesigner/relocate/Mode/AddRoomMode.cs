@@ -46,27 +46,28 @@ public class AddRoomMode : BaseMode
         _addRoomRoom.Position = point;
         _addRoomRoom.Orientation = Quaternion.CreateFromYawPitchRoll(0, 0, angle * (float)Math.PI / 180);
 
-        (var newWall, var oldWall, var distance) = NearestAdjacentWall(_addRoomRoom);
-        if (oldWall is not null)
+        var result = NearestAdjacentWall(_addRoomRoom);
+        if (result is not null)
         {
-            newWall.SwitchTemplate(oldWall.Template);
-            newWall.DoorFrame.Enabled = false;
-
-            if (oldWall.DoorFrame is not null)
+            if (result.Target.DoorFrame is not null)
             {
-                _addRoomRoom.Orientation = oldWall.Orientation / newWall.Orientation * Quaternion.CreateFromYawPitchRoll(0, 0, MathF.PI);
-                _addRoomRoom.Position = oldWall.DoorFrame.Hooks.First().Position;
-                _addRoomRoom.Position += newWall.Parent.Position - newWall.DoorFrame.Hooks.Last().Position;
+                result.Source.SwitchTemplate(result.Target.Template);
+                result.Source.DoorFrame.Enabled = false;
+
+                _addRoomRoom.Orientation = result.Target.Orientation / result.Source.Orientation * Quaternion.CreateFromYawPitchRoll(0, 0, MathF.PI);
+                _addRoomRoom.Position = result.Target.DoorFrame.Hooks.First().Position;
+                _addRoomRoom.Position += result.Source.Parent.Position - result.Source.DoorFrame.Hooks.Last().Position;
+
             }
             else
             {
-                _addRoomRoom.Position = new(-1000, 0, 0);
+
             }
         }
 
         var roomMeshDescriptors = new List<MeshDescriptor>();
         _areaEntity.RenderRoom(_engine.AssetManager, _addRoomRoom, ref roomMeshDescriptors);
-        roomMeshDescriptors.ForEach(x => x.AmbientColor = new Vector3(1.5f, 1.5f, 1.5f));
+        roomMeshDescriptors.ForEach(x => x.AmbientColor += new Vector3(0.5f, 0.5f, 0.5f));
         descriptors.AddRange(roomMeshDescriptors);
     }
 

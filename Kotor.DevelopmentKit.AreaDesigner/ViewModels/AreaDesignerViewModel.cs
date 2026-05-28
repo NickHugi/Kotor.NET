@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Text;
@@ -16,6 +17,8 @@ using Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
 using Kotor.DevelopmentKit.AreaDesigner.Settings;
 using Kotor.NET.Common;
 using Kotor.NET.Common.Data;
+using Kotor.NET.Graphics.Cameras;
+using Kotor.NET.Graphics.Model;
 using Kotor.NET.Graphics.OpenGL;
 using Kotor.NET.Resources.KotorARE;
 using Kotor.NET.Resources.KotorBWM;
@@ -38,6 +41,7 @@ public class AreaDesignerViewModel : ReactiveObject
     public Interaction<Unit, string?> SelectSaveFilepathForArea = new();
     public Interaction<Unit, string?> SelectLoadFilepathForArea = new();
     public Interaction<Unit, Unit> PromptEditSettings = new();
+    public Interaction<Wall, Unit> SelectWall = new();
 
     public ObservableCollection<Kit> Kits { get; } = new();
     public Kit? SelectedKit
@@ -50,12 +54,22 @@ public class AreaDesignerViewModel : ReactiveObject
         }
     }
 
+    public Wall SelectedWall
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
+    public AreaEntity AreaEntity
+    {
+        get => Engine.Scene.Entities.OfType<AreaEntity>().Single();
+    }
     public Area Area
     {
-        get => Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
+        get => AreaEntity.Area;
         set
         {
-            Engine.Scene.Entities.OfType<AreaEntity>().Single().Area = value;
+            AreaEntity.Area = value;
             this.RaisePropertyChanged(nameof(Area));
         }
     }
@@ -95,6 +109,12 @@ public class AreaDesignerViewModel : ReactiveObject
     {
         Kit.Manager.Refresh();
         Kits = new(Kit.Manager.Kits);
+
+        SelectWall.RegisterHandler(async interaction =>
+        {
+            SelectedWall = interaction.Input;
+            interaction.SetOutput(Unit.Default);
+        });
     }
 
     public void SetSceneMode_AddRoom()
@@ -119,6 +139,15 @@ public class AreaDesignerViewModel : ReactiveObject
     {
 
     }
+    public void SetSceneMode_SelectWall()
+    {
+        var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
+        Mode = new SelectWallMode(Engine, area, SelectedKit)
+        {
+            GetMousePoint = GetMousePoint,
+            SelectWall = SelectWall,
+        };
+    }
     public void SetSceneMode_SwitchWall()
     {
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
@@ -136,7 +165,7 @@ public class AreaDesignerViewModel : ReactiveObject
 
     public void ReloadKit(string filepath)
     {
-        
+
     }
 
     public async Task SaveAreaAs()
@@ -207,7 +236,7 @@ public class AreaDesignerViewModel : ReactiveObject
         ifo.Source.Root.SetBinary("Mod_ID", Enumerable.Range(0, 16).Select(_ => (byte)0).ToArray());
 
         var are = new ARE();
-            
+
         var git = new GFF();
         git.Type = GFFType.GIT;
 
@@ -228,5 +257,18 @@ public class AreaDesignerViewModel : ReactiveObject
     public async Task NewArea()
     {
         Area = new();
+    }
+
+    public async Task RenderIntercept(OrbitCamera camera, Point mouse, List<MeshDescriptor> descriptors)
+    {
+        if (Mode is null)
+            return;
+
+        await Mode.RenderIntercept(camera, mouse, descriptors);
+
+        descriptors
+            .Where(x => SelectedWall != null && x.Tag == SelectedWall)
+            .ToList()
+            .ForEach(x => x.AmbientColor += new Vector3(0.5f, 0.5f, 0.5f));
     }
 }

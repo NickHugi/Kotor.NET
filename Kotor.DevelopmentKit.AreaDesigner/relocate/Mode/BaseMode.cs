@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
@@ -60,24 +61,38 @@ public class BaseMode : ReactiveObject
             .FirstOrDefault();
     }
 
-    protected (Wall ThisHook, Wall OtherHook, float distance) NearestAdjacentWall(Room room)
+    protected MagnetResult<Wall>? NearestAdjacentWall(Room room)
     {
-        var near = new List<(Wall NewHook, Wall OldHook, float distance)>();
+        var near = new List<MagnetResult<Wall>>();
         var otherWalls = _area.Rooms.SelectMany(x => x.Walls).ToList();
 
         foreach (var wall in room.Walls)
         {
             var match = otherWalls
-                .Where(x => x.DoorFrame is not null)
+                //.Where(predicate)
                 .Where(x => Vector3.Distance(wall.Position, x.Position) < 3)
                 .OrderBy(x => Vector3.Distance(wall.Position, x.Position))
-                .Select(x => (wall, x, Vector3.Distance(wall.Position, x.Position)))
+                .Select(x => new MagnetResult<Wall>(wall, x, Vector3.Distance(wall.Position, x.Position)))
                 .ToList();
 
             if (match.Count > 0)
                 near.AddRange(match);
         }
 
-        return near.OrderBy(x => x.distance).FirstOrDefault();
+        return near.OrderBy(x => x.Distance).FirstOrDefault();
+    }
+}
+
+public class MagnetResult<T>
+{
+    public T Source { get; }
+    public T Target { get; }
+    public float Distance { get; }
+
+    public MagnetResult(T source, T target, float distance)
+    {
+        Source = source;
+        Target = target;
+        Distance = distance;
     }
 }

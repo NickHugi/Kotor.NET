@@ -23,6 +23,12 @@ public class DoorFrameItem : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
+    public string Group
+    {
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
     public string Model
     {
         get => field;
@@ -40,6 +46,7 @@ public class DoorFrameItem : ReactiveObject
         ID = "";
         Name = "";
         Model = "";
+        Group = "";
         Hooks = [new(), new()];
     }
     public DoorFrameItem(DoorFrameTemplate template)
@@ -47,6 +54,7 @@ public class DoorFrameItem : ReactiveObject
         ID = template.ID;
         Name = template.Name;
         Model = template.Model;
+        Group = template.Group;
         Hooks = new(template.Hooks.Select(x => new DoorFrameHookItem(x)));
     }
 
@@ -57,6 +65,7 @@ public class DoorFrameItem : ReactiveObject
             KitID = kitID,
             ID = ID,
             Name = Name,
+            Group = Group,
             Model = Model,
             Hooks = Hooks.Select(x => x.ToModel()).ToArray(),
         };

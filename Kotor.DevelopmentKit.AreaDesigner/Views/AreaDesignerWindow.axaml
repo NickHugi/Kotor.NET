@@ -34,10 +34,20 @@
         </Menu>
         <StackPanel DockPanel.Dock="Top"
                     Orientation="Horizontal">
-            <Button Content="Add Room" Command="{Binding SetSceneMode_AddRoom}" />
-            <Button Content="Extend Room" Command="{Binding SetSceneMode_AddTile}" />
-            <Button Content="Switch Wall" Command="{Binding SetSceneMode_SwitchWall}" />
-            <Button Content="Add Object" Command="{Binding SetSceneMode_AddObject}" />
+            <Label Content="Tile:" VerticalAlignment="Center" />
+            <Button Content="Select" />
+            <Button Content="Add" Command="{Binding SetSceneMode_AddRoom}" />
+            
+            <Label Content="Wall:" VerticalAlignment="Center" />
+            <Button Content="Select" Command="{Binding SetSceneMode_SelectWall}" />
+            <Button Content="Change" Command="{Binding SetSceneMode_SwitchWall}"  />
+
+            <!--<Button Content="Extend Room" Command="{Binding SetSceneMode_AddTile}" />-->
+
+            <Label Content="Object:" VerticalAlignment="Center" />
+            <Button Content="Select" />
+            <Button Content="Add" Command="{Binding SetSceneMode_AddObject}" />
+
             <Label Content="{Binding Mode.Name}" />
 
             <DropDownButton Content="Visibility">

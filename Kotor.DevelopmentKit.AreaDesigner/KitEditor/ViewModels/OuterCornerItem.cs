@@ -8,7 +8,7 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
-public class WallItem : ReactiveObject
+public class OuterCornerItem : ReactiveObject
 {
     public string ID
     {
@@ -34,39 +34,30 @@ public class WallItem : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public string DoorFrameID
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public WallItem()
+    public OuterCornerItem()
     {
         ID = "";
         Name = "";
         Group = "";
         Model = "";
-        DoorFrameID = "";
     }
-    public WallItem(WallTemplate template)
+    public OuterCornerItem(OuterCornerTemplate template)
     {
         ID = template.ID;
         Name = template.Name;
-        Model = template.Model;
         Group = template.Group;
-        DoorFrameID = template.DoorFrameID;
+        Model = template.Model;
     }
 
-    public WallTemplate ToModel(string kitID)
+    public OuterCornerTemplate ToModel(string kitID)
     {
-        return new WallTemplate
+        return new OuterCornerTemplate
         {
             KitID = kitID,
             ID = ID,
             Name = Name,
-            Model = Model,
             Group = Group,
-            DoorFrameID = DoorFrameID,
+            Model = Model,
         };
     }
 }

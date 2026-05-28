@@ -17,6 +17,7 @@ public class FloorTemplate
     public required string KitID { get; init; }
     public required string ID { get; init; }
     public required string Name { get; init; }
+    public required string Group { get; init; }
     public required string Model { get; init; }
 }
 
@@ -41,6 +42,7 @@ public class WallTemplate
     public required string KitID { get; init; }
     public required string ID { get; init; }
     public required string Name { get; init; }
+    public required string Group { get; init; }
     public required string Model { get; init; }
     public required string DoorFrameID { get; init; }
 
@@ -91,6 +93,7 @@ public class DoorFrameTemplate
     public required string KitID { get; init; }
     public required string ID { get; init; }
     public required string Name { get; init; }
+    public required string Group { get; init; }
     public required string Model { get; init; }
     public required DoorFrameHookTemplate[] Hooks { get; init; }
 }
@@ -104,6 +107,7 @@ public class CeilingTemplate
 {
     public required string KitID { get; init; }
     public required string ID { get; init; }
+    public required string Group { get; init; }
     public required string Name { get; init; }
     public required string Model { get; init; }
 }
@@ -113,6 +117,7 @@ public class ObjectTemplate
     public required string KitID { get; init; }
     public required string ID { get; init; }
     public required string Name { get; init; }
+    public required string Group { get; init; }
     public required string Model { get; init; }
 }
 
@@ -122,6 +127,7 @@ public class InnerCornerTemplate
     public required string KitID { get; init; }
     public required string ID { get; init; }
     public required string Name { get; init; }
+    public required string Group { get; init; }
     public required string Model { get; init; }
 }
 
@@ -130,5 +136,6 @@ public class OuterCornerTemplate
     public required string KitID { get; init; }
     public required string ID { get; init; }
     public required string Name { get; init; }
+    public required string Group { get; init; }
     public required string Model { get; init; }
 }

@@ -22,6 +22,12 @@ public class ObjectItem : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
+    public string Group
+    {
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
     public string Model
     {
         get => field;
@@ -32,12 +38,14 @@ public class ObjectItem : ReactiveObject
     {
         ID = "";
         Name = "";
+        Group = "";
         Model = "";
     }
     public ObjectItem(ObjectTemplate template)
     {
         ID = template.ID;
         Name = template.Name;
+        Group = template.Group;
         Model = template.Model;
     }
 
@@ -48,6 +56,7 @@ public class ObjectItem : ReactiveObject
             KitID = kitID,
             ID = ID,
             Name = Name,
+            Group = Group,
             Model = Model,
         };
     }

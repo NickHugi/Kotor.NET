@@ -48,6 +48,8 @@ public class KitEditorViewModel : ReactiveObject
     public DoorFrameTabViewModel DoorFrameTab { get; }
     public CeilingTabViewModel CeilingTab { get; }
     public ObjectTabViewModel ObjectTab { get; }
+    public InnerCornerTabViewModel InnerCornerTab { get; }
+    public OuterCornerTabViewModel OuterCornerTab { get; }
 
     public KitEditorViewModel()
     {
@@ -61,6 +63,8 @@ public class KitEditorViewModel : ReactiveObject
         DoorFrameTab = new();
         CeilingTab = new();
         ObjectTab = new();
+        InnerCornerTab = new();
+        OuterCornerTab = new();
     }
     public KitEditorViewModel(Kit kit) : this()
     {
@@ -75,6 +79,8 @@ public class KitEditorViewModel : ReactiveObject
         DoorFrameTab = new(kit);
         CeilingTab = new(kit);
         ObjectTab = new(kit);
+        InnerCornerTab = new(kit);
+        OuterCornerTab = new(kit);
     }
 
     public Kit ToModel()
@@ -85,8 +91,8 @@ public class KitEditorViewModel : ReactiveObject
             Floors = FloorTab.FloorItems.Select(x => x.ToModel(KitID)).ToList(),
             Walls = WallTab.WallItems.Select(x => x.ToModel(KitID)).ToList(),
             DoorFrames = DoorFrameTab.DoorFrameItems.Select(x => x.ToModel(KitID)).ToList(),
-            //InsideCorners = .TileItems.Select(x => x.ToModel()).ToList(),
-            //OutsideCorners = OuterCornerTab.TileItems.Select(x => x.ToModel()).ToList(),
+            InnerCorners = InnerCornerTab.InnerCornerItems.Select(x => x.ToModel(KitID)).ToList(),
+            OuterCorners = OuterCornerTab.OuterCornerItems.Select(x => x.ToModel(KitID)).ToList(),
             Ceilings = CeilingTab.CeilingItems.Select(x => x.ToModel(KitID)).ToList(),
             Objects = ObjectTab.ObjectItems.Select(x => x.ToModel(KitID)).ToList(),
         };

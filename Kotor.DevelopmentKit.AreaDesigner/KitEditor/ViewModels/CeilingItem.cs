@@ -19,6 +19,12 @@ public class CeilingItem : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
+    public string Group
+    {
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
     public string Model
     {
         get => field;
@@ -29,12 +35,14 @@ public class CeilingItem : ReactiveObject
     {
         ID = "";
         Name = "";
+        Group = "";
         Model = "";
     }
     public CeilingItem(CeilingTemplate template)
     {
         ID = template.ID;
         Name = template.Name;
+        Group = template.Group;
         Model = template.Model;
     }
 
@@ -45,6 +53,7 @@ public class CeilingItem : ReactiveObject
             KitID = kitID,
             ID = ID,
             Name = Name,
+            Group = Group,
             Model = Model
         };
     }

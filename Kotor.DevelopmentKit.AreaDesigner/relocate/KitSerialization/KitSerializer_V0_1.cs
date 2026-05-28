@@ -34,6 +34,7 @@ public class KitSerializer_V0_1
                 KitID = kitID,
                 ID = floor.id.Value,
                 Name = floor.name.Value,
+                Group = floor.group?.Value,
                 Model = floor.model.Value,
             });
         }
@@ -45,6 +46,7 @@ public class KitSerializer_V0_1
                 KitID = kitID,
                 ID = ceiling.id.Value,
                 Name = ceiling.name.Value,
+                Group = ceiling.group?.Value,
                 Model = ceiling.model.Value,
             });
         }
@@ -56,6 +58,7 @@ public class KitSerializer_V0_1
                 KitID = kitID,
                 ID = door.id.Value,
                 Name = door.name.Value,
+                Group = door.group?.Value,
                 Model = door.model.Value,
                 Hooks = ((JArray)door.hooks).Select(x => (dynamic)x).Select(hook => new DoorFrameHookTemplate
                 {
@@ -73,6 +76,7 @@ public class KitSerializer_V0_1
                 ID = wall.id.Value,
                 Name = wall.name.Value,
                 Model = wall.model.Value,
+                Group = wall.group.Value,
                 DoorFrameID = wall.doorframeID?.Value,
             });
         }
@@ -117,6 +121,7 @@ public class KitSerializer_V0_1
                 KitID = kitID,
                 ID = innerCorner.id.Value,
                 Name = innerCorner.name.Value,
+                Group = innerCorner.group?.Value,
                 Model = innerCorner.model.Value,
             });
         }
@@ -128,6 +133,7 @@ public class KitSerializer_V0_1
                 KitID = kitID,
                 ID = outerCorner.id.Value,
                 Name = outerCorner.name.Value,
+                Group = outerCorner.group?.Value,
                 Model = outerCorner.model.Value,
             });
         }
@@ -139,6 +145,7 @@ public class KitSerializer_V0_1
                 KitID = kitID,
                 ID = @object.id.Value,
                 Name = @object.name.Value,
+                Group = @object.group?.Value,
                 Model = @object.model.Value,
             });
         }
@@ -187,6 +194,7 @@ public class KitSerializer_V0_1
         {
             id = floor.ID,
             name = floor.Name,
+            group = floor.Group,
             model = floor.Model,
         });
 
@@ -194,6 +202,7 @@ public class KitSerializer_V0_1
         {
             id = ceiling.ID,
             name = ceiling.Name,
+            group = ceiling.Group,
             model = ceiling.Model,
         });
 
@@ -201,6 +210,7 @@ public class KitSerializer_V0_1
         {
             id = doorframe.ID,
             name = doorframe.Name,
+            group = doorframe.Group,
             model = doorframe.Model,
             hooks = doorframe.Hooks.Select(hook => new
             {
@@ -214,6 +224,7 @@ public class KitSerializer_V0_1
             id = wall.ID,
             name = wall.Name,
             model = wall.Model,
+            group = wall.Group,
             doorframeID = wall.DoorFrameID,
         });
 
@@ -221,6 +232,7 @@ public class KitSerializer_V0_1
         {
             id = obj.ID,
             name = obj.Name,
+            group = obj.Group,
             model = obj.Model,
         });
 
@@ -228,6 +240,7 @@ public class KitSerializer_V0_1
         {
             id = obj.ID,
             name = obj.Name,
+            group = obj.Group,
             model = obj.Model,
         });
 
@@ -235,6 +248,7 @@ public class KitSerializer_V0_1
         {
             id = obj.ID,
             name = obj.Name,
+            group = obj.Group,
             model = obj.Model,
         });
 

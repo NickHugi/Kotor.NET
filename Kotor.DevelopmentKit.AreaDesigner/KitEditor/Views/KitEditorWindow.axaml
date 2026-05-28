@@ -86,6 +86,20 @@
 				<TextBlock Text="{Binding ID}" FontSize="10" />
 			</StackPanel>
 		</DataTemplate>
+        
+        <DataTemplate x:Key="InnerCornerItemTemplate" x:DataType="vm:InnerCornerItem">
+			<StackPanel>
+				<TextBlock Text="{Binding Name}" FontWeight="Bold" />
+				<TextBlock Text="{Binding ID}" FontSize="10" />
+			</StackPanel>
+		</DataTemplate>
+        
+        <DataTemplate x:Key="OuterCornerItemTemplate" x:DataType="vm:OuterCornerItem">
+			<StackPanel>
+				<TextBlock Text="{Binding Name}" FontWeight="Bold" />
+				<TextBlock Text="{Binding ID}" FontSize="10" />
+			</StackPanel>
+		</DataTemplate>
 	</Window.Resources>
 
     <TabControl>
@@ -250,6 +264,8 @@
 												 Text="{Binding FloorTab.SelectedFloorItem.ID}" />
 							<core:LabeledTextBox Label="Name"
 												 Text="{Binding FloorTab.SelectedFloorItem.Name}" />
+							<core:LabeledTextBox Label="Group"
+												 Text="{Binding FloorTab.SelectedFloorItem.Group}" />
 							<core:LabeledTextBox Label="Model"
 												 Text="{Binding FloorTab.SelectedFloorItem.Model}" />
                         </StackPanel>
@@ -294,6 +310,8 @@
 												 Text="{Binding WallTab.SelectedWallItem.ID}" />
 							<core:LabeledTextBox Label="Name"
 												 Text="{Binding WallTab.SelectedWallItem.Name}" />
+							<core:LabeledTextBox Label="Group"
+												 Text="{Binding WallTab.SelectedWallItem.Group}" />
 							<core:LabeledTextBox Label="Model"
 												 Text="{Binding WallTab.SelectedWallItem.Model}" />
 							<core:LabeledTextBox Label="Door Frame ID"
@@ -413,6 +431,8 @@
 												 Text="{Binding CeilingTab.SelectedCeilingItem.ID}" />
 							<core:LabeledTextBox Label="Name"
 												 Text="{Binding CeilingTab.SelectedCeilingItem.Name}" />
+							<core:LabeledTextBox Label="Group"
+												 Text="{Binding CeilingTab.SelectedCeilingItem.Group}" />
 							<core:LabeledTextBox Label="Model"
 												 Text="{Binding CeilingTab.SelectedCeilingItem.Model}" />
                         </StackPanel>
@@ -448,7 +468,7 @@
         <TabItem Header="Objects">
             <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
                 
-				<!--Ceiling Editor Panel-->
+				<!--Object Editor Panel-->
                 <Border Grid.Column="1" Padding="4" Background="#ddd">
                 <ScrollViewer>
                     <StackPanel Background="#ddd" Spacing="4">
@@ -482,6 +502,95 @@
                                 Command="{Binding ObjectTab.AddObject}" />
 						<Button Content="Delete"
                                 Command="{Binding ObjectTab.DeleteSelectedObject}" />
+					</StackPanel>
+                </Grid>
+                </Border>
+                
+            </Grid>
+        </TabItem>
+
+        <TabItem Header="Inner Corners">
+            <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
+                
+				<!--Inner Corner Editor Panel-->
+                <Border Grid.Column="1" Padding="4" Background="#ddd">
+                <ScrollViewer>
+                    <StackPanel Background="#ddd" Spacing="4">
+                        <Border Padding="4" Background="#bbb">
+                        <StackPanel HorizontalAlignment="Left">
+							<core:LabeledTextBox Label="ID"
+												 Text="{Binding InnerCornerTab.SelectedInnerCornerItem.ID}" />
+							<core:LabeledTextBox Label="Name"
+												 Text="{Binding InnerCornerTab.SelectedInnerCornerItem.Name}" />
+							<core:LabeledTextBox Label="Model"
+												 Text="{Binding InnerCornerTab.SelectedInnerCornerItem.Model}" />
+                        </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+                </Border>
+
+                <!--Inner Corner List Panel-->
+                <Border Grid.Column="2" Padding="4" Background="#ddd">
+                <Grid RowDefinitions="Auto, *, Auto" Background="#bbb" RowSpacing="4">
+                    <TextBlock Grid.Row="0"
+                               Text="Inner Corners" />
+                    <ListBox Grid.Row="1"
+                             ItemTemplate="{StaticResource InnerCornerItemTemplate}"
+                             ItemsSource="{Binding InnerCornerTab.InnerCornerItems}"
+                             SelectedItem="{Binding InnerCornerTab.SelectedInnerCornerItem}" />
+					<StackPanel Grid.Row="2"
+                                Orientation="Horizontal"
+                                Spacing="4">
+						<Button Content="Add"
+                                Command="{Binding InnerCornerTab.AddInnerCorner}" />
+						<Button Content="Delete"
+                                Command="{Binding InnerCornerTab.DeleteSelectedInnerCorner}" />
+					</StackPanel>
+                </Grid>
+                </Border>
+                
+            </Grid>
+        </TabItem>
+
+        
+        <TabItem Header="Outer Corners">
+            <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
+                
+				<!--Outer Corner Editor Panel-->
+                <Border Grid.Column="1" Padding="4" Background="#ddd">
+                <ScrollViewer>
+                    <StackPanel Background="#ddd" Spacing="4">
+                        <Border Padding="4" Background="#bbb">
+                        <StackPanel HorizontalAlignment="Left">
+							<core:LabeledTextBox Label="ID"
+												 Text="{Binding OuterCornerTab.SelectedOuterCornerItem.ID}" />
+							<core:LabeledTextBox Label="Name"
+												 Text="{Binding OuterCornerTab.SelectedOuterCornerItem.Name}" />
+							<core:LabeledTextBox Label="Model"
+												 Text="{Binding OuterCornerTab.SelectedOuterCornerItem.Model}" />
+                        </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+                </Border>
+
+                <!--Outer Corner List Panel-->
+                <Border Grid.Column="2" Padding="4" Background="#ddd">
+                <Grid RowDefinitions="Auto, *, Auto" Background="#bbb" RowSpacing="4">
+                    <TextBlock Grid.Row="0"
+                               Text="Outer Corners" />
+                    <ListBox Grid.Row="1"
+                             ItemTemplate="{StaticResource OuterCornerItemTemplate}"
+                             ItemsSource="{Binding OuterCornerTab.OuterCornerItems}"
+                             SelectedItem="{Binding OuterCornerTab.SelectedOuterCornerItem}" />
+					<StackPanel Grid.Row="2"
+                                Orientation="Horizontal"
+                                Spacing="4">
+						<Button Content="Add"
+                                Command="{Binding OuterCornerTab.AddOuterCorner}" />
+						<Button Content="Delete"
+                                Command="{Binding OuterCornerTab.DeleteSelectedOuterCorner}" />
 					</StackPanel>
                 </Grid>
                 </Border>
