@@ -35,17 +35,21 @@
         <StackPanel DockPanel.Dock="Top"
                     Orientation="Horizontal">
             <Label Content="Tile:" VerticalAlignment="Center" />
-            <Button Content="Select" />
-            <Button Content="Add" Command="{Binding SetSceneMode_AddTile}" />
+            <Button Content="Select" IsEnabled="{Binding !IsMode_SelectTile}" />
+            <Button Content="Add" Command="{Binding SetSceneMode_AddTile}" IsEnabled="{Binding !IsMode_AddTile}" />
             
             <Label Content="Wall:" VerticalAlignment="Center" />
-            <Button Content="Select" Command="{Binding SetSceneMode_SelectWall}" />
+            <Button Content="Select" Command="{Binding SetSceneMode_SelectWall}" IsEnabled="{Binding !IsMode_SelectWall}" />
+            
+            <Label Content="Floor:" VerticalAlignment="Center" />
+            <Button Content="Select" IsEnabled="{Binding !IsMode_SelectFloor}" />
+            
+            <Label Content="Ceiling:" VerticalAlignment="Center" />
+            <Button Content="Select" IsEnabled="{Binding !IsMode_SelectCeiling}" />
 
             <Label Content="Object:" VerticalAlignment="Center" />
-            <Button Content="Select" />
-            <Button Content="Add" Command="{Binding SetSceneMode_AddObject}" />
-
-            <Label Content="{Binding Mode.Name}" />
+            <Button Content="Select" IsEnabled="{Binding !IsMode_SelectObject}" />
+            <Button Content="Add" Command="{Binding SetSceneMode_AddObject}" IsEnabled="{Binding !IsMode_AddObject}" />
 
             <DropDownButton Content="Visibility">
                 <DropDownButton.Flyout>

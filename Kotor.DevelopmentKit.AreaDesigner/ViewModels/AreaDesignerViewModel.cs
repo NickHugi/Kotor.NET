@@ -119,20 +119,20 @@ public class AreaDesignerViewModel : ReactiveObject
             SelectedObject = interaction.Input;
             interaction.SetOutput(Unit.Default);
         });
+
+        this.WhenAnyValue(x => x.Mode)
+            .Subscribe(mode =>
+            {
+                this.RaisePropertyChanged(nameof(IsMode_AddTile));
+                this.RaisePropertyChanged(nameof(IsMode_SelectWall));
+                this.RaisePropertyChanged(nameof(IsMode_AddObject));
+            });
     }
 
     public void SetSceneMode_AddTile()
     {
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
         Mode = new AddTileMode(Engine, area, SelectedKit, SelectedObject);
-    }
-    public void SetSceneMode_DeleteRoom()
-    {
-
-    }
-    public void SetSceneMode_DeleteTile()
-    {
-
     }
     public void SetSceneMode_SelectWall()
     {
@@ -147,6 +147,14 @@ public class AreaDesignerViewModel : ReactiveObject
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
         Mode = new AddObjectMode(Engine, area, SelectedKit, SelectedObject);
     }
+
+    public bool IsMode_SelectTile => false; // TODO
+    public bool IsMode_AddTile => Mode is AddTileMode;
+    public bool IsMode_SelectWall => Mode is SelectWallMode;
+    public bool IsMode_SelectFloor => false; // TODO
+    public bool IsMode_SelectCeiling => false; // TODO
+    public bool IsMode_SelectObject => false; // TODO
+    public bool IsMode_AddObject => Mode is AddObjectMode;
 
     public void ReloadKit(string filepath)
     {
