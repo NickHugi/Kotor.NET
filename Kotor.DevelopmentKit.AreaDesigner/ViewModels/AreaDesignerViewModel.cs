@@ -54,7 +54,7 @@ public class AreaDesignerViewModel : ReactiveObject
         }
     }
 
-    public Wall SelectedWall
+    public object SelectedObject
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
@@ -112,28 +112,19 @@ public class AreaDesignerViewModel : ReactiveObject
 
         SelectWall.RegisterHandler(async interaction =>
         {
-            SelectedWall = interaction.Input;
+            SelectedObject = interaction.Input;
             interaction.SetOutput(Unit.Default);
         });
     }
 
-    public void SetSceneMode_AddRoom()
+    public void SetSceneMode_AddTile()
     {
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
-        Mode = new AddTileMode(Engine, area, SelectedKit);
+        Mode = new AddTileMode(Engine, area, SelectedKit, SelectedObject);
     }
     public void SetSceneMode_DeleteRoom()
     {
 
-    }
-    public void SetSceneMode_AddTile()
-    {
-        var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
-        Mode = new ExtendRoomMode(Engine, area, SelectedKit)
-        {
-            GetMousePoint = GetMousePoint,
-            SelectTileTemplate = SelectTileTemplate,
-        };
     }
     public void SetSceneMode_DeleteTile()
     {
@@ -142,7 +133,7 @@ public class AreaDesignerViewModel : ReactiveObject
     public void SetSceneMode_SelectWall()
     {
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
-        Mode = new SelectWallMode(Engine, area, SelectedKit)
+        Mode = new SelectWallMode(Engine, area, SelectedKit, SelectedObject)
         {
             GetMousePoint = GetMousePoint,
             SelectWall = SelectWall,
@@ -151,7 +142,7 @@ public class AreaDesignerViewModel : ReactiveObject
     public void SetSceneMode_SwitchWall()
     {
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
-        Mode = new SwitchWallMode(Engine, area, SelectedKit)
+        Mode = new SwitchWallMode(Engine, area, SelectedKit, SelectedObject)
         {
             GetMousePoint = GetMousePoint,
             SelectWallTemplate = SelectWallTemplate,
@@ -160,7 +151,7 @@ public class AreaDesignerViewModel : ReactiveObject
     public void SetSceneMode_AddObject()
     {
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
-        Mode = new AddObjectMode(Engine, area, SelectedKit);
+        Mode = new AddObjectMode(Engine, area, SelectedKit, SelectedObject);
     }
 
     public void ReloadKit(string filepath)
@@ -267,7 +258,7 @@ public class AreaDesignerViewModel : ReactiveObject
         await Mode.RenderIntercept(camera, mouse, descriptors);
 
         descriptors
-            .Where(x => SelectedWall != null && x.Tag == SelectedWall)
+            .Where(x => SelectedObject != null && x.Tag == SelectedObject)
             .ToList()
             .ForEach(x => x.AmbientColor += new Vector3(0.5f, 0.5f, 0.5f));
     }

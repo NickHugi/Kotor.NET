@@ -19,14 +19,31 @@ public class AddTileMode : BaseMode
     private Room _addRoomRoom;
     private float angle = 0;
 
-    public List<TileTemplate> TileTemplates => SelectedKit?.Tiles.ToList() ?? [];
+    public List<TileTemplate> TileTemplates
+    {
+        get
+        {
+            if (SelectedKit is null)
+                return [];
+
+            if (SelectedPiece is Wall wall)
+            {
+                var activeGroup = wall.Template.Group;
+                return SelectedKit.Tiles.Where(x => x.Walls.Any(y => activeGroup == y.DefaultTemplate.Group)).ToList();
+            }
+            else
+            {
+                return SelectedKit?.Tiles.ToList() ?? [];
+            }
+        }
+    }
     public TileTemplate? SelectedTileTemplate
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public AddTileMode(GLEngine engine, Area area, Kit kit) : base(engine, area, kit)
+    public AddTileMode(GLEngine engine, Area area, Kit kit, object selectedPiece) : base(engine, area, kit, selectedPiece)
     {
         this.WhenAnyValue(x => x.SelectedKit).Subscribe(_ =>
         {
@@ -47,7 +64,7 @@ public class AddTileMode : BaseMode
         _addRoomRoom.Position = point;
         _addRoomRoom.Orientation = Quaternion.CreateFromYawPitchRoll(0, 0, angle * (float)Math.PI / 180);
 
-        var result = NearestAdjacentWall(_addRoomRoom);
+        var result = NearestAdjacentWall(_addRoomRoom, 1);
         if (result is not null)
         {
             // Target is existing wall
@@ -95,7 +112,7 @@ public class AddTileMode : BaseMode
         if (SelectedTileTemplate is null)
             return;
 
-        var result = NearestAdjacentWall(_addRoomRoom);
+        var result = NearestAdjacentWall(_addRoomRoom, 1);
         if (result is not null && result.Target.DoorFrame is null)
         {
             result.Target.Extend(_addRoomRoom.Tiles.First().Template);

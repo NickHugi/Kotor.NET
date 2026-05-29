@@ -19,16 +19,18 @@ public class BaseMode : ReactiveObject
 {
     public virtual string Name { get; } = "";
 
-    public Kit SelectedKit { get; set; }
+    public Kit? SelectedKit { get; set; }
+    public object SelectedPiece { get; set; }
 
     protected readonly GLEngine _engine;
     protected readonly Area _area;
 
     protected AreaEntity _areaEntity => _engine.Scene.Entities.OfType<AreaEntity>().Single(x => x.Area == _area);
 
-    public BaseMode(GLEngine engine, Area area, Kit selectedKit)
+    public BaseMode(GLEngine engine, Area area, Kit selectedKit, object selectedPiece)
     {
         SelectedKit = selectedKit;
+        SelectedPiece = selectedPiece;
         _engine = engine;
         _area = area;
     }
@@ -61,7 +63,7 @@ public class BaseMode : ReactiveObject
             .FirstOrDefault();
     }
     
-    protected MagnetResult<Wall>? NearestAdjacentWall(Room room)
+    protected MagnetResult<Wall>? NearestAdjacentWall(Room room, float distance)
     {
         var near = new List<MagnetResult<Wall>>();
         var otherWalls = _area.Rooms.SelectMany(x => x.Walls).ToList();
@@ -69,8 +71,8 @@ public class BaseMode : ReactiveObject
         foreach (var wall in room.Walls)
         {
             var match = otherWalls
-                //.Where(predicate)
-                .Where(x => Vector3.Distance(wall.Position, x.Position) < 3)
+                .Where(x => x.Template.Group == wall.Template.Group)
+                .Where(x => Vector3.Distance(wall.Position, x.Position) < distance)
                 .OrderBy(x => Vector3.Distance(wall.Position, x.Position))
                 .Select(x => new MagnetResult<Wall>(wall, x, Vector3.Distance(wall.Position, x.Position)))
                 .ToList();

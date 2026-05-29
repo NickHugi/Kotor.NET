@@ -18,7 +18,7 @@ public class AddObjectMode : BaseMode
     private Object _addObject = null;
     private float angle = 0;
 
-    public AddObjectMode(GLEngine engine, Area area, Kit kit) : base(engine, area, kit)
+    public AddObjectMode(GLEngine engine, Area area, Kit? kit, object selectedPiece) : base(engine, area, kit, selectedPiece)
     {
     }
 

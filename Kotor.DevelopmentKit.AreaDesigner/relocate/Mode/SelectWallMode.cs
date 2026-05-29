@@ -24,7 +24,7 @@ public class SelectWallMode : BaseMode
 
     private Wall? _wall;
 
-    public SelectWallMode(GLEngine engine, Area area, Kit kit) : base(engine, area, kit)
+    public SelectWallMode(GLEngine engine, Area area, Kit kit, object selectedPiece) : base(engine, area, kit, selectedPiece)
     {
     }
 

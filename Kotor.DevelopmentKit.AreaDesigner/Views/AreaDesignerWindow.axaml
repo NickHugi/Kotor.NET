@@ -36,13 +36,11 @@
                     Orientation="Horizontal">
             <Label Content="Tile:" VerticalAlignment="Center" />
             <Button Content="Select" />
-            <Button Content="Add" Command="{Binding SetSceneMode_AddRoom}" />
+            <Button Content="Add" Command="{Binding SetSceneMode_AddTile}" />
             
             <Label Content="Wall:" VerticalAlignment="Center" />
             <Button Content="Select" Command="{Binding SetSceneMode_SelectWall}" />
             <Button Content="Change" Command="{Binding SetSceneMode_SwitchWall}"  />
-
-            <!--<Button Content="Extend Room" Command="{Binding SetSceneMode_AddTile}" />-->
 
             <Label Content="Object:" VerticalAlignment="Center" />
             <Button Content="Select" />
@@ -82,7 +80,7 @@
 
             <ContentControl Content="{Binding Mode}">
                 <ContentControl.DataTemplates>
-                    <DataTemplate DataType="{x:Type mode:AddRoomMode}">
+                    <DataTemplate DataType="{x:Type mode:AddTileMode}">
                         <ListBox ItemsSource="{Binding TileTemplates}"
                                  SelectedItem="{Binding SelectedTileTemplate}"
                                  Height="200">
