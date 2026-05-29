@@ -19,8 +19,16 @@ public class BaseMode : ReactiveObject
 {
     public virtual string Name { get; } = "";
 
-    public Kit? SelectedKit { get; set; }
-    public object SelectedPiece { get; set; }
+    public Kit? SelectedKit
+    {
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+    public object SelectedPiece
+    {
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
 
     protected readonly GLEngine _engine;
     protected readonly Area _area;

@@ -57,7 +57,11 @@ public class AreaDesignerViewModel : ReactiveObject
     public object SelectedObject
     {
         get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
+        set
+        {
+            Mode.SelectedPiece = value;
+            this.RaiseAndSetIfChanged(ref field, value);
+        }
     }
 
     public AreaEntity AreaEntity
@@ -135,17 +139,7 @@ public class AreaDesignerViewModel : ReactiveObject
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
         Mode = new SelectWallMode(Engine, area, SelectedKit, SelectedObject)
         {
-            GetMousePoint = GetMousePoint,
             SelectWall = SelectWall,
-        };
-    }
-    public void SetSceneMode_SwitchWall()
-    {
-        var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
-        Mode = new SwitchWallMode(Engine, area, SelectedKit, SelectedObject)
-        {
-            GetMousePoint = GetMousePoint,
-            SelectWallTemplate = SelectWallTemplate,
         };
     }
     public void SetSceneMode_AddObject()

@@ -17,27 +17,71 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
 
 public class SelectWallMode : BaseMode
 {
-    public required Interaction<Unit, Point> GetMousePoint { get; init; }
+    public override string Name => "Select Wall";
+
     public required Interaction<Wall, Unit> SelectWall { get; init; }
 
-    public override string Name => "Select Wall";
+    public List<WallTemplate> WallTemplates
+    {
+        get
+        {
+            if (SelectedKit is null)
+                return [];
+
+            if (SelectedPiece is Wall wall)
+            {
+                var activeGroup = wall.Template.Group;
+                return SelectedKit.Walls.Where(x => x.Group == activeGroup).ToList();
+            }
+            else
+            {
+                return SelectedKit?.Walls.ToList() ?? [];
+            }
+        }
+    }
+    public WallTemplate? SelectedWallTemplate
+    {
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
 
     private Wall? _wall;
 
     public SelectWallMode(GLEngine engine, Area area, Kit kit, object selectedPiece) : base(engine, area, kit, selectedPiece)
     {
+        this.WhenAnyValue(x => x.SelectedPiece)
+            .Subscribe(_ => this.RaisePropertyChanged(nameof(WallTemplates)));
+
+        this.WhenAnyValue(x => x.SelectedWallTemplate)
+            .Subscribe(_ =>
+            {
+                if (SelectedWallTemplate is null)
+                    return;
+                if (SelectedPiece is not Wall wall)
+                    return;
+                if (wall == _wall)
+                    return;
+
+                wall.SwitchTemplate(SelectedWallTemplate);
+            });
     }
 
-    public override async Task RenderIntercept(OrbitCamera camera, Point mouse, List<MeshDescriptor> descriptors)
+    public override Task RenderIntercept(OrbitCamera camera, Point mouse, List<MeshDescriptor> descriptors)
     {
         _wall = NearestWallMagnest(camera, mouse.X, mouse.Y)?.Result;
 
         if (_wall is not null)
             descriptors.Where(x => x.Tag == _wall).ToList().ForEach(x => x.AmbientColor = new(1.5f, 1.5f, 1.5f));
+
+        return Task.CompletedTask;
     }
 
     public override async Task Trigger()
     {
-        var template = await SelectWall.Handle(_wall);
+        if (_wall is null)
+            return;
+
+        await SelectWall.Handle(_wall);
+        SelectedWallTemplate = _wall.Template;
     }
 }

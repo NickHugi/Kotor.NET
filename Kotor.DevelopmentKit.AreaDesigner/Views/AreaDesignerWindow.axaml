@@ -40,7 +40,6 @@
             
             <Label Content="Wall:" VerticalAlignment="Center" />
             <Button Content="Select" Command="{Binding SetSceneMode_SelectWall}" />
-            <Button Content="Change" Command="{Binding SetSceneMode_SwitchWall}"  />
 
             <Label Content="Object:" VerticalAlignment="Center" />
             <Button Content="Select" />
@@ -83,6 +82,20 @@
                     <DataTemplate DataType="{x:Type mode:AddTileMode}">
                         <ListBox ItemsSource="{Binding TileTemplates}"
                                  SelectedItem="{Binding SelectedTileTemplate}"
+                                 Height="200">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Name}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DataTemplate>
+                    
+                    <DataTemplate DataType="{x:Type mode:SelectWallMode}">
+                        <ListBox ItemsSource="{Binding WallTemplates}"
+                                 SelectedItem="{Binding SelectedWallTemplate}"
                                  Height="200">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
