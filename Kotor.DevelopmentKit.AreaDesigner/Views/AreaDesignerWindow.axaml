@@ -25,11 +25,14 @@
                 <Separator/>
                 <MenuItem Header="_Settings" Command="{Binding EditSettings}" />
                 <Separator/>
-                <MenuItem Header="_Exit" />
+                <MenuItem Header="_Exit" Command="{Binding #Window.OpenKitEditor}" />
             </MenuItem>
             <MenuItem Header="_Export">
                 <MenuItem Header="_To KotOR 1" Command="{Binding ExportK1}" />
                 <MenuItem Header="_To KotOR 2" Command="{Binding ExportK2}" />
+            </MenuItem>
+            <MenuItem Header="_Advanced">
+                <MenuItem Header="_Edit Kit" Command="{Binding ExportK1}" />
             </MenuItem>
         </Menu>
         <StackPanel DockPanel.Dock="Top"
@@ -65,7 +68,7 @@
         </StackPanel>
         <StackPanel DockPanel.Dock="Left"
                     Width="250">
-            <Grid ColumnDefinitions="*, Auto">
+            <Grid ColumnDefinitions="*">
                 <ComboBox ItemsSource="{Binding Kits}"
                           SelectedItem="{Binding SelectedKit}"
                           Grid.Column="0"
@@ -76,9 +79,6 @@
                       </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <Button Grid.Column="1"
-                        Content="Edit Kit"
-                        Command="{Binding #Window.OpenKitEditor}" />
             </Grid>
 
             <ContentControl Content="{Binding Mode}">
