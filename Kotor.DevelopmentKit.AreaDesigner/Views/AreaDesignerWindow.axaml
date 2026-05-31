@@ -111,6 +111,20 @@
                         </ListBox>
                     </DataTemplate>
                     
+                    <DataTemplate DataType="{x:Type mode:AddObjectMode}">
+                        <ListBox ItemsSource="{Binding ObjectTemplates}"
+                                 SelectedItem="{Binding SelectedObjectTemplate}"
+                                 Height="200">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Name}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DataTemplate>
+
                     <DataTemplate DataType="{x:Type mode:SelectObjectMode}">
                         <ListBox ItemsSource="{Binding ObjectTemplates}"
                                  SelectedItem="{Binding SelectedObjectTemplate}"
