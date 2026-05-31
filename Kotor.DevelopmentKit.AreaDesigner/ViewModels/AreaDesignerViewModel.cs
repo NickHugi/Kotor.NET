@@ -41,7 +41,16 @@ public class AreaDesignerViewModel : ReactiveObject
     public Interaction<Unit, string?> SelectSaveFilepathForArea = new();
     public Interaction<Unit, string?> SelectLoadFilepathForArea = new();
     public Interaction<Unit, Unit> PromptEditSettings = new();
-    public Interaction<Wall, Unit> SelectWall = new();
+    public Interaction<Unit, Unit> ClearSelection = new();
+    public Interaction<object, Unit> AddToSelection = new();
+
+    public bool IsMode_SelectTile => false; // TODO
+    public bool IsMode_AddTile => Mode is AddTileMode;
+    public bool IsMode_SelectWall => Mode is SelectWallMode;
+    public bool IsMode_SelectFloor => false; // TODO
+    public bool IsMode_SelectCeiling => false; // TODO
+    public bool IsMode_SelectObject => Mode is SelectObjectMode;
+    public bool IsMode_AddObject => Mode is AddObjectMode;
 
     public ObservableCollection<Kit> Kits { get; } = new();
     public Kit? SelectedKit
@@ -54,7 +63,12 @@ public class AreaDesignerViewModel : ReactiveObject
         }
     }
 
-    public object SelectedObject
+    public ObservableCollection<object> SelectedPieces
+    {
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+    public object? ActiveObject
     {
         get;
         set
@@ -113,10 +127,19 @@ public class AreaDesignerViewModel : ReactiveObject
     {
         Kit.Manager.Refresh();
         Kits = new(Kit.Manager.Kits);
+        SelectedPieces = new();
 
-        SelectWall.RegisterHandler(async interaction =>
+        ClearSelection.RegisterHandler(async interaction =>
         {
-            SelectedObject = interaction.Input;
+            ActiveObject = null;
+            SelectedPieces.Clear();
+            interaction.SetOutput(Unit.Default);
+        });
+
+        AddToSelection.RegisterHandler(async interaction =>
+        {
+            ActiveObject = interaction.Input;
+            SelectedPieces.Add(ActiveObject);
             interaction.SetOutput(Unit.Default);
         });
 
@@ -124,37 +147,42 @@ public class AreaDesignerViewModel : ReactiveObject
             .Subscribe(mode =>
             {
                 this.RaisePropertyChanged(nameof(IsMode_AddTile));
+                this.RaisePropertyChanged(nameof(IsMode_SelectTile));
                 this.RaisePropertyChanged(nameof(IsMode_SelectWall));
+                this.RaisePropertyChanged(nameof(IsMode_SelectFloor));
+                this.RaisePropertyChanged(nameof(IsMode_SelectCeiling));
                 this.RaisePropertyChanged(nameof(IsMode_AddObject));
+                this.RaisePropertyChanged(nameof(IsMode_SelectObject));
             });
     }
 
     public void SetSceneMode_AddTile()
     {
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
-        Mode = new AddTileMode(Engine, area, SelectedKit, SelectedObject);
+        Mode = new AddTileMode(Engine, area, SelectedKit, ActiveObject);
     }
     public void SetSceneMode_SelectWall()
     {
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
-        Mode = new SelectWallMode(Engine, area, SelectedKit, SelectedObject)
+        Mode = new SelectWallMode(Engine, area, SelectedKit, ActiveObject)
         {
-            SelectWall = SelectWall,
+            AddToSelection = AddToSelection,
+            ClearSelection = ClearSelection,
         };
     }
     public void SetSceneMode_AddObject()
     {
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
-        Mode = new AddObjectMode(Engine, area, SelectedKit, SelectedObject);
+        Mode = new AddObjectMode(Engine, area, SelectedKit, ActiveObject);
     }
-
-    public bool IsMode_SelectTile => false; // TODO
-    public bool IsMode_AddTile => Mode is AddTileMode;
-    public bool IsMode_SelectWall => Mode is SelectWallMode;
-    public bool IsMode_SelectFloor => false; // TODO
-    public bool IsMode_SelectCeiling => false; // TODO
-    public bool IsMode_SelectObject => false; // TODO
-    public bool IsMode_AddObject => Mode is AddObjectMode;
+    public void SetSceneMode_SelectObject()
+    {
+        Mode = new SelectObjectMode(Engine, Area, SelectedKit, ActiveObject)
+        {
+            AddToSelection = AddToSelection,
+            ClearSelection = ClearSelection,
+        };
+    }
 
     public void ReloadKit(string filepath)
     {
@@ -260,7 +288,7 @@ public class AreaDesignerViewModel : ReactiveObject
         await Mode.RenderIntercept(camera, mouse, descriptors);
 
         descriptors
-            .Where(x => SelectedObject != null && x.Tag == SelectedObject)
+            .Where(x => ActiveObject != null && x.Tag == ActiveObject)
             .ToList()
             .ForEach(x => x.AmbientColor += new Vector3(0.5f, 0.5f, 0.5f));
     }

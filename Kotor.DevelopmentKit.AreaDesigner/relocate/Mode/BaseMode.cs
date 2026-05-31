@@ -70,7 +70,19 @@ public class BaseMode : ReactiveObject
             .Where(x => x.Distance < 3)
             .FirstOrDefault();
     }
-    
+
+    protected RaycastResult<Object>? IntersectingObject(OrbitCamera camera, double x, double y)
+    {
+        var ray = camera.ProjectRay((int)x, (int)y, _engine.Width, _engine.Height);
+
+        return _area.Rooms
+            .SelectMany(x => x.Objects)
+            .OrderBy(x => ray.ShortestDistanceTo(x.Position))
+            .Select(x => new RaycastResult<Object>(x, ray.ShortestDistanceTo(x.Position)))
+            .Where(x => x.Distance < 3)
+            .FirstOrDefault();
+    }
+
     protected MagnetResult<Wall>? NearestAdjacentWall(Room room, float distance)
     {
         var near = new List<MagnetResult<Wall>>();

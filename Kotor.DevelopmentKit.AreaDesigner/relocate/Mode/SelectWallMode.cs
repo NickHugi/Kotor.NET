@@ -19,7 +19,8 @@ public class SelectWallMode : BaseMode
 {
     public override string Name => "Select Wall";
 
-    public required Interaction<Wall, Unit> SelectWall { get; init; }
+    public required Interaction<object, Unit> AddToSelection { get; init; }
+    public required Interaction<Unit, Unit> ClearSelection { get; init; }
 
     public List<WallTemplate> WallTemplates
     {
@@ -81,7 +82,8 @@ public class SelectWallMode : BaseMode
         if (_wall is null)
             return;
 
-        await SelectWall.Handle(_wall);
+        await ClearSelection.Handle(Unit.Default);
+        await AddToSelection.Handle(_wall);
         SelectedWallTemplate = _wall.Template;
     }
 }

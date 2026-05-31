@@ -32,7 +32,7 @@
                 <MenuItem Header="_To KotOR 2" Command="{Binding ExportK2}" />
             </MenuItem>
             <MenuItem Header="_Advanced">
-                <MenuItem Header="_Edit Kit" Command="{Binding ExportK1}" />
+                <MenuItem Header="_Edit Kit" Command="{Binding #Window.OpenKitEditor}" />
             </MenuItem>
         </Menu>
         <StackPanel DockPanel.Dock="Top"
@@ -51,7 +51,7 @@
             <Button Content="Select" IsEnabled="{Binding !IsMode_SelectCeiling}" />
 
             <Label Content="Object:" VerticalAlignment="Center" />
-            <Button Content="Select" IsEnabled="{Binding !IsMode_SelectObject}" />
+            <Button Content="Select" Command="{Binding SetSceneMode_SelectObject}" IsEnabled="{Binding !IsMode_SelectObject}" />
             <Button Content="Add" Command="{Binding SetSceneMode_AddObject}" IsEnabled="{Binding !IsMode_AddObject}" />
 
             <DropDownButton Content="Visibility">
@@ -100,6 +100,20 @@
                     <DataTemplate DataType="{x:Type mode:SelectWallMode}">
                         <ListBox ItemsSource="{Binding WallTemplates}"
                                  SelectedItem="{Binding SelectedWallTemplate}"
+                                 Height="200">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Name}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DataTemplate>
+                    
+                    <DataTemplate DataType="{x:Type mode:SelectObjectMode}">
+                        <ListBox ItemsSource="{Binding ObjectTemplates}"
+                                 SelectedItem="{Binding SelectedObjectTemplate}"
                                  Height="200">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>

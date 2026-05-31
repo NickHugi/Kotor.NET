@@ -55,7 +55,7 @@ public class AreaEntity : BaseEntity
     }
     private void RenderTile(IAssetManager assets, Tile tile, ref List<MeshDescriptor> descriptors)
     {
-        descriptors.AddRange(DescriptorsForModel(assets, tile.Floor.Template.Model, tile.Transform));
+        descriptors.AddRange(DescriptorsForModel(assets, tile.Floor.Template.Model, tile.Transform, tile));
     }
     private void RenderWall(IAssetManager assets, Wall wall, ref List<MeshDescriptor> descriptors)
     {
@@ -76,18 +76,18 @@ public class AreaEntity : BaseEntity
         if (!corner.Visible)
             return;
 
-        descriptors.AddRange(DescriptorsForModel(assets, corner.Template.Model, corner.Transform));
+        descriptors.AddRange(DescriptorsForModel(assets, corner.Template.Model, corner.Transform, corner));
     }
     private void RenderOuterCorner(IAssetManager assets, OuterCorner corner, ref List<MeshDescriptor> descriptors)
     {
         if (!corner.Visible)
             return;
 
-        descriptors.AddRange(DescriptorsForModel(assets, corner.Template.Model, corner.Transform));
+        descriptors.AddRange(DescriptorsForModel(assets, corner.Template.Model, corner.Transform, corner));
     }
     public void RenderObject(IAssetManager assets, Object @object, ref List<MeshDescriptor> descriptors)
     {
-        descriptors.AddRange(DescriptorsForModel(assets, @object.Template.Model, @object.LocalTransform));
+        descriptors.AddRange(DescriptorsForModel(assets, @object.Template.Model, @object.LocalTransform, @object));
     }
     // TODO - clean this up somehow
     private ICollection<MeshDescriptor> DescriptorsForModel(IAssetManager assets, string modelName, Matrix4x4 transform, object tag = null)
