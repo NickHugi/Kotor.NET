@@ -48,7 +48,7 @@ public class AreaDesignerViewModel : ReactiveObject
     public bool IsMode_AddTile => Mode is AddTileMode;
     public bool IsMode_SelectWall => Mode is SelectWallMode;
     public bool IsMode_SelectFloor => Mode is SelectFloorMode;
-    public bool IsMode_SelectCeiling => false; // TODO
+    public bool IsMode_SelectCeiling => Mode is SelectCeilingMode;
     public bool IsMode_SelectObject => Mode is SelectObjectMode;
     public bool IsMode_AddObject => Mode is AddObjectMode;
 
@@ -173,6 +173,14 @@ public class AreaDesignerViewModel : ReactiveObject
     public void SetSceneMode_SelectFloor()
     {
         Mode = new SelectFloorMode(Engine, Area, SelectedKit, ActiveObject)
+        {
+            AddToSelection = AddToSelection,
+            ClearSelection = ClearSelection,
+        };
+    }
+    public void SetSceneMode_SelectCeiling()
+    {
+        Mode = new SelectCeilingMode(Engine, Area, SelectedKit, ActiveObject)
         {
             AddToSelection = AddToSelection,
             ClearSelection = ClearSelection,

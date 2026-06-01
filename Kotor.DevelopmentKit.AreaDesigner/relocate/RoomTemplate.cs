@@ -34,6 +34,7 @@ public class TileTemplate
     public required Vector3[] CeilingHooks { get; init; }
 
     public FloorTemplate Floor => Kit.Manager.Get(KitID).Floor(DefaultFloorID);
+    public CeilingTemplate Ceiling => Kit.Manager.Get(KitID).Ceiling(DefaultCeilingID);
 }
 
 

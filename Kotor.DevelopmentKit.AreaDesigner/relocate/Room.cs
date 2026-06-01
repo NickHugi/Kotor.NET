@@ -116,6 +116,7 @@ public class Tile
         KitID = template.KitID;
         TemplateID = template.ID;
         Floor = new(this, template.Floor);
+        Ceiling = new(this, template.Ceiling);
         Walls = template.Walls.Select(x => new Wall(this, x.DefaultTemplate, x)).ToArray();
         InnerCorners = template.InnerCorners.Select(x => new InnerCorner(this, x.DefaultTemplate, x)).ToArray();
         OuterCorners = template.OuterCorners.Select(x => new OuterCorner(this, x.DefaultTemplate, x)).ToArray();

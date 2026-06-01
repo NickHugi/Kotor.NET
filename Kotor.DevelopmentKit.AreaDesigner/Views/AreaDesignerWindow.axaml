@@ -30,6 +30,20 @@
             </ListBox>
 		</DataTemplate>
 
+        <DataTemplate x:Key="SelectCeilingMode" x:DataType="mode:SelectCeilingMode">
+			<ListBox ItemsSource="{Binding CeilingTemplates}"
+                     SelectedItem="{Binding SelectedCeilingTemplate}"
+                     Height="200">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+		</DataTemplate>
+
 	</Window.Resources>
 
     <DockPanel>
@@ -65,7 +79,7 @@
             <Button Content="Select" Command="{Binding SetSceneMode_SelectFloor}" IsEnabled="{Binding !IsMode_SelectFloor}" />
             
             <Label Content="Ceiling:" VerticalAlignment="Center" />
-            <Button Content="Select" IsEnabled="{Binding !IsMode_SelectCeiling}" />
+            <Button Content="Select" Command="{Binding SetSceneMode_SelectCeiling}" IsEnabled="{Binding !IsMode_SelectCeiling}" />
 
             <Label Content="Object:" VerticalAlignment="Center" />
             <Button Content="Select" Command="{Binding SetSceneMode_SelectObject}" IsEnabled="{Binding !IsMode_SelectObject}" />
@@ -157,6 +171,7 @@
                     </DataTemplate>
 
                     <StaticResource ResourceKey="SelectFloorMode" />
+                    <StaticResource ResourceKey="SelectCeilingMode" />
                 </ContentControl.DataTemplates>
             </ContentControl>
             

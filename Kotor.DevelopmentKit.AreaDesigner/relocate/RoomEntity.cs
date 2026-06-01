@@ -56,6 +56,7 @@ public class AreaEntity : BaseEntity
     private void RenderFloor(IAssetManager assets, Tile tile, ref List<MeshDescriptor> descriptors)
     {
         descriptors.AddRange(DescriptorsForModel(assets, tile.Floor.Template.Model, tile.Transform, tile.Floor));
+        descriptors.AddRange(DescriptorsForModel(assets, tile.Ceiling.Template.Model, tile.Transform, tile.Ceiling));
     }
     private void RenderWall(IAssetManager assets, Wall wall, ref List<MeshDescriptor> descriptors)
     {
