@@ -70,7 +70,28 @@ public class BaseMode : ReactiveObject
             .Where(x => x.Distance < 3)
             .FirstOrDefault();
     }
+    protected RaycastResult<Floor>? IntersectingFloor(OrbitCamera camera, double x, double y)
+    {
+        var ray = camera.ProjectRay((int)x, (int)y, _engine.Width, _engine.Height);
 
+        return _area.Rooms
+            .SelectMany(x => x.Floors)
+            .OrderBy(x => ray.ShortestDistanceTo(x.Position))
+            .Select(x => new RaycastResult<Floor>(x, ray.ShortestDistanceTo(x.Position)))
+            .Where(x => x.Distance < 3)
+            .FirstOrDefault();
+    }
+    protected RaycastResult<Ceiling>? IntersectingCeiling(OrbitCamera camera, double x, double y)
+    {
+        var ray = camera.ProjectRay((int)x, (int)y, _engine.Width, _engine.Height);
+
+        return _area.Rooms
+            .SelectMany(x => x.Ceilings)
+            .OrderBy(x => ray.ShortestDistanceTo(x.Position))
+            .Select(x => new RaycastResult<Ceiling>(x, ray.ShortestDistanceTo(x.Position)))
+            .Where(x => x.Distance < 3)
+            .FirstOrDefault();
+    }
     protected RaycastResult<Object>? IntersectingObject(OrbitCamera camera, double x, double y)
     {
         var ray = camera.ProjectRay((int)x, (int)y, _engine.Width, _engine.Height);
@@ -79,7 +100,7 @@ public class BaseMode : ReactiveObject
             .SelectMany(x => x.Objects)
             .OrderBy(x => ray.ShortestDistanceTo(x.Position))
             .Select(x => new RaycastResult<Object>(x, ray.ShortestDistanceTo(x.Position)))
-            .Where(x => x.Distance < 3)
+            .Where(x => x.Distance < 1)
             .FirstOrDefault();
     }
 

@@ -26,6 +26,8 @@ public class Room
 
     public ICollection<Tile> Tiles { get; } = new List<Tile>();
     public ICollection<Wall> Walls => Tiles.SelectMany(x => x.Walls).ToList();
+    public ICollection<Floor> Floors => Tiles.Select(x => x.Floor).ToList();
+    public ICollection<Ceiling> Ceilings => Tiles.Select(x => x.Ceiling).ToList();
     public ICollection<InnerCorner> InnerCorners => Tiles.SelectMany(x => x.InnerCorners).ToList();
     public ICollection<OuterCorner> OuterCorners => Tiles.SelectMany(x => x.OuterCorners).ToList();
     public ICollection<DoorFrame> DoorFrames => Walls.Select(x => x.DoorFrame).Where(x => x is not null).ToList();

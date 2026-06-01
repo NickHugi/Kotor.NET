@@ -15,6 +15,23 @@
         <vm:AreaDesignerViewModel />
     </Design.DataContext>
 
+    <Window.Resources>
+        <DataTemplate x:Key="SelectFloorMode" x:DataType="mode:SelectFloorMode">
+			<ListBox ItemsSource="{Binding FloorTemplates}"
+                     SelectedItem="{Binding SelectedFloorTemplate}"
+                     Height="200">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+		</DataTemplate>
+
+	</Window.Resources>
+
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
@@ -45,7 +62,7 @@
             <Button Content="Select" Command="{Binding SetSceneMode_SelectWall}" IsEnabled="{Binding !IsMode_SelectWall}" />
             
             <Label Content="Floor:" VerticalAlignment="Center" />
-            <Button Content="Select" IsEnabled="{Binding !IsMode_SelectFloor}" />
+            <Button Content="Select" Command="{Binding SetSceneMode_SelectFloor}" IsEnabled="{Binding !IsMode_SelectFloor}" />
             
             <Label Content="Ceiling:" VerticalAlignment="Center" />
             <Button Content="Select" IsEnabled="{Binding !IsMode_SelectCeiling}" />
@@ -138,6 +155,8 @@
                             </ListBox.ItemTemplate>
                         </ListBox>
                     </DataTemplate>
+
+                    <StaticResource ResourceKey="SelectFloorMode" />
                 </ContentControl.DataTemplates>
             </ContentControl>
             

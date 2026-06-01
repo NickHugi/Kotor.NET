@@ -30,7 +30,7 @@ public class AreaEntity : BaseEntity
     {
         foreach (var tile in room.Tiles)
         {
-            RenderTile(assets, tile, ref descriptors);
+            RenderFloor(assets, tile, ref descriptors);
         }
         foreach (var wall in room.Walls)
         {
@@ -53,9 +53,9 @@ public class AreaEntity : BaseEntity
             RenderObject(assets, @object, ref descriptors);
         }
     }
-    private void RenderTile(IAssetManager assets, Tile tile, ref List<MeshDescriptor> descriptors)
+    private void RenderFloor(IAssetManager assets, Tile tile, ref List<MeshDescriptor> descriptors)
     {
-        descriptors.AddRange(DescriptorsForModel(assets, tile.Floor.Template.Model, tile.Transform, tile));
+        descriptors.AddRange(DescriptorsForModel(assets, tile.Floor.Template.Model, tile.Transform, tile.Floor));
     }
     private void RenderWall(IAssetManager assets, Wall wall, ref List<MeshDescriptor> descriptors)
     {
