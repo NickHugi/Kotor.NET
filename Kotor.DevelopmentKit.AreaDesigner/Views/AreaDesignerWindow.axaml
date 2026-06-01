@@ -143,10 +143,10 @@
             <DropDownButton Content="Visibility">
                 <DropDownButton.Flyout>
                     <MenuFlyout>
-                        <MenuItem Header="Show Walls" ToggleType="CheckBox" IsChecked="{Binding ShowWalls}" />
-                        <MenuItem Header="Show Doors" ToggleType="CheckBox" IsChecked="{Binding ShowWalls}" />
-                        <MenuItem Header="Show Corners" ToggleType="CheckBox" IsChecked="{Binding ShowWalls}" />
-                        <MenuItem Header="Show Ceilings" ToggleType="CheckBox" IsChecked="{Binding ShowWalls}" />
+                        <MenuItem Header="Show Walls" ToggleType="CheckBox" IsChecked="{Binding ShowWalls, Mode=TwoWay}" />
+                        <MenuItem Header="Show Doors" ToggleType="CheckBox" IsChecked="{Binding ShowDoors, Mode=TwoWay}" />
+                        <MenuItem Header="Show Corners" ToggleType="CheckBox" IsChecked="{Binding ShowCorners, Mode=TwoWay}" />
+                        <MenuItem Header="Show Ceilings" ToggleType="CheckBox" IsChecked="{Binding ShowCeilings, Mode=TwoWay}" />
                     </MenuFlyout>
                 </DropDownButton.Flyout>
             </DropDownButton>

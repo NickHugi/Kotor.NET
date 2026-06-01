@@ -8,12 +8,20 @@ using Avalonia.Controls;
 using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Entities;
 using Kotor.NET.Graphics.Model;
+using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate;
 
 public class AreaEntity : BaseEntity
 {
     public Area Area { get; set; } = new();
+
+    public bool DoRenderCorners { get; set; } = true;
+    public bool DoRenderWalls { get; set; } = true;
+    public bool DoRenderDoors { get; set; } = true;
+    public bool DoRenderFloor { get; set; } = true;
+    public bool DoRenderCeiling { get; set; } = false;
+    public bool DoRenderObjects { get; set; } = true;
 
     public override ICollection<MeshDescriptor> GetMeshDescriptors(IAssetManager assets)
     {
@@ -31,6 +39,7 @@ public class AreaEntity : BaseEntity
         foreach (var tile in room.Tiles)
         {
             RenderFloor(assets, tile, ref descriptors);
+            RenderCeiling(assets, tile, ref descriptors);
         }
         foreach (var wall in room.Walls)
         {
@@ -55,39 +64,51 @@ public class AreaEntity : BaseEntity
     }
     private void RenderFloor(IAssetManager assets, Tile tile, ref List<MeshDescriptor> descriptors)
     {
+        if (!DoRenderFloor)
+            return;
+
         descriptors.AddRange(DescriptorsForModel(assets, tile.Floor.Template.Model, tile.Transform, tile.Floor));
+    }
+    private void RenderCeiling(IAssetManager assets, Tile tile, ref List<MeshDescriptor> descriptors)
+    {
+        if (!DoRenderCeiling)
+            return;
+
         descriptors.AddRange(DescriptorsForModel(assets, tile.Ceiling.Template.Model, tile.Transform, tile.Ceiling));
     }
     private void RenderWall(IAssetManager assets, Wall wall, ref List<MeshDescriptor> descriptors)
     {
-        if (!wall.Visible)
+        if (!wall.Visible || ((wall.DoorFrame is null && !DoRenderWalls) || (wall.DoorFrame is not null && !DoRenderDoors)))
             return;
 
         descriptors.AddRange(DescriptorsForModel(assets, wall.Template.Model, wall.Transform, wall));
     }
     private void RenderDoorFrame(IAssetManager assets, DoorFrame doorframe, ref List<MeshDescriptor> descriptors)
     {
-        if (!doorframe.Visible)
+        if (!doorframe.Visible || !DoRenderDoors)
             return;
 
         descriptors.AddRange(DescriptorsForModel(assets, doorframe.Template.Model, doorframe.Transform, doorframe));
     }
     private void RenderInnerCorner(IAssetManager assets, InnerCorner corner, ref List<MeshDescriptor> descriptors)
     {
-        if (!corner.Visible)
+        if (!corner.Visible || !DoRenderCorners)
             return;
 
         descriptors.AddRange(DescriptorsForModel(assets, corner.Template.Model, corner.Transform, corner));
     }
     private void RenderOuterCorner(IAssetManager assets, OuterCorner corner, ref List<MeshDescriptor> descriptors)
     {
-        if (!corner.Visible)
+        if (!corner.Visible || !DoRenderCorners)
             return;
 
         descriptors.AddRange(DescriptorsForModel(assets, corner.Template.Model, corner.Transform, corner));
     }
     public void RenderObject(IAssetManager assets, Object @object, ref List<MeshDescriptor> descriptors)
     {
+        if (!DoRenderObjects)
+            return;
+
         descriptors.AddRange(DescriptorsForModel(assets, @object.Template.Model, @object.LocalTransform, @object));
     }
     // TODO - clean this up somehow

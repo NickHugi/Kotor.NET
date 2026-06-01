@@ -105,23 +105,57 @@ public class AreaDesignerViewModel : ReactiveObject
     public bool ShowWalls
     {
         get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
+        set
+        {
+            AreaEntity?.DoRenderWalls = value;
+            this.RaiseAndSetIfChanged(ref field, value);
+        }
     } = true;
     public bool ShowDoors
     {
         get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
+        set
+        {
+            AreaEntity?.DoRenderDoors = value;
+            this.RaiseAndSetIfChanged(ref field, value);
+        }
     } = true;
-    public bool ShowCorners
+    public bool ShowFloors
     {
         get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
+        set
+        {
+            AreaEntity?.DoRenderFloor = value;
+            this.RaiseAndSetIfChanged(ref field, value);
+        }
     } = true;
     public bool ShowCeilings
     {
         get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
+        set
+        {
+            AreaEntity?.DoRenderCeiling = value;
+            this.RaiseAndSetIfChanged(ref field, value);
+        }
     } = false;
+    public bool ShowCorners
+    {
+        get;
+        set
+        {
+            AreaEntity?.DoRenderCorners = value;
+            this.RaiseAndSetIfChanged(ref field, value);
+        }
+    } = true;
+    public bool ShowObjects
+    {
+        get;
+        set
+        {
+            AreaEntity?.DoRenderObjects = value;
+            this.RaiseAndSetIfChanged(ref field, value);
+        }
+    } = true;
 
     public AreaDesignerViewModel()
     {

@@ -47,7 +47,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
     public OrbitCamera _camera { get; } = new();
     private Point? _lastPointerPosition;
     private DateTime _lastRender = DateTime.Now;
-    private DesignerResourceManager _resourceManager = new DesignerResourceManager(@"C:\Kits");
+    private DesignerResourceManager _resourceManager = new(@"C:\Kits");
 
     public SceneControl()
     {
