@@ -16,6 +16,34 @@
     </Design.DataContext>
 
     <Window.Resources>
+        <DataTemplate x:Key="AddTileMode" x:DataType="mode:AddTileMode">
+			<ListBox ItemsSource="{Binding TileTemplates}"
+                     SelectedItem="{Binding SelectedTileTemplate}"
+                     Height="200">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+		</DataTemplate>
+
+        <DataTemplate x:Key="SelectWallMode" x:DataType="mode:SelectWallMode">
+			<ListBox ItemsSource="{Binding WallTemplates}"
+                     SelectedItem="{Binding SelectedWallTemplate}"
+                     Height="200">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+		</DataTemplate>
+
         <DataTemplate x:Key="SelectFloorMode" x:DataType="mode:SelectFloorMode">
 			<ListBox ItemsSource="{Binding FloorTemplates}"
                      SelectedItem="{Binding SelectedFloorTemplate}"
@@ -29,7 +57,7 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 		</DataTemplate>
-
+        
         <DataTemplate x:Key="SelectCeilingMode" x:DataType="mode:SelectCeilingMode">
 			<ListBox ItemsSource="{Binding CeilingTemplates}"
                      SelectedItem="{Binding SelectedCeilingTemplate}"
@@ -44,6 +72,33 @@
             </ListBox>
 		</DataTemplate>
 
+        <DataTemplate x:Key="SelectObjectMode" x:DataType="mode:SelectObjectMode">
+			<ListBox ItemsSource="{Binding ObjectTemplates}"
+                     SelectedItem="{Binding SelectedObjectTemplate}"
+                     Height="200">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+		</DataTemplate>
+
+        <DataTemplate x:Key="AddObjectMode" x:DataType="mode:AddObjectMode">
+			<ListBox ItemsSource="{Binding ObjectTemplates}"
+                     SelectedItem="{Binding SelectedObjectTemplate}"
+                     Height="200">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+		</DataTemplate>
 	</Window.Resources>
 
     <DockPanel>
@@ -114,64 +169,12 @@
 
             <ContentControl Content="{Binding Mode}">
                 <ContentControl.DataTemplates>
-                    <DataTemplate DataType="{x:Type mode:AddTileMode}">
-                        <ListBox ItemsSource="{Binding TileTemplates}"
-                                 SelectedItem="{Binding SelectedTileTemplate}"
-                                 Height="200">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Name}" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </DataTemplate>
-                    
-                    <DataTemplate DataType="{x:Type mode:SelectWallMode}">
-                        <ListBox ItemsSource="{Binding WallTemplates}"
-                                 SelectedItem="{Binding SelectedWallTemplate}"
-                                 Height="200">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Name}" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </DataTemplate>
-                    
-                    <DataTemplate DataType="{x:Type mode:AddObjectMode}">
-                        <ListBox ItemsSource="{Binding ObjectTemplates}"
-                                 SelectedItem="{Binding SelectedObjectTemplate}"
-                                 Height="200">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Name}" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </DataTemplate>
-
-                    <DataTemplate DataType="{x:Type mode:SelectObjectMode}">
-                        <ListBox ItemsSource="{Binding ObjectTemplates}"
-                                 SelectedItem="{Binding SelectedObjectTemplate}"
-                                 Height="200">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Name}" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </DataTemplate>
-
+                    <StaticResource ResourceKey="AddTileMode" />
+                    <StaticResource ResourceKey="SelectWallMode" />
                     <StaticResource ResourceKey="SelectFloorMode" />
                     <StaticResource ResourceKey="SelectCeilingMode" />
+                    <StaticResource ResourceKey="SelectObjectMode" />
+                    <StaticResource ResourceKey="AddObjectMode" />
                 </ContentControl.DataTemplates>
             </ContentControl>
             
