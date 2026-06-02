@@ -16,6 +16,12 @@
     </Design.DataContext>
 
     <Window.Resources>
+        <DataTemplate x:Key="SelectRoomMode" x:DataType="mode:SelectRoomMode">
+		</DataTemplate>
+
+        <DataTemplate x:Key="SelectTileMode" x:DataType="mode:SelectTileMode">
+		</DataTemplate>
+
         <DataTemplate x:Key="AddTileMode" x:DataType="mode:AddTileMode">
 			<ListBox ItemsSource="{Binding TileTemplates}"
                      SelectedItem="{Binding SelectedTileTemplate}"
@@ -123,8 +129,11 @@
         </Menu>
         <StackPanel DockPanel.Dock="Top"
                     Orientation="Horizontal">
+            <Label Content="Room:" VerticalAlignment="Center" />
+            <Button Content="Select" Command="{Binding SetSceneMode_SelectRoom}" IsEnabled="{Binding !IsMode_SelectRoom}" />
+
             <Label Content="Tile:" VerticalAlignment="Center" />
-            <Button Content="Select" IsEnabled="{Binding !IsMode_SelectTile}" />
+            <Button Content="Select" Command="{Binding SetSceneMode_SelectTile}" IsEnabled="{Binding !IsMode_SelectTile}" />
             <Button Content="Add" Command="{Binding SetSceneMode_AddTile}" IsEnabled="{Binding !IsMode_AddTile}" />
             
             <Label Content="Wall:" VerticalAlignment="Center" />
@@ -169,6 +178,8 @@
 
             <ContentControl Content="{Binding Mode}">
                 <ContentControl.DataTemplates>
+                    <StaticResource ResourceKey="SelectRoomMode" />
+                    <StaticResource ResourceKey="SelectTileMode" />
                     <StaticResource ResourceKey="AddTileMode" />
                     <StaticResource ResourceKey="SelectWallMode" />
                     <StaticResource ResourceKey="SelectFloorMode" />
@@ -180,7 +191,7 @@
             
         </StackPanel>
 
-        <local:SceneControl/>
+        <local:SceneControl KeyDown="SceneControl_KeyDown" />
     </DockPanel>
 
 </Window>

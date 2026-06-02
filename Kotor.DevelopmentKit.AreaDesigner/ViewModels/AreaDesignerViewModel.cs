@@ -30,6 +30,7 @@ using Kotor.NET.Resources.KotorMDL;
 using Kotor.NET.Resources.KotorMDL.Nodes;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
+using Object = Kotor.DevelopmentKit.AreaDesigner.relocate.Object;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.ViewModels;
 
@@ -44,7 +45,8 @@ public class AreaDesignerViewModel : ReactiveObject
     public Interaction<Unit, Unit> ClearSelection = new();
     public Interaction<object, Unit> AddToSelection = new();
 
-    public bool IsMode_SelectTile => false; // TODO
+    public bool IsMode_SelectRoom => Mode is SelectRoomMode;
+    public bool IsMode_SelectTile => Mode is SelectTileMode;
     public bool IsMode_AddTile => Mode is AddTileMode;
     public bool IsMode_SelectWall => Mode is SelectWallMode;
     public bool IsMode_SelectFloor => Mode is SelectFloorMode;
@@ -190,6 +192,22 @@ public class AreaDesignerViewModel : ReactiveObject
             });
     }
 
+    public void SetSceneMode_SelectRoom()
+    {
+        Mode = new SelectRoomMode(Engine, Area, SelectedKit, ActiveObject)
+        {
+            AddToSelection = AddToSelection,
+            ClearSelection = ClearSelection,
+        };
+    }
+    public void SetSceneMode_SelectTile()
+    {
+        Mode = new SelectTileMode(Engine, Area, SelectedKit, ActiveObject)
+        {
+            AddToSelection = AddToSelection,
+            ClearSelection = ClearSelection,
+        };
+    }
     public void SetSceneMode_AddTile()
     {
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
@@ -330,12 +348,39 @@ public class AreaDesignerViewModel : ReactiveObject
         Area = new();
     }
 
+    public void DeleteSelected()
+    {
+        foreach (var piece in SelectedPieces)
+        {
+            DeletePiece(piece);
+        }
+    }
+    public void DeletePiece(object piece)
+    {
+        if (piece is Object @object)
+        {
+            @object.Parent.Objects.Remove(@object);
+        }
+        else if (piece is Tile tile)
+        {
+            tile.Parent.DeleteTile(tile);
+        }
+    }
+
     public async Task RenderIntercept(OrbitCamera camera, Point mouse, List<MeshDescriptor> descriptors)
     {
         if (Mode is null)
             return;
 
         await Mode.RenderIntercept(camera, mouse, descriptors);
+
+        if (ActiveObject is Tile tile)
+        {
+            descriptors
+                .Where(x => tile.Walls.Contains(x.Tag) || tile.Floor == x.Tag || tile.Ceiling == x.Tag)
+                .ToList()
+                .ForEach(x => x.AmbientColor += new Vector3(0.5f, 0.5f, 0.5f));
+        }
 
         descriptors
             .Where(x => ActiveObject != null && x.Tag == ActiveObject)

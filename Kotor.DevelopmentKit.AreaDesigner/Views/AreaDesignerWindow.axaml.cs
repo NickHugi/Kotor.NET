@@ -38,4 +38,12 @@ public partial class AreaDesignerWindow : ReactiveWindow<AreaDesignerViewModel>
     private void ListBox_Initialized(object? sender, System.EventArgs e)
     {
     }
+
+    private void SceneControl_KeyDown(object? sender, Avalonia.Input.KeyEventArgs e)
+    {
+        if (e.Key == Avalonia.Input.Key.Delete)
+        {
+            ViewModel.DeleteSelected();
+        }
+    }
 }

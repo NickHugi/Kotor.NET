@@ -25,7 +25,7 @@ public class AreaSerializer_V0_1
 
         foreach (var roomData in data.rooms.ToObject<dynamic[]>())
         {
-            var room = new Room();
+            var room = new Room(area);
             area.AddRoom(room);
 
             foreach (var tileData in roomData.tiles.ToObject<dynamic[]>())
@@ -38,10 +38,9 @@ public class AreaSerializer_V0_1
                 var floorTemplate = Kit.Manager.Get(floorData.kitID.Value).Floor(floorData.templateID.Value);
                 tile.Floor.SwitchTemplate(floorTemplate);
 
-                // TODO
-                //var ceilingData = tileData.ceiling;
-                //var ceilingTemplate = Kit.Manager.Get(ceilingData.kitID.Value).Ceiling(ceilingData.templateID.Value);
-                //tile.Ceiling.SwitchTemplate(ceilingTemplate);
+                var ceilingData = tileData.ceiling;
+                var ceilingTemplate = Kit.Manager.Get(ceilingData.kitID.Value).Ceiling(ceilingData.templateID.Value);
+                tile.Ceiling.SwitchTemplate(ceilingTemplate);
 
                 for (int i = 0; i < tileData.walls.Count; i++)
                 {
@@ -51,10 +50,8 @@ public class AreaSerializer_V0_1
                     wall.SwitchTemplate(wallTemplate);
                 }
 
-                room.Tiles.Add(tile);
+                room.AddTile(tile);
             }
-
-            room.FixWalls();
         }
 
         return area;

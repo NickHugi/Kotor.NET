@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
 using Avalonia.Markup.Xaml.Templates;
 using DynamicData;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate;
+
+public interface IDeleteable
+{
+    public void Delete();
+}
+
 
 public class Area
 {
@@ -16,15 +23,23 @@ public class Area
     {
         _rooms.Add(room);
     }
+    public void DeleteRoom(Room room)
+    {
+        _rooms.Remove(room);
+    }
 }
 
 public class Room
 {
+    public Area Parent { get; }
+
     public Vector3 Position { get; set; } = new();
     public Quaternion Orientation { get; set; } = new();
     public Matrix4x4 Transform => Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position);
 
-    public ICollection<Tile> Tiles { get; } = new List<Tile>();
+    private List<Tile> _tiles = new();
+    public IReadOnlyCollection<Tile> Tiles => new ReadOnlyCollection<Tile>(_tiles);
+
     public ICollection<Wall> Walls => Tiles.SelectMany(x => x.Walls).ToList();
     public ICollection<Floor> Floors => Tiles.Select(x => x.Floor).ToList();
     public ICollection<Ceiling> Ceilings => Tiles.Select(x => x.Ceiling).ToList();
@@ -33,16 +48,48 @@ public class Room
     public ICollection<DoorFrame> DoorFrames => Walls.Select(x => x.DoorFrame).Where(x => x is not null).ToList();
     public ICollection<Object> Objects = [];
 
-    public Room()
+    public Room(Area parent)
     {
+        Parent = parent;
     }
-    public Room(TileTemplate template)
+    public Room(Area parent, TileTemplate template) : this(parent)
     {
-        Tiles.Add(new(this, template));
+        var tile = new Tile(this, template);
+        AddTile(tile);
     }
 
-    public void FixWalls()
+    public void AddObject(Object @object)
     {
+        Objects.Add(@object);
+    }
+    public void AddTile(Tile tile)
+    {
+        _tiles.Add(tile);
+        FixWalls();
+    }
+    public void DeleteTile(Tile tile)
+    {
+        _tiles.Remove(tile);
+        FixWalls();
+
+        if (Tiles.Count() == 0)
+        {
+            Delete();
+        }
+    }
+
+    public void Delete()
+    {
+        Parent.DeleteRoom(this);
+    }
+
+    private void FixWalls()
+    {
+        foreach (var wall in Tiles.SelectMany(x => x.Walls))
+        {
+            wall.LinkedTile = null;
+        }
+
         foreach (var tileA in Tiles)
         {
             foreach (var tileB in Tiles)
@@ -60,11 +107,6 @@ public class Room
                 }
             }
         }
-    }
-
-    public void AddObject(Object @object)
-    {
-        Objects.Add(@object);
     }
 
     // todo ienumerable extension
@@ -88,7 +130,7 @@ public class Room
     }
 }
 
-public class Tile
+public class Tile : IDeleteable
 {
     public Room Parent { get; }
 
@@ -142,10 +184,7 @@ public class Tile
             + Vector3.Transform(wall.LocalPosition, LocalOrientation)
             - Vector3.Transform(adjacent.LocalPosition, newTile.LocalOrientation);
 
-        Parent.Tiles.Add(newTile);
-
-        // Link the new tile to the old tile, as well as any other touching tiles
-        Parent.FixWalls();
+        Parent.AddTile(newTile);
 
         return newTile;
     }
@@ -159,6 +198,11 @@ public class Tile
         Walls = template.Walls.Select(x => new Wall(this, x.DefaultTemplate, x)).ToArray();
         InnerCorners = template.InnerCorners.Select(x => new InnerCorner(this, x.DefaultTemplate, x)).ToArray();
         OuterCorners = template.OuterCorners.Select(x => new OuterCorner(this, x.DefaultTemplate, x)).ToArray();
+    }
+
+    public void Delete()
+    {
+        Parent.DeleteTile(this);
     }
 }
 

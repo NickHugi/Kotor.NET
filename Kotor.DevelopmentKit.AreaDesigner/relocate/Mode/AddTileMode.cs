@@ -60,7 +60,7 @@ public class AddTileMode : BaseMode
         var point = ray.FindPointOnPlane(Axis.Z, 0);
         var render = true;
 
-        _addRoomRoom = new Room(SelectedTileTemplate);
+        _addRoomRoom = new Room(_area, SelectedTileTemplate);
         _addRoomRoom.Position = point;
         _addRoomRoom.Orientation = Quaternion.CreateFromYawPitchRoll(0, 0, angle * (float)Math.PI / 180);
 
