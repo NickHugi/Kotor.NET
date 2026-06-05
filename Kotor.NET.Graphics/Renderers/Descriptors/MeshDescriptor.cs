@@ -8,9 +8,9 @@ using Kotor.NET.Common.Data;
 using Kotor.NET.Graphics.GPU;
 using Vector3 = System.Numerics.Vector3;
 
-namespace Kotor.NET.Graphics.Model;
+namespace Kotor.NET.Graphics.Renderers.Descriptors;
 
-public class MeshDescriptor
+public class MeshDescriptor : IDrawCallDescriptor
 {
     public IMesh Mesh { get; init; }
     public BoundingBox? BoundingBox { get; init; }

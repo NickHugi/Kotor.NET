@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Graphics.Entities;
 using Kotor.NET.Graphics.GPU;
+using Kotor.NET.Graphics.Renderers.Descriptors;
 
 namespace Kotor.NET.Graphics.Model.Nodes;
 
@@ -28,11 +29,11 @@ public class SkinmeshNode : MeshNode
         return node;
     }
 
-    public override ICollection<MeshDescriptor> GetMeshDescriptors(BaseEntity entity)
+    public override ICollection<IDrawCallDescriptor> GetMeshDescriptors(BaseEntity entity)
     {
         return
         [
-            new()
+            new MeshDescriptor()
             {
                 Mesh = Mesh,
                 Texture1 = Texture1,

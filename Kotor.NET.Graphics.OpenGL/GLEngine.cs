@@ -62,6 +62,7 @@ public class GLEngine
         GL.ClearColor(0.1f, 0.0f, 0.0f, 1.0f);
         GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
+        new LineRenderer().Render(AssetManager, Scene, camera, Width, Height);
         new GeometryRenderer().Render(AssetManager, Scene, camera, Width, Height);
         new ImageRenderer().Render(AssetManager, Scene, camera, Width, Height);
     }

@@ -2,10 +2,14 @@
 using System.Numerics;
 using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Cameras;
+using Kotor.NET.Graphics.Entities;
 using Kotor.NET.Graphics.GPU;
 using Kotor.NET.Graphics.Interface;
+using Kotor.NET.Graphics.Model.Nodes;
 using Kotor.NET.Graphics.OpenGL;
 using Kotor.NET.Graphics.OpenGL.Factories;
+using Kotor.NET.Graphics.Renderers;
+using Kotor.NET.Graphics.Renderers.Descriptors;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 
@@ -61,19 +65,29 @@ class Program
         };
 
         assets.Quad = new VertexArrayObjectFactory().NewQuad(gl);
+        assets.Line = new VertexArrayObjectFactory().GetLineQuad(gl);
         assets.AddShader("image", new ShaderFactory(gl).FromFile("Assets/image/vertex.glsl", "Assets/image/fragment.glsl"));
+        assets.AddShader("line", new ShaderFactory(gl).FromFile("Assets/line/vertex.glsl", "Assets/line/fragment.glsl"));
         assets.AddShader("basic", new ShaderFactory(gl).FromFile("Assets/standard/vertex.glsl", "Assets/standard/fragment.glsl"));
         assets.AddShader("picker", new ShaderFactory(gl).FromFile("Assets/picker/vertex.glsl", "Assets/picker/fragment.glsl"));
         assets.AddTexture("placeholder", new TPCTextureFactory(gl).FromPlaceholder());
         assets.AddTexture("test", new TPCTextureFactory(gl).FromFile(@"C:\Kits\sandral\lda_flr05.tpc"));
 
-        scene.AddControl(new SimpleImageControl()
+        //scene.AddControl(new SimpleImageControl()
+        //{
+        //    X = 10,
+        //    Y = 10,
+        //    Width = 256,
+        //    Height = 256,
+        //    Image = "test"
+        //});
+
+        scene.AddEntity(new LineEntity()
         {
-            X = 10,
-            Y = 10,
-            Width = 256,
-            Height = 256,
-            Image = "test"
+            Start = new(100, 100, 0),
+            End = new(-100, -100, 0),
+            Color = new(1, 0, 0, 1),
+            Thickness = 1
         });
 
         while (!glfw.WindowShouldClose(window))
@@ -83,7 +97,9 @@ class Program
             engine.Render(new OrbitCamera()
             {
                 Target = Vector3.Zero,
-                Distance = 5,
+                Pitch = (float)(Math.PI / 4),
+                Yaw = 0,
+                Distance = 10,
             });
 
             glfw.SwapBuffers(window);
@@ -119,3 +135,30 @@ public class SimpleImageControl : BaseControl
         ];
     }
 }
+
+public class LineEntity : BaseEntity
+{
+    public required Vector3 Start { get; init; }
+    public required Vector3 End { get; init; }
+    public required Vector4 Color { get; init; }
+    public float Thickness { get; init; } = 1;
+
+    public override ICollection<IDrawCallDescriptor> GetMeshDescriptors(IAssetManager assets)
+    {
+        return
+        [
+            new LineDescriptor()
+            {
+                Start = Start,
+                End = End,
+                Color = Color,
+                Thickness = Thickness,
+            }
+        ];
+    }
+
+    public override void Update(IAssetManager assetManager, float delta)
+    {
+    }
+}
+
