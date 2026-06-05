@@ -4,8 +4,8 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using Kotor.NET.Graphics.Model;
 using Kotor.NET.Graphics.Model.Nodes;
+using Kotor.NET.Graphics.Renderers.Descriptors;
 
 namespace Kotor.NET.Graphics.Entities;
 
@@ -14,7 +14,7 @@ public class PropEntity : BaseEntity
     public required string Model { get; set; }
     public List<ActiveAnimation> Animations { get; set; } = [];
 
-    public override ICollection<MeshDescriptor> GetMeshDescriptors(IAssetManager assets)
+    public override ICollection<IDrawCallDescriptor> GetMeshDescriptors(IAssetManager assets)
     {
         var model = assets.GetModel(Model);
         model.Root.GenerateTransform(Animations);

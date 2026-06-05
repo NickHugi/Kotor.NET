@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Graphics.GPU;
 using Silk.NET.OpenGL;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Kotor.NET.Graphics.OpenGL.GPU;
 
