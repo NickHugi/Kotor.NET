@@ -65,7 +65,9 @@ class Program
         };
 
         assets.Quad = new VertexArrayObjectFactory().NewQuad(gl);
+        assets.Billboard = new VertexArrayObjectFactory().NewBillBoard(gl);
         assets.Line = new VertexArrayObjectFactory().GetLineQuad(gl);
+        assets.AddShader("billboard", new ShaderFactory(gl).FromFile("Assets/billboard/vertex.glsl", "Assets/billboard/fragment.glsl"));
         assets.AddShader("image", new ShaderFactory(gl).FromFile("Assets/image/vertex.glsl", "Assets/image/fragment.glsl"));
         assets.AddShader("line", new ShaderFactory(gl).FromFile("Assets/line/vertex.glsl", "Assets/line/fragment.glsl"));
         assets.AddShader("basic", new ShaderFactory(gl).FromFile("Assets/standard/vertex.glsl", "Assets/standard/fragment.glsl"));
@@ -90,16 +92,27 @@ class Program
             Thickness = 1
         });
 
+        scene.AddEntity(new SimpleBillboardEntity()
+        {
+            DoRender = true,
+            FixedSize = false,
+            Image = "test",
+            Location = new Vector3(10, 10, 0),
+            Size = 1
+        });
+
+        var yaw = 0f;
         while (!glfw.WindowShouldClose(window))
         {
             glfw.PollEvents();
 
+            yaw += 0.0001f;
             engine.Render(new OrbitCamera()
             {
                 Target = Vector3.Zero,
                 Pitch = (float)(Math.PI / 4),
-                Yaw = 0,
-                Distance = 10,
+                Yaw = yaw,
+                Distance = 50
             });
 
             glfw.SwapBuffers(window);
@@ -153,6 +166,34 @@ public class LineEntity : BaseEntity
                 End = End,
                 Color = Color,
                 Thickness = Thickness,
+            }
+        ];
+    }
+
+    public override void Update(IAssetManager assetManager, float delta)
+    {
+    }
+}
+
+public class SimpleBillboardEntity : BaseEntity
+{
+    public required bool DoRender { get; init; }
+    public required bool FixedSize { get; init; }
+    public required string Image { get; init; }
+    public required Vector3 Location { get; set; }
+    public required float Size { get; init; }
+
+    public override ICollection<IDrawCallDescriptor> GetMeshDescriptors(IAssetManager assets)
+    {
+        return
+        [
+            new BillboardDescriptor()
+            {
+                DoRender = DoRender,
+                FixedSize = FixedSize,
+                Image = Image,
+                Location = Location,
+                Size = Size
             }
         ];
     }
