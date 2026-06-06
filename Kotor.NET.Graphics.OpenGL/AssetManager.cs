@@ -12,6 +12,7 @@ namespace Kotor.NET.Graphics.OpenGL;
 public class AssetManager : IAssetManager
 {
     public IMesh Quad { get; set; }
+    public IMesh Billboard { get; set; }
     public ILine Line { get; set; }
 
     private readonly Dictionary<string, KModel> _models = new();

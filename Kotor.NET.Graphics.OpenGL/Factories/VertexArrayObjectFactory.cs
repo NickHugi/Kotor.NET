@@ -180,6 +180,42 @@ public class VertexArrayObjectFactory : IVertexArrayObjectFactory
         ]);
     }
 
+    public unsafe IMesh NewBillBoard(GL gl)
+    {
+        float[] vertices =
+        {
+            -0.5f, -0.5f,
+             0.5f, -0.5f,
+             0.5f,  0.5f,
+
+            -0.5f, -0.5f,
+             0.5f,  0.5f,
+            -0.5f,  0.5f
+        };
+
+        ushort[] elements =
+        [
+            0, 1, 2,
+            2, 3, 0
+        ];
+
+        var vao = gl.GenVertexArray();
+        gl.BindVertexArray(vao);
+
+        var vbo = gl.GenBuffer();
+        gl.BindBuffer(BufferTargetARB.ArrayBuffer, vbo);
+        gl.BufferData<float>(BufferTargetARB.ArrayBuffer, vertices, BufferUsageARB.StaticDraw);
+
+        var ebo = gl.GenBuffer();
+        gl.BindBuffer(BufferTargetARB.ElementArrayBuffer, ebo);
+        gl.BufferData<ushort>(BufferTargetARB.ElementArrayBuffer, elements, BufferUsageARB.StaticDraw);
+
+        gl.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), 0);
+        gl.EnableVertexAttribArray(0);
+
+        return new VertexArrayObject(gl, vao, vbo, ebo, (uint)elements.Length);
+    }
+
     private static ILine? _lineQuad;
     public unsafe ILine GetLineQuad(GL gl)
     {

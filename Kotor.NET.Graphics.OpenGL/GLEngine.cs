@@ -10,6 +10,7 @@ using Kotor.NET.Graphics.Entities;
 using Kotor.NET.Graphics.Model.Nodes;
 using Kotor.NET.Graphics.OpenGL.Factories;
 using Kotor.NET.Graphics.Renderers;
+using Kotor.NET.Graphics.Renderers.Descriptors;
 using Kotor.NET.Tests.Encapsulation;
 using Silk.NET.OpenGL;
 
@@ -63,6 +64,7 @@ public class GLEngine
         GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
         new LineRenderer().Render(AssetManager, Scene, camera, Width, Height);
+        new BillboardRenderer().Render(AssetManager, Scene, camera, Width, Height);
         new GeometryRenderer().Render(AssetManager, Scene, camera, Width, Height);
         new ImageRenderer().Render(AssetManager, Scene, camera, Width, Height);
     }
