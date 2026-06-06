@@ -11,6 +11,7 @@ using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Cameras;
 using Kotor.NET.Graphics.Model;
 using Kotor.NET.Graphics.OpenGL;
+using Kotor.NET.Graphics.Renderers.Descriptors;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
@@ -67,12 +68,12 @@ public class SelectWallMode : BaseMode
             });
     }
 
-    public override Task RenderIntercept(OrbitCamera camera, Point mouse, List<MeshDescriptor> descriptors)
+    public override Task RenderIntercept(OrbitCamera camera, Point mouse, List<IDrawCallDescriptor> descriptors)
     {
         _wall = NearestWallMagnest(camera, mouse.X, mouse.Y)?.Result;
 
         if (_wall is not null)
-            descriptors.Where(x => x.Tag == _wall).ToList().ForEach(x => x.AmbientColor = new(1.5f, 1.5f, 1.5f));
+            descriptors.Where(x => x.Tag == _wall).ToList().OfType<MeshDescriptor>().ToList().ForEach(x => x.AmbientColor = new(1.5f, 1.5f, 1.5f));
 
         return Task.CompletedTask;
     }

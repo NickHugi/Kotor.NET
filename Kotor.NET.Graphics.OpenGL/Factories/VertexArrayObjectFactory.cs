@@ -179,4 +179,97 @@ public class VertexArrayObjectFactory : IVertexArrayObjectFactory
             new Vector2(0.0f, 1.0f)
         ]);
     }
+
+    public unsafe IMesh NewBillBoard(GL gl)
+    {
+        float[] vertices =
+        {
+            -0.5f, -0.5f,
+             0.5f, -0.5f,
+             0.5f,  0.5f,
+
+            -0.5f, -0.5f,
+             0.5f,  0.5f,
+            -0.5f,  0.5f
+        };
+
+        ushort[] elements =
+        [
+            0, 1, 2,
+            2, 3, 0
+        ];
+
+        var vao = gl.GenVertexArray();
+        gl.BindVertexArray(vao);
+
+        var vbo = gl.GenBuffer();
+        gl.BindBuffer(BufferTargetARB.ArrayBuffer, vbo);
+        gl.BufferData<float>(BufferTargetARB.ArrayBuffer, vertices, BufferUsageARB.StaticDraw);
+
+        var ebo = gl.GenBuffer();
+        gl.BindBuffer(BufferTargetARB.ElementArrayBuffer, ebo);
+        gl.BufferData<ushort>(BufferTargetARB.ElementArrayBuffer, elements, BufferUsageARB.StaticDraw);
+
+        gl.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), 0);
+        gl.EnableVertexAttribArray(0);
+
+        return new VertexArrayObject(gl, vao, vbo, ebo, (uint)elements.Length);
+    }
+
+    private static ILine? _lineQuad;
+    public unsafe ILine GetLineQuad(GL gl)
+    {
+        if (_lineQuad is null)
+        {
+            float[] vertices =
+            {
+                0f, -1f,
+                1f, -1f,
+                0f,  1f,
+
+                0f,  1f,
+                1f, -1f,
+                1f,  1f
+            };
+
+            var vao = gl.GenVertexArray();
+            gl.BindVertexArray(vao);
+
+            uint quadVbo = gl.GenBuffer();
+            gl.BindBuffer(BufferTargetARB.ArrayBuffer, quadVbo);
+            gl.BufferData(BufferTargetARB.ArrayBuffer, (ReadOnlySpan<float>)vertices, BufferUsageARB.StaticDraw);
+
+            gl.EnableVertexAttribArray(0);
+            gl.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), 0);
+
+            uint instanceVbo = gl.GenBuffer();
+            gl.BindBuffer(BufferTargetARB.ArrayBuffer, instanceVbo);
+
+            uint stride = sizeof(float) * (3 + 3 + 4 + 1);
+
+            // Start (location 1)
+            gl.EnableVertexAttribArray(1);
+            gl.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, stride, 0);
+            gl.VertexAttribDivisor(1, 1);
+
+            // End (location 2)
+            gl.EnableVertexAttribArray(2);
+            gl.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, stride, sizeof(float) * 3);
+            gl.VertexAttribDivisor(2, 1);
+
+            // Color (location 3)
+            gl.EnableVertexAttribArray(3);
+            gl.VertexAttribPointer(3, 4, VertexAttribPointerType.Float, false, stride, sizeof(float) * 6);
+            gl.VertexAttribDivisor(3, 1);
+
+            // Thickness (location 4)
+            gl.EnableVertexAttribArray(4);
+            gl.VertexAttribPointer(4, 1, VertexAttribPointerType.Float, false, stride, sizeof(float) * 10);
+            gl.VertexAttribDivisor(4, 1);
+
+            _lineQuad = new Line(gl, vao, quadVbo, instanceVbo);
+        }
+
+        return _lineQuad;
+    }
 }

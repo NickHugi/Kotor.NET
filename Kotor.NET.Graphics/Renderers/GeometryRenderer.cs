@@ -1,30 +1,26 @@
 ﻿using System.Numerics;
 using Kotor.NET.Graphics.Cameras;
 using Kotor.NET.Graphics.Entities;
+using Kotor.NET.Graphics.Factories;
 using Kotor.NET.Graphics.GPU;
-using Kotor.NET.Graphics.Model;
+using Kotor.NET.Graphics.Renderers.Descriptors;
 
 namespace Kotor.NET.Graphics.Renderers;
 
 public class GeometryRenderer : IRenderer
 {
-    public void Render(IAssetManager assets, Scene scene, Camera camera, uint width, uint height, Action<List<MeshDescriptor>> renderInterceptor)
+    public void Render(IAssetManager assets, IEnumerable<IDrawCallDescriptor> descriptors, Camera camera, Vector2 viewport)
     {
-        var descriptors = scene.Entities.SelectMany(x => x.GetMeshDescriptors(assets)).ToList();
-
-        if (renderInterceptor is not null)
-            renderInterceptor(descriptors);
-
         var shader = assets.GetShader("basic");
 
         shader.Activate();
-        shader.SetMatrix4x4("projection", camera.GetProjectionTransform(width, height));
-        shader.SetMatrix4x4("view", camera.GetViewTransform());
-        shader.SetMatrix4x4("mesh", Matrix4x4.Identity);
-        shader.SetUniform1("texture1", 0);
-        shader.SetUniform1("texture2", 1);
+        shader.SetMatrix4x4("uProjection", camera.GetProjectionTransform((uint)viewport.X, (uint)viewport.Y));
+        shader.SetMatrix4x4("uView", camera.GetViewTransform());
+        shader.SetMatrix4x4("uMesh", Matrix4x4.Identity);
+        shader.SetUniform1("uTexture1", 0);
+        shader.SetUniform1("uTexture2", 1);
 
-        descriptors.ForEach(x => Render(assets, shader, x));
+        descriptors.OfType<MeshDescriptor>().ToList().ForEach(x => Render(assets, shader, x));
     }
 
     private void Render(IAssetManager assets, IShader shader, MeshDescriptor descriptor)
@@ -32,12 +28,12 @@ public class GeometryRenderer : IRenderer
         if (!descriptor.DoRender)
             return;
 
-        shader.SetMatrix4x4("entity", Matrix4x4.Identity);
-        shader.SetMatrix4x4("mesh", descriptor.Transform);
-        shader.SetMatrix4x4Array("finalBonesMatrices", descriptor.BoneTransforms);
-        shader.SetUniform3("diffuse", descriptor.DiffuseColor);
-        shader.SetUniform3("ambient", descriptor.AmbientColor);
-        shader.SetUniform1("pickerID", descriptor.PickerID);
+        shader.SetMatrix4x4("uEntity", Matrix4x4.Identity);
+        shader.SetMatrix4x4("uMesh", descriptor.Transform);
+        shader.SetMatrix4x4Array("uFinalBonesMatrices", descriptor.BoneTransforms);
+        shader.SetUniform3("uDiffuse", descriptor.DiffuseColor);
+        shader.SetUniform3("uAmbient", descriptor.AmbientColor);
+        shader.SetUniform1("uPickerID", descriptor.PickerID);
 
         var texturePlaceholder = assets.GetTexture("placeholder");
         var texture1 = assets.GetTexture(descriptor.Texture1);

@@ -11,6 +11,7 @@ using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Cameras;
 using Kotor.NET.Graphics.Model;
 using Kotor.NET.Graphics.OpenGL;
+using Kotor.NET.Graphics.Renderers.Descriptors;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
@@ -43,7 +44,7 @@ public class BaseMode : ReactiveObject
         _area = area;
     }
 
-    public virtual Task RenderIntercept(OrbitCamera camera, Point mouse, List<MeshDescriptor> descriptors)
+    public virtual Task RenderIntercept(OrbitCamera camera, Point mouse, List<IDrawCallDescriptor> descriptors)
     {
         return Task.CompletedTask;
     }

@@ -8,6 +8,7 @@ using Avalonia.Controls;
 using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Entities;
 using Kotor.NET.Graphics.Model;
+using Kotor.NET.Graphics.Renderers.Descriptors;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate;
@@ -23,9 +24,9 @@ public class AreaEntity : BaseEntity
     public bool DoRenderCeiling { get; set; } = false;
     public bool DoRenderObjects { get; set; } = true;
 
-    public override ICollection<MeshDescriptor> GetMeshDescriptors(IAssetManager assets)
+    public override ICollection<IDrawCallDescriptor> GetDrawCallDescriptors(IAssetManager assets)
     {
-        var descriptors = new List<MeshDescriptor>();
+        var descriptors = new List<IDrawCallDescriptor>();
 
         foreach (var room in Area.Rooms)
         {
@@ -34,7 +35,7 @@ public class AreaEntity : BaseEntity
 
         return descriptors;
     }
-    public void RenderRoom(IAssetManager assets, Room room, ref List<MeshDescriptor> descriptors)
+    public void RenderRoom(IAssetManager assets, Room room, ref List<IDrawCallDescriptor> descriptors)
     {
         foreach (var tile in room.Tiles)
         {
@@ -62,49 +63,49 @@ public class AreaEntity : BaseEntity
             RenderObject(assets, @object, ref descriptors);
         }
     }
-    private void RenderFloor(IAssetManager assets, Tile tile, ref List<MeshDescriptor> descriptors)
+    private void RenderFloor(IAssetManager assets, Tile tile, ref List<IDrawCallDescriptor> descriptors)
     {
         if (!DoRenderFloor)
             return;
 
         descriptors.AddRange(DescriptorsForModel(assets, tile.Floor.Template.Model, tile.Transform, tile.Floor));
     }
-    private void RenderCeiling(IAssetManager assets, Tile tile, ref List<MeshDescriptor> descriptors)
+    private void RenderCeiling(IAssetManager assets, Tile tile, ref List<IDrawCallDescriptor> descriptors)
     {
         if (!DoRenderCeiling)
             return;
 
         descriptors.AddRange(DescriptorsForModel(assets, tile.Ceiling.Template.Model, tile.Transform, tile.Ceiling));
     }
-    private void RenderWall(IAssetManager assets, Wall wall, ref List<MeshDescriptor> descriptors)
+    private void RenderWall(IAssetManager assets, Wall wall, ref List<IDrawCallDescriptor> descriptors)
     {
         if (!wall.Visible || ((wall.DoorFrame is null && !DoRenderWalls) || (wall.DoorFrame is not null && !DoRenderDoors)))
             return;
 
         descriptors.AddRange(DescriptorsForModel(assets, wall.Template.Model, wall.Transform, wall));
     }
-    private void RenderDoorFrame(IAssetManager assets, DoorFrame doorframe, ref List<MeshDescriptor> descriptors)
+    private void RenderDoorFrame(IAssetManager assets, DoorFrame doorframe, ref List<IDrawCallDescriptor> descriptors)
     {
         if (!doorframe.Visible || !DoRenderDoors)
             return;
 
         descriptors.AddRange(DescriptorsForModel(assets, doorframe.Template.Model, doorframe.Transform, doorframe));
     }
-    private void RenderInnerCorner(IAssetManager assets, InnerCorner corner, ref List<MeshDescriptor> descriptors)
+    private void RenderInnerCorner(IAssetManager assets, InnerCorner corner, ref List<IDrawCallDescriptor> descriptors)
     {
         if (!corner.Visible || !DoRenderCorners)
             return;
 
         descriptors.AddRange(DescriptorsForModel(assets, corner.Template.Model, corner.Transform, corner));
     }
-    private void RenderOuterCorner(IAssetManager assets, OuterCorner corner, ref List<MeshDescriptor> descriptors)
+    private void RenderOuterCorner(IAssetManager assets, OuterCorner corner, ref List<IDrawCallDescriptor> descriptors)
     {
         if (!corner.Visible || !DoRenderCorners)
             return;
 
         descriptors.AddRange(DescriptorsForModel(assets, corner.Template.Model, corner.Transform, corner));
     }
-    public void RenderObject(IAssetManager assets, Object @object, ref List<MeshDescriptor> descriptors)
+    public void RenderObject(IAssetManager assets, Object @object, ref List<IDrawCallDescriptor> descriptors)
     {
         if (!DoRenderObjects)
             return;
@@ -112,12 +113,12 @@ public class AreaEntity : BaseEntity
         descriptors.AddRange(DescriptorsForModel(assets, @object.Template.Model, @object.LocalTransform, @object));
     }
     // TODO - clean this up somehow
-    private ICollection<MeshDescriptor> DescriptorsForModel(IAssetManager assets, string modelName, Matrix4x4 transform, object tag = null)
+    private ICollection<IDrawCallDescriptor> DescriptorsForModel(IAssetManager assets, string modelName, Matrix4x4 transform, object tag = null)
     {
         var model = assets.GetModel(modelName);
         model.Root.GenerateTransform([]);
         return model.GetAllNodes()
-            .SelectMany(node => node.GetMeshDescriptors(transform))
+            .SelectMany(node => node.GetDrawCallDescriptors(transform))
             .Select(x =>
             {
                 x.Tag = tag;

@@ -6,24 +6,22 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Graphics.Cameras;
 using Kotor.NET.Graphics.GPU;
-using Kotor.NET.Graphics.Interface;
 using Kotor.NET.Graphics.Model;
+using Kotor.NET.Graphics.Renderers.Descriptors;
 
 namespace Kotor.NET.Graphics.Renderers;
 
 public class ImageRenderer : IRenderer
 {
-    public void Render(IAssetManager assets, Scene scene, Camera camera, uint width, uint height, Action<List<MeshDescriptor>> renderInterceptor)
+    public void Render(IAssetManager assets, IEnumerable<IDrawCallDescriptor> descriptors, Camera camera, Vector2 viewport)
     {
-        var descriptors = scene.Controls.SelectMany(x => x.GetImageDescriptors(assets)).ToList();
-
         var shader = assets.GetShader("image");
 
         shader.Activate();
-        shader.SetUniform1("texture", 0);
-        shader.SetUniform2("uScreenSize", new Vector2(width, height));
+        shader.SetUniform1("uTexture", 0);
+        shader.SetUniform2("uViewport", viewport);
 
-        descriptors.ForEach(x => Render(assets, shader, x));
+        descriptors.OfType<ImageDescriptor>().ToList().ForEach(x => Render(assets, shader, x));
     }
 
     private void Render(IAssetManager assets, IShader shader, ImageDescriptor descriptor)

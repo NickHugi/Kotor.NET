@@ -8,6 +8,7 @@ using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Cameras;
 using Kotor.NET.Graphics.Model;
 using Kotor.NET.Graphics.OpenGL;
+using Kotor.NET.Graphics.Renderers.Descriptors;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
@@ -51,7 +52,7 @@ public class AddTileMode : BaseMode
         });
     }
 
-    public override async Task RenderIntercept(OrbitCamera camera, Point mouse, List<MeshDescriptor> descriptors)
+    public override async Task RenderIntercept(OrbitCamera camera, Point mouse, List<IDrawCallDescriptor> descriptors)
     {
         if (SelectedTileTemplate is null)
             return;
@@ -99,12 +100,12 @@ public class AddTileMode : BaseMode
             RenderRoom(descriptors);
         }
     }
-    private void RenderRoom(List<MeshDescriptor> descriptors)
+    private void RenderRoom(List<IDrawCallDescriptor> descriptors)
     {
-        var roomMeshDescriptors = new List<MeshDescriptor>();
-        _areaEntity.RenderRoom(_engine.AssetManager, _addRoomRoom, ref roomMeshDescriptors);
-        roomMeshDescriptors.ForEach(x => x.AmbientColor += new Vector3(0.5f, 0.5f, 0.5f));
-        descriptors.AddRange(roomMeshDescriptors);
+        var roomDescriptors = new List<IDrawCallDescriptor>();
+        _areaEntity.RenderRoom(_engine.AssetManager, _addRoomRoom, ref roomDescriptors);
+        roomDescriptors.OfType<MeshDescriptor>().ToList().ForEach(x => x.AmbientColor += new Vector3(0.5f, 0.5f, 0.5f));
+        descriptors.AddRange(roomDescriptors);
     }
 
     public override async Task Trigger()

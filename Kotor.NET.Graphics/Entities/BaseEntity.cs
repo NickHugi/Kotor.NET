@@ -4,7 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using Kotor.NET.Graphics.Model;
+using Kotor.NET.Graphics.Renderers.Descriptors;
 
 namespace Kotor.NET.Graphics.Entities;
 
@@ -17,7 +17,7 @@ public abstract class BaseEntity
 
     public abstract void Update(IAssetManager assetManager, float delta);
 
-    public virtual ICollection<MeshDescriptor> GetMeshDescriptors(IAssetManager assets)
+    public virtual ICollection<IDrawCallDescriptor> GetDrawCallDescriptors(IAssetManager assets)
     {
         return [];
     }

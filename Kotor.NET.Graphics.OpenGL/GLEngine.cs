@@ -11,8 +11,10 @@ using Kotor.NET.Graphics.Model;
 using Kotor.NET.Graphics.Model.Nodes;
 using Kotor.NET.Graphics.OpenGL.Factories;
 using Kotor.NET.Graphics.Renderers;
+using Kotor.NET.Graphics.Renderers.Descriptors;
 using Kotor.NET.Tests.Encapsulation;
 using Silk.NET.OpenGL;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace Kotor.NET.Graphics.OpenGL;
 
@@ -21,7 +23,7 @@ public class GLEngine
     public required GL GL { get; init; }
     public required Scene Scene { get; init; }
     public required AssetManager AssetManager { get; init; }
-    public Action<List<MeshDescriptor>>? RenderInterceptor { get; set;  }
+    public Action<List<IDrawCallDescriptor>>? RenderInterceptor { get; set;  }
 
     public uint Width { get; set; }
     public uint Height { get; set; }
@@ -35,6 +37,8 @@ public class GLEngine
         GL.Enable(EnableCap.DepthTest);
 
         AssetManager.AddShader("basic", new ShaderFactory(GL).FromFile("Assets/standard/vertex.glsl", "Assets/standard/fragment.glsl"));
+        AssetManager.AddShader("line", new ShaderFactory(GL).FromFile("Assets/line/vertex.glsl", "Assets/line/fragment.glsl"));
+        AssetManager.AddShader("billboard", new ShaderFactory(GL).FromFile("Assets/billboard/vertex.glsl", "Assets/billboard/fragment.glsl"));
         AssetManager.AddShader("picker", new ShaderFactory(GL).FromFile("Assets/picker/vertex.glsl", "Assets/picker/fragment.glsl"));
         AssetManager.AddShader("image", new ShaderFactory(GL).FromFile("Assets/image/vertex.glsl", "Assets/image/fragment.glsl"));
 
@@ -42,6 +46,8 @@ public class GLEngine
         AssetManager.AddTexture("placeholder", placeholderTexture);
 
         AssetManager.Quad = new VertexArrayObjectFactory().NewQuad(GL);
+        AssetManager.Billboard = new VertexArrayObjectFactory().NewBillBoard(GL);
+        AssetManager.Line = new VertexArrayObjectFactory().GetLineQuad(GL);
     }
 
     public void Deinit()
@@ -57,13 +63,24 @@ public class GLEngine
             action();
         }
 
+        var viewport = new Vector2(Width, Height);
         GL.Viewport(0, 0, Width, Height);
 
         GL.ClearColor(0.1f, 0.0f, 0.0f, 1.0f);
         GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
-        new GeometryRenderer().Render(AssetManager, Scene, camera, Width, Height, RenderInterceptor);
-        new ImageRenderer().Render(AssetManager, Scene, camera, Width, Height, RenderInterceptor);
+        List<IDrawCallDescriptor> descriptors =
+        [
+            ..Scene.Entities.SelectMany(x => x.GetDrawCallDescriptors(AssetManager)),
+            ..Scene.Controls.SelectMany(x => x.GetImageDescriptors(AssetManager))
+        ];
+
+        RenderInterceptor?.Invoke(descriptors);
+
+        new LineRenderer().Render(AssetManager, descriptors, camera, viewport);
+        new BillboardRenderer().Render(AssetManager, descriptors, camera, viewport);
+        new GeometryRenderer().Render(AssetManager, descriptors, camera, viewport);
+        new ImageRenderer().Render(AssetManager, descriptors, camera, viewport);
     }
 
     public void Update(float timestep)
@@ -80,7 +97,7 @@ public class GLEngine
             GL.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
             GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
-            new PickRenderer().Render(AssetManager, Scene, camera, Width, Height, RenderInterceptor);
+            //new PickRenderer().Render(AssetManager, Scene, camera, Width, Height);
 
             Span<byte> bytes = new byte[4];
             GL.ReadPixels(x, (int)Height - y, 1, 1, PixelFormat.Rgba, PixelType.UnsignedByte, bytes);

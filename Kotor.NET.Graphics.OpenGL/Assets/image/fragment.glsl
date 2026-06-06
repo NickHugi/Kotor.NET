@@ -1,12 +1,13 @@
 #version 300 es
 precision highp float;
 
-in vec2 uv;
+in vec2 vUV;
 out vec4 FragColor;
 
-uniform sampler2D texture1;
+uniform sampler2D uTexture;
+
 void main()
 {
-    vec4 diffuseColor = texture(texture1, uv);
+    vec4 diffuseColor = texture(uTexture, vUV);
     FragColor = diffuseColor;
 } 

@@ -11,6 +11,7 @@ using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Cameras;
 using Kotor.NET.Graphics.Model;
 using Kotor.NET.Graphics.OpenGL;
+using Kotor.NET.Graphics.Renderers.Descriptors;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
@@ -28,7 +29,7 @@ public class SelectTileMode : BaseMode
     {
     }
 
-    public override Task RenderIntercept(OrbitCamera camera, Point mouse, List<MeshDescriptor> descriptors)
+    public override Task RenderIntercept(OrbitCamera camera, Point mouse, List<IDrawCallDescriptor> descriptors)
     {
         _tileAtCursor = IntersectingFloor(camera, mouse.X, mouse.Y)?.Result.Parent;
 
@@ -36,6 +37,7 @@ public class SelectTileMode : BaseMode
         {
             descriptors
                 .Where(x => x.Tag == _tileAtCursor.Floor || x.Tag == _tileAtCursor.Ceiling || _tileAtCursor.Walls.Contains(x.Tag))
+                .OfType<MeshDescriptor>()
                 .ToList()
                 .ForEach(x => x.AmbientColor = new(1.5f, 1.5f, 1.5f));
         }

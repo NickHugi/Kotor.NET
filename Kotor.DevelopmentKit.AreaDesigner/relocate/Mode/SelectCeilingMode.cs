@@ -11,6 +11,7 @@ using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Cameras;
 using Kotor.NET.Graphics.Model;
 using Kotor.NET.Graphics.OpenGL;
+using Kotor.NET.Graphics.Renderers.Descriptors;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
@@ -59,12 +60,12 @@ public class SelectCeilingMode : BaseMode
             });
     }
 
-    public override Task RenderIntercept(OrbitCamera camera, Point mouse, List<MeshDescriptor> descriptors)
+    public override Task RenderIntercept(OrbitCamera camera, Point mouse, List<IDrawCallDescriptor> descriptors)
     {
         _ceilingAtCursor = IntersectingCeiling(camera, mouse.X, mouse.Y)?.Result;
 
         if (_ceilingAtCursor is not null)
-            descriptors.Where(x => x.Tag == _ceilingAtCursor).ToList().ForEach(x => x.AmbientColor = new(1.5f, 1.5f, 1.5f));
+            descriptors.Where(x => x.Tag == _ceilingAtCursor).OfType<MeshDescriptor>().ToList().ForEach(x => x.AmbientColor = new(1.5f, 1.5f, 1.5f));
 
         return Task.CompletedTask;
     }

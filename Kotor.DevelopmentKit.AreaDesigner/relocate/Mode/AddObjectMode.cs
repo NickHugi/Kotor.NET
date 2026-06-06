@@ -8,6 +8,7 @@ using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Cameras;
 using Kotor.NET.Graphics.Model;
 using Kotor.NET.Graphics.OpenGL;
+using Kotor.NET.Graphics.Renderers.Descriptors;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
@@ -36,7 +37,7 @@ public class AddObjectMode : BaseMode
     {
     }
 
-    public override async Task RenderIntercept(OrbitCamera camera, Point mouse, List<MeshDescriptor> descriptors)
+    public override async Task RenderIntercept(OrbitCamera camera, Point mouse, List<IDrawCallDescriptor> descriptors)
     {
         if (SelectedObjectTemplate is null)
             return;
@@ -50,10 +51,10 @@ public class AddObjectMode : BaseMode
         _addObject.LocalPosition = point;
         _addObject.LocalOrientation = Quaternion.CreateFromYawPitchRoll(0, 0, angle * (float)Math.PI / 180);
 
-        var roomMeshDescriptors = new List<MeshDescriptor>();
-        _areaEntity.RenderObject(_engine.AssetManager, _addObject, ref roomMeshDescriptors);
-        roomMeshDescriptors.ForEach(x => x.AmbientColor = new Vector3(1.5f, 1.5f, 1.5f));
-        descriptors.AddRange(roomMeshDescriptors);
+        var roomDescriptors = new List<IDrawCallDescriptor>();
+        _areaEntity.RenderObject(_engine.AssetManager, _addObject, ref roomDescriptors);
+        roomDescriptors.OfType<MeshDescriptor>().ToList().ForEach(x => x.AmbientColor = new Vector3(1.5f, 1.5f, 1.5f));
+        descriptors.AddRange(roomDescriptors);
     }
 
     public override async Task Trigger()

@@ -20,6 +20,7 @@ using Kotor.NET.Common.Data;
 using Kotor.NET.Graphics.Cameras;
 using Kotor.NET.Graphics.Model;
 using Kotor.NET.Graphics.OpenGL;
+using Kotor.NET.Graphics.Renderers.Descriptors;
 using Kotor.NET.Resources.KotorARE;
 using Kotor.NET.Resources.KotorBWM;
 using Kotor.NET.Resources.KotorERF;
@@ -367,7 +368,7 @@ public class AreaDesignerViewModel : ReactiveObject
         }
     }
 
-    public async Task RenderIntercept(OrbitCamera camera, Point mouse, List<MeshDescriptor> descriptors)
+    public async Task RenderIntercept(OrbitCamera camera, Point mouse, List<IDrawCallDescriptor> descriptors)
     {
         if (Mode is null)
             return;
@@ -378,12 +379,14 @@ public class AreaDesignerViewModel : ReactiveObject
         {
             descriptors
                 .Where(x => tile.Walls.Contains(x.Tag) || tile.Floor == x.Tag || tile.Ceiling == x.Tag)
+                .OfType<MeshDescriptor>()
                 .ToList()
                 .ForEach(x => x.AmbientColor += new Vector3(0.5f, 0.5f, 0.5f));
         }
 
         descriptors
             .Where(x => ActiveObject != null && x.Tag == ActiveObject)
+            .OfType<MeshDescriptor>()
             .ToList()
             .ForEach(x => x.AmbientColor += new Vector3(0.5f, 0.5f, 0.5f));
     }
