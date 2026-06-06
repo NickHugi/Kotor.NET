@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Graphics.GPU;
 
-namespace Kotor.NET.Graphics.Model;
+namespace Kotor.NET.Graphics.Renderers.Descriptors;
 
-public class MeshDescriptor
+public class MeshDescriptor : IDrawCallDescriptor
 {
     public object Tag { get; set; }
     public uint PickerID { get; set; } = 0xFFFFFFFF;

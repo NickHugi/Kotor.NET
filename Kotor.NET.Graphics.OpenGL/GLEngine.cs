@@ -11,6 +11,7 @@ using Kotor.NET.Graphics.Model;
 using Kotor.NET.Graphics.Model.Nodes;
 using Kotor.NET.Graphics.OpenGL.Factories;
 using Kotor.NET.Graphics.Renderers;
+using Kotor.NET.Graphics.Renderers.Descriptors;
 using Kotor.NET.Tests.Encapsulation;
 using Silk.NET.OpenGL;
 
@@ -62,8 +63,10 @@ public class GLEngine
         GL.ClearColor(0.1f, 0.0f, 0.0f, 1.0f);
         GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
-        new GeometryRenderer().Render(AssetManager, Scene, camera, Width, Height, RenderInterceptor);
-        new ImageRenderer().Render(AssetManager, Scene, camera, Width, Height, RenderInterceptor);
+        new LineRenderer().Render(AssetManager, Scene, camera, Width, Height);
+        new BillboardRenderer().Render(AssetManager, Scene, camera, Width, Height);
+        new GeometryRenderer().Render(AssetManager, Scene, camera, Width, Height);
+        new ImageRenderer().Render(AssetManager, Scene, camera, Width, Height);
     }
 
     public void Update(float timestep)

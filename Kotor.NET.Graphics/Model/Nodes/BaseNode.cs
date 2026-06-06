@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Kotor.NET.Graphics.Entities;
 using Kotor.NET.Graphics.Extensions;
 using Kotor.NET.Graphics.OpenGL.Model;
+using Kotor.NET.Graphics.Renderers.Descriptors;
 
 namespace Kotor.NET.Graphics.Model.Nodes;
 
@@ -54,7 +55,7 @@ public abstract class BaseNode : IDisposable
 
     public bool Visible;
 
-    public virtual ICollection<MeshDescriptor> GetMeshDescriptors(Matrix4x4 transform)
+    public virtual ICollection<IDrawCallDescriptor> GetMeshDescriptors(BaseEntity entity)
     {
         return [];
     }

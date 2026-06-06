@@ -6,9 +6,9 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kotor.NET.Graphics.Interface;
+namespace Kotor.NET.Graphics.Renderers.Descriptors;
 
-public class ImageDescriptor
+public class ImageDescriptor : IDrawCallDescriptor
 {
     public required string Image { get; init; }
     public required int X { get; init; }

@@ -22,12 +22,13 @@ public interface IShader : IDisposable
 
     public void SetUniform1(string name, int value);
     public void SetUniform1(string name, uint value);
+    public void SetUniform1(string name, float value);
+    public void SetUniform1(string name, bool value);
 
+    public void SetUniform2(string name, Vector2 value);
     public void SetUniform2(string name, Vector2 value);
 
     public void SetUniform3(string name, Vector3 value);
     public void SetUniform3(string name, Color value);
 
-    public void SetUniform4(string name, Vector4 value);
-    public void SetUniform4(string name, Color value);
 }

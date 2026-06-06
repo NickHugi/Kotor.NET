@@ -2,7 +2,7 @@
 using Kotor.NET.Graphics.Cameras;
 using Kotor.NET.Graphics.Entities;
 using Kotor.NET.Graphics.GPU;
-using Kotor.NET.Graphics.Model;
+using Kotor.NET.Graphics.Renderers.Descriptors;
 
 namespace Kotor.NET.Graphics.Renderers;
 
@@ -10,7 +10,10 @@ public class PickRenderer : IRenderer
 {
     public void Render(IAssetManager assets, Scene scene, Camera camera, uint width, uint height, Action<List<MeshDescriptor>> renderInterceptor)
     {
-        var descriptors = scene.Entities.SelectMany(x => x.GetMeshDescriptors(assets)).ToList();
+        var descriptors = scene.Entities
+            .SelectMany(x => x.GetMeshDescriptors(assets))
+            .OfType<MeshDescriptor>()
+            .ToList();
 
         var shader = assets.GetShader("picker");
 

@@ -6,8 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Graphics.Cameras;
 using Kotor.NET.Graphics.GPU;
-using Kotor.NET.Graphics.Interface;
 using Kotor.NET.Graphics.Model;
+using Kotor.NET.Graphics.Renderers.Descriptors;
 
 namespace Kotor.NET.Graphics.Renderers;
 
