@@ -52,6 +52,10 @@ public class BillboardRenderer : IRenderer
         shader.SetUniform1("uSize", descriptor.Size);
         shader.SetUniform1("uFixedSize", descriptor.FixedSize);
 
-        assets.Quad.Draw();
+        var texturePlaceholder = assets.GetTexture("placeholder");
+        var texture = assets.GetTexture(descriptor.Image);
+        if (texture is null) texturePlaceholder.Activate(0); else texture.Activate(0);
+
+        assets.Billboard.Draw();
     }
 }

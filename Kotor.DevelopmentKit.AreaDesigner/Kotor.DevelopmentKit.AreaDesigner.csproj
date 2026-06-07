@@ -9,10 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Assets\" />
     <Folder Include="KitEditor\ReactiveObjects\" />
     <Folder Include="Models\" />
     <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Remove="Assets\Textures\magnet.tga" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,5 +43,11 @@
     <Compile Update="Views\AreaDesignerWindow.axaml.cs">
       <DependentUpon>AreaDesignerWindow.axaml</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Assets\Textures\magnet.tga">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

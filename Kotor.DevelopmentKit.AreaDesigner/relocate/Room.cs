@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using Avalonia.Markup.Xaml.Templates;
 using DynamicData;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate;
 
@@ -81,6 +82,22 @@ public class Room
     public void Delete()
     {
         Parent.DeleteRoom(this);
+    }
+
+    public List<Magnet> GetMagnets()
+    {
+        var magnets = new List<Magnet>();
+
+        foreach (var wall in Walls)
+        {
+            magnets.Add(new()
+            {
+                Position = wall.Position,
+                Orientation = wall.Orientation,
+            });
+        }
+
+        return magnets;
     }
 
     private void FixWalls()

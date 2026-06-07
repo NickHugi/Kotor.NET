@@ -49,6 +49,11 @@ public class BaseMode : ReactiveObject
         return Task.CompletedTask;
     }
 
+    public virtual Task Update(float delta)
+    {
+        return Task.CompletedTask;
+    }
+
     public virtual Task Trigger()
     {
         return Task.CompletedTask;
@@ -139,4 +144,10 @@ public class MagnetResult<T>
         Target = target;
         Distance = distance;
     }
+}
+
+public class Magnet
+{
+    public required Vector3 Position { get; init; }
+    public required Quaternion Orientation { get; init; }
 }

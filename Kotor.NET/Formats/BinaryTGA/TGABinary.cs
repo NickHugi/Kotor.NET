@@ -22,8 +22,6 @@ public class TGABinary
     {
         try
         {
-            var writer = new BinaryWriter(stream);
-
             var reader = new BinaryReader(stream);
             FileHeader = new(reader);
             ID = reader.ReadString(FileHeader.IDLength);
@@ -46,7 +44,7 @@ public class TGABinary
         }
         catch (Exception ex)
         {
-            throw new IOException("Failed to read the 2DA data.", ex);
+            throw new IOException("Failed to read the TGA data.", ex);
         }
     }
 

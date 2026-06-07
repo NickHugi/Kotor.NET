@@ -65,6 +65,7 @@ public class AddTileMode : BaseMode
         _addRoomRoom.Position = point;
         _addRoomRoom.Orientation = Quaternion.CreateFromYawPitchRoll(0, 0, angle * (float)Math.PI / 180);
 
+        // TODO - build list of compatible magnets, use those as ways of snapping elements together
         var result = NearestAdjacentWall(_addRoomRoom, 1);
         if (result is not null)
         {
@@ -99,6 +100,20 @@ public class AddTileMode : BaseMode
         {
             RenderRoom(descriptors);
         }
+
+        // Render Magnets
+        var size = (0.5f) + MathF.Sin((_engine.RunningTime % 0.75f) / 0.75f * MathF.PI) * 0.25f;
+        _area.Rooms.SelectMany(x => x.GetMagnets()).Concat(_addRoomRoom.GetMagnets()).ToList().ForEach(magnet =>
+        {
+            descriptors.Add(new BillboardDescriptor()
+            {
+                DoRender = true,
+                FixedSize = false,
+                Image = "magnet",
+                Location = magnet.Position,
+                Size = size
+            });
+        });
     }
     private void RenderRoom(List<IDrawCallDescriptor> descriptors)
     {

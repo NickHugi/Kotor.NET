@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Common.Data;
+using Kotor.NET.Formats.BinaryTPC.Serialisation;
 using Kotor.NET.Graphics.Cameras;
 using Kotor.NET.Graphics.Entities;
 using Kotor.NET.Graphics.Model;
@@ -27,6 +28,7 @@ public class GLEngine
 
     public uint Width { get; set; }
     public uint Height { get; set; }
+    public float RunningTime { get; private set; }
 
     public IEncapsulation Source { get; set; }
 
@@ -44,6 +46,11 @@ public class GLEngine
 
         var placeholderTexture = new TPCTextureFactory(GL).FromPlaceholder();
         AssetManager.AddTexture("placeholder", placeholderTexture);
+
+        using var magnetTextureStream = File.OpenRead("Assets/Textures/magnet.tga");
+        var magnetTPC = new TGABinaryDeserializer(new(magnetTextureStream)).Deserialize();
+        var magnetTexture = new TPCTextureFactory(GL).FromTPC(magnetTPC);
+        AssetManager.AddTexture("magnet", magnetTexture);
 
         AssetManager.Quad = new VertexArrayObjectFactory().NewQuad(GL);
         AssetManager.Billboard = new VertexArrayObjectFactory().NewBillBoard(GL);
@@ -85,6 +92,7 @@ public class GLEngine
 
     public void Update(float timestep)
     {
+        RunningTime += timestep;
         Scene.Update(AssetManager, timestep);
     }
 

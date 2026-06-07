@@ -29,6 +29,10 @@ public class TPCTextureFactory(GL _gl) : ITextureFactory
     public unsafe ITexture FromStream(Stream stream)
     {
         var tpc = new TPCBinaryDeserializer(new Formats.BinaryTPC.TPCBinary(stream)).Deserialize();
+        return FromTPC(tpc);
+    }
+    public unsafe ITexture FromTPC(TPC tpc)
+    {
         var textureID = _gl.GenTexture();
 
         _gl.BindTexture(GLEnum.Texture2D, textureID);
@@ -51,16 +55,18 @@ public class TPCTextureFactory(GL _gl) : ITextureFactory
             fixed (byte* buf = data)
                 _gl.CompressedTexImage2D(GLEnum.Texture2D, 0, InternalFormat.CompressedRgbaS3TCDxt5Ext, (uint)tpc.Width, (uint)tpc.Height, 0, (uint)data.Length, buf);
         }
-        //else if (tpc.Format == TPCTextureFormat.RGB)
-        //{
-        //    fixed (byte* buf = mipmap.Data)
-        //        gl.TexImage2D(GLEnum.Texture2D, 0, InternalFormat.Rgb, (uint)mipmap.Width, (uint)mipmap.Height, 0, GLEnum.Rgb, PixelType.UnsignedByte, buf);
-        //}
-        //else if (tpc.Format == TPCTextureFormat.RGBA)
-        //{
-        //    fixed (byte* buf = mipmap.Data)
-        //        gl.TexImage2D(GLEnum.Texture2D, 0, InternalFormat.Rgba, (uint)mipmap.Width, (uint)mipmap.Height, 0, GLEnum.Rgba, PixelType.UnsignedByte, buf);
-        //}
+        else if (tpc.TextureFormat == TPCTextureFormat.RGB)
+        {
+            var data = tpc.GetData(0, 0);
+            fixed (byte* buf = data)
+                _gl.TexImage2D(GLEnum.Texture2D, 0, InternalFormat.Rgb, (uint)tpc.Width, (uint)tpc.Height, 0, GLEnum.Rgb, PixelType.UnsignedByte, buf);
+        }
+        else if (tpc.TextureFormat == TPCTextureFormat.RGBA)
+        {
+            var data = tpc.GetData(0, 0);
+            fixed (byte* buf = data)
+                _gl.TexImage2D(GLEnum.Texture2D, 0, InternalFormat.Rgba, (uint)tpc.Width, (uint)tpc.Height, 0, GLEnum.Rgba, PixelType.UnsignedByte, buf);
+        }
 
         _gl.GenerateMipmap(TextureTarget.Texture2D);
 

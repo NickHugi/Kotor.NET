@@ -184,13 +184,10 @@ public class VertexArrayObjectFactory : IVertexArrayObjectFactory
     {
         float[] vertices =
         {
-            -0.5f, -0.5f,
-             0.5f, -0.5f,
-             0.5f,  0.5f,
-
-            -0.5f, -0.5f,
-             0.5f,  0.5f,
-            -0.5f,  0.5f
+    -0.5f, -0.5f, // 0
+     0.5f, -0.5f, // 1
+     0.5f,  0.5f, // 2
+    -0.5f,  0.5f  // 3
         };
 
         ushort[] elements =
