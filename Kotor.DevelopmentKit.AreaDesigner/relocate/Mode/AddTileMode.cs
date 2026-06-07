@@ -4,9 +4,9 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using Avalonia;
+using Kotor.NET.Extensions;
 using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Cameras;
-using Kotor.NET.Graphics.Model;
 using Kotor.NET.Graphics.OpenGL;
 using Kotor.NET.Graphics.Renderers.Descriptors;
 using ReactiveUI;
@@ -91,9 +91,7 @@ public class AddTileMode : BaseMode
 
                 RenderRoom(descriptors);
 
-                // TODO: More accurately predict/visualize placement result
-                descriptors.RemoveAll(x => x.Tag == result.Target);
-                descriptors.RemoveAll(x => x.Tag == result.Source);
+                RenderPredict(descriptors);
             }
         }
         else
@@ -107,6 +105,7 @@ public class AddTileMode : BaseMode
         {
             descriptors.Add(new BillboardDescriptor()
             {
+                AllwaysOnTop = true,
                 DoRender = true,
                 FixedSize = false,
                 Image = "magnet",
@@ -121,6 +120,44 @@ public class AddTileMode : BaseMode
         _areaEntity.RenderRoom(_engine.AssetManager, _addRoomRoom, ref roomDescriptors);
         roomDescriptors.OfType<MeshDescriptor>().ToList().ForEach(x => x.AmbientColor += new Vector3(0.5f, 0.5f, 0.5f));
         descriptors.AddRange(roomDescriptors);
+    }
+    private void RenderPredict(List<IDrawCallDescriptor> descriptors)
+    {
+        foreach (var existing in _area.Rooms.SelectMany(x => x.Walls))
+        {
+            foreach (var cursor in _addRoomRoom.Walls)
+            {
+                if (existing.Position.ApproximatelyEquals(cursor.Position, 0.01f))
+                {
+                    descriptors.RemoveAll(x => x.Tag == existing);
+                    descriptors.RemoveAll(x => x.Tag == cursor);
+                }
+            }
+        }
+
+        foreach (var existing in _area.Rooms.SelectMany(x => x.InnerCorners))
+        {
+            foreach (var cursor in _addRoomRoom.InnerCorners)
+            {
+                if (existing.Position.ApproximatelyEquals(cursor.Position, 0.01f))
+                {
+                    descriptors.RemoveAll(x => x.Tag == existing);
+                    descriptors.RemoveAll(x => x.Tag == cursor);
+                }
+            }
+        }
+
+        foreach (var existing in _area.Rooms.SelectMany(x => x.InnerCorners))
+        {
+            foreach (var cursor in _addRoomRoom.OuterCorners)
+            {
+                if (existing.Position.ApproximatelyEquals(cursor.Position, 0.01f))
+                {
+                    descriptors.RemoveAll(x => x.Tag == existing);
+                    descriptors.RemoveAll(x => x.Tag == cursor);
+                }
+            }
+        }
     }
 
     public override async Task Trigger()

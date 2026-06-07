@@ -84,9 +84,11 @@ public class GLEngine
 
         RenderInterceptor?.Invoke(descriptors);
 
+        //descriptors = descriptors.OrderBy(x => (x as BillboardDescriptor)?.AllwaysOnTop ?? false).ToList();
+
         new LineRenderer().Render(AssetManager, descriptors, camera, viewport);
-        new BillboardRenderer().Render(AssetManager, descriptors, camera, viewport);
         new GeometryRenderer().Render(AssetManager, descriptors, camera, viewport);
+        new BillboardRenderer().Render(AssetManager, descriptors, camera, viewport);
         new ImageRenderer().Render(AssetManager, descriptors, camera, viewport);
     }
 

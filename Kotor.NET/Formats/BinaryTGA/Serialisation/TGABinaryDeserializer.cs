@@ -25,8 +25,6 @@ public class TGABinaryDeserializer
     {
         try
         {
-            //if (_binary.FileHeader.)
-
             var compressed = false;
             var mipmaps = (byte)1;
             var width = (ushort)_binary.FileHeader.Width;

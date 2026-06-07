@@ -19,6 +19,7 @@ public class GeometryRenderer : IRenderer
         shader.SetMatrix4x4("uMesh", Matrix4x4.Identity);
         shader.SetUniform1("uTexture1", 0);
         shader.SetUniform1("uTexture2", 1);
+        shader.SetDepthTest(true);
 
         descriptors.OfType<MeshDescriptor>().ToList().ForEach(x => Render(assets, shader, x));
     }

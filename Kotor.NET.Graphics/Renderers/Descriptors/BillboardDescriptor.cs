@@ -9,6 +9,7 @@ namespace Kotor.NET.Graphics.Renderers.Descriptors;
 
 public class BillboardDescriptor : IDrawCallDescriptor
 {
+    public required bool AllwaysOnTop { get; set; }
     public required bool DoRender { get; set; }
     public required string Image { get; set; }
     public required Vector3 Location { get; set; }

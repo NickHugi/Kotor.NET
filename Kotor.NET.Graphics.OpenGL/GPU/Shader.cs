@@ -106,4 +106,13 @@ public class Shader : IShader
         var location = GetUniformLocation(name);
         _gl.Uniform4(location, new Vector4(value.R / 255.0f, value.G / 255.0f, value.B / 255.0f, value.A / 255.0f));
     }
+
+    // HACK
+    public void SetDepthTest(bool enabled)
+    {
+        if (enabled)
+            _gl.Enable(EnableCap.DepthTest);
+        else
+            _gl.Disable(EnableCap.DepthTest);
+    }
 }

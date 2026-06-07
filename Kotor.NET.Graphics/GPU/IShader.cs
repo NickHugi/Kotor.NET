@@ -15,7 +15,7 @@ public interface IShader : IDisposable
     public void Activate();
 
     public int GetUniformLocation(string name);
-
+    void SetDepthTest(bool enabled);
     public void SetMatrix4x4(string name, Matrix4x4 value);
 
     public void SetMatrix4x4Array(string name, Matrix4x4[] value);
