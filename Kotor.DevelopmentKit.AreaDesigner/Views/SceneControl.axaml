@@ -7,5 +7,7 @@
              PointerMoved="PointerMoved"
              PointerWheelChanged="PointerWheelChanged"
              PointerPressed="PointerPressed"
+             KeyDown="UserControl_KeyDown"
+             KeyUp="UserControl_KeyUp"
              Focusable="True">
 </UserControl>

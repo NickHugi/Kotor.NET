@@ -4,6 +4,8 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.NET.Common.Data.Geometry;
+using Kotor.NET.Extensions;
 
 namespace Kotor.NET.Graphics;
 
@@ -56,5 +58,18 @@ public class Ray
             default:
                 throw new ArgumentException("Invalid axis.");
         }
+    }
+
+    public Vector3 SolveLine(Axis axis, Vector3 position)
+    {
+        var t = Vector3.Distance(position, Origin);
+        var component = Origin.GetComponent(axis) + t * Direction.GetComponent(axis);
+
+        return axis switch
+        {
+            Axis.X => new(component, position.Y, position.Z),
+            Axis.Y => new(position.X, component, position.Z),
+            Axis.Z => new(position.X, position.Y, component),
+        };
     }
 }

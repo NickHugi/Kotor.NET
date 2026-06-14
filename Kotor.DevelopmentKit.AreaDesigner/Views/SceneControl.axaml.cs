@@ -43,11 +43,12 @@ namespace Kotor.DevelopmentKit.AreaDesigner.Views;
 public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivatableView
 {
     public AreaDesignerViewModel ViewModel => (AreaDesignerViewModel)DataContext;
-    
+
     public OrbitCamera _camera { get; } = new();
     private Point? _lastPointerPosition;
     private DateTime _lastRender = DateTime.Now;
     private DesignerResourceManager _resourceManager = new(@"C:\Kits");
+    private Inputs _inputs = new();
 
     public SceneControl()
     {
@@ -110,7 +111,8 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
     #region ICustomHitTest
     public bool HitTest(Point point)
     {
-        return Bounds.Contains(point);
+        var scale = TopLevel.GetTopLevel(this).RenderScaling;
+        return Bounds.Contains(point + new Vector2((float)Bounds.X, (float)Bounds.Y));
     }
     #endregion
 
@@ -247,6 +249,19 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
             ViewModel.Mode?.AlternativeTrigger();
         }
     }
+
+    private void UserControl_KeyDown(object? sender, KeyEventArgs e)
+    {
+        if (!_inputs.IsKeyDown((int)e.Key))
+            ViewModel.Mode?.KeyPress(_inputs, (int)e.Key);
+
+        _inputs.SetKeyDown((int)e.Key, true);
+    }
+
+    private void UserControl_KeyUp(object? sender, KeyEventArgs e)
+    {
+        _inputs.SetKeyDown((int)e.Key, false);
+    }
     #endregion
 
     public async Task SelectWallTemplate(IInteractionContext<Unit, WallTemplate?> context)
@@ -360,5 +375,38 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         };
         await dialog.ShowDialog((Window)TopLevel.GetTopLevel(this)!);
         context.SetOutput(Unit.Default);
+    }
+
+}
+
+public class Inputs
+{
+    private readonly HashSet<int> _keysDown = new();
+    private readonly HashSet<int> _buttonsDown = new();
+
+    public bool IsKeyDown(int key)
+    {
+        return _keysDown.Contains(key);
+    }
+
+    public bool IsMouseButtonDown(int button)
+    {
+        return _buttonsDown.Contains(button);
+    }
+
+    public void SetKeyDown(int key, bool down)
+    {
+        if (down)
+            _keysDown.Add(key);
+        else
+            _keysDown.Remove(key);
+    }
+
+    public void SetMouseButtonDown(int button, bool down)
+    {
+        if (down)
+            _buttonsDown.Add(button);
+        else
+            _buttonsDown.Remove(button);
     }
 }

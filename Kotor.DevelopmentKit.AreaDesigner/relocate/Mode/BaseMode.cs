@@ -58,8 +58,11 @@ public class BaseMode : ReactiveObject
     {
         return Task.CompletedTask;
     }
-
     public virtual Task AlternativeTrigger()
+    {
+        return Task.CompletedTask;
+    }
+    public virtual Task KeyPress(Inputs inputs, int keyCode)
     {
         return Task.CompletedTask;
     }

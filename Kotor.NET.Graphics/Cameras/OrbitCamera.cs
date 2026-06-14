@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using Vector3 = System.Numerics.Vector3;
 
 namespace Kotor.NET.Graphics.Cameras;
@@ -71,6 +72,39 @@ public class OrbitCamera : Camera
     public override Matrix4x4 GetProjectionTransform(uint width, uint height)
     {
         return Matrix4x4.CreatePerspectiveFieldOfView(FOV, width / (float)height, 0.001f, 1000);
+    }
+
+    public Vector2 WorldToScreen(
+        Vector3 position,
+        int screenWidth,
+        int screenHeight)
+    {
+        var view = GetViewTransform();
+        var projection = GetProjectionTransform((uint)screenWidth, (uint)screenHeight);
+        var clip = Vector4.Transform(new Vector4(position, 1f), view * projection);
+
+        var ndc = new Vector3(clip.X / clip.W, clip.Y / clip.W, clip.Z / clip.W);
+
+        return new Vector2(
+            (ndc.X * 0.5f + 0.5f) * screenWidth,
+            (-ndc.Y * 0.5f + 0.5f) * screenHeight
+        );
+    }
+
+    public Vector2 ProjectToScreen(uint width, uint height, Vector3 worldPos)
+    {
+        Matrix4x4 view = GetViewTransform();
+        Matrix4x4 proj = GetProjectionTransform(width, height);
+
+        Vector4 clip = Vector4.Transform(
+            Vector4.Transform(new Vector4(worldPos, 1), view),
+            proj);
+
+        clip /= clip.W;
+
+        return new Vector2(
+            (clip.X * 0.5f + 0.5f) * width,
+            (1 - (clip.Y * 0.5f + 0.5f)) * height);
     }
 
     public override Ray ProjectRay(int mouseX, int mouseY, uint screenWidth, uint screenHeight)

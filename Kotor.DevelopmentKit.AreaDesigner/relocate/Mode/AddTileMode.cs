@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using Avalonia;
+using Kotor.NET.Common.Data.Geometry;
 using Kotor.NET.Extensions;
 using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Cameras;
