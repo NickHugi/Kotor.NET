@@ -129,8 +129,8 @@ public class SelectObjectMode : BaseMode
             descriptors.Add(new LineDescriptor()
             {
                 Color = color,
-                Start = @object.Position + start,
-                End = @object.Position - start,
+                Start = @object.GlobalPosition + start,
+                End = @object.GlobalPosition - start,
                 Thickness = 0.5f
             });
         }

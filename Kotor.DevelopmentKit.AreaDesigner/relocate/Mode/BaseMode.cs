@@ -107,8 +107,8 @@ public class BaseMode : ReactiveObject
 
         return _area.Rooms
             .SelectMany(x => x.Objects)
-            .OrderBy(x => ray.ShortestDistanceTo(x.Position))
-            .Select(x => new RaycastResult<Object>(x, ray.ShortestDistanceTo(x.Position)))
+            .OrderBy(x => ray.ShortestDistanceTo(x.GlobalPosition))
+            .Select(x => new RaycastResult<Object>(x, ray.ShortestDistanceTo(x.GlobalPosition)))
             .Where(x => x.Distance < 1)
             .FirstOrDefault();
     }

@@ -12,6 +12,7 @@
     <Folder Include="KitEditor\ReactiveObjects\" />
     <Folder Include="Models\" />
     <AvaloniaResource Include="Assets\**" />
+    <Folder Include="relocate\AreaStuff\" />
   </ItemGroup>
 
   <ItemGroup>

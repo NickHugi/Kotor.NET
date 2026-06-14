@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
 using Avalonia.Markup.Xaml.Templates;
@@ -460,7 +461,24 @@ public class DoorFrameHook
     }
 }
 
-public class Object
+public interface IObject
+{
+    public Room Parent { get; }
+
+    public ObjectTemplate Template { get; }
+
+    public Vector3 LocalPosition { get; set; }
+    public Quaternion LocalOrientation { get; set; }
+    public Matrix4x4 LocalTransform { get; }
+
+    public Vector3 GlobalPosition { get; set; }
+    public Quaternion GlobalOrientation { get; set; }
+    public Matrix4x4 GlobalTransform { get; }
+
+    public void SwitchTemplate(ObjectTemplate template);
+}
+
+public class Object : IObject
 {
     public Room Parent { get; }
 
@@ -472,13 +490,24 @@ public class Object
     public Quaternion LocalOrientation { get; set; }
     public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
 
-    public Vector3 Position => Matrix4x4.Decompose(Transform, out _, out _, out var value) ? value : new();
-    public Quaternion Orientation => Matrix4x4.Decompose(Transform, out _, out var value, out _) ? value : new();
-    public Matrix4x4 Transform => LocalTransform * Parent.Transform;
+    public Vector3 GlobalPosition
+    { 
+        get => Matrix4x4.Decompose(GlobalTransform, out _, out _, out var value) ? value : new();
+        set => throw new NotImplementedException(); // TODO
+    }
+    public Quaternion GlobalOrientation
+    {
+        get => Matrix4x4.Decompose(GlobalTransform, out _, out var value, out _) ? value : new();
+        set => throw new NotImplementedException(); // TODO
+    }
+    public Matrix4x4 GlobalTransform => LocalTransform * Parent.Transform;
 
     public Object(Room parent, ObjectTemplate template)
     {
         Parent = parent;
+
+        KitID = default!;
+        TemplateID = default!;
         SwitchTemplate(template);
     }
 
