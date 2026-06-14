@@ -32,7 +32,7 @@ public class SelectFloorMode : BaseMode
             if (SelectedPiece is not Floor floor)
                 return [];
 
-            return SelectedKit?.Floors.Where(x => x.Group == floor.Template.Group).ToList() ?? [];
+            return SelectedKit?.Floors.Where(x => x.ClassID == floor.Template.ClassID).ToList() ?? [];
         }
     }
     public FloorTemplate? SelectedFloorTemplate

@@ -3,6 +3,7 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using Kotor.NET.Graphics.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -32,9 +33,9 @@ public class KitSerializer_V0_1
             kit.Floors.Add(new FloorTemplate
             {
                 KitID = kitID,
-                ID = floor.id.Value,
+                ObjectID = floor.id.Value,
                 Name = floor.name.Value,
-                Group = floor.group?.Value,
+                ClassID = floor.group?.Value,
                 Model = floor.model.Value,
             });
         }
@@ -44,9 +45,9 @@ public class KitSerializer_V0_1
             kit.Ceilings.Add(new CeilingTemplate
             {
                 KitID = kitID,
-                ID = ceiling.id.Value,
+                ObjectID = ceiling.id.Value,
                 Name = ceiling.name.Value,
-                Group = ceiling.group?.Value,
+                ClassID = ceiling.group?.Value,
                 Model = ceiling.model.Value,
             });
         }
@@ -56,9 +57,9 @@ public class KitSerializer_V0_1
             kit.DoorFrames.Add(new DoorFrameTemplate
             {
                 KitID = kitID,
-                ID = door.id.Value,
+                ObjectID = door.id.Value,
                 Name = door.name.Value,
-                Group = door.group?.Value,
+                ClassID = door.group?.Value,
                 Model = door.model.Value,
                 Hooks = ((JArray)door.hooks).Select(x => (dynamic)x).Select(hook => new DoorFrameHookTemplate
                 {
@@ -73,10 +74,10 @@ public class KitSerializer_V0_1
             kit.Walls.Add(new WallTemplate
             {
                 KitID = kitID,
-                ID = wall.id.Value,
+                ObjectID = wall.id.Value,
                 Name = wall.name.Value,
                 Model = wall.model.Value,
-                Group = wall.group.Value,
+                ClassID = wall.group.Value,
                 DoorFrameID = wall.doorframeID?.Value,
             });
         }
@@ -119,9 +120,9 @@ public class KitSerializer_V0_1
             kit.InnerCorners.Add(new InnerCornerTemplate
             {
                 KitID = kitID,
-                ID = innerCorner.id.Value,
+                ObjectID = innerCorner.id.Value,
                 Name = innerCorner.name.Value,
-                Group = innerCorner.group?.Value,
+                ClassID = innerCorner.group?.Value,
                 Model = innerCorner.model.Value,
             });
         }
@@ -131,9 +132,9 @@ public class KitSerializer_V0_1
             kit.OuterCorners.Add(new OuterCornerTemplate
             {
                 KitID = kitID,
-                ID = outerCorner.id.Value,
+                ObjectID = outerCorner.id.Value,
                 Name = outerCorner.name.Value,
-                Group = outerCorner.group?.Value,
+                ClassID = outerCorner.group?.Value,
                 Model = outerCorner.model.Value,
             });
         }
@@ -143,9 +144,9 @@ public class KitSerializer_V0_1
             kit.Objects.Add(new ObjectTemplate
             {
                 KitID = kitID,
-                ID = @object.id.Value,
+                ObjectID = @object.id.Value,
                 Name = @object.name.Value,
-                Group = @object.group?.Value,
+                ClassID = @object.group?.Value,
                 Model = @object.model.Value,
             });
         }
@@ -192,25 +193,25 @@ public class KitSerializer_V0_1
 
         data.floors = kit.Floors.Select(floor => new
         {
-            id = floor.ID,
+            id = floor.ObjectID,
             name = floor.Name,
-            group = floor.Group,
+            group = floor.ClassID,
             model = floor.Model,
         });
 
         data.ceilings = kit.Ceilings.Select(ceiling => new
         {
-            id = ceiling.ID,
+            id = ceiling.ObjectID,
             name = ceiling.Name,
-            group = ceiling.Group,
+            group = ceiling.ClassID,
             model = ceiling.Model,
         });
 
         data.doorframes = kit.DoorFrames.Select(doorframe => new
         {
-            id = doorframe.ID,
+            id = doorframe.ObjectID,
             name = doorframe.Name,
-            group = doorframe.Group,
+            group = doorframe.ClassID,
             model = doorframe.Model,
             hooks = doorframe.Hooks.Select(hook => new
             {
@@ -221,34 +222,34 @@ public class KitSerializer_V0_1
 
         data.walls = kit.Walls.Select(wall => new
         {
-            id = wall.ID,
+            id = wall.ObjectID,
             name = wall.Name,
             model = wall.Model,
-            group = wall.Group,
+            group = wall.ClassID,
             doorframeID = wall.DoorFrameID,
         });
 
         data.innerCorners = kit.InnerCorners.Select(obj => new
         {
-            id = obj.ID,
+            id = obj.ObjectID,
             name = obj.Name,
-            group = obj.Group,
+            group = obj.ClassID,
             model = obj.Model,
         });
 
         data.outerCorners = kit.OuterCorners.Select(obj => new
         {
-            id = obj.ID,
+            id = obj.ObjectID,
             name = obj.Name,
-            group = obj.Group,
+            group = obj.ClassID,
             model = obj.Model,
         });
 
         data.objects = kit.Objects.Select(obj => new
         {
-            id = obj.ID,
+            id = obj.ObjectID,
             name = obj.Name,
-            group = obj.Group,
+            group = obj.ClassID,
             model = obj.Model,
         });
 

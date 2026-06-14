@@ -106,7 +106,7 @@ public class AreaEntity : BaseEntity
 
         descriptors.AddRange(DescriptorsForModel(assets, corner.Template.Model, corner.Transform, corner));
     }
-    public void RenderObject(IAssetManager assets, Object @object, ref List<IDrawCallDescriptor> descriptors)
+    public void RenderObject(IAssetManager assets, WorldObject @object, ref List<IDrawCallDescriptor> descriptors)
     {
         if (!DoRenderObjects)
             return;

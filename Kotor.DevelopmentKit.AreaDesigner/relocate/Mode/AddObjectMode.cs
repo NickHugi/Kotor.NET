@@ -33,7 +33,7 @@ public class AddObjectMode : BaseMode
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    private Object _addObject = null;
+    private WorldObject _addObject = null;
     private float angle = 0;
 
     public AddObjectMode(GLEngine engine, Area area, Kit? kit, object selectedPiece) : base(engine, area, kit, selectedPiece)

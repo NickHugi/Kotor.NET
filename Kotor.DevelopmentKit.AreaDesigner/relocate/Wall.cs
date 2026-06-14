@@ -30,7 +30,7 @@ public class Wall
         Parent = parent;
         Hook = hook;
         KitID = template.KitID;
-        TemplateID = template.ID;
+        TemplateID = template.ObjectID;
     }
 
     public Tile Extend(TileTemplate template)
@@ -41,7 +41,7 @@ public class Wall
     public void SwitchTemplate(WallTemplate template)
     {
         KitID = template.KitID;
-        TemplateID = template.ID;
+        TemplateID = template.ObjectID;
 
         if (template.DoorFrame is not null)
         {

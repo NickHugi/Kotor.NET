@@ -28,7 +28,7 @@ public class Room
     public ICollection<InnerCorner> InnerCorners => Tiles.SelectMany(x => x.InnerCorners).ToList();
     public ICollection<OuterCorner> OuterCorners => Tiles.SelectMany(x => x.OuterCorners).ToList();
     public ICollection<DoorFrame> DoorFrames => Walls.Select(x => x.DoorFrame).Where(x => x is not null).ToList();
-    public ICollection<Object> Objects = [];
+    public ICollection<WorldObject> Objects = [];
 
     public Room(Area parent)
     {
@@ -40,7 +40,7 @@ public class Room
         AddTile(tile);
     }
 
-    public void AddObject(Object @object)
+    public void AddObject(WorldObject @object)
     {
         Objects.Add(@object);
     }

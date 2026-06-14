@@ -51,10 +51,10 @@ public class DoorFrameItem : ReactiveObject
     }
     public DoorFrameItem(DoorFrameTemplate template)
     {
-        ID = template.ID;
+        ID = template.ObjectID;
         Name = template.Name;
         Model = template.Model;
-        Group = template.Group;
+        Group = template.ClassID;
         Hooks = new(template.Hooks.Select(x => new DoorFrameHookItem(x)));
     }
 
@@ -63,9 +63,9 @@ public class DoorFrameItem : ReactiveObject
         return new DoorFrameTemplate
         {
             KitID = kitID,
-            ID = ID,
+            ObjectID = ID,
             Name = Name,
-            Group = Group,
+            ClassID = Group,
             Model = Model,
             Hooks = Hooks.Select(x => x.ToModel()).ToArray(),
         };

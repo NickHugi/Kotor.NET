@@ -14,6 +14,8 @@ public class OuterCorner
     public string TemplateID { get; private set; } = "";
     public OuterCornerTemplate Template => Kit.Manager.Get(KitID).OuterCorner(TemplateID);
 
+    public string? GroupID { get; set; }
+
     public Vector3 Position => Hook.LocalPosition;
     public Quaternion Orientation => Hook.LocalOrientation;
     public Matrix4x4 Transform => Hook.LocalTransform * Parent.Transform;
@@ -45,6 +47,6 @@ public class OuterCorner
     public void SwitchTemplate(OuterCornerTemplate template)
     {
         KitID = template.KitID;
-        TemplateID = template.ID;
+        TemplateID = template.ObjectID;
     }
 }

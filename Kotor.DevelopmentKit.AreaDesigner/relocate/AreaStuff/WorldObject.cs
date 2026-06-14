@@ -4,13 +4,15 @@ using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
-public class Object : IObject
+public class WorldObject : IWorldObject
 {
     public Room Parent { get; }
 
     public string KitID { get; private set; }
     public string TemplateID { get; private set; }
     public ObjectTemplate Template => Kit.Manager.Get(KitID).Object(TemplateID);
+
+    public string? GroupID { get; set; }
 
     public Vector3 LocalPosition { get; set; }
     public Quaternion LocalOrientation { get; set; }
@@ -28,7 +30,7 @@ public class Object : IObject
     }
     public Matrix4x4 GlobalTransform => LocalTransform * Parent.Transform;
 
-    public Object(Room parent, ObjectTemplate template)
+    public WorldObject(Room parent, ObjectTemplate template)
     {
         Parent = parent;
 
@@ -40,6 +42,6 @@ public class Object : IObject
     public void SwitchTemplate(ObjectTemplate template)
     {
         KitID = template.KitID;
-        TemplateID = template.ID;
+        TemplateID = template.ObjectID;
     }
 }

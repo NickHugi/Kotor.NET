@@ -32,8 +32,8 @@ public class AddTileMode : BaseMode
 
             if (SelectedPiece is Wall wall)
             {
-                var activeGroup = wall.Template.Group;
-                return SelectedKit.Tiles.Where(x => x.Walls.Any(y => activeGroup == y.DefaultTemplate.Group)).ToList();
+                var activeGroup = wall.Template.ClassID;
+                return SelectedKit.Tiles.Where(x => x.Walls.Any(y => activeGroup == y.DefaultTemplate.ClassID)).ToList();
             }
             else
             {

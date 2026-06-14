@@ -32,7 +32,7 @@ public class SelectCeilingMode : BaseMode
             if (SelectedPiece is not Ceiling ceiling)
                 return [];
 
-            return SelectedKit?.Ceilings.Where(x => x.Group == ceiling.Template.Group).ToList() ?? [];
+            return SelectedKit?.Ceilings.Where(x => x.ClassID == ceiling.Template.ClassID).ToList() ?? [];
         }
     }
     public CeilingTemplate? SelectedCeilingTemplate

@@ -102,14 +102,14 @@ public class BaseMode : ReactiveObject
             .Where(x => x.Distance < 3)
             .FirstOrDefault();
     }
-    protected RaycastResult<Object>? IntersectingObject(OrbitCamera camera, double x, double y)
+    protected RaycastResult<WorldObject>? IntersectingObject(OrbitCamera camera, double x, double y)
     {
         var ray = camera.ProjectRay((int)x, (int)y, _engine.Width, _engine.Height);
 
         return _area.Rooms
             .SelectMany(x => x.Objects)
             .OrderBy(x => ray.ShortestDistanceTo(x.GlobalPosition))
-            .Select(x => new RaycastResult<Object>(x, ray.ShortestDistanceTo(x.GlobalPosition)))
+            .Select(x => new RaycastResult<WorldObject>(x, ray.ShortestDistanceTo(x.GlobalPosition)))
             .Where(x => x.Distance < 1)
             .FirstOrDefault();
     }
@@ -122,7 +122,7 @@ public class BaseMode : ReactiveObject
         foreach (var wall in room.Walls)
         {
             var match = otherWalls
-                .Where(x => x.Template.Group == wall.Template.Group)
+                .Where(x => x.Template.ClassID == wall.Template.ClassID)
                 .Where(x => Vector3.Distance(wall.Position, x.Position) < distance)
                 .OrderBy(x => Vector3.Distance(wall.Position, x.Position))
                 .Select(x => new MagnetResult<Wall>(wall, x, Vector3.Distance(wall.Position, x.Position)))

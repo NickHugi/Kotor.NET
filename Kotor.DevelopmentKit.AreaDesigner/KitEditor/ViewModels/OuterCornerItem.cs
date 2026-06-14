@@ -43,9 +43,9 @@ public class OuterCornerItem : ReactiveObject
     }
     public OuterCornerItem(OuterCornerTemplate template)
     {
-        ID = template.ID;
+        ID = template.ObjectID;
         Name = template.Name;
-        Group = template.Group;
+        Group = template.ClassID;
         Model = template.Model;
     }
 
@@ -54,9 +54,9 @@ public class OuterCornerItem : ReactiveObject
         return new OuterCornerTemplate
         {
             KitID = kitID,
-            ID = ID,
+            ObjectID = ID,
             Name = Name,
-            Group = Group,
+            ClassID = Group,
             Model = Model,
         };
     }

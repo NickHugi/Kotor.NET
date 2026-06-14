@@ -93,7 +93,7 @@ public static class AreaExporter
         return cornerMDL.Root;
     }
 
-    private static MDLNode ObjectToMDLNode(Object @object)
+    private static MDLNode ObjectToMDLNode(WorldObject @object)
     {
         var objectMDL = MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{@object.KitID}/{@object.Template.Model}.mdl");
         objectMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(@object.LocalPosition));

@@ -44,7 +44,7 @@ public class SelectObjectMode : BaseMode
 
     private bool _isTranslating;
     private Axis? _transformAxis;
-    private Object? _projectedObject;
+    private WorldObject? _projectedObject;
     private Point _mousePrevious;
 
     public SelectObjectMode(GLEngine engine, Area area, Kit kit, object selectedPiece) : base(engine, area, kit, selectedPiece)
@@ -54,7 +54,7 @@ public class SelectObjectMode : BaseMode
             {
                 if (SelectedObjectTemplate is null)
                     return;
-                if (SelectedPiece is not Object @object)
+                if (SelectedPiece is not WorldObject @object)
                     return;
                 if (@object == _projectedObject)
                     return;
@@ -97,7 +97,7 @@ public class SelectObjectMode : BaseMode
         if (_projectedObject is not null)
             descriptors.Where(x => x.Tag == _projectedObject).OfType<MeshDescriptor>().ToList().ForEach(x => x.AmbientColor = new(1.5f, 1.5f, 1.5f));
 
-        if (_isTranslating && SelectedPiece is Object obj)
+        if (_isTranslating && SelectedPiece is WorldObject obj)
         {
             var ray = camera.ProjectRay((int)mouse.X, (int)mouse.Y, 1109, 703);
 
@@ -111,7 +111,7 @@ public class SelectObjectMode : BaseMode
                 obj.LocalPosition = new(point.X, point.Y, obj.LocalPosition.Z);
             }
         }
-        if (SelectedPiece is Object @object && _isTranslating)
+        if (SelectedPiece is WorldObject @object && _isTranslating)
         {
             Vector3 start = _transformAxis switch
             {

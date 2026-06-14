@@ -3,11 +3,13 @@ using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
-public interface IObject
+public interface IWorldObject
 {
     public Room Parent { get; }
 
     public ObjectTemplate Template { get; }
+
+    public string? GroupID { get; set; }
 
     public Vector3 LocalPosition { get; set; }
     public Quaternion LocalOrientation { get; set; }

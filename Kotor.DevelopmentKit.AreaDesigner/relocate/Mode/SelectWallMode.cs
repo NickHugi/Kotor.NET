@@ -34,8 +34,8 @@ public class SelectWallMode : BaseMode
 
             if (SelectedPiece is Wall wall)
             {
-                var activeGroup = wall.Template.Group;
-                return SelectedKit.Walls.Where(x => x.Group == activeGroup).ToList();
+                var activeGroup = wall.Template.ClassID;
+                return SelectedKit.Walls.Where(x => x.ClassID == activeGroup).ToList();
             }
             else
             {

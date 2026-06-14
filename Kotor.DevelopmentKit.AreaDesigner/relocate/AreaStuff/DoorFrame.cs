@@ -13,6 +13,8 @@ public class DoorFrame
     public string TemplateID { get; private set; } = "";
     public DoorFrameTemplate Template => Kit.Manager.Get(KitID).DoorFrame(TemplateID);
 
+    public string? GroupID { get; set; }
+
     public bool Enabled { get; set; } = true;
 
     public IEnumerable<DoorFrameHook> Hooks => Template.Hooks.Select(x => new DoorFrameHook(this, x));
@@ -36,6 +38,6 @@ public class DoorFrame
     public void SwitchTemplate(DoorFrameTemplate template)
     {
         KitID = template.KitID;
-        TemplateID = template.ID;
+        TemplateID = template.ObjectID;
     }
 }

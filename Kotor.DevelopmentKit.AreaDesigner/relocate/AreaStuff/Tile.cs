@@ -46,7 +46,7 @@ public class Tile : IDeleteable
 
         // todo - first compatible
         var adjacent = newTile.Walls
-            .Where(x => x.Template.ID == wall.Template.ID)
+            .Where(x => x.Template.ObjectID == wall.Template.ObjectID)
             //.OrderBy(x => x.LocalOrientaiton == wall.LocalOrientaiton)
             .First();
 

@@ -13,6 +13,8 @@ public class InnerCorner
     public string TemplateID { get; private set; } = "";
     public InnerCornerTemplate Template => Kit.Manager.Get(KitID).InnerCorner(TemplateID);
 
+    public string? GroupID { get; set; }
+
     public Vector3 LocalPosition => Hook.LocalPosition;
     public Quaternion LocalOrientation => Hook.LocalOrientation;
 
@@ -38,6 +40,6 @@ public class InnerCorner
     public void SwitchTemplate(InnerCornerTemplate template)
     {
         KitID = template.KitID;
-        TemplateID = template.ID;
+        TemplateID = template.ObjectID;
     }
 }

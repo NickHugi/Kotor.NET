@@ -43,9 +43,9 @@ public class ObjectItem : ReactiveObject
     }
     public ObjectItem(ObjectTemplate template)
     {
-        ID = template.ID;
+        ID = template.ObjectID;
         Name = template.Name;
-        Group = template.Group;
+        Group = template.ClassID;
         Model = template.Model;
     }
 
@@ -54,9 +54,9 @@ public class ObjectItem : ReactiveObject
         return new ObjectTemplate
         {
             KitID = kitID,
-            ID = ID,
+            ObjectID = ID,
             Name = Name,
-            Group = Group,
+            ClassID = Group,
             Model = Model,
         };
     }

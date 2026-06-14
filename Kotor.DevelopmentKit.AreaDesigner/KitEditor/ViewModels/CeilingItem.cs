@@ -40,9 +40,9 @@ public class CeilingItem : ReactiveObject
     }
     public CeilingItem(CeilingTemplate template)
     {
-        ID = template.ID;
+        ID = template.ObjectID;
         Name = template.Name;
-        Group = template.Group;
+        Group = template.ClassID;
         Model = template.Model;
     }
 
@@ -51,9 +51,9 @@ public class CeilingItem : ReactiveObject
         return new CeilingTemplate
         {
             KitID = kitID,
-            ID = ID,
+            ObjectID = ID,
             Name = Name,
-            Group = Group,
+            ClassID = Group,
             Model = Model
         };
     }

@@ -33,7 +33,7 @@ using Kotor.NET.Resources.KotorMDL;
 using Kotor.NET.Resources.KotorMDL.Nodes;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
-using Object = Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff.Object;
+using WorldObject = Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff.WorldObject;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.ViewModels;
 
@@ -360,7 +360,7 @@ public class AreaDesignerViewModel : ReactiveObject
     }
     public void DeletePiece(object piece)
     {
-        if (piece is Object @object)
+        if (piece is WorldObject @object)
         {
             @object.Parent.Objects.Remove(@object);
         }

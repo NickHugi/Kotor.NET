@@ -50,10 +50,10 @@ public class WallItem : ReactiveObject
     }
     public WallItem(WallTemplate template)
     {
-        ID = template.ID;
+        ID = template.ObjectID;
         Name = template.Name;
         Model = template.Model;
-        Group = template.Group;
+        Group = template.ClassID;
         DoorFrameID = template.DoorFrameID;
     }
 
@@ -62,10 +62,10 @@ public class WallItem : ReactiveObject
         return new WallTemplate
         {
             KitID = kitID,
-            ID = ID,
+            ObjectID = ID,
             Name = Name,
             Model = Model,
-            Group = Group,
+            ClassID = Group,
             DoorFrameID = DoorFrameID,
         };
     }
