@@ -9,6 +9,7 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 public class Tile : IDeleteable
 {
     public Room Parent { get; }
+    public WorldObjectType Type => WorldObjectType.Tile;
 
     public Floor Floor { get; private set; }
     public Ceiling Ceiling { get; private set; }

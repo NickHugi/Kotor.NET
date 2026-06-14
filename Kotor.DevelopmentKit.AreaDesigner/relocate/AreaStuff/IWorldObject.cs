@@ -6,6 +6,7 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 public interface IWorldObject
 {
     public Room Parent { get; }
+    public WorldObjectType Type { get; }
 
     public ObjectTemplate Template { get; }
 

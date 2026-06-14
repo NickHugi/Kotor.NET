@@ -7,6 +7,8 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 public class InnerCorner
 {
     public Tile Parent { get; }
+    public WorldObjectType Type => WorldObjectType.InnerCorner;
+
     public InnerCornerHookTemplate Hook { get; }
 
     public string KitID { get; private set; } = "";

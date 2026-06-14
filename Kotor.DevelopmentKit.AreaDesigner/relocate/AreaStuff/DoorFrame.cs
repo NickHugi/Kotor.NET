@@ -8,6 +8,7 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 public class DoorFrame
 {
     public Wall Parent { get; }
+    public WorldObjectType Type => WorldObjectType.Prop;
 
     public string KitID { get; private set; } = "";
     public string TemplateID { get; private set; } = "";

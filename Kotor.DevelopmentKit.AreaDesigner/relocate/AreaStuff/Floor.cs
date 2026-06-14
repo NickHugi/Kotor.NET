@@ -6,6 +6,7 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 public class Floor
 {
     public Tile Parent { get; }
+    public WorldObjectType Type => WorldObjectType.Floor;
 
     public string KitID { get; private set; } = "";
     public string TemplateID { get; private set; } = "";

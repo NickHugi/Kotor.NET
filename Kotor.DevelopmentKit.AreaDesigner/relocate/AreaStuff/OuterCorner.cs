@@ -8,6 +8,8 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 public class OuterCorner
 {
     public Tile Parent { get; }
+    public WorldObjectType Type => WorldObjectType.OuterCorner;
+
     public OuterCornerHookTemplate Hook { get; }
 
     public string KitID { get; private set; } = "";

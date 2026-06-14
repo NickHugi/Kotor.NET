@@ -1,12 +1,13 @@
 ﻿using System.Numerics;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
-namespace Kotor.DevelopmentKit.AreaDesigner.relocate;
+namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
 public class Wall
 {
     public Tile Parent { get; }
+    public WorldObjectType Type => WorldObjectType.Prop;
+
     public Room? LinkedRoom { get; set; }
     public Tile? LinkedTile { get; set; }
     public DoorFrame? DoorFrame { get; set; }
