@@ -6,10 +6,14 @@ using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
-public class Tile : IDeleteable
+public class Tile : IDeleteable, IWorldObject
 {
     public Room Parent { get; }
+
+    public List<Magnet> Magnets => new();
     public WorldObjectType Type => WorldObjectType.Tile;
+
+    public string? GroupID { get; set; }
 
     public Floor Floor { get; private set; }
     public Ceiling Ceiling { get; private set; }
@@ -25,9 +29,17 @@ public class Tile : IDeleteable
     public Quaternion LocalOrientation { get; set; } = new(0, 0, 0, 1);
     public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
 
-    public Vector3 Position => Matrix4x4.Decompose(Transform, out _, out _, out var value) ? value : new();
-    public Quaternion Orientation => Matrix4x4.Decompose(Transform, out _, out var value, out _) ? value : new();
-    public Matrix4x4 Transform => LocalTransform * Parent.Transform;
+    public Vector3 GlobalPosition
+    {
+        get => Matrix4x4.Decompose(GlobalTransform, out _, out _, out var value) ? value : new();
+        set => throw new NotImplementedException(); // TODO
+    }
+    public Quaternion GlobalOrientation
+    {
+        get => Matrix4x4.Decompose(GlobalTransform, out _, out var value, out _) ? value : new();
+        set => throw new NotImplementedException(); // TODO
+    }
+    public Matrix4x4 GlobalTransform => LocalTransform * Parent.Transform;
 
     public Tile(Room parent, TileTemplate template)
     {
@@ -54,7 +66,7 @@ public class Tile : IDeleteable
         newTile.LocalOrientation = wall.LocalOrientation
             / adjacent.Hook.LocalOrientation
             * Quaternion.CreateFromYawPitchRoll(0, 0, MathF.PI)
-            * Orientation
+            * GlobalOrientation
             / Parent.Orientation;
 
         newTile.LocalPosition = LocalPosition

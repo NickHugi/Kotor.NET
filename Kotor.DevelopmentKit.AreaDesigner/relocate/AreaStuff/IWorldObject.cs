@@ -1,14 +1,17 @@
-﻿using System.Numerics;
+﻿using System.Collections.Generic;
+using System.Numerics;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
 public interface IWorldObject
 {
-    public Room Parent { get; }
+    //public Room Parent { get; }
     public WorldObjectType Type { get; }
 
-    public ObjectTemplate Template { get; }
+    //public ObjectTemplate Template { get; }
+
+    public List<Magnet> Magnets { get; }
 
     public string? GroupID { get; set; }
 
@@ -20,5 +23,5 @@ public interface IWorldObject
     public Quaternion GlobalOrientation { get; set; }
     public Matrix4x4 GlobalTransform { get; }
 
-    public void SwitchTemplate(ObjectTemplate template);
+    //public void SwitchTemplate(ObjectTemplate template);
 }

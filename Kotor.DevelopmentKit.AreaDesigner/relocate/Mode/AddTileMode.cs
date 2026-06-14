@@ -80,17 +80,17 @@ public class AddTileMode : BaseMode
                 result.Source.SwitchTemplate(result.Target.Template);
                 result.Source.DoorFrame.Enabled = false;
 
-                _addRoomRoom.Orientation = result.Target.Orientation / result.Source.Orientation * Quaternion.CreateFromYawPitchRoll(0, 0, MathF.PI);
+                _addRoomRoom.Orientation = result.Target.GlobalOrientation / result.Source.GlobalOrientation * Quaternion.CreateFromYawPitchRoll(0, 0, MathF.PI);
                 _addRoomRoom.Position = result.Target.DoorFrame.Hooks.First().Position;
-                _addRoomRoom.Position += result.Source.Parent.Position - result.Source.DoorFrame.Hooks.Last().Position;
+                _addRoomRoom.Position += result.Source.Parent.GlobalPosition - result.Source.DoorFrame.Hooks.Last().Position;
 
                 RenderRoom(descriptors);
             }
             else
             {
-                _addRoomRoom.Orientation = result.Target.Orientation / result.Source.Orientation * Quaternion.CreateFromYawPitchRoll(0, 0, MathF.PI);
-                _addRoomRoom.Position = result.Target.Position;
-                _addRoomRoom.Position += result.Source.Parent.Position - result.Source.Position;
+                _addRoomRoom.Orientation = result.Target.GlobalOrientation / result.Source.GlobalOrientation * Quaternion.CreateFromYawPitchRoll(0, 0, MathF.PI);
+                _addRoomRoom.Position = result.Target.GlobalPosition;
+                _addRoomRoom.Position += result.Source.Parent.GlobalPosition - result.Source.GlobalPosition;
 
                 RenderRoom(descriptors);
 
@@ -130,7 +130,7 @@ public class AddTileMode : BaseMode
         {
             foreach (var cursor in _addRoomRoom.Walls)
             {
-                if (existing.Position.ApproximatelyEquals(cursor.Position, 0.01f))
+                if (existing.GlobalPosition.ApproximatelyEquals(cursor.GlobalPosition, 0.01f))
                 {
                     descriptors.RemoveAll(x => x.Tag == existing);
                     descriptors.RemoveAll(x => x.Tag == cursor);
@@ -142,7 +142,7 @@ public class AddTileMode : BaseMode
         {
             foreach (var cursor in _addRoomRoom.InnerCorners)
             {
-                if (existing.Position.ApproximatelyEquals(cursor.Position, 0.01f))
+                if (existing.GlobalPosition.ApproximatelyEquals(cursor.GlobalPosition, 0.01f))
                 {
                     descriptors.RemoveAll(x => x.Tag == existing);
                     descriptors.RemoveAll(x => x.Tag == cursor);
@@ -154,7 +154,7 @@ public class AddTileMode : BaseMode
         {
             foreach (var cursor in _addRoomRoom.OuterCorners)
             {
-                if (existing.Position.ApproximatelyEquals(cursor.Position, 0.01f))
+                if (existing.GlobalPosition.ApproximatelyEquals(cursor.GlobalPosition, 0.01f))
                 {
                     descriptors.RemoveAll(x => x.Tag == existing);
                     descriptors.RemoveAll(x => x.Tag == cursor);

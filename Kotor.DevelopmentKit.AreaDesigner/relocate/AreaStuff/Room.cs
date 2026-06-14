@@ -73,8 +73,8 @@ public class Room
         {
             magnets.Add(new()
             {
-                Position = wall.Position,
-                Orientation = wall.Orientation,
+                Position = wall.GlobalPosition,
+                Orientation = wall.GlobalOrientation,
             });
         }
 
@@ -97,7 +97,7 @@ public class Room
 
                 foreach (var adjacent in GetCombinations(tileA.Walls, tileB.Walls))
                 {
-                    if (Vector3.Distance(adjacent.Item1.Position, adjacent.Item2.Position) < 0.01f)
+                    if (Vector3.Distance(adjacent.Item1.GlobalPosition, adjacent.Item2.GlobalPosition) < 0.01f)
                     {
                         adjacent.Item1.LinkedTile = tileB;
                         adjacent.Item2.LinkedTile = tileA;

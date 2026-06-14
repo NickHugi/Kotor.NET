@@ -1,12 +1,16 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
-public class InnerCorner
+public class InnerCorner : IWorldObject
 {
     public Tile Parent { get; }
+
+    public List<Magnet> Magnets => new();
     public WorldObjectType Type => WorldObjectType.InnerCorner;
 
     public InnerCornerHookTemplate Hook { get; }
@@ -17,12 +21,29 @@ public class InnerCorner
 
     public string? GroupID { get; set; }
 
-    public Vector3 LocalPosition => Hook.LocalPosition;
-    public Quaternion LocalOrientation => Hook.LocalOrientation;
+    public Vector3 LocalPosition
+    {
+        get => Hook.LocalPosition;
+        set => throw new NotImplementedException(); // TODO
+    }
+    public Quaternion LocalOrientation
+    {
+        get => Hook.LocalOrientation;
+        set => throw new NotImplementedException(); // TODO
+    }
+    public Matrix4x4 LocalTransform => throw new NotImplementedException(); // TODO
 
-    public Vector3 Position => Matrix4x4.Decompose(Transform, out _, out _, out var value) ? value : new();
-    public Quaternion Orientation => Matrix4x4.Decompose(Transform, out _, out var value, out _) ? value : new();
-    public Matrix4x4 Transform => Hook.LocalTransform * Parent.Transform;
+    public Vector3 GlobalPosition
+    {
+        get => Matrix4x4.Decompose(GlobalTransform, out _, out _, out var value) ? value : new();
+        set => throw new NotImplementedException(); // TODO
+    }
+    public Quaternion GlobalOrientation
+    {
+        get => Matrix4x4.Decompose(GlobalTransform, out _, out var value, out _) ? value : new();
+        set => throw new NotImplementedException(); // TODO
+    }
+    public Matrix4x4 GlobalTransform => Hook.LocalTransform * Parent.GlobalTransform;
 
     public bool Visible
     {

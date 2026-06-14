@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
-public class OuterCorner
+public class OuterCorner : IWorldObject
 {
     public Tile Parent { get; }
+
+    public List<Magnet> Magnets => new();
     public WorldObjectType Type => WorldObjectType.OuterCorner;
 
     public OuterCornerHookTemplate Hook { get; }
@@ -18,9 +21,29 @@ public class OuterCorner
 
     public string? GroupID { get; set; }
 
-    public Vector3 Position => Hook.LocalPosition;
-    public Quaternion Orientation => Hook.LocalOrientation;
-    public Matrix4x4 Transform => Hook.LocalTransform * Parent.Transform;
+    public Vector3 LocalPosition
+    {
+        get => throw new NotImplementedException(); // TODO
+        set => throw new NotImplementedException(); // TODO
+    }
+    public Quaternion LocalOrientation
+    {
+        get => throw new NotImplementedException(); // TODO
+        set => throw new NotImplementedException(); // TODO
+    }
+    public Matrix4x4 LocalTransform => throw new NotImplementedException(); // TODO
+
+    public Vector3 GlobalPosition
+    {
+        get => Hook.LocalPosition;
+        set => throw new NotImplementedException(); // TODO
+    }
+    public Quaternion GlobalOrientation
+    {
+        get => Hook.LocalOrientation;
+        set => throw new NotImplementedException(); // TODO
+    }
+    public Matrix4x4 GlobalTransform => Hook.LocalTransform * Parent.GlobalTransform;
 
     public bool Visible
     {

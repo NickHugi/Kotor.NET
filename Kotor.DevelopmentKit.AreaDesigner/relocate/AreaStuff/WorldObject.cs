@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
@@ -7,6 +8,8 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 public class WorldObject : IWorldObject
 {
     public Room Parent { get; }
+
+    public List<Magnet> Magnets => new();
     public WorldObjectType Type => WorldObjectType.Prop;
 
     public string KitID { get; private set; }

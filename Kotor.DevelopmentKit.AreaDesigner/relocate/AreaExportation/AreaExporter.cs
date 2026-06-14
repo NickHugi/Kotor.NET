@@ -53,8 +53,8 @@ public static class AreaExporter
     private static MDLNode FloorToMDLNode(Floor floor)
     {
         var floorMDL = MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{floor.KitID}/{floor.Template.Model}.mdl");
-        floorMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(floor.Position));
-        floorMDL.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(floor.Orientation));
+        floorMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(floor.GlobalPosition));
+        floorMDL.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(floor.GlobalOrientation));
         AdjustWalkmesh(floorMDL, floorMDL.Root.GetAllDescendants().OfType<MDLWalkmeshNode>().First());
         return floorMDL.Root;
     }
@@ -62,16 +62,16 @@ public static class AreaExporter
     private static MDLNode CeilingToMDLNode(Ceiling ceiling)
     {
         var ceilingMDL = MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{ceiling.KitID}/{ceiling.Template.Model}.mdl");
-        ceilingMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(ceiling.Position));
-        ceilingMDL.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(ceiling.Orientation));
+        ceilingMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(ceiling.GlobalPosition));
+        ceilingMDL.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(ceiling.GlobalOrientation));
         return ceilingMDL.Root;
     }
 
     private static MDLNode WallToMDLNode(Wall wall)
     {
         var wallMDL = MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{wall.KitID}/{wall.Template.Model}.mdl");
-        wallMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(wall.Position));
-        wallMDL.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(wall.Orientation));
+        wallMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(wall.GlobalPosition));
+        wallMDL.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(wall.GlobalOrientation));
         AdjustWalkmesh(wallMDL, wallMDL.Root.GetAllDescendants().OfType<MDLWalkmeshNode>().First());
         return wallMDL.Root;
     }
@@ -79,8 +79,8 @@ public static class AreaExporter
     private static MDLNode DoorFrameToMDLNode(DoorFrame doorframe)
     {
         var doorframeMDL = MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{doorframe.KitID}/{doorframe.Template.Model}.mdl");
-        doorframeMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(doorframe.Position));
-        doorframeMDL.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(doorframe.Orientation));
+        doorframeMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(doorframe.GlobalPosition));
+        doorframeMDL.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(doorframe.GlobalOrientation));
         AdjustWalkmesh(doorframeMDL, doorframeMDL.Root.GetAllDescendants().OfType<MDLWalkmeshNode>().First());
         return doorframeMDL.Root;
     }
@@ -88,8 +88,8 @@ public static class AreaExporter
     private static MDLNode InnerCornerToMDLNode(InnerCorner corner)
     {
         var cornerMDL = MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{corner.KitID}/{corner.Template.Model}.mdl");
-        cornerMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(corner.Position));
-        cornerMDL.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(corner.Orientation));
+        cornerMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(corner.GlobalPosition));
+        cornerMDL.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(corner.GlobalOrientation));
         return cornerMDL.Root;
     }
 

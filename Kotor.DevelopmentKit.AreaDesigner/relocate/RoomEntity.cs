@@ -69,49 +69,49 @@ public class AreaEntity : BaseEntity
         if (!DoRenderFloor)
             return;
 
-        descriptors.AddRange(DescriptorsForModel(assets, tile.Floor.Template.Model, tile.Transform, tile.Floor));
+        descriptors.AddRange(DescriptorsForModel(assets, tile.Floor.Template.Model, tile.GlobalTransform, tile.Floor));
     }
     private void RenderCeiling(IAssetManager assets, Tile tile, ref List<IDrawCallDescriptor> descriptors)
     {
         if (!DoRenderCeiling)
             return;
 
-        descriptors.AddRange(DescriptorsForModel(assets, tile.Ceiling.Template.Model, tile.Transform, tile.Ceiling));
+        descriptors.AddRange(DescriptorsForModel(assets, tile.Ceiling.Template.Model, tile.GlobalTransform, tile.Ceiling));
     }
     private void RenderWall(IAssetManager assets, Wall wall, ref List<IDrawCallDescriptor> descriptors)
     {
         if (!wall.Visible || ((wall.DoorFrame is null && !DoRenderWalls) || (wall.DoorFrame is not null && !DoRenderDoors)))
             return;
 
-        descriptors.AddRange(DescriptorsForModel(assets, wall.Template.Model, wall.Transform, wall));
+        descriptors.AddRange(DescriptorsForModel(assets, wall.Template.Model, wall.GlobalTransform, wall));
     }
     private void RenderDoorFrame(IAssetManager assets, DoorFrame doorframe, ref List<IDrawCallDescriptor> descriptors)
     {
         if (!doorframe.Visible || !DoRenderDoors)
             return;
 
-        descriptors.AddRange(DescriptorsForModel(assets, doorframe.Template.Model, doorframe.Transform, doorframe));
+        descriptors.AddRange(DescriptorsForModel(assets, doorframe.Template.Model, doorframe.GlobalTransform, doorframe));
     }
     private void RenderInnerCorner(IAssetManager assets, InnerCorner corner, ref List<IDrawCallDescriptor> descriptors)
     {
         if (!corner.Visible || !DoRenderCorners)
             return;
 
-        descriptors.AddRange(DescriptorsForModel(assets, corner.Template.Model, corner.Transform, corner));
+        descriptors.AddRange(DescriptorsForModel(assets, corner.Template.Model, corner.GlobalTransform, corner));
     }
     private void RenderOuterCorner(IAssetManager assets, OuterCorner corner, ref List<IDrawCallDescriptor> descriptors)
     {
         if (!corner.Visible || !DoRenderCorners)
             return;
 
-        descriptors.AddRange(DescriptorsForModel(assets, corner.Template.Model, corner.Transform, corner));
+        descriptors.AddRange(DescriptorsForModel(assets, corner.Template.Model, corner.GlobalTransform, corner));
     }
     public void RenderObject(IAssetManager assets, WorldObject @object, ref List<IDrawCallDescriptor> descriptors)
     {
         if (!DoRenderObjects)
             return;
 
-        descriptors.AddRange(DescriptorsForModel(assets, @object.Template.Model, @object.LocalTransform, @object));
+        descriptors.AddRange(DescriptorsForModel(assets, @object.Template.Model, @object.GlobalTransform, @object));
     }
     // TODO - clean this up somehow
     private ICollection<IDrawCallDescriptor> DescriptorsForModel(IAssetManager assets, string modelName, Matrix4x4 transform, object tag = null)

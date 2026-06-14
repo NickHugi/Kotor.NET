@@ -75,8 +75,8 @@ public class BaseMode : ReactiveObject
         return _area.Rooms
             .SelectMany(x => x.Walls)
             .Where(x => x.LinkedTile is null)
-            .OrderBy(x => ray.ShortestDistanceTo(x.Position))
-            .Select(x => new RaycastResult<Wall>(x, ray.ShortestDistanceTo(x.Position)))
+            .OrderBy(x => ray.ShortestDistanceTo(x.GlobalPosition))
+            .Select(x => new RaycastResult<Wall>(x, ray.ShortestDistanceTo(x.GlobalPosition)))
             .Where(x => x.Distance < 3)
             .FirstOrDefault();
     }
@@ -86,8 +86,8 @@ public class BaseMode : ReactiveObject
 
         return _area.Rooms
             .SelectMany(x => x.Floors)
-            .OrderBy(x => ray.ShortestDistanceTo(x.Position))
-            .Select(x => new RaycastResult<Floor>(x, ray.ShortestDistanceTo(x.Position)))
+            .OrderBy(x => ray.ShortestDistanceTo(x.GlobalPosition))
+            .Select(x => new RaycastResult<Floor>(x, ray.ShortestDistanceTo(x.GlobalPosition)))
             .Where(x => x.Distance < 3)
             .FirstOrDefault();
     }
@@ -97,8 +97,8 @@ public class BaseMode : ReactiveObject
 
         return _area.Rooms
             .SelectMany(x => x.Ceilings)
-            .OrderBy(x => ray.ShortestDistanceTo(x.Position))
-            .Select(x => new RaycastResult<Ceiling>(x, ray.ShortestDistanceTo(x.Position)))
+            .OrderBy(x => ray.ShortestDistanceTo(x.GlobalPosition))
+            .Select(x => new RaycastResult<Ceiling>(x, ray.ShortestDistanceTo(x.GlobalPosition)))
             .Where(x => x.Distance < 3)
             .FirstOrDefault();
     }
@@ -123,9 +123,9 @@ public class BaseMode : ReactiveObject
         {
             var match = otherWalls
                 .Where(x => x.Template.ClassID == wall.Template.ClassID)
-                .Where(x => Vector3.Distance(wall.Position, x.Position) < distance)
-                .OrderBy(x => Vector3.Distance(wall.Position, x.Position))
-                .Select(x => new MagnetResult<Wall>(wall, x, Vector3.Distance(wall.Position, x.Position)))
+                .Where(x => Vector3.Distance(wall.GlobalPosition, x.GlobalPosition) < distance)
+                .OrderBy(x => Vector3.Distance(wall.GlobalPosition, x.GlobalPosition))
+                .Select(x => new MagnetResult<Wall>(wall, x, Vector3.Distance(wall.GlobalPosition, x.GlobalPosition)))
                 .ToList();
 
             if (match.Count > 0)

@@ -1,11 +1,15 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Collections.Generic;
+using System.Numerics;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
-public class Ceiling
+public class Ceiling : IWorldObject
 {
     public Tile Parent { get; }
+
+    public List<Magnet> Magnets => new();
     public WorldObjectType Type => WorldObjectType.Ceiling;
 
     public string KitID { get; private set; } = "";
@@ -14,9 +18,29 @@ public class Ceiling
 
     public string? GroupID { get; set; }
 
-    public Vector3 Position => Matrix4x4.Decompose(Transform, out _, out _, out var value) ? value : new();
-    public Quaternion Orientation => Matrix4x4.Decompose(Transform, out _, out var value, out _) ? value : new();
-    public Matrix4x4 Transform => Parent.Transform;
+    public Vector3 LocalPosition
+    {
+        get => throw new NotImplementedException(); // TODO
+        set => throw new NotImplementedException(); // TODO
+    }
+    public Quaternion LocalOrientation
+    {
+        get => throw new NotImplementedException(); // TODO
+        set => throw new NotImplementedException(); // TODO
+    }
+    public Matrix4x4 LocalTransform => throw new NotImplementedException(); // TODO
+
+    public Vector3 GlobalPosition
+    {
+        get => Matrix4x4.Decompose(GlobalTransform, out _, out _, out var value) ? value : new();
+        set => throw new NotImplementedException(); // TODO
+    }
+    public Quaternion GlobalOrientation
+    {
+        get => Matrix4x4.Decompose(GlobalTransform, out _, out var value, out _) ? value : new();
+        set => throw new NotImplementedException(); // TODO
+    }
+    public Matrix4x4 GlobalTransform => Parent.GlobalTransform;
 
     public Ceiling(Tile parent, CeilingTemplate template)
     {
