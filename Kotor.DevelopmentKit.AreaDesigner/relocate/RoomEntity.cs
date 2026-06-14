@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Entities;
 using Kotor.NET.Graphics.Model;

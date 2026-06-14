@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Clipper2Lib;
 using DynamicData;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.NET.Common.Data.Geometry;
 using Kotor.NET.Graphics.GPU;
 using Kotor.NET.Resources.KotorMDL;

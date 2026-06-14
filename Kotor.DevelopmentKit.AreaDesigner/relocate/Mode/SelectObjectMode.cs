@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Input;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.Views;
 using Kotor.NET.Common.Data.Geometry;
 using Kotor.NET.Graphics;

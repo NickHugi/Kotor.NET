@@ -12,6 +12,7 @@ using Avalonia;
 using Kotor.DevelopmentKit.AreaDesigner.relocate;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaExportation;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaSerialization;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.KitSerialization;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
 using Kotor.DevelopmentKit.AreaDesigner.Settings;
@@ -31,7 +32,7 @@ using Kotor.NET.Resources.KotorMDL;
 using Kotor.NET.Resources.KotorMDL.Nodes;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
-using Object = Kotor.DevelopmentKit.AreaDesigner.relocate.Object;
+using Object = Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff.Object;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.ViewModels;
 
