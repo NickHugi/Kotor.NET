@@ -20,6 +20,7 @@ using Avalonia.Platform.Storage;
 using Avalonia.Rendering;
 using Avalonia.Threading;
 using Kotor.DevelopmentKit.AreaDesigner.relocate;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using Kotor.DevelopmentKit.AreaDesigner.ViewModels;
 using Kotor.DevelopmentKit.Base;
 using Kotor.DevelopmentKit.Base.Settings.ViewModels;
