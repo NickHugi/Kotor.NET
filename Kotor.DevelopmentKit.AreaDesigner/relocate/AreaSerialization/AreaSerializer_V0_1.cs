@@ -68,7 +68,7 @@ public class AreaSerializer_V0_1
         {
             position = room.Position.ToFloatArray(),
             orientation = room.Orientation.ToFloatArray(),
-            tiles = room.Tiles.Select(tile => new
+            tiles = room.Objects.OfType<Tile>().Select(tile => new
             {
                 kitID = tile.KitID,
                 templateID = tile.TemplateID,

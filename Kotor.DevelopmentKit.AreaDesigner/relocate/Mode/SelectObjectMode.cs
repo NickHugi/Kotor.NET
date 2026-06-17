@@ -44,7 +44,7 @@ public class SelectObjectMode : BaseMode
 
     private bool _isTranslating;
     private Axis? _transformAxis;
-    private WorldObject? _projectedObject;
+    private IWorldObject? _projectedObject;
     private Point _mousePrevious;
 
     public SelectObjectMode(GLEngine engine, Area area, Kit kit, object selectedPiece) : base(engine, area, kit, selectedPiece)
@@ -147,7 +147,7 @@ public class SelectObjectMode : BaseMode
 
         await ClearSelection.Handle(Unit.Default);
         await AddToSelection.Handle(_projectedObject);
-        SelectedObjectTemplate = _projectedObject.Template;
+        //SelectedObjectTemplate = _projectedObject.Template;
     }
 
     public override Task KeyPress(Inputs inputs, int key)

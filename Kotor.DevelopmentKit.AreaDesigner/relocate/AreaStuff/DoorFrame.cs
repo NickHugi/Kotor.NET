@@ -9,8 +9,36 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 public class DoorFrame : IWorldObject
 {
     public Wall Parent { get; }
+    public Wall? AdjacentWall
+    {
+        get
+        {
+            var area = Parent.Parent.Parent.Parent;
+            var walls = area.Rooms
+                .SelectMany(x => x.Objects.OfType<Tile>())
+                .SelectMany(x => x.Walls)
+                .ToList();
 
-    public List<Magnet> Magnets => new();
+            return walls.FirstOrDefault(x => x != Parent && AllMagnets.Any(y => y.GlobalPosition == x.GlobalPosition));
+        }
+    }
+
+    private IReadOnlyCollection<Magnet> AllMagnets
+    {
+        get
+        {
+            return Template.Hooks.Select(x => new Magnet(this)
+            {
+                Type = MagnetType.Wall,
+                LocalPosition = x.Position,
+                LocalOrientation = x.Orientation,
+            }).ToList();
+        }
+    }
+    public IReadOnlyCollection<Magnet> Magnets
+    {
+        get => AllMagnets.Where(x => x.GlobalPosition != Parent.GlobalPosition).ToList();
+    }
     public WorldObjectType Type => WorldObjectType.Prop;
 
     public string KitID { get; private set; } = "";
@@ -25,15 +53,15 @@ public class DoorFrame : IWorldObject
 
     public Vector3 LocalPosition
     {
-        get => Template.Hooks.Last().Position;
+        get => Template.Hooks.First().Position;
         set => throw new NotImplementedException(); // TODO
     }
     public Quaternion LocalOrientation
     {
-        get => Template.Hooks.Last().Orientation;
+        get => Template.Hooks.First().Orientation;
         set => throw new NotImplementedException(); // TODO
     }
-    public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
+    public Matrix4x4 LocalTransform => Matrix4x4.CreateRotationZ(MathF.PI) * Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
 
     public Vector3 GlobalPosition
     {

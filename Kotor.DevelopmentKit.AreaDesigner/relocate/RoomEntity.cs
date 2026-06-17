@@ -38,30 +38,62 @@ public class AreaEntity : BaseEntity
     }
     public void RenderRoom(IAssetManager assets, Room room, ref List<IDrawCallDescriptor> descriptors)
     {
-        foreach (var tile in room.Tiles)
-        {
-            RenderFloor(assets, tile, ref descriptors);
-            RenderCeiling(assets, tile, ref descriptors);
-        }
-        foreach (var wall in room.Walls)
-        {
-            RenderWall(assets, wall, ref descriptors);
-        }
-        foreach (var doorframe in room.DoorFrames)
-        {
-            RenderDoorFrame(assets, doorframe, ref descriptors);
-        }
-        foreach (var corner in room.InnerCorners)
-        {
-            RenderInnerCorner(assets, corner, ref descriptors);
-        }
-        foreach (var corner in room.OuterCorners)
-        {
-            RenderOuterCorner(assets, corner, ref descriptors);
-        }
+        //foreach (var tile in room.Tiles)
+        //{
+        //    RenderFloor(assets, tile, ref descriptors);
+        //    RenderCeiling(assets, tile, ref descriptors);
+        //}
+        //foreach (var wall in room.Walls)
+        //{
+        //    RenderWall(assets, wall, ref descriptors);
+        //}
+        //foreach (var doorframe in room.DoorFrames)
+        //{
+        //    RenderDoorFrame(assets, doorframe, ref descriptors);
+        //}
+        //foreach (var corner in room.InnerCorners)
+        //{
+        //    RenderInnerCorner(assets, corner, ref descriptors);
+        //}
+        //foreach (var corner in room.OuterCorners)
+        //{
+        //    RenderOuterCorner(assets, corner, ref descriptors);
+        //}
         foreach (var @object in room.Objects)
         {
             RenderObject(assets, @object, ref descriptors);
+        }
+    }
+    public void RenderObject(IAssetManager assets, IWorldObject obj, ref List<IDrawCallDescriptor> descriptors)
+    {
+        if (!DoRenderObjects)
+            return;
+
+        if (obj is Tile tile)
+        {
+            RenderFloor(assets, tile, ref descriptors);
+            RenderCeiling(assets, tile, ref descriptors);
+
+            foreach (var wall in tile.Walls)
+            {
+                RenderWall(assets, wall, ref descriptors);
+            }
+            foreach (var doorframe in tile.Walls.Select(x => x.DoorFrame).Where(x => x is not null))
+            {
+                RenderDoorFrame(assets, doorframe, ref descriptors);
+            }
+            foreach (var innerCorner in tile.InnerCorners)
+            {
+                RenderInnerCorner(assets, innerCorner, ref descriptors);
+            }
+            foreach (var outerCorner in tile.OuterCorners)
+            {
+                RenderOuterCorner(assets, outerCorner, ref descriptors);
+            }
+        }
+        if (obj is WorldObject prop)
+        {
+            descriptors.AddRange(DescriptorsForModel(assets, prop.Template.Model, obj.GlobalTransform, obj));
         }
     }
     private void RenderFloor(IAssetManager assets, Tile tile, ref List<IDrawCallDescriptor> descriptors)
@@ -106,13 +138,7 @@ public class AreaEntity : BaseEntity
 
         descriptors.AddRange(DescriptorsForModel(assets, corner.Template.Model, corner.GlobalTransform, corner));
     }
-    public void RenderObject(IAssetManager assets, WorldObject @object, ref List<IDrawCallDescriptor> descriptors)
-    {
-        if (!DoRenderObjects)
-            return;
 
-        descriptors.AddRange(DescriptorsForModel(assets, @object.Template.Model, @object.GlobalTransform, @object));
-    }
     // TODO - clean this up somehow
     private ICollection<IDrawCallDescriptor> DescriptorsForModel(IAssetManager assets, string modelName, Matrix4x4 transform, object tag = null)
     {

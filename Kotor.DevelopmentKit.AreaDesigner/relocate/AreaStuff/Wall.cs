@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
@@ -8,8 +9,19 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 public class Wall : IWorldObject
 {
     public Tile Parent { get; }
-
-    public List<Magnet> Magnets => new();
+    
+    public IReadOnlyCollection<Magnet> Magnets
+    {
+        get =>
+        [
+            new Magnet(this)
+            {
+                LocalPosition = new(),
+                LocalOrientation = new(),
+                Type = MagnetType.Wall
+            }
+        ];
+    }
     public WorldObjectType Type => WorldObjectType.Prop;
 
     public string? GroupID { get; set; }
@@ -55,11 +67,6 @@ public class Wall : IWorldObject
         Hook = hook;
         KitID = template.KitID;
         TemplateID = template.ObjectID;
-    }
-
-    public Tile Extend(TileTemplate template)
-    {
-        return Parent.Extend(this, template);
     }
 
     public void SwitchTemplate(WallTemplate template)

@@ -11,7 +11,7 @@ public interface IWorldObject
 
     //public ObjectTemplate Template { get; }
 
-    public List<Magnet> Magnets { get; }
+    public IReadOnlyCollection<Magnet> Magnets { get; }
 
     public string? GroupID { get; set; }
 

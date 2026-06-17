@@ -36,7 +36,7 @@ public class SelectRoomMode : BaseMode
 
         if (_roomAtCursor is not null)
         {
-            foreach (var tile in _roomAtCursor.Tiles)
+            foreach (var tile in _roomAtCursor.Objects.OfType<Tile>())
             {
                 descriptors
                     .Where(x => x.Tag == tile.Floor || x.Tag == tile.Ceiling || tile.Walls.Contains(x.Tag))

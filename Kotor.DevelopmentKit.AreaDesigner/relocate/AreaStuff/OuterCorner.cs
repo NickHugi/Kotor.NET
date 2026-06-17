@@ -10,7 +10,7 @@ public class OuterCorner : IWorldObject
 {
     public Tile Parent { get; }
 
-    public List<Magnet> Magnets => new();
+    public IReadOnlyCollection<Magnet> Magnets => [];
     public WorldObjectType Type => WorldObjectType.OuterCorner;
 
     public OuterCornerHookTemplate Hook { get; }

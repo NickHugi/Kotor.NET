@@ -9,7 +9,7 @@ public class Ceiling : IWorldObject
 {
     public Tile Parent { get; }
 
-    public List<Magnet> Magnets => new();
+    public IReadOnlyCollection<Magnet> Magnets => [];
     public WorldObjectType Type => WorldObjectType.Ceiling;
 
     public string KitID { get; private set; } = "";

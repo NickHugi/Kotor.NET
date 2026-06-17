@@ -19,16 +19,16 @@ public class Room
     public Quaternion Orientation { get; set; } = new();
     public Matrix4x4 Transform => Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position);
 
-    private List<Tile> _tiles = new();
-    public IReadOnlyCollection<Tile> Tiles => new ReadOnlyCollection<Tile>(_tiles);
+    //private List<Tile> _tiles = new();
+    //public IReadOnlyCollection<Tile> Tiles => new ReadOnlyCollection<Tile>(_tiles);
 
-    public ICollection<Wall> Walls => Tiles.SelectMany(x => x.Walls).ToList();
-    public ICollection<Floor> Floors => Tiles.Select(x => x.Floor).ToList();
-    public ICollection<Ceiling> Ceilings => Tiles.Select(x => x.Ceiling).ToList();
-    public ICollection<InnerCorner> InnerCorners => Tiles.SelectMany(x => x.InnerCorners).ToList();
-    public ICollection<OuterCorner> OuterCorners => Tiles.SelectMany(x => x.OuterCorners).ToList();
-    public ICollection<DoorFrame> DoorFrames => Walls.Select(x => x.DoorFrame).Where(x => x is not null).ToList();
-    public ICollection<WorldObject> Objects = [];
+    //public ICollection<Wall> Walls => Tiles.SelectMany(x => x.Walls).ToList();
+    //public ICollection<Floor> Floors => Tiles.Select(x => x.Floor).ToList();
+    //public ICollection<Ceiling> Ceilings => Tiles.Select(x => x.Ceiling).ToList();
+    //public ICollection<InnerCorner> InnerCorners => Tiles.SelectMany(x => x.InnerCorners).ToList();
+    //public ICollection<OuterCorner> OuterCorners => Tiles.SelectMany(x => x.OuterCorners).ToList();
+    //public ICollection<DoorFrame> DoorFrames => Walls.Select(x => x.DoorFrame).Where(x => x is not null).ToList();
+    public ICollection<IWorldObject> Objects = [];
 
     public Room(Area parent)
     {
@@ -40,21 +40,21 @@ public class Room
         AddTile(tile);
     }
 
-    public void AddObject(WorldObject @object)
+    public void AddObject(IWorldObject @object)
     {
         Objects.Add(@object);
     }
     public void AddTile(Tile tile)
     {
-        _tiles.Add(tile);
+        Objects.Add(tile);
         FixWalls();
     }
     public void DeleteTile(Tile tile)
     {
-        _tiles.Remove(tile);
+        Objects.Remove(tile);
         FixWalls();
 
-        if (Tiles.Count() == 0)
+        if (Objects.Count() == 0)
         {
             Delete();
         }
@@ -67,30 +67,19 @@ public class Room
 
     public List<Magnet> GetMagnets()
     {
-        var magnets = new List<Magnet>();
-
-        foreach (var wall in Walls)
-        {
-            magnets.Add(new()
-            {
-                Position = wall.GlobalPosition,
-                Orientation = wall.GlobalOrientation,
-            });
-        }
-
-        return magnets;
+        return Objects.SelectMany(x => x.Magnets).ToList();
     }
 
     private void FixWalls()
     {
-        foreach (var wall in Tiles.SelectMany(x => x.Walls))
+        foreach (var wall in Objects.OfType<Tile>().SelectMany(x => x.Walls))
         {
             wall.LinkedTile = null;
         }
 
-        foreach (var tileA in Tiles)
+        foreach (var tileA in Objects.OfType<Tile>())
         {
-            foreach (var tileB in Tiles)
+            foreach (var tileB in Objects.OfType<Tile>())
             {
                 if (tileA == tileB)
                     continue;

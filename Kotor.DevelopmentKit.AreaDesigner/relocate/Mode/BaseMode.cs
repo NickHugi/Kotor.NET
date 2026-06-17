@@ -73,7 +73,10 @@ public class BaseMode : ReactiveObject
         var ray = camera.ProjectRay((int)x, (int)y, _engine.Width, _engine.Height);
 
         return _area.Rooms
+            .SelectMany(x => x.Objects)
+            .OfType<Tile>()
             .SelectMany(x => x.Walls)
+            .OfType<Wall>()
             .Where(x => x.LinkedTile is null)
             .OrderBy(x => ray.ShortestDistanceTo(x.GlobalPosition))
             .Select(x => new RaycastResult<Wall>(x, ray.ShortestDistanceTo(x.GlobalPosition)))
@@ -85,7 +88,8 @@ public class BaseMode : ReactiveObject
         var ray = camera.ProjectRay((int)x, (int)y, _engine.Width, _engine.Height);
 
         return _area.Rooms
-            .SelectMany(x => x.Floors)
+            .SelectMany(x => x.Objects)
+            .OfType<Floor>()
             .OrderBy(x => ray.ShortestDistanceTo(x.GlobalPosition))
             .Select(x => new RaycastResult<Floor>(x, ray.ShortestDistanceTo(x.GlobalPosition)))
             .Where(x => x.Distance < 3)
@@ -96,20 +100,21 @@ public class BaseMode : ReactiveObject
         var ray = camera.ProjectRay((int)x, (int)y, _engine.Width, _engine.Height);
 
         return _area.Rooms
-            .SelectMany(x => x.Ceilings)
+            .SelectMany(x => x.Objects)
+            .OfType<Ceiling>()
             .OrderBy(x => ray.ShortestDistanceTo(x.GlobalPosition))
             .Select(x => new RaycastResult<Ceiling>(x, ray.ShortestDistanceTo(x.GlobalPosition)))
             .Where(x => x.Distance < 3)
             .FirstOrDefault();
     }
-    protected RaycastResult<WorldObject>? IntersectingObject(OrbitCamera camera, double x, double y)
+    protected RaycastResult<IWorldObject>? IntersectingObject(OrbitCamera camera, double x, double y)
     {
         var ray = camera.ProjectRay((int)x, (int)y, _engine.Width, _engine.Height);
 
         return _area.Rooms
             .SelectMany(x => x.Objects)
             .OrderBy(x => ray.ShortestDistanceTo(x.GlobalPosition))
-            .Select(x => new RaycastResult<WorldObject>(x, ray.ShortestDistanceTo(x.GlobalPosition)))
+            .Select(x => new RaycastResult<IWorldObject>(x, ray.ShortestDistanceTo(x.GlobalPosition)))
             .Where(x => x.Distance < 1)
             .FirstOrDefault();
     }
@@ -117,15 +122,36 @@ public class BaseMode : ReactiveObject
     protected MagnetResult<Wall>? NearestAdjacentWall(Room room, float distance)
     {
         var near = new List<MagnetResult<Wall>>();
-        var otherWalls = _area.Rooms.SelectMany(x => x.Walls).ToList();
+        var otherWalls = _area.Rooms.SelectMany(x => x.Objects).OfType<Wall>().ToList();
 
-        foreach (var wall in room.Walls)
+        foreach (var wall in room.Objects.OfType<Wall>())
         {
             var match = otherWalls
                 .Where(x => x.Template.ClassID == wall.Template.ClassID)
                 .Where(x => Vector3.Distance(wall.GlobalPosition, x.GlobalPosition) < distance)
                 .OrderBy(x => Vector3.Distance(wall.GlobalPosition, x.GlobalPosition))
                 .Select(x => new MagnetResult<Wall>(wall, x, Vector3.Distance(wall.GlobalPosition, x.GlobalPosition)))
+                .ToList();
+
+            if (match.Count > 0)
+                near.AddRange(match);
+        }
+
+        return near.OrderBy(x => x.Distance).FirstOrDefault();
+    }
+
+    protected MagnetResult<Magnet>? NearestMagnet(List<Magnet> magnets, float distance)
+    {
+        var near = new List<MagnetResult<Magnet>>();
+        var otherWalls = _area.Rooms.SelectMany(x => x.GetMagnets());
+
+        foreach (var magnet in magnets)
+        {
+            var match = otherWalls
+                //.Where(x => x.Template.ClassID == wall.Template.ClassID)
+                .Where(x => Vector3.Distance(magnet.GlobalPosition, x.GlobalPosition) < distance)
+                .OrderBy(x => Vector3.Distance(magnet.GlobalPosition, x.GlobalPosition))
+                .Select(x => new MagnetResult<Magnet>(magnet, x, Vector3.Distance(magnet.GlobalPosition, x.GlobalPosition)))
                 .ToList();
 
             if (match.Count > 0)
@@ -148,10 +174,4 @@ public class MagnetResult<T>
         Target = target;
         Distance = distance;
     }
-}
-
-public class Magnet
-{
-    public required Vector3 Position { get; init; }
-    public required Quaternion Orientation { get; init; }
 }

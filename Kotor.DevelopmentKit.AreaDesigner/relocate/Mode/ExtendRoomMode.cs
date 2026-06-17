@@ -44,23 +44,4 @@ public class ExtendRoomMode : BaseMode
                 descriptors.Where(x => x.Tag == _wall).OfType<MeshDescriptor>().ToList().ForEach(x => x.AmbientColor = new(1.5f, 1.5f, 1.5f));
         }
     }
-
-    public override async Task Trigger()
-    {
-        //if (validWall)
-        //    _wall!.Extend(TileTemplate.Sandral8x8);
-    }
-
-    public override async Task AlternativeTrigger()
-    {
-        if (!validWall)
-            return;
-
-        var template = await SelectTileTemplate.Handle(Unit.Default);
-
-        if (template is null)
-            return;
-
-        var tile = _wall!.Extend(template);
-    }
 }

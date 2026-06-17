@@ -25,7 +25,7 @@ public static class AreaExporter
         var mdl = new MDL();
         mdl.Name = "test";
 
-        foreach (var tile in room.Tiles)
+        foreach (var tile in room.Objects.OfType<Tile>())
         {
             mdl.Root.Children.Add(FloorToMDLNode(tile.Floor));
             //mdl.Root.Children.Add(CeilingToMDLNode(tile.Ceiling));
@@ -93,13 +93,14 @@ public static class AreaExporter
         return cornerMDL.Root;
     }
 
-    private static MDLNode ObjectToMDLNode(WorldObject @object)
+    private static MDLNode ObjectToMDLNode(IWorldObject @object)
     {
-        var objectMDL = MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{@object.KitID}/{@object.Template.Model}.mdl");
-        objectMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(@object.LocalPosition));
-        objectMDL.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(@object.LocalOrientation));
-        AdjustWalkmesh(objectMDL, objectMDL.Root.GetAllDescendants().OfType<MDLWalkmeshNode>().First());
-        return objectMDL.Root;
+        return null;
+        //var objectMDL = MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{@object.KitID}/{@object.Template.Model}.mdl");
+        //objectMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(@object.LocalPosition));
+        //objectMDL.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(@object.LocalOrientation));
+        //AdjustWalkmesh(objectMDL, objectMDL.Root.GetAllDescendants().OfType<MDLWalkmeshNode>().First());
+        //return objectMDL.Root;
     }
 
     private static void DeleteWalkmeshesRecursive(MDLNode node)
