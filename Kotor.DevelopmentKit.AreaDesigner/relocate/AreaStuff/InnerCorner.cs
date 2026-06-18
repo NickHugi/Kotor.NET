@@ -60,6 +60,13 @@ public class InnerCorner : IWorldObject
         SwitchTemplate(template);
     }
 
+    public void SwitchTemplate(ObjectTemplate template)
+    {
+        if (template is not InnerCornerTemplate innerCornerTemplate)
+            throw new ArgumentException();
+
+        SwitchTemplate(innerCornerTemplate);
+    }
     public void SwitchTemplate(InnerCornerTemplate template)
     {
         KitID = template.KitID;

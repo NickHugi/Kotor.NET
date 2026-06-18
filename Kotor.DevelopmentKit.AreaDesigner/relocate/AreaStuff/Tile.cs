@@ -34,6 +34,15 @@ public class Tile : IDeleteable, IWorldObject
     public IReadOnlyCollection<InnerCorner> InnerCorners { get; private set; }
     public IReadOnlyCollection<OuterCorner> OuterCorners { get; private set; }
 
+    public IReadOnlyCollection<IWorldObject> VirtualObjects =>
+    [
+        Floor,
+        Ceiling,
+        ..Walls,
+        ..InnerCorners,
+        ..OuterCorners
+    ];
+
     public string KitID { get; private set; }
     public string TemplateID { get; private set; }
     public TileTemplate Template => Kit.Manager.Get(KitID).Tile(TemplateID);
@@ -66,6 +75,13 @@ public class Tile : IDeleteable, IWorldObject
         OuterCorners = template.OuterCorners.Select(x => new OuterCorner(this, x.DefaultTemplate, x)).ToArray();
     }
 
+    public void SwitchTemplate(ObjectTemplate template)
+    {
+        //if (template is not TileTemplate tileTemplate)
+            throw new ArgumentException();
+
+        //SwitchTemplate(tileTemplate);
+    }
     public void SwitchTemplate(TileTemplate template)
     {
         KitID = template.KitID;

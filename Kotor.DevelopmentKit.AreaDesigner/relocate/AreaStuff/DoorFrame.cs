@@ -39,7 +39,7 @@ public class DoorFrame : IWorldObject
     {
         get => AllMagnets.Where(x => x.GlobalPosition != Parent.GlobalPosition).ToList();
     }
-    public WorldObjectType Type => WorldObjectType.Prop;
+    public WorldObjectType Type => WorldObjectType.Basic;
 
     public string KitID { get; private set; } = "";
     public string TemplateID { get; private set; } = "";
@@ -83,6 +83,13 @@ public class DoorFrame : IWorldObject
         SwitchTemplate(template);
     }
 
+    public void SwitchTemplate(ObjectTemplate template)
+    {
+        if (template is not DoorFrameTemplate doorframeTemplate)
+            throw new ArgumentException();
+
+        SwitchTemplate(doorframeTemplate);
+    }
     public void SwitchTemplate(DoorFrameTemplate template)
     {
         KitID = template.KitID;

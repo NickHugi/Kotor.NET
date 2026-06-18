@@ -33,7 +33,15 @@ public class SelectObjectMode : BaseMode
     {
         get
         {
-            return SelectedKit?.Objects.ToList() ?? [];
+            if (SelectedKit is null)
+                return [];
+
+            return SelectedPiece switch
+            {
+                Wall _ => SelectedKit.Walls.OfType<ObjectTemplate>().ToList(),
+                Floor _ => SelectedKit.Floors.OfType<ObjectTemplate>().ToList(),
+                _ => SelectedKit.Objects.ToList()
+            };
         }
     }
     public ObjectTemplate? SelectedObjectTemplate
@@ -49,12 +57,19 @@ public class SelectObjectMode : BaseMode
 
     public SelectObjectMode(GLEngine engine, Area area, Kit kit, object selectedPiece) : base(engine, area, kit, selectedPiece)
     {
+        this.WhenAnyValue(x => x.SelectedPiece)
+            .Subscribe(_ =>
+            {
+                this.RaisePropertyChanged(nameof(ObjectTemplates));
+                this.RaisePropertyChanged(nameof(SelectedObjectTemplate));
+            });
+
         this.WhenAnyValue(x => x.SelectedObjectTemplate)
             .Subscribe(_ =>
             {
                 if (SelectedObjectTemplate is null)
                     return;
-                if (SelectedPiece is not WorldObject @object)
+                if (SelectedPiece is not IWorldObject @object)
                     return;
                 if (@object == _projectedObject)
                     return;

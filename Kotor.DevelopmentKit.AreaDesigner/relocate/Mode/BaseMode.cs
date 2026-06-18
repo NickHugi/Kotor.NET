@@ -113,6 +113,7 @@ public class BaseMode : ReactiveObject
 
         return _area.Rooms
             .SelectMany(x => x.Objects)
+            .Concat(_area.Rooms.SelectMany(x => x.Objects.OfType<Tile>().SelectMany(x => x.VirtualObjects)))
             .OrderBy(x => ray.ShortestDistanceTo(x.GlobalPosition))
             .Select(x => new RaycastResult<IWorldObject>(x, ray.ShortestDistanceTo(x.GlobalPosition)))
             .Where(x => x.Distance < 1)

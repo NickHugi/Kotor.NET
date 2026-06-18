@@ -22,7 +22,7 @@ public class Wall : IWorldObject
             }
         ];
     }
-    public WorldObjectType Type => WorldObjectType.Prop;
+    public WorldObjectType Type => WorldObjectType.Basic;
 
     public string? GroupID { get; set; }
 
@@ -69,6 +69,13 @@ public class Wall : IWorldObject
         TemplateID = template.ObjectID;
     }
 
+    public void SwitchTemplate(ObjectTemplate template)
+    {
+        if (template is not WallTemplate wallTemplate)
+            throw new ArgumentException();
+
+        SwitchTemplate(wallTemplate);
+    }
     public void SwitchTemplate(WallTemplate template)
     {
         KitID = template.KitID;

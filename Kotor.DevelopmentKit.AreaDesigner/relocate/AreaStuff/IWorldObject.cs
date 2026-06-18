@@ -23,5 +23,5 @@ public interface IWorldObject
     public Quaternion GlobalOrientation { get; set; }
     public Matrix4x4 GlobalTransform { get; }
 
-    //public void SwitchTemplate(ObjectTemplate template);
+    public void SwitchTemplate(ObjectTemplate template);
 }

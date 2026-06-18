@@ -48,6 +48,13 @@ public class Floor : IWorldObject
         SwitchTemplate(template);
     }
 
+    public void SwitchTemplate(ObjectTemplate template)
+    {
+        if (template is not FloorTemplate floorTemplate)
+            throw new ArgumentException();
+
+        SwitchTemplate(floorTemplate);
+    }
     public void SwitchTemplate(FloorTemplate template)
     {
         KitID = template.KitID;

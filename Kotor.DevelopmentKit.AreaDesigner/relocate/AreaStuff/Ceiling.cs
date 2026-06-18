@@ -48,6 +48,13 @@ public class Ceiling : IWorldObject
         SwitchTemplate(template);
     }
 
+    public void SwitchTemplate(ObjectTemplate template)
+    {
+        if (template is not CeilingTemplate ceilingTemplate)
+            throw new ArgumentException();
+
+        SwitchTemplate(ceilingTemplate);
+    }
     public void SwitchTemplate(CeilingTemplate template)
     {
         KitID = template.KitID;

@@ -69,6 +69,13 @@ public class OuterCorner : IWorldObject
         SwitchTemplate(template);
     }
 
+    public void SwitchTemplate(ObjectTemplate template)
+    {
+        if (template is not OuterCornerTemplate outerCornerTemplate)
+            throw new ArgumentException();
+
+        SwitchTemplate(outerCornerTemplate);
+    }
     public void SwitchTemplate(OuterCornerTemplate template)
     {
         KitID = template.KitID;

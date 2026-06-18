@@ -16,7 +16,7 @@ public class Room
     public Area Parent { get; }
 
     public Vector3 Position { get; set; } = new();
-    public Quaternion Orientation { get; set; } = new();
+    public Quaternion Orientation { get; set; } = Quaternion.Identity;
     public Matrix4x4 Transform => Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position);
 
     //private List<Tile> _tiles = new();

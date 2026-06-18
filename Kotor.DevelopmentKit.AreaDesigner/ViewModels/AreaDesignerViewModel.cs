@@ -48,12 +48,12 @@ public class AreaDesignerViewModel : ReactiveObject
     public Interaction<Unit, Unit> ClearSelection = new();
     public Interaction<object, Unit> AddToSelection = new();
 
-    public bool IsMode_SelectRoom => Mode is SelectRoomMode;
-    public bool IsMode_SelectTile => Mode is SelectTileMode;
-    public bool IsMode_AddTile => Mode is AddTileMode;
-    public bool IsMode_SelectWall => Mode is SelectWallMode;
-    public bool IsMode_SelectFloor => Mode is SelectFloorMode;
-    public bool IsMode_SelectCeiling => Mode is SelectCeilingMode;
+    public bool IsMode_SelectRoom => false;// Mode is SelectRoomMode;
+    public bool IsMode_SelectTile => false;// Mode is SelectTileMode;
+    public bool IsMode_AddTile => false;// Mode is AddTileMode;
+    public bool IsMode_SelectWall => false;// Mode is SelectWallMode;
+    public bool IsMode_SelectFloor => false;// Mode is SelectFloorMode;
+    public bool IsMode_SelectCeiling => false;// Mode is SelectCeilingMode;
     public bool IsMode_SelectObject => Mode is SelectObjectMode;
     public bool IsMode_AddObject => Mode is AddObjectMode;
 
@@ -195,51 +195,10 @@ public class AreaDesignerViewModel : ReactiveObject
             });
     }
 
-    public void SetSceneMode_SelectRoom()
-    {
-        Mode = new SelectRoomMode(Engine, Area, SelectedKit, ActiveObject)
-        {
-            AddToSelection = AddToSelection,
-            ClearSelection = ClearSelection,
-        };
-    }
-    public void SetSceneMode_SelectTile()
-    {
-        Mode = new SelectTileMode(Engine, Area, SelectedKit, ActiveObject)
-        {
-            AddToSelection = AddToSelection,
-            ClearSelection = ClearSelection,
-        };
-    }
     public void SetSceneMode_AddTile()
     {
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
         Mode = new AddTileMode(Engine, area, SelectedKit, ActiveObject);
-    }
-    public void SetSceneMode_SelectWall()
-    {
-        var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
-        Mode = new SelectWallMode(Engine, area, SelectedKit, ActiveObject)
-        {
-            AddToSelection = AddToSelection,
-            ClearSelection = ClearSelection,
-        };
-    }
-    public void SetSceneMode_SelectFloor()
-    {
-        Mode = new SelectFloorMode(Engine, Area, SelectedKit, ActiveObject)
-        {
-            AddToSelection = AddToSelection,
-            ClearSelection = ClearSelection,
-        };
-    }
-    public void SetSceneMode_SelectCeiling()
-    {
-        Mode = new SelectCeilingMode(Engine, Area, SelectedKit, ActiveObject)
-        {
-            AddToSelection = AddToSelection,
-            ClearSelection = ClearSelection,
-        };
     }
     public void SetSceneMode_AddObject()
     {

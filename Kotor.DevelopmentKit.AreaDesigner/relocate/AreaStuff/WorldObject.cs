@@ -10,7 +10,7 @@ public class WorldObject : IWorldObject
     public Room Parent { get; }
 
     public IReadOnlyCollection<Magnet> Magnets => [];
-    public WorldObjectType Type => WorldObjectType.Prop;
+    public WorldObjectType Type => WorldObjectType.Basic;
 
     public string KitID { get; private set; }
     public string TemplateID { get; private set; }

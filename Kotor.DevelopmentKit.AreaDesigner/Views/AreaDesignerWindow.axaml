@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Kotor.DevelopmentKit.AreaDesigner.ViewModels"
         xmlns:mode="using:Kotor.DevelopmentKit.AreaDesigner.relocate.Mode"
+        xmlns:active="using:Kotor.DevelopmentKit.AreaDesigner.relocate.Mode.Active"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="using:Kotor.DevelopmentKit.AreaDesigner.Views"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -16,12 +17,6 @@
     </Design.DataContext>
 
     <Window.Resources>
-        <DataTemplate x:Key="SelectRoomMode" x:DataType="mode:SelectRoomMode">
-		</DataTemplate>
-
-        <DataTemplate x:Key="SelectTileMode" x:DataType="mode:SelectTileMode">
-		</DataTemplate>
-
         <DataTemplate x:Key="AddTileMode" x:DataType="mode:AddTileMode">
 			<ListBox ItemsSource="{Binding TileTemplates}"
                      SelectedItem="{Binding SelectedTileTemplate}"
@@ -35,50 +30,8 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 		</DataTemplate>
-
-        <DataTemplate x:Key="SelectWallMode" x:DataType="mode:SelectWallMode">
-			<ListBox ItemsSource="{Binding WallTemplates}"
-                     SelectedItem="{Binding SelectedWallTemplate}"
-                     Height="200">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Name}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-		</DataTemplate>
-
-        <DataTemplate x:Key="SelectFloorMode" x:DataType="mode:SelectFloorMode">
-			<ListBox ItemsSource="{Binding FloorTemplates}"
-                     SelectedItem="{Binding SelectedFloorTemplate}"
-                     Height="200">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Name}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-		</DataTemplate>
         
-        <DataTemplate x:Key="SelectCeilingMode" x:DataType="mode:SelectCeilingMode">
-			<ListBox ItemsSource="{Binding CeilingTemplates}"
-                     SelectedItem="{Binding SelectedCeilingTemplate}"
-                     Height="200">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Name}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-		</DataTemplate>
-
-        <DataTemplate x:Key="SelectObjectMode" x:DataType="mode:SelectObjectMode">
+        <DataTemplate x:Key="AddObjectMode" x:DataType="mode:AddObjectMode">
 			<ListBox ItemsSource="{Binding ObjectTemplates}"
                      SelectedItem="{Binding SelectedObjectTemplate}"
                      Height="200">
@@ -92,7 +45,7 @@
             </ListBox>
 		</DataTemplate>
 
-        <DataTemplate x:Key="AddObjectMode" x:DataType="mode:AddObjectMode">
+        <DataTemplate x:Key="SelectObjectMode" x:DataType="mode:SelectObjectMode">
 			<ListBox ItemsSource="{Binding ObjectTemplates}"
                      SelectedItem="{Binding SelectedObjectTemplate}"
                      Height="200">
@@ -129,25 +82,9 @@
         </Menu>
         <StackPanel DockPanel.Dock="Top"
                     Orientation="Horizontal">
-            <Label Content="Room:" VerticalAlignment="Center" />
-            <Button Content="Select" Command="{Binding SetSceneMode_SelectRoom}" IsEnabled="{Binding !IsMode_SelectRoom}" />
-
-            <Label Content="Tile:" VerticalAlignment="Center" />
-            <Button Content="Select" Command="{Binding SetSceneMode_SelectTile}" IsEnabled="{Binding !IsMode_SelectTile}" />
-            <Button Content="Add" Command="{Binding SetSceneMode_AddTile}" IsEnabled="{Binding !IsMode_AddTile}" />
-            
-            <Label Content="Wall:" VerticalAlignment="Center" />
-            <Button Content="Select" Command="{Binding SetSceneMode_SelectWall}" IsEnabled="{Binding !IsMode_SelectWall}" />
-            
-            <Label Content="Floor:" VerticalAlignment="Center" />
-            <Button Content="Select" Command="{Binding SetSceneMode_SelectFloor}" IsEnabled="{Binding !IsMode_SelectFloor}" />
-            
-            <Label Content="Ceiling:" VerticalAlignment="Center" />
-            <Button Content="Select" Command="{Binding SetSceneMode_SelectCeiling}" IsEnabled="{Binding !IsMode_SelectCeiling}" />
-
-            <Label Content="Object:" VerticalAlignment="Center" />
             <Button Content="Select" Command="{Binding SetSceneMode_SelectObject}" IsEnabled="{Binding !IsMode_SelectObject}" />
-            <Button Content="Add" Command="{Binding SetSceneMode_AddObject}" IsEnabled="{Binding !IsMode_AddObject}" />
+            <Button Content="Add Tile" Command="{Binding SetSceneMode_AddTile}" IsEnabled="{Binding !IsMode_AddTile}" />
+            <Button Content="Add Object" Command="{Binding SetSceneMode_AddObject}" IsEnabled="{Binding !IsMode_AddObject}" />
 
             <DropDownButton Content="Visibility">
                 <DropDownButton.Flyout>
@@ -178,14 +115,9 @@
 
             <ContentControl Content="{Binding Mode}">
                 <ContentControl.DataTemplates>
-                    <StaticResource ResourceKey="SelectRoomMode" />
-                    <StaticResource ResourceKey="SelectTileMode" />
                     <StaticResource ResourceKey="AddTileMode" />
-                    <StaticResource ResourceKey="SelectWallMode" />
-                    <StaticResource ResourceKey="SelectFloorMode" />
-                    <StaticResource ResourceKey="SelectCeilingMode" />
-                    <StaticResource ResourceKey="SelectObjectMode" />
                     <StaticResource ResourceKey="AddObjectMode" />
+                    <StaticResource ResourceKey="SelectObjectMode" />
                 </ContentControl.DataTemplates>
             </ContentControl>
             
