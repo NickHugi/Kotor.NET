@@ -14,14 +14,18 @@ public class Tile : IDeleteable, IWorldObject
     {
         get => Walls.SelectMany(x =>
         {
+            IEnumerable<Magnet> magnets;
             if (x.DoorFrame is null)
             {
-                return x.Magnets;
+                magnets = x.Magnets;
             }
             else
             {
-                return x.DoorFrame.Magnets;
+                magnets = x.DoorFrame.Magnets;
             }
+            return magnets.Where(x =>
+                (x.Parent is DoorFrame doorframe)
+                || (x.Parent is Wall wall && wall?.LinkedTile is null));
         }).ToList();
     }
     public WorldObjectType Type => WorldObjectType.Tile;
@@ -48,17 +52,21 @@ public class Tile : IDeleteable, IWorldObject
     public TileTemplate Template => Kit.Manager.Get(KitID).Tile(TemplateID);
 
     public Vector3 LocalPosition { get; set; }
-    public Quaternion LocalOrientation { get; set; } = new(0, 0, 0, 1);
+    public Quaternion LocalOrientation
+    {
+        get;
+        set => field = Quaternion.Normalize(value);
+    } = Quaternion.Identity;
     public Matrix4x4 LocalTransform => Matrix4x4.CreateTranslation(LocalPosition) * Matrix4x4.CreateFromQuaternion(LocalOrientation);
 
     public Vector3 GlobalPosition
     {
-        get => Matrix4x4.Decompose(GlobalTransform, out _, out _, out var value) ? value : new();
+        get => Vector3.Transform(LocalPosition, Parent.Orientation) + Parent.Position;
         set => LocalPosition = Vector3.Transform(value - Parent.Position, Quaternion.Inverse(Parent.Orientation));
     }
     public Quaternion GlobalOrientation
     {
-        get => Matrix4x4.Decompose(GlobalTransform, out _, out var value, out _) ? value : new();
+        get => Quaternion.Normalize(LocalOrientation * Parent.Orientation);
         set => LocalOrientation = value * Quaternion.Inverse(Parent.Orientation);
     }
     public Matrix4x4 GlobalTransform => LocalTransform * Parent.Transform;

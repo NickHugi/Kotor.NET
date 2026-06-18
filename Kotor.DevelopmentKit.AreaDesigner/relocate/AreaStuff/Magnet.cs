@@ -17,11 +17,11 @@ public class Magnet
 
     public Vector3 GlobalPosition
     {
-        get => Matrix4x4.Decompose(GlobalTransform, out _, out _, out var value) ? value : new();
+        get => Vector3.Transform(LocalPosition, Parent.GlobalOrientation) + Parent.GlobalPosition;
     }
     public Quaternion GlobalOrientation
     {
-        get => Matrix4x4.Decompose(GlobalTransform, out _, out var value, out _) ? value : new();
+        get => Quaternion.Normalize(LocalOrientation * Parent.GlobalOrientation);
     }
     public Matrix4x4 GlobalTransform => LocalTransform * Parent.GlobalTransform;
 
