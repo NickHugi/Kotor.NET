@@ -96,6 +96,33 @@
                     </MenuFlyout>
                 </DropDownButton.Flyout>
             </DropDownButton>
+            
+            <DropDownButton Content="Snapping">
+                <DropDownButton.Flyout>
+                    <Flyout>
+                        <StackPanel>
+                            <!--<StackPanel>
+                                <TextBlock Text="Magnets" Foreground="DimGray" FontWeight="SemiBold" />
+                                <CheckBox Content="Enabled" />
+                            </StackPanel>
+                            <Separator Margin="0 15 0 15" />-->
+                            
+                            <StackPanel>
+                                <TextBlock Text="Position Increment" Foreground="DimGray" FontWeight="SemiBold" />
+                                <CheckBox Content="Enabled" IsChecked="{Binding Settings.PositionSnapEnabled}" />
+                                <NumericUpDown Value="{Binding Settings.PositionSnapSize}" />
+                            </StackPanel>
+                            <Separator Margin="0 15 0 15" />
+                            
+                            <!--<StackPanel>
+                                <TextBlock Text="Rotation Increment" Foreground="DimGray" FontWeight="SemiBold" />
+                                <CheckBox Content="Enabled" />
+                                <NumericUpDown />
+                            </StackPanel>-->
+                        </StackPanel>
+                    </Flyout>
+                </DropDownButton.Flyout>
+            </DropDownButton>
 
         </StackPanel>
         <StackPanel DockPanel.Dock="Left"

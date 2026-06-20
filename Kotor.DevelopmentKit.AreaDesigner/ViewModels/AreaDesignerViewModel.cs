@@ -48,12 +48,7 @@ public class AreaDesignerViewModel : ReactiveObject
     public Interaction<Unit, Unit> ClearSelection = new();
     public Interaction<object, Unit> AddToSelection = new();
 
-    public bool IsMode_SelectRoom => false;// Mode is SelectRoomMode;
-    public bool IsMode_SelectTile => false;// Mode is SelectTileMode;
-    public bool IsMode_AddTile => false;// Mode is AddTileMode;
-    public bool IsMode_SelectWall => false;// Mode is SelectWallMode;
-    public bool IsMode_SelectFloor => false;// Mode is SelectFloorMode;
-    public bool IsMode_SelectCeiling => false;// Mode is SelectCeilingMode;
+    public bool IsMode_AddTile => Mode is AddTileMode;
     public bool IsMode_SelectObject => Mode is SelectObjectMode;
     public bool IsMode_AddObject => Mode is AddObjectMode;
 
@@ -106,7 +101,9 @@ public class AreaDesignerViewModel : ReactiveObject
         get;
         private set => this.RaiseAndSetIfChanged(ref field, value);
     }
+    public DesignerSettings Settings { get; } = new();
 
+    // move to settings
     public bool ShowWalls
     {
         get;
@@ -186,10 +183,6 @@ public class AreaDesignerViewModel : ReactiveObject
             .Subscribe(mode =>
             {
                 this.RaisePropertyChanged(nameof(IsMode_AddTile));
-                this.RaisePropertyChanged(nameof(IsMode_SelectTile));
-                this.RaisePropertyChanged(nameof(IsMode_SelectWall));
-                this.RaisePropertyChanged(nameof(IsMode_SelectFloor));
-                this.RaisePropertyChanged(nameof(IsMode_SelectCeiling));
                 this.RaisePropertyChanged(nameof(IsMode_AddObject));
                 this.RaisePropertyChanged(nameof(IsMode_SelectObject));
             });
@@ -198,16 +191,16 @@ public class AreaDesignerViewModel : ReactiveObject
     public void SetSceneMode_AddTile()
     {
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
-        Mode = new AddTileMode(Engine, area, SelectedKit, ActiveObject);
+        Mode = new AddTileMode(Engine, area, SelectedKit, ActiveObject, Settings);
     }
     public void SetSceneMode_AddObject()
     {
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
-        Mode = new AddObjectMode(Engine, area, SelectedKit, ActiveObject);
+        Mode = new AddObjectMode(Engine, area, SelectedKit, ActiveObject, Settings);
     }
     public void SetSceneMode_SelectObject()
     {
-        Mode = new SelectObjectMode(Engine, Area, SelectedKit, ActiveObject)
+        Mode = new SelectObjectMode(Engine, Area, SelectedKit, ActiveObject, Settings)
         {
             AddToSelection = AddToSelection,
             ClearSelection = ClearSelection,

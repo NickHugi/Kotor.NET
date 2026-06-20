@@ -10,6 +10,7 @@ using Kotor.NET.Common.Data.Geometry;
 using Kotor.NET.Extensions;
 using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Cameras;
+using Kotor.NET.Graphics.Extensions;
 using Kotor.NET.Graphics.OpenGL;
 using Kotor.NET.Graphics.Renderers.Descriptors;
 using ReactiveUI;
@@ -48,7 +49,7 @@ public class AddTileMode : BaseMode
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public AddTileMode(GLEngine engine, Area area, Kit kit, object selectedPiece) : base(engine, area, kit, selectedPiece)
+    public AddTileMode(GLEngine engine, Area area, Kit kit, object selectedPiece, DesignerSettings settings) : base(engine, area, kit, selectedPiece, settings)
     {
         this.WhenAnyValue(x => x.SelectedKit).Subscribe(_ =>
         {
@@ -63,7 +64,9 @@ public class AddTileMode : BaseMode
 
         var ray = camera.ProjectRay((int)mouse.X, (int)mouse.Y, _engine.Width, _engine.Height);
         var point = ray.FindPointOnPlane(Axis.Z, 0);
-        var render = true;
+
+        if (_settings.PositionSnapEnabled)
+            point = point.Snap(Axis.X, _settings.PositionSnapSize).Snap(Axis.Y, _settings.PositionSnapSize);
 
         _projectedRoom = new Room(_area, SelectedTileTemplate);
         _projectedRoom.Position = point;

@@ -36,7 +36,7 @@ public class AddObjectMode : BaseMode
     private WorldObject _addObject = null;
     private float angle = 0;
 
-    public AddObjectMode(GLEngine engine, Area area, Kit? kit, object selectedPiece) : base(engine, area, kit, selectedPiece)
+    public AddObjectMode(GLEngine engine, Area area, Kit? kit, object selectedPiece, DesignerSettings settings) : base(engine, area, kit, selectedPiece, settings)
     {
     }
 

@@ -34,15 +34,17 @@ public class BaseMode : ReactiveObject
 
     protected readonly GLEngine _engine;
     protected readonly Area _area;
+    protected readonly DesignerSettings _settings;
 
     protected AreaEntity _areaEntity => _engine.Scene.Entities.OfType<AreaEntity>().Single(x => x.Area == _area);
 
-    public BaseMode(GLEngine engine, Area area, Kit selectedKit, object selectedPiece)
+    public BaseMode(GLEngine engine, Area area, Kit selectedKit, object selectedPiece, DesignerSettings settings)
     {
         SelectedKit = selectedKit;
         SelectedPiece = selectedPiece;
         _engine = engine;
         _area = area;
+        _settings = settings;
     }
 
     public virtual Task RenderIntercept(OrbitCamera camera, Point mouse, List<IDrawCallDescriptor> descriptors)
