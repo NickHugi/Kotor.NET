@@ -40,7 +40,8 @@ public class Room
     }
     public Room(Area parent, TileTemplate template) : this(parent)
     {
-        var tile = new Tile(this, template);
+        var tile = new Tile(this);
+        tile.SwitchTemplate(template);
         AddTile(tile);
     }
 
@@ -76,7 +77,7 @@ public class Room
 
     private void FixWalls()
     {
-        foreach (var wall in Objects.OfType<Tile>().SelectMany(x => x.Walls))
+        foreach (var wall in Objects.OfType<Tile>().SelectMany(x => x.VirtualObjects.OfType<Wall>()))
         {
             wall.LinkedTile = null;
         }
@@ -88,7 +89,7 @@ public class Room
                 if (tileA == tileB)
                     continue;
 
-                foreach (var adjacent in GetCombinations(tileA.Walls, tileB.Walls))
+                foreach (var adjacent in GetCombinations(tileA.VirtualObjects.OfType<Wall>(), tileB.VirtualObjects.OfType<Wall>()))
                 {
                     if (Vector3.Distance(adjacent.Item1.GlobalPosition, adjacent.Item2.GlobalPosition) < 0.01f)
                     {

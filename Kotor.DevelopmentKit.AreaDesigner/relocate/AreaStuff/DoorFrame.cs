@@ -16,7 +16,7 @@ public class DoorFrame : IWorldObject
             var area = Parent.Parent.Parent.Parent;
             var walls = area.Rooms
                 .SelectMany(x => x.Objects.OfType<Tile>())
-                .SelectMany(x => x.Walls)
+                .SelectMany(x => x.VirtualObjects.OfType<Wall>())
                 .ToList();
 
             return walls.FirstOrDefault(x => x != Parent && AllMagnets.Any(y => y.GlobalPosition == x.GlobalPosition));

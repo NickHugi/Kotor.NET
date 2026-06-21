@@ -31,23 +31,33 @@ public class AreaSerializer_V0_1
 
             foreach (var tileData in roomData.tiles.ToObject<dynamic[]>())
             {
-                var tile = new Tile(room, Kit.Manager.Get(tileData.kitID.Value).Tile(tileData.templateID.Value));
+                var template = Kit.Manager.Get(tileData.kitID.Value).Tile(tileData.templateID.Value);
+                var tile = new Tile(room);
+                tile.SwitchTemplate(template);
                 tile.LocalPosition = new Vector3(tileData.position.ToObject<float[]>());
                 tile.LocalOrientation = ((float[])tileData.orientation.ToObject<float[]>()).ToQuaternion();
 
-                var floorData = tileData.floor;
-                var floorTemplate = Kit.Manager.Get(floorData.kitID.Value).Floor(floorData.templateID.Value);
-                tile.Floor.SwitchTemplate(floorTemplate);
+                // TODO
 
-                var ceilingData = tileData.ceiling;
-                var ceilingTemplate = Kit.Manager.Get(ceilingData.kitID.Value).Ceiling(ceilingData.templateID.Value);
-                tile.Ceiling.SwitchTemplate(ceilingTemplate);
+                foreach (var floor in tile.VirtualObjects.OfType<Floor>())
+                {
+                    var floorData = tileData.floor;
+                    var floorTemplate = Kit.Manager.Get(floorData.kitID.Value).Floor(floorData.templateID.Value);
+                    floor.SwitchTemplate(floorTemplate);
+                }
+
+                foreach (var ceiling in tile.VirtualObjects.OfType<Ceiling>())
+                {
+                    var ceilingData = tileData.ceiling;
+                    var ceilingTemplate = Kit.Manager.Get(ceilingData.kitID.Value).Ceiling(ceilingData.templateID.Value);
+                    ceiling.SwitchTemplate(ceilingTemplate);
+                }
 
                 for (int i = 0; i < tileData.walls.Count; i++)
                 {
                     var wallData = tileData.walls[i];
                     var wallTemplate = Kit.Manager.Get(wallData.kitID.Value).Wall(wallData.templateID.Value);
-                    var wall = tile.Walls.ElementAt(i);
+                    var wall = tile.VirtualObjects.OfType<Wall>().ElementAt(i);
                     wall.SwitchTemplate(wallTemplate);
                 }
 
@@ -74,21 +84,10 @@ public class AreaSerializer_V0_1
                 templateID = tile.TemplateID,
                 position = tile.LocalPosition.ToFloatArray(),
                 orientation = tile.LocalOrientation.ToFloatArray(),
-                floor = new
+                virtalObjects = tile.VirtualObjects.Select(x => new
                 {
-                    kitID = tile.Floor.KitID,
-                    templateID = tile.Floor.TemplateID,
-                },
-                ceiling = new
-                {
-                    kitID = "",
-                    templateID = "",
-                },
-                walls = tile.Walls.Select(x => new
-                {
-                    kitID = x.KitID,
-                    templateID = x.TemplateID,
-                }),
+                    // TODO
+                })
             })
         });
 

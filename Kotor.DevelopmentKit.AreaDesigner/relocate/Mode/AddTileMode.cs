@@ -129,9 +129,9 @@ public class AddTileMode : BaseMode
     {
         var tiles = _area.Rooms.SelectMany(x => x.Objects.OfType<Tile>()).ToList();
 
-        foreach (var existing in tiles.SelectMany(x => x.Walls))
+        foreach (var existing in tiles.SelectMany(x => x.VirtualObjects.OfType<Wall>()))
         {
-            foreach (var cursor in _projectedTile.Walls)
+            foreach (var cursor in _projectedTile.VirtualObjects.OfType<Wall>())
             {
                 if (existing.GlobalPosition.ApproximatelyEquals(cursor.GlobalPosition, 0.01f))
                 {
@@ -141,9 +141,9 @@ public class AddTileMode : BaseMode
             }
         }
 
-        foreach (var existing in tiles.SelectMany(x => x.InnerCorners))
+        foreach (var existing in tiles.SelectMany(x => x.VirtualObjects.OfType<InnerCorner>()))
         {
-            foreach (var cursor in _projectedTile.InnerCorners)
+            foreach (var cursor in _projectedTile.VirtualObjects.OfType<InnerCorner>())
             {
                 if (existing.GlobalPosition.ApproximatelyEquals(cursor.GlobalPosition, 0.01f))
                 {
@@ -153,9 +153,9 @@ public class AddTileMode : BaseMode
             }
         }
 
-        foreach (var existing in tiles.SelectMany(x => x.InnerCorners))
+        foreach (var existing in tiles.SelectMany(x => x.VirtualObjects.OfType<OuterCorner>()))
         {
-            foreach (var cursor in _projectedTile.OuterCorners)
+            foreach (var cursor in _projectedTile.VirtualObjects.OfType<OuterCorner>())
             {
                 if (existing.GlobalPosition.ApproximatelyEquals(cursor.GlobalPosition, 0.01f))
                 {
@@ -176,7 +176,8 @@ public class AddTileMode : BaseMode
         {
             var template = _projectedRoom.Objects.OfType<Tile>().First().Template;
             var room = wall.Parent.Parent;
-            var newTile = new Tile(room, template);
+            var newTile = new Tile(room);
+            newTile.SwitchTemplate(template);
             newTile.GlobalPosition = _projectedRoom.Position;
             newTile.GlobalOrientation = _projectedRoom.Orientation;
             room.AddTile(newTile);

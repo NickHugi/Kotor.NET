@@ -77,7 +77,7 @@ public class BaseMode : ReactiveObject
         return _area.Rooms
             .SelectMany(x => x.Objects)
             .OfType<Tile>()
-            .SelectMany(x => x.Walls)
+            .SelectMany(x => x.VirtualObjects.OfType<Wall>())
             .OfType<Wall>()
             .Where(x => x.LinkedTile is null)
             .OrderBy(x => ray.ShortestDistanceTo(x.GlobalPosition))

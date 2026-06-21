@@ -51,11 +51,11 @@ public class OuterCorner : IWorldObject
         {
             if (Hook.Adjacent.Count() != 2)
                 return false;
-            if (Hook.Adjacent.Any(x => Parent.Walls.ElementAt(x).LinkedTile is null))
+            if (Hook.Adjacent.Any(x => Parent.VirtualObjects.OfType<Wall>().ElementAt(x).LinkedTile is null))
                 return false;
 
-            var a = Parent.Walls.ElementAt(Hook.Adjacent[0]).LinkedTile!.Walls.Select(x => x.LinkedTile).Where(x => x != Parent);
-            var b = Parent.Walls.ElementAt(Hook.Adjacent[1]).LinkedTile!.Walls.Select(x => x.LinkedTile).Where(x => x != Parent);
+            var a = Parent.VirtualObjects.OfType<Wall>().ElementAt(Hook.Adjacent[0]).LinkedTile!.VirtualObjects.OfType<Wall>().Select(x => x.LinkedTile).Where(x => x != Parent);
+            var b = Parent.VirtualObjects.OfType<Wall>().ElementAt(Hook.Adjacent[1]).LinkedTile!.VirtualObjects.OfType<Wall>().Select(x => x.LinkedTile).Where(x => x != Parent);
 
             var circuit = a.Intersect(b).Any();
             return !circuit;

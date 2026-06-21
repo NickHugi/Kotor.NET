@@ -12,40 +12,31 @@ public class Tile : IDeleteable, IWorldObject
 
     public IReadOnlyCollection<Magnet> Magnets
     {
-        get => Walls.SelectMany(x =>
+        get => VirtualObjects.SelectMany(x =>
         {
-            IEnumerable<Magnet> magnets;
-            if (x.DoorFrame is null)
+            IEnumerable<Magnet> magnets = [];
+
+            if (x is Wall wall)
             {
-                magnets = x.Magnets;
+                if (wall.DoorFrame is null)
+                {
+                    magnets = wall.Magnets;
+                }
+                else
+                {
+                    magnets = wall.DoorFrame.Magnets;
+                }
             }
-            else
-            {
-                magnets = x.DoorFrame.Magnets;
-            }
+
             return magnets.Where(x =>
                 (x.Parent is DoorFrame doorframe)
                 || (x.Parent is Wall wall && wall?.LinkedTile is null));
         }).ToList();
     }
     public WorldObjectType Type => WorldObjectType.Tile;
+    public IReadOnlyCollection<IWorldObject> VirtualObjects { get; private set; } = [];
 
     public string? GroupID { get; set; }
-
-    public Floor Floor { get; private set; }
-    public Ceiling Ceiling { get; private set; }
-    public IReadOnlyCollection<Wall> Walls { get; private set; }
-    public IReadOnlyCollection<InnerCorner> InnerCorners { get; private set; }
-    public IReadOnlyCollection<OuterCorner> OuterCorners { get; private set; }
-
-    public IReadOnlyCollection<IWorldObject> VirtualObjects =>
-    [
-        Floor,
-        Ceiling,
-        ..Walls,
-        ..InnerCorners,
-        ..OuterCorners
-    ];
 
     public string KitID { get; private set; }
     public string TemplateID { get; private set; }
@@ -71,16 +62,9 @@ public class Tile : IDeleteable, IWorldObject
     }
     public Matrix4x4 GlobalTransform => LocalTransform * Parent.Transform;
 
-    public Tile(Room parent, TileTemplate template)
+    public Tile(Room parent)
     {
         Parent = parent;
-        KitID = template.KitID;
-        TemplateID = template.ID;
-        Floor = new(this, template.Floor);
-        Ceiling = new(this, template.Ceiling);
-        Walls = template.Walls.Select(x => new Wall(this, x.DefaultTemplate, x)).ToArray();
-        InnerCorners = template.InnerCorners.Select(x => new InnerCorner(this, x.DefaultTemplate, x)).ToArray();
-        OuterCorners = template.OuterCorners.Select(x => new OuterCorner(this, x.DefaultTemplate, x)).ToArray();
     }
 
     public void SwitchTemplate(ObjectTemplate template)
@@ -94,10 +78,15 @@ public class Tile : IDeleteable, IWorldObject
     {
         KitID = template.KitID;
         TemplateID = template.ID;
-        Floor = new(this, template.Floor);
-        Walls = template.Walls.Select(x => new Wall(this, x.DefaultTemplate, x)).ToArray();
-        InnerCorners = template.InnerCorners.Select(x => new InnerCorner(this, x.DefaultTemplate, x)).ToArray();
-        OuterCorners = template.OuterCorners.Select(x => new OuterCorner(this, x.DefaultTemplate, x)).ToArray();
+
+        var virtualObjects = new List<IWorldObject>();
+        VirtualObjects = virtualObjects;
+
+        virtualObjects.Add(new Floor(this, template.Floor));
+        virtualObjects.Add(new Ceiling(this, template.Ceiling));
+        virtualObjects.AddRange(template.Walls.Select(x => new Wall(this, x.DefaultTemplate, x)));
+        virtualObjects.AddRange(template.InnerCorners.Select(x => new InnerCorner(this, x.DefaultTemplate, x)));
+        virtualObjects.AddRange(template.OuterCorners.Select(x => new OuterCorner(this, x.DefaultTemplate, x)));
     }
 
     public void Delete()

@@ -49,7 +49,7 @@ public class InnerCorner : IWorldObject
     {
         get
         {
-            return Hook.Adjacent.Any() && Hook.Adjacent.All(x => Parent.Walls.ElementAt(x).LinkedTile is null);
+            return Hook.Adjacent.Any() && Hook.Adjacent.All(x => Parent.VirtualObjects.OfType<Wall>().ElementAt(x).LinkedTile is null);
         }
     }
     

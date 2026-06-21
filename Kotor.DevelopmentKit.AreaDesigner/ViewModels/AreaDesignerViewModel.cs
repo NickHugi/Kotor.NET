@@ -332,7 +332,9 @@ public class AreaDesignerViewModel : ReactiveObject
         if (ActiveObject is Tile tile)
         {
             descriptors
-                .Where(x => tile.Walls.Contains(x.Tag) || tile.Floor == x.Tag || tile.Ceiling == x.Tag)
+                .Where(x => tile.VirtualObjects.OfType<Wall>().Contains(x.Tag)
+                    || tile.VirtualObjects.OfType<Floor>().Contains(x.Tag)
+                    || tile.VirtualObjects.OfType<Ceiling>().Contains(x.Tag))
                 .OfType<MeshDescriptor>()
                 .ToList()
                 .ForEach(x => x.AmbientColor += new Vector3(0.5f, 0.5f, 0.5f));

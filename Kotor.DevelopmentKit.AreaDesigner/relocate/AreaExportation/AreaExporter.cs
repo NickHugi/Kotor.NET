@@ -27,12 +27,12 @@ public static class AreaExporter
 
         foreach (var tile in room.Objects.OfType<Tile>())
         {
-            mdl.Root.Children.Add(FloorToMDLNode(tile.Floor));
+            mdl.Root.Children.AddRange(tile.VirtualObjects.OfType<Floor>().Select(FloorToMDLNode));
             //mdl.Root.Children.Add(CeilingToMDLNode(tile.Ceiling));
-            mdl.Root.Children.AddRange(tile.Walls.Where(x => x.Visible).Select(WallToMDLNode));
-            mdl.Root.Children.AddRange(tile.Walls.Select(x => x.DoorFrame).Where(x => x?.Visible == true).Select(DoorFrameToMDLNode));
-            mdl.Root.Children.AddRange(tile.InnerCorners.Where(x => x.Visible == true).Select(InnerCornerToMDLNode));
-            mdl.Root.Children.AddRange(room.Objects.Select(ObjectToMDLNode));
+            mdl.Root.Children.AddRange(tile.VirtualObjects.OfType<Wall>().Where(x => x.Visible).Select(WallToMDLNode));
+            mdl.Root.Children.AddRange(tile.VirtualObjects.OfType<Wall>().Select(x => x.DoorFrame).Where(x => x?.Visible == true).Select(DoorFrameToMDLNode));
+            mdl.Root.Children.AddRange(tile.VirtualObjects.OfType<InnerCorner>().Where(x => x.Visible == true).Select(InnerCornerToMDLNode));
+            //mdl.Root.Children.AddRange(room.Vi.Select(ObjectToMDLNode));
         }
 
         var walkmeshes = mdl.Root.GetAllDescendants().OfType<MDLWalkmeshNode>();

@@ -71,22 +71,27 @@ public class AreaEntity : BaseEntity
 
         if (obj is Tile tile)
         {
-            RenderFloor(assets, tile, ref descriptors);
-            RenderCeiling(assets, tile, ref descriptors);
-
-            foreach (var wall in tile.Walls)
+            foreach (var floor in tile.VirtualObjects.OfType<Floor>())
+            {
+                RenderFloor(assets, floor, ref descriptors);
+            }
+            foreach (var ceiling in tile.VirtualObjects.OfType<Ceiling>())
+            {
+                RenderCeiling(assets, ceiling, ref descriptors);
+            }
+            foreach (var wall in tile.VirtualObjects.OfType<Wall>())
             {
                 RenderWall(assets, wall, ref descriptors);
             }
-            foreach (var doorframe in tile.Walls.Select(x => x.DoorFrame).Where(x => x is not null))
+            foreach (var doorframe in tile.VirtualObjects.OfType<Wall>().Select(x => x.DoorFrame).Where(x => x is not null))
             {
                 RenderDoorFrame(assets, doorframe, ref descriptors);
             }
-            foreach (var innerCorner in tile.InnerCorners)
+            foreach (var innerCorner in tile.VirtualObjects.OfType<InnerCorner>())
             {
                 RenderInnerCorner(assets, innerCorner, ref descriptors);
             }
-            foreach (var outerCorner in tile.OuterCorners)
+            foreach (var outerCorner in tile.VirtualObjects.OfType<OuterCorner>())
             {
                 RenderOuterCorner(assets, outerCorner, ref descriptors);
             }
@@ -96,19 +101,19 @@ public class AreaEntity : BaseEntity
             descriptors.AddRange(DescriptorsForModel(assets, prop.Template.Model, obj.GlobalTransform, obj));
         }
     }
-    private void RenderFloor(IAssetManager assets, Tile tile, ref List<IDrawCallDescriptor> descriptors)
+    private void RenderFloor(IAssetManager assets, Floor floor, ref List<IDrawCallDescriptor> descriptors)
     {
         if (!DoRenderFloor)
             return;
 
-        descriptors.AddRange(DescriptorsForModel(assets, tile.Floor.Template.Model, tile.GlobalTransform, tile.Floor));
+        descriptors.AddRange(DescriptorsForModel(assets, floor.Template.Model, floor.GlobalTransform, floor));
     }
-    private void RenderCeiling(IAssetManager assets, Tile tile, ref List<IDrawCallDescriptor> descriptors)
+    private void RenderCeiling(IAssetManager assets, Ceiling ceiling, ref List<IDrawCallDescriptor> descriptors)
     {
         if (!DoRenderCeiling)
             return;
 
-        descriptors.AddRange(DescriptorsForModel(assets, tile.Ceiling.Template.Model, tile.GlobalTransform, tile.Ceiling));
+        descriptors.AddRange(DescriptorsForModel(assets, ceiling.Template.Model, ceiling.GlobalTransform, ceiling));
     }
     private void RenderWall(IAssetManager assets, Wall wall, ref List<IDrawCallDescriptor> descriptors)
     {
