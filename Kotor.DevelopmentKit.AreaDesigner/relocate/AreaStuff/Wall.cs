@@ -12,15 +12,26 @@ public class Wall : IWorldObject
     
     public IReadOnlyCollection<Magnet> Magnets
     {
-        get =>
-        [
-            new Magnet(this)
+        get
+        {
+            if (LinkedTile is not null)
             {
-                LocalPosition = new(),
-                LocalOrientation = Quaternion.Identity,
-                Type = MagnetType.Wall
+                return [];
             }
-        ];
+            else if (DoorFrame is null)
+            {
+                return [new Magnet(this)
+                {
+                    LocalPosition = new(),
+                    LocalOrientation = Quaternion.Identity,
+                    Type = MagnetType.Wall
+                }];
+            }
+            else
+            {
+                return DoorFrame.Magnets;
+            }
+        }
     }
     public WorldObjectType Type => WorldObjectType.Basic;
 
