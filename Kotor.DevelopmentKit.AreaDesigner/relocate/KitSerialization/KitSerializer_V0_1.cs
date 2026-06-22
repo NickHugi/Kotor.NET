@@ -89,8 +89,18 @@ public class KitSerializer_V0_1
                 KitID = kitID,
                 ID = tile.id.Value,
                 Name = tile.name.Value,
-                DefaultFloorID = tile.defaultFloorID.Value,
-                DefaultCeilingID = tile.defaultCeilingID?.Value ?? "",
+                Floors = ((JArray)tile.floorHooks).Select(x => (dynamic)x).Select(hook => new TileTemplateHook
+                {
+                    DefaultTemplateID = hook.defaultTemplateID,
+                    LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
+                    LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
+                }).ToArray(),
+                Ceilings = ((JArray)tile.ceilingHooks).Select(x => (dynamic)x).Select(hook => new TileTemplateHook
+                {
+                    DefaultTemplateID = hook.defaultTemplateID,
+                    LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
+                    LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
+                }).ToArray(),
                 Walls = ((JArray)tile.wallHooks).Select(x => (dynamic)x).Select(hook => new WallHookTemplate
                 {
                     DefaultWallID = hook.defaultWallID,
@@ -111,7 +121,6 @@ public class KitSerializer_V0_1
                     LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
                     LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
                 }).ToArray(),
-                CeilingHooks = []
             });
         }
 
@@ -167,8 +176,18 @@ public class KitSerializer_V0_1
         {
             id = tile.ID,
             name = tile.Name,
-            defaultFloorID = tile.DefaultFloorID,
-            defaultCeilingID = tile.DefaultCeilingID,
+            floorHooks = tile.Floors.Select(x => new
+            {
+                defaultTemplateID = x.DefaultTemplateID,
+                position = x.LocalPosition.ToFloatArray(),
+                orientation = x.LocalOrientation.ToFloatArray()
+            }),
+            ceilingHooks = tile.Ceilings.Select(x => new
+            {
+                defaultTemplateID = x.DefaultTemplateID,
+                position = x.LocalPosition.ToFloatArray(),
+                orientation = x.LocalOrientation.ToFloatArray()
+            }),
             wallHooks = tile.Walls.Select(x => new
             {
                 defaultWallID = x.DefaultWallID,

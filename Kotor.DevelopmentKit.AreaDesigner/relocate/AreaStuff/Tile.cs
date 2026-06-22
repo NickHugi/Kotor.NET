@@ -79,11 +79,13 @@ public class Tile : IDeleteable, IWorldObject
         KitID = template.KitID;
         TemplateID = template.ID;
 
+        var kit = Kit.Manager.Get(KitID);
+
         var virtualObjects = new List<IWorldObject>();
         VirtualObjects = virtualObjects;
 
-        virtualObjects.Add(new Floor(this, template.Floor));
-        virtualObjects.Add(new Ceiling(this, template.Ceiling));
+        virtualObjects.AddRange(template.Floors.Select(x => new Floor(this, kit.Floor(x.DefaultTemplateID))));
+        virtualObjects.AddRange(template.Ceilings.Select(x => new Ceiling(this, kit.Ceiling(x.DefaultTemplateID))));
         virtualObjects.AddRange(template.Walls.Select(x => new Wall(this, x.DefaultTemplate, x)));
         virtualObjects.AddRange(template.InnerCorners.Select(x => new InnerCorner(this, x.DefaultTemplate, x)));
         virtualObjects.AddRange(template.OuterCorners.Select(x => new OuterCorner(this, x.DefaultTemplate, x)));

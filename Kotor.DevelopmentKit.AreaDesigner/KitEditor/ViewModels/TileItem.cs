@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using System.Numerics;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using ReactiveUI;
 
@@ -62,8 +63,8 @@ public class TileItem : ReactiveObject
     {
         ID = tile.ID;
         Name = tile.Name;
-        DefaultFloorID = tile.DefaultFloorID;
-        DefaultCeilingID = tile.DefaultCeilingID;
+        DefaultFloorID = tile.Floors.First().DefaultTemplateID;
+        DefaultCeilingID = tile.Ceilings.First().DefaultTemplateID;
         Walls = new(tile.Walls.Select(x => new WallHookItem(x)));
         InnerCorners = new(tile.InnerCorners.Select(x => new InnerCornerHookItem(x)));
         OuterCorners = new(tile.OuterCorners.Select(x => new OuterCornerHookItem(x)));
@@ -76,12 +77,11 @@ public class TileItem : ReactiveObject
             KitID = kitID,
             ID = ID,
             Name = Name,
-            DefaultFloorID = DefaultFloorID,
-            DefaultCeilingID = DefaultCeilingID,
+            Floors = [new() { DefaultTemplateID = DefaultFloorID, LocalPosition = Vector3.Zero, LocalOrientation = Quaternion.Identity }],
+            Ceilings = [new() { DefaultTemplateID = DefaultCeilingID, LocalPosition = Vector3.Zero, LocalOrientation = Quaternion.Identity }],
             Walls = Walls.Select(x => x.ToModel()).ToArray(),
             InnerCorners = InnerCorners.Select(x => x.ToModel()).ToArray(),
             OuterCorners = OuterCorners.Select(x => x.ToModel()).ToArray(),
-            CeilingHooks = [], // TODO
         };
     }
 }
