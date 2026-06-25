@@ -33,7 +33,7 @@ public class KitSerializer_V0_1
             kit.Floors.Add(new FloorTemplate
             {
                 KitID = kitID,
-                ObjectID = floor.id.Value,
+                TemplateID = floor.id.Value,
                 Name = floor.name.Value,
                 ClassID = floor.group?.Value,
                 Model = floor.model.Value,
@@ -45,7 +45,7 @@ public class KitSerializer_V0_1
             kit.Ceilings.Add(new CeilingTemplate
             {
                 KitID = kitID,
-                ObjectID = ceiling.id.Value,
+                TemplateID = ceiling.id.Value,
                 Name = ceiling.name.Value,
                 ClassID = ceiling.group?.Value,
                 Model = ceiling.model.Value,
@@ -57,7 +57,7 @@ public class KitSerializer_V0_1
             kit.DoorFrames.Add(new DoorFrameTemplate
             {
                 KitID = kitID,
-                ObjectID = door.id.Value,
+                TemplateID = door.id.Value,
                 Name = door.name.Value,
                 ClassID = door.group?.Value,
                 Model = door.model.Value,
@@ -74,7 +74,7 @@ public class KitSerializer_V0_1
             kit.Walls.Add(new WallTemplate
             {
                 KitID = kitID,
-                ObjectID = wall.id.Value,
+                TemplateID = wall.id.Value,
                 Name = wall.name.Value,
                 Model = wall.model.Value,
                 ClassID = wall.group.Value,
@@ -87,15 +87,17 @@ public class KitSerializer_V0_1
             kit.Tiles.Add(new TileTemplate
             {
                 KitID = kitID,
-                ID = tile.id.Value,
+                TemplateID = tile.id.Value,
                 Name = tile.name.Value,
-                Floors = ((JArray)tile.floorHooks).Select(x => (dynamic)x).Select(hook => new TileTemplateHook
+                ClassID = null,
+                Model = null,
+                Floors = ((JArray)tile.floorHooks).Select(x => (dynamic)x).Select(hook => new FloorHookTemplate
                 {
                     DefaultTemplateID = hook.defaultTemplateID,
                     LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
                     LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
                 }).ToArray(),
-                Ceilings = ((JArray)tile.ceilingHooks).Select(x => (dynamic)x).Select(hook => new TileTemplateHook
+                Ceilings = ((JArray)tile.ceilingHooks).Select(x => (dynamic)x).Select(hook => new CeilingHookTemplate
                 {
                     DefaultTemplateID = hook.defaultTemplateID,
                     LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
@@ -103,20 +105,20 @@ public class KitSerializer_V0_1
                 }).ToArray(),
                 Walls = ((JArray)tile.wallHooks).Select(x => (dynamic)x).Select(hook => new WallHookTemplate
                 {
-                    DefaultWallID = hook.defaultWallID,
+                    DefaultTemplateID = hook.defaultWallID,
                     LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
                     LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
                 }).ToArray(),
                 InnerCorners = ((JArray)tile.innerCornerHooks).Select(x => (dynamic)x).Select(hook => new InnerCornerHookTemplate
                 {
-                    DefaultCornerID = hook.defaultInnerCornerID.Value,
+                    DefaultTemplateID = hook.defaultInnerCornerID.Value,
                     Adjacent = hook.adjacencies?.ToObject<int[]>() ?? new int[0],
                     LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
                     LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
                 }).ToArray(),
                 OuterCorners = ((JArray)tile.outerCornerHooks).Select(x => (dynamic)x).Select(hook => new OuterCornerHookTemplate
                 {
-                    DefaultCornerID = hook.defaultOuterCornerID.Value,
+                    DefaultTemplateID = hook.defaultOuterCornerID.Value,
                     Adjacent = hook.adjacencies?.ToObject<int[]>() ?? new int[0],
                     LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
                     LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
@@ -129,7 +131,7 @@ public class KitSerializer_V0_1
             kit.InnerCorners.Add(new InnerCornerTemplate
             {
                 KitID = kitID,
-                ObjectID = innerCorner.id.Value,
+                TemplateID = innerCorner.id.Value,
                 Name = innerCorner.name.Value,
                 ClassID = innerCorner.group?.Value,
                 Model = innerCorner.model.Value,
@@ -141,7 +143,7 @@ public class KitSerializer_V0_1
             kit.OuterCorners.Add(new OuterCornerTemplate
             {
                 KitID = kitID,
-                ObjectID = outerCorner.id.Value,
+                TemplateID = outerCorner.id.Value,
                 Name = outerCorner.name.Value,
                 ClassID = outerCorner.group?.Value,
                 Model = outerCorner.model.Value,
@@ -153,7 +155,7 @@ public class KitSerializer_V0_1
             kit.Objects.Add(new ObjectTemplate
             {
                 KitID = kitID,
-                ObjectID = @object.id.Value,
+                TemplateID = @object.id.Value,
                 Name = @object.name.Value,
                 ClassID = @object.group?.Value,
                 Model = @object.model.Value,
@@ -174,7 +176,7 @@ public class KitSerializer_V0_1
 
         data.tiles = kit.Tiles.Select(tile => new
         {
-            id = tile.ID,
+            id = tile.TemplateID,
             name = tile.Name,
             floorHooks = tile.Floors.Select(x => new
             {
@@ -190,20 +192,20 @@ public class KitSerializer_V0_1
             }),
             wallHooks = tile.Walls.Select(x => new
             {
-                defaultWallID = x.DefaultWallID,
+                defaultWallID = x.DefaultTemplateID,
                 position = x.LocalPosition.ToFloatArray(),
                 orientation = x.LocalOrientation.ToFloatArray(),
             }),
             innerCornerHooks = tile.InnerCorners.Select(x => new
             {
-                defaultInnerCornerID = x.DefaultCornerID,
+                defaultInnerCornerID = x.DefaultTemplateID,
                 position = x.LocalPosition.ToFloatArray(),
                 orientation = x.LocalOrientation.ToFloatArray(),
                 adjacencies = x.Adjacent,
             }),
             outerCornerHooks = tile.OuterCorners.Select(x => new
             {
-                defaultOuterCornerID = x.DefaultCornerID,
+                defaultOuterCornerID = x.DefaultTemplateID,
                 position = x.LocalPosition.ToFloatArray(),
                 orientation = x.LocalOrientation.ToFloatArray(),
                 adjacencies = x.Adjacent,
@@ -212,7 +214,7 @@ public class KitSerializer_V0_1
 
         data.floors = kit.Floors.Select(floor => new
         {
-            id = floor.ObjectID,
+            id = floor.TemplateID,
             name = floor.Name,
             group = floor.ClassID,
             model = floor.Model,
@@ -220,7 +222,7 @@ public class KitSerializer_V0_1
 
         data.ceilings = kit.Ceilings.Select(ceiling => new
         {
-            id = ceiling.ObjectID,
+            id = ceiling.TemplateID,
             name = ceiling.Name,
             group = ceiling.ClassID,
             model = ceiling.Model,
@@ -228,7 +230,7 @@ public class KitSerializer_V0_1
 
         data.doorframes = kit.DoorFrames.Select(doorframe => new
         {
-            id = doorframe.ObjectID,
+            id = doorframe.TemplateID,
             name = doorframe.Name,
             group = doorframe.ClassID,
             model = doorframe.Model,
@@ -241,7 +243,7 @@ public class KitSerializer_V0_1
 
         data.walls = kit.Walls.Select(wall => new
         {
-            id = wall.ObjectID,
+            id = wall.TemplateID,
             name = wall.Name,
             model = wall.Model,
             group = wall.ClassID,
@@ -250,7 +252,7 @@ public class KitSerializer_V0_1
 
         data.innerCorners = kit.InnerCorners.Select(obj => new
         {
-            id = obj.ObjectID,
+            id = obj.TemplateID,
             name = obj.Name,
             group = obj.ClassID,
             model = obj.Model,
@@ -258,7 +260,7 @@ public class KitSerializer_V0_1
 
         data.outerCorners = kit.OuterCorners.Select(obj => new
         {
-            id = obj.ObjectID,
+            id = obj.TemplateID,
             name = obj.Name,
             group = obj.ClassID,
             model = obj.Model,
@@ -266,7 +268,7 @@ public class KitSerializer_V0_1
 
         data.objects = kit.Objects.Select(obj => new
         {
-            id = obj.ObjectID,
+            id = obj.TemplateID,
             name = obj.Name,
             group = obj.ClassID,
             model = obj.Model,

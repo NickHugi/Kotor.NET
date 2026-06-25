@@ -4,8 +4,8 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
 public class InnerCornerHookTemplate
 {
-    public required string DefaultCornerID { get; init; }
-    public InnerCornerTemplate DefaultTemplate => Kit.Manager.Get("sandral").InnerCorner(DefaultCornerID); // todo - remove hardcoding
+    public required string DefaultTemplateID { get; init; }
+    public InnerCornerTemplate DefaultTemplate => Kit.Manager.Get("sandral").InnerCorner(DefaultTemplateID); // todo - remove hardcoding
 
     public required int[] Adjacent { get; init; }
 

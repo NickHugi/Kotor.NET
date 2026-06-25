@@ -10,7 +10,13 @@ namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
 public class ObjectItem : ReactiveObject
 {
-    public string ID
+    public string KitID
+    {
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
+    public string TemplateID
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
@@ -22,7 +28,7 @@ public class ObjectItem : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public string Group
+    public string ClassID
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
@@ -36,16 +42,18 @@ public class ObjectItem : ReactiveObject
 
     public ObjectItem()
     {
-        ID = "";
+        KitID = "";
+        TemplateID = "";
         Name = "";
-        Group = "";
+        ClassID = "";
         Model = "";
     }
     public ObjectItem(ObjectTemplate template)
     {
-        ID = template.ObjectID;
+        KitID = template.KitID;
+        TemplateID = template.TemplateID;
         Name = template.Name;
-        Group = template.ClassID;
+        ClassID = template.ClassID;
         Model = template.Model;
     }
 
@@ -54,9 +62,9 @@ public class ObjectItem : ReactiveObject
         return new ObjectTemplate
         {
             KitID = kitID,
-            ObjectID = ID,
+            TemplateID = TemplateID,
             Name = Name,
-            ClassID = Group,
+            ClassID = ClassID,
             Model = Model,
         };
     }

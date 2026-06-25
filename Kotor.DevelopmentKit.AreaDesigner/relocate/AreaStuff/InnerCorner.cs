@@ -70,6 +70,6 @@ public class InnerCorner : IWorldObject
     public void SwitchTemplate(InnerCornerTemplate template)
     {
         KitID = template.KitID;
-        TemplateID = template.ObjectID;
+        TemplateID = template.TemplateID;
     }
 }

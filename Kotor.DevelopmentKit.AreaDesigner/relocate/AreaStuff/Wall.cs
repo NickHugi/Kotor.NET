@@ -77,7 +77,7 @@ public class Wall : IWorldObject
         Parent = parent;
         Hook = hook;
         KitID = template.KitID;
-        TemplateID = template.ObjectID;
+        TemplateID = template.TemplateID;
     }
 
     public void SwitchTemplate(ObjectTemplate template)
@@ -90,7 +90,7 @@ public class Wall : IWorldObject
     public void SwitchTemplate(WallTemplate template)
     {
         KitID = template.KitID;
-        TemplateID = template.ObjectID;
+        TemplateID = template.TemplateID;
 
         if (template.DoorFrame is not null)
         {

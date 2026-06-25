@@ -46,6 +46,6 @@ public class WorldObject : IWorldObject
     public void SwitchTemplate(ObjectTemplate template)
     {
         KitID = template.KitID;
-        TemplateID = template.ObjectID;
+        TemplateID = template.TemplateID;
     }
 }

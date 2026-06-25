@@ -93,6 +93,6 @@ public class DoorFrame : IWorldObject
     public void SwitchTemplate(DoorFrameTemplate template)
     {
         KitID = template.KitID;
-        TemplateID = template.ObjectID;
+        TemplateID = template.TemplateID;
     }
 }

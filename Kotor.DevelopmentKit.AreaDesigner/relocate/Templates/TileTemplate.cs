@@ -2,13 +2,10 @@
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
-public class TileTemplate
+public class TileTemplate : ObjectTemplate
 {
-    public required string KitID { get; init; }
-    public required string ID { get; init; }
-    public required string Name { get; init; }
-    public required TileTemplateHook[] Floors { get; init; }
-    public required TileTemplateHook[] Ceilings { get; init; }
+    public required FloorHookTemplate[] Floors { get; init; }
+    public required CeilingHookTemplate[] Ceilings { get; init; }
     public required WallHookTemplate[] Walls { get; init; }
     public required InnerCornerHookTemplate[] InnerCorners { get; init; }
     public required OuterCornerHookTemplate[] OuterCorners { get; init; }

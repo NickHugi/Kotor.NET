@@ -26,14 +26,26 @@ public class Kit
     public ICollection<OuterCornerTemplate> OuterCorners { get; init; } = [];
     public ICollection<ObjectTemplate> Objects { get; init; } = [];
 
-    public FloorTemplate Floor(string id) => Floors.Single(x => x.ObjectID == id);
-    public TileTemplate Tile(string id) => Tiles.Single(x => x.ID == id);
-    public WallTemplate Wall(string id) => Walls.Single(x => x.ObjectID == id);
-    public DoorFrameTemplate DoorFrame(string id) => DoorFrames.Single(x => x.ObjectID == id);
-    public CeilingTemplate Ceiling(string id) => Ceilings.Single(x => x.ObjectID == id);
-    public InnerCornerTemplate InnerCorner(string id) => InnerCorners.Single(x => x.ObjectID == id);
-    public OuterCornerTemplate OuterCorner(string id) => OuterCorners.Single(x => x.ObjectID == id);
-    public ObjectTemplate Object(string id) => Objects.Single(x => x.ObjectID == id);
+    public IReadOnlyCollection<ObjectTemplate> AllObjects =>
+    [
+        ..Tiles,
+        ..Floors,
+        ..Walls,
+        ..DoorFrames,
+        ..Ceilings,
+        ..InnerCorners,
+        ..OuterCorners,
+        ..Objects
+    ];
+
+    public FloorTemplate Floor(string id) => Floors.Single(x => x.TemplateID == id);
+    public TileTemplate Tile(string id) => Tiles.Single(x => x.TemplateID == id);
+    public WallTemplate Wall(string id) => Walls.Single(x => x.TemplateID == id);
+    public DoorFrameTemplate DoorFrame(string id) => DoorFrames.Single(x => x.TemplateID == id);
+    public CeilingTemplate Ceiling(string id) => Ceilings.Single(x => x.TemplateID == id);
+    public InnerCornerTemplate InnerCorner(string id) => InnerCorners.Single(x => x.TemplateID == id);
+    public OuterCornerTemplate OuterCorner(string id) => OuterCorners.Single(x => x.TemplateID == id);
+    public ObjectTemplate Object(string id) => Objects.Single(x => x.TemplateID == id);
 
     public Kit(string filepath, string id, int version, string name)
     {

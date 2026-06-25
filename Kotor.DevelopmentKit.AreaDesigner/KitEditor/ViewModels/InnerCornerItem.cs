@@ -43,7 +43,7 @@ public class InnerCornerItem : ReactiveObject
     }
     public InnerCornerItem(InnerCornerTemplate template)
     {
-        ID = template.ObjectID;
+        ID = template.TemplateID;
         Name = template.Name;
         Group = template.ClassID;
         Model = template.Model;
@@ -54,7 +54,7 @@ public class InnerCornerItem : ReactiveObject
         return new InnerCornerTemplate
         {
             KitID = kitID,
-            ObjectID = ID,
+            TemplateID = ID,
             Name = Name,
             ClassID = Group,
             Model = Model,

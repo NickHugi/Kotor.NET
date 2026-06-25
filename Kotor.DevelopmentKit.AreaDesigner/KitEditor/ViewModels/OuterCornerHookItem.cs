@@ -6,44 +6,32 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
-public class OuterCornerHookItem : ReactiveObject
+public class OuterCornerHookItem : HookItem
 {
-    public string Name => $"Hook ({Position.Z:F2}, {Position.Y:F2}, {Position.Z:F2})";
+    public string Name => $"{DefaultTemplateID} ({Position.Z:F2}, {Position.Y:F2}, {Position.Z:F2})";
 
-    public string DefaultCornerID
+    public string DefaultTemplateID
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
-
-    public ReactiveVector3 Position
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public ReactiveQuaternion Orientation
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
     public ObservableCollection<int> AdjacentWalls
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public OuterCornerHookItem()
+    public OuterCornerHookItem() : base()
     {
-        DefaultCornerID = "";
-        Position = new();
-        Orientation = new();
+        DefaultTemplateID = "";
         AdjacentWalls = [];
+
+        //this.WhenAnyValue(x => x.DefaultTemplateID).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
+        //this.WhenAnyValue(x => x.Position).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
     }
-    public OuterCornerHookItem(OuterCornerHookTemplate template)
+    public OuterCornerHookItem(OuterCornerHookTemplate template) : this()
     {
-        DefaultCornerID = template.DefaultCornerID;
+        DefaultTemplateID = template.DefaultTemplateID;
         Position = new(template.LocalPosition);
         Orientation = new(template.LocalOrientation);
         AdjacentWalls = new(template.Adjacent);
@@ -53,7 +41,7 @@ public class OuterCornerHookItem : ReactiveObject
     {
         return new OuterCornerHookTemplate
         {
-            DefaultCornerID = DefaultCornerID,
+            DefaultTemplateID = DefaultTemplateID,
             Adjacent = AdjacentWalls.ToArray(),
             LocalPosition = Position.ToModel(),
             LocalOrientation = Orientation.ToModel(),

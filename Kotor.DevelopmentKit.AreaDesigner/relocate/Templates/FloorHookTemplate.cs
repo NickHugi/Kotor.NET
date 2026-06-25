@@ -1,18 +1,17 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
-public class WallHookTemplate
+public class FloorHookTemplate
 {
     public required string DefaultTemplateID { get; init; }
-    public WallTemplate DefaultTemplate => Kit.Manager.Get("sandral").Wall(DefaultTemplateID); // todo - remove hardcoding
 
     public required Vector3 LocalPosition { get; init; }
     public required Quaternion LocalOrientation { get; init; }
     public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
-
-    public int[] AdjacentWalls { get; init; } = [];
-
-    //public ICollection<string> CompatibleWallTemplates { get; }
-    //public ICollection<string> CompatibleTileTemplates { get; }
 }

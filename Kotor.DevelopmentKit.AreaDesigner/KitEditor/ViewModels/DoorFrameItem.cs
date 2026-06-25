@@ -51,7 +51,7 @@ public class DoorFrameItem : ReactiveObject
     }
     public DoorFrameItem(DoorFrameTemplate template)
     {
-        ID = template.ObjectID;
+        ID = template.TemplateID;
         Name = template.Name;
         Model = template.Model;
         Group = template.ClassID;
@@ -63,7 +63,7 @@ public class DoorFrameItem : ReactiveObject
         return new DoorFrameTemplate
         {
             KitID = kitID,
-            ObjectID = ID,
+            TemplateID = ID,
             Name = Name,
             ClassID = Group,
             Model = Model,

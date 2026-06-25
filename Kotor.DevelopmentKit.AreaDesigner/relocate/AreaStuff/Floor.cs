@@ -58,6 +58,6 @@ public class Floor : IWorldObject
     public void SwitchTemplate(FloorTemplate template)
     {
         KitID = template.KitID;
-        TemplateID = template.ObjectID;
+        TemplateID = template.TemplateID;
     }
 }

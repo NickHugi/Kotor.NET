@@ -42,6 +42,13 @@ public class KitEditorViewModel : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
+    public ObjectItem? SelectedObjectTemplateItem
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+    public List<ObjectItem> ObjectTemplateItems { get; } = new();
+
     public TileTabViewModel TileTab { get; }
     public FloorTabViewModel FloorTab { get; }
     public WallTabViewModel WallTab { get; }
@@ -72,6 +79,10 @@ public class KitEditorViewModel : ReactiveObject
         Name = kit.Name;
         KitID = kit.ID;
         Version = kit.Version;
+
+        ObjectTemplateItems.AddRange(kit.Tiles.Select(x => new TileItem(x)).OrderBy(x => x.ClassID));
+        ObjectTemplateItems.AddRange(kit.Floors.Select(x => new FloorItem(x)).OrderBy(x => x.ClassID));
+        ObjectTemplateItems.AddRange(kit.Objects.Select(x => new ObjectItem(x)).OrderBy(x => x.ClassID));
 
         TileTab = new(kit);
         FloorTab = new(kit);

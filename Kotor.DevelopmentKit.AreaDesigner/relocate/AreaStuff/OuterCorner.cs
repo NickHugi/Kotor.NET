@@ -79,6 +79,6 @@ public class OuterCorner : IWorldObject
     public void SwitchTemplate(OuterCornerTemplate template)
     {
         KitID = template.KitID;
-        TemplateID = template.ObjectID;
+        TemplateID = template.TemplateID;
     }
 }

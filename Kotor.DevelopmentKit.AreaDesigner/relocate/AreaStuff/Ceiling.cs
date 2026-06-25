@@ -58,6 +58,6 @@ public class Ceiling : IWorldObject
     public void SwitchTemplate(CeilingTemplate template)
     {
         KitID = template.KitID;
-        TemplateID = template.ObjectID;
+        TemplateID = template.TemplateID;
     }
 }

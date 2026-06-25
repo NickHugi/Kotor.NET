@@ -6,44 +6,33 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
-public class InnerCornerHookItem : ReactiveObject
+// TODO Merge with innercorner, have innerdefaulttemplateid/outer...
+public class InnerCornerHookItem : HookItem
 {
     public string Name => $"Hook ({Position.Z:F2}, {Position.Y:F2}, {Position.Z:F2})";
 
-    public string DefaultCornerID
+    public string DefaultTemplateID
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
-
-    public ReactiveVector3 Position
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public ReactiveQuaternion Orientation
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
     public ObservableCollection<int> AdjacentWalls
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public InnerCornerHookItem()
+    public InnerCornerHookItem() : base()
     {
-        DefaultCornerID = "";
-        Position = new();
-        Orientation = new();
+        DefaultTemplateID = "";
         AdjacentWalls = [];
+
+        //this.WhenAnyValue(x => x.DefaultTemplateID).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
+        //this.WhenAnyValue(x => x.Position).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
     }
     public InnerCornerHookItem(InnerCornerHookTemplate template)
     {
-        DefaultCornerID = template.DefaultCornerID;
+        DefaultTemplateID = template.DefaultTemplateID;
         Position = new(template.LocalPosition);
         Orientation = new(template.LocalOrientation);
         AdjacentWalls = new(template.Adjacent);
@@ -53,7 +42,7 @@ public class InnerCornerHookItem : ReactiveObject
     {
         return new InnerCornerHookTemplate
         {
-            DefaultCornerID = DefaultCornerID,
+            DefaultTemplateID = DefaultTemplateID,
             Adjacent = AdjacentWalls.ToArray(),
             LocalPosition = Position.ToModel(),
             LocalOrientation = Orientation.ToModel(),

@@ -77,7 +77,7 @@ public class Tile : IDeleteable, IWorldObject
     public void SwitchTemplate(TileTemplate template)
     {
         KitID = template.KitID;
-        TemplateID = template.ID;
+        TemplateID = template.TemplateID;
 
         var kit = Kit.Manager.Get(KitID);
 

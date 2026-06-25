@@ -8,45 +8,13 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
-public class FloorItem : ReactiveObject
+public class FloorItem : ObjectItem
 {
-    public string ID
+    public FloorItem() : base()
     {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
     }
-
-    public string Name
+    public FloorItem(FloorTemplate template) : base(template)
     {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public string Group
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public string Model
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public FloorItem()
-    {
-        ID = "";
-        Name = "";
-        Group = "";
-        Model = "";
-    }
-    public FloorItem(FloorTemplate template)
-    {
-        ID = template.ObjectID;
-        Name = template.Name;
-        Group = template.ClassID;
-        Model = template.Model;
     }
 
     public FloorTemplate ToModel(string kitID)
@@ -54,9 +22,9 @@ public class FloorItem : ReactiveObject
         return new FloorTemplate
         {
             KitID = kitID,
-            ObjectID = ID,
+            TemplateID = TemplateID,
             Name = Name,
-            ClassID = Group,
+            ClassID = ClassID,
             Model = Model,
         };
     }

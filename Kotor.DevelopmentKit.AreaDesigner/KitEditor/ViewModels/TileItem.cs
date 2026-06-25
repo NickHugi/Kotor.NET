@@ -6,38 +6,23 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
-public class TileItem : ReactiveObject
+public class TileItem : ObjectItem
 {
-    public string ID
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public string Name
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public string DefaultFloorID
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public string DefaultCeilingID
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
     public ObservableCollection<WallHookItem> Walls
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
-
+    public ObservableCollection<FloorHookItem> Floors
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+    public ObservableCollection<CeilingHookItem> Ceilings
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
     public ObservableCollection<InnerCornerHookItem> InnerCorners
     {
         get => field;
@@ -48,23 +33,22 @@ public class TileItem : ReactiveObject
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
+    public HookItem? SelectedHook { get; set; }
 
-    public TileItem()
+    public TileItem() : base()
     {
-        ID = "";
-        Name = "";
-        DefaultFloorID = "";
-        DefaultCeilingID = "";
         Walls = [];
+        Floors = [];
+        Ceilings = [];
         InnerCorners = [];
         OuterCorners = [];
     }
     public TileItem(TileTemplate tile)
     {
-        ID = tile.ID;
+        TemplateID = tile.TemplateID;
         Name = tile.Name;
-        DefaultFloorID = tile.Floors.First().DefaultTemplateID;
-        DefaultCeilingID = tile.Ceilings.First().DefaultTemplateID;
+        Floors = []; // TODO new(tile.Floors.Select(x => new WallHookItem(x)))
+        Ceilings = [];
         Walls = new(tile.Walls.Select(x => new WallHookItem(x)));
         InnerCorners = new(tile.InnerCorners.Select(x => new InnerCornerHookItem(x)));
         OuterCorners = new(tile.OuterCorners.Select(x => new OuterCornerHookItem(x)));
@@ -75,13 +59,51 @@ public class TileItem : ReactiveObject
         return new TileTemplate
         {
             KitID = kitID,
-            ID = ID,
+            TemplateID = TemplateID,
             Name = Name,
-            Floors = [new() { DefaultTemplateID = DefaultFloorID, LocalPosition = Vector3.Zero, LocalOrientation = Quaternion.Identity }],
-            Ceilings = [new() { DefaultTemplateID = DefaultCeilingID, LocalPosition = Vector3.Zero, LocalOrientation = Quaternion.Identity }],
+            Model = null,
+            ClassID = null,
+            Floors = Floors.Select(x => x.ToModel()).ToArray(),
+            Ceilings = Ceilings.Select(x => x.ToModel()).ToArray(),
             Walls = Walls.Select(x => x.ToModel()).ToArray(),
             InnerCorners = InnerCorners.Select(x => x.ToModel()).ToArray(),
             OuterCorners = OuterCorners.Select(x => x.ToModel()).ToArray(),
         };
+    }
+
+    public void AddWallHook()
+    {
+        Walls.Add(new());
+    }
+    public void DeleteSelectedWallHook()
+    {
+        if (SelectedHook is WallHookItem wallHook && wallHook is not null)
+        {
+            Walls.Remove(wallHook);
+        }
+    }
+
+    public void AddInnerCorner()
+    {
+        InnerCorners.Add(new());
+    }
+    public void DeleteSelectedInnerCorner()
+    {
+        if (SelectedHook is InnerCornerHookItem corner && corner is not null)
+        {
+            InnerCorners.Remove(corner);
+        }
+    }
+
+    public void AddOuterCorner()
+    {
+        OuterCorners.Add(new());
+    }
+    public void DeleteSelectedOuterCorner()
+    {
+        if (SelectedHook is OuterCornerHookItem corner && corner is not null)
+        {
+            OuterCorners.Remove(corner);
+        }
     }
 }
