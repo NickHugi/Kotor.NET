@@ -3,50 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
-public class InnerCornerItem : ReactiveObject
+public class InnerCornerItem : ObjectItem
 {
-    public string ID
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
+    public override WorldObjectType WorldObjectType => WorldObjectType.InnerCorner;
 
-    public string Name
+    public InnerCornerItem() : base()
     {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
     }
-
-    public string Group
+    public InnerCornerItem(InnerCornerTemplate template) : base(template)
     {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public string Model
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public InnerCornerItem()
-    {
-        ID = "";
-        Name = "";
-        Group = "";
-        Model = "";
-    }
-    public InnerCornerItem(InnerCornerTemplate template)
-    {
-        ID = template.TemplateID;
-        Name = template.Name;
-        Group = template.ClassID;
-        Model = template.Model;
     }
 
     public InnerCornerTemplate ToModel(string kitID)
@@ -54,9 +25,9 @@ public class InnerCornerItem : ReactiveObject
         return new InnerCornerTemplate
         {
             KitID = kitID,
-            TemplateID = ID,
+            TemplateID = TemplateID,
             Name = Name,
-            ClassID = Group,
+            ClassID = ClassID,
             Model = Model,
         };
     }

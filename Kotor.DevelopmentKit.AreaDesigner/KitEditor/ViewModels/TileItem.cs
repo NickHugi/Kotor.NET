@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using ReactiveUI;
 
@@ -8,6 +9,8 @@ namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
 public class TileItem : ObjectItem
 {
+    public override WorldObjectType WorldObjectType => WorldObjectType.Tile;
+
     public ObservableCollection<WallHookItem> Walls
     {
         get => field;
@@ -33,7 +36,6 @@ public class TileItem : ObjectItem
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
-    public HookItem? SelectedHook { get; set; }
 
     public TileItem() : base()
     {
@@ -43,10 +45,8 @@ public class TileItem : ObjectItem
         InnerCorners = [];
         OuterCorners = [];
     }
-    public TileItem(TileTemplate tile)
+    public TileItem(TileTemplate tile) : base(tile)
     {
-        TemplateID = tile.TemplateID;
-        Name = tile.Name;
         Floors = []; // TODO new(tile.Floors.Select(x => new WallHookItem(x)))
         Ceilings = [];
         Walls = new(tile.Walls.Select(x => new WallHookItem(x)));

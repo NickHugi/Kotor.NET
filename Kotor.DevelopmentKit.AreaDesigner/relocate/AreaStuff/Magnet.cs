@@ -10,6 +10,7 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 public class Magnet
 {
     public IWorldObject Parent { get; }
+    public MagnetType Type { get; set; }
 
     public Vector3 LocalPosition { get; init; }
     public Quaternion LocalOrientation { get; init; }
@@ -24,8 +25,6 @@ public class Magnet
         get => Quaternion.Normalize(LocalOrientation * Parent.GlobalOrientation);
     }
     public Matrix4x4 GlobalTransform => LocalTransform * Parent.GlobalTransform;
-
-    public MagnetType Type { get; set; }
 
     public Magnet(IWorldObject obj)
     {

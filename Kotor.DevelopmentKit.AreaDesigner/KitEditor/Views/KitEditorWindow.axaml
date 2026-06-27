@@ -27,11 +27,35 @@
                 <TextBlock Text="{Binding TemplateID}" FontSize="10" />
             </StackPanel>
         </DataTemplate>
-
         
         <DataTemplate x:Key="ObjectPanelTemplate" x:DataType="vm:ObjectItem">
             <StackPanel>
                 <core:LabeledTextBox Label="Model" Text="{Binding Model}" />
+            </StackPanel>
+        </DataTemplate>
+        
+        <DataTemplate x:Key="WallPanelTemplate" x:DataType="vm:WallItem">
+            <StackPanel>
+                <core:LabeledTextBox Label="Model" Text="{Binding Model}" />
+                <core:LabeledTextBox Label="Doorframe Template ID" Text="{Binding DoorFrameID}" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="DoorFrameItemPanel" x:DataType="vm:DoorFrameItem">
+            <StackPanel>
+                <core:LabeledTextBox Label="Model" Text="{Binding Model}" />
+                
+                <StackPanel>
+                    <TextBlock Text="Wall Hooks" />
+                    <ListBox ItemTemplate="{StaticResource HookItem}"
+                                ItemsSource="{Binding Hooks}"
+                                SelectedItem="{Binding SelectedHook}"
+                                Height="100" />
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <!--<Button Content="Add" Command="{Binding TileTab.AddWallHook}" />
+                        <Button Content="Remove" Command="{Binding TileTab.DeleteSelectedWallHook}" />-->
+                    </StackPanel>
+                </StackPanel>
             </StackPanel>
         </DataTemplate>
 
@@ -52,9 +76,9 @@
                 <StackPanel>
                     <TextBlock Text="Inner Corner Hooks" />
                     <ListBox ItemTemplate="{StaticResource CornerHookItemTemplate}"
-                                ItemsSource="{Binding InnerCorners}"
-                                SelectedItem="{Binding SelectedHook}"
-                                Height="100" />
+                             ItemsSource="{Binding InnerCorners}"
+                             SelectedItem="{Binding SelectedHook}"
+                             Height="100" />
                     <StackPanel Orientation="Horizontal" Spacing="4">
                        <!-- <Button Content="Add" Command="{Binding TileTab.AddInnerCorner}" />
                         <Button Content="Remove" Command="{Binding TileTab.DeleteSelectedInnerCorner}" />-->
@@ -100,65 +124,10 @@
                 </StackPanel>
             </Border>
         </DataTemplate>
-
-
-
-        <DataTemplate x:Key="WallHookItemTemplate" x:DataType="vm:WallHookItem">
+        
+        <DataTemplate x:Key="WorldObjectTypeItemTemplate" x:DataType="vm:WorldObjectTypeItem">
             <StackPanel>
                 <TextBlock Text="{Binding Name}" />
-            </StackPanel>
-        </DataTemplate>
-
-        <DataTemplate x:Key="InnerCornerHookItemTemplate" x:DataType="vm:InnerCornerHookItem">
-            <StackPanel>
-                <TextBlock Text="{Binding Name}" />
-            </StackPanel>
-        </DataTemplate>
-
-        <DataTemplate x:Key="OuterCornerHookItemTemplate" x:DataType="vm:OuterCornerHookItem">
-            <StackPanel>
-                <TextBlock Text="{Binding Name}" />
-            </StackPanel>
-        </DataTemplate>
-
-        <DataTemplate x:Key="WallItemTemplate" x:DataType="vm:WallItem">
-            <StackPanel>
-                <TextBlock Text="{Binding Name}" FontWeight="Bold" />
-                <TextBlock Text="{Binding ID}" FontSize="10" />
-            </StackPanel>
-        </DataTemplate>
-
-        <DataTemplate x:Key="DoorFrameItemTemplate" x:DataType="vm:DoorFrameItem">
-            <StackPanel>
-                <TextBlock Text="{Binding Name}" FontWeight="Bold" />
-                <TextBlock Text="{Binding ID}" FontSize="10" />
-            </StackPanel>
-        </DataTemplate>
-
-        <DataTemplate x:Key="DoorFrameHookItemTemplate" x:DataType="vm:DoorFrameHookItem">
-            <StackPanel>
-                <TextBlock Text="{Binding Name}" />
-            </StackPanel>
-        </DataTemplate>
-
-        <DataTemplate x:Key="CeilingItemTemplate" x:DataType="vm:CeilingItem">
-            <StackPanel>
-                <TextBlock Text="{Binding Name}" FontWeight="Bold" />
-                <TextBlock Text="{Binding ID}" FontSize="10" />
-            </StackPanel>
-        </DataTemplate>
-
-        <DataTemplate x:Key="InnerCornerItemTemplate" x:DataType="vm:InnerCornerItem">
-            <StackPanel>
-                <TextBlock Text="{Binding Name}" FontWeight="Bold" />
-                <TextBlock Text="{Binding ID}" FontSize="10" />
-            </StackPanel>
-        </DataTemplate>
-
-        <DataTemplate x:Key="OuterCornerItemTemplate" x:DataType="vm:OuterCornerItem">
-            <StackPanel>
-                <TextBlock Text="{Binding Name}" FontWeight="Bold" />
-                <TextBlock Text="{Binding ID}" FontSize="10" />
             </StackPanel>
         </DataTemplate>
     </Window.Resources>
@@ -166,36 +135,44 @@
     <TabControl>
         <TabItem Header="Kit">
             <StackPanel>
-                <core:LabeledTextBox Label="Name"
-                                     Text="{Binding Name}" />
-                <core:LabeledTextBox Label="ID"
-                                     Text="{Binding KitID}"
-                                     IsReadOnly="True" />
-                <core:LabeledTextBox Label="Version"
-                                     Text="{Binding Version}"
-                                     IsReadOnly="True" />
-                <core:LabeledTextBox Label="FilePath"
-                                     Text="{Binding FilePath}"
-                                     IsReadOnly="True" />
-                <Button Content="Save"
-                        Command="{Binding Save}" />
-                <Button Content="Save As"
-                        Command="{Binding SaveAs}" />
+                <core:LabeledTextBox Label="Name" Text="{Binding Name}" />
+                <core:LabeledTextBox Label="ID" Text="{Binding KitID}" IsReadOnly="True" />
+                <core:LabeledTextBox Label="Version" Text="{Binding Version}" IsReadOnly="True" />
+                <core:LabeledTextBox Label="FilePath" Text="{Binding FilePath}" IsReadOnly="True" />
+                <Button Content="Save" Command="{Binding Save}" />
+                <Button Content="Save As" Command="{Binding SaveAs}" />
             </StackPanel>
         </TabItem>
 
         <TabItem Header="Objects">
             <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
+
                 <Border Grid.Column="0" Padding="4" Background="#ddd">
-                    <Grid RowDefinitions="*, Auto" RowSpacing="5" Background="#bbb">
+                    <Grid RowDefinitions="Auto, *, Auto" RowSpacing="5" Background="#bbb">
+                        <ComboBox ItemTemplate="{StaticResource WorldObjectTypeItemTemplate}"
+                                  ItemsSource="{Binding WorldObjectTypeItems}"
+                                  SelectedItem="{Binding SelectedWorldObjectTypeItem, Mode=TwoWay}" />
                         <ListBox ItemTemplate="{StaticResource ObjectListTemplate}"
                                  ItemsSource="{Binding ObjectTemplateItems}"
                                  SelectedItem="{Binding SelectedObjectTemplateItem}"
-                                 Grid.Row="0"/>
-                    <!--    <StackPanel Orientation="Horizontal" Spacing="4" Grid.Row="1">
-                            <Button Content="Add" Command="{Binding TileTab.AddTile}" />
-                            <Button Content="Delete" Command="{Binding TileTab.DeleteSelectedTile}" />
-                        </StackPanel>-->
+                                 Grid.Row="1"/>
+                        <StackPanel Orientation="Horizontal" Spacing="4" Grid.Row="2">
+                            <DropDownButton Content="Add">
+                                <DropDownButton.Flyout>
+                                    <MenuFlyout>
+                                        <MenuItem Header="Object" Command="{Binding AddBasicWorldObject}" />
+                                        <MenuItem Header="Tile" Command="{Binding AddTileWorldObject}" />
+                                        <MenuItem Header="Floor" Command="{Binding AddFloorWorldObject}" />
+                                        <MenuItem Header="Ceiling" Command="{Binding AddCeilingWorldObject}" />
+                                        <MenuItem Header="Wall" Command="{Binding AddWallWorldObject}" />
+                                        <MenuItem Header="Doorframe" Command="{Binding AddDoorframeWorldObject}" />
+                                        <MenuItem Header="InnerCorner" Command="{Binding AddInnerCornerWorldObject}" />
+                                        <MenuItem Header="OuterCorner" Command="{Binding AddOuterCornerWorldObject}" />
+                                    </MenuFlyout>
+                                </DropDownButton.Flyout>
+                            </DropDownButton>
+                            <Button Content="Delete" Command="{Binding DeleteSelectedObject}" />
+                        </StackPanel>
                     </Grid>
                 </Border>
                 
@@ -212,349 +189,41 @@
                                     <ContentControl.DataTemplates>
                                         <StaticResource ResourceKey="TilePanelTemplate" />
                                         <StaticResource ResourceKey="ObjectPanelTemplate" />
+                                        <StaticResource ResourceKey="WallPanelTemplate" />
                                     </ContentControl.DataTemplates>
                                 </ContentControl>
                             </StackPanel>
                         </Border>
                     </StackPanel>
                 </Border>
-            </Grid>
-        </TabItem>
 
-        <TabItem Header="Tiles" IsVisible="False">
-            <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
-
-                <!--Tile Editor Panel-->
-                <Border Grid.Column="1" Padding="4" Background="#ddd">
-                    <ScrollViewer>
-                        <StackPanel Background="#ddd" Spacing="4">
-
-                            
-                        </StackPanel>
-                    </ScrollViewer>
-                </Border>
-
-            </Grid>
-        </TabItem>
-
-        <TabItem Header="Floors" IsVisible="False">
-            <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
-                <!--Floor List Panel-->
-                <Border Grid.Column="2" Padding="4" Background="#ddd">
-                    <Grid RowDefinitions="Auto, *, Auto" Background="#bbb" RowSpacing="4">
-                        <TextBlock Grid.Row="0"
-                                   Text="Floors" />
-                        <ListBox Grid.Row="1"
-                                 ItemTemplate="{StaticResource FloorItemTemplate}"
-                                 ItemsSource="{Binding FloorTab.FloorItems}"
-                                 SelectedItem="{Binding FloorTab.SelectedFloorItem}" />
-                        <StackPanel Grid.Row="2"
-                                    Orientation="Horizontal"
-                                    Spacing="4">
-                            <Button Content="Add"
-                                    Command="{Binding FloorTab.AddFloor}" />
-                            <Button Content="Delete"
-                                    Command="{Binding FloorTab.DeleteSelectedFloor}" />
-                        </StackPanel>
-                    </Grid>
-                </Border>
-            </Grid>
-        </TabItem>
-
-        <TabItem Header="Walls" IsVisible="False">
-            <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
-
-                <!--Walls Editor Panel-->
-                <Border Grid.Column="1" Padding="4" Background="#ddd">
-                    <ScrollViewer>
-                        <StackPanel Background="#ddd" Spacing="4">
-                            <Border Padding="4" Background="#bbb">
-                                <StackPanel HorizontalAlignment="Left">
-                                    <core:LabeledTextBox Label="ID"
-                                                         Text="{Binding WallTab.SelectedWallItem.ID}" />
-                                    <core:LabeledTextBox Label="Name"
-                                                         Text="{Binding WallTab.SelectedWallItem.Name}" />
-                                    <core:LabeledTextBox Label="Group"
-                                                         Text="{Binding WallTab.SelectedWallItem.Group}" />
-                                    <core:LabeledTextBox Label="Model"
-                                                         Text="{Binding WallTab.SelectedWallItem.Model}" />
-                                    <core:LabeledTextBox Label="Door Frame ID"
-                                                         Text="{Binding WallTab.SelectedWallItem.DoorFrameID}" />
-                                </StackPanel>
-                            </Border>
-                        </StackPanel>
-                    </ScrollViewer>
-                </Border>
-
-                <Border Grid.Column="2" Padding="4" Background="#ddd">
-                    <Grid RowDefinitions="Auto, *, Auto" Background="#bbb" RowSpacing="4">
-                        <TextBlock Grid.Row="0"
-                                   Text="Walls" />
-                        <ListBox Grid.Row="1"
-                                 ItemTemplate="{StaticResource WallItemTemplate}"
-                                 ItemsSource="{Binding WallTab.WallItems}"
-                                 SelectedItem="{Binding WallTab.SelectedWallItem}" />
-                        <StackPanel Grid.Row="2"
-                                    Orientation="Horizontal"
-                                    Spacing="4">
-                            <Button Content="Add"
-                                    Command="{Binding WallTab.AddWall}" />
-                            <Button Content="Delete"
-                                    Command="{Binding WallTab.DeleteSelectedWall}" />
-                        </StackPanel>
-                    </Grid>
-                </Border>
-
-            </Grid>
-        </TabItem>
-
-        <TabItem Header="Door Frames" IsVisible="False">
-            <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
-
-                <Border Grid.Column="0" Padding="4" Background="#ddd">
-                    <StackPanel Background="#ddd" Spacing="4">
-                        <Border Grid.Column="0" Padding="4" Background="#bbb">
-                            <StackPanel>
-                                <core:Vector3Edit Label="Position"
-                                                  Value="{Binding DoorFrameTab.SelectedDoorFrameHookItem.Position}" />
-                                <core:QuaternionEdit Label="Orientation"
-                                                     Value="{Binding DoorFrameTab.SelectedDoorFrameHookItem.Orientation}" />
+                <Border Grid.Column="2" Padding="5" Background="#ddd">
+                    <StackPanel Spacing="5">
+                        <Border Padding="5" Background="#bbb">
+                            <StackPanel HorizontalAlignment="Left">
+                                
+                            <!--    <ContentControl Content="{Binding SelectedObjectTemplateItem}">
+                                    <ContentControl.DataTemplates>
+                                        <DataTemplate x:DataType="vm:TileItem">
+                                            <ContentControl Content="{Binding SelectedHook}">
+                                                <ContentControl.DataTemplates>
+                                                    <StaticResource ResourceKey="WallHookPanelTemplate" />
+                                                </ContentControl.DataTemplates>
+                                            </ContentControl>
+                                        </DataTemplate>
+                                    </ContentControl.DataTemplates>
+                                </ContentControl>-->
+                                <ContentControl Content="{Binding SelectedObjectTemplateItem.SelectedHook}">
+                                    <ContentControl.DataTemplates>
+                                        <StaticResource ResourceKey="WallHookPanelTemplate" />
+                                        <StaticResource ResourceKey="InnerCornerHookPanelTemplate" />
+                                        <StaticResource ResourceKey="OuterCornerHookPanelTemplate" />
+                                    </ContentControl.DataTemplates>
+                                </ContentControl>
                             </StackPanel>
                         </Border>
                     </StackPanel>
                 </Border>
-
-                <!--Doorframe Editor Panel-->
-                <Border Grid.Column="1" Padding="4" Background="#ddd">
-                    <ScrollViewer>
-                        <StackPanel Background="#ddd" Spacing="4">
-                            <Border Padding="4" Background="#bbb">
-                                <StackPanel HorizontalAlignment="Left">
-                                    <core:LabeledTextBox Label="ID"
-                                                         Text="{Binding DoorFrameTab.SelectedDoorFrameItem.ID}" />
-                                    <core:LabeledTextBox Label="Name"
-                                                         Text="{Binding DoorFrameTab.SelectedDoorFrameItem.Name}" />
-                                    <core:LabeledTextBox Label="Model"
-                                                         Text="{Binding DoorFrameTab.SelectedDoorFrameItem.Model}" />
-                                </StackPanel>
-                            </Border>
-<!--
-                            <Border Padding="4" Background="#bbb">
-                                <StackPanel>
-                                    <TextBlock Text="Wall Hooks" />
-                                    <ListBox ItemTemplate="{StaticResource DoorFrameHookItemTemplate}"
-                                             ItemsSource="{Binding DoorFrameTab.SelectedDoorFrameItem.Hooks}"
-                                             SelectedItem="{Binding DoorFrameTab.SelectedDoorFrameHookItem}"
-                                             Height="100" />
-                                    <StackPanel Orientation="Horizontal" Spacing="4">
-                                        <Button Content="Add" Command="{Binding TileTab.AddWallHook}" />
-                                        <Button Content="Remove" Command="{Binding TileTab.DeleteSelectedWallHook}" />
-                                    </StackPanel>
-                                </StackPanel>
-                            </Border>-->
-
-                        </StackPanel>
-                    </ScrollViewer>
-                </Border>
-
-                <!--Doorframe List Panel-->
-                <Border Grid.Column="2" Padding="4" Background="#ddd">
-                    <Grid RowDefinitions="Auto, *, Auto" Background="#bbb" RowSpacing="4">
-                        <TextBlock Grid.Row="0"
-                                   Text="Door Frames" />
-                        <ListBox Grid.Row="1"
-                                 ItemTemplate="{StaticResource DoorFrameItemTemplate}"
-                                 ItemsSource="{Binding DoorFrameTab.DoorFrameItems}"
-                                 SelectedItem="{Binding DoorFrameTab.SelectedDoorFrameItem}" />
-                        <StackPanel Grid.Row="2"
-                                    Orientation="Horizontal"
-                                    Spacing="4">
-                            <Button Content="Add"
-                                    Command="{Binding DoorFrameTab.AddDoorFrame}" />
-                            <Button Content="Delete"
-                                    Command="{Binding DoorFrameTab.DeleteSelectedDoorFrame}" />
-                        </StackPanel>
-                    </Grid>
-                </Border>
-
-            </Grid>
-        </TabItem>
-
-        <TabItem Header="Ceilings" IsVisible="False">
-            <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
-
-                <!--Ceiling Editor Panel-->
-                <Border Grid.Column="1" Padding="4" Background="#ddd">
-                    <ScrollViewer>
-                        <StackPanel Background="#ddd" Spacing="4">
-                            <Border Padding="4" Background="#bbb">
-                                <StackPanel HorizontalAlignment="Left">
-                                    <core:LabeledTextBox Label="ID"
-                                                         Text="{Binding CeilingTab.SelectedCeilingItem.ID}" />
-                                    <core:LabeledTextBox Label="Name"
-                                                         Text="{Binding CeilingTab.SelectedCeilingItem.Name}" />
-                                    <core:LabeledTextBox Label="Group"
-                                                         Text="{Binding CeilingTab.SelectedCeilingItem.Group}" />
-                                    <core:LabeledTextBox Label="Model"
-                                                         Text="{Binding CeilingTab.SelectedCeilingItem.Model}" />
-                                </StackPanel>
-                            </Border>
-                        </StackPanel>
-                    </ScrollViewer>
-                </Border>
-
-                <!--Ceiling List Panel-->
-                <Border Grid.Column="2" Padding="4" Background="#ddd">
-                    <Grid RowDefinitions="Auto, *, Auto" Background="#bbb" RowSpacing="4">
-                        <TextBlock Grid.Row="0"
-                                   Text="Ceilings" />
-                        <ListBox Grid.Row="1"
-                                 ItemTemplate="{StaticResource CeilingItemTemplate}"
-                                 ItemsSource="{Binding CeilingTab.CeilingItems}"
-                                 SelectedItem="{Binding CeilingTab.SelectedCeilingItem}" />
-                        <StackPanel Grid.Row="2"
-                                    Orientation="Horizontal"
-                                    Spacing="4">
-                            <Button Content="Add"
-                                    Command="{Binding CeilingTab.AddCeiling}" />
-                            <Button Content="Delete"
-                                    Command="{Binding CeilingTab.DeleteSelectedCeiling}" />
-                        </StackPanel>
-                    </Grid>
-                </Border>
-
-            </Grid>
-        </TabItem>
-
-        <TabItem Header="Objects" IsVisible="False">
-            <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
-
-                <!--Object Editor Panel-->
-                <Border Grid.Column="1" Padding="4" Background="#ddd">
-                    <ScrollViewer>
-                        <StackPanel Background="#ddd" Spacing="4">
-                            <Border Padding="4" Background="#bbb">
-                                <StackPanel HorizontalAlignment="Left">
-                                    <core:LabeledTextBox Label="ID"
-                                                         Text="{Binding ObjectTab.SelectedObjectItem.TemplateID}" />
-                                    <core:LabeledTextBox Label="Name"
-                                                         Text="{Binding ObjectTab.SelectedObjectItem.Name}" />
-                                    <core:LabeledTextBox Label="Model"
-                                                         Text="{Binding ObjectTab.SelectedObjectItem.Model}" />
-                                </StackPanel>
-                            </Border>
-                        </StackPanel>
-                    </ScrollViewer>
-                </Border>
-
-                <!--Object List Panel-->
-                <Border Grid.Column="2" Padding="4" Background="#ddd">
-                    <Grid RowDefinitions="Auto, *, Auto" Background="#bbb" RowSpacing="4">
-                        <TextBlock Grid.Row="0"
-                                   Text="Objects" />
-                        <ListBox Grid.Row="1"
-                                 ItemTemplate="{StaticResource ObjectItemTemplate}"
-                                 ItemsSource="{Binding ObjectTab.ObjectItems}"
-                                 SelectedItem="{Binding ObjectTab.SelectedObjectItem}" />
-                        <StackPanel Grid.Row="2"
-                                    Orientation="Horizontal"
-                                    Spacing="4">
-                            <Button Content="Add"
-                                    Command="{Binding ObjectTab.AddObject}" />
-                            <Button Content="Delete"
-                                    Command="{Binding ObjectTab.DeleteSelectedObject}" />
-                        </StackPanel>
-                    </Grid>
-                </Border>
-
-            </Grid>
-        </TabItem>
-
-        <TabItem Header="Inner Corners" IsVisible="False">
-            <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
-
-                <!--Inner Corner Editor Panel-->
-                <Border Grid.Column="1" Padding="4" Background="#ddd">
-                    <ScrollViewer>
-                        <StackPanel Background="#ddd" Spacing="4">
-                            <Border Padding="4" Background="#bbb">
-                                <StackPanel HorizontalAlignment="Left">
-                                    <core:LabeledTextBox Label="ID"
-                                                         Text="{Binding InnerCornerTab.SelectedInnerCornerItem.ID}" />
-                                    <core:LabeledTextBox Label="Name"
-                                                         Text="{Binding InnerCornerTab.SelectedInnerCornerItem.Name}" />
-                                    <core:LabeledTextBox Label="Model"
-                                                         Text="{Binding InnerCornerTab.SelectedInnerCornerItem.Model}" />
-                                </StackPanel>
-                            </Border>
-                        </StackPanel>
-                    </ScrollViewer>
-                </Border>
-
-                <!--Inner Corner List Panel-->
-                <Border Grid.Column="2" Padding="4" Background="#ddd">
-                    <Grid RowDefinitions="Auto, *, Auto" Background="#bbb" RowSpacing="4">
-                        <TextBlock Grid.Row="0"
-                                   Text="Inner Corners" />
-                        <ListBox Grid.Row="1"
-                                 ItemTemplate="{StaticResource InnerCornerItemTemplate}"
-                                 ItemsSource="{Binding InnerCornerTab.InnerCornerItems}"
-                                 SelectedItem="{Binding InnerCornerTab.SelectedInnerCornerItem}" />
-                        <StackPanel Grid.Row="2"
-                                    Orientation="Horizontal"
-                                    Spacing="4">
-                            <Button Content="Add"
-                                    Command="{Binding InnerCornerTab.AddInnerCorner}" />
-                            <Button Content="Delete"
-                                    Command="{Binding InnerCornerTab.DeleteSelectedInnerCorner}" />
-                        </StackPanel>
-                    </Grid>
-                </Border>
-
-            </Grid>
-        </TabItem>
-
-        <TabItem Header="Outer Corners" IsVisible="False">
-            <Grid ColumnDefinitions="*, *, *" ColumnSpacing="5">
-
-                <!--Outer Corner Editor Panel-->
-                <Border Grid.Column="1" Padding="4" Background="#ddd">
-                    <ScrollViewer>
-                        <StackPanel Background="#ddd" Spacing="4">
-                            <Border Padding="4" Background="#bbb">
-                                <StackPanel HorizontalAlignment="Left">
-                                    <core:LabeledTextBox Label="ID"
-                                                         Text="{Binding OuterCornerTab.SelectedOuterCornerItem.ID}" />
-                                    <core:LabeledTextBox Label="Name"
-                                                         Text="{Binding OuterCornerTab.SelectedOuterCornerItem.Name}" />
-                                    <core:LabeledTextBox Label="Model"
-                                                         Text="{Binding OuterCornerTab.SelectedOuterCornerItem.Model}" />
-                                </StackPanel>
-                            </Border>
-                        </StackPanel>
-                    </ScrollViewer>
-                </Border>
-
-                <!--Outer Corner List Panel-->
-                <Border Grid.Column="2" Padding="4" Background="#ddd">
-                    <Grid RowDefinitions="Auto, *, Auto" Background="#bbb" RowSpacing="4">
-                        <TextBlock Grid.Row="0"
-                                   Text="Outer Corners" />
-                        <ListBox Grid.Row="1"
-                                 ItemTemplate="{StaticResource OuterCornerItemTemplate}"
-                                 ItemsSource="{Binding OuterCornerTab.OuterCornerItems}"
-                                 SelectedItem="{Binding OuterCornerTab.SelectedOuterCornerItem}" />
-                        <StackPanel Grid.Row="2"
-                                    Orientation="Horizontal"
-                                    Spacing="4">
-                            <Button Content="Add"
-                                    Command="{Binding OuterCornerTab.AddOuterCorner}" />
-                            <Button Content="Delete"
-                                    Command="{Binding OuterCornerTab.DeleteSelectedOuterCorner}" />
-                        </StackPanel>
-                    </Grid>
-                </Border>
-
             </Grid>
         </TabItem>
     </TabControl>

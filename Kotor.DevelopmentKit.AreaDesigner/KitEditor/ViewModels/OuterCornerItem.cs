@@ -3,50 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
-public class OuterCornerItem : ReactiveObject
+public class OuterCornerItem : ObjectItem
 {
-    public string ID
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
+    public override WorldObjectType WorldObjectType => WorldObjectType.OuterCorner;
 
-    public string Name
+    public OuterCornerItem() : base()
     {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
     }
-
-    public string Group
+    public OuterCornerItem(OuterCornerTemplate template) : base()
     {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public string Model
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public OuterCornerItem()
-    {
-        ID = "";
-        Name = "";
-        Group = "";
-        Model = "";
-    }
-    public OuterCornerItem(OuterCornerTemplate template)
-    {
-        ID = template.TemplateID;
-        Name = template.Name;
-        Group = template.ClassID;
-        Model = template.Model;
     }
 
     public OuterCornerTemplate ToModel(string kitID)
@@ -54,9 +25,9 @@ public class OuterCornerItem : ReactiveObject
         return new OuterCornerTemplate
         {
             KitID = kitID,
-            TemplateID = ID,
+            TemplateID = TemplateID,
             Name = Name,
-            ClassID = Group,
+            ClassID = ClassID,
             Model = Model,
         };
     }

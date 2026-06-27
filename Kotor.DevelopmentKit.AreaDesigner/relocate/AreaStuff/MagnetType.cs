@@ -4,4 +4,6 @@ public enum MagnetType
 {
     Generic,
     Wall,
+    InnerCorner,
+    OuterCorner,
 }

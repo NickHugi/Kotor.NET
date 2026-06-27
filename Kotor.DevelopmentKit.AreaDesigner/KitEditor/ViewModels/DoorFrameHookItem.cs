@@ -9,27 +9,12 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
-public class DoorFrameHookItem : ReactiveObject
+public class DoorFrameHookItem : HookItem
 {
-    public string Name => $"Hook ({Position.X:F2}, {Position.Y:F2}, {Position.Z:F2})";
+    public override string Name => $"Hook ({Position.X:F2}, {Position.Y:F2}, {Position.Z:F2})";
 
-    public ReactiveVector3 Position
+    public DoorFrameHookItem() : base()
     {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public ReactiveQuaternion Orientation
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public DoorFrameHookItem()
-    {
-        Position = new();
-        Orientation = new();
-
         this.WhenAnyValue(x => x.Position).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
     }
     public DoorFrameHookItem(DoorFrameHookTemplate template) : this()

@@ -3,36 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
-public class WallItem : ReactiveObject
+public class WallItem : ObjectItem
 {
-    public string ID
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public string Name
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public string Group
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public string Model
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
+    public override WorldObjectType WorldObjectType => WorldObjectType.Wall;
 
     public string DoorFrameID
     {
@@ -40,20 +19,12 @@ public class WallItem : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public WallItem()
+    public WallItem() : base()
     {
-        ID = "";
-        Name = "";
-        Group = "";
-        Model = "";
         DoorFrameID = "";
     }
-    public WallItem(WallTemplate template)
+    public WallItem(WallTemplate template) : base(template)
     {
-        ID = template.TemplateID;
-        Name = template.Name;
-        Model = template.Model;
-        Group = template.ClassID;
         DoorFrameID = template.DoorFrameID;
     }
 
@@ -62,10 +33,10 @@ public class WallItem : ReactiveObject
         return new WallTemplate
         {
             KitID = kitID,
-            TemplateID = ID,
+            TemplateID = TemplateID,
             Name = Name,
             Model = Model,
-            ClassID = Group,
+            ClassID = ClassID,
             DoorFrameID = DoorFrameID,
         };
     }

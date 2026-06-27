@@ -8,7 +8,7 @@ namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
 public class OuterCornerHookItem : HookItem
 {
-    public string Name => $"{DefaultTemplateID} ({Position.Z:F2}, {Position.Y:F2}, {Position.Z:F2})";
+    public override string Name => $"{DefaultTemplateID} ({Position.Z:F2}, {Position.Y:F2}, {Position.Z:F2})";
 
     public string DefaultTemplateID
     {

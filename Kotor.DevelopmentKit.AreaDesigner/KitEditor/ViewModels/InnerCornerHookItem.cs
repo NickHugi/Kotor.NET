@@ -9,7 +9,7 @@ namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 // TODO Merge with innercorner, have innerdefaulttemplateid/outer...
 public class InnerCornerHookItem : HookItem
 {
-    public string Name => $"Hook ({Position.Z:F2}, {Position.Y:F2}, {Position.Z:F2})";
+    public override string Name => $"Hook ({Position.Z:F2}, {Position.Y:F2}, {Position.Z:F2})";
 
     public string DefaultTemplateID
     {

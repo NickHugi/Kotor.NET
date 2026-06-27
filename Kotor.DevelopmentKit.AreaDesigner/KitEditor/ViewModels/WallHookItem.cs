@@ -8,7 +8,7 @@ namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
 public class WallHookItem : HookItem
 {
-    public string Name => $"{DefaultTemplateID} ({Position.X:F2}, {Position.Y:F2}, {Position.Z:F2})";
+    public override string Name => $"{DefaultTemplateID} ({Position.X:F2}, {Position.Y:F2}, {Position.Z:F2})";
     public string DefaultTemplateID
     {
         get => field;

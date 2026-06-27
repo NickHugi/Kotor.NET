@@ -1,49 +1,20 @@
 ﻿using System.Collections.ObjectModel;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
-public class CeilingItem : ReactiveObject
+public class CeilingItem : ObjectItem
 {
-    public string ID
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
+    public override WorldObjectType WorldObjectType =>  WorldObjectType.Ceiling;
 
-    public string Name
+    public CeilingItem() : base()
     {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
     }
-
-    public string Group
+    public CeilingItem(CeilingTemplate template) : base(template)
     {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public string Model
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public CeilingItem()
-    {
-        ID = "";
-        Name = "";
-        Group = "";
-        Model = "";
-    }
-    public CeilingItem(CeilingTemplate template)
-    {
-        ID = template.TemplateID;
-        Name = template.Name;
-        Group = template.ClassID;
-        Model = template.Model;
     }
 
     public CeilingTemplate ToModel(string kitID)
@@ -51,9 +22,9 @@ public class CeilingItem : ReactiveObject
         return new CeilingTemplate
         {
             KitID = kitID,
-            TemplateID = ID,
+            TemplateID = TemplateID,
             Name = Name,
-            ClassID = Group,
+            ClassID = ClassID,
             Model = Model
         };
     }

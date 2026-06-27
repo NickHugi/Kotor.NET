@@ -10,6 +10,7 @@ namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
 public abstract class HookItem : ReactiveObject
 {
+    public virtual string Name => "Hook";
     public ReactiveVector3 Position
     {
         get;

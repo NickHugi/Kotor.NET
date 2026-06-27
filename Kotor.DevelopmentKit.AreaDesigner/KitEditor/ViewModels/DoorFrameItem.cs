@@ -4,36 +4,15 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
-public class DoorFrameItem : ReactiveObject
+public class DoorFrameItem : ObjectItem
 {
-    public string ID
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public string Name
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public string Group
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
-    public string Model
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
+    public override WorldObjectType WorldObjectType => WorldObjectType.DoorFrame;
 
     public ObservableCollection<DoorFrameHookItem> Hooks
     {
@@ -41,20 +20,12 @@ public class DoorFrameItem : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public DoorFrameItem()
+    public DoorFrameItem() : base()
     {
-        ID = "";
-        Name = "";
-        Model = "";
-        Group = "";
         Hooks = [new(), new()];
     }
-    public DoorFrameItem(DoorFrameTemplate template)
+    public DoorFrameItem(DoorFrameTemplate template) : base(template)
     {
-        ID = template.TemplateID;
-        Name = template.Name;
-        Model = template.Model;
-        Group = template.ClassID;
         Hooks = new(template.Hooks.Select(x => new DoorFrameHookItem(x)));
     }
 
@@ -63,9 +34,9 @@ public class DoorFrameItem : ReactiveObject
         return new DoorFrameTemplate
         {
             KitID = kitID,
-            TemplateID = ID,
+            TemplateID = TemplateID,
             Name = Name,
-            ClassID = Group,
+            ClassID = ClassID,
             Model = Model,
             Hooks = Hooks.Select(x => x.ToModel()).ToArray(),
         };
