@@ -2,8 +2,6 @@
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
-public class DoorFrameHookTemplate
+public class DoorFrameHookTemplate : HookTemplate
 {
-    public required Vector3 Position { get; init; }
-    public required Quaternion Orientation { get; init; }
 }

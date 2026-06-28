@@ -21,27 +21,27 @@
     </Window.Styles>
 
     <Window.Resources>
-        <DataTemplate x:Key="ObjectListTemplate" x:DataType="vm:ObjectItem">
+        <DataTemplate x:Key="ObjectItemList" x:DataType="vm:ObjectItem">
             <StackPanel>
                 <TextBlock Text="{Binding Name}" FontWeight="Bold" />
                 <TextBlock Text="{Binding TemplateID}" FontSize="10" />
             </StackPanel>
         </DataTemplate>
         
-        <DataTemplate x:Key="ObjectPanelTemplate" x:DataType="vm:ObjectItem">
+        <DataTemplate x:Key="ObjectItemPanel" x:DataType="vm:ObjectItem">
             <StackPanel>
                 <core:LabeledTextBox Label="Model" Text="{Binding Model}" />
             </StackPanel>
         </DataTemplate>
         
-        <DataTemplate x:Key="WallPanelTemplate" x:DataType="vm:WallItem">
+        <DataTemplate x:Key="WalltemPanel" x:DataType="vm:WallItem">
             <StackPanel>
                 <core:LabeledTextBox Label="Model" Text="{Binding Model}" />
                 <core:LabeledTextBox Label="Doorframe Template ID" Text="{Binding DoorFrameID}" />
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Key="DoorFrameItemPanel" x:DataType="vm:DoorFrameItem">
+        <DataTemplate x:Key="DoorframeItemPanel" x:DataType="vm:DoorFrameItem">
             <StackPanel>
                 <core:LabeledTextBox Label="Model" Text="{Binding Model}" />
                 
@@ -59,47 +59,23 @@
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Key="TilePanelTemplate" x:DataType="vm:TileItem">
+        <DataTemplate x:Key="TileItemPanel" x:DataType="vm:TileItem">
             <StackPanel>
                 <StackPanel>
-                    <TextBlock Text="Wall Hooks" />
+                    <TextBlock Text="Magnets" />
                     <ListBox ItemTemplate="{StaticResource WallHookItemTemplate}"
-                             ItemsSource="{Binding Walls}"
+                             ItemsSource="{Binding Hooks}"
                              SelectedItem="{Binding SelectedHook}"
                              Height="100" />
                     <StackPanel Orientation="Horizontal" Spacing="4">
-                        <Button Content="Add" Command="{Binding AddWallHook}" />
-                        <Button Content="Remove" Command="{Binding DeleteSelectedWallHook}" />
-                    </StackPanel>
-                </StackPanel>
-
-                <StackPanel>
-                    <TextBlock Text="Inner Corner Hooks" />
-                    <ListBox ItemTemplate="{StaticResource CornerHookItemTemplate}"
-                             ItemsSource="{Binding InnerCorners}"
-                             SelectedItem="{Binding SelectedHook}"
-                             Height="100" />
-                    <StackPanel Orientation="Horizontal" Spacing="4">
-                       <!-- <Button Content="Add" Command="{Binding TileTab.AddInnerCorner}" />
-                        <Button Content="Remove" Command="{Binding TileTab.DeleteSelectedInnerCorner}" />-->
-                    </StackPanel>
-                </StackPanel>
-
-                <StackPanel>
-                    <TextBlock Text="Outer Corner Hooks" />
-                    <ListBox ItemTemplate="{StaticResource CornerHookItemTemplate}"
-                                ItemsSource="{Binding OuterCorners}"
-                                SelectedItem="{Binding SelectedHook}"
-                                Height="100" />
-                    <StackPanel Orientation="Horizontal" Spacing="4">
-                        <!--<Button Content="Add" Command="{Binding TileTab.AddOuterCorner}" />
-                        <Button Content="Remove" Command="{Binding TileTab.DeleteSelectedOuterCorner}" />-->
+                        <!--<Button Content="Add" Command="{Binding AddWallHook}" />-->
+                        <!--<Button Content="Remove" Command="{Binding DeleteSelectedWallHook}" />-->
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
         </DataTemplate>
         
-        <DataTemplate x:Key="WallHookPanelTemplate" DataType="vm:WallHookItem">
+        <DataTemplate x:Key="WallHookItemPanel" DataType="vm:WallHookItem">
             <StackPanel>
                 <core:LabeledTextBox Label="Default Wall ID" Text="{Binding DefaultTemplateID}" />
                 <core:Vector3Edit Label="Position" Value="{Binding Position}" />
@@ -107,22 +83,15 @@
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Key="InnerCornerHookPanelTemplate" DataType="vm:InnerCornerHookItem">
+        <DataTemplate x:Key="CornerHookPanel" DataType="vm:CornerHookItem">
             <StackPanel>
-                <core:LabeledTextBox Label="Default Corner ID" Text="{Binding DefaultTemplateID}" />
+                <core:LabeledTextBox Label="Inner Corner Kit ID" Text="{Binding DefaultInnerKitID}" />
+                <core:LabeledTextBox Label="Inner Corner Templat ID" Text="{Binding DefaultInnerTemplateID}" />
+                <core:LabeledTextBox Label="Outer Corner Kit ID" Text="{Binding DefaultOuterKitID}" />
+                <core:LabeledTextBox Label="Outer Corner Template ID" Text="{Binding DefaultOuterTemplateID}" />
                 <core:Vector3Edit Label="Position" Value="{Binding Position}" />
                 <core:QuaternionEdit Label="Orientation" Value="{Binding Orientation}" />
             </StackPanel>
-        </DataTemplate>
-        
-        <DataTemplate x:Key="OuterCornerHookPanelTemplate" DataType="vm:OuterCornerHookItem">
-            <Border Grid.Column="0" Padding="4" Background="#bbb">
-                <StackPanel>
-                    <core:LabeledTextBox Label="Default Corner ID" Text="{Binding DefaultTemplateID}" />
-                    <core:Vector3Edit Label="Position" Value="{Binding Position}" />
-                    <core:QuaternionEdit Label="Orientation" Value="{Binding Orientation}" />
-                </StackPanel>
-            </Border>
         </DataTemplate>
         
         <DataTemplate x:Key="WorldObjectTypeItemTemplate" x:DataType="vm:WorldObjectTypeItem">
@@ -152,7 +121,7 @@
                         <ComboBox ItemTemplate="{StaticResource WorldObjectTypeItemTemplate}"
                                   ItemsSource="{Binding WorldObjectTypeItems}"
                                   SelectedItem="{Binding SelectedWorldObjectTypeItem, Mode=TwoWay}" />
-                        <ListBox ItemTemplate="{StaticResource ObjectListTemplate}"
+                        <ListBox ItemTemplate="{StaticResource ObjectItemList}"
                                  ItemsSource="{Binding ObjectTemplateItems}"
                                  SelectedItem="{Binding SelectedObjectTemplateItem}"
                                  Grid.Row="1"/>
@@ -187,9 +156,9 @@
                                                      
                                 <ContentControl Content="{Binding SelectedObjectTemplateItem}">
                                     <ContentControl.DataTemplates>
-                                        <StaticResource ResourceKey="TilePanelTemplate" />
-                                        <StaticResource ResourceKey="ObjectPanelTemplate" />
-                                        <StaticResource ResourceKey="WallPanelTemplate" />
+                                        <StaticResource ResourceKey="TileItemPanel" />
+                                        <StaticResource ResourceKey="ObjectItemPanel" />
+                                        <StaticResource ResourceKey="WalltemPanel" />
                                     </ContentControl.DataTemplates>
                                 </ContentControl>
                             </StackPanel>
@@ -207,7 +176,7 @@
                                         <DataTemplate x:DataType="vm:TileItem">
                                             <ContentControl Content="{Binding SelectedHook}">
                                                 <ContentControl.DataTemplates>
-                                                    <StaticResource ResourceKey="WallHookPanelTemplate" />
+                                                    <StaticResource ResourceKey="WallHookItemPanel" />
                                                 </ContentControl.DataTemplates>
                                             </ContentControl>
                                         </DataTemplate>
@@ -215,9 +184,8 @@
                                 </ContentControl>-->
                                 <ContentControl Content="{Binding SelectedObjectTemplateItem.SelectedHook}">
                                     <ContentControl.DataTemplates>
-                                        <StaticResource ResourceKey="WallHookPanelTemplate" />
-                                        <StaticResource ResourceKey="InnerCornerHookPanelTemplate" />
-                                        <StaticResource ResourceKey="OuterCornerHookPanelTemplate" />
+                                        <StaticResource ResourceKey="WallHookItemPanel" />
+                                        <StaticResource ResourceKey="CornerHookPanel" />
                                     </ContentControl.DataTemplates>
                                 </ContentControl>
                             </StackPanel>

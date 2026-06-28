@@ -30,8 +30,8 @@ public class DoorFrame : IWorldObject
             return Template.Hooks.Select(x => new Magnet(this)
             {
                 Type = MagnetType.Wall,
-                LocalPosition = x.Position,
-                LocalOrientation = x.Orientation,
+                LocalPosition = x.LocalPosition,
+                LocalOrientation = x.LocalOrientation,
             }).ToList();
         }
     }
@@ -49,16 +49,16 @@ public class DoorFrame : IWorldObject
 
     public bool Enabled { get; set; } = true;
 
-    public IEnumerable<DoorFrameHook> Hooks => Template.Hooks.Select(x => new DoorFrameHook(this, x));
+    public IEnumerable<DoorFrameHook> Hooks => Template.Hooks.OfType<DoorFrameHookTemplate>().Select(x => new DoorFrameHook(this, x));
 
     public Vector3 LocalPosition
     {
-        get => Template.Hooks.First().Position;
+        get => Template.Hooks.First().LocalPosition;
         set => throw new NotImplementedException(); // TODO
     }
     public Quaternion LocalOrientation
     {
-        get => Template.Hooks.First().Orientation;
+        get => Template.Hooks.First().LocalOrientation;
         set => throw new NotImplementedException(); // TODO
     }
     public Matrix4x4 LocalTransform => Matrix4x4.CreateRotationZ(MathF.PI) * Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);

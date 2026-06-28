@@ -26,14 +26,14 @@ public class DoorFrameItem : ObjectItem
     }
     public DoorFrameItem(DoorFrameTemplate template) : base(template)
     {
-        Hooks = new(template.Hooks.Select(x => new DoorFrameHookItem(x)));
+        Hooks = new(template.Hooks.OfType<DoorFrameHookTemplate>().Select(x => new DoorFrameHookItem(x)));
     }
 
-    public DoorFrameTemplate ToModel(string kitID)
+    public override DoorFrameTemplate ToModel()
     {
         return new DoorFrameTemplate
         {
-            KitID = kitID,
+            KitID = KitID,
             TemplateID = TemplateID,
             Name = Name,
             ClassID = ClassID,

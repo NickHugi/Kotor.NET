@@ -28,16 +28,17 @@ public class WallItem : ObjectItem
         DoorFrameID = template.DoorFrameID;
     }
 
-    public WallTemplate ToModel(string kitID)
+    public override WallTemplate ToModel()
     {
         return new WallTemplate
         {
-            KitID = kitID,
+            KitID = KitID,
             TemplateID = TemplateID,
             Name = Name,
             Model = Model,
             ClassID = ClassID,
             DoorFrameID = DoorFrameID,
+            Hooks = []
         };
     }
 }

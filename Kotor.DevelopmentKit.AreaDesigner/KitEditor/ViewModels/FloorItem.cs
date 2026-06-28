@@ -20,15 +20,16 @@ public class FloorItem : ObjectItem
     {
     }
 
-    public FloorTemplate ToModel(string kitID)
+    public override FloorTemplate ToModel()
     {
         return new FloorTemplate
         {
-            KitID = kitID,
+            KitID = KitID,
             TemplateID = TemplateID,
             Name = Name,
             ClassID = ClassID,
             Model = Model,
+            Hooks = []
         };
     }
 }

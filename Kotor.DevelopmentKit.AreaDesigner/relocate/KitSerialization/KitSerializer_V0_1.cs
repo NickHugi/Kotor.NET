@@ -32,11 +32,12 @@ public class KitSerializer_V0_1
         {
             kit.Floors.Add(new FloorTemplate
             {
-                KitID = kitID,
-                TemplateID = floor.id.Value,
+                KitID = floor.kitID.Value,
+                TemplateID = floor.templateID.Value,
                 Name = floor.name.Value,
                 ClassID = floor.group?.Value,
                 Model = floor.model.Value,
+                Hooks = []
             });
         }
 
@@ -44,11 +45,12 @@ public class KitSerializer_V0_1
         {
             kit.Ceilings.Add(new CeilingTemplate
             {
-                KitID = kitID,
-                TemplateID = ceiling.id.Value,
+                KitID = ceiling.kitID.Value,
+                TemplateID = ceiling.templateID.Value,
                 Name = ceiling.name.Value,
                 ClassID = ceiling.group?.Value,
                 Model = ceiling.model.Value,
+                Hooks = []
             });
         }
 
@@ -56,15 +58,15 @@ public class KitSerializer_V0_1
         {
             kit.DoorFrames.Add(new DoorFrameTemplate
             {
-                KitID = kitID,
-                TemplateID = door.id.Value,
+                KitID = door.kitID.Value,
+                TemplateID = door.templateID.Value,
                 Name = door.name.Value,
                 ClassID = door.group?.Value,
                 Model = door.model.Value,
                 Hooks = ((JArray)door.hooks).Select(x => (dynamic)x).Select(hook => new DoorFrameHookTemplate
                 {
-                    Position = new Vector3(hook.position.ToObject<float[]>()),
-                    Orientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
+                    LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
+                    LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
                 }).ToArray()
             });
         }
@@ -73,12 +75,13 @@ public class KitSerializer_V0_1
         {
             kit.Walls.Add(new WallTemplate
             {
-                KitID = kitID,
-                TemplateID = wall.id.Value,
+                KitID = wall.kitID.Value,
+                TemplateID = wall.templateID.Value,
                 Name = wall.name.Value,
                 Model = wall.model.Value,
                 ClassID = wall.group.Value,
                 DoorFrameID = wall.doorframeID?.Value,
+                Hooks = []
             });
         }
 
@@ -86,43 +89,45 @@ public class KitSerializer_V0_1
         {
             kit.Tiles.Add(new TileTemplate
             {
-                KitID = kitID,
-                TemplateID = tile.id.Value,
+                KitID = tile.kitID.Value,
+                TemplateID = tile.templateID.Value,
                 Name = tile.name.Value,
                 ClassID = null,
                 Model = null,
-                Floors = ((JArray)tile.floorHooks).Select(x => (dynamic)x).Select(hook => new FloorHookTemplate
-                {
-                    DefaultTemplateID = hook.defaultTemplateID,
-                    LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
-                    LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
-                }).ToArray(),
-                Ceilings = ((JArray)tile.ceilingHooks).Select(x => (dynamic)x).Select(hook => new CeilingHookTemplate
-                {
-                    DefaultTemplateID = hook.defaultTemplateID,
-                    LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
-                    LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
-                }).ToArray(),
-                Walls = ((JArray)tile.wallHooks).Select(x => (dynamic)x).Select(hook => new WallHookTemplate
-                {
-                    DefaultTemplateID = hook.defaultWallID,
-                    LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
-                    LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
-                }).ToArray(),
-                InnerCorners = ((JArray)tile.innerCornerHooks).Select(x => (dynamic)x).Select(hook => new InnerCornerHookTemplate
-                {
-                    DefaultTemplateID = hook.defaultInnerCornerID.Value,
-                    Adjacent = hook.adjacencies?.ToObject<int[]>() ?? new int[0],
-                    LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
-                    LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
-                }).ToArray(),
-                OuterCorners = ((JArray)tile.outerCornerHooks).Select(x => (dynamic)x).Select(hook => new OuterCornerHookTemplate
-                {
-                    DefaultTemplateID = hook.defaultOuterCornerID.Value,
-                    Adjacent = hook.adjacencies?.ToObject<int[]>() ?? new int[0],
-                    LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
-                    LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
-                }).ToArray(),
+                Hooks =
+                [
+                    ..((JArray)tile.floorHooks).Select(x => (dynamic)x).Select(hook => new FloorHookTemplate
+                    {
+                        KitID = hook.kitID,
+                        TemplateID = hook.templateID,
+                        LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
+                        LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
+                    }),
+                    ..((JArray)tile.ceilingHooks).Select(x => (dynamic)x).Select(hook => new CeilingHookTemplate
+                    {
+                        KitID = hook.kitID,
+                        TemplateID = hook.templateID,
+                        LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
+                        LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
+                    }),
+                    ..((JArray)tile.wallHooks).Select(x => (dynamic)x).Select(hook => new WallHookTemplate
+                    {
+                        KitID = hook.kitID,
+                        TemplateID = hook.templateID,
+                        LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
+                        LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
+                    }),
+                    ..((JArray)tile.wallHooks).Select(x => (dynamic)x).Select(hook => new CornerHookTemplate
+                    {
+                        InnerKitID = hook.innerKitID,
+                        InnerTemplateID = hook.innerTemplateID,
+                        OuterKitID = hook.outertKitID,
+                        OuterTemplateID = hook.outerTemplateID,
+                        LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
+                        LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion(),
+                        Adjacent = []
+                    }),
+                ],
             });
         }
 
@@ -130,11 +135,12 @@ public class KitSerializer_V0_1
         {
             kit.InnerCorners.Add(new InnerCornerTemplate
             {
-                KitID = kitID,
-                TemplateID = innerCorner.id.Value,
+                KitID = innerCorner.kitID.Value,
+                TemplateID = innerCorner.templateID.Value,
                 Name = innerCorner.name.Value,
                 ClassID = innerCorner.group?.Value,
                 Model = innerCorner.model.Value,
+                Hooks = []
             });
         }
 
@@ -142,11 +148,12 @@ public class KitSerializer_V0_1
         {
             kit.OuterCorners.Add(new OuterCornerTemplate
             {
-                KitID = kitID,
-                TemplateID = outerCorner.id.Value,
+                KitID = outerCorner.kitID.Value,
+                TemplateID = outerCorner.templateID.Value,
                 Name = outerCorner.name.Value,
                 ClassID = outerCorner.group?.Value,
                 Model = outerCorner.model.Value,
+                Hooks = []
             });
         }
 
@@ -154,11 +161,12 @@ public class KitSerializer_V0_1
         {
             kit.Objects.Add(new ObjectTemplate
             {
-                KitID = kitID,
-                TemplateID = @object.id.Value,
+                KitID = @object.kitID.Value,
+                TemplateID = @object.templateID.Value,
                 Name = @object.name.Value,
                 ClassID = @object.group?.Value,
                 Model = @object.model.Value,
+                Hooks = []
             });
         }
 
@@ -178,34 +186,33 @@ public class KitSerializer_V0_1
         {
             id = tile.TemplateID,
             name = tile.Name,
-            floorHooks = tile.Floors.Select(x => new
+            floorHooks = tile.Hooks.OfType<FloorHookTemplate>().Select(x => new
             {
-                defaultTemplateID = x.DefaultTemplateID,
+                kitID = x.KitID,
+                templateID = x.TemplateID,
                 position = x.LocalPosition.ToFloatArray(),
                 orientation = x.LocalOrientation.ToFloatArray()
             }),
-            ceilingHooks = tile.Ceilings.Select(x => new
+            ceilingHooks = tile.Hooks.OfType<CeilingHookTemplate>().Select(x => new
             {
-                defaultTemplateID = x.DefaultTemplateID,
+                kitID = x.KitID,
+                templateID = x.TemplateID,
                 position = x.LocalPosition.ToFloatArray(),
                 orientation = x.LocalOrientation.ToFloatArray()
             }),
-            wallHooks = tile.Walls.Select(x => new
+            wallHooks = tile.Hooks.OfType<WallHookTemplate>().Select(x => new
             {
-                defaultWallID = x.DefaultTemplateID,
+                kitID = x.KitID,
+                templateID = x.TemplateID,
                 position = x.LocalPosition.ToFloatArray(),
                 orientation = x.LocalOrientation.ToFloatArray(),
             }),
-            innerCornerHooks = tile.InnerCorners.Select(x => new
+            cornerHooks = tile.Hooks.OfType<CornerHookTemplate>().Select(x => new
             {
-                defaultInnerCornerID = x.DefaultTemplateID,
-                position = x.LocalPosition.ToFloatArray(),
-                orientation = x.LocalOrientation.ToFloatArray(),
-                adjacencies = x.Adjacent,
-            }),
-            outerCornerHooks = tile.OuterCorners.Select(x => new
-            {
-                defaultOuterCornerID = x.DefaultTemplateID,
+                innerKitID = x.InnerKitID,
+                innerTemplateID = x.InnerTemplateID,
+                outerKitID = x.OuterKitID,
+                outerTemplateID = x.OuterTemplateID,
                 position = x.LocalPosition.ToFloatArray(),
                 orientation = x.LocalOrientation.ToFloatArray(),
                 adjacencies = x.Adjacent,
@@ -236,8 +243,8 @@ public class KitSerializer_V0_1
             model = doorframe.Model,
             hooks = doorframe.Hooks.Select(hook => new
             {
-                position = hook.Position.ToFloatArray(),
-                orientation = hook.Orientation.ToFloatArray(),
+                position = hook.LocalPosition.ToFloatArray(),
+                orientation = hook.LocalOrientation.ToFloatArray(),
             })
         });
 

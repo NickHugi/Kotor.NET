@@ -84,11 +84,14 @@ public class Tile : IDeleteable, IWorldObject
         var virtualObjects = new List<IWorldObject>();
         VirtualObjects = virtualObjects;
 
-        virtualObjects.AddRange(template.Floors.Select(x => new Floor(this, kit.Floor(x.DefaultTemplateID))));
-        virtualObjects.AddRange(template.Ceilings.Select(x => new Ceiling(this, kit.Ceiling(x.DefaultTemplateID))));
-        virtualObjects.AddRange(template.Walls.Select(x => new Wall(this, x.DefaultTemplate, x)));
-        virtualObjects.AddRange(template.InnerCorners.Select(x => new InnerCorner(this, x.DefaultTemplate, x)));
-        virtualObjects.AddRange(template.OuterCorners.Select(x => new OuterCorner(this, x.DefaultTemplate, x)));
+        virtualObjects.AddRange(
+        [
+            ..template.Hooks.OfType<FloorHookTemplate>().Select(x => new Floor(this, kit.Floor(x.TemplateID))),
+            ..template.Hooks.OfType<CeilingHookTemplate>().Select(x => new Ceiling(this, kit.Ceiling(x.TemplateID))),
+            ..template.Hooks.OfType<WallHookTemplate>().Select(x => new Wall(this, kit.Wall(x.TemplateID), x)),
+            ..template.Hooks.OfType<CornerHookTemplate>().Select(x => new InnerCorner(this, kit.InnerCorner(x.InnerTemplateID), x)),
+            ..template.Hooks.OfType<CornerHookTemplate>().Select(x => new OuterCorner(this, kit.OuterCorner(x.OuterTemplateID), x)),
+        ]);
     }
 
     public void Delete()

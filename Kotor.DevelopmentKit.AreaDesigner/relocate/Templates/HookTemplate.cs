@@ -1,16 +1,15 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
-public class InnerCornerHookTemplate
+public class HookTemplate
 {
-    public required string DefaultTemplateID { get; init; }
-    public InnerCornerTemplate DefaultTemplate => Kit.Manager.Get("sandral").InnerCorner(DefaultTemplateID); // todo - remove hardcoding
-
-    public required int[] Adjacent { get; init; }
-
     public required Vector3 LocalPosition { get; init; }
     public required Quaternion LocalOrientation { get; init; }
     public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
-
 }

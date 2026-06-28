@@ -3,7 +3,10 @@
 public enum MagnetType
 {
     Generic,
+    Hook,
     Wall,
-    InnerCorner,
-    OuterCorner,
+    Doorframe,
+    Floor,
+    Ceiling,
+    Corner,
 }

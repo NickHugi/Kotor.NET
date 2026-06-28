@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,7 +44,9 @@ public class ObjectItem : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public HookItem SelectedHook
+    public ObservableCollection<HookItem> Hooks { get; }
+
+    public HookItem? SelectedHook
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
@@ -56,8 +59,9 @@ public class ObjectItem : ReactiveObject
         Name = "";
         ClassID = "";
         Model = "";
+        Hooks = [];
     }
-    public ObjectItem(ObjectTemplate template)
+    public ObjectItem(ObjectTemplate template) : this()
     {
         KitID = template.KitID;
         TemplateID = template.TemplateID;
@@ -66,15 +70,16 @@ public class ObjectItem : ReactiveObject
         Model = template.Model;
     }
 
-    public ObjectTemplate ToModel(string kitID)
+    public virtual ObjectTemplate ToModel()
     {
         return new ObjectTemplate
         {
-            KitID = kitID,
+            KitID = KitID,
             TemplateID = TemplateID,
             Name = Name,
             ClassID = ClassID,
             Model = Model,
+            Hooks = Hooks.Select(x => x.ToModel()).ToArray(),
         };
     }
 }

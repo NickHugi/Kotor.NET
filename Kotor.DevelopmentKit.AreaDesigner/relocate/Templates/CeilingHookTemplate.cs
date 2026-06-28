@@ -7,11 +7,8 @@ using System.Threading.Tasks;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
-public class CeilingHookTemplate
+public class CeilingHookTemplate : HookTemplate
 {
-    public required string DefaultTemplateID { get; init; }
-
-    public required Vector3 LocalPosition { get; init; }
-    public required Quaternion LocalOrientation { get; init; }
-    public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
+    public required string KitID { get; init; }
+    public required string TemplateID { get; init; }
 }

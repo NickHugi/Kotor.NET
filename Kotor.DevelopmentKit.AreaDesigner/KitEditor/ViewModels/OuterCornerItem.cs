@@ -20,15 +20,16 @@ public class OuterCornerItem : ObjectItem
     {
     }
 
-    public OuterCornerTemplate ToModel(string kitID)
+    public override OuterCornerTemplate ToModel()
     {
         return new OuterCornerTemplate
         {
-            KitID = kitID,
+            KitID = KitID,
             TemplateID = TemplateID,
             Name = Name,
             ClassID = ClassID,
             Model = Model,
+            Hooks = []
         };
     }
 }

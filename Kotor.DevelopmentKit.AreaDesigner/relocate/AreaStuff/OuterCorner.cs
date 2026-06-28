@@ -13,7 +13,7 @@ public class OuterCorner : IWorldObject
     public IReadOnlyCollection<Magnet> Magnets => [];
     public WorldObjectType Type => WorldObjectType.OuterCorner;
 
-    public OuterCornerHookTemplate Hook { get; }
+    public CornerHookTemplate Hook { get; }
 
     public string KitID { get; private set; } = "";
     public string TemplateID { get; private set; } = "";
@@ -62,7 +62,7 @@ public class OuterCorner : IWorldObject
         }
     }
 
-    public OuterCorner(Tile parent, OuterCornerTemplate template, OuterCornerHookTemplate hook)
+    public OuterCorner(Tile parent, OuterCornerTemplate template, CornerHookTemplate hook)
     {
         Parent = parent;
         Hook = hook;

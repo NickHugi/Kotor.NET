@@ -7,4 +7,5 @@ public class ObjectTemplate
     public required string ClassID { get; init; }
     public required string Name { get; init; }
     public required string Model { get; init; }
+    public required HookTemplate[] Hooks { get; init; }
 }

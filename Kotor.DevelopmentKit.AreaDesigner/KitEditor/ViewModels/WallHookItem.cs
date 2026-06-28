@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using ReactiveUI;
@@ -9,6 +10,12 @@ namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 public class WallHookItem : HookItem
 {
     public override string Name => $"{DefaultTemplateID} ({Position.X:F2}, {Position.Y:F2}, {Position.Z:F2})";
+    public override MagnetType MagnetType => MagnetType.Wall;
+    public string DefaultKitID
+    {
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
     public string DefaultTemplateID
     {
         get => field;
@@ -30,7 +37,7 @@ public class WallHookItem : HookItem
     }
     public WallHookItem(WallHookTemplate wallHook) : this()
     {
-        DefaultTemplateID = wallHook.DefaultTemplateID;
+        DefaultTemplateID = wallHook.TemplateID;
         Position = new(wallHook.LocalPosition);
         Orientation = new(wallHook.LocalOrientation);
         AdjacentWalls = new(wallHook.AdjacentWalls);
@@ -40,7 +47,8 @@ public class WallHookItem : HookItem
     {
         return new WallHookTemplate
         {
-            DefaultTemplateID = DefaultTemplateID,
+            KitID = DefaultKitID,
+            TemplateID = DefaultTemplateID,
             LocalPosition = Position.ToModel(),
             LocalOrientation = Orientation.ToModel(),
         };

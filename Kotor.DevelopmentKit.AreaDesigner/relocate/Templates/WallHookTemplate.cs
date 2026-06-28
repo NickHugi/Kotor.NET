@@ -2,17 +2,11 @@
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
-public class WallHookTemplate
+public class WallHookTemplate : HookTemplate
 {
-    public required string DefaultTemplateID { get; init; }
-    public WallTemplate DefaultTemplate => Kit.Manager.Get("sandral").Wall(DefaultTemplateID); // todo - remove hardcoding
-
-    public required Vector3 LocalPosition { get; init; }
-    public required Quaternion LocalOrientation { get; init; }
-    public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
+    public required string KitID { get; init; }
+    public required string TemplateID { get; init; }
+    public WallTemplate Template => Kit.Manager.Get(KitID).Wall(TemplateID);
 
     public int[] AdjacentWalls { get; init; } = [];
-
-    //public ICollection<string> CompatibleWallTemplates { get; }
-    //public ICollection<string> CompatibleTileTemplates { get; }
 }

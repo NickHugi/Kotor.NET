@@ -8,8 +8,8 @@ public class DoorFrameHook
     public DoorFrame Parent { get; }
     public DoorFrameHookTemplate Template { get; }
 
-    public Vector3 LocalPosition => Template.Position;
-    public Quaternion LocalOrientation => Template.Orientation;
+    public Vector3 LocalPosition => Template.LocalPosition;
+    public Quaternion LocalOrientation => Template.LocalOrientation;
     public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
 
     public Vector3 Position => Matrix4x4.Decompose(Transform, out _, out _, out var value) ? value : new();

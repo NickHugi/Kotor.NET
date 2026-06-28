@@ -17,15 +17,16 @@ public class CeilingItem : ObjectItem
     {
     }
 
-    public CeilingTemplate ToModel(string kitID)
+    public override CeilingTemplate ToModel()
     {
         return new CeilingTemplate
         {
-            KitID = kitID,
+            KitID = KitID,
             TemplateID = TemplateID,
             Name = Name,
             ClassID = ClassID,
-            Model = Model
+            Model = Model,
+            Hooks = []
         };
     }
 }
