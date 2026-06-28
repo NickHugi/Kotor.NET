@@ -10,26 +10,26 @@ namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
 public class CornerHookItem : HookItem
 {
-    public override string Name => $"{DefaultInnerTemplateID} ({Position.Z:F2}, {Position.Y:F2}, {Position.Z:F2})";
+    public override string Name => $"{InnerTemplateID} ({Position.Z:F2}, {Position.Y:F2}, {Position.Z:F2})";
     public override MagnetType MagnetType => MagnetType.Corner;
 
-    public string DefaultInnerKitID
+    public string InnerKitID
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
-    public string DefaultInnerTemplateID
+    public string InnerTemplateID
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public string DefaultOuterKitID
+    public string OuterKitID
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
-    public string DefaultOuterTemplateID
+    public string OuterTemplateID
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
@@ -43,10 +43,10 @@ public class CornerHookItem : HookItem
 
     public CornerHookItem() : base()
     {
-        DefaultInnerKitID = "";
-        DefaultInnerTemplateID = "";
-        DefaultOuterKitID = "";
-        DefaultOuterTemplateID = "";
+        InnerKitID = "";
+        InnerTemplateID = "";
+        OuterKitID = "";
+        OuterTemplateID = "";
 
         AdjacentWalls = [];
 
@@ -55,10 +55,10 @@ public class CornerHookItem : HookItem
     }
     public CornerHookItem(CornerHookTemplate template) : this()
     {
-        DefaultInnerKitID = template.InnerKitID;
-        DefaultInnerTemplateID = template.InnerTemplateID;
-        DefaultOuterKitID = template.OuterKitID;
-        DefaultOuterTemplateID = template.OuterTemplateID;
+        InnerKitID = template.InnerKitID;
+        InnerTemplateID = template.InnerTemplateID;
+        OuterKitID = template.OuterKitID;
+        OuterTemplateID = template.OuterTemplateID;
         Position = new(template.LocalPosition);
         Orientation = new(template.LocalOrientation);
         AdjacentWalls = new(template.Adjacent);
@@ -68,10 +68,10 @@ public class CornerHookItem : HookItem
     {
         return new CornerHookTemplate
         {
-            InnerKitID = DefaultInnerKitID,
-            InnerTemplateID = DefaultInnerTemplateID,
-            OuterKitID = DefaultOuterKitID,
-            OuterTemplateID = DefaultOuterTemplateID,
+            InnerKitID = InnerKitID,
+            InnerTemplateID = InnerTemplateID,
+            OuterKitID = OuterKitID,
+            OuterTemplateID = OuterTemplateID,
             Adjacent = AdjacentWalls.ToArray(),
             LocalPosition = Position.ToModel(),
             LocalOrientation = Orientation.ToModel(),

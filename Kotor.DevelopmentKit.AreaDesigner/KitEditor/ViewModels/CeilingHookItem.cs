@@ -12,14 +12,14 @@ namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
 public class CeilingHookItem : HookItem
 {
-    public override string Name => $"{DefaultTemplateID} ({Position.X:F2}, {Position.Y:F2}, {Position.Z:F2})";
+    public override string Name => $"{TemplateID} ({Position.X:F2}, {Position.Y:F2}, {Position.Z:F2})";
     public override MagnetType MagnetType => MagnetType.Ceiling;
-    public string DefaultKitID
+    public string KitID
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
-    public string DefaultTemplateID
+    public string TemplateID
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
@@ -27,25 +27,26 @@ public class CeilingHookItem : HookItem
 
     public CeilingHookItem() : base()
     {
-        DefaultTemplateID = "";
+        KitID = "";
+        TemplateID = "";
 
-        this.WhenAnyValue(x => x.DefaultTemplateID).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
+        this.WhenAnyValue(x => x.TemplateID).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
         this.WhenAnyValue(x => x.Position).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
     }
     public CeilingHookItem(CeilingHookTemplate template) : this()
     {
+        KitID = template.KitID;
+        TemplateID = template.TemplateID;
         Position = new(template.LocalPosition);
         Orientation = new(template.LocalOrientation);
-        DefaultKitID = template.KitID;
-        DefaultTemplateID = template.TemplateID;
     }
 
     public override CeilingHookTemplate ToModel()
     {
         return new CeilingHookTemplate
         {
-            KitID = DefaultKitID,
-            TemplateID = DefaultTemplateID,
+            KitID = KitID,
+            TemplateID = TemplateID,
             LocalPosition = Position.ToModel(),
             LocalOrientation = Orientation.ToModel(),
         };

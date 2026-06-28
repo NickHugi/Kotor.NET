@@ -10,10 +10,10 @@ using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
-public class MagnetItem : HookItem
+public class HookItem : ReactiveObject
 {
-    public override string Name => "Magnet";
-    public override MagnetType MagnetType => MagnetType.Magnet;
+    public virtual string Name => "Hook";
+    public virtual MagnetType MagnetType => MagnetType.Magnet;
     public ReactiveVector3 Position
     {
         get;
@@ -25,13 +25,13 @@ public class MagnetItem : HookItem
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public MagnetItem()
+    public HookItem()
     {
         Position = new();
         Orientation = new();
     }
 
-    public override HookTemplate ToModel()
+    public virtual HookTemplate ToModel()
     {
         return new HookTemplate
         {

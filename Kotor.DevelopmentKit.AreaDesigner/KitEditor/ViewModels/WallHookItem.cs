@@ -9,14 +9,14 @@ namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
 public class WallHookItem : HookItem
 {
-    public override string Name => $"{DefaultTemplateID} ({Position.X:F2}, {Position.Y:F2}, {Position.Z:F2})";
+    public override string Name => $"{TemplateID} ({Position.X:F2}, {Position.Y:F2}, {Position.Z:F2})";
     public override MagnetType MagnetType => MagnetType.Wall;
-    public string DefaultKitID
+    public string KitID
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
-    public string DefaultTemplateID
+    public string TemplateID
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
@@ -29,15 +29,17 @@ public class WallHookItem : HookItem
 
     public WallHookItem() : base()
     {
-        DefaultTemplateID = "";
+        KitID = "";
+        TemplateID = "";
         AdjacentWalls = [];
 
-        this.WhenAnyValue(x => x.DefaultTemplateID).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
+        this.WhenAnyValue(x => x.TemplateID).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
         this.WhenAnyValue(x => x.Position).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
     }
     public WallHookItem(WallHookTemplate wallHook) : this()
     {
-        DefaultTemplateID = wallHook.TemplateID;
+        KitID = wallHook.KitID;
+        TemplateID = wallHook.TemplateID;
         Position = new(wallHook.LocalPosition);
         Orientation = new(wallHook.LocalOrientation);
         AdjacentWalls = new(wallHook.AdjacentWalls);
@@ -47,8 +49,8 @@ public class WallHookItem : HookItem
     {
         return new WallHookTemplate
         {
-            KitID = DefaultKitID,
-            TemplateID = DefaultTemplateID,
+            KitID = KitID,
+            TemplateID = TemplateID,
             LocalPosition = Position.ToModel(),
             LocalOrientation = Orientation.ToModel(),
         };

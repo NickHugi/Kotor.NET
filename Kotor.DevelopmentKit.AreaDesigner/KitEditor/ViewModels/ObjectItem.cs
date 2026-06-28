@@ -82,4 +82,54 @@ public class ObjectItem : ReactiveObject
             Hooks = Hooks.Select(x => x.ToModel()).ToArray(),
         };
     }
+
+    public void DeleteSelectedMagnet()
+    {
+        if (SelectedHook is null)
+            return;
+
+        Hooks.Remove(SelectedHook);
+    }
+
+    public void AddMagnet()
+    {
+        Hooks.Add(new MagnetItem());
+    }
+    public void AddBasicHook()
+    {
+        Hooks.Add(new HookItem());
+    }
+    public void AddFloorHook()
+    {
+        Hooks.Add(new FloorHookItem()
+        {
+            KitID = KitID
+        });
+    }
+    public void AddCeilingHook()
+    {
+        Hooks.Add(new CeilingHookItem()
+        {
+            KitID = KitID
+        });
+    }
+    public void AddWallHook()
+    {
+        Hooks.Add(new WallHookItem()
+        {
+            KitID = KitID
+        });
+    }
+    public void AddDoorframeHook()
+    {
+        Hooks.Add(new DoorFrameHookItem());
+    }
+    public void AddCornerHook()
+    {
+        Hooks.Add(new CornerHookItem()
+        {
+            InnerKitID = KitID,
+            InnerTemplateID = KitID,
+        });
+    }
 }

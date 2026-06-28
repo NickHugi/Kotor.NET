@@ -2,7 +2,7 @@
 
 public enum MagnetType
 {
-    Generic,
+    Magnet,
     Hook,
     Wall,
     Doorframe,
