@@ -9,11 +9,16 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Avalonia.Markup.Xaml.Templates;
 using DynamicData;
 using DynamicData.Binding;
 using Kotor.DevelopmentKit.AreaDesigner.relocate;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.KitSerialization;
+using Kotor.NET.Graphics.Model.Nodes;
+using Kotor.NET.Resources.KotorMDL;
+using Kotor.NET.Resources.KotorMDL.Controllers;
+using Kotor.NET.Resources.KotorMDL.Nodes;
 using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
@@ -21,6 +26,7 @@ namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 public class KitEditorViewModel : ReactiveObject
 {
     public Interaction<Unit, string?> SelectKitSaveFile { get; } = new();
+    public Interaction<Unit, string[]> ImportTemplateFiles { get; } = new();
 
     public string Name
     {
@@ -152,92 +158,256 @@ public class KitEditorViewModel : ReactiveObject
         KitSerializer.Save(filepath, ToModel());
     }
 
-    public void AddBasicWorldObject()
+    public async Task ImportTemplates()
+    {
+        var filepaths = await ImportTemplateFiles.Handle(Unit.Default);
+
+        foreach (var filepath in filepaths)
+        {
+            var filename = Path.GetFileNameWithoutExtension(filepath);
+            var mdl = MDL.FromFile(filepath);
+            var template = TemplateFromMDL(filename, mdl);
+            _objectTemplatesSource.Add(template);
+
+            if (template is FloorItem floorTemplate)
+            {
+                var tileTemplate = TileFromFloor(filename, floorTemplate, mdl);
+                _objectTemplatesSource.Add(tileTemplate);
+            }
+        }
+    }
+    public void AddBasicTemplate()
     {
         _objectTemplatesSource.Add(new ObjectItem
         {
             KitID = KitID,
-            TemplateID = $"{KitID}_object_",
-            Model = $"{KitID}_object_",
+            TemplateID = $"object_",
+            Model = $"object_",
             Name = "New Object",
         });
     }
-    public void AddTileWorldObject()
+    public void AddTileTemplate()
     {
         _objectTemplatesSource.Add(new TileItem
         {
             KitID = KitID,
-            TemplateID = $"{KitID}_tile_",
-            Model = $"{KitID}_tile_",
+            TemplateID = $"tile_",
+            Model = $"tile_",
             Name = "New Tile",
         });
     }
-    public void AddWallWorldObject()
+    public void AddWallTemplate()
     {
         _objectTemplatesSource.Add(new WallItem
         {
             KitID = KitID,
-            TemplateID = $"{KitID}_wall_",
-            Model = $"{KitID}_wall_",
+            TemplateID = $"wall_",
+            Model = $"wall_",
             Name = "New Wall",
         });
     }
-    public void AddDoorframeWorldObject()
+    public void AddDoorframeTemplate()
     {
         _objectTemplatesSource.Add(new WallItem
         {
             KitID = KitID,
-            TemplateID = $"{KitID}_doorframe_",
-            Model = $"{KitID}_doorframe_",
+            TemplateID = $"doorframe_",
+            Model = $"doorframe_",
             Name = "New Doorframe",
         });
     }
-    public void AddCeilingWorldObject()
+    public void AddCeilingTemplate()
     {
         _objectTemplatesSource.Add(new CeilingItem
         {
             KitID = KitID,
-            TemplateID = $"{KitID}_ceiling_",
-            Model = $"{KitID}_ceiling_",
+            TemplateID = $"ceiling_",
+            Model = $"ceiling_",
             Name = "New Ceiling",
         });
     }
-    public void AddFloorWorldObject()
+    public void AddFloorTemplate()
     {
         _objectTemplatesSource.Add(new FloorItem
         {
             KitID = KitID,
-            TemplateID = $"{KitID}_floor_",
-            Model = $"{KitID}_floor_",
+            TemplateID = $"floor_",
+            Model = $"floor_",
             Name = "New Floor",
         });
     }
-    public void AddInnerCornerWorldObject()
+    public void AddInnerCornerTemplate()
     {
         _objectTemplatesSource.Add(new InnerCornerItem
         {
             KitID = KitID,
-            TemplateID = $"{KitID}_icorner_",
-            Model = $"{KitID}_icorner_",
+            TemplateID = $"icorner_",
+            Model = $"icorner_",
             Name = "New Inner Corner",
         });
     }
-    public void AddOuterCornerWorldObject()
+    public void AddOuterCornerTemplate()
     {
         _objectTemplatesSource.Add(new OuterCornerItem
         {
             KitID = KitID,
-            TemplateID = $"{KitID}_ocorner_",
-            Model = $"{KitID}_ocorner_",
+            TemplateID = $"ocorner_",
+            Model = $"ocorner_",
             Name = "New Outer Corner",
         });
     }
 
-    public void DeleteSelectedObject()
+    public void DeleteSelectedTemplate()
     {
         if (SelectedObjectTemplateItem is null)
             return;
 
         _objectTemplatesSource.Remove(SelectedObjectTemplateItem);
+    }
+
+    private ObjectItem TemplateFromMDL(string filename, MDL mdl)
+    {
+        var name = mdl.Root.Name;
+
+        if (filename.Contains("floor"))
+        {
+            return new FloorItem()
+            {
+                KitID = KitID,
+                TemplateID = filename,
+                Name = mdl.Root.Name,
+                Model = filename,
+                ClassID = "",
+            };
+        }
+        else if (filename.Contains("ceiling"))
+        {
+            return new CeilingItem()
+            {
+                KitID = KitID,
+                TemplateID = filename,
+                Name = mdl.Root.Name,
+                Model = filename,
+                ClassID = "",
+            };
+        }
+        else if (filename.Contains("wall"))
+        {
+
+            return new WallItem()
+            {
+                KitID = KitID,
+                TemplateID = filename,
+                Name = mdl.Root.Name,
+                Model = filename,
+                ClassID = "",
+            };
+        }
+        else if (filename.Contains("object"))
+        {
+            return new ObjectItem()
+            {
+                KitID = KitID,
+                TemplateID = filename,
+                Name = mdl.Root.Name,
+                Model = filename,
+                ClassID = "",
+            };
+        }
+        else if (filename.Contains("icorner"))
+        {
+            return new InnerCornerItem()
+            {
+                KitID = KitID,
+                TemplateID = filename,
+                Name = mdl.Root.Name,
+                Model = filename,
+                ClassID = "",
+            };
+        }
+        else if (filename.Contains("ocorner"))
+        {
+            return new OuterCornerItem()
+            {
+                KitID = KitID,
+                TemplateID = filename,
+                Name = mdl.Root.Name,
+                Model = filename,
+                ClassID = "",
+            };
+        }
+        else if (filename.Contains("doorframe"))
+        {
+            var magnetsNodes = mdl.Root.GetAllDescendants().Where(x => x.Name.Contains("magnet."));
+
+            return new DoorFrameItem()
+            {
+                KitID = KitID,
+                TemplateID = filename,
+                Name = mdl.Root.Name,
+                Model = filename,
+                ClassID = "",
+                Hooks =
+                [
+                    ..magnetsNodes.Select(x => new DoorFrameHookItem()
+                    {
+                        Position = new(x.GetController<MDLControllerDataPosition>().First().Data[0].ToVector3()),
+                        Orientation = new(x.GetController<MDLControllerDataOrientation>().First().Data[0].ToQuaternion()),
+                    }),
+                ]
+            };
+        }
+        else
+        {
+            return null;
+        }
+    }
+    private TileItem TileFromFloor(string filename, FloorItem floor, MDL mdl)
+    {
+        var wallNodes = mdl.Root.GetAllDescendants().Where(x => x.Name.Contains("magnet.wall."));
+        var cornerNodes = mdl.Root.GetAllDescendants().Where(x => x.Name.Contains("magnet.corner."));
+        var floorNodes = mdl.Root.GetAllDescendants().Where(x => x.Name.Contains("magnet.floor."));
+        var ceilingNodes = mdl.Root.GetAllDescendants().Where(x => x.Name.Contains("magnet.ceiling."));
+
+        return new TileItem()
+        {
+            KitID = KitID,
+            TemplateID = filename.Replace("floor_", "tile_"),
+            Name = mdl.Root.Name,
+            ClassID = "",
+            Hooks =
+            [
+                new FloorHookItem()
+                {
+                    KitID = KitID,
+                    TemplateID = $"floor_{filename.Replace("floor_", "")}",
+                    Position = new(Vector3.Zero),
+                    Orientation = new(Quaternion.Identity),
+                },
+                new CeilingHookItem()
+                {
+                    KitID = KitID,
+                    TemplateID = $"ceiling_{filename.Replace("floor_", "")}",
+                    Position = new(Vector3.Zero),
+                    Orientation = new(Quaternion.Identity),
+                },
+                ..wallNodes.Select(x => new WallHookItem()
+                {
+                    KitID = KitID,
+                    TemplateID = $"wall_{x.Name.Split('.').Last()}",
+                    Position = new(x.GetController<MDLControllerDataPosition>().First().Data[0].ToVector3()),
+                    Orientation = new(x.GetController<MDLControllerDataOrientation>().First().Data[0].ToQuaternion()),
+                }),
+                ..cornerNodes.Select(x => new CornerHookItem()
+                {
+                    InnerKitID = KitID,
+                    InnerTemplateID = $"icorner_{x.Name.Split('.').Last()}",
+                    OuterKitID = KitID,
+                    OuterTemplateID = $"ocorner_{x.Name.Split('.').Last()}",
+                    Position = new(x.GetController<MDLControllerDataPosition>().First().Data[0].ToVector3()),
+                    Orientation = new(x.GetController<MDLControllerDataOrientation>().First().Data[0].ToQuaternion()),
+                }),
+            ]
+        };
     }
 }

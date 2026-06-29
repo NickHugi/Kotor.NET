@@ -44,7 +44,7 @@ public class ObjectItem : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public ObservableCollection<HookItem> Hooks { get; }
+    public ObservableCollection<HookItem> Hooks { get; init; }
 
     public HookItem? SelectedHook
     {

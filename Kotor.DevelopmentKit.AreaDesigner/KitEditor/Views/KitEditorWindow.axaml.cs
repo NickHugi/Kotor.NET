@@ -24,9 +24,9 @@ public partial class KitEditorWindow : ReactiveWindow<KitEditorViewModel>
         this.WhenActivated(d =>
         {
             ViewModel.SelectKitSaveFile.RegisterHandler(SelectKitSaveFile).DisposeWith(d);
+            ViewModel.ImportTemplateFiles.RegisterHandler(ImportTemplateFiles).DisposeWith(d);
         });
     }
-
 
     public async Task SelectKitSaveFile(IInteractionContext<Unit, string?> context)
     {
@@ -49,5 +49,20 @@ public partial class KitEditorWindow : ReactiveWindow<KitEditorViewModel>
             context.SetOutput(null);
             return;
         }
+    }
+
+    public async Task ImportTemplateFiles(IInteractionContext<Unit, string[]> context)
+    {
+        var files = await GetTopLevel(this)!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
+        {
+            Title = "Import Template Files",
+            AllowMultiple = true,
+            FileTypeFilter =
+            [
+                new FilePickerFileType("KotOR MDL") { Patterns = ["*.mdl"] },
+            ]
+        });
+
+        context.SetOutput(files.Select(x => x.Path.LocalPath).ToArray());
     }
 }
