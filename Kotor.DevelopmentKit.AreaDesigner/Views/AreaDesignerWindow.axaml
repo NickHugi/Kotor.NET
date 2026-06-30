@@ -20,8 +20,7 @@
     <Window.Resources>
         <DataTemplate x:Key="AddTileMode" x:DataType="mode:AddTileMode">
 			<ListBox ItemsSource="{Binding TileTemplates}"
-                     SelectedItem="{Binding SelectedTileTemplate}"
-                     Height="200">
+                     SelectedItem="{Binding SelectedTileTemplate}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical">
@@ -35,8 +34,7 @@
         
         <DataTemplate x:Key="AddObjectMode" x:DataType="mode:AddObjectMode">
 			<ListBox ItemsSource="{Binding ObjectTemplates}"
-                     SelectedItem="{Binding SelectedObjectTemplate}"
-                     Height="200">
+                     SelectedItem="{Binding SelectedObjectTemplate}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -49,8 +47,7 @@
 
         <DataTemplate x:Key="SelectObjectMode" x:DataType="mode:SelectObjectMode">
 			<ListBox ItemsSource="{Binding ObjectTemplates}"
-                     SelectedItem="{Binding SelectedObjectTemplate}"
-                     Height="200">
+                     SelectedItem="{Binding SelectedObjectTemplate}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -142,10 +139,10 @@
             </DropDownButton>
 
         </StackPanel>
-        <StackPanel DockPanel.Dock="Left"
-                    Width="250">
-            <Grid ColumnDefinitions="*">
-            <DropDownButton Content="Active Kits" HorizontalAlignment="Stretch" Grid.Column="0">
+        <Grid DockPanel.Dock="Left"
+              RowDefinitions="Auto, *"
+              Width="250">
+            <DropDownButton Content="Active Kits" HorizontalAlignment="Stretch" Grid.Row="0">
                 <DropDownButton.Flyout>
                     <Flyout>
                         <ItemsControl ItemsSource="{Binding Kits}"
@@ -153,18 +150,14 @@
                     </Flyout>
                 </DropDownButton.Flyout>
             </DropDownButton>
-
-            </Grid>
-
-            <ContentControl Content="{Binding Mode}">
+            <ContentControl Content="{Binding Mode}" Grid.Row="1">
                 <ContentControl.DataTemplates>
                     <StaticResource ResourceKey="AddTileMode" />
                     <StaticResource ResourceKey="AddObjectMode" />
                     <StaticResource ResourceKey="SelectObjectMode" />
                 </ContentControl.DataTemplates>
             </ContentControl>
-            
-        </StackPanel>
+        </Grid>
 
         <local:SceneControl KeyDown="SceneControl_KeyDown" />
     </DockPanel>
