@@ -46,7 +46,7 @@ public class AreaDesignerViewModel : ReactiveObject
     public Interaction<Unit, string?> SelectLoadFilepathForArea = new();
     public Interaction<Unit, Unit> PromptEditSettings = new();
     public Interaction<Unit, Unit> ClearSelection = new();
-    public Interaction<object, Unit> AddToSelection = new();
+    public Interaction<IWorldObject, Unit> AddToSelection = new();
 
     public bool IsMode_AddTile => Mode is AddTileMode;
     public bool IsMode_SelectObject => Mode is SelectObjectMode;
@@ -59,12 +59,12 @@ public class AreaDesignerViewModel : ReactiveObject
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
-    public object? ActiveObject
+    public IWorldObject? ActiveWorldObject
     {
         get;
         set
         {
-            Mode.SelectedPiece = value;
+            Mode.SelectedWorldObject = value;
             this.RaiseAndSetIfChanged(ref field, value);
         }
     }
@@ -158,15 +158,15 @@ public class AreaDesignerViewModel : ReactiveObject
 
         ClearSelection.RegisterHandler(async interaction =>
         {
-            ActiveObject = null;
+            ActiveWorldObject = null;
             SelectedPieces.Clear();
             interaction.SetOutput(Unit.Default);
         });
 
         AddToSelection.RegisterHandler(async interaction =>
         {
-            ActiveObject = interaction.Input;
-            SelectedPieces.Add(ActiveObject);
+            ActiveWorldObject = interaction.Input;
+            SelectedPieces.Add(ActiveWorldObject);
             interaction.SetOutput(Unit.Default);
         });
 
@@ -182,16 +182,16 @@ public class AreaDesignerViewModel : ReactiveObject
     public void SetSceneMode_AddTile()
     {
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
-        Mode = new AddTileMode(Engine, area, Kits, ActiveObject, Settings);
+        Mode = new AddTileMode(Engine, area, Kits, ActiveWorldObject, Settings);
     }
     public void SetSceneMode_AddObject()
     {
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
-        Mode = new AddObjectMode(Engine, area, Kits, ActiveObject, Settings);
+        Mode = new AddObjectMode(Engine, area, Kits, ActiveWorldObject, Settings);
     }
     public void SetSceneMode_SelectObject()
     {
-        Mode = new SelectObjectMode(Engine, Area, Kits, ActiveObject, Settings)
+        Mode = new SelectObjectMode(Engine, Area, Kits, ActiveWorldObject, Settings)
         {
             AddToSelection = AddToSelection,
             ClearSelection = ClearSelection,
@@ -320,7 +320,7 @@ public class AreaDesignerViewModel : ReactiveObject
 
         await Mode.RenderIntercept(camera, mouse, descriptors);
 
-        if (ActiveObject is Tile tile)
+        if (ActiveWorldObject is Tile tile)
         {
             descriptors
                 .Where(x => tile.VirtualObjects.OfType<Wall>().Contains(x.Tag)
@@ -332,7 +332,7 @@ public class AreaDesignerViewModel : ReactiveObject
         }
 
         descriptors
-            .Where(x => ActiveObject != null && x.Tag == ActiveObject)
+            .Where(x => ActiveWorldObject != null && x.Tag == ActiveWorldObject)
             .OfType<MeshDescriptor>()
             .ToList()
             .ForEach(x => x.AmbientColor += new Vector3(0.5f, 0.5f, 0.5f));

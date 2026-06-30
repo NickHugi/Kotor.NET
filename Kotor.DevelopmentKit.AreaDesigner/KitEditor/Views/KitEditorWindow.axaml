@@ -30,13 +30,7 @@
             </StackPanel>
         </DataTemplate>
         
-        <DataTemplate x:Key="ObjectItemPanel" x:DataType="templates:WorldObjectItem">
-            <StackPanel>
-                <core:LabeledTextBox Label="Model" Text="{Binding Model}" />
-            </StackPanel>
-        </DataTemplate>
-        
-        <DataTemplate x:Key="WalltemPanel" x:DataType="templates:WallItem">
+        <DataTemplate x:Key="WallItemPanel" x:DataType="templates:WallItem">
             <StackPanel>
                 <core:LabeledTextBox Label="Model" Text="{Binding Model}" />
                 <core:LabeledTextBox Label="Doorframe Kit ID" Text="{Binding DoorframeKitID}" />
@@ -89,6 +83,12 @@
             </Grid>
         </DataTemplate>
         
+        <DataTemplate x:Key="WorldObjectItemPanel" x:DataType="templates:WorldObjectItem">
+            <StackPanel>
+                <core:LabeledTextBox Label="Model" Text="{Binding Model}" />
+            </StackPanel>
+        </DataTemplate>
+        
         <DataTemplate x:Key="WallHookItemPanel" DataType="hooks:WallHookItem">
             <StackPanel>
                 <core:LabeledTextBox Label="Kit ID" Text="{Binding KitID}" />
@@ -115,7 +115,7 @@
             </StackPanel>
         </DataTemplate>
         
-        <DataTemplate x:Key="MagnetItemList" x:DataType="hooks:HookItem">
+        <DataTemplate x:Key="MagnetItemList" x:DataType="hooks:BaseMagnetItem">
             <StackPanel>
                 <TextBlock Text="{Binding Name}" />
             </StackPanel>
@@ -181,8 +181,9 @@
                             <ContentControl Content="{Binding SelectedObjectTemplateItem}" Grid.Row="4">
                                 <ContentControl.DataTemplates>
                                     <StaticResource ResourceKey="TileItemPanel" />
-                                    <StaticResource ResourceKey="WalltemPanel" />
-                                    <StaticResource ResourceKey="ObjectItemPanel" />
+                                    <StaticResource ResourceKey="WallItemPanel" />
+                                    <StaticResource ResourceKey="DoorframeItemPanel" />
+                                    <StaticResource ResourceKey="WorldObjectItemPanel" />
                                 </ContentControl.DataTemplates>
                             </ContentControl>
                         </Grid>

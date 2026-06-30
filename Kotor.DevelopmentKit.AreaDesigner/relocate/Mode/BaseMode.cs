@@ -27,7 +27,7 @@ public class BaseMode : ReactiveObject
     public virtual string Name { get; } = "";
     public ObservableCollection<KitItem> Kits { get; }
 
-    public object SelectedPiece
+    public IWorldObject SelectedWorldObject
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
@@ -40,10 +40,10 @@ public class BaseMode : ReactiveObject
     protected IReadOnlyCollection<WorldObjectTemplate> _objects => Kits.Where(x => x.Active).SelectMany(x => x.Kit.Objects).ToList();
     protected AreaEntity _areaEntity => _engine.Scene.Entities.OfType<AreaEntity>().Single(x => x.Area == _area);
 
-    public BaseMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, object selectedPiece, DesignerSettings settings)
+    public BaseMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, IWorldObject activeWorldObject, DesignerSettings settings)
     {
         Kits = kits;
-        SelectedPiece = selectedPiece;
+        SelectedWorldObject = selectedWorldObject;
         _engine = engine;
         _area = area;
         _settings = settings;

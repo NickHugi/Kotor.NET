@@ -82,9 +82,9 @@ public class KitSerializer_V0_1
                 ClassID = wall.classID.Value,
                 Name = wall.name.Value,
                 Model = wall.model.Value,
-                DoorframeKitID = wall.doorframeKtID?.Value ?? "",
-                DoorframeTemplateID = wall.doorframeTemplateID?.Value ?? "",
-                DoorframeClassID = wall.doorframeClassID?.Value ?? "",
+                DoorframeKitID = wall.doorframeKitID.Value,
+                DoorframeTemplateID = wall.doorframeTemplateID.Value,
+                DoorframeClassID = wall.doorframeClassID.Value,
                 Magnets = []
             });
         }

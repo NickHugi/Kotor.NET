@@ -63,7 +63,7 @@ public class KitEditorViewModel : ReactiveObject
     private readonly ReadOnlyObservableCollection<WorldObjectItem> _objectTemplates;
     public ReadOnlyObservableCollection<WorldObjectItem> ObjectTemplateItems => _objectTemplates;
 
-    public PropItem? SelectedObjectTemplateItem
+    public WorldObjectItem? SelectedObjectTemplateItem
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);

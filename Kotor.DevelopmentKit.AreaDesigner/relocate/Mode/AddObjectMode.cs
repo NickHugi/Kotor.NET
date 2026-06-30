@@ -40,7 +40,7 @@ public class AddObjectMode : BaseMode
     private WorldObject _addObject = default!;
     private float angle = 0;
 
-    public AddObjectMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, object selectedPiece, DesignerSettings settings) : base(engine, area, kits, selectedPiece, settings)
+    public AddObjectMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, IWorldObject activeWorldObject, DesignerSettings settings) : base(engine, area, kits, activeWorldObject, settings)
     {
         Kits.ToObservableChangeSet().AutoRefresh(x => x.Active).Subscribe(_ => this.RaisePropertyChanged(nameof(ObjectTemplates)));
     }

@@ -28,21 +28,20 @@ public class SelectObjectMode : BaseMode
 {
     public override string Name => "Select Object";
 
-    public required Interaction<object, Unit> AddToSelection { get; init; }
+    public required Interaction<IWorldObject, Unit> AddToSelection { get; init; }
     public required Interaction<Unit, Unit> ClearSelection { get; init; }
 
-    public List<WorldObjectTemplate> ObjectTemplates
+    public IEnumerable<WorldObjectTemplate> ObjectTemplates
     {
         get
         {
-            if (Kits is null)
-                return [];
-
-            return SelectedPiece switch
+            return SelectedWorldObject switch
             {
-                //TODO
-                //Wall _ => SelectedKit.Objects.OfType<ObjectTemplate>().ToList(),
-                //Floor _ => SelectedKit.Objects.OfType<ObjectTemplate>().ToList(),
+                Wall wall => _objects.OfType<WallTemplate>().Where(x => x.ClassID == wall.Template.ClassID),
+                Floor floor => _objects.OfType<FloorTemplate>().Where(x => x.ClassID == floor.Template.ClassID),
+                Ceiling ceiling => _objects.OfType<CeilingTemplate>().Where(x => x.ClassID == ceiling.Template.ClassID),
+                InnerCorner innerCorner => _objects.OfType<InnerCornerTemplate>().Where(x => x.ClassID == innerCorner.Template.ClassID),
+                OuterCorner outerCorner => _objects.OfType<OuterCornerTemplate>().Where(x => x.ClassID == outerCorner.Template.ClassID),
                 _ => _objects.ToList()
             };
         }
@@ -58,9 +57,9 @@ public class SelectObjectMode : BaseMode
     private IWorldObject? _projectedObject;
     private Point _mousePrevious;
 
-    public SelectObjectMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, object selectedPiece, DesignerSettings settings) : base(engine, area, kits, selectedPiece, settings)
+    public SelectObjectMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, IWorldObject activeWorldObject, DesignerSettings settings) : base(engine, area, kits, selectedPiece, settings)
     {
-        this.WhenAnyValue(x => x.SelectedPiece)
+        this.WhenAnyValue(x => x.SelectedWorldObject)
             .Subscribe(_ =>
             {
                 this.RaisePropertyChanged(nameof(ObjectTemplates));
@@ -72,7 +71,7 @@ public class SelectObjectMode : BaseMode
             {
                 if (SelectedObjectTemplate is null)
                     return;
-                if (SelectedPiece is not IWorldObject @object)
+                if (SelectedWorldObject is not IWorldObject @object)
                     return;
                 if (@object == _projectedObject)
                     return;
@@ -115,7 +114,7 @@ public class SelectObjectMode : BaseMode
         if (_projectedObject is not null)
             descriptors.Where(x => x.Tag == _projectedObject).OfType<MeshDescriptor>().ToList().ForEach(x => x.AmbientColor = new(1.5f, 1.5f, 1.5f));
 
-        if (_isTranslating && SelectedPiece is WorldObject obj)
+        if (_isTranslating && SelectedWorldObject is WorldObject obj)
         {
             var ray = camera.ProjectRay((int)mouse.X, (int)mouse.Y, 1109, 703);
 
@@ -129,7 +128,7 @@ public class SelectObjectMode : BaseMode
                 obj.LocalPosition = new(point.X, point.Y, obj.LocalPosition.Z);
             }
         }
-        if (SelectedPiece is WorldObject @object && _isTranslating)
+        if (SelectedWorldObject is WorldObject @object && _isTranslating)
         {
             Vector3 start = _transformAxis switch
             {

@@ -6,6 +6,6 @@ public class WallTemplate : WorldObjectTemplate
     public required string DoorframeTemplateID { get; init; }
     public required string DoorframeClassID { get; init; }
 
-    public DoorFrameTemplate? DoorFrame => DoorframeTemplateID is not null ? Kit.Manager.Get(DoorframeKitID).DoorFrame(DoorframeTemplateID) : null;
+    public DoorFrameTemplate? DoorFrame => string.IsNullOrEmpty(DoorframeTemplateID) ? null : Kit.Manager.Get(DoorframeKitID).DoorFrame(DoorframeTemplateID);
     public bool CanBeDoor => DoorFrame is not null;
 }

@@ -37,7 +37,7 @@ public class AddTileMode : BaseMode
             if (Kits is null)
                 return [];
 
-            if (SelectedPiece is Wall wall)
+            if (SelectedWorldObject is Wall wall)
             {
                 var activeGroup = wall.Template.ClassID;
                 return _objects.OfType<TileTemplate>().Where(x => x.Magnets.OfType<WallHookTemplate>().Any(y => activeGroup == y.Template.ClassID)).ToList();
@@ -54,7 +54,7 @@ public class AddTileMode : BaseMode
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public AddTileMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, object selectedPiece, DesignerSettings settings) : base(engine, area, kits, selectedPiece, settings)
+    public AddTileMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, IWorldObject activeWorldObject, DesignerSettings settings) : base(engine, area, kits, selectedPiece, settings)
     {
         Kits.ToObservableChangeSet().AutoRefresh(x => x.Active).Subscribe(_ => this.RaisePropertyChanged(nameof(TileTemplates)));
     }
