@@ -9,12 +9,17 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using Avalonia.Layout;
 using Avalonia.Markup.Xaml.Templates;
 using DynamicData;
 using DynamicData.Binding;
 using Kotor.DevelopmentKit.AreaDesigner.relocate;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.KitSerialization;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
+using Kotor.DevelopmentKit.AreaDesigner.Views;
+using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using Kotor.NET.Graphics.Model.Nodes;
 using Kotor.NET.Resources.KotorMDL;
 using Kotor.NET.Resources.KotorMDL.Controllers;
@@ -108,14 +113,14 @@ public class KitEditorViewModel : ReactiveObject
 
         _objectTemplatesSource.AddRange(
         [
-            .. kit.Objects.Select(x => new ObjectItem(x)),
-            .. kit.Tiles.Select(x => new TileItem(x)),
-            .. kit.Floors.Select(x => new FloorItem(x)),
-            .. kit.Ceilings.Select(x => new CeilingItem(x)),
-            .. kit.Walls.Select(x => new WallItem(x)),
-            .. kit.DoorFrames.Select(x => new DoorFrameItem(x)),
-            .. kit.InnerCorners.Select(x => new InnerCornerItem(x)),
-            .. kit.OuterCorners.Select(x => new OuterCornerItem(x)),
+            .. kit.Objects.Where(x => x.GetType() == typeof(ObjectTemplate)).Select(x => new ObjectItem(x)),
+            .. kit.Objects.OfType<TileTemplate>().Select(x => new TileItem(x)),
+            .. kit.Objects.OfType<FloorTemplate>().Select(x => new FloorItem(x)),
+            .. kit.Objects.OfType<CeilingTemplate>().Select(x => new CeilingItem(x)),
+            .. kit.Objects.OfType<WallTemplate>().Select(x => new WallItem(x)),
+            .. kit.Objects.OfType<DoorFrameTemplate>().Select(x => new DoorFrameItem(x)),
+            .. kit.Objects.OfType<InnerCornerTemplate>().Select(x => new InnerCornerItem(x)),
+            .. kit.Objects.OfType<OuterCornerTemplate>().Select(x => new OuterCornerItem(x)),
         ]);
     }
 
@@ -123,15 +128,7 @@ public class KitEditorViewModel : ReactiveObject
     {
         return new Kit(FilePath, KitID, Version, Name)
         {
-            //TODO
-            //Tiles = TileTab.TileItems.Select(x => x.ToModel(KitID)).ToList(),
-            //Floors = FloorTab.FloorItems.Select(x => x.ToModel(KitID)).ToList(),
-            //Walls = WallTab.WallItems.Select(x => x.ToModel(KitID)).ToList(),
-            //DoorFrames = DoorFrameTab.DoorFrameItems.Select(x => x.ToModel(KitID)).ToList(),
-            //InnerCorners = InnerCornerTab.InnerCornerItems.Select(x => x.ToModel(KitID)).ToList(),
-            //OuterCorners = OuterCornerTab.OuterCornerItems.Select(x => x.ToModel(KitID)).ToList(),
-            //Ceilings = CeilingTab.CeilingItems.Select(x => x.ToModel(KitID)).ToList(),
-            //Objects = ObjectTab.ObjectItems.Select(x => x.ToModel(KitID)).ToList(),
+            Objects = ObjectTemplateItems.Select(x => x.ToModel()).ToList()
         };
     }
 
@@ -267,17 +264,15 @@ public class KitEditorViewModel : ReactiveObject
 
     private ObjectItem TemplateFromMDL(string filename, MDL mdl)
     {
-        var name = mdl.Root.Name;
-
         if (filename.Contains("floor"))
         {
             return new FloorItem()
             {
                 KitID = KitID,
                 TemplateID = filename,
-                Name = mdl.Root.Name,
+                ClassID = ClassIDFromMDL(mdl),
+                Name = NameFromMDL(mdl),
                 Model = filename,
-                ClassID = "",
             };
         }
         else if (filename.Contains("ceiling"))
@@ -286,21 +281,23 @@ public class KitEditorViewModel : ReactiveObject
             {
                 KitID = KitID,
                 TemplateID = filename,
-                Name = mdl.Root.Name,
+                ClassID = ClassIDFromMDL(mdl),
+                Name = NameFromMDL(mdl),
                 Model = filename,
-                ClassID = "",
             };
         }
         else if (filename.Contains("wall"))
         {
-
             return new WallItem()
             {
                 KitID = KitID,
                 TemplateID = filename,
-                Name = mdl.Root.Name,
+                ClassID = ClassIDFromMDL(mdl),
+                Name = NameFromMDL(mdl),
                 Model = filename,
-                ClassID = "",
+                DoorframeKitID = DoorframeKitIDFromMDL(mdl),
+                DoorframeTemplateID = DoorframeTemplateIDFromMDL(mdl),
+                DoorframeClassID = DoorframeClassIDFromMDL(mdl)
             };
         }
         else if (filename.Contains("object"))
@@ -309,9 +306,9 @@ public class KitEditorViewModel : ReactiveObject
             {
                 KitID = KitID,
                 TemplateID = filename,
-                Name = mdl.Root.Name,
+                ClassID = ClassIDFromMDL(mdl),
+                Name = NameFromMDL(mdl),
                 Model = filename,
-                ClassID = "",
             };
         }
         else if (filename.Contains("icorner"))
@@ -320,9 +317,9 @@ public class KitEditorViewModel : ReactiveObject
             {
                 KitID = KitID,
                 TemplateID = filename,
-                Name = mdl.Root.Name,
+                ClassID = ClassIDFromMDL(mdl),
+                Name = NameFromMDL(mdl),
                 Model = filename,
-                ClassID = "",
             };
         }
         else if (filename.Contains("ocorner"))
@@ -331,9 +328,9 @@ public class KitEditorViewModel : ReactiveObject
             {
                 KitID = KitID,
                 TemplateID = filename,
-                Name = mdl.Root.Name,
+                ClassID = ClassIDFromMDL(mdl),
+                Name = NameFromMDL(mdl),
                 Model = filename,
-                ClassID = "",
             };
         }
         else if (filename.Contains("doorframe"))
@@ -344,15 +341,15 @@ public class KitEditorViewModel : ReactiveObject
             {
                 KitID = KitID,
                 TemplateID = filename,
-                Name = mdl.Root.Name,
+                ClassID = ClassIDFromMDL(mdl),
+                Name = NameFromMDL(mdl),
                 Model = filename,
-                ClassID = "",
                 Hooks =
                 [
                     ..magnetsNodes.Select(x => new DoorFrameHookItem()
                     {
-                        Position = new(x.GetController<MDLControllerDataPosition>().First().Data[0].ToVector3()),
-                        Orientation = new(x.GetController<MDLControllerDataOrientation>().First().Data[0].ToQuaternion()),
+                        Position = PositionFromNode(x),
+                        Orientation = OrientationFromNode(x),
                     }),
                 ]
             };
@@ -373,8 +370,8 @@ public class KitEditorViewModel : ReactiveObject
         {
             KitID = KitID,
             TemplateID = filename.Replace("floor_", "tile_"),
-            Name = mdl.Root.Name,
-            ClassID = "",
+            ClassID = ClassIDFromMDL(mdl),
+            Name = NameFromMDL(mdl).Replace("Floor", "Tile"),
             Hooks =
             [
                 new FloorHookItem()
@@ -395,8 +392,8 @@ public class KitEditorViewModel : ReactiveObject
                 {
                     KitID = KitID,
                     TemplateID = $"wall_{x.Name.Split('.').Last()}",
-                    Position = new(x.GetController<MDLControllerDataPosition>().First().Data[0].ToVector3()),
-                    Orientation = new(x.GetController<MDLControllerDataOrientation>().First().Data[0].ToQuaternion()),
+                    Position = PositionFromNode(x),
+                    Orientation = OrientationFromNode(x),
                 }),
                 ..cornerNodes.Select(x => new CornerHookItem()
                 {
@@ -404,10 +401,44 @@ public class KitEditorViewModel : ReactiveObject
                     InnerTemplateID = $"icorner_{x.Name.Split('.').Last()}",
                     OuterKitID = KitID,
                     OuterTemplateID = $"ocorner_{x.Name.Split('.').Last()}",
-                    Position = new(x.GetController<MDLControllerDataPosition>().First().Data[0].ToVector3()),
-                    Orientation = new(x.GetController<MDLControllerDataOrientation>().First().Data[0].ToQuaternion()),
+                    Position = PositionFromNode(x),
+                    Orientation = OrientationFromNode(x),
                 }),
             ]
         };
+    }
+    private ReactiveVector3 PositionFromNode(MDLNode node)
+    {
+        return new(node.GetController<MDLControllerDataPosition>().First().Data[0].ToVector3());
+    }
+    private ReactiveQuaternion OrientationFromNode(MDLNode node)
+    {
+        return new(node.GetController<MDLControllerDataOrientation>().First().Data[0].ToQuaternion());
+    }
+    private string NameFromMDL(MDL mdl)
+    {
+        var node = mdl.Root.Children.SingleOrDefault(x => x.Name.StartsWith("_Name="));
+        return node?.Name.Replace("_Name=", "") ?? mdl.Name;
+    }
+    private string ClassIDFromMDL(MDL mdl)
+    {
+        var node = mdl.Root.Children.SingleOrDefault(x => x.Name.StartsWith("_ClassID="));
+        return node?.Name.Replace("_ClassID=", "") ?? "";
+    }
+    private string DoorframeTemplateIDFromMDL(MDL mdl)
+    {
+        var node = mdl.Root.Children.SingleOrDefault(x => x.Name.StartsWith("_DoorframeTemplateID="));
+        return node?.Name.Replace("_DoorframeTemplateID=", "") ?? "";
+    }
+    private string DoorframeKitIDFromMDL(MDL mdl)
+    {
+        var node = mdl.Root.Children.SingleOrDefault(x => x.Name.StartsWith("_DoorframeKitID="));
+        var fallbackKitID = (DoorframeTemplateIDFromMDL(mdl) is null) ? "" : KitID;
+        return node?.Name.Replace("_DoorframeKitID=", "") ?? fallbackKitID;
+    }
+    private string DoorframeClassIDFromMDL(MDL mdl)
+    {
+        var node = mdl.Root.Children.SingleOrDefault(x => x.Name.StartsWith("_DoorframeClassID="));
+        return node?.Name.Replace("_DoorframeClassID=", "") ?? "";
     }
 }

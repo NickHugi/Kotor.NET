@@ -38,8 +38,9 @@ public class SelectObjectMode : BaseMode
 
             return SelectedPiece switch
             {
-                Wall _ => SelectedKit.Walls.OfType<ObjectTemplate>().ToList(),
-                Floor _ => SelectedKit.Floors.OfType<ObjectTemplate>().ToList(),
+                //TODO
+                //Wall _ => SelectedKit.Objects.OfType<ObjectTemplate>().ToList(),
+                //Floor _ => SelectedKit.Objects.OfType<ObjectTemplate>().ToList(),
                 _ => SelectedKit.Objects.ToList()
             };
         }

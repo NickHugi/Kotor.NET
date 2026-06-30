@@ -16,7 +16,7 @@ public class OuterCornerItem : ObjectItem
     public OuterCornerItem() : base()
     {
     }
-    public OuterCornerItem(OuterCornerTemplate template) : base()
+    public OuterCornerItem(OuterCornerTemplate template) : base(template)
     {
     }
 

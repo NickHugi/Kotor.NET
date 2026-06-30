@@ -37,7 +37,9 @@
         <DataTemplate x:Key="WalltemPanel" x:DataType="vm:WallItem">
             <StackPanel>
                 <core:LabeledTextBox Label="Model" Text="{Binding Model}" />
-                <core:LabeledTextBox Label="Doorframe Template ID" Text="{Binding DoorFrameID}" />
+                <core:LabeledTextBox Label="Doorframe Kit ID" Text="{Binding DoorframeKitID}" />
+                <core:LabeledTextBox Label="Doorframe Template ID" Text="{Binding DoorframeTemplateID}" />
+                <core:LabeledTextBox Label="Doorframe Class ID" Text="{Binding DoorframeClassID}" />
             </StackPanel>
         </DataTemplate>
 
@@ -177,8 +179,8 @@
                             <ContentControl Content="{Binding SelectedObjectTemplateItem}" Grid.Row="4">
                                 <ContentControl.DataTemplates>
                                     <StaticResource ResourceKey="TileItemPanel" />
-                                    <StaticResource ResourceKey="ObjectItemPanel" />
                                     <StaticResource ResourceKey="WalltemPanel" />
+                                    <StaticResource ResourceKey="ObjectItemPanel" />
                                 </ContentControl.DataTemplates>
                             </ContentControl>
                         </Grid>

@@ -34,8 +34,10 @@ public class FloorHookItem : HookItem
         this.WhenAnyValue(x => x.TemplateID).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
         this.WhenAnyValue(x => x.Position).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
     }
-    public FloorHookItem(DoorFrameHookTemplate template) : this()
+    public FloorHookItem(FloorHookTemplate template) : this()
     {
+        KitID = template.KitID;
+        TemplateID = template.TemplateID;
         Position = new(template.LocalPosition);
         Orientation = new(template.LocalOrientation);
     }

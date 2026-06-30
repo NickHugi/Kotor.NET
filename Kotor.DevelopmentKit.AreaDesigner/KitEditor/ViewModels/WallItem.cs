@@ -13,7 +13,17 @@ public class WallItem : ObjectItem
 {
     public override WorldObjectType WorldObjectType => WorldObjectType.Wall;
 
-    public string DoorFrameID
+    public string DoorframeTemplateID
+    {
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+    public string DoorframeKitID
+    {
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+    public string DoorframeClassID
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
@@ -21,11 +31,15 @@ public class WallItem : ObjectItem
 
     public WallItem() : base()
     {
-        DoorFrameID = "";
+        DoorframeKitID = "";
+        DoorframeTemplateID = "";
+        DoorframeClassID = "";
     }
     public WallItem(WallTemplate template) : base(template)
     {
-        DoorFrameID = template.DoorFrameID;
+        DoorframeKitID = template.DoorframeKitID;
+        DoorframeTemplateID = template.DoorframeTemplateID;
+        DoorframeClassID = template.DoorframeClassID;
     }
 
     public override WallTemplate ToModel()
@@ -37,7 +51,9 @@ public class WallItem : ObjectItem
             Name = Name,
             Model = Model,
             ClassID = ClassID,
-            DoorFrameID = DoorFrameID,
+            DoorframeKitID = DoorframeKitID,
+            DoorframeTemplateID = DoorframeTemplateID,
+            DoorframeClassID = DoorframeClassID,
             Hooks = []
         };
     }

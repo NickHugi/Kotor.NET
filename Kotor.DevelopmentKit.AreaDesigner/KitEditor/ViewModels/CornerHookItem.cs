@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia.Markup.Xaml.Templates;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
@@ -50,8 +51,9 @@ public class CornerHookItem : HookItem
 
         AdjacentWalls = [];
 
-        //this.WhenAnyValue(x => x.DefaultInnerTemplateID).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
-        //this.WhenAnyValue(x => x.Position).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
+        this.WhenAnyValue(x => x.InnerTemplateID).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
+        this.WhenAnyValue(x => x.OuterTemplateID).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
+        this.WhenAnyValue(x => x.Position).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
     }
     public CornerHookItem(CornerHookTemplate template) : this()
     {
@@ -64,7 +66,7 @@ public class CornerHookItem : HookItem
         AdjacentWalls = new(template.Adjacent);
     }
 
-    public CornerHookTemplate ToModel()
+    public override CornerHookTemplate ToModel()
     {
         return new CornerHookTemplate
         {

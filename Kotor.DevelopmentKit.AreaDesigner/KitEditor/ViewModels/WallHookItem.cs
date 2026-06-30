@@ -45,7 +45,7 @@ public class WallHookItem : HookItem
         AdjacentWalls = new(wallHook.AdjacentWalls);
     }
 
-    public WallHookTemplate ToModel()
+    public override WallHookTemplate ToModel()
     {
         return new WallHookTemplate
         {

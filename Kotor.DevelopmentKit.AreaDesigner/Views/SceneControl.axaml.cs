@@ -57,8 +57,6 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
 
         this.WhenActivated(d =>
         {
-            ViewModel.SelectWallTemplate.RegisterHandler(SelectWallTemplate).DisposeWith(d);
-            ViewModel.SelectTileTemplate.RegisterHandler(SelectTileTemplate).DisposeWith(d);
             ViewModel.SelectSaveFilepathForArea.RegisterHandler(SelectSaveFilepathForArea).DisposeWith(d);
             ViewModel.SelectLoadFilepathForArea.RegisterHandler(SelectLoadFilepathForArea).DisposeWith(d);
             ViewModel.PromptEditSettings.RegisterHandler(EditSettings).DisposeWith(d);
@@ -76,6 +74,9 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         ViewModel.Engine.Scene.AddEntity(new AreaEntity());
         ViewModel.Engine.RenderInterceptor = descriptors =>
         {
+            if (_lastPointerPosition is null)
+                return;
+
             ViewModel.RenderIntercept(_camera, _lastPointerPosition.GetValueOrDefault(), descriptors).Wait();
         };
     }
@@ -265,59 +266,6 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
     }
     #endregion
 
-    public async Task SelectWallTemplate(IInteractionContext<Unit, WallTemplate?> context)
-    {
-        var tcs = new TaskCompletionSource<WallTemplate?>(TaskCreationOptions.RunContinuationsAsynchronously);
-
-        var menu = new ContextMenu();
-        Kit.Manager.Get("sandral").Walls.ToList().ForEach(template =>
-        {
-            menu.Items.Add(new MenuItem
-            {
-                Header = template.Name,
-                Command = ReactiveCommand.Create(() => tcs.TrySetResult(template))
-            });
-        });
-        menu.Closed += (_, __) => tcs.TrySetCanceled();
-        menu.Open(this);
-
-        try
-        {
-            var result = await tcs.Task;
-            context.SetOutput(result);
-        }
-        catch (TaskCanceledException)
-        {
-            context.SetOutput(null);
-        }
-    }
-
-    public async Task SelectTileTemplate(IInteractionContext<Unit, TileTemplate?> context)
-    {
-        var tcs = new TaskCompletionSource<TileTemplate?>(TaskCreationOptions.RunContinuationsAsynchronously);
-
-        var menu = new ContextMenu();
-        Kit.Manager.Get("sandral").Tiles.ToList().ForEach(template =>
-        {
-            menu.Items.Add(new MenuItem
-            {
-                Header = template.Name,
-                Command = ReactiveCommand.Create(() => tcs.TrySetResult(template))
-            });
-        });
-        menu.Closed += (_, __) => tcs.TrySetCanceled();
-        menu.Open(this);
-
-        try
-        {
-            var result = await tcs.Task;
-            context.SetOutput(result);
-        }
-        catch (TaskCanceledException)
-        {
-            context.SetOutput(null);
-        }
-    }
 
     public async Task SelectSaveFilepathForArea(IInteractionContext<Unit, string?> context)
     {

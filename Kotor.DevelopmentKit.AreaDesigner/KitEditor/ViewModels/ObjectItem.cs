@@ -68,6 +68,14 @@ public class ObjectItem : ReactiveObject
         Name = template.Name;
         ClassID = template.ClassID;
         Model = template.Model;
+        Hooks =
+        [
+            ..template.Hooks.OfType<WallHookTemplate>().Select(x => new WallHookItem(x)),
+            ..template.Hooks.OfType<CeilingHookTemplate>().Select(x => new CeilingHookItem(x)),
+            ..template.Hooks.OfType<FloorHookTemplate>().Select(x => new FloorHookItem(x)),
+            ..template.Hooks.OfType<CornerHookTemplate>().Select(x => new CornerHookItem(x)),
+            ..template.Hooks.OfType<DoorFrameHookTemplate>().Select(x => new DoorFrameHookItem(x)),
+        ];
     }
 
     public virtual ObjectTemplate ToModel()

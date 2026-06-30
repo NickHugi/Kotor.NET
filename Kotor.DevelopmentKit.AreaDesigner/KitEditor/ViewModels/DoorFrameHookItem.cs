@@ -25,7 +25,7 @@ public class DoorFrameHookItem : HookItem
         Orientation = new(template.LocalOrientation);
     }
 
-    public DoorFrameHookTemplate ToModel()
+    public override DoorFrameHookTemplate ToModel()
     {
         return new DoorFrameHookTemplate
         {

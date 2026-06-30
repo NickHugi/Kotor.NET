@@ -17,35 +17,17 @@ public class Kit
     public string Name { get; }
     public string FilePath { get; }
     public int Version { get; }
-    public ICollection<FloorTemplate> Floors { get; init; } = [];
-    public ICollection<TileTemplate> Tiles { get; init; } = [];
-    public ICollection<WallTemplate> Walls { get; init; } = [];
-    public ICollection<DoorFrameTemplate> DoorFrames { get; init; } = [];
-    public ICollection<CeilingTemplate> Ceilings { get; init; } = [];
-    public ICollection<InnerCornerTemplate> InnerCorners { get; init; } = [];
-    public ICollection<OuterCornerTemplate> OuterCorners { get; init; } = [];
     public ICollection<ObjectTemplate> Objects { get; init; } = [];
 
-    public IReadOnlyCollection<ObjectTemplate> AllObjects =>
-    [
-        ..Tiles,
-        ..Floors,
-        ..Walls,
-        ..DoorFrames,
-        ..Ceilings,
-        ..InnerCorners,
-        ..OuterCorners,
-        ..Objects
-    ];
-
-    public FloorTemplate Floor(string id) => Floors.Single(x => x.TemplateID == id);
-    public TileTemplate Tile(string id) => Tiles.Single(x => x.TemplateID == id);
-    public WallTemplate Wall(string id) => Walls.Single(x => x.TemplateID == id);
-    public DoorFrameTemplate DoorFrame(string id) => DoorFrames.Single(x => x.TemplateID == id);
-    public CeilingTemplate Ceiling(string id) => Ceilings.Single(x => x.TemplateID == id);
-    public InnerCornerTemplate InnerCorner(string id) => InnerCorners.Single(x => x.TemplateID == id);
-    public OuterCornerTemplate OuterCorner(string id) => OuterCorners.Single(x => x.TemplateID == id);
-    public ObjectTemplate Object(string id) => Objects.Single(x => x.TemplateID == id);
+    // TODO - and kit
+    public FloorTemplate Floor(string id) => Objects.OfType<FloorTemplate>().Single(x => x.TemplateID == id);
+    public TileTemplate Tile(string id) => Objects.OfType<TileTemplate>().Single(x => x.TemplateID == id);
+    public WallTemplate Wall(string id) => Objects.OfType<WallTemplate>().Single(x => x.TemplateID == id);
+    public DoorFrameTemplate DoorFrame(string id) => Objects.OfType<DoorFrameTemplate>().Single(x => x.TemplateID == id);
+    public CeilingTemplate Ceiling(string id) => Objects.OfType<CeilingTemplate>().Single(x => x.TemplateID == id);
+    public InnerCornerTemplate InnerCorner(string id) => Objects.OfType<InnerCornerTemplate>().Single(x => x.TemplateID == id);
+    public OuterCornerTemplate OuterCorner(string id) => Objects.OfType<OuterCornerTemplate>().Single(x => x.TemplateID == id);
+    public ObjectTemplate Object(string id) => Objects.Where(x => x.GetType() == typeof(ObjectTemplate)).Single(x => x.TemplateID == id);
 
     public Kit(string filepath, string id, int version, string name)
     {
