@@ -62,11 +62,18 @@
 		</DataTemplate>
 
         <DataTemplate x:Key="KitItem" x:DataType="vm:KitItem">
-            <StackPanel Orientation="Horizontal"
-                        Background="White">
-                <CheckBox IsChecked="{Binding Active,Mode=TwoWay}" />
-                <TextBlock Text="{Binding Kit.Name}" VerticalAlignment="Center" />
-            </StackPanel>
+            <Border Padding="10 0 10 0">
+                <Border.Styles>
+                    <Style Selector="Border:pointerover">
+                        <Setter Property="Background" Value="White"/>
+                    </Style>
+                </Border.Styles>
+                <StackPanel Orientation="Horizontal"
+                            PointerPressed="StackPanel_PointerPressed">
+                    <CheckBox IsChecked="{Binding Active,Mode=TwoWay}" />
+                    <TextBlock Text="{Binding Kit.Name}" VerticalAlignment="Center" />
+                </StackPanel>
+            </Border>
         </DataTemplate>
 	</Window.Resources>
 

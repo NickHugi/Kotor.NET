@@ -48,4 +48,14 @@ public partial class AreaDesignerWindow : ReactiveWindow<AreaDesignerViewModel>
             ViewModel.DeleteSelected();
         }
     }
+
+    private void StackPanel_PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
+    {
+        if (e.Source is not Control control)
+            return;
+        if (control.DataContext is not KitItem kitItem)
+            return;
+
+        kitItem.Active = !kitItem.Active;
+    }
 }
