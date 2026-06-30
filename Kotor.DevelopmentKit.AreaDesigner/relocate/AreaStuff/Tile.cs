@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
@@ -67,7 +68,7 @@ public class Tile : IDeleteable, IWorldObject
         Parent = parent;
     }
 
-    public void SwitchTemplate(ObjectTemplate template)
+    public void SwitchTemplate(WorldObjectTemplate template)
     {
         //if (template is not TileTemplate tileTemplate)
             throw new ArgumentException();
@@ -86,11 +87,11 @@ public class Tile : IDeleteable, IWorldObject
 
         virtualObjects.AddRange(
         [
-            ..template.Hooks.OfType<FloorHookTemplate>().Select(x => new Floor(this, kit.Floor(x.TemplateID))),
-            ..template.Hooks.OfType<CeilingHookTemplate>().Select(x => new Ceiling(this, kit.Ceiling(x.TemplateID))),
-            ..template.Hooks.OfType<WallHookTemplate>().Select(x => new Wall(this, kit.Wall(x.TemplateID), x)),
-            ..template.Hooks.OfType<CornerHookTemplate>().Select(x => new InnerCorner(this, kit.InnerCorner(x.InnerTemplateID), x)),
-            ..template.Hooks.OfType<CornerHookTemplate>().Select(x => new OuterCorner(this, kit.OuterCorner(x.OuterTemplateID), x)),
+            ..template.Magnets.OfType<FloorHookTemplate>().Select(x => new Floor(this, kit.Floor(x.TemplateID))),
+            ..template.Magnets.OfType<CeilingHookTemplate>().Select(x => new Ceiling(this, kit.Ceiling(x.TemplateID))),
+            ..template.Magnets.OfType<WallHookTemplate>().Select(x => new Wall(this, kit.Wall(x.TemplateID), x)),
+            ..template.Magnets.OfType<CornerHookTemplate>().Select(x => new InnerCorner(this, kit.InnerCorner(x.InnerTemplateID), x)),
+            ..template.Magnets.OfType<CornerHookTemplate>().Select(x => new OuterCorner(this, kit.OuterCorner(x.OuterTemplateID), x)),
         ]);
     }
 

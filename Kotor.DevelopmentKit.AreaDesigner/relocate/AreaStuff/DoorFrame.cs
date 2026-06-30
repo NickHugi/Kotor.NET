@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
@@ -27,7 +28,7 @@ public class DoorFrame : IWorldObject
     {
         get
         {
-            return Template.Hooks.Select(x => new Magnet(this)
+            return Template.Magnets.Select(x => new Magnet(this)
             {
                 Type = MagnetType.Wall,
                 LocalPosition = x.LocalPosition,
@@ -39,7 +40,7 @@ public class DoorFrame : IWorldObject
     {
         get => AllMagnets.Where(x => x.GlobalPosition != Parent.GlobalPosition).ToList();
     }
-    public WorldObjectType Type => WorldObjectType.Basic;
+    public WorldObjectType Type => WorldObjectType.Prop;
 
     public string KitID { get; private set; } = "";
     public string TemplateID { get; private set; } = "";
@@ -49,16 +50,16 @@ public class DoorFrame : IWorldObject
 
     public bool Enabled { get; set; } = true;
 
-    public IEnumerable<DoorFrameHook> Hooks => Template.Hooks.OfType<DoorFrameHookTemplate>().Select(x => new DoorFrameHook(this, x));
+    public IEnumerable<DoorFrameHook> Hooks => Template.Magnets.OfType<DoorFrameHookTemplate>().Select(x => new DoorFrameHook(this, x));
 
     public Vector3 LocalPosition
     {
-        get => Template.Hooks.First().LocalPosition;
+        get => Template.Magnets.First().LocalPosition;
         set => throw new NotImplementedException(); // TODO
     }
     public Quaternion LocalOrientation
     {
-        get => Template.Hooks.First().LocalOrientation;
+        get => Template.Magnets.First().LocalOrientation;
         set => throw new NotImplementedException(); // TODO
     }
     public Matrix4x4 LocalTransform => Matrix4x4.CreateRotationZ(MathF.PI) * Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
@@ -83,7 +84,7 @@ public class DoorFrame : IWorldObject
         SwitchTemplate(template);
     }
 
-    public void SwitchTemplate(ObjectTemplate template)
+    public void SwitchTemplate(WorldObjectTemplate template)
     {
         if (template is not DoorFrameTemplate doorframeTemplate)
             throw new ArgumentException();

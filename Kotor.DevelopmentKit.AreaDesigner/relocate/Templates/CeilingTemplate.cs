@@ -1,5 +1,5 @@
 ﻿namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
-public class CeilingTemplate : ObjectTemplate
+public class CeilingTemplate : WorldObjectTemplate
 {
 }

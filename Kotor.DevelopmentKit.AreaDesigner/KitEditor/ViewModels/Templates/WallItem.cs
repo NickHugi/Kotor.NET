@@ -7,9 +7,9 @@ using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
+namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Templates;
 
-public class WallItem : ObjectItem
+public class WallItem : WorldObjectItem
 {
     public override WorldObjectType WorldObjectType => WorldObjectType.Wall;
 
@@ -54,7 +54,7 @@ public class WallItem : ObjectItem
             DoorframeKitID = DoorframeKitID,
             DoorframeTemplateID = DoorframeTemplateID,
             DoorframeClassID = DoorframeClassID,
-            Hooks = []
+            Magnets = []
         };
     }
 }

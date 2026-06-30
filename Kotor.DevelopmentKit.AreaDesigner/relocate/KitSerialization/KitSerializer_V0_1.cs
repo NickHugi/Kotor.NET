@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using Kotor.NET.Graphics.Extensions;
 using Newtonsoft.Json;
@@ -38,7 +39,7 @@ public class KitSerializer_V0_1
                 ClassID = floor.classID.Value,
                 Name = floor.name.Value,
                 Model = floor.model.Value,
-                Hooks = []
+                Magnets = []
             });
         }
 
@@ -51,7 +52,7 @@ public class KitSerializer_V0_1
                 ClassID = ceiling.classID.Value,
                 Name = ceiling.name.Value,
                 Model = ceiling.model.Value,
-                Hooks = []
+                Magnets = []
             });
         }
 
@@ -64,7 +65,7 @@ public class KitSerializer_V0_1
                 ClassID = door.classID.Value,
                 Name = door.name.Value,
                 Model = door.model.Value,
-                Hooks = ((JArray)door.hooks).Select(x => (dynamic)x).Select(hook => new DoorFrameHookTemplate
+                Magnets = ((JArray)door.hooks).Select(x => (dynamic)x).Select(hook => new DoorFrameHookTemplate
                 {
                     LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
                     LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion()
@@ -84,7 +85,7 @@ public class KitSerializer_V0_1
                 DoorframeKitID = wall.doorframeKtID?.Value ?? "",
                 DoorframeTemplateID = wall.doorframeTemplateID?.Value ?? "",
                 DoorframeClassID = wall.doorframeClassID?.Value ?? "",
-                Hooks = []
+                Magnets = []
             });
         }
 
@@ -97,7 +98,7 @@ public class KitSerializer_V0_1
                 Name = tile.name.Value,
                 ClassID = "",
                 Model = "",
-                Hooks =
+                Magnets =
                 [
                     ..((JArray)tile.floorHooks).Select(x => (dynamic)x).Select(hook => new FloorHookTemplate
                     {
@@ -143,7 +144,7 @@ public class KitSerializer_V0_1
                 ClassID = innerCorner.classID.Value,
                 Name = innerCorner.name.Value,
                 Model = innerCorner.model.Value,
-                Hooks = []
+                Magnets = []
             });
         }
 
@@ -156,20 +157,20 @@ public class KitSerializer_V0_1
                 ClassID = outerCorner.classID.Value,
                 Name = outerCorner.name.Value,
                 Model = outerCorner.model.Value,
-                Hooks = []
+                Magnets = []
             });
         }
 
         foreach (var @object in data.objects)
         {
-            kit.Objects.Add(new ObjectTemplate
+            kit.Objects.Add(new PropTemplate
             {
                 KitID = kitID,
                 TemplateID = @object.templateID.Value,
                 ClassID = @object.classID.Value,
                 Name = @object.name.Value,
                 Model = @object.model.Value,
-                Hooks = []
+                Magnets = []
             });
         }
 
@@ -191,28 +192,28 @@ public class KitSerializer_V0_1
             classID = tile.ClassID,
             name = tile.Name,
             model = tile.Model,
-            floorHooks = tile.Hooks.OfType<FloorHookTemplate>().Select(x => new
+            floorHooks = tile.Magnets.OfType<FloorHookTemplate>().Select(x => new
             {
                 kitID = x.KitID,
                 templateID = x.TemplateID,
                 position = x.LocalPosition.ToFloatArray(),
                 orientation = x.LocalOrientation.ToFloatArray()
             }),
-            ceilingHooks = tile.Hooks.OfType<CeilingHookTemplate>().Select(x => new
+            ceilingHooks = tile.Magnets.OfType<CeilingHookTemplate>().Select(x => new
             {
                 kitID = x.KitID,
                 templateID = x.TemplateID,
                 position = x.LocalPosition.ToFloatArray(),
                 orientation = x.LocalOrientation.ToFloatArray()
             }),
-            wallHooks = tile.Hooks.OfType<WallHookTemplate>().Select(x => new
+            wallHooks = tile.Magnets.OfType<WallHookTemplate>().Select(x => new
             {
                 kitID = x.KitID,
                 templateID = x.TemplateID,
                 position = x.LocalPosition.ToFloatArray(),
                 orientation = x.LocalOrientation.ToFloatArray(),
             }),
-            cornerHooks = tile.Hooks.OfType<CornerHookTemplate>().Select(x => new
+            cornerHooks = tile.Magnets.OfType<CornerHookTemplate>().Select(x => new
             {
                 innerKitID = x.InnerKitID,
                 innerTemplateID = x.InnerTemplateID,
@@ -246,7 +247,7 @@ public class KitSerializer_V0_1
             classID = doorframe.ClassID,
             name = doorframe.Name,
             model = doorframe.Model,
-            hooks = doorframe.Hooks.Select(hook => new
+            hooks = doorframe.Magnets.Select(hook => new
             {
                 position = hook.LocalPosition.ToFloatArray(),
                 orientation = hook.LocalOrientation.ToFloatArray(),
@@ -280,7 +281,7 @@ public class KitSerializer_V0_1
             model = obj.Model,
         });
 
-        data.objects = kit.Objects.Where(x => x.GetType() == typeof(ObjectTemplate)).Select(obj => new
+        data.objects = kit.Objects.Where(x => x.GetType() == typeof(WorldObjectTemplate)).Select(obj => new
         {
             templateID = obj.TemplateID,
             classID = obj.ClassID,

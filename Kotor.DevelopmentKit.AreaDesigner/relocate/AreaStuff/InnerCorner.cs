@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
@@ -60,7 +61,7 @@ public class InnerCorner : IWorldObject
         SwitchTemplate(template);
     }
 
-    public void SwitchTemplate(ObjectTemplate template)
+    public void SwitchTemplate(WorldObjectTemplate template)
     {
         if (template is not InnerCornerTemplate innerCornerTemplate)
             throw new ArgumentException();

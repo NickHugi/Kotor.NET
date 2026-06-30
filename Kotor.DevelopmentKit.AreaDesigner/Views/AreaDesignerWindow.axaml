@@ -145,12 +145,6 @@
         <StackPanel DockPanel.Dock="Left"
                     Width="250">
             <Grid ColumnDefinitions="*">
-                <!--<ComboBox ItemTemplate="{StaticResource KitItem}"
-                          ItemsSource="{Binding Kits}"
-                          SelectedItem="{Binding SelectedKit}"
-                          Grid.Column="0"
-                          HorizontalAlignment="Stretch" />-->
-                
             <DropDownButton Content="Active Kits" HorizontalAlignment="Stretch" Grid.Column="0">
                 <DropDownButton.Flyout>
                     <Flyout>

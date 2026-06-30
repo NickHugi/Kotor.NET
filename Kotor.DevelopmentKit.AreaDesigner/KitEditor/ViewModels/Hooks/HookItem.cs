@@ -1,53 +1,50 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
 using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
+namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Hooks;
 
-public class WallHookItem : HookItem
+public class HookItem : BaseMagnetItem
 {
     public override string Name => $"{TemplateID} ({Position.X:F2}, {Position.Y:F2}, {Position.Z:F2})";
-    public override MagnetType MagnetType => MagnetType.Wall;
+    public override MagnetType MagnetType => MagnetType.Hook;
+
     public string KitID
     {
-        get => field;
+        get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
     public string TemplateID
     {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-    public ObservableCollection<int> AdjacentWalls
-    {
-        get => field;
+        get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public WallHookItem() : base()
+    public HookItem() : base()
     {
         KitID = "";
         TemplateID = "";
-        AdjacentWalls = [];
 
         this.WhenAnyValue(x => x.TemplateID).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
         this.WhenAnyValue(x => x.Position).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
     }
-    public WallHookItem(WallHookTemplate wallHook) : this()
+    public HookItem(HookTemplate hook) : this()
     {
-        KitID = wallHook.KitID;
-        TemplateID = wallHook.TemplateID;
-        Position = new(wallHook.LocalPosition);
-        Orientation = new(wallHook.LocalOrientation);
-        AdjacentWalls = new(wallHook.AdjacentWalls);
+        KitID = hook.KitID;
+        TemplateID = hook.TemplateID;
+        Position = new(hook.LocalPosition);
+        Orientation = new(hook.LocalOrientation);
     }
 
-    public override WallHookTemplate ToModel()
+    public override HookTemplate ToModel()
     {
-        return new WallHookTemplate
+        return new HookTemplate
         {
             KitID = KitID,
             TemplateID = TemplateID,

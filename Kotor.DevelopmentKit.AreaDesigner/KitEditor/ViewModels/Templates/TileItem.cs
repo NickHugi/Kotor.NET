@@ -5,9 +5,9 @@ using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
+namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Templates;
 
-public class TileItem : ObjectItem
+public class TileItem : WorldObjectItem
 {
     public override WorldObjectType WorldObjectType => WorldObjectType.Tile;
 
@@ -25,7 +25,7 @@ public class TileItem : ObjectItem
             KitID = KitID,
             TemplateID = TemplateID,
             Name = Name,
-            Hooks = Hooks.Select(x => x.ToModel()).ToArray(),
+            Magnets = Hooks.Select(x => x.ToModel()).ToArray(),
             Model = null,
             ClassID = null,
         };

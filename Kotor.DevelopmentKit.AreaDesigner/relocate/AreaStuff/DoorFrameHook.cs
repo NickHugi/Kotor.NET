@@ -1,5 +1,5 @@
 ﻿using System.Numerics;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 

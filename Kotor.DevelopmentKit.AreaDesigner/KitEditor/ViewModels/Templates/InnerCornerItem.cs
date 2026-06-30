@@ -7,9 +7,9 @@ using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
+namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Templates;
 
-public class InnerCornerItem : ObjectItem
+public class InnerCornerItem : WorldObjectItem
 {
     public override WorldObjectType WorldObjectType => WorldObjectType.InnerCorner;
 
@@ -29,7 +29,7 @@ public class InnerCornerItem : ObjectItem
             Name = Name,
             ClassID = ClassID,
             Model = Model,
-            Hooks = []
+            Magnets = []
         };
     }
 }

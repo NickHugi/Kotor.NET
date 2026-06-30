@@ -31,7 +31,7 @@ public class SelectObjectMode : BaseMode
     public required Interaction<object, Unit> AddToSelection { get; init; }
     public required Interaction<Unit, Unit> ClearSelection { get; init; }
 
-    public List<ObjectTemplate> ObjectTemplates
+    public List<WorldObjectTemplate> ObjectTemplates
     {
         get
         {
@@ -47,7 +47,7 @@ public class SelectObjectMode : BaseMode
             };
         }
     }
-    public ObjectTemplate? SelectedObjectTemplate
+    public WorldObjectTemplate? SelectedObjectTemplate
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);

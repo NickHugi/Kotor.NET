@@ -24,14 +24,14 @@ public class AddObjectMode : BaseMode
 {
     public override string Name => "Add Object";
 
-    public List<ObjectTemplate> ObjectTemplates
+    public List<WorldObjectTemplate> ObjectTemplates
     {
         get
         {
-            return _objects.Where(x => x.GetType() == typeof(ObjectTemplate)).ToList();
+            return _objects.Where(x => x.GetType() == typeof(WorldObjectTemplate)).ToList();
         }
     }
-    public ObjectTemplate? SelectedObjectTemplate
+    public WorldObjectTemplate? SelectedObjectTemplate
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);

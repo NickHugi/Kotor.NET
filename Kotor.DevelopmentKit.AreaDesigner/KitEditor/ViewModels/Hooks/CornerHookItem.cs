@@ -3,13 +3,13 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia.Markup.Xaml.Templates;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
 using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
+namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Hooks;
 
-public class CornerHookItem : HookItem
+public class CornerHookItem : BaseMagnetItem
 {
     public override string Name => $"{InnerTemplateID} ({Position.Z:F2}, {Position.Y:F2}, {Position.Z:F2})";
     public override MagnetType MagnetType => MagnetType.Corner;

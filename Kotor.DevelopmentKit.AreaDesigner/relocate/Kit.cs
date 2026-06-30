@@ -17,7 +17,7 @@ public class Kit
     public string Name { get; }
     public string FilePath { get; }
     public int Version { get; }
-    public ICollection<ObjectTemplate> Objects { get; init; } = [];
+    public ICollection<WorldObjectTemplate> Objects { get; init; } = [];
 
     // TODO - and kit
     public FloorTemplate Floor(string id) => Objects.OfType<FloorTemplate>().Single(x => x.TemplateID == id);
@@ -27,7 +27,7 @@ public class Kit
     public CeilingTemplate Ceiling(string id) => Objects.OfType<CeilingTemplate>().Single(x => x.TemplateID == id);
     public InnerCornerTemplate InnerCorner(string id) => Objects.OfType<InnerCornerTemplate>().Single(x => x.TemplateID == id);
     public OuterCornerTemplate OuterCorner(string id) => Objects.OfType<OuterCornerTemplate>().Single(x => x.TemplateID == id);
-    public ObjectTemplate Object(string id) => Objects.Where(x => x.GetType() == typeof(ObjectTemplate)).Single(x => x.TemplateID == id);
+    public WorldObjectTemplate Object(string id) => Objects.Where(x => x.GetType() == typeof(WorldObjectTemplate)).Single(x => x.TemplateID == id);
 
     public Kit(string filepath, string id, int version, string name)
     {

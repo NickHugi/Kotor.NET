@@ -4,16 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
 using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
+namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Hooks;
 
-public class HookItem : ReactiveObject
+public abstract class BaseMagnetItem : ReactiveObject
 {
-    public virtual string Name => "Hook";
-    public virtual MagnetType MagnetType => MagnetType.Magnet;
+    public abstract string Name { get; }
+    public abstract MagnetType MagnetType { get; }
+
     public ReactiveVector3 Position
     {
         get;
@@ -25,18 +26,11 @@ public class HookItem : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public HookItem()
+    public BaseMagnetItem()
     {
         Position = new();
         Orientation = new();
     }
 
-    public virtual HookTemplate ToModel()
-    {
-        return new HookTemplate
-        {
-            LocalPosition = Position.ToModel(),
-            LocalOrientation = Orientation.ToModel(),
-        };
-    }
+    public abstract BaseMagnetTemplate ToModel();
 }

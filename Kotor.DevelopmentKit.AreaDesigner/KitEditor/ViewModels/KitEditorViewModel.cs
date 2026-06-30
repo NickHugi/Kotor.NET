@@ -14,6 +14,8 @@ using Avalonia.Layout;
 using Avalonia.Markup.Xaml.Templates;
 using DynamicData;
 using DynamicData.Binding;
+using Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Hooks;
+using Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Templates;
 using Kotor.DevelopmentKit.AreaDesigner.relocate;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.KitSerialization;
@@ -57,11 +59,11 @@ public class KitEditorViewModel : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    private SourceList<ObjectItem> _objectTemplatesSource = new();
-    private readonly ReadOnlyObservableCollection<ObjectItem> _objectTemplates;
-    public ReadOnlyObservableCollection<ObjectItem> ObjectTemplateItems => _objectTemplates;
+    private SourceList<WorldObjectItem> _objectTemplatesSource = new();
+    private readonly ReadOnlyObservableCollection<WorldObjectItem> _objectTemplates;
+    public ReadOnlyObservableCollection<WorldObjectItem> ObjectTemplateItems => _objectTemplates;
 
-    public ObjectItem? SelectedObjectTemplateItem
+    public PropItem? SelectedObjectTemplateItem
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
@@ -70,7 +72,7 @@ public class KitEditorViewModel : ReactiveObject
     public List<WorldObjectTypeItem> WorldObjectTypeItems { get; } =
     [
         WorldObjectTypeItem.All,
-        new(WorldObjectType.Basic),
+        new(WorldObjectType.Prop),
         new(WorldObjectType.Tile),
         new(WorldObjectType.Floor),
         new(WorldObjectType.Wall),
@@ -87,20 +89,19 @@ public class KitEditorViewModel : ReactiveObject
 
     public KitEditorViewModel()
     {
-
         Name = "New Kit";
         KitID = "";
         FilePath = "";
 
-        IObservable<Func<ObjectItem, bool>> filter =
+        IObservable<Func<WorldObjectItem, bool>> filter =
             this.WhenAnyValue(x => x.SelectedWorldObjectTypeItem)
-                .Select(filterWorldObjectType => new Func<ObjectItem, bool>(
+                .Select(filterWorldObjectType => new Func<WorldObjectItem, bool>(
                     x => filterWorldObjectType.Value is null
                     || x.WorldObjectType == filterWorldObjectType.Value));
 
         _objectTemplatesSource.Connect()
             .Filter(filter)
-            .Sort(SortExpressionComparer<ObjectItem>.Ascending(x => x.ClassID).ThenByAscending(x => x.Name))
+            .Sort(SortExpressionComparer<WorldObjectItem>.Ascending(x => x.ClassID).ThenByAscending(x => x.Name))
             .Bind(out _objectTemplates)
             .Subscribe();
     }
@@ -113,7 +114,7 @@ public class KitEditorViewModel : ReactiveObject
 
         _objectTemplatesSource.AddRange(
         [
-            .. kit.Objects.Where(x => x.GetType() == typeof(ObjectTemplate)).Select(x => new ObjectItem(x)),
+            .. kit.Objects.OfType<PropTemplate>().Select(x => new PropItem(x)),
             .. kit.Objects.OfType<TileTemplate>().Select(x => new TileItem(x)),
             .. kit.Objects.OfType<FloorTemplate>().Select(x => new FloorItem(x)),
             .. kit.Objects.OfType<CeilingTemplate>().Select(x => new CeilingItem(x)),
@@ -175,7 +176,7 @@ public class KitEditorViewModel : ReactiveObject
     }
     public void AddBasicTemplate()
     {
-        _objectTemplatesSource.Add(new ObjectItem
+        _objectTemplatesSource.Add(new PropItem
         {
             KitID = KitID,
             TemplateID = $"object_",
@@ -262,7 +263,7 @@ public class KitEditorViewModel : ReactiveObject
         _objectTemplatesSource.Remove(SelectedObjectTemplateItem);
     }
 
-    private ObjectItem TemplateFromMDL(string filename, MDL mdl)
+    private WorldObjectItem TemplateFromMDL(string filename, MDL mdl)
     {
         if (filename.Contains("floor"))
         {
@@ -302,7 +303,7 @@ public class KitEditorViewModel : ReactiveObject
         }
         else if (filename.Contains("object"))
         {
-            return new ObjectItem()
+            return new PropItem()
             {
                 KitID = KitID,
                 TemplateID = filename,

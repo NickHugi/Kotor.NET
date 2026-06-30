@@ -1,6 +1,6 @@
 ﻿namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
-public class WallTemplate : ObjectTemplate
+public class WallTemplate : WorldObjectTemplate
 {
     public required string DoorframeKitID { get; init; }
     public required string DoorframeTemplateID { get; init; }

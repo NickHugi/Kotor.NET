@@ -5,9 +5,9 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
+namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
 
-public class HookTemplate
+public class BaseMagnetTemplate
 {
     public required Vector3 LocalPosition { get; init; }
     public required Quaternion LocalOrientation { get; init; }

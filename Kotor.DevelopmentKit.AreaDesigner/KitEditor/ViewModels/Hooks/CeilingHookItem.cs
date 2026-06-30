@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
 using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
+namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Hooks;
 
-public class FloorHookItem : HookItem
+public class CeilingHookItem : BaseMagnetItem
 {
     public override string Name => $"{TemplateID} ({Position.X:F2}, {Position.Y:F2}, {Position.Z:F2})";
-    public override MagnetType MagnetType => MagnetType.Floor;
+    public override MagnetType MagnetType => MagnetType.Ceiling;
 
     public string KitID
     {
@@ -26,7 +26,7 @@ public class FloorHookItem : HookItem
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public FloorHookItem() : base()
+    public CeilingHookItem() : base()
     {
         KitID = "";
         TemplateID = "";
@@ -34,7 +34,7 @@ public class FloorHookItem : HookItem
         this.WhenAnyValue(x => x.TemplateID).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
         this.WhenAnyValue(x => x.Position).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
     }
-    public FloorHookItem(FloorHookTemplate template) : this()
+    public CeilingHookItem(CeilingHookTemplate template) : this()
     {
         KitID = template.KitID;
         TemplateID = template.TemplateID;
@@ -42,9 +42,9 @@ public class FloorHookItem : HookItem
         Orientation = new(template.LocalOrientation);
     }
 
-    public override FloorHookTemplate ToModel()
+    public override CeilingHookTemplate ToModel()
     {
-        return new FloorHookTemplate
+        return new CeilingHookTemplate
         {
             KitID = KitID,
             TemplateID = TemplateID,

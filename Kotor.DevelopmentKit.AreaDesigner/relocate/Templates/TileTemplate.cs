@@ -2,6 +2,6 @@
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
-public class TileTemplate : ObjectTemplate
+public class TileTemplate : WorldObjectTemplate
 {
 }

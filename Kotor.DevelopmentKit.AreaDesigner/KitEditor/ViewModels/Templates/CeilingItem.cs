@@ -4,9 +4,9 @@ using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
+namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Templates;
 
-public class CeilingItem : ObjectItem
+public class CeilingItem : WorldObjectItem
 {
     public override WorldObjectType WorldObjectType =>  WorldObjectType.Ceiling;
 
@@ -26,7 +26,7 @@ public class CeilingItem : ObjectItem
             Name = Name,
             ClassID = ClassID,
             Model = Model,
-            Hooks = []
+            Magnets = []
         };
     }
 }

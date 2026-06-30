@@ -48,7 +48,7 @@ public class Ceiling : IWorldObject
         SwitchTemplate(template);
     }
 
-    public void SwitchTemplate(ObjectTemplate template)
+    public void SwitchTemplate(WorldObjectTemplate template)
     {
         if (template is not CeilingTemplate ceilingTemplate)
             throw new ArgumentException();

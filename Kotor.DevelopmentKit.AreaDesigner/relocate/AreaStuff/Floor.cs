@@ -48,7 +48,7 @@ public class Floor : IWorldObject
         SwitchTemplate(template);
     }
 
-    public void SwitchTemplate(ObjectTemplate template)
+    public void SwitchTemplate(WorldObjectTemplate template)
     {
         if (template is not FloorTemplate floorTemplate)
             throw new ArgumentException();

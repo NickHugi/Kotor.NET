@@ -7,29 +7,29 @@ using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
+namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Templates;
 
-public class OuterCornerItem : ObjectItem
+public class FloorItem : WorldObjectItem
 {
-    public override WorldObjectType WorldObjectType => WorldObjectType.OuterCorner;
+    public override WorldObjectType WorldObjectType => WorldObjectType.Floor;
 
-    public OuterCornerItem() : base()
+    public FloorItem() : base()
     {
     }
-    public OuterCornerItem(OuterCornerTemplate template) : base(template)
+    public FloorItem(FloorTemplate template) : base(template)
     {
     }
 
-    public override OuterCornerTemplate ToModel()
+    public override FloorTemplate ToModel()
     {
-        return new OuterCornerTemplate
+        return new FloorTemplate
         {
             KitID = KitID,
             TemplateID = TemplateID,
             Name = Name,
             ClassID = ClassID,
             Model = Model,
-            Hooks = []
+            Magnets = []
         };
     }
 }

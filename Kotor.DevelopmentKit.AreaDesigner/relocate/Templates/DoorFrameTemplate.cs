@@ -1,5 +1,5 @@
 ﻿namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
-public class DoorFrameTemplate : ObjectTemplate
+public class DoorFrameTemplate : WorldObjectTemplate
 {
 }

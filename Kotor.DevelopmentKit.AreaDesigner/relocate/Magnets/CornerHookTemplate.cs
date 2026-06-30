@@ -1,8 +1,9 @@
 ﻿using System.Numerics;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
-namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
+namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
 
-public class CornerHookTemplate : HookTemplate
+public class CornerHookTemplate : BaseMagnetTemplate
 {
     public required string InnerKitID { get; init; }
     public required string InnerTemplateID { get; init; }

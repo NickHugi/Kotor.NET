@@ -37,7 +37,7 @@ public class BaseMode : ReactiveObject
     protected readonly Area _area;
     protected readonly DesignerSettings _settings;
 
-    protected IReadOnlyCollection<ObjectTemplate> _objects => Kits.Where(x => x.Active).SelectMany(x => x.Kit.Objects).ToList();
+    protected IReadOnlyCollection<WorldObjectTemplate> _objects => Kits.Where(x => x.Active).SelectMany(x => x.Kit.Objects).ToList();
     protected AreaEntity _areaEntity => _engine.Scene.Entities.OfType<AreaEntity>().Single(x => x.Area == _area);
 
     public BaseMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, object selectedPiece, DesignerSettings settings)

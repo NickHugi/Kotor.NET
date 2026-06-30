@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
@@ -33,7 +34,7 @@ public class Wall : IWorldObject
             }
         }
     }
-    public WorldObjectType Type => WorldObjectType.Basic;
+    public WorldObjectType Type => WorldObjectType.Prop;
 
     public string? GroupID { get; set; }
 
@@ -80,7 +81,7 @@ public class Wall : IWorldObject
         TemplateID = template.TemplateID;
     }
 
-    public void SwitchTemplate(ObjectTemplate template)
+    public void SwitchTemplate(WorldObjectTemplate template)
     {
         if (template is not WallTemplate wallTemplate)
             throw new ArgumentException();

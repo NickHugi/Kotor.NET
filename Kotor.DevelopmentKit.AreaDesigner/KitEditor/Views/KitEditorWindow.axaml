@@ -3,6 +3,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels"
+        xmlns:hooks="using:Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Hooks"
+        xmlns:templates="using:Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Templates"
         xmlns:core="using:Kotor.DevelopmentKit.Base.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Kotor.DevelopmentKit.AreaDesigner.KitEditor.Views.KitEditorWindow"
@@ -21,20 +23,20 @@
     </Window.Styles>
 
     <Window.Resources>
-        <DataTemplate x:Key="ObjectItemList" x:DataType="vm:ObjectItem">
+        <DataTemplate x:Key="ObjectItemList" x:DataType="templates:WorldObjectItem">
             <StackPanel>
                 <TextBlock Text="{Binding Name}" FontWeight="Bold" />
                 <TextBlock Text="{Binding TemplateID}" FontSize="10" />
             </StackPanel>
         </DataTemplate>
         
-        <DataTemplate x:Key="ObjectItemPanel" x:DataType="vm:ObjectItem">
+        <DataTemplate x:Key="ObjectItemPanel" x:DataType="templates:WorldObjectItem">
             <StackPanel>
                 <core:LabeledTextBox Label="Model" Text="{Binding Model}" />
             </StackPanel>
         </DataTemplate>
         
-        <DataTemplate x:Key="WalltemPanel" x:DataType="vm:WallItem">
+        <DataTemplate x:Key="WalltemPanel" x:DataType="templates:WallItem">
             <StackPanel>
                 <core:LabeledTextBox Label="Model" Text="{Binding Model}" />
                 <core:LabeledTextBox Label="Doorframe Kit ID" Text="{Binding DoorframeKitID}" />
@@ -43,7 +45,7 @@
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Key="DoorframeItemPanel" x:DataType="vm:DoorFrameItem">
+        <DataTemplate x:Key="DoorframeItemPanel" x:DataType="templates:DoorFrameItem">
             <StackPanel>
                 <core:LabeledTextBox Label="Model" Text="{Binding Model}" />
                 
@@ -61,7 +63,7 @@
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Key="TileItemPanel" x:DataType="vm:TileItem">
+        <DataTemplate x:Key="TileItemPanel" x:DataType="templates:TileItem">
             <Grid RowDefinitions="Auto, *, Auto">
                 <TextBlock Text="Magnets" Grid.Row="0" />
                 <ListBox ItemTemplate="{StaticResource MagnetItemList}"
@@ -87,7 +89,7 @@
             </Grid>
         </DataTemplate>
         
-        <DataTemplate x:Key="WallHookItemPanel" DataType="vm:WallHookItem">
+        <DataTemplate x:Key="WallHookItemPanel" DataType="hooks:WallHookItem">
             <StackPanel>
                 <core:LabeledTextBox Label="Kit ID" Text="{Binding KitID}" />
                 <core:LabeledTextBox Label="Template ID" Text="{Binding TemplateID}" />
@@ -96,7 +98,7 @@
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Key="CornerHookPanel" DataType="vm:CornerHookItem">
+        <DataTemplate x:Key="CornerHookPanel" DataType="hooks:CornerHookItem">
             <StackPanel>
                 <core:LabeledTextBox Label="Inner Corner Kit ID" Text="{Binding InnerKitID}" />
                 <core:LabeledTextBox Label="Inner Corner Templat ID" Text="{Binding InnerTemplateID}" />
@@ -113,7 +115,7 @@
             </StackPanel>
         </DataTemplate>
         
-        <DataTemplate x:Key="MagnetItemList" x:DataType="vm:HookItem">
+        <DataTemplate x:Key="MagnetItemList" x:DataType="hooks:HookItem">
             <StackPanel>
                 <TextBlock Text="{Binding Name}" />
             </StackPanel>

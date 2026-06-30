@@ -4,15 +4,17 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Hooks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
+namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Templates;
 
-public class ObjectItem : ReactiveObject
+public abstract class WorldObjectItem : ReactiveObject
 {
-    public virtual WorldObjectType WorldObjectType => WorldObjectType.Basic;
+    public abstract WorldObjectType WorldObjectType { get; }
 
     public string KitID
     {
@@ -44,7 +46,7 @@ public class ObjectItem : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public ObservableCollection<HookItem> Hooks { get; init; }
+    public ObservableCollection<BaseMagnetItem> Hooks { get; init; }
 
     public HookItem? SelectedHook
     {
@@ -52,7 +54,7 @@ public class ObjectItem : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public ObjectItem()
+    public WorldObjectItem()
     {
         KitID = "";
         TemplateID = "";
@@ -61,7 +63,7 @@ public class ObjectItem : ReactiveObject
         Model = "";
         Hooks = [];
     }
-    public ObjectItem(ObjectTemplate template) : this()
+    public WorldObjectItem(WorldObjectTemplate template) : this()
     {
         KitID = template.KitID;
         TemplateID = template.TemplateID;
@@ -70,26 +72,17 @@ public class ObjectItem : ReactiveObject
         Model = template.Model;
         Hooks =
         [
-            ..template.Hooks.OfType<WallHookTemplate>().Select(x => new WallHookItem(x)),
-            ..template.Hooks.OfType<CeilingHookTemplate>().Select(x => new CeilingHookItem(x)),
-            ..template.Hooks.OfType<FloorHookTemplate>().Select(x => new FloorHookItem(x)),
-            ..template.Hooks.OfType<CornerHookTemplate>().Select(x => new CornerHookItem(x)),
-            ..template.Hooks.OfType<DoorFrameHookTemplate>().Select(x => new DoorFrameHookItem(x)),
+            ..template.Magnets.OfType<MagnetTemplate>().Select(x => new MagnetItem(x)),
+            ..template.Magnets.OfType<HookTemplate>().Select(x => new HookItem(x)),
+            ..template.Magnets.OfType<WallHookTemplate>().Select(x => new WallHookItem(x)),
+            ..template.Magnets.OfType<CeilingHookTemplate>().Select(x => new CeilingHookItem(x)),
+            ..template.Magnets.OfType<FloorHookTemplate>().Select(x => new FloorHookItem(x)),
+            ..template.Magnets.OfType<CornerHookTemplate>().Select(x => new CornerHookItem(x)),
+            ..template.Magnets.OfType<DoorFrameHookTemplate>().Select(x => new DoorFrameHookItem(x)),
         ];
     }
 
-    public virtual ObjectTemplate ToModel()
-    {
-        return new ObjectTemplate
-        {
-            KitID = KitID,
-            TemplateID = TemplateID,
-            Name = Name,
-            ClassID = ClassID,
-            Model = Model,
-            Hooks = Hooks.Select(x => x.ToModel()).ToArray(),
-        };
-    }
+    public abstract WorldObjectTemplate ToModel();
 
     public void DeleteSelectedMagnet()
     {
@@ -105,7 +98,7 @@ public class ObjectItem : ReactiveObject
     }
     public void AddBasicHook()
     {
-        Hooks.Add(new HookItem());
+        Hooks.Add(new MagnetItem());
     }
     public void AddFloorHook()
     {

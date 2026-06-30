@@ -10,11 +10,11 @@ public class WorldObject : IWorldObject
     public Room Parent { get; }
 
     public IReadOnlyCollection<Magnet> Magnets => [];
-    public WorldObjectType Type => WorldObjectType.Basic;
+    public WorldObjectType Type => WorldObjectType.Prop;
 
     public string KitID { get; private set; }
     public string TemplateID { get; private set; }
-    public ObjectTemplate Template => Kit.Manager.Get(KitID).Object(TemplateID);
+    public WorldObjectTemplate Template => Kit.Manager.Get(KitID).Object(TemplateID);
 
     public string? GroupID { get; set; }
 
@@ -34,7 +34,7 @@ public class WorldObject : IWorldObject
     }
     public Matrix4x4 GlobalTransform => LocalTransform * Parent.Transform;
 
-    public WorldObject(Room parent, ObjectTemplate template)
+    public WorldObject(Room parent, WorldObjectTemplate template)
     {
         Parent = parent;
 
@@ -43,7 +43,7 @@ public class WorldObject : IWorldObject
         SwitchTemplate(template);
     }
 
-    public void SwitchTemplate(ObjectTemplate template)
+    public void SwitchTemplate(WorldObjectTemplate template)
     {
         KitID = template.KitID;
         TemplateID = template.TemplateID;
