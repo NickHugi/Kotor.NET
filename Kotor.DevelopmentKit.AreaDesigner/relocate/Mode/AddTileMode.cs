@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using Avalonia;
+using DynamicData;
+using DynamicData.Binding;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
+using Kotor.DevelopmentKit.AreaDesigner.ViewModels;
 using Kotor.NET.Common.Data.Geometry;
 using Kotor.NET.Extensions;
 using Kotor.NET.Graphics;
@@ -21,7 +25,7 @@ public class AddTileMode : BaseMode
 {
     public override string Name => "Add Room";
 
-    private Room _projectedRoom;
+    private Room _projectedRoom = default!;
     private Tile _projectedTile => _projectedRoom.Objects.OfType<Tile>().Single();
     private float angle = 0;
 
@@ -29,17 +33,17 @@ public class AddTileMode : BaseMode
     {
         get
         {
-            if (SelectedKit is null)
+            if (Kits is null)
                 return [];
 
             if (SelectedPiece is Wall wall)
             {
                 var activeGroup = wall.Template.ClassID;
-                return SelectedKit.Objects.OfType<TileTemplate>().Where(x => x.Hooks.OfType<WallHookTemplate>().Any(y => activeGroup == y.Template.ClassID)).ToList();
+                return _objects.OfType<TileTemplate>().Where(x => x.Hooks.OfType<WallHookTemplate>().Any(y => activeGroup == y.Template.ClassID)).ToList();
             }
             else
             {
-                return SelectedKit?.Objects.OfType<TileTemplate>().ToList() ?? [];
+                return _objects.OfType<TileTemplate>().ToList() ?? [];
             }
         }
     }
@@ -49,12 +53,9 @@ public class AddTileMode : BaseMode
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public AddTileMode(GLEngine engine, Area area, Kit kit, object selectedPiece, DesignerSettings settings) : base(engine, area, kit, selectedPiece, settings)
+    public AddTileMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, object selectedPiece, DesignerSettings settings) : base(engine, area, kits, selectedPiece, settings)
     {
-        this.WhenAnyValue(x => x.SelectedKit).Subscribe(_ =>
-        {
-            this.RaisePropertyChanged(nameof(TileTemplates));
-        });
+        Kits.ToObservableChangeSet().AutoRefresh(x => x.Active).Subscribe(_ => this.RaisePropertyChanged(nameof(TileTemplates)));
     }
 
     public override async Task RenderIntercept(OrbitCamera camera, Point mouse, List<IDrawCallDescriptor> descriptors)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
+using Kotor.DevelopmentKit.AreaDesigner.ViewModels;
 using Kotor.DevelopmentKit.AreaDesigner.Views;
 using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Cameras;
@@ -28,7 +30,7 @@ public class ExtendRoomMode : BaseMode
     private Wall? _wall;
     private bool validWall => _wall is not null && _wall.DoorFrame is null;
 
-    public ExtendRoomMode(GLEngine engine, Area area, Kit kit, object selectedPiece, DesignerSettings settings) : base(engine, area, kit, selectedPiece, settings)
+    public ExtendRoomMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, object selectedPiece, DesignerSettings settings) : base(engine, area, kits, selectedPiece, settings)
     {
     }
 

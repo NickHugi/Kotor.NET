@@ -23,12 +23,14 @@ public partial class AreaDesignerWindow : ReactiveWindow<AreaDesignerViewModel>
 
     public async Task OpenKitEditor()
     {
-        if (ViewModel.SelectedKit is null)
+        var kit = ViewModel.Kits.FirstOrDefault(x => x.Active)?.Kit;
+
+        if (kit is null)
             return;
 
         var dialog = new KitEditorWindow()
         {
-            DataContext = new KitEditorViewModel(ViewModel.SelectedKit)
+            DataContext = new KitEditorViewModel(kit)
         };
 
         // todo - refresh after save changes

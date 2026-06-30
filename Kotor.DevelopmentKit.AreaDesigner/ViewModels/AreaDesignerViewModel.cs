@@ -52,16 +52,7 @@ public class AreaDesignerViewModel : ReactiveObject
     public bool IsMode_SelectObject => Mode is SelectObjectMode;
     public bool IsMode_AddObject => Mode is AddObjectMode;
 
-    public ObservableCollection<Kit> Kits { get; } = new();
-    public Kit? SelectedKit
-    {
-        get => field;
-        set
-        {
-            Mode?.SelectedKit = value;
-            this.RaiseAndSetIfChanged(ref field, value);
-        }
-    }
+    public ObservableCollection<KitItem> Kits { get; } = new();
 
     public ObservableCollection<object> SelectedPieces
     {
@@ -162,7 +153,7 @@ public class AreaDesignerViewModel : ReactiveObject
     public AreaDesignerViewModel()
     {
         Kit.Manager.Refresh();
-        Kits = new(Kit.Manager.Kits);
+        Kits = new(Kit.Manager.Kits.Select(x => new KitItem(x)));
         SelectedPieces = new();
 
         ClearSelection.RegisterHandler(async interaction =>
@@ -191,16 +182,16 @@ public class AreaDesignerViewModel : ReactiveObject
     public void SetSceneMode_AddTile()
     {
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
-        Mode = new AddTileMode(Engine, area, SelectedKit, ActiveObject, Settings);
+        Mode = new AddTileMode(Engine, area, Kits, ActiveObject, Settings);
     }
     public void SetSceneMode_AddObject()
     {
         var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
-        Mode = new AddObjectMode(Engine, area, SelectedKit, ActiveObject, Settings);
+        Mode = new AddObjectMode(Engine, area, Kits, ActiveObject, Settings);
     }
     public void SetSceneMode_SelectObject()
     {
-        Mode = new SelectObjectMode(Engine, Area, SelectedKit, ActiveObject, Settings)
+        Mode = new SelectObjectMode(Engine, Area, Kits, ActiveObject, Settings)
         {
             AddToSelection = AddToSelection,
             ClearSelection = ClearSelection,

@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Avalonia;
+using DynamicData;
+using DynamicData.Binding;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
+using Kotor.DevelopmentKit.AreaDesigner.ViewModels;
 using Kotor.DevelopmentKit.AreaDesigner.Views;
 using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Cameras;
@@ -20,12 +25,8 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
 public class BaseMode : ReactiveObject
 {
     public virtual string Name { get; } = "";
+    public ObservableCollection<KitItem> Kits { get; }
 
-    public Kit? SelectedKit
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
     public object SelectedPiece
     {
         get => field;
@@ -36,15 +37,18 @@ public class BaseMode : ReactiveObject
     protected readonly Area _area;
     protected readonly DesignerSettings _settings;
 
+    protected IReadOnlyCollection<ObjectTemplate> _objects => Kits.Where(x => x.Active).SelectMany(x => x.Kit.Objects).ToList();
     protected AreaEntity _areaEntity => _engine.Scene.Entities.OfType<AreaEntity>().Single(x => x.Area == _area);
 
-    public BaseMode(GLEngine engine, Area area, Kit selectedKit, object selectedPiece, DesignerSettings settings)
+    public BaseMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, object selectedPiece, DesignerSettings settings)
     {
-        SelectedKit = selectedKit;
+        Kits = kits;
         SelectedPiece = selectedPiece;
         _engine = engine;
         _area = area;
         _settings = settings;
+
+        Kits.ToObservableChangeSet().AutoRefresh(x => x.Active).Subscribe(_ => this.RaisePropertyChanged(nameof(_objects)));
     }
 
     public virtual Task RenderIntercept(OrbitCamera camera, Point mouse, List<IDrawCallDescriptor> descriptors)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
@@ -11,6 +12,7 @@ using Avalonia;
 using Avalonia.Input;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
+using Kotor.DevelopmentKit.AreaDesigner.ViewModels;
 using Kotor.DevelopmentKit.AreaDesigner.Views;
 using Kotor.NET.Common.Data.Geometry;
 using Kotor.NET.Graphics;
@@ -33,7 +35,7 @@ public class SelectObjectMode : BaseMode
     {
         get
         {
-            if (SelectedKit is null)
+            if (Kits is null)
                 return [];
 
             return SelectedPiece switch
@@ -41,7 +43,7 @@ public class SelectObjectMode : BaseMode
                 //TODO
                 //Wall _ => SelectedKit.Objects.OfType<ObjectTemplate>().ToList(),
                 //Floor _ => SelectedKit.Objects.OfType<ObjectTemplate>().ToList(),
-                _ => SelectedKit.Objects.ToList()
+                _ => _objects.ToList()
             };
         }
     }
@@ -56,7 +58,7 @@ public class SelectObjectMode : BaseMode
     private IWorldObject? _projectedObject;
     private Point _mousePrevious;
 
-    public SelectObjectMode(GLEngine engine, Area area, Kit kit, object selectedPiece, DesignerSettings settings) : base(engine, area, kit, selectedPiece, settings)
+    public SelectObjectMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, object selectedPiece, DesignerSettings settings) : base(engine, area, kits, selectedPiece, settings)
     {
         this.WhenAnyValue(x => x.SelectedPiece)
             .Subscribe(_ =>

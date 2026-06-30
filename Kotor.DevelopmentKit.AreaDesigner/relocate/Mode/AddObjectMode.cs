@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using Avalonia;
+using DynamicData;
+using DynamicData.Binding;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
+using Kotor.DevelopmentKit.AreaDesigner.ViewModels;
 using Kotor.NET.Common.Data.Geometry;
 using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Cameras;
@@ -24,7 +28,7 @@ public class AddObjectMode : BaseMode
     {
         get
         {
-            return SelectedKit?.Objects.ToList() ?? [];
+            return _objects.Where(x => x.GetType() == typeof(ObjectTemplate)).ToList();
         }
     }
     public ObjectTemplate? SelectedObjectTemplate
@@ -33,11 +37,12 @@ public class AddObjectMode : BaseMode
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    private WorldObject _addObject = null;
+    private WorldObject _addObject = default!;
     private float angle = 0;
 
-    public AddObjectMode(GLEngine engine, Area area, Kit? kit, object selectedPiece, DesignerSettings settings) : base(engine, area, kit, selectedPiece, settings)
+    public AddObjectMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, object selectedPiece, DesignerSettings settings) : base(engine, area, kits, selectedPiece, settings)
     {
+        Kits.ToObservableChangeSet().AutoRefresh(x => x.Active).Subscribe(_ => this.RaisePropertyChanged(nameof(ObjectTemplates)));
     }
 
     public override async Task RenderIntercept(OrbitCamera camera, Point mouse, List<IDrawCallDescriptor> descriptors)
