@@ -181,7 +181,7 @@ public class KitSerializer_V0_1
     {
         dynamic data = new ExpandoObject();
 
-        data.id = kit.ID;
+        data.id = kit.KitID;
         data.version = kit.Version;
         data.name = kit.Name;
         data.format = FormatID;

@@ -109,7 +109,7 @@ public class KitEditorViewModel : ReactiveObject
     {
         FilePath = kit.FilePath;
         Name = kit.Name;
-        KitID = kit.ID;
+        KitID = kit.KitID;
         Version = kit.Version;
 
         _objectTemplatesSource.AddRange(

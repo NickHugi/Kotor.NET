@@ -84,9 +84,9 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
     private async Task LoadRequiredDataForKits()
     {
         var loadModels = Kit.Manager.Kits
-            .SelectMany(kit => Directory.GetFiles($@"{Kit.Manager.ActiveDirectory}/{kit.ID}")
+            .SelectMany(kit => Directory.GetFiles($@"{Kit.Manager.ActiveDirectory}/{kit.KitID}")
                 .Where(x => string.Equals(Path.GetExtension(x), ".mdl", StringComparison.InvariantCultureIgnoreCase))
-                .Select(x => LoadModel(kit.ID, Path.GetFileNameWithoutExtension(x))))
+                .Select(x => LoadModel(kit.KitID, Path.GetFileNameWithoutExtension(x))))
             .ToArray();
         await Task.WhenAll(loadModels);
 
