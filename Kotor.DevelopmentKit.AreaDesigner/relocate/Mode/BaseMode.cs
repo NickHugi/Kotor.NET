@@ -43,7 +43,7 @@ public class BaseMode : ReactiveObject
     public BaseMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, IWorldObject activeWorldObject, DesignerSettings settings)
     {
         Kits = kits;
-        SelectedWorldObject = selectedWorldObject;
+        SelectedWorldObject = activeWorldObject;
         _engine = engine;
         _area = area;
         _settings = settings;

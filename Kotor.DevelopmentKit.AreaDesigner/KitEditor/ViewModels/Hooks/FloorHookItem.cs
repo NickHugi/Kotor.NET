@@ -13,7 +13,7 @@ namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Hooks;
 public class FloorHookItem : BaseMagnetItem
 {
     public override string Name => $"{TemplateID} ({Position.X:F2}, {Position.Y:F2}, {Position.Z:F2})";
-    public override MagnetType MagnetType => MagnetType.Floor;
+    public override MagnetType MagnetType => MagnetType.Hook;
 
     public string KitID
     {

@@ -97,6 +97,24 @@
                 <core:QuaternionEdit Label="Orientation" Value="{Binding Orientation}" />
             </StackPanel>
         </DataTemplate>
+        
+        <DataTemplate x:Key="FloorHookItemPanel" DataType="hooks:FloorHookItem">
+            <StackPanel>
+                <core:LabeledTextBox Label="Kit ID" Text="{Binding KitID}" />
+                <core:LabeledTextBox Label="Template ID" Text="{Binding TemplateID}" />
+                <core:Vector3Edit Label="Position" Value="{Binding Position}" />
+                <core:QuaternionEdit Label="Orientation" Value="{Binding Orientation}" />
+            </StackPanel>
+        </DataTemplate>
+        
+        <DataTemplate x:Key="CeilingHookItemPanel" DataType="hooks:CeilingHookItem">
+            <StackPanel>
+                <core:LabeledTextBox Label="Kit ID" Text="{Binding KitID}" />
+                <core:LabeledTextBox Label="Template ID" Text="{Binding TemplateID}" />
+                <core:Vector3Edit Label="Position" Value="{Binding Position}" />
+                <core:QuaternionEdit Label="Orientation" Value="{Binding Orientation}" />
+            </StackPanel>
+        </DataTemplate>
 
         <DataTemplate x:Key="CornerHookPanel" DataType="hooks:CornerHookItem">
             <StackPanel>
@@ -196,6 +214,8 @@
                             <StackPanel HorizontalAlignment="Left">
                                 <ContentControl Content="{Binding SelectedObjectTemplateItem.SelectedHook}">
                                     <ContentControl.DataTemplates>
+                                        <StaticResource ResourceKey="CeilingHookItemPanel" />
+                                        <StaticResource ResourceKey="FloorHookItemPanel" />
                                         <StaticResource ResourceKey="WallHookItemPanel" />
                                         <StaticResource ResourceKey="CornerHookPanel" />
                                     </ContentControl.DataTemplates>

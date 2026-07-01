@@ -38,31 +38,12 @@ public class AreaEntity : BaseEntity
     }
     public void RenderRoom(IAssetManager assets, Room room, ref List<IDrawCallDescriptor> descriptors)
     {
-        //foreach (var tile in room.Tiles)
-        //{
-        //    RenderFloor(assets, tile, ref descriptors);
-        //    RenderCeiling(assets, tile, ref descriptors);
-        //}
-        //foreach (var wall in room.Walls)
-        //{
-        //    RenderWall(assets, wall, ref descriptors);
-        //}
-        //foreach (var doorframe in room.DoorFrames)
-        //{
-        //    RenderDoorFrame(assets, doorframe, ref descriptors);
-        //}
-        //foreach (var corner in room.InnerCorners)
-        //{
-        //    RenderInnerCorner(assets, corner, ref descriptors);
-        //}
-        //foreach (var corner in room.OuterCorners)
-        //{
-        //    RenderOuterCorner(assets, corner, ref descriptors);
-        //}
         foreach (var @object in room.Objects)
         {
             RenderObject(assets, @object, ref descriptors);
         }
+
+        descriptors.RemoveAll(x => x is MeshDescriptor mesh && mesh.TransparencyHint != 0);
     }
     public void RenderObject(IAssetManager assets, IWorldObject obj, ref List<IDrawCallDescriptor> descriptors)
     {

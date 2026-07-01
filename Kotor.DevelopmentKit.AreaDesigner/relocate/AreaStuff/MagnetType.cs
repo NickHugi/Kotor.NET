@@ -4,9 +4,4 @@ public enum MagnetType
 {
     Magnet,
     Hook,
-    Wall,
-    Doorframe,
-    Floor,
-    Ceiling,
-    Corner,
 }

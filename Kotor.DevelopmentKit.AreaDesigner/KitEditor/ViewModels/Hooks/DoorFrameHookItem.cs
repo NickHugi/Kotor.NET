@@ -13,7 +13,7 @@ namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Hooks;
 public class DoorFrameHookItem : BaseMagnetItem
 {
     public override string Name => $"Hook ({Position.X:F2}, {Position.Y:F2}, {Position.Z:F2})";
-    public override MagnetType MagnetType => MagnetType.Doorframe;
+    public override MagnetType MagnetType => MagnetType.Hook;
 
     public DoorFrameHookItem() : base()
     {

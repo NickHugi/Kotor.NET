@@ -12,7 +12,7 @@ namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Hooks;
 public class CornerHookItem : BaseMagnetItem
 {
     public override string Name => $"{InnerTemplateID} ({Position.Z:F2}, {Position.Y:F2}, {Position.Z:F2})";
-    public override MagnetType MagnetType => MagnetType.Corner;
+    public override MagnetType MagnetType => MagnetType.Hook;
 
     public string InnerKitID
     {

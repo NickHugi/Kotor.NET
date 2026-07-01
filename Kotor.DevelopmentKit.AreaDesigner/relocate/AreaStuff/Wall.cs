@@ -25,7 +25,7 @@ public class Wall : IWorldObject
                 {
                     LocalPosition = new(),
                     LocalOrientation = Quaternion.Identity,
-                    Type = MagnetType.Wall
+                    Type = MagnetType.Hook
                 }];
             }
             else

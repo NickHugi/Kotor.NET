@@ -26,6 +26,7 @@ public class MeshDescriptor : IDrawCallDescriptor
     public Matrix4x4[] BoneTransforms { get; set; }
     public Vector3 DiffuseColor { get; set; }
     public Vector3 AmbientColor { get; set; }
+    public float TransparencyHint { get; set; } = 1.0f;
 }
 
 

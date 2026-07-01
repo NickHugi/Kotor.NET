@@ -18,6 +18,7 @@ public class MeshNode : DummyNode
     public Vector3 AmbientColor { get; set; }
     public string Texture1 { get; set; } = "";
     public string Texture2 { get; set; } = "";
+    public uint TransparencyHint { get; set; }
 
     public override ICollection<IDrawCallDescriptor> GetDrawCallDescriptors(Matrix4x4 transform)
     {
@@ -36,6 +37,7 @@ public class MeshNode : DummyNode
                 BoundingSphere = null,
                 AmbientColor = AmbientColor,
                 DiffuseColor = DiffuseColor,
+                TransparencyHint = TransparencyHint,
             }
         ];
     }

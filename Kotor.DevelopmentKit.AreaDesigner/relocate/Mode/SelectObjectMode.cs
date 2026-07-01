@@ -57,7 +57,7 @@ public class SelectObjectMode : BaseMode
     private IWorldObject? _projectedObject;
     private Point _mousePrevious;
 
-    public SelectObjectMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, IWorldObject activeWorldObject, DesignerSettings settings) : base(engine, area, kits, selectedPiece, settings)
+    public SelectObjectMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, IWorldObject activeWorldObject, DesignerSettings settings) : base(engine, area, kits, activeWorldObject, settings)
     {
         this.WhenAnyValue(x => x.SelectedWorldObject)
             .Subscribe(_ =>

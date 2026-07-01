@@ -18,7 +18,7 @@ public class PropEntity : BaseEntity
     {
         var model = assets.GetModel(Model);
         model.Root.GenerateTransform(Animations);
-        var descriptors =  model.GetAllNodes().ToList().SelectMany(node => node.GetDrawCallDescriptors(Transformation)).ToList();
+        var descriptors =  model.GetAllNodes().SelectMany(node => node.GetDrawCallDescriptors(Transformation)).ToList();
 
         return descriptors;
     }

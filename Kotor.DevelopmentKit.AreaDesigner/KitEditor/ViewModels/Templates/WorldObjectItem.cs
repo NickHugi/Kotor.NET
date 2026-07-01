@@ -48,7 +48,7 @@ public abstract class WorldObjectItem : ReactiveObject
 
     public ObservableCollection<BaseMagnetItem> Hooks { get; init; }
 
-    public HookItem? SelectedHook
+    public BaseMagnetItem? SelectedHook
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);

@@ -290,6 +290,7 @@ public class ModelLoader
                     Orientation = orientation,
                     DiffuseColor = trimeshHeader.Diffuse,
                     AmbientColor = trimeshHeader.Ambient,
+                    TransparencyHint = trimeshHeader.TransparencyHint,
                 };
                 
             }

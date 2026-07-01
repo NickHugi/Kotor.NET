@@ -30,7 +30,7 @@ public class DoorFrame : IWorldObject
         {
             return Template.Magnets.Select(x => new Magnet(this)
             {
-                Type = MagnetType.Wall,
+                Type = MagnetType.Hook,
                 LocalPosition = x.LocalPosition,
                 LocalOrientation = x.LocalOrientation,
             }).ToList();
@@ -54,12 +54,12 @@ public class DoorFrame : IWorldObject
 
     public Vector3 LocalPosition
     {
-        get => Template.Magnets.First().LocalPosition;
+        get => new();//Template.Magnets.First().LocalPosition;
         set => throw new NotImplementedException(); // TODO
     }
     public Quaternion LocalOrientation
     {
-        get => Template.Magnets.First().LocalOrientation;
+        get => Quaternion.Identity; //Template.Magnets.First().LocalOrientation;
         set => throw new NotImplementedException(); // TODO
     }
     public Matrix4x4 LocalTransform => Matrix4x4.CreateRotationZ(MathF.PI) * Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
