@@ -74,8 +74,12 @@ public class AddTileMode : BaseMode
         _projectedRoom.Position = point;
         _projectedRoom.Orientation = Quaternion.CreateFromYawPitchRoll(0, 0, angle * (float)Math.PI / 180);
 
-        // TODO - build list of compatible magnets, use those as ways of snapping elements together
-        var result = NearestMagnet(_projectedRoom.GetMagnets(), 1);
+        var result = NearbyMagnets(_projectedRoom.GetMagnets(), 1)
+            .Where(x => x.Source.Parent is Wall source
+                && x.Target.Parent is Wall target
+                && source.Template.ClassID == target.Template.ClassID)
+            .FirstOrDefault();
+
         if (result is not null)
         {
             // Target is existing wall

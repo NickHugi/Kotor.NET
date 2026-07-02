@@ -167,6 +167,25 @@ public class BaseMode : ReactiveObject
 
         return near.OrderBy(x => x.Distance).FirstOrDefault();
     }
+    protected IEnumerable<MagnetResult<Magnet>> NearbyMagnets(List<Magnet> candidates, float distance)
+    {
+        var near = new List<MagnetResult<Magnet>>();
+        var allMagnets = _area.Rooms.SelectMany(x => x.GetMagnets());
+
+        foreach (var magnet in candidates)
+        {
+            var match = allMagnets
+                .Where(x => Vector3.Distance(magnet.GlobalPosition, x.GlobalPosition) < distance)
+                .OrderBy(x => Vector3.Distance(magnet.GlobalPosition, x.GlobalPosition))
+                .Select(x => new MagnetResult<Magnet>(magnet, x, Vector3.Distance(magnet.GlobalPosition, x.GlobalPosition)))
+                .ToList();
+
+            if (match.Count > 0)
+                near.AddRange(match);
+        }
+
+        return near.OrderBy(x => x.Distance);
+    }
 }
 
 public class MagnetResult<T>
