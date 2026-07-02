@@ -49,7 +49,7 @@ public class Tile : IDeleteable, IWorldObject
         get;
         set => field = Quaternion.Normalize(value);
     } = Quaternion.Identity;
-    public Matrix4x4 LocalTransform => Matrix4x4.CreateTranslation(LocalPosition) * Matrix4x4.CreateFromQuaternion(LocalOrientation);
+    public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
 
     public Vector3 GlobalPosition
     {
