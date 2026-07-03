@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.Intrinsics.X86;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
+using Kotor.NET.Extensions;
+using Kotor.NET.Graphics.Extensions;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
@@ -24,42 +27,65 @@ public class OuterCorner : IWorldObject
 
     public Vector3 LocalPosition
     {
-        get => throw new NotImplementedException(); // TODO
+        get => Hook.LocalPosition;
         set => throw new NotImplementedException(); // TODO
     }
     public Quaternion LocalOrientation
     {
-        get => throw new NotImplementedException(); // TODO
+        get => Hook.LocalOrientation;
         set => throw new NotImplementedException(); // TODO
     }
-    public Matrix4x4 LocalTransform => throw new NotImplementedException(); // TODO
+    public Matrix4x4 LocalTransform => Hook.LocalTransform;
 
     public Vector3 GlobalPosition
     {
-        get => Hook.LocalPosition;
+        get => Vector3.Transform(LocalPosition, Parent.GlobalOrientation) + Parent.GlobalPosition;
         set => throw new NotImplementedException(); // TODO
     }
     public Quaternion GlobalOrientation
     {
-        get => Hook.LocalOrientation;
+        get => Quaternion.Normalize(LocalOrientation * Parent.GlobalOrientation);
         set => throw new NotImplementedException(); // TODO
     }
-    public Matrix4x4 GlobalTransform => Hook.LocalTransform * Parent.GlobalTransform;
+    public Matrix4x4 GlobalTransform => LocalTransform * Parent.GlobalTransform;
 
     public bool Visible
     {
         get
         {
-            if (Hook.Adjacent.Count() != 2)
-                return false;
-            if (Hook.Adjacent.Any(x => Parent.VirtualObjects.OfType<Wall>().ElementAt(x).LinkedTile is null))
-                return false;
+            var at = Parent.Parent.Objects.OfType<Tile>().SelectMany(x => x.VirtualObjects).OfType<OuterCorner>().Where(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, 0.1f));
+            var count = at.Count();
 
-            var a = Parent.VirtualObjects.OfType<Wall>().ElementAt(Hook.Adjacent[0]).LinkedTile!.VirtualObjects.OfType<Wall>().Select(x => x.LinkedTile).Where(x => x != Parent);
-            var b = Parent.VirtualObjects.OfType<Wall>().ElementAt(Hook.Adjacent[1]).LinkedTile!.VirtualObjects.OfType<Wall>().Select(x => x.LinkedTile).Where(x => x != Parent);
+            if (count == 3)
+            {
+                var a = at.ElementAt(0).Parent;
+                var b = at.ElementAt(1).Parent;
+                var c = at.ElementAt(2).Parent;
+                var a2b = Vector3.Distance(a.GlobalPosition, b.GlobalPosition);
+                var a2c = Vector3.Distance(a.GlobalPosition, c.GlobalPosition);
+                var c2b = Vector3.Distance(c.GlobalPosition, b.GlobalPosition);
 
-            var circuit = a.Intersect(b).Any();
-            return !circuit;
+                if (a2b.Equals(a2c, 0.001f))
+                {
+                    return this.Parent == a;
+                }
+                else if (a2b.Equals(c2b, 0.001f))
+                {
+                    return this.Parent == b;
+                }
+                else if (a2c.Equals(c2b, 0.001f))
+                {
+                    return this.Parent == c;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 

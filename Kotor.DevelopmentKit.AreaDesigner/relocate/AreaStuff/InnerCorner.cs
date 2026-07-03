@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
+using Kotor.NET.Extensions;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
@@ -32,25 +33,26 @@ public class InnerCorner : IWorldObject
         get => Hook.LocalOrientation;
         set => throw new NotImplementedException(); // TODO
     }
-    public Matrix4x4 LocalTransform => throw new NotImplementedException(); // TODO
+    public Matrix4x4 LocalTransform => Hook.LocalTransform;
 
     public Vector3 GlobalPosition
     {
-        get => Matrix4x4.Decompose(GlobalTransform, out _, out _, out var value) ? value : new();
+        get => Vector3.Transform(LocalPosition, Parent.GlobalOrientation) + Parent.GlobalPosition;
         set => throw new NotImplementedException(); // TODO
     }
     public Quaternion GlobalOrientation
     {
-        get => Matrix4x4.Decompose(GlobalTransform, out _, out var value, out _) ? value : new();
+        get => Quaternion.Normalize(LocalOrientation * Parent.GlobalOrientation);
         set => throw new NotImplementedException(); // TODO
     }
-    public Matrix4x4 GlobalTransform => Hook.LocalTransform * Parent.GlobalTransform;
+    public Matrix4x4 GlobalTransform => LocalTransform * Parent.GlobalTransform;
 
     public bool Visible
     {
         get
         {
-            return Hook.Adjacent.Any() && Hook.Adjacent.All(x => Parent.VirtualObjects.OfType<Wall>().ElementAt(x).LinkedTile is null);
+            var count = Parent.Parent.Objects.OfType<Tile>().SelectMany(x => x.VirtualObjects).OfType<InnerCorner>().Count(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, 0.1f));
+            return count == 1;
         }
     }
     
