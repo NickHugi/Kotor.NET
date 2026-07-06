@@ -165,6 +165,10 @@ public class KitEditorViewModel : ReactiveObject
             var filename = Path.GetFileNameWithoutExtension(filepath);
             var mdl = MDL.FromFile(filepath);
             var template = TemplateFromMDL(filename, mdl);
+
+            var existing = ObjectTemplateItems.Where(x => x.TemplateID == template.TemplateID);
+            _objectTemplatesSource.RemoveMany(existing);
+
             _objectTemplatesSource.Add(template);
 
             if (template is FloorItem floorTemplate)
