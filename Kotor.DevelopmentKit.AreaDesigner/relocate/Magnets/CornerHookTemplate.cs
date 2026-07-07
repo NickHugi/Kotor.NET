@@ -12,6 +12,4 @@ public class CornerHookTemplate : BaseMagnetTemplate
     public required string OuterKitID { get; init; }
     public required string OuterTemplateID { get; init; }
     public OuterCornerTemplate OuterCornerTemplate => Kit.Manager.Get(OuterKitID).OuterCorner(OuterTemplateID);
-
-    public required int[] Adjacent { get; init; }
 }

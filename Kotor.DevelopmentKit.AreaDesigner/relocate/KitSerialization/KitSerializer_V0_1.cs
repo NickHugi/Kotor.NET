@@ -129,7 +129,6 @@ public class KitSerializer_V0_1
                         OuterTemplateID = hook.outerTemplateID,
                         LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
                         LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion(),
-                        Adjacent = []
                     }),
                 ],
             });
@@ -221,7 +220,6 @@ public class KitSerializer_V0_1
                 outerTemplateID = x.OuterTemplateID,
                 position = x.LocalPosition.ToFloatArray(),
                 orientation = x.LocalOrientation.ToFloatArray(),
-                adjacencies = x.Adjacent,
             }),
         });
 

@@ -63,7 +63,6 @@ public class CornerHookItem : BaseMagnetItem
         OuterTemplateID = template.OuterTemplateID;
         Position = new(template.LocalPosition);
         Orientation = new(template.LocalOrientation);
-        AdjacentWalls = new(template.Adjacent);
     }
 
     public override CornerHookTemplate ToModel()
@@ -74,7 +73,6 @@ public class CornerHookItem : BaseMagnetItem
             InnerTemplateID = InnerTemplateID,
             OuterKitID = OuterKitID,
             OuterTemplateID = OuterTemplateID,
-            Adjacent = AdjacentWalls.ToArray(),
             LocalPosition = Position.ToModel(),
             LocalOrientation = Orientation.ToModel(),
         };
