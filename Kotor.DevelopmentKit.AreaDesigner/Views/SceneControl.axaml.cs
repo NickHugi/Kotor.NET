@@ -102,12 +102,17 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
     }
     private async Task LoadTexture(string name)
     {
-        var filepath = $@"C:\Kits\sandral\{name}.tpc";
-        if (!File.Exists(filepath))
+        var filepath = Directory.GetFiles(@"C:\Kits", "*.*", SearchOption.AllDirectories).FirstOrDefault(x =>
+        {
+            return Path.GetFileNameWithoutExtension(x).ToLower() == name.ToLower();
+        });
+
+        if (filepath is null)
             return;
 
         var texture = File.ReadAllBytes(filepath);
-        await ViewModel.Engine.LoadTexture(name, texture);
+        var resourceType = ResourceType.FromFilepath(filepath);
+        await ViewModel.Engine.LoadTexture(name, texture, resourceType);
     }
 
     #region ICustomHitTest

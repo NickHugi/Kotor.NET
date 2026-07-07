@@ -117,7 +117,7 @@ public class GLEngine
         });
     }
 
-    public async Task LoadTexture(string name, byte[] data)
+    public async Task LoadTexture(string name, byte[] data, ResourceType resourceType)
     {
         await RunOnGLThread(() =>
         {
@@ -125,7 +125,14 @@ public class GLEngine
                 AssetManager.RemoveTexture(name);
 
             using var stream = new MemoryStream(data);
-            var texture = new TPCTextureFactory(GL).FromStream(stream);
+
+            var texture = resourceType switch
+            {
+                _ when resourceType == ResourceType.TGA => new TGATextureFactory(GL).FromStream(stream),
+                _ when resourceType == ResourceType.TPC => new TPCTextureFactory(GL).FromStream(stream),
+                _ => throw new NotImplementedException()
+            };
+
             AssetManager.AddTexture(name, texture);
         });
     }
@@ -158,7 +165,8 @@ public class GLEngine
                         var textureName = mesh.Texture1;
                         var textureResource = Source.Find(mesh.Texture1, ResourceType.TPC);
                         var textureData = File.ReadAllBytes(textureResource.FilePath);
-                        await LoadTexture(textureName, textureData);
+                        var resourceType = textureResource.Type;
+                        await LoadTexture(textureName, textureData, resourceType);
                     }
                 }
             }

@@ -116,7 +116,7 @@ public class MDLResourceViewerViewModel : ReactiveObject
         {
             var name = SelectedTexture.Name;
             var data = resource.Texture.ReadData();
-            await Engine.LoadTexture(name, data);
+            await Engine.LoadTexture(name, data, resource.Texture.Type);
         }
     }
 
