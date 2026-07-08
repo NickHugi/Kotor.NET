@@ -54,7 +54,7 @@ public class AddTileMode : BaseMode
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public AddTileMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, IWorldObject activeWorldObject, DesignerSettings settings) : base(engine, area, kits, activeWorldObject, settings)
+    public AddTileMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, UltimateWorldObject activeWorldObject, DesignerSettings settings) : base(engine, area, kits, activeWorldObject, settings)
     {
         Kits.ToObservableChangeSet().AutoRefresh(x => x.Active).Subscribe(_ => this.RaisePropertyChanged(nameof(TileTemplates)));
     }
@@ -135,9 +135,9 @@ public class AddTileMode : BaseMode
     {
         var tiles = _area.Rooms.SelectMany(x => x.Objects.OfType<Tile>()).ToList();
 
-        foreach (var existing in tiles.SelectMany(x => x.VirtualObjects.OfType<Wall>()))
+        foreach (var existing in tiles.SelectMany(x => x.AttachedObjects.OfType<Wall>()))
         {
-            foreach (var cursor in _projectedTile.VirtualObjects.OfType<Wall>())
+            foreach (var cursor in _projectedTile.AttachedObjects.OfType<Wall>())
             {
                 if (existing.GlobalPosition.ApproximatelyEquals(cursor.GlobalPosition, 0.01f))
                 {
@@ -147,9 +147,9 @@ public class AddTileMode : BaseMode
             }
         }
 
-        foreach (var existing in tiles.SelectMany(x => x.VirtualObjects.OfType<InnerCorner>()))
+        foreach (var existing in tiles.SelectMany(x => x.AttachedObjects.OfType<InnerCorner>()))
         {
-            foreach (var cursor in _projectedTile.VirtualObjects.OfType<InnerCorner>())
+            foreach (var cursor in _projectedTile.AttachedObjects.OfType<InnerCorner>())
             {
                 if (existing.GlobalPosition.ApproximatelyEquals(cursor.GlobalPosition, 0.01f))
                 {
@@ -159,9 +159,9 @@ public class AddTileMode : BaseMode
             }
         }
 
-        foreach (var existing in tiles.SelectMany(x => x.VirtualObjects.OfType<OuterCorner>()))
+        foreach (var existing in tiles.SelectMany(x => x.AttachedObjects.OfType<OuterCorner>()))
         {
-            foreach (var cursor in _projectedTile.VirtualObjects.OfType<OuterCorner>())
+            foreach (var cursor in _projectedTile.AttachedObjects.OfType<OuterCorner>())
             {
                 if (existing.GlobalPosition.ApproximatelyEquals(cursor.GlobalPosition, 0.01f))
                 {
@@ -182,7 +182,7 @@ public class AddTileMode : BaseMode
         {
             var template = _projectedRoom.Objects.OfType<Tile>().First().Template;
             var room = wall.Parent.Parent;
-            var newTile = new Tile(room);
+            var newTile = new Tile(room, template);
             newTile.SwitchTemplate(template);
             newTile.GlobalPosition = _projectedRoom.Position;
             newTile.GlobalOrientation = _projectedRoom.Orientation;

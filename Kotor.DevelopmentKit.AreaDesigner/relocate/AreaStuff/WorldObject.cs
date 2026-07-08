@@ -5,36 +5,15 @@ using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
-public class WorldObject : IWorldObject
+public class WorldObject : UltimateWorldObject
 {
     public Room Parent { get; }
 
     public IReadOnlyCollection<Magnet> Magnets => [];
-    public WorldObjectType Type => WorldObjectType.Prop;
 
-    public string KitID { get; private set; }
-    public string TemplateID { get; private set; }
-    public WorldObjectTemplate Template => Kit.Manager.Get(KitID).Object(TemplateID);
+    public UltimateWorldObjectTemplate Template => Kit.Manager.Get(KitID).Object(TemplateID);
 
-    public string? GroupID { get; set; }
-
-    public Vector3 LocalPosition { get; set; }
-    public Quaternion LocalOrientation { get; set; }
-    public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
-
-    public Vector3 GlobalPosition
-    { 
-        get => Matrix4x4.Decompose(GlobalTransform, out _, out _, out var value) ? value : new();
-        set => throw new NotImplementedException(); // TODO
-    }
-    public Quaternion GlobalOrientation
-    {
-        get => Matrix4x4.Decompose(GlobalTransform, out _, out var value, out _) ? value : new();
-        set => throw new NotImplementedException(); // TODO
-    }
-    public Matrix4x4 GlobalTransform => LocalTransform * Parent.Transform;
-
-    public WorldObject(Room parent, WorldObjectTemplate template)
+    public WorldObject(Room parent, UltimateWorldObjectTemplate template) : base(parent, template, Guid.NewGuid())
     {
         Parent = parent;
 
@@ -43,7 +22,7 @@ public class WorldObject : IWorldObject
         SwitchTemplate(template);
     }
 
-    public void SwitchTemplate(WorldObjectTemplate template)
+    public void SwitchTemplate(UltimateWorldObjectTemplate template)
     {
         KitID = template.KitID;
         TemplateID = template.TemplateID;

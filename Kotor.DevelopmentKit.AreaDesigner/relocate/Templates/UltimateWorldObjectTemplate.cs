@@ -22,8 +22,9 @@ public class UltimateWorldObjectTemplate
 
     public required UltimateMagnetTemplate[] Magnets { get; init; }
 
-    public required string DoorframeKitID { get; init; }
-    public required string DoorframeTemplateID { get; init; }
-    public required string DoorframeClassID { get; init; }
+    public string DoorframeKitID { get; init; }
+    public string DoorframeTemplateID { get; init; }
+    public string DoorframeClassID { get; init; }
     public bool CanBeDoor => !string.IsNullOrEmpty(DoorframeTemplateID);
+    public DoorFrameTemplate? DoorFrame => string.IsNullOrEmpty(DoorframeTemplateID) ? null : Kit.Manager.Get(DoorframeKitID).DoorFrame(DoorframeTemplateID);
 }

@@ -24,7 +24,7 @@ public class DoorFrameItem : WorldObjectItem
         Hooks = new(template.Magnets.OfType<DoorFrameHookTemplate>().Select(x => new DoorFrameHookItem(x)));
     }
 
-    public override WorldObjectTemplate ToModel()
+    public override UltimateWorldObjectTemplate ToModel()
     {
         return new DoorFrameTemplate
         {

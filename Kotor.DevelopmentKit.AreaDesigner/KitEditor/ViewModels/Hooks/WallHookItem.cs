@@ -43,7 +43,6 @@ public class WallHookItem : BaseMagnetItem
         TemplateID = wallHook.TemplateID;
         Position = new(wallHook.LocalPosition);
         Orientation = new(wallHook.LocalOrientation);
-        AdjacentWalls = new(wallHook.AdjacentWalls);
     }
 
     public override WallHookTemplate ToModel()
@@ -54,6 +53,7 @@ public class WallHookItem : BaseMagnetItem
             TemplateID = TemplateID,
             LocalPosition = Position.ToModel(),
             LocalOrientation = Orientation.ToModel(),
+            MagnetType = MagnetType.Hook,
         };
     }
 }

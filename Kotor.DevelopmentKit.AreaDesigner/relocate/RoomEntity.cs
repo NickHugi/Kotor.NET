@@ -45,34 +45,34 @@ public class AreaEntity : BaseEntity
 
         descriptors.RemoveAll(x => x is MeshDescriptor mesh && mesh.TransparencyHint != 0);
     }
-    public void RenderObject(IAssetManager assets, IWorldObject obj, ref List<IDrawCallDescriptor> descriptors)
+    public void RenderObject(IAssetManager assets, UltimateWorldObject obj, ref List<IDrawCallDescriptor> descriptors)
     {
         if (!DoRenderObjects)
             return;
 
         if (obj is Tile tile)
         {
-            foreach (var floor in tile.VirtualObjects.OfType<Floor>())
+            foreach (var floor in tile.AttachedObjects.OfType<Floor>())
             {
                 RenderFloor(assets, floor, ref descriptors);
             }
-            foreach (var ceiling in tile.VirtualObjects.OfType<Ceiling>())
+            foreach (var ceiling in tile.AttachedObjects.OfType<Ceiling>())
             {
                 RenderCeiling(assets, ceiling, ref descriptors);
             }
-            foreach (var wall in tile.VirtualObjects.OfType<Wall>())
+            foreach (var wall in tile.AttachedObjects.OfType<Wall>())
             {
                 RenderWall(assets, wall, ref descriptors);
             }
-            foreach (var doorframe in tile.VirtualObjects.OfType<Wall>().Select(x => x.DoorFrame).Where(x => x is not null))
+            foreach (var doorframe in tile.AttachedObjects.OfType<Wall>().Select(x => x.DoorFrame).Where(x => x is not null))
             {
                 RenderDoorFrame(assets, doorframe, ref descriptors);
             }
-            foreach (var innerCorner in tile.VirtualObjects.OfType<InnerCorner>())
+            foreach (var innerCorner in tile.AttachedObjects.OfType<InnerCorner>())
             {
                 RenderInnerCorner(assets, innerCorner, ref descriptors);
             }
-            foreach (var outerCorner in tile.VirtualObjects.OfType<OuterCorner>())
+            foreach (var outerCorner in tile.AttachedObjects.OfType<OuterCorner>())
             {
                 RenderOuterCorner(assets, outerCorner, ref descriptors);
             }

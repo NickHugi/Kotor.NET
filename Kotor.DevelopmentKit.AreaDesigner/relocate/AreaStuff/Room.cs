@@ -23,16 +23,7 @@ public class Room
     }
     public Matrix4x4 Transform => Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position);
 
-    //private List<Tile> _tiles = new();
-    //public IReadOnlyCollection<Tile> Tiles => new ReadOnlyCollection<Tile>(_tiles);
-
-    //public ICollection<Wall> Walls => Tiles.SelectMany(x => x.Walls).ToList();
-    //public ICollection<Floor> Floors => Tiles.Select(x => x.Floor).ToList();
-    //public ICollection<Ceiling> Ceilings => Tiles.Select(x => x.Ceiling).ToList();
-    //public ICollection<InnerCorner> InnerCorners => Tiles.SelectMany(x => x.InnerCorners).ToList();
-    //public ICollection<OuterCorner> OuterCorners => Tiles.SelectMany(x => x.OuterCorners).ToList();
-    //public ICollection<DoorFrame> DoorFrames => Walls.Select(x => x.DoorFrame).Where(x => x is not null).ToList();
-    public ICollection<IWorldObject> Objects = [];
+    public ICollection<UltimateWorldObject> Objects = [];
 
     public Room(Area parent)
     {
@@ -40,12 +31,12 @@ public class Room
     }
     public Room(Area parent, TileTemplate template) : this(parent)
     {
-        var tile = new Tile(this);
+        var tile = new Tile(this, template);
         tile.SwitchTemplate(template);
         AddTile(tile);
     }
 
-    public void AddObject(IWorldObject @object)
+    public void AddObject(UltimateWorldObject @object)
     {
         Objects.Add(@object);
     }
@@ -72,12 +63,14 @@ public class Room
 
     public List<Magnet> GetMagnets()
     {
-        return Objects.SelectMany(x => x.Magnets).ToList();
+        // TODO
+        return [];
+        //return Objects.SelectMany(x => x.Magnets).ToList();
     }
 
     private void FixWalls()
     {
-        foreach (var wall in Objects.OfType<Tile>().SelectMany(x => x.VirtualObjects.OfType<Wall>()))
+        foreach (var wall in Objects.OfType<Tile>().SelectMany(x => x.AttachedObjects.OfType<Wall>()))
         {
             wall.LinkedTile = null;
         }
@@ -89,7 +82,7 @@ public class Room
                 if (tileA == tileB)
                     continue;
 
-                foreach (var adjacent in GetCombinations(tileA.VirtualObjects.OfType<Wall>(), tileB.VirtualObjects.OfType<Wall>()))
+                foreach (var adjacent in GetCombinations(tileA.AttachedObjects.OfType<Wall>(), tileB.AttachedObjects.OfType<Wall>()))
                 {
                     if (Vector3.Distance(adjacent.Item1.GlobalPosition, adjacent.Item2.GlobalPosition) < 0.01f)
                     {

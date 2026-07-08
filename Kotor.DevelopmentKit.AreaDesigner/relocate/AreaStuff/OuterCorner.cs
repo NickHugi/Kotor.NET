@@ -10,50 +10,19 @@ using Kotor.NET.Graphics.Extensions;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
-public class OuterCorner : IWorldObject
+public class OuterCorner : UltimateWorldObject
 {
     public Tile Parent { get; }
 
-    public IReadOnlyCollection<Magnet> Magnets => [];
-    public WorldObjectType Type => WorldObjectType.OuterCorner;
-
     public CornerHookTemplate Hook { get; }
 
-    public string KitID { get; private set; } = "";
-    public string TemplateID { get; private set; } = "";
     public OuterCornerTemplate Template => Kit.Manager.Get(KitID).OuterCorner(TemplateID);
-
-    public string? GroupID { get; set; }
-
-    public Vector3 LocalPosition
-    {
-        get => Hook.LocalPosition;
-        set => throw new NotImplementedException(); // TODO
-    }
-    public Quaternion LocalOrientation
-    {
-        get => Hook.LocalOrientation;
-        set => throw new NotImplementedException(); // TODO
-    }
-    public Matrix4x4 LocalTransform => Hook.LocalTransform;
-
-    public Vector3 GlobalPosition
-    {
-        get => Vector3.Transform(LocalPosition, Parent.GlobalOrientation) + Parent.GlobalPosition;
-        set => throw new NotImplementedException(); // TODO
-    }
-    public Quaternion GlobalOrientation
-    {
-        get => Quaternion.Normalize(LocalOrientation * Parent.GlobalOrientation);
-        set => throw new NotImplementedException(); // TODO
-    }
-    public Matrix4x4 GlobalTransform => LocalTransform * Parent.GlobalTransform;
 
     public bool Visible
     {
         get
         {
-            var at = Parent.Parent.Objects.OfType<Tile>().SelectMany(x => x.VirtualObjects).OfType<OuterCorner>().Where(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, 0.1f));
+            var at = Parent.Parent.Objects.OfType<Tile>().SelectMany(x => x.AttachedObjects).OfType<OuterCorner>().Where(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, 0.1f));
             var count = at.Count();
 
             if (count == 3)
@@ -89,14 +58,14 @@ public class OuterCorner : IWorldObject
         }
     }
 
-    public OuterCorner(Tile parent, OuterCornerTemplate template, CornerHookTemplate hook)
+    public OuterCorner(Tile parent, OuterCornerTemplate template, CornerHookTemplate hook) : base(parent.Parent, template, Guid.NewGuid())
     {
         Parent = parent;
         Hook = hook;
         SwitchTemplate(template);
     }
 
-    public void SwitchTemplate(WorldObjectTemplate template)
+    public void SwitchTemplate(UltimateWorldObjectTemplate template)
     {
         if (template is not OuterCornerTemplate outerCornerTemplate)
             throw new ArgumentException();

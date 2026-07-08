@@ -50,6 +50,7 @@ public class HookItem : BaseMagnetItem
             TemplateID = TemplateID,
             LocalPosition = Position.ToModel(),
             LocalOrientation = Orientation.ToModel(),
+            MagnetType = MagnetType.Hook
         };
     }
 }

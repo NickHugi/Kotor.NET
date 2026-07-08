@@ -75,6 +75,7 @@ public class CornerHookItem : BaseMagnetItem
             OuterTemplateID = OuterTemplateID,
             LocalPosition = Position.ToModel(),
             LocalOrientation = Orientation.ToModel(),
+            MagnetType = MagnetType.Hook,
         };
     }
 }

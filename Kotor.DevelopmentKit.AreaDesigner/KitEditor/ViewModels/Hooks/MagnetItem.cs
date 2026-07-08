@@ -30,6 +30,7 @@ public class MagnetItem : BaseMagnetItem
         {
             LocalPosition = Position.ToModel(),
             LocalOrientation = Orientation.ToModel(),
+            MagnetType = MagnetType.Magnet
         };
     }
 }

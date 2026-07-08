@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Magnets;
 using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using ReactiveUI;
 
@@ -32,5 +33,5 @@ public abstract class BaseMagnetItem : ReactiveObject
         Orientation = new();
     }
 
-    public abstract BaseMagnetTemplate ToModel();
+    public abstract UltimateMagnetTemplate ToModel();
 }

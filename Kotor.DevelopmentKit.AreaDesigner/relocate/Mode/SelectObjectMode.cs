@@ -28,10 +28,10 @@ public class SelectObjectMode : BaseMode
 {
     public override string Name => "Select Object";
 
-    public required Interaction<IWorldObject, Unit> AddToSelection { get; init; }
+    public required Interaction<UltimateWorldObject, Unit> AddToSelection { get; init; }
     public required Interaction<Unit, Unit> ClearSelection { get; init; }
 
-    public IEnumerable<WorldObjectTemplate> ObjectTemplates
+    public IEnumerable<UltimateWorldObjectTemplate> ObjectTemplates
     {
         get
         {
@@ -46,7 +46,7 @@ public class SelectObjectMode : BaseMode
             };
         }
     }
-    public WorldObjectTemplate? SelectedObjectTemplate
+    public UltimateWorldObjectTemplate? SelectedObjectTemplate
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
@@ -54,10 +54,10 @@ public class SelectObjectMode : BaseMode
 
     private bool _isTranslating;
     private Axis? _transformAxis;
-    private IWorldObject? _projectedObject;
+    private UltimateWorldObject? _projectedObject;
     private Point _mousePrevious;
 
-    public SelectObjectMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, IWorldObject activeWorldObject, DesignerSettings settings) : base(engine, area, kits, activeWorldObject, settings)
+    public SelectObjectMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, UltimateWorldObject activeWorldObject, DesignerSettings settings) : base(engine, area, kits, activeWorldObject, settings)
     {
         this.WhenAnyValue(x => x.SelectedWorldObject)
             .Subscribe(_ =>
@@ -71,7 +71,7 @@ public class SelectObjectMode : BaseMode
             {
                 if (SelectedObjectTemplate is null)
                     return;
-                if (SelectedWorldObject is not IWorldObject @object)
+                if (SelectedWorldObject is not UltimateWorldObject @object)
                     return;
                 if (@object == _projectedObject)
                     return;

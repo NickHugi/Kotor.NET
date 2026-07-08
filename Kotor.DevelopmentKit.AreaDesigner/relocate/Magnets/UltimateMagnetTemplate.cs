@@ -14,8 +14,8 @@ public class UltimateMagnetTemplate
     public required Quaternion LocalOrientation { get; init; }
     public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
 
-    public string AttachedKitID { get; init; } = "";
-    public string AttachedTemplateID { get; init; } = "";
+    public string KitID { get; init; } = "";
+    public string TemplateID { get; init; } = "";
 
     public required MagnetType MagnetType { get; init; }
 }

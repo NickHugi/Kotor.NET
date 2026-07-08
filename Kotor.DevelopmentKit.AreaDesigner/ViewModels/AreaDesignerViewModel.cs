@@ -46,7 +46,7 @@ public class AreaDesignerViewModel : ReactiveObject
     public Interaction<Unit, string?> SelectLoadFilepathForArea = new();
     public Interaction<Unit, Unit> PromptEditSettings = new();
     public Interaction<Unit, Unit> ClearSelection = new();
-    public Interaction<IWorldObject, Unit> AddToSelection = new();
+    public Interaction<UltimateWorldObject, Unit> AddToSelection = new();
 
     public bool IsMode_AddTile => Mode is AddTileMode;
     public bool IsMode_SelectObject => Mode is SelectObjectMode;
@@ -59,7 +59,7 @@ public class AreaDesignerViewModel : ReactiveObject
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
-    public IWorldObject? ActiveWorldObject
+    public UltimateWorldObject? ActiveWorldObject
     {
         get;
         set
@@ -303,9 +303,10 @@ public class AreaDesignerViewModel : ReactiveObject
     }
     public void DeletePiece(object piece)
     {
-        if (piece is WorldObject @object)
+        if (piece is UltimateWorldObject @object)
         {
-            @object.Parent.Objects.Remove(@object);
+            //TODO
+            //@object.Parent.Objects.Remove(@object);
         }
         else if (piece is Tile tile)
         {
@@ -323,9 +324,9 @@ public class AreaDesignerViewModel : ReactiveObject
         if (ActiveWorldObject is Tile tile)
         {
             descriptors
-                .Where(x => tile.VirtualObjects.OfType<Wall>().Contains(x.Tag)
-                    || tile.VirtualObjects.OfType<Floor>().Contains(x.Tag)
-                    || tile.VirtualObjects.OfType<Ceiling>().Contains(x.Tag))
+                .Where(x => tile.AttachedObjects.OfType<Wall>().Contains(x.Tag)
+                    //|| tile.AttachedObjects.OfType<Floor>().Contains(x.Tag)
+                    || tile.AttachedObjects.OfType<Ceiling>().Contains(x.Tag))
                 .OfType<MeshDescriptor>()
                 .ToList()
                 .ForEach(x => x.AmbientColor += new Vector3(0.5f, 0.5f, 0.5f));

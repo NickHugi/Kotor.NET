@@ -31,6 +31,7 @@ public class DoorFrameHookItem : BaseMagnetItem
         {
             LocalPosition = Position.ToModel(),
             LocalOrientation = Orientation.ToModel(),
+            MagnetType = MagnetType.Hook
         };
     }
 }

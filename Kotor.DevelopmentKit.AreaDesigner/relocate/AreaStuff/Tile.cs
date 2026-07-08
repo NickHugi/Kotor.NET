@@ -7,13 +7,13 @@ using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
-public class Tile : IDeleteable, IWorldObject
+public class Tile : UltimateWorldObject, IDeleteable
 {
     public Room Parent { get; }
 
     public IReadOnlyCollection<Magnet> Magnets
     {
-        get => VirtualObjects.SelectMany(x =>
+        get => AttachedObjects.SelectMany(x =>
         {
             IEnumerable<Magnet> magnets = [];
 
@@ -34,41 +34,15 @@ public class Tile : IDeleteable, IWorldObject
                 || (x.Parent is Wall wall && wall?.LinkedTile is null));
         }).ToList();
     }
-    public WorldObjectType Type => WorldObjectType.Tile;
-    public IReadOnlyCollection<IWorldObject> VirtualObjects { get; private set; } = [];
 
-    public string? GroupID { get; set; }
-
-    public string KitID { get; private set; }
-    public string TemplateID { get; private set; }
     public TileTemplate Template => Kit.Manager.Get(KitID).Tile(TemplateID);
 
-    public Vector3 LocalPosition { get; set; }
-    public Quaternion LocalOrientation
-    {
-        get;
-        set => field = Quaternion.Normalize(value);
-    } = Quaternion.Identity;
-    public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
-
-    public Vector3 GlobalPosition
-    {
-        get => Vector3.Transform(LocalPosition, Parent.Orientation) + Parent.Position;
-        set => LocalPosition = Vector3.Transform(value - Parent.Position, Quaternion.Inverse(Parent.Orientation));
-    }
-    public Quaternion GlobalOrientation
-    {
-        get => Quaternion.Normalize(LocalOrientation * Parent.Orientation);
-        set => LocalOrientation = value * Quaternion.Inverse(Parent.Orientation);
-    }
-    public Matrix4x4 GlobalTransform => LocalTransform * Parent.Transform;
-
-    public Tile(Room parent)
+    public Tile(Room parent, TileTemplate template) : base(parent, template, Guid.NewGuid())
     {
         Parent = parent;
     }
 
-    public void SwitchTemplate(WorldObjectTemplate template)
+    public void SwitchTemplate(UltimateWorldObjectTemplate template)
     {
         //if (template is not TileTemplate tileTemplate)
             throw new ArgumentException();
@@ -82,16 +56,17 @@ public class Tile : IDeleteable, IWorldObject
 
         var kit = Kit.Manager.Get(KitID);
 
-        var virtualObjects = new List<IWorldObject>();
-        VirtualObjects = virtualObjects;
+        var virtualObjects = new List<UltimateWorldObject>();
+        AttachedObjects = virtualObjects;
 
         virtualObjects.AddRange(
         [
             ..template.Magnets.OfType<FloorHookTemplate>().Select(x => new Floor(this, kit.Floor(x.TemplateID))),
             ..template.Magnets.OfType<CeilingHookTemplate>().Select(x => new Ceiling(this, kit.Ceiling(x.TemplateID))),
             ..template.Magnets.OfType<WallHookTemplate>().Select(x => new Wall(this, kit.Wall(x.TemplateID), x)),
-            ..template.Magnets.OfType<CornerHookTemplate>().Select(x => new InnerCorner(this, kit.InnerCorner(x.InnerTemplateID), x)),
-            ..template.Magnets.OfType<CornerHookTemplate>().Select(x => new OuterCorner(this, kit.OuterCorner(x.OuterTemplateID), x)),
+            // TODO
+            //..template.Magnets.OfType<CornerHookTemplate>().Select(x => new InnerCorner(this, kit.InnerCorner(x.InnerTemplateID), x)),
+            //..template.Magnets.OfType<CornerHookTemplate>().Select(x => new OuterCorner(this, kit.OuterCorner(x.OuterTemplateID), x)),
         ]);
     }
 

@@ -5,9 +5,10 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Hooks;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Magnets;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
 
-public class MagnetTemplate : BaseMagnetTemplate
+public class MagnetTemplate : UltimateMagnetTemplate
 {
 }

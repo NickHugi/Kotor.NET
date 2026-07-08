@@ -30,7 +30,7 @@ public class ExtendRoomMode : BaseMode
     private Wall? _wall;
     private bool validWall => _wall is not null && _wall.DoorFrame is null;
 
-    public ExtendRoomMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, IWorldObject selectedPiece, DesignerSettings settings) : base(engine, area, kits, selectedPiece, settings)
+    public ExtendRoomMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, UltimateWorldObject selectedPiece, DesignerSettings settings) : base(engine, area, kits, selectedPiece, settings)
     {
     }
 

@@ -8,7 +8,7 @@ using Kotor.NET.Extensions;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
-public class InnerCorner : IWorldObject
+public class InnerCorner : UltimateWorldObject
 {
     public Tile Parent { get; }
 
@@ -17,53 +17,25 @@ public class InnerCorner : IWorldObject
 
     public CornerHookTemplate Hook { get; }
 
-    public string KitID { get; private set; } = "";
-    public string TemplateID { get; private set; } = "";
     public InnerCornerTemplate Template => Kit.Manager.Get(KitID).InnerCorner(TemplateID);
-
-    public string? GroupID { get; set; }
-
-    public Vector3 LocalPosition
-    {
-        get => Hook.LocalPosition;
-        set => throw new NotImplementedException(); // TODO
-    }
-    public Quaternion LocalOrientation
-    {
-        get => Hook.LocalOrientation;
-        set => throw new NotImplementedException(); // TODO
-    }
-    public Matrix4x4 LocalTransform => Hook.LocalTransform;
-
-    public Vector3 GlobalPosition
-    {
-        get => Vector3.Transform(LocalPosition, Parent.GlobalOrientation) + Parent.GlobalPosition;
-        set => throw new NotImplementedException(); // TODO
-    }
-    public Quaternion GlobalOrientation
-    {
-        get => Quaternion.Normalize(LocalOrientation * Parent.GlobalOrientation);
-        set => throw new NotImplementedException(); // TODO
-    }
-    public Matrix4x4 GlobalTransform => LocalTransform * Parent.GlobalTransform;
 
     public bool Visible
     {
         get
         {
-            var count = Parent.Parent.Objects.OfType<Tile>().SelectMany(x => x.VirtualObjects).OfType<InnerCorner>().Count(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, 0.1f));
+            var count = Parent.Parent.Objects.OfType<Tile>().SelectMany(x => x.AttachedObjects).OfType<InnerCorner>().Count(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, 0.1f));
             return count == 1;
         }
     }
     
-    public InnerCorner(Tile parent, InnerCornerTemplate template, CornerHookTemplate hook)
+    public InnerCorner(Tile parent, InnerCornerTemplate template, CornerHookTemplate hook) : base(parent.Parent, template, Guid.NewGuid())
     {
         Parent = parent;
         Hook = hook;
         SwitchTemplate(template);
     }
 
-    public void SwitchTemplate(WorldObjectTemplate template)
+    public void SwitchTemplate(UltimateWorldObjectTemplate template)
     {
         if (template is not InnerCornerTemplate innerCornerTemplate)
             throw new ArgumentException();

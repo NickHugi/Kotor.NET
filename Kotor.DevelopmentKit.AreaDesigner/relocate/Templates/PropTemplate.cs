@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
-public class PropTemplate : WorldObjectTemplate
+public class PropTemplate : UltimateWorldObjectTemplate
 {
 }

@@ -4,11 +4,10 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Magnets;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
 
-public class HookTemplate : BaseMagnetTemplate
+public class HookTemplate : UltimateMagnetTemplate
 {
-    public required string KitID { get; init; }
-    public required string TemplateID { get; init; }
 }

@@ -27,11 +27,11 @@ public static class AreaExporter
 
         foreach (var tile in room.Objects.OfType<Tile>())
         {
-            mdl.Root.Children.AddRange(tile.VirtualObjects.OfType<Floor>().Select(FloorToMDLNode));
+            mdl.Root.Children.AddRange(tile.AttachedObjects.OfType<Floor>().Select(FloorToMDLNode));
             //mdl.Root.Children.Add(CeilingToMDLNode(tile.Ceiling));
-            mdl.Root.Children.AddRange(tile.VirtualObjects.OfType<Wall>().Where(x => x.Visible).Select(WallToMDLNode));
-            mdl.Root.Children.AddRange(tile.VirtualObjects.OfType<Wall>().Select(x => x.DoorFrame).Where(x => x?.Visible == true).Select(DoorFrameToMDLNode));
-            mdl.Root.Children.AddRange(tile.VirtualObjects.OfType<InnerCorner>().Where(x => x.Visible == true).Select(InnerCornerToMDLNode));
+            mdl.Root.Children.AddRange(tile.AttachedObjects.OfType<Wall>().Where(x => x.Visible).Select(WallToMDLNode));
+            mdl.Root.Children.AddRange(tile.AttachedObjects.OfType<Wall>().Select(x => x.DoorFrame).Where(x => x?.Visible == true).Select(DoorFrameToMDLNode));
+            mdl.Root.Children.AddRange(tile.AttachedObjects.OfType<InnerCorner>().Where(x => x.Visible == true).Select(InnerCornerToMDLNode));
             //mdl.Root.Children.AddRange(room.Vi.Select(ObjectToMDLNode));
         }
 
@@ -93,7 +93,7 @@ public static class AreaExporter
         return cornerMDL.Root;
     }
 
-    private static MDLNode ObjectToMDLNode(IWorldObject @object)
+    private static MDLNode ObjectToMDLNode(UltimateWorldObject @object)
     {
         return null;
         //var objectMDL = MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{@object.KitID}/{@object.Template.Model}.mdl");

@@ -63,7 +63,7 @@ public abstract class WorldObjectItem : ReactiveObject
         Model = "";
         Hooks = [];
     }
-    public WorldObjectItem(WorldObjectTemplate template) : this()
+    public WorldObjectItem(UltimateWorldObjectTemplate template) : this()
     {
         KitID = template.KitID;
         TemplateID = template.TemplateID;
@@ -82,7 +82,7 @@ public abstract class WorldObjectItem : ReactiveObject
         ];
     }
 
-    public abstract WorldObjectTemplate ToModel();
+    public abstract UltimateWorldObjectTemplate ToModel();
 
     public void DeleteSelectedMagnet()
     {

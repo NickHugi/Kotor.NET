@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Magnets;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
@@ -12,17 +13,19 @@ public class UltimateWorldObject
 {
     public Room Room { get; }
 
-    public required string KitID { get; init; }
-    public required string TemplateID { get; init; }
+    public Guid ID { get; }
 
-    public required WorldObjectType Type { get; init; }
+    public string KitID { get; protected set; }
+    public string TemplateID { get; protected set; }
+
+    public WorldObjectType Type { get; protected set; }
 
     public string? GroupID { get; init; }
 
     public bool Visible { get; set; } = true;
 
     public UltimateWorldObjectAttachment Attachment;
-    public IReadOnlyCollection<UltimateWorldObject> AttachedObjects => _attachedObjects.AsReadOnly();
+    public IReadOnlyCollection<UltimateWorldObject> AttachedObjects { get; set; } //_attachedObjects.AsReadOnly();
     private List<UltimateWorldObject> _attachedObjects = [];
 
     public Vector3 LocalPosition
@@ -62,9 +65,19 @@ public class UltimateWorldObject
     }
     public Matrix4x4 GlobalTransform => LocalTransform * ParentTransform;
 
-    public UltimateWorldObject(Room room)
+    public UltimateWorldObject(Room room, UltimateWorldObjectTemplate template, Guid id)
     {
         Room = room;
+        ID = id;
+        SwitchTemplate(template);
+    }
+
+    public void SwitchTemplate(UltimateWorldObjectTemplate template)
+    {
+        KitID = template.KitID;
+        TemplateID = template.TemplateID;
+        // TODO
+        //Type = template.Type;
     }
 }
 
