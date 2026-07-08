@@ -21,12 +21,14 @@ public class Wall : UltimateWorldObject
             }
             else if (DoorFrame is null)
             {
-                return [new Magnet(this)
-                {
-                    LocalPosition = new(),
-                    LocalOrientation = Quaternion.Identity,
-                    Type = MagnetType.Hook
-                }];
+                // TODO
+                return [];
+                //return [new Magnet(this)
+                //{
+                //    LocalPosition = new(),
+                //    LocalOrientation = Quaternion.Identity,
+                //    Type = MagnetType.Hook
+                //}];
             }
             else
             {
@@ -44,7 +46,7 @@ public class Wall : UltimateWorldObject
 
     public bool Visible => LinkedTile is null;
 
-    public Wall(Tile parent, WallTemplate template, WallHookTemplate hook) : base(parent.Parent, template, Guid.NewGuid())
+    public Wall(Tile parent, Magnet parentMagnet, WallTemplate template, WallHookTemplate hook) : base(parent.Parent, parentMagnet, template, Guid.NewGuid())
     {
         Parent = parent;
         Hook = hook;
@@ -66,7 +68,8 @@ public class Wall : UltimateWorldObject
 
         if (template.DoorFrame is not null)
         {
-            DoorFrame = new(this, template.DoorFrame);
+            // TODO
+            //DoorFrame = new(this, template.DoorFrame);
         }
         else
         {

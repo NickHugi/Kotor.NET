@@ -4,16 +4,19 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Magnets;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
 public class Magnet
 {
     public UltimateWorldObject Parent { get; }
+    public UltimateMagnetTemplate Template { get; }
     public MagnetType Type { get; set; }
 
-    public Vector3 LocalPosition { get; init; }
-    public Quaternion LocalOrientation { get; init; }
+    public Vector3 LocalPosition => Template.LocalPosition;
+    public Quaternion LocalOrientation => Template.LocalOrientation;
     public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
 
     public Vector3 GlobalPosition
@@ -26,8 +29,9 @@ public class Magnet
     }
     public Matrix4x4 GlobalTransform => LocalTransform * Parent.GlobalTransform;
 
-    public Magnet(UltimateWorldObject obj)
+    public Magnet(UltimateWorldObject parent, UltimateMagnetTemplate template)
     {
-        Parent = obj;
+        Parent = parent;
+        Template = template;
     }
 }

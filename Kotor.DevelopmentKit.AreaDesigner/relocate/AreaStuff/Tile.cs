@@ -37,7 +37,7 @@ public class Tile : UltimateWorldObject, IDeleteable
 
     public TileTemplate Template => Kit.Manager.Get(KitID).Tile(TemplateID);
 
-    public Tile(Room parent, TileTemplate template) : base(parent, template, Guid.NewGuid())
+    public Tile(Room parent, TileTemplate template) : base(parent, null, template, Guid.NewGuid())
     {
         Parent = parent;
     }
@@ -61,12 +61,12 @@ public class Tile : UltimateWorldObject, IDeleteable
 
         virtualObjects.AddRange(
         [
-            ..template.Magnets.OfType<FloorHookTemplate>().Select(x => new Floor(this, kit.Floor(x.TemplateID))),
-            ..template.Magnets.OfType<CeilingHookTemplate>().Select(x => new Ceiling(this, kit.Ceiling(x.TemplateID))),
-            ..template.Magnets.OfType<WallHookTemplate>().Select(x => new Wall(this, kit.Wall(x.TemplateID), x)),
+            .. base.Magnets.Where(x => x.Template is WallHookTemplate).Select(x => new Wall(this, x, x.Template.Template as WallTemplate, x.Template as WallHookTemplate)),
+            .. base.Magnets.Where(x => x.Template is FloorHookTemplate).Select(x => new Floor(this, x, x.Template.Template as FloorTemplate)),
+            .. base.Magnets.Where(x => x.Template is CeilingHookTemplate).Select(x => new Ceiling(this, x, x.Template.Template as CeilingTemplate)),
+            //.. base.Magnets.Where(x => x.Template is CornerHookTemplate).Select(x => new InnerCorner(this, x, x.Template.Template as InnerCornerTemplate)),
+            //.. base.Magnets.Where(x => x.Template is CornerHookTemplate).Select(x => new InnerCorner(this, x, x.Template.Template as InnerCornerTemplate)),
             // TODO
-            //..template.Magnets.OfType<CornerHookTemplate>().Select(x => new InnerCorner(this, kit.InnerCorner(x.InnerTemplateID), x)),
-            //..template.Magnets.OfType<CornerHookTemplate>().Select(x => new OuterCorner(this, kit.OuterCorner(x.OuterTemplateID), x)),
         ]);
     }
 

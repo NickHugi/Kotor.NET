@@ -25,7 +25,7 @@ public class Kit
     public CeilingTemplate Ceiling(string templateID) => Objects.OfType<CeilingTemplate>().Single(x => x.TemplateID == templateID);
     public InnerCornerTemplate InnerCorner(string templateID) => Objects.OfType<InnerCornerTemplate>().Single(x => x.TemplateID == templateID);
     public OuterCornerTemplate OuterCorner(string templateID) => Objects.OfType<OuterCornerTemplate>().Single(x => x.TemplateID == templateID);
-    public UltimateWorldObjectTemplate Object(string templateID) => Objects.Where(x => x.GetType() == typeof(UltimateWorldObjectTemplate)).Single(x => x.TemplateID == templateID);
+    public UltimateWorldObjectTemplate Object(string templateID) => Objects/*.Where(x => x.GetType() == typeof(UltimateWorldObjectTemplate))*/.Single(x => x.TemplateID == templateID);
 
     public Kit(string filepath, string kitID, int version, string name)
     {

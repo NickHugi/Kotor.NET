@@ -20,25 +20,13 @@ public class DoorFrame : UltimateWorldObject
                 .SelectMany(x => x.AttachedObjects.OfType<Wall>())
                 .ToList();
 
-            return walls.FirstOrDefault(x => x != Parent && AllMagnets.Any(y => y.GlobalPosition == x.GlobalPosition));
+            return walls.FirstOrDefault(x => x != Parent && Magnets.Any(y => y.GlobalPosition == x.GlobalPosition));
         }
     }
 
-    private IReadOnlyCollection<Magnet> AllMagnets
-    {
-        get
-        {
-            return Template.Magnets.Select(x => new Magnet(this)
-            {
-                Type = MagnetType.Hook,
-                LocalPosition = x.LocalPosition,
-                LocalOrientation = x.LocalOrientation,
-            }).ToList();
-        }
-    }
     public IReadOnlyCollection<Magnet> Magnets
     {
-        get => AllMagnets.Where(x => x.GlobalPosition != Parent.GlobalPosition).ToList();
+        get => base.Magnets.Where(x => x.GlobalPosition != Parent.GlobalPosition).ToList();
     }
 
     public DoorFrameTemplate Template => Kit.Manager.Get(KitID).DoorFrame(TemplateID);
@@ -49,7 +37,7 @@ public class DoorFrame : UltimateWorldObject
 
     public bool Visible => Enabled;
 
-    public DoorFrame(Wall parent, DoorFrameTemplate template) : base(parent.Parent.Parent, template, Guid.NewGuid())
+    public DoorFrame(Wall parent, Magnet parentMagnet, DoorFrameTemplate template) : base(parent.Parent.Parent, parentMagnet, template, Guid.NewGuid())
     {
         Parent = parent;
         SwitchTemplate(template);

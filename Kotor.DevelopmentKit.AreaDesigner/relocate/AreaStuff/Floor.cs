@@ -11,7 +11,7 @@ public class Floor : UltimateWorldObject
 
     public FloorTemplate Template => Kit.Manager.Get(KitID).Floor(TemplateID);
 
-    public Floor(Tile parent, FloorTemplate template) : base(parent.Parent, template, Guid.NewGuid())
+    public Floor(Tile parent, Magnet parentMagnet, FloorTemplate template) : base(parent.Parent, parentMagnet, template, Guid.NewGuid())
     {
         Parent = parent;
         SwitchTemplate(template);

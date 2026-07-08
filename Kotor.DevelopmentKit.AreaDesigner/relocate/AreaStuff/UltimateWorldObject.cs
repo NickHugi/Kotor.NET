@@ -12,11 +12,13 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 public class UltimateWorldObject
 {
     public Room Room { get; }
+    public Magnet? ParentMagnet { get; }
 
     public Guid ID { get; }
 
     public string KitID { get; protected set; }
     public string TemplateID { get; protected set; }
+    public UltimateWorldObjectTemplate Template => Kit.Manager.Get(KitID).Object(TemplateID);
 
     public WorldObjectType Type { get; protected set; }
 
@@ -24,9 +26,10 @@ public class UltimateWorldObject
 
     public bool Visible { get; set; } = true;
 
-    public UltimateWorldObjectAttachment Attachment;
-    public IReadOnlyCollection<UltimateWorldObject> AttachedObjects { get; set; } //_attachedObjects.AsReadOnly();
-    private List<UltimateWorldObject> _attachedObjects = [];
+    //public UltimateWorldObjectAttachment Attachment;
+    public IReadOnlyCollection<UltimateWorldObject> AttachedObjects { get; set; }
+
+    public IReadOnlyCollection<Magnet> Magnets => Template.Magnets.Select(x => new Magnet(this, x)).ToArray();
 
     public Vector3 LocalPosition
     {
@@ -42,15 +45,15 @@ public class UltimateWorldObject
 
     private Vector3 ParentPosition
     {
-        get => (Attachment is null) ? Room.Position : Attachment.Parent.GlobalPosition;
+        get => (ParentMagnet is null) ? Room.Position : ParentMagnet.GlobalPosition;
     }
     private Quaternion ParentOrientation
     {
-        get => (Attachment is null) ? Room.Orientation : Attachment.Parent.GlobalOrientation;
+        get => (ParentMagnet is null) ? Room.Orientation : ParentMagnet.GlobalOrientation;
     }
     private Matrix4x4 ParentTransform
     {
-        get => (Attachment is null) ? Room.Transform : Attachment.Parent.GlobalTransform;
+        get => (ParentMagnet is null) ? Room.Transform : ParentMagnet.GlobalTransform;
     }
 
     public Vector3 GlobalPosition
@@ -65,9 +68,10 @@ public class UltimateWorldObject
     }
     public Matrix4x4 GlobalTransform => LocalTransform * ParentTransform;
 
-    public UltimateWorldObject(Room room, UltimateWorldObjectTemplate template, Guid id)
+    public UltimateWorldObject(Room room, Magnet? parent, UltimateWorldObjectTemplate template, Guid id)
     {
         Room = room;
+        ParentMagnet = parent;
         ID = id;
         SwitchTemplate(template);
     }

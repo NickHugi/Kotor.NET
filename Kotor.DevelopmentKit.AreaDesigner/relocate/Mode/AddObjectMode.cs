@@ -55,7 +55,7 @@ public class AddObjectMode : BaseMode
 
         // todo - should be placed in room where walkmesh intersects.
         // todo - should not be hardcoded
-        _addObject = new(_area.Rooms.Last(), SelectedObjectTemplate); 
+        _addObject = new(_area.Rooms.Last(), null, SelectedObjectTemplate); 
         _addObject.LocalPosition = point;
         _addObject.LocalOrientation = Quaternion.CreateFromYawPitchRoll(0, 0, angle * (float)Math.PI / 180);
 

@@ -28,7 +28,7 @@ public class InnerCorner : UltimateWorldObject
         }
     }
     
-    public InnerCorner(Tile parent, InnerCornerTemplate template, CornerHookTemplate hook) : base(parent.Parent, template, Guid.NewGuid())
+    public InnerCorner(Tile parent, Magnet parentMaget, InnerCornerTemplate template, CornerHookTemplate hook) : base(parent.Parent, parentMaget, template, Guid.NewGuid())
     {
         Parent = parent;
         Hook = hook;

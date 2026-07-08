@@ -13,7 +13,7 @@ public class WorldObject : UltimateWorldObject
 
     public UltimateWorldObjectTemplate Template => Kit.Manager.Get(KitID).Object(TemplateID);
 
-    public WorldObject(Room parent, UltimateWorldObjectTemplate template) : base(parent, template, Guid.NewGuid())
+    public WorldObject(Room parent, Magnet parentMagnet, UltimateWorldObjectTemplate template) : base(parent, parentMagnet, template, Guid.NewGuid())
     {
         Parent = parent;
 

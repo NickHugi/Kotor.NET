@@ -11,7 +11,7 @@ public class Ceiling : UltimateWorldObject
 
     public CeilingTemplate Template => Kit.Manager.Get(KitID).Ceiling(TemplateID);
 
-    public Ceiling(Tile parent, CeilingTemplate template) : base(parent.Parent, template, Guid.NewGuid())
+    public Ceiling(Tile parent, Magnet parentMagnet, CeilingTemplate template) : base(parent.Parent, parentMagnet, template, Guid.NewGuid())
     {
         Parent = parent;
         SwitchTemplate(template);

@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Magnets;
 
@@ -16,6 +17,7 @@ public class UltimateMagnetTemplate
 
     public string KitID { get; init; } = "";
     public string TemplateID { get; init; } = "";
+    public UltimateWorldObjectTemplate Template => Kit.Manager.Get(KitID).Object(TemplateID);
 
     public required MagnetType MagnetType { get; init; }
 }

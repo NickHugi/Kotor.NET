@@ -58,7 +58,7 @@ public class OuterCorner : UltimateWorldObject
         }
     }
 
-    public OuterCorner(Tile parent, OuterCornerTemplate template, CornerHookTemplate hook) : base(parent.Parent, template, Guid.NewGuid())
+    public OuterCorner(Tile parent, Magnet parentMagnet, OuterCornerTemplate template, CornerHookTemplate hook) : base(parent.Parent, parentMagnet, template, Guid.NewGuid())
     {
         Parent = parent;
         Hook = hook;
