@@ -27,7 +27,8 @@ public static class AreaExporter
 
         foreach (var tile in room.Objects.OfType<Tile>())
         {
-            mdl.Root.Children.AddRange(tile.AttachedObjects.OfType<Floor>().Select(FloorToMDLNode));
+            // TODO
+            //mdl.Root.Children.AddRange(tile.AttachedObjects.Select(ObjectToMDLNode));
             //mdl.Root.Children.Add(CeilingToMDLNode(tile.Ceiling));
             mdl.Root.Children.AddRange(tile.AttachedObjects.OfType<Wall>().Where(x => x.Visible).Select(WallToMDLNode));
             mdl.Root.Children.AddRange(tile.AttachedObjects.OfType<Wall>().Select(x => x.DoorFrame).Where(x => x?.Visible == true).Select(DoorFrameToMDLNode));
@@ -49,16 +50,6 @@ public static class AreaExporter
 
         return mdl;
     }
-
-    private static MDLNode FloorToMDLNode(Floor floor)
-    {
-        var floorMDL = MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{floor.KitID}/{floor.Template.Model}.mdl");
-        floorMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(floor.GlobalPosition));
-        floorMDL.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(floor.GlobalOrientation));
-        AdjustWalkmesh(floorMDL, floorMDL.Root.GetAllDescendants().OfType<MDLWalkmeshNode>().First());
-        return floorMDL.Root;
-    }
-
     private static MDLNode CeilingToMDLNode(Ceiling ceiling)
     {
         var ceilingMDL = MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{ceiling.KitID}/{ceiling.Template.Model}.mdl");

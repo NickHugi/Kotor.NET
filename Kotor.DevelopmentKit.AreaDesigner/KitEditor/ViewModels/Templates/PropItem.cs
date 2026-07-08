@@ -33,6 +33,7 @@ public class PropItem : WorldObjectItem
     {
         return new PropTemplate
         {
+            Type = WorldObjectType.Prop,
             KitID = KitID,
             TemplateID = TemplateID,
             Name = Name,

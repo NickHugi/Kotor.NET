@@ -89,15 +89,16 @@ public class BaseMode : ReactiveObject
             .Where(x => x.Distance < 3)
             .FirstOrDefault();
     }
-    protected RaycastResult<Floor>? IntersectingFloor(OrbitCamera camera, double x, double y)
+    protected RaycastResult<UltimateWorldObject>? IntersectingFloor(OrbitCamera camera, double x, double y)
     {
         var ray = camera.ProjectRay((int)x, (int)y, _engine.Width, _engine.Height);
 
         return _area.Rooms
             .SelectMany(x => x.Objects)
-            .OfType<Floor>()
+            .Where(x => x.Template.Type == WorldObjectType.Floor))
+            .OfType<UltimateWorldObject>()
             .OrderBy(x => ray.ShortestDistanceTo(x.GlobalPosition))
-            .Select(x => new RaycastResult<Floor>(x, ray.ShortestDistanceTo(x.GlobalPosition)))
+            .Select(x => new RaycastResult<UltimateWorldObject>(x, ray.ShortestDistanceTo(x.GlobalPosition)))
             .Where(x => x.Distance < 3)
             .FirstOrDefault();
     }

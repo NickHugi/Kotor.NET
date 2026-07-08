@@ -52,10 +52,11 @@ public class AreaEntity : BaseEntity
 
         if (obj is Tile tile)
         {
-            foreach (var floor in tile.AttachedObjects.OfType<Floor>())
+            foreach (var worldObject in tile.AttachedObjects.Where(x => typeof(UltimateWorldObject) == x.GetType()))
             {
-                RenderFloor(assets, floor, ref descriptors);
+                descriptors.AddRange(DescriptorsForModel(assets, worldObject.Template.Model, obj.GlobalTransform, obj));
             }
+
             foreach (var ceiling in tile.AttachedObjects.OfType<Ceiling>())
             {
                 RenderCeiling(assets, ceiling, ref descriptors);
@@ -81,13 +82,6 @@ public class AreaEntity : BaseEntity
         {
             descriptors.AddRange(DescriptorsForModel(assets, prop.Template.Model, obj.GlobalTransform, obj));
         }
-    }
-    private void RenderFloor(IAssetManager assets, Floor floor, ref List<IDrawCallDescriptor> descriptors)
-    {
-        if (!DoRenderFloor)
-            return;
-
-        descriptors.AddRange(DescriptorsForModel(assets, floor.Template.Model, floor.GlobalTransform, floor));
     }
     private void RenderCeiling(IAssetManager assets, Ceiling ceiling, ref List<IDrawCallDescriptor> descriptors)
     {

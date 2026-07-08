@@ -13,6 +13,7 @@ public class UltimateWorldObjectTemplate
 {
     public required string KitID { get; init; }
     public required string TemplateID { get; init; }
+    public required WorldObjectType Type { get; init; }
 
     public required string ClassID { get; init; }
 

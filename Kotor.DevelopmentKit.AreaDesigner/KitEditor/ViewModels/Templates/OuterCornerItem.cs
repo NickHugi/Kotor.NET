@@ -24,6 +24,7 @@ public class OuterCornerItem : WorldObjectItem
     {
         return new OuterCornerTemplate
         {
+            Type = WorldObjectType.OuterCorner,
             KitID = KitID,
             TemplateID = TemplateID,
             Name = Name,

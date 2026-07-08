@@ -18,7 +18,6 @@ public class Kit
     public int Version { get; }
     public ICollection<UltimateWorldObjectTemplate> Objects { get; init; } = [];
 
-    public FloorTemplate Floor(string templateID) => Objects.OfType<FloorTemplate>().Single(x => x.TemplateID == templateID);
     public TileTemplate Tile(string templateID) => Objects.OfType<TileTemplate>().Single(x => x.TemplateID == templateID);
     public WallTemplate Wall(string templateID) => Objects.OfType<WallTemplate>().Single(x => x.TemplateID == templateID);
     public DoorFrameTemplate DoorFrame(string templateID) => Objects.OfType<DoorFrameTemplate>().Single(x => x.TemplateID == templateID);

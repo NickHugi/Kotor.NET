@@ -16,14 +16,15 @@ public class FloorItem : WorldObjectItem
     public FloorItem() : base()
     {
     }
-    public FloorItem(FloorTemplate template) : base(template)
+    public FloorItem(UltimateWorldObjectTemplate template) : base(template)
     {
     }
 
-    public override FloorTemplate ToModel()
+    public override UltimateWorldObjectTemplate ToModel()
     {
-        return new FloorTemplate
+        return new UltimateWorldObjectTemplate
         {
+            Type = WorldObjectType.Floor,
             KitID = KitID,
             TemplateID = TemplateID,
             Name = Name,

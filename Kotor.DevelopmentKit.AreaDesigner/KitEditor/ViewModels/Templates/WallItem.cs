@@ -46,6 +46,7 @@ public class WallItem : WorldObjectItem
     {
         return new WallTemplate
         {
+            Type = WorldObjectType.Wall,
             KitID = KitID,
             TemplateID = TemplateID,
             Name = Name,

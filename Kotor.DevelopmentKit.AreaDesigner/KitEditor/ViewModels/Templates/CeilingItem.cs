@@ -21,6 +21,7 @@ public class CeilingItem : WorldObjectItem
     {
         return new CeilingTemplate
         {
+            Type = WorldObjectType.Ceiling,
             KitID = KitID,
             TemplateID = TemplateID,
             Name = Name,

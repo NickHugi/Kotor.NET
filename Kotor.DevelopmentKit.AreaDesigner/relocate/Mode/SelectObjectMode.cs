@@ -38,7 +38,6 @@ public class SelectObjectMode : BaseMode
             return SelectedWorldObject switch
             {
                 Wall wall => _objects.OfType<WallTemplate>().Where(x => x.ClassID == wall.Template.ClassID),
-                Floor floor => _objects.OfType<FloorTemplate>().Where(x => x.ClassID == floor.Template.ClassID),
                 Ceiling ceiling => _objects.OfType<CeilingTemplate>().Where(x => x.ClassID == ceiling.Template.ClassID),
                 InnerCorner innerCorner => _objects.OfType<InnerCornerTemplate>().Where(x => x.ClassID == innerCorner.Template.ClassID),
                 OuterCorner outerCorner => _objects.OfType<OuterCornerTemplate>().Where(x => x.ClassID == outerCorner.Template.ClassID),

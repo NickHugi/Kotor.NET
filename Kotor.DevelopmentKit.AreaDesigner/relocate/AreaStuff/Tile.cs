@@ -62,7 +62,7 @@ public class Tile : UltimateWorldObject, IDeleteable
         virtualObjects.AddRange(
         [
             .. base.Magnets.Where(x => x.Template is WallHookTemplate).Select(x => new Wall(this, x, x.Template.Template as WallTemplate, x.Template as WallHookTemplate)),
-            .. base.Magnets.Where(x => x.Template is FloorHookTemplate).Select(x => new Floor(this, x, x.Template.Template as FloorTemplate)),
+            .. base.Magnets.Where(x => x.Template is FloorHookTemplate).Select(x => new UltimateWorldObject(Parent, x, x.Template.Template, Guid.NewGuid())),
             .. base.Magnets.Where(x => x.Template is CeilingHookTemplate).Select(x => new Ceiling(this, x, x.Template.Template as CeilingTemplate)),
             //.. base.Magnets.Where(x => x.Template is CornerHookTemplate).Select(x => new InnerCorner(this, x, x.Template.Template as InnerCornerTemplate)),
             //.. base.Magnets.Where(x => x.Template is CornerHookTemplate).Select(x => new InnerCorner(this, x, x.Template.Template as InnerCornerTemplate)),

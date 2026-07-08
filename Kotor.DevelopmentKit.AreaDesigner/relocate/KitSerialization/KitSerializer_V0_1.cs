@@ -32,8 +32,9 @@ public class KitSerializer_V0_1
 
         foreach (var floor in data.floors)
         {
-            kit.Objects.Add(new FloorTemplate
+            kit.Objects.Add(new UltimateWorldObjectTemplate
             {
+                Type = WorldObjectType.Floor,
                 KitID = kitID,
                 TemplateID = floor.templateID.Value,
                 ClassID = floor.classID.Value,
@@ -47,6 +48,7 @@ public class KitSerializer_V0_1
         {
             kit.Objects.Add(new CeilingTemplate
             {
+                Type = WorldObjectType.Ceiling,
                 KitID = kitID,
                 TemplateID = ceiling.templateID.Value,
                 ClassID = ceiling.classID.Value,
@@ -60,6 +62,7 @@ public class KitSerializer_V0_1
         {
             kit.Objects.Add(new DoorFrameTemplate
             {
+                Type = WorldObjectType.DoorFrame,
                 KitID = kitID,
                 TemplateID = door.templateID.Value,
                 ClassID = door.classID.Value,
@@ -79,6 +82,7 @@ public class KitSerializer_V0_1
         {
             kit.Objects.Add(new WallTemplate
             {
+                Type = WorldObjectType.Wall,
                 KitID = kitID,
                 TemplateID = wall.templateID.Value,
                 ClassID = wall.classID.Value,
@@ -95,6 +99,7 @@ public class KitSerializer_V0_1
         {
             kit.Objects.Add(new TileTemplate
             {
+                Type = WorldObjectType.Tile,
                 KitID = kitID,
                 TemplateID = tile.templateID.Value,
                 Name = tile.name.Value,
@@ -144,6 +149,7 @@ public class KitSerializer_V0_1
         {
             kit.Objects.Add(new InnerCornerTemplate
             {
+                Type = WorldObjectType.InnerCorner,
                 KitID = kitID,
                 TemplateID = innerCorner.templateID.Value,
                 ClassID = innerCorner.classID.Value,
@@ -157,6 +163,7 @@ public class KitSerializer_V0_1
         {
             kit.Objects.Add(new OuterCornerTemplate
             {
+                Type = WorldObjectType.OuterCorner,
                 KitID = kitID,
                 TemplateID = outerCorner.templateID.Value,
                 ClassID = outerCorner.classID.Value,
@@ -170,6 +177,7 @@ public class KitSerializer_V0_1
         {
             kit.Objects.Add(new PropTemplate
             {
+                Type = WorldObjectType.Prop,
                 KitID = kitID,
                 TemplateID = @object.templateID.Value,
                 ClassID = @object.classID.Value,
@@ -229,7 +237,7 @@ public class KitSerializer_V0_1
             }),
         });
 
-        data.floors = kit.Objects.OfType<FloorTemplate>().Select(floor => new
+        data.floors = kit.Objects.OfType<UltimateWorldObjectTemplate>().Select(floor => new
         {
             templateID = floor.TemplateID,
             classID = floor.ClassID,

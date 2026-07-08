@@ -22,6 +22,7 @@ public class TileItem : WorldObjectItem
     {
         return new TileTemplate
         {
+            Type = WorldObjectType.Tile,
             KitID = KitID,
             TemplateID = TemplateID,
             Name = Name,

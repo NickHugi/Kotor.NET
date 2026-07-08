@@ -28,6 +28,7 @@ public class DoorFrameItem : WorldObjectItem
     {
         return new DoorFrameTemplate
         {
+            Type = WorldObjectType.DoorFrame,
             KitID = KitID,
             TemplateID = TemplateID,
             Name = Name,
