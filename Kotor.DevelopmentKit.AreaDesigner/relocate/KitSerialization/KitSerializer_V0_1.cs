@@ -46,7 +46,7 @@ public class KitSerializer_V0_1
 
         foreach (var ceiling in data.ceilings)
         {
-            kit.Objects.Add(new CeilingTemplate
+            kit.Objects.Add(new UltimateWorldObjectTemplate
             {
                 Type = WorldObjectType.Ceiling,
                 KitID = kitID,
@@ -80,7 +80,7 @@ public class KitSerializer_V0_1
 
         foreach (var wall in data.walls)
         {
-            kit.Objects.Add(new WallTemplate
+            kit.Objects.Add(new UltimateWorldObjectTemplate
             {
                 Type = WorldObjectType.Wall,
                 KitID = kitID,
@@ -245,7 +245,7 @@ public class KitSerializer_V0_1
             model = floor.Model,
         });
 
-        data.ceilings = kit.Objects.OfType<CeilingTemplate>().Select(ceiling => new
+        data.ceilings = kit.Objects.OfType<UltimateWorldObjectTemplate>().Select(ceiling => new
         {
             templateID = ceiling.TemplateID,
             classID = ceiling.ClassID,
@@ -266,7 +266,7 @@ public class KitSerializer_V0_1
             })
         });
 
-        data.walls = kit.Objects.OfType<WallTemplate>().Select(wall => new
+        data.walls = kit.Objects.OfType<UltimateWorldObjectTemplate>().Select(wall => new
         {
             templateID = wall.TemplateID,
             classID = wall.ClassID,

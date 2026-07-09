@@ -70,28 +70,29 @@ public class Room
 
     private void FixWalls()
     {
-        foreach (var wall in Objects.OfType<Tile>().SelectMany(x => x.AttachedObjects.OfType<Wall>()))
-        {
-            wall.LinkedTile = null;
-        }
+        // TODO
+        //foreach (var wall in Objects.OfType<Tile>().SelectMany(x => x.AttachedObjects.OfType<UltimateWorldObject>()))
+        //{
+        //    wall.LinkedTile = null;
+        //}
 
-        foreach (var tileA in Objects.OfType<Tile>())
-        {
-            foreach (var tileB in Objects.OfType<Tile>())
-            {
-                if (tileA == tileB)
-                    continue;
+        //foreach (var tileA in Objects.OfType<Tile>())
+        //{
+        //    foreach (var tileB in Objects.OfType<Tile>())
+        //    {
+        //        if (tileA == tileB)
+        //            continue;
 
-                foreach (var adjacent in GetCombinations(tileA.AttachedObjects.OfType<Wall>(), tileB.AttachedObjects.OfType<Wall>()))
-                {
-                    if (Vector3.Distance(adjacent.Item1.GlobalPosition, adjacent.Item2.GlobalPosition) < 0.01f)
-                    {
-                        adjacent.Item1.LinkedTile = tileB;
-                        adjacent.Item2.LinkedTile = tileA;
-                    }
-                }
-            }
-        }
+        //        foreach (var adjacent in GetCombinations(tileA.AttachedObjects.OfType<UltimateWorldObject>(), tileB.AttachedObjects.OfType<UltimateWorldObject>()))
+        //        {
+        //            if (Vector3.Distance(adjacent.Item1.GlobalPosition, adjacent.Item2.GlobalPosition) < 0.01f)
+        //            {
+        //                adjacent.Item1.LinkedTile = tileB;
+        //                adjacent.Item2.LinkedTile = tileA;
+        //            }
+        //        }
+        //    }
+        //}
     }
 
     // todo ienumerable extension

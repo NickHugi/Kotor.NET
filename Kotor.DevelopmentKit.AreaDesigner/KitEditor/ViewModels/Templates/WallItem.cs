@@ -35,16 +35,16 @@ public class WallItem : WorldObjectItem
         DoorframeTemplateID = "";
         DoorframeClassID = "";
     }
-    public WallItem(WallTemplate template) : base(template)
+    public WallItem(UltimateWorldObjectTemplate template) : base(template)
     {
         DoorframeKitID = template.DoorframeKitID;
         DoorframeTemplateID = template.DoorframeTemplateID;
         DoorframeClassID = template.DoorframeClassID;
     }
 
-    public override WallTemplate ToModel()
+    public override UltimateWorldObjectTemplate ToModel()
     {
-        return new WallTemplate
+        return new UltimateWorldObjectTemplate
         {
             Type = WorldObjectType.Wall,
             KitID = KitID,

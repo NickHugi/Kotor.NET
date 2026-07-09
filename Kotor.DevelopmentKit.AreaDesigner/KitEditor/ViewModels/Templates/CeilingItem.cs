@@ -13,13 +13,13 @@ public class CeilingItem : WorldObjectItem
     public CeilingItem() : base()
     {
     }
-    public CeilingItem(CeilingTemplate template) : base(template)
+    public CeilingItem(UltimateWorldObjectTemplate template) : base(template)
     {
     }
 
-    public override CeilingTemplate ToModel()
+    public override UltimateWorldObjectTemplate ToModel()
     {
-        return new CeilingTemplate
+        return new UltimateWorldObjectTemplate
         {
             Type = WorldObjectType.Ceiling,
             KitID = KitID,

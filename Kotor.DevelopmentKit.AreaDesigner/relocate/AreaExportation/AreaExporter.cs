@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Clipper2Lib;
 using DynamicData;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using Kotor.NET.Common.Data.Geometry;
 using Kotor.NET.Graphics.GPU;
 using Kotor.NET.Resources.KotorMDL;
@@ -30,8 +31,8 @@ public static class AreaExporter
             // TODO
             //mdl.Root.Children.AddRange(tile.AttachedObjects.Select(ObjectToMDLNode));
             //mdl.Root.Children.Add(CeilingToMDLNode(tile.Ceiling));
-            mdl.Root.Children.AddRange(tile.AttachedObjects.OfType<Wall>().Where(x => x.Visible).Select(WallToMDLNode));
-            mdl.Root.Children.AddRange(tile.AttachedObjects.OfType<Wall>().Select(x => x.DoorFrame).Where(x => x?.Visible == true).Select(DoorFrameToMDLNode));
+            //mdl.Root.Children.AddRange(tile.AttachedObjects.OfType<Wall>().Where(x => x.Visible).Select(WallToMDLNode));
+            //mdl.Root.Children.AddRange(tile.AttachedObjects.OfType<Wall>().Select(x => x.DoorFrame).Where(x => x?.Visible == true).Select(DoorFrameToMDLNode));
             mdl.Root.Children.AddRange(tile.AttachedObjects.OfType<InnerCorner>().Where(x => x.Visible == true).Select(InnerCornerToMDLNode));
             //mdl.Root.Children.AddRange(room.Vi.Select(ObjectToMDLNode));
         }
@@ -50,7 +51,7 @@ public static class AreaExporter
 
         return mdl;
     }
-    private static MDLNode CeilingToMDLNode(Ceiling ceiling)
+    private static MDLNode CeilingToMDLNode(UltimateWorldObject ceiling)
     {
         var ceilingMDL = MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{ceiling.KitID}/{ceiling.Template.Model}.mdl");
         ceilingMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(ceiling.GlobalPosition));
@@ -58,7 +59,7 @@ public static class AreaExporter
         return ceilingMDL.Root;
     }
 
-    private static MDLNode WallToMDLNode(Wall wall)
+    private static MDLNode WallToMDLNode(UltimateWorldObject wall)
     {
         var wallMDL = MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{wall.KitID}/{wall.Template.Model}.mdl");
         wallMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(wall.GlobalPosition));

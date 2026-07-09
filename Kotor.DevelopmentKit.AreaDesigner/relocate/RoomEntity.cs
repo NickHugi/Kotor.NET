@@ -52,23 +52,17 @@ public class AreaEntity : BaseEntity
 
         if (obj is Tile tile)
         {
-            foreach (var worldObject in tile.AttachedObjects.Where(x => typeof(UltimateWorldObject) == x.GetType()))
+            foreach (var worldObject in tile.AttachedObjects)
             {
-                descriptors.AddRange(DescriptorsForModel(assets, worldObject.Template.Model, obj.GlobalTransform, obj));
+                RenderObject(assets, worldObject, ref descriptors);
+                descriptors.AddRange(DescriptorsForModel(assets, worldObject.Template.Model, worldObject.GlobalTransform, obj));
             }
 
-            foreach (var ceiling in tile.AttachedObjects.OfType<Ceiling>())
-            {
-                RenderCeiling(assets, ceiling, ref descriptors);
-            }
-            foreach (var wall in tile.AttachedObjects.OfType<Wall>())
-            {
-                RenderWall(assets, wall, ref descriptors);
-            }
-            foreach (var doorframe in tile.AttachedObjects.OfType<Wall>().Select(x => x.DoorFrame).Where(x => x is not null))
-            {
-                RenderDoorFrame(assets, doorframe, ref descriptors);
-            }
+            // TODO
+            //foreach (var doorframe in tile.AttachedObjects.OfType<UltimateWorldObject>().Select(x => x.DoorFrame).Where(x => x is not null))
+            //{
+            //    RenderDoorFrame(assets, doorframe, ref descriptors);
+            //}
             foreach (var innerCorner in tile.AttachedObjects.OfType<InnerCorner>())
             {
                 RenderInnerCorner(assets, innerCorner, ref descriptors);
@@ -83,19 +77,20 @@ public class AreaEntity : BaseEntity
             descriptors.AddRange(DescriptorsForModel(assets, prop.Template.Model, obj.GlobalTransform, obj));
         }
     }
-    private void RenderCeiling(IAssetManager assets, Ceiling ceiling, ref List<IDrawCallDescriptor> descriptors)
+    private void RenderCeiling(IAssetManager assets, UltimateWorldObject ceiling, ref List<IDrawCallDescriptor> descriptors)
     {
         if (!DoRenderCeiling)
             return;
 
         descriptors.AddRange(DescriptorsForModel(assets, ceiling.Template.Model, ceiling.GlobalTransform, ceiling));
     }
-    private void RenderWall(IAssetManager assets, Wall wall, ref List<IDrawCallDescriptor> descriptors)
+    private void RenderWall(IAssetManager assets, UltimateWorldObject wall, ref List<IDrawCallDescriptor> descriptors)
     {
-        if (!wall.Visible || ((wall.DoorFrame is null && !DoRenderWalls) || (wall.DoorFrame is not null && !DoRenderDoors)))
-            return;
+        // TODO
+        //if (!wall.Visible || ((wall.DoorFrame is null && !DoRenderWalls) || (wall.DoorFrame is not null && !DoRenderDoors)))
+        //    return;
 
-        descriptors.AddRange(DescriptorsForModel(assets, wall.Template.Model, wall.GlobalTransform, wall));
+        //descriptors.AddRange(DescriptorsForModel(assets, wall.Template.Model, wall.GlobalTransform, wall));
     }
     private void RenderDoorFrame(IAssetManager assets, DoorFrame doorframe, ref List<IDrawCallDescriptor> descriptors)
     {

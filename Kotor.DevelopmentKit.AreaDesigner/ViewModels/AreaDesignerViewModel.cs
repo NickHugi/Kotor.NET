@@ -40,7 +40,6 @@ namespace Kotor.DevelopmentKit.AreaDesigner.ViewModels;
 public class AreaDesignerViewModel : ReactiveObject
 {
     public Interaction<Unit, Point> GetMousePoint = new();
-    public Interaction<Unit, WallTemplate?> SelectWallTemplate = new();
     public Interaction<Unit, TileTemplate?> SelectTileTemplate = new();
     public Interaction<Unit, string?> SelectSaveFilepathForArea = new();
     public Interaction<Unit, string?> SelectLoadFilepathForArea = new();
@@ -324,9 +323,7 @@ public class AreaDesignerViewModel : ReactiveObject
         if (ActiveWorldObject is Tile tile)
         {
             descriptors
-                .Where(x => tile.AttachedObjects.OfType<Wall>().Contains(x.Tag)
-                    //|| tile.AttachedObjects.OfType<Floor>().Contains(x.Tag)
-                    || tile.AttachedObjects.OfType<Ceiling>().Contains(x.Tag))
+                .Where(x => tile.AttachedObjects.Contains(x.Tag))
                 .OfType<MeshDescriptor>()
                 .ToList()
                 .ForEach(x => x.AmbientColor += new Vector3(0.5f, 0.5f, 0.5f));

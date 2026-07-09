@@ -6,5 +6,5 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
 
 public class WallHookTemplate : UltimateMagnetTemplate
 {
-    public WallTemplate Template => Kit.Manager.Get(KitID).Wall(TemplateID);
+    public UltimateWorldObjectTemplate Template => Kit.Manager.Get(KitID).Object(TemplateID);
 }

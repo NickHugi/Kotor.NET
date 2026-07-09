@@ -11,62 +11,73 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
 public class UltimateWorldObject
 {
+    // TODO Doorframes (hooked)
+
     public Room Room { get; }
     public Magnet? ParentMagnet { get; }
 
     public Guid ID { get; }
-
-    public string KitID { get; protected set; }
-    public string TemplateID { get; protected set; }
-    public UltimateWorldObjectTemplate Template => Kit.Manager.Get(KitID).Object(TemplateID);
-
     public WorldObjectType Type { get; protected set; }
 
     public string? GroupID { get; init; }
 
     public bool Visible { get; set; } = true;
 
-    //public UltimateWorldObjectAttachment Attachment;
+    public IReadOnlyCollection<Magnet> Magnets => Template.Magnets.Select(x => new Magnet(this, x)).ToArray();
+
     public IReadOnlyCollection<UltimateWorldObject> AttachedObjects { get; set; }
 
-    public IReadOnlyCollection<Magnet> Magnets => Template.Magnets.Select(x => new Magnet(this, x)).ToArray();
+    public string KitID { get; protected set; }
+    public string TemplateID { get; protected set; }
+    public UltimateWorldObjectTemplate Template => Kit.Manager.Get(KitID).Object(TemplateID);
+
 
     public Vector3 LocalPosition
     {
-        get;
+        get => (ParentMagnet is null) ? field : ParentMagnet.LocalPosition;
         set;
     }
     public Quaternion LocalOrientation
     {
-        get;
+        get => (ParentMagnet is null) ? field : ParentMagnet.LocalOrientation;
         set;
     } = Quaternion.Identity;
     public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
 
-    private Vector3 ParentPosition
+    public Vector3 ParentPosition
     {
         get => (ParentMagnet is null) ? Room.Position : ParentMagnet.GlobalPosition;
     }
-    private Quaternion ParentOrientation
+    public Quaternion ParentOrientation
     {
         get => (ParentMagnet is null) ? Room.Orientation : ParentMagnet.GlobalOrientation;
     }
-    private Matrix4x4 ParentTransform
+    public Matrix4x4 ParentTransform
     {
-        get => (ParentMagnet is null) ? Room.Transform : ParentMagnet.GlobalTransform;
+        get => (ParentMagnet is null) ? Room.Transform : ParentMagnet.LocalTransform;
     }
-
+        
     public Vector3 GlobalPosition
     {
-        get => Vector3.Transform(LocalPosition, ParentOrientation) + ParentPosition;
-        set => LocalPosition = Vector3.Transform(value - ParentPosition, Quaternion.Inverse(ParentOrientation));
+        get => (ParentMagnet is null)
+            ? Vector3.Transform(LocalPosition, Room.Orientation) + Room.Position
+            : Vector3.Transform(LocalPosition, ParentMagnet.GlobalOrientation) + ParentMagnet.GlobalPosition;
+        set => _ = (ParentMagnet is null)
+            ? LocalPosition = Vector3.Transform(value - ParentPosition, Quaternion.Inverse(ParentOrientation))
+            : Vector3.Zero;
     }
     public Quaternion GlobalOrientation
     {
-        get => Quaternion.Normalize(LocalOrientation * ParentOrientation);
-        set => LocalOrientation = value * Quaternion.Inverse(ParentOrientation);
+        get => (ParentMagnet is null)
+            ? Quaternion.Normalize(LocalOrientation * Room.Orientation)
+            : Quaternion.Normalize(LocalOrientation * ParentMagnet.GlobalOrientation);
+        set => _ = (ParentMagnet is null)
+            ? LocalOrientation = value * Quaternion.Inverse(Room.Orientation)
+            : Quaternion.Identity;
     }
-    public Matrix4x4 GlobalTransform => LocalTransform * ParentTransform;
+    public Matrix4x4 GlobalTransform => (ParentMagnet is null)
+        ? LocalTransform * Room.Transform
+        : ParentMagnet.GlobalTransform;
 
     public UltimateWorldObject(Room room, Magnet? parent, UltimateWorldObjectTemplate template, Guid id)
     {

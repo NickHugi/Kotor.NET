@@ -115,11 +115,11 @@ public class KitEditorViewModel : ReactiveObject
         _objectTemplatesSource.AddRange(
         [
             //.. kit.Objects.OfType<UltimateWorldObject>().Select(x => new FloorItem(x)),
+            //.. kit.Objects.OfType<CeilingTemplate>().Select(x => new CeilingItem(x)),
+            //.. kit.Objects.OfType<WallTemplate>().Select(x => new WallItem(x)),
 
             .. kit.Objects.OfType<PropTemplate>().Select(x => new PropItem(x)),
             .. kit.Objects.OfType<TileTemplate>().Select(x => new TileItem(x)),
-            .. kit.Objects.OfType<CeilingTemplate>().Select(x => new CeilingItem(x)),
-            .. kit.Objects.OfType<WallTemplate>().Select(x => new WallItem(x)),
             .. kit.Objects.OfType<DoorFrameTemplate>().Select(x => new DoorFrameItem(x)),
             .. kit.Objects.OfType<InnerCornerTemplate>().Select(x => new InnerCornerItem(x)),
             .. kit.Objects.OfType<OuterCornerTemplate>().Select(x => new OuterCornerItem(x)),

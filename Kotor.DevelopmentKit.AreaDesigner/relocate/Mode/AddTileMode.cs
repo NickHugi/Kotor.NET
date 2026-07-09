@@ -37,9 +37,9 @@ public class AddTileMode : BaseMode
             if (Kits is null)
                 return [];
 
-            if (SelectedWorldObject is Wall wall)
+            if (SelectedWorldObject?.Type == WorldObjectType.Wall)
             {
-                var activeGroup = wall.Template.ClassID;
+                var activeGroup = SelectedWorldObject.Template.ClassID;
                 return _objects.OfType<TileTemplate>().Where(x => x.Magnets.OfType<WallHookTemplate>().Any(y => activeGroup == y.Template.ClassID)).ToList();
             }
             else
@@ -75,9 +75,9 @@ public class AddTileMode : BaseMode
         _projectedRoom.Orientation = Quaternion.CreateFromYawPitchRoll(0, 0, angle * (float)Math.PI / 180);
 
         var result = NearbyMagnets(_projectedRoom.GetMagnets(), 1)
-            .Where(x => x.Source.Parent is Wall source
-                && x.Target.Parent is Wall target
-                && source.Template.ClassID == target.Template.ClassID)
+            .Where(x => x.Source.Parent.Type == WorldObjectType.Wall
+                && x.Target.Parent.Type == WorldObjectType.Wall
+                && x.Source.Parent.Template.ClassID == x.Target.Parent.Template.ClassID)
             .FirstOrDefault();
 
         if (result is not null)
@@ -89,12 +89,12 @@ public class AddTileMode : BaseMode
             _projectedRoom.Position = new();
             _projectedRoom.Position = result.Target.GlobalPosition - result.Source.GlobalPosition;
 
-            var sourceWall = result.Source.Parent as Wall;
+            var sourceWall = result.Source.Parent;
 
             if (result.Target.Parent is DoorFrame targetDoorframe)
             {
                 sourceWall.SwitchTemplate(targetDoorframe.Parent.Template);
-                sourceWall.DoorFrame.Enabled = false;
+                //sourceWall.DoorFrame.Enabled = false;
 
                 RenderRoom(descriptors);
             }
@@ -135,9 +135,9 @@ public class AddTileMode : BaseMode
     {
         var tiles = _area.Rooms.SelectMany(x => x.Objects.OfType<Tile>()).ToList();
 
-        foreach (var existing in tiles.SelectMany(x => x.AttachedObjects.OfType<Wall>()))
+        foreach (var existing in tiles.SelectMany(x => x.AttachedObjects.Where(x => x.Type == WorldObjectType.Wall)))
         {
-            foreach (var cursor in _projectedTile.AttachedObjects.OfType<Wall>())
+            foreach (var cursor in _projectedTile.AttachedObjects.Where(x => x.Type == WorldObjectType.Wall))
             {
                 if (existing.GlobalPosition.ApproximatelyEquals(cursor.GlobalPosition, 0.01f))
                 {
@@ -178,10 +178,10 @@ public class AddTileMode : BaseMode
             return;
 
         var magnet = NearestMagnet(_projectedRoom.GetMagnets(), 1);
-        if (magnet is not null && magnet.Target.Parent is Wall wall)
+        if (magnet is not null && magnet.Target.Parent.Type == WorldObjectType.Wall)
         {
             var template = _projectedRoom.Objects.OfType<Tile>().First().Template;
-            var room = wall.Parent.Parent;
+            var room = magnet.Target.Parent.Room;
             var newTile = new Tile(room, template);
             newTile.SwitchTemplate(template);
             newTile.GlobalPosition = _projectedRoom.Position;

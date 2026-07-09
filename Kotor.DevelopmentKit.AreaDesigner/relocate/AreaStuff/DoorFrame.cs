@@ -9,15 +9,15 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
 public class DoorFrame : UltimateWorldObject
 {
-    public Wall Parent { get; }
-    public Wall? AdjacentWall
+    public UltimateWorldObject Parent { get; }
+    public UltimateWorldObject? AdjacentWall
     {
         get
         {
-            var area = Parent.Parent.Parent.Parent;
+            var area = Room.Parent;
             var walls = area.Rooms
                 .SelectMany(x => x.Objects.OfType<Tile>())
-                .SelectMany(x => x.AttachedObjects.OfType<Wall>())
+                .SelectMany(x => x.AttachedObjects.Where(x => x.Template.Type == WorldObjectType.Wall))
                 .ToList();
 
             return walls.FirstOrDefault(x => x != Parent && Magnets.Any(y => y.GlobalPosition == x.GlobalPosition));
@@ -37,7 +37,7 @@ public class DoorFrame : UltimateWorldObject
 
     public bool Visible => Enabled;
 
-    public DoorFrame(Wall parent, Magnet parentMagnet, DoorFrameTemplate template) : base(parent.Parent.Parent, parentMagnet, template, Guid.NewGuid())
+    public DoorFrame(UltimateWorldObject parent, Magnet parentMagnet, DoorFrameTemplate template) : base(parent.Room, parentMagnet, template, Guid.NewGuid())
     {
         Parent = parent;
         SwitchTemplate(template);

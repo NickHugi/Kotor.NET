@@ -13,26 +13,28 @@ public class Tile : UltimateWorldObject, IDeleteable
 
     public IReadOnlyCollection<Magnet> Magnets
     {
-        get => AttachedObjects.SelectMany(x =>
-        {
-            IEnumerable<Magnet> magnets = [];
+        get => [];
+        // TODO
+        //get => AttachedObjects.SelectMany(x =>
+        //{
+        //    IEnumerable<Magnet> magnets = [];
 
-            if (x is Wall wall)
-            {
-                if (wall.DoorFrame is null)
-                {
-                    magnets = wall.Magnets;
-                }
-                else
-                {
-                    magnets = wall.DoorFrame.Magnets;
-                }
-            }
+        //    if (x.Type == WorldObjectType.Wall)
+        //    {
+        //        if (x.DoorFrame is null)
+        //        {
+        //            magnets = x.Magnets;
+        //        }
+        //        else
+        //        {
+        //            magnets = x.DoorFrame.Magnets;
+        //        }
+        //    }
 
-            return magnets.Where(x =>
-                (x.Parent is DoorFrame doorframe)
-                || (x.Parent is Wall wall && wall?.LinkedTile is null));
-        }).ToList();
+        //    return magnets.Where(x =>
+        //        (x.Parent is DoorFrame doorframe)
+        //        || (x.Parent is Wall wall && wall?.LinkedTile is null));
+        //}).ToList();
     }
 
     public TileTemplate Template => Kit.Manager.Get(KitID).Tile(TemplateID);
@@ -61,9 +63,9 @@ public class Tile : UltimateWorldObject, IDeleteable
 
         virtualObjects.AddRange(
         [
-            .. base.Magnets.Where(x => x.Template is WallHookTemplate).Select(x => new Wall(this, x, x.Template.Template as WallTemplate, x.Template as WallHookTemplate)),
+            .. base.Magnets.Where(x => x.Template is WallHookTemplate).Select(x => new UltimateWorldObject(Parent, x, x.Template.Template, Guid.NewGuid())),
             .. base.Magnets.Where(x => x.Template is FloorHookTemplate).Select(x => new UltimateWorldObject(Parent, x, x.Template.Template, Guid.NewGuid())),
-            .. base.Magnets.Where(x => x.Template is CeilingHookTemplate).Select(x => new Ceiling(this, x, x.Template.Template as CeilingTemplate)),
+            .. base.Magnets.Where(x => x.Template is CeilingHookTemplate).Select(x => new UltimateWorldObject(Parent, x, x.Template.Template, Guid.NewGuid())),
             //.. base.Magnets.Where(x => x.Template is CornerHookTemplate).Select(x => new InnerCorner(this, x, x.Template.Template as InnerCornerTemplate)),
             //.. base.Magnets.Where(x => x.Template is CornerHookTemplate).Select(x => new InnerCorner(this, x, x.Template.Template as InnerCornerTemplate)),
             // TODO
