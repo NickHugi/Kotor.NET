@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
@@ -39,7 +38,7 @@ public class Tile : UltimateWorldObject, IDeleteable
 
     public TileTemplate Template => Kit.Manager.Get(KitID).Tile(TemplateID);
 
-    public Tile(Room parent, TileTemplate template) : base(parent, null, template, Guid.NewGuid())
+    public Tile(Room parent, TileTemplate template) : base(parent, null, template, Guid.NewGuid(), WorldObjectType.Tile)
     {
         Parent = parent;
     }
@@ -63,10 +62,10 @@ public class Tile : UltimateWorldObject, IDeleteable
 
         virtualObjects.AddRange(
         [
-            .. base.Magnets.Where(x => x.Template is WallHookTemplate).Select(x => new UltimateWorldObject(Parent, x, x.Template.Template, Guid.NewGuid())),
-            .. base.Magnets.Where(x => x.Template is FloorHookTemplate).Select(x => new UltimateWorldObject(Parent, x, x.Template.Template, Guid.NewGuid())),
-            .. base.Magnets.Where(x => x.Template is CeilingHookTemplate).Select(x => new UltimateWorldObject(Parent, x, x.Template.Template, Guid.NewGuid())),
-            //.. base.Magnets.Where(x => x.Template is CornerHookTemplate).Select(x => new InnerCorner(this, x, x.Template.Template as InnerCornerTemplate)),
+            .. base.Magnets.Where(x => x.Template is WallHookTemplate).Select(x => new UltimateWorldObject(Parent, x, x.Template.Template, Guid.NewGuid(), WorldObjectType.Wall)),
+            .. base.Magnets.Where(x => x.Template is FloorHookTemplate).Select(x => new UltimateWorldObject(Parent, x, x.Template.Template, Guid.NewGuid(), WorldObjectType.Floor)),
+            .. base.Magnets.Where(x => x.Template is CeilingHookTemplate).Select(x => new UltimateWorldObject(Parent, x, x.Template.Template, Guid.NewGuid(), WorldObjectType.Ceiling)),
+            .. base.Magnets.Where(x => x.Template is CornerHookTemplate).Select(x => new UltimateWorldObject(Parent, x, x.Template.Template, Guid.NewGuid(), WorldObjectType.InnerCorner)),
             //.. base.Magnets.Where(x => x.Template is CornerHookTemplate).Select(x => new InnerCorner(this, x, x.Template.Template as InnerCornerTemplate)),
             // TODO
         ]);

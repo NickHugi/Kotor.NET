@@ -25,7 +25,7 @@ public class UltimateWorldObject
 
     public IReadOnlyCollection<Magnet> Magnets => Template.Magnets.Select(x => new Magnet(this, x)).ToArray();
 
-    public IReadOnlyCollection<UltimateWorldObject> AttachedObjects { get; set; }
+    public IReadOnlyCollection<UltimateWorldObject> AttachedObjects { get; set; } = [];
 
     public string KitID { get; protected set; }
     public string TemplateID { get; protected set; }
@@ -79,11 +79,12 @@ public class UltimateWorldObject
         ? LocalTransform * Room.Transform
         : ParentMagnet.GlobalTransform;
 
-    public UltimateWorldObject(Room room, Magnet? parent, UltimateWorldObjectTemplate template, Guid id)
+    public UltimateWorldObject(Room room, Magnet? parent, UltimateWorldObjectTemplate template, Guid id, WorldObjectType type)
     {
         Room = room;
         ParentMagnet = parent;
         ID = id;
+        Type = type;
         SwitchTemplate(template);
     }
 

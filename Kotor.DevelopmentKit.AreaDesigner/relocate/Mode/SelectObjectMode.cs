@@ -37,8 +37,6 @@ public class SelectObjectMode : BaseMode
         {
             return SelectedWorldObject switch
             {
-                InnerCorner innerCorner => _objects.OfType<InnerCornerTemplate>().Where(x => x.ClassID == innerCorner.Template.ClassID),
-                OuterCorner outerCorner => _objects.OfType<OuterCornerTemplate>().Where(x => x.ClassID == outerCorner.Template.ClassID),
                 _ => _objects.Where(x => SelectedWorldObject is null || x.Type == SelectedWorldObject.Type).ToList()
             };
         }

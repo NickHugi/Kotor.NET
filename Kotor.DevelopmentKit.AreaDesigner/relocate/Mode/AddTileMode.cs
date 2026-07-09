@@ -147,9 +147,9 @@ public class AddTileMode : BaseMode
             }
         }
 
-        foreach (var existing in tiles.SelectMany(x => x.AttachedObjects.OfType<InnerCorner>()))
+        foreach (var existing in tiles.SelectMany(x => x.AttachedObjects.Where(x => x.Type == WorldObjectType.InnerCorner)))
         {
-            foreach (var cursor in _projectedTile.AttachedObjects.OfType<InnerCorner>())
+            foreach (var cursor in _projectedTile.AttachedObjects.Where(x => x.Type == WorldObjectType.InnerCorner))
             {
                 if (existing.GlobalPosition.ApproximatelyEquals(cursor.GlobalPosition, 0.01f))
                 {
@@ -159,9 +159,9 @@ public class AddTileMode : BaseMode
             }
         }
 
-        foreach (var existing in tiles.SelectMany(x => x.AttachedObjects.OfType<OuterCorner>()))
+        foreach (var existing in tiles.SelectMany(x => x.AttachedObjects.Where(x => x.Type == WorldObjectType.OuterCorner)))
         {
-            foreach (var cursor in _projectedTile.AttachedObjects.OfType<OuterCorner>())
+            foreach (var cursor in _projectedTile.AttachedObjects.Where(x => x.Type == WorldObjectType.OuterCorner))
             {
                 if (existing.GlobalPosition.ApproximatelyEquals(cursor.GlobalPosition, 0.01f))
                 {

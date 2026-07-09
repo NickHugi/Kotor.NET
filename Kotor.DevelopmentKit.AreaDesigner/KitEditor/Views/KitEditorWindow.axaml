@@ -118,10 +118,8 @@
 
         <DataTemplate x:Key="CornerHookPanel" DataType="hooks:CornerHookItem">
             <StackPanel>
-                <core:LabeledTextBox Label="Inner Corner Kit ID" Text="{Binding InnerKitID}" />
-                <core:LabeledTextBox Label="Inner Corner Templat ID" Text="{Binding InnerTemplateID}" />
-                <core:LabeledTextBox Label="Outer Corner Kit ID" Text="{Binding OuterKitID}" />
-                <core:LabeledTextBox Label="Outer Corner Template ID" Text="{Binding OuterTemplateID}" />
+                <core:LabeledTextBox Label="Kit ID" Text="{Binding KitID}" />
+                <core:LabeledTextBox Label="Template ID" Text="{Binding TemplateID}" />
                 <core:Vector3Edit Label="Position" Value="{Binding Position}" />
                 <core:QuaternionEdit Label="Orientation" Value="{Binding Orientation}" />
             </StackPanel>

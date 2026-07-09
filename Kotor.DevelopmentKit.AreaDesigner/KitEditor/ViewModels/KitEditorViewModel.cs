@@ -117,12 +117,12 @@ public class KitEditorViewModel : ReactiveObject
             //.. kit.Objects.OfType<UltimateWorldObject>().Select(x => new FloorItem(x)),
             //.. kit.Objects.OfType<CeilingTemplate>().Select(x => new CeilingItem(x)),
             //.. kit.Objects.OfType<WallTemplate>().Select(x => new WallItem(x)),
+            //.. kit.Objects.OfType<InnerCornerTemplate>().Select(x => new InnerCornerItem(x)),
+            //.. kit.Objects.OfType<OuterCornerTemplate>().Select(x => new OuterCornerItem(x)),
 
             .. kit.Objects.OfType<PropTemplate>().Select(x => new PropItem(x)),
             .. kit.Objects.OfType<TileTemplate>().Select(x => new TileItem(x)),
             .. kit.Objects.OfType<DoorFrameTemplate>().Select(x => new DoorFrameItem(x)),
-            .. kit.Objects.OfType<InnerCornerTemplate>().Select(x => new InnerCornerItem(x)),
-            .. kit.Objects.OfType<OuterCornerTemplate>().Select(x => new OuterCornerItem(x)),
         ]);
     }
 
@@ -403,10 +403,8 @@ public class KitEditorViewModel : ReactiveObject
                 }),
                 ..cornerNodes.Select(x => new CornerHookItem()
                 {
-                    InnerKitID = KitID,
-                    InnerTemplateID = $"icorner_{x.Name.Split('.').Last()}",
-                    OuterKitID = KitID,
-                    OuterTemplateID = $"ocorner_{x.Name.Split('.').Last()}",
+                    KitID = KitID,
+                    TemplateID = $"Xcorner_{x.Name.Split('.').Last()}",
                     Position = PositionFromNode(x),
                     Orientation = OrientationFromNode(x),
                 }),

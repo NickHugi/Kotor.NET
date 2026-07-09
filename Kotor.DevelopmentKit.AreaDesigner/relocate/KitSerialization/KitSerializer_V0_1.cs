@@ -133,10 +133,16 @@ public class KitSerializer_V0_1
                     }),
                     ..((JArray)tile.cornerHooks).Select(x => (dynamic)x).Select(hook => new CornerHookTemplate
                     {
-                        InnerKitID = hook.innerKitID,
-                        InnerTemplateID = hook.innerTemplateID,
-                        OuterKitID = hook.outerKitID,
-                        OuterTemplateID = hook.outerTemplateID,
+                        KitID = hook.innerKitID,
+                        TemplateID = hook.innerTemplateID,
+                        LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
+                        LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion(),
+                        MagnetType = MagnetType.Hook
+                    }),
+                    ..((JArray)tile.cornerHooks).Select(x => (dynamic)x).Select(hook => new CornerHookTemplate
+                    {
+                        KitID = hook.outerKitID,
+                        TemplateID = hook.outerTemplateID,
                         LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
                         LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion(),
                         MagnetType = MagnetType.Hook
@@ -147,7 +153,7 @@ public class KitSerializer_V0_1
 
         foreach (var innerCorner in data.innerCorners)
         {
-            kit.Objects.Add(new InnerCornerTemplate
+            kit.Objects.Add(new UltimateWorldObjectTemplate
             {
                 Type = WorldObjectType.InnerCorner,
                 KitID = kitID,
@@ -161,7 +167,7 @@ public class KitSerializer_V0_1
 
         foreach (var outerCorner in data.outerCorners)
         {
-            kit.Objects.Add(new OuterCornerTemplate
+            kit.Objects.Add(new UltimateWorldObjectTemplate
             {
                 Type = WorldObjectType.OuterCorner,
                 KitID = kitID,
@@ -228,16 +234,14 @@ public class KitSerializer_V0_1
             }),
             cornerHooks = tile.Magnets.OfType<CornerHookTemplate>().Select(x => new
             {
-                innerKitID = x.InnerKitID,
-                innerTemplateID = x.InnerTemplateID,
-                outerKitID = x.OuterKitID,
-                outerTemplateID = x.OuterTemplateID,
+                innerKitID = x.KitID,
+                innerTemplateID = x.TemplateID,
                 position = x.LocalPosition.ToFloatArray(),
                 orientation = x.LocalOrientation.ToFloatArray(),
             }),
         });
 
-        data.floors = kit.Objects.OfType<UltimateWorldObjectTemplate>().Select(floor => new
+        data.floors = kit.Objects.Where(x => x.Type == WorldObjectType.Floor).Select(floor => new
         {
             templateID = floor.TemplateID,
             classID = floor.ClassID,
@@ -245,7 +249,7 @@ public class KitSerializer_V0_1
             model = floor.Model,
         });
 
-        data.ceilings = kit.Objects.OfType<UltimateWorldObjectTemplate>().Select(ceiling => new
+        data.ceilings = kit.Objects.Where(x => x.Type == WorldObjectType.Ceiling).Select(ceiling => new
         {
             templateID = ceiling.TemplateID,
             classID = ceiling.ClassID,
@@ -277,7 +281,7 @@ public class KitSerializer_V0_1
             doorframeClassID = wall.DoorframeClassID,
         });
 
-        data.innerCorners = kit.Objects.OfType<InnerCornerTemplate>().Select(obj => new
+        data.innerCorners = kit.Objects.Where(x => x.Type == WorldObjectType.InnerCorner).Select(obj => new
         {
             templateID = obj.TemplateID,
             classID = obj.ClassID,
@@ -285,7 +289,7 @@ public class KitSerializer_V0_1
             model = obj.Model,
         });
 
-        data.outerCorners = kit.Objects.OfType<OuterCornerTemplate>().Select(obj => new
+        data.outerCorners = kit.Objects.Where(x => x.Type == WorldObjectType.OuterCorner).Select(obj => new
         {
             templateID = obj.TemplateID,
             classID = obj.ClassID,
@@ -293,7 +297,7 @@ public class KitSerializer_V0_1
             model = obj.Model,
         });
 
-        data.objects = kit.Objects.Where(x => x.GetType() == typeof(UltimateWorldObjectTemplate)).Select(obj => new
+        data.objects = kit.Objects.Where(x => x.Type == WorldObjectType.Prop).Select(obj => new
         {
             templateID = obj.TemplateID,
             classID = obj.ClassID,

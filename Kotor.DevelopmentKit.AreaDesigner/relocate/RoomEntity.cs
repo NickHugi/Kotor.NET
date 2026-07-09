@@ -45,44 +45,40 @@ public class AreaEntity : BaseEntity
 
         descriptors.RemoveAll(x => x is MeshDescriptor mesh && mesh.TransparencyHint != 0);
     }
-    public void RenderObject(IAssetManager assets, UltimateWorldObject obj, ref List<IDrawCallDescriptor> descriptors)
+    public void RenderObject(IAssetManager assets, UltimateWorldObject worldObject, ref List<IDrawCallDescriptor> descriptors)
     {
-        if (!DoRenderObjects)
+        if (!worldObject.Visible)
+            return;
+        if (worldObject.Type == WorldObjectType.Ceiling && !DoRenderCeiling)
+            return;
+        if (worldObject.Type == WorldObjectType.Wall && !DoRenderWalls)
+            return;
+        if (worldObject.Type == WorldObjectType.Floor && !DoRenderFloor)
+            return;
+        if (worldObject.Type == WorldObjectType.DoorFrame && false)
+            return;
+        if (worldObject.Type == WorldObjectType.OuterCorner && !DoRenderWalls)
+            return;
+        if (worldObject.Type == WorldObjectType.InnerCorner && !DoRenderWalls)
+            return;
+        if (worldObject.Type == WorldObjectType.Prop && !DoRenderObjects)
             return;
 
-        if (obj is Tile tile)
+        foreach (var attachedWorldObject in worldObject.AttachedObjects)
         {
-            foreach (var worldObject in tile.AttachedObjects)
-            {
-                RenderObject(assets, worldObject, ref descriptors);
-                descriptors.AddRange(DescriptorsForModel(assets, worldObject.Template.Model, worldObject.GlobalTransform, obj));
-            }
-
-            // TODO
-            //foreach (var doorframe in tile.AttachedObjects.OfType<UltimateWorldObject>().Select(x => x.DoorFrame).Where(x => x is not null))
-            //{
-            //    RenderDoorFrame(assets, doorframe, ref descriptors);
-            //}
-            foreach (var innerCorner in tile.AttachedObjects.OfType<InnerCorner>())
-            {
-                RenderInnerCorner(assets, innerCorner, ref descriptors);
-            }
-            foreach (var outerCorner in tile.AttachedObjects.OfType<OuterCorner>())
-            {
-                RenderOuterCorner(assets, outerCorner, ref descriptors);
-            }
+            RenderObject(assets, attachedWorldObject, ref descriptors);
         }
-        if (obj is WorldObject prop)
+
+        if (!string.IsNullOrWhiteSpace(worldObject.Template.Model))
         {
-            descriptors.AddRange(DescriptorsForModel(assets, prop.Template.Model, obj.GlobalTransform, obj));
+            descriptors.AddRange(DescriptorsForModel(assets, worldObject.Template.Model, worldObject.GlobalTransform, worldObject));
         }
-    }
-    private void RenderCeiling(IAssetManager assets, UltimateWorldObject ceiling, ref List<IDrawCallDescriptor> descriptors)
-    {
-        if (!DoRenderCeiling)
-            return;
 
-        descriptors.AddRange(DescriptorsForModel(assets, ceiling.Template.Model, ceiling.GlobalTransform, ceiling));
+        // TODO
+        //foreach (var doorframe in tile.AttachedObjects.OfType<UltimateWorldObject>().Select(x => x.DoorFrame).Where(x => x is not null))
+        //{
+        //    RenderDoorFrame(assets, doorframe, ref descriptors);
+        //}
     }
     private void RenderWall(IAssetManager assets, UltimateWorldObject wall, ref List<IDrawCallDescriptor> descriptors)
     {
@@ -98,20 +94,6 @@ public class AreaEntity : BaseEntity
             return;
 
         descriptors.AddRange(DescriptorsForModel(assets, doorframe.Template.Model, doorframe.GlobalTransform, doorframe));
-    }
-    private void RenderInnerCorner(IAssetManager assets, InnerCorner corner, ref List<IDrawCallDescriptor> descriptors)
-    {
-        if (!corner.Visible || !DoRenderCorners)
-            return;
-
-        descriptors.AddRange(DescriptorsForModel(assets, corner.Template.Model, corner.GlobalTransform, corner));
-    }
-    private void RenderOuterCorner(IAssetManager assets, OuterCorner corner, ref List<IDrawCallDescriptor> descriptors)
-    {
-        if (!corner.Visible || !DoRenderCorners)
-            return;
-
-        descriptors.AddRange(DescriptorsForModel(assets, corner.Template.Model, corner.GlobalTransform, corner));
     }
 
     // TODO - clean this up somehow

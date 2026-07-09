@@ -16,13 +16,13 @@ public class InnerCornerItem : WorldObjectItem
     public InnerCornerItem() : base()
     {
     }
-    public InnerCornerItem(InnerCornerTemplate template) : base(template)
+    public InnerCornerItem(UltimateWorldObjectTemplate template) : base(template)
     {
     }
 
-    public override InnerCornerTemplate ToModel()
+    public override UltimateWorldObjectTemplate ToModel()
     {
-        return new InnerCornerTemplate
+        return new UltimateWorldObjectTemplate
         {
             Type = WorldObjectType.InnerCorner,
             KitID = KitID,

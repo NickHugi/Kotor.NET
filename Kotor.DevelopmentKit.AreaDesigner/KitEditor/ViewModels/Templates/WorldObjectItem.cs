@@ -129,8 +129,8 @@ public abstract class WorldObjectItem : ReactiveObject
     {
         Hooks.Add(new CornerHookItem()
         {
-            InnerKitID = KitID,
-            InnerTemplateID = KitID,
+            KitID = KitID,
+            TemplateID = KitID,
         });
     }
 }

@@ -37,7 +37,7 @@ public class DoorFrame : UltimateWorldObject
 
     public bool Visible => Enabled;
 
-    public DoorFrame(UltimateWorldObject parent, Magnet parentMagnet, DoorFrameTemplate template) : base(parent.Room, parentMagnet, template, Guid.NewGuid())
+    public DoorFrame(UltimateWorldObject parent, Magnet parentMagnet, DoorFrameTemplate template) : base(parent.Room, parentMagnet, template, Guid.NewGuid(), WorldObjectType.Wall)
     {
         Parent = parent;
         SwitchTemplate(template);
