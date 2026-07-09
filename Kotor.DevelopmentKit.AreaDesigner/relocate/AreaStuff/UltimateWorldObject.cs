@@ -59,7 +59,7 @@ public class UltimateWorldObject
     {
         get => (ParentMagnet is null)
             ? Vector3.Transform(LocalPosition, Room.Orientation) + Room.Position
-            : Vector3.Transform(LocalPosition, ParentMagnet.GlobalOrientation) + ParentMagnet.GlobalPosition;
+            : ParentMagnet.GlobalPosition;
         set => _ = (ParentMagnet is null)
             ? LocalPosition = Vector3.Transform(value - ParentPosition, Quaternion.Inverse(ParentOrientation))
             : Vector3.Zero;
@@ -68,7 +68,7 @@ public class UltimateWorldObject
     {
         get => (ParentMagnet is null)
             ? Quaternion.Normalize(LocalOrientation * Room.Orientation)
-            : Quaternion.Normalize(LocalOrientation * ParentMagnet.GlobalOrientation);
+            : ParentMagnet.GlobalOrientation;
         set => _ = (ParentMagnet is null)
             ? LocalOrientation = value * Quaternion.Inverse(Room.Orientation)
             : Quaternion.Identity;
