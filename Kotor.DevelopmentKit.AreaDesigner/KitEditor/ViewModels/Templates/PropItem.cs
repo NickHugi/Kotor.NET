@@ -19,7 +19,7 @@ public class PropItem : WorldObjectItem
     public PropItem() : base()
     {
     }
-    public PropItem(PropTemplate template) : this()
+    public PropItem(UltimateWorldObjectTemplate template) : this()
     {
         KitID = template.KitID;
         TemplateID = template.TemplateID;
@@ -29,9 +29,9 @@ public class PropItem : WorldObjectItem
         Hooks = [];
     }
 
-    public override PropTemplate ToModel()
+    public override UltimateWorldObjectTemplate ToModel()
     {
-        return new PropTemplate
+        return new UltimateWorldObjectTemplate
         {
             Type = WorldObjectType.Prop,
             KitID = KitID,

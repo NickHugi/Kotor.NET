@@ -181,7 +181,7 @@ public class KitSerializer_V0_1
 
         foreach (var @object in data.objects)
         {
-            kit.Objects.Add(new PropTemplate
+            kit.Objects.Add(new UltimateWorldObjectTemplate
             {
                 Type = WorldObjectType.Prop,
                 KitID = kitID,

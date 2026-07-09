@@ -37,7 +37,7 @@ public class AddObjectMode : BaseMode
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    private WorldObject _addObject = default!;
+    private UltimateWorldObject _addObject = default!;
     private float angle = 0;
 
     public AddObjectMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, UltimateWorldObject activeWorldObject, DesignerSettings settings) : base(engine, area, kits, activeWorldObject, settings)
@@ -55,7 +55,7 @@ public class AddObjectMode : BaseMode
 
         // todo - should be placed in room where walkmesh intersects.
         // todo - should not be hardcoded
-        _addObject = new(_area.Rooms.Last(), null, SelectedObjectTemplate); 
+        _addObject = new(_area.Rooms.Last(), null, SelectedObjectTemplate, Guid.NewGuid(), WorldObjectType.Prop); 
         _addObject.LocalPosition = point;
         _addObject.LocalOrientation = Quaternion.CreateFromYawPitchRoll(0, 0, angle * (float)Math.PI / 180);
 

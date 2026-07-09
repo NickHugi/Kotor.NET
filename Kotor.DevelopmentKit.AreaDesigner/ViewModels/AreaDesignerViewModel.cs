@@ -33,7 +33,6 @@ using Kotor.NET.Resources.KotorMDL;
 using Kotor.NET.Resources.KotorMDL.Nodes;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
-using WorldObject = Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff.WorldObject;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.ViewModels;
 

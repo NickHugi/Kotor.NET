@@ -109,21 +109,21 @@ public class SelectObjectMode : BaseMode
         if (_projectedObject is not null)
             descriptors.Where(x => x.Tag == _projectedObject).OfType<MeshDescriptor>().ToList().ForEach(x => x.AmbientColor = new(1.5f, 1.5f, 1.5f));
 
-        if (_isTranslating && SelectedWorldObject is WorldObject obj)
+        if (_isTranslating && SelectedWorldObject is not null)
         {
             var ray = camera.ProjectRay((int)mouse.X, (int)mouse.Y, 1109, 703);
 
             if (_transformAxis.HasValue)
             {
-                obj.LocalPosition = ray.SolveLine(_transformAxis.Value, obj.LocalPosition);
+                SelectedWorldObject.LocalPosition = ray.SolveLine(_transformAxis.Value, SelectedWorldObject.LocalPosition);
             }
             else
             {
                 var point = ray.FindPointOnPlane(Axis.Z, 0);
-                obj.LocalPosition = new(point.X, point.Y, obj.LocalPosition.Z);
+                SelectedWorldObject.LocalPosition = new(point.X, point.Y, SelectedWorldObject.LocalPosition.Z);
             }
         }
-        if (SelectedWorldObject is WorldObject @object && _isTranslating)
+        if (SelectedWorldObject is not null && _isTranslating)
         {
             Vector3 start = _transformAxis switch
             {
@@ -143,8 +143,8 @@ public class SelectObjectMode : BaseMode
             descriptors.Add(new LineDescriptor()
             {
                 Color = color,
-                Start = @object.GlobalPosition + start,
-                End = @object.GlobalPosition - start,
+                Start = SelectedWorldObject.GlobalPosition + start,
+                End = SelectedWorldObject.GlobalPosition - start,
                 Thickness = 0.5f
             });
         }
