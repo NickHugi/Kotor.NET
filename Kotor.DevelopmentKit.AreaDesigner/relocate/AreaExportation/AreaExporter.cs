@@ -68,7 +68,7 @@ public static class AreaExporter
         return wallMDL.Root;
     }
 
-    private static MDLNode DoorFrameToMDLNode(DoorFrame doorframe)
+    private static MDLNode DoorFrameToMDLNode(UltimateWorldObject doorframe)
     {
         var doorframeMDL = MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{doorframe.KitID}/{doorframe.Template.Model}.mdl");
         doorframeMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(doorframe.GlobalPosition));

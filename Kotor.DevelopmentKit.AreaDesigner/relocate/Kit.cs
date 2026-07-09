@@ -18,8 +18,7 @@ public class Kit
     public int Version { get; }
     public ICollection<UltimateWorldObjectTemplate> Objects { get; init; } = [];
 
-    public DoorFrameTemplate DoorFrame(string templateID) => Objects.OfType<DoorFrameTemplate>().Single(x => x.TemplateID == templateID);
-    public UltimateWorldObjectTemplate Object(string templateID) => Objects/*.Where(x => x.GetType() == typeof(UltimateWorldObjectTemplate))*/.Single(x => x.TemplateID == templateID);
+    public UltimateWorldObjectTemplate Object(string templateID) => Objects.Single(x => x.TemplateID == templateID);
 
     public Kit(string filepath, string kitID, int version, string name)
     {

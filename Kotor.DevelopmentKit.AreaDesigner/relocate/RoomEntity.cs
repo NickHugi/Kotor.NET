@@ -88,7 +88,7 @@ public class AreaEntity : BaseEntity
 
         //descriptors.AddRange(DescriptorsForModel(assets, wall.Template.Model, wall.GlobalTransform, wall));
     }
-    private void RenderDoorFrame(IAssetManager assets, DoorFrame doorframe, ref List<IDrawCallDescriptor> descriptors)
+    private void RenderDoorFrame(IAssetManager assets, UltimateWorldObject doorframe, ref List<IDrawCallDescriptor> descriptors)
     {
         if (!doorframe.Visible || !DoRenderDoors)
             return;

@@ -121,7 +121,7 @@ public class KitEditorViewModel : ReactiveObject
             //.. kit.Objects.OfType<OuterCornerTemplate>().Select(x => new OuterCornerItem(x)),
             //.. kit.Objects.OfType<PropTemplate>().Select(x => new PropItem(x)),
             //.. kit.Objects.OfType<TileTemplate>().Select(x => new TileItem(x)),
-            .. kit.Objects.OfType<DoorFrameTemplate>().Select(x => new DoorFrameItem(x)),
+            //.. kit.Objects.OfType<DoorFrameTemplate>().Select(x => new DoorFrameItem(x)),
         ]);
     }
 

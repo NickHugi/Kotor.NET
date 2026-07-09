@@ -27,5 +27,5 @@ public class UltimateWorldObjectTemplate
     public string DoorframeTemplateID { get; init; }
     public string DoorframeClassID { get; init; }
     public bool CanBeDoor => !string.IsNullOrEmpty(DoorframeTemplateID);
-    public DoorFrameTemplate? DoorFrame => string.IsNullOrEmpty(DoorframeTemplateID) ? null : Kit.Manager.Get(DoorframeKitID).DoorFrame(DoorframeTemplateID);
+    public UltimateWorldObjectTemplate? DoorFrame => string.IsNullOrEmpty(DoorframeTemplateID) ? null : Kit.Manager.Get(DoorframeKitID).Object(DoorframeTemplateID);
 }

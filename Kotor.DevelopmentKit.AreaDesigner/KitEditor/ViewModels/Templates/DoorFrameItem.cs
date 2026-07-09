@@ -19,14 +19,14 @@ public class DoorFrameItem : WorldObjectItem
     public DoorFrameItem() : base()
     {
     }
-    public DoorFrameItem(DoorFrameTemplate template) : base(template)
+    public DoorFrameItem(UltimateWorldObjectTemplate template) : base(template)
     {
         Hooks = new(template.Magnets.OfType<DoorFrameHookTemplate>().Select(x => new DoorFrameHookItem(x)));
     }
 
     public override UltimateWorldObjectTemplate ToModel()
     {
-        return new DoorFrameTemplate
+        return new UltimateWorldObjectTemplate
         {
             Type = WorldObjectType.DoorFrame,
             KitID = KitID,

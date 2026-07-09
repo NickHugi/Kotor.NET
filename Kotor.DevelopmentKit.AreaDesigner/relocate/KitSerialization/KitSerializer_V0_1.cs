@@ -60,7 +60,7 @@ public class KitSerializer_V0_1
 
         foreach (var door in data.doorframes)
         {
-            kit.Objects.Add(new DoorFrameTemplate
+            kit.Objects.Add(new UltimateWorldObjectTemplate
             {
                 Type = WorldObjectType.DoorFrame,
                 KitID = kitID,
@@ -257,7 +257,7 @@ public class KitSerializer_V0_1
             model = ceiling.Model,
         });
 
-        data.doorframes = kit.Objects.OfType<DoorFrameTemplate>().Select(doorframe => new
+        data.doorframes = kit.Objects.Where(x => x.Type == WorldObjectType.DoorFrame).Select(doorframe => new
         {
             templateID = doorframe.TemplateID,
             classID = doorframe.ClassID,

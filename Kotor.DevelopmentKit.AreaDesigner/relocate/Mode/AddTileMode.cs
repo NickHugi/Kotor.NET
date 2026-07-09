@@ -91,9 +91,10 @@ public class AddTileMode : BaseMode
 
             var sourceWall = result.Source.Parent;
 
-            if (result.Target.Parent is DoorFrame targetDoorframe)
+            if (result.Target.Parent.Type == WorldObjectType.DoorFrame)
             {
-                sourceWall.SwitchTemplate(targetDoorframe.Parent.Template);
+                // TODO
+                sourceWall.SwitchTemplate(result.Target.Parent.Template);
                 //sourceWall.DoorFrame.Enabled = false;
 
                 RenderRoom(descriptors);
