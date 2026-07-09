@@ -15,7 +15,6 @@ using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaSerialization;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.KitSerialization;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using Kotor.DevelopmentKit.AreaDesigner.Settings;
 using Kotor.NET.Common;
 using Kotor.NET.Common.Data;

@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Input;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using Kotor.DevelopmentKit.AreaDesigner.ViewModels;
 using Kotor.DevelopmentKit.AreaDesigner.Views;
 using Kotor.NET.Common.Data.Geometry;

@@ -7,7 +7,6 @@ using System.Numerics;
 using Avalonia.Markup.Xaml.Templates;
 using DynamicData;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 

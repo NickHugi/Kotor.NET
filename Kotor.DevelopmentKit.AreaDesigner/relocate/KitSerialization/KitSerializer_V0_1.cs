@@ -4,8 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.Magnets;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using Kotor.NET.Graphics.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;

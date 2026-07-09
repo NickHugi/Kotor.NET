@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia.Markup.Xaml.Templates;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.Magnets;
 using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using ReactiveUI;
 
