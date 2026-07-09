@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Magnets;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using Kotor.NET.Graphics.Extensions;
 using Newtonsoft.Json;
@@ -68,7 +68,7 @@ public class KitSerializer_V0_1
                 ClassID = door.classID.Value,
                 Name = door.name.Value,
                 Model = door.model.Value,
-                Magnets = ((JArray)door.hooks).Select(x => (dynamic)x).Select(hook => new DoorFrameHookTemplate
+                Magnets = ((JArray)door.hooks).Select(x => (dynamic)x).Select(hook => new UltimateMagnetTemplate
                 {
                     LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
                     LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion(),
@@ -107,7 +107,7 @@ public class KitSerializer_V0_1
                 Model = "",
                 Magnets =
                 [
-                    ..((JArray)tile.floorHooks).Select(x => (dynamic)x).Select(hook => new FloorHookTemplate
+                    ..((JArray)tile.floorHooks).Select(x => (dynamic)x).Select(hook => new UltimateMagnetTemplate
                     {
                         KitID = hook.kitID,
                         TemplateID = hook.templateID,
@@ -115,7 +115,7 @@ public class KitSerializer_V0_1
                         LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion(),
                         MagnetType = MagnetType.Hook
                     }),
-                    ..((JArray)tile.ceilingHooks).Select(x => (dynamic)x).Select(hook => new CeilingHookTemplate
+                    ..((JArray)tile.ceilingHooks).Select(x => (dynamic)x).Select(hook => new UltimateMagnetTemplate
                     {
                         KitID = hook.kitID,
                         TemplateID = hook.templateID,
@@ -123,7 +123,7 @@ public class KitSerializer_V0_1
                         LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion(),
                         MagnetType = MagnetType.Hook
                     }),
-                    ..((JArray)tile.wallHooks).Select(x => (dynamic)x).Select(hook => new WallHookTemplate
+                    ..((JArray)tile.wallHooks).Select(x => (dynamic)x).Select(hook => new UltimateMagnetTemplate
                     {
                         KitID = hook.kitID,
                         TemplateID = hook.templateID,
@@ -131,7 +131,7 @@ public class KitSerializer_V0_1
                         LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion(),
                         MagnetType = MagnetType.Hook
                     }),
-                    ..((JArray)tile.cornerHooks).Select(x => (dynamic)x).Select(hook => new CornerHookTemplate
+                    ..((JArray)tile.cornerHooks).Select(x => (dynamic)x).Select(hook => new UltimateMagnetTemplate
                     {
                         KitID = hook.innerKitID,
                         TemplateID = hook.innerTemplateID,
@@ -139,7 +139,7 @@ public class KitSerializer_V0_1
                         LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion(),
                         MagnetType = MagnetType.Hook
                     }),
-                    ..((JArray)tile.cornerHooks).Select(x => (dynamic)x).Select(hook => new CornerHookTemplate
+                    ..((JArray)tile.cornerHooks).Select(x => (dynamic)x).Select(hook => new UltimateMagnetTemplate
                     {
                         KitID = hook.outerKitID,
                         TemplateID = hook.outerTemplateID,
@@ -211,28 +211,28 @@ public class KitSerializer_V0_1
             classID = tile.ClassID,
             name = tile.Name,
             model = tile.Model,
-            floorHooks = tile.Magnets.OfType<FloorHookTemplate>().Select(x => new
+            floorHooks = tile.Magnets.OfType<UltimateMagnetTemplate>().Select(x => new
             {
                 kitID = x.KitID,
                 templateID = x.TemplateID,
                 position = x.LocalPosition.ToFloatArray(),
                 orientation = x.LocalOrientation.ToFloatArray()
             }),
-            ceilingHooks = tile.Magnets.OfType<CeilingHookTemplate>().Select(x => new
+            ceilingHooks = tile.Magnets.OfType<UltimateMagnetTemplate>().Select(x => new
             {
                 kitID = x.KitID,
                 templateID = x.TemplateID,
                 position = x.LocalPosition.ToFloatArray(),
                 orientation = x.LocalOrientation.ToFloatArray()
             }),
-            wallHooks = tile.Magnets.OfType<WallHookTemplate>().Select(x => new
+            wallHooks = tile.Magnets.OfType<UltimateMagnetTemplate>().Select(x => new
             {
                 kitID = x.KitID,
                 templateID = x.TemplateID,
                 position = x.LocalPosition.ToFloatArray(),
                 orientation = x.LocalOrientation.ToFloatArray(),
             }),
-            cornerHooks = tile.Magnets.OfType<CornerHookTemplate>().Select(x => new
+            cornerHooks = tile.Magnets.OfType<UltimateMagnetTemplate>().Select(x => new
             {
                 innerKitID = x.KitID,
                 innerTemplateID = x.TemplateID,

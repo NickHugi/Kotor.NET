@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Magnets;
 using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using ReactiveUI;
 
@@ -18,15 +18,15 @@ public class MagnetItem : BaseMagnetItem
     public MagnetItem() : base()
     {
     }
-    public MagnetItem(MagnetTemplate magnet) : this()
+    public MagnetItem(UltimateMagnetTemplate magnet) : this()
     {
         Position = new(magnet.LocalPosition);
         Orientation = new(magnet.LocalOrientation);
     }
 
-    public override MagnetTemplate ToModel()
+    public override UltimateMagnetTemplate ToModel()
     {
-        return new MagnetTemplate
+        return new UltimateMagnetTemplate
         {
             LocalPosition = Position.ToModel(),
             LocalOrientation = Orientation.ToModel(),

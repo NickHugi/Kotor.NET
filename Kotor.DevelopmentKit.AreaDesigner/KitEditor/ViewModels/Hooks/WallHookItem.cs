@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Magnets;
 using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using ReactiveUI;
 
@@ -37,7 +37,7 @@ public class WallHookItem : BaseMagnetItem
         this.WhenAnyValue(x => x.TemplateID).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
         this.WhenAnyValue(x => x.Position).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
     }
-    public WallHookItem(WallHookTemplate wallHook) : this()
+    public WallHookItem(UltimateMagnetTemplate wallHook) : this()
     {
         KitID = wallHook.KitID;
         TemplateID = wallHook.TemplateID;
@@ -45,9 +45,9 @@ public class WallHookItem : BaseMagnetItem
         Orientation = new(wallHook.LocalOrientation);
     }
 
-    public override WallHookTemplate ToModel()
+    public override UltimateMagnetTemplate ToModel()
     {
-        return new WallHookTemplate
+        return new UltimateMagnetTemplate
         {
             KitID = KitID,
             TemplateID = TemplateID,

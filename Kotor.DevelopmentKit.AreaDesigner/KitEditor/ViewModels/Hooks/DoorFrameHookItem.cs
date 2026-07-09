@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Magnets;
 using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using ReactiveUI;
 
@@ -19,15 +19,15 @@ public class DoorFrameHookItem : BaseMagnetItem
     {
         this.WhenAnyValue(x => x.Position).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
     }
-    public DoorFrameHookItem(DoorFrameHookTemplate template) : this()
+    public DoorFrameHookItem(UltimateMagnetTemplate template) : this()
     {
         Position = new(template.LocalPosition);
         Orientation = new(template.LocalOrientation);
     }
 
-    public override DoorFrameHookTemplate ToModel()
+    public override UltimateMagnetTemplate ToModel()
     {
-        return new DoorFrameHookTemplate
+        return new UltimateMagnetTemplate
         {
             LocalPosition = Position.ToModel(),
             LocalOrientation = Orientation.ToModel(),

@@ -8,7 +8,7 @@ using Avalonia;
 using DynamicData;
 using DynamicData.Binding;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Magnets;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using Kotor.DevelopmentKit.AreaDesigner.ViewModels;
 using Kotor.NET.Common.Data.Geometry;
@@ -40,7 +40,7 @@ public class AddTileMode : BaseMode
             if (SelectedWorldObject?.Type == WorldObjectType.Wall)
             {
                 var activeGroup = SelectedWorldObject.Template.ClassID;
-                return _objects.Where(x => x.Type == WorldObjectType.Tile).Where(x => x.Magnets.OfType<WallHookTemplate>().Any(y => activeGroup == y.Template.ClassID)).ToList();
+                return _objects.Where(x => x.Type == WorldObjectType.Tile).Where(x => x.Magnets.OfType<UltimateMagnetTemplate>().Any(y => activeGroup == y.Template.ClassID)).ToList();
             }
             else
             {

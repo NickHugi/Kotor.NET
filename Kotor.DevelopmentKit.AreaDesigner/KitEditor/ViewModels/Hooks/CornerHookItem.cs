@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia.Markup.Xaml.Templates;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Magnets;
 using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using ReactiveUI;
 
@@ -30,11 +30,10 @@ public class CornerHookItem : BaseMagnetItem
         KitID = "";
         TemplateID = "";
 
-
         this.WhenAnyValue(x => x.TemplateID).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
         this.WhenAnyValue(x => x.Position).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
     }
-    public CornerHookItem(CornerHookTemplate template) : this()
+    public CornerHookItem(UltimateMagnetTemplate template) : this()
     {
         KitID = template.KitID;
         TemplateID = template.TemplateID;
@@ -42,9 +41,9 @@ public class CornerHookItem : BaseMagnetItem
         Orientation = new(template.LocalOrientation);
     }
 
-    public override CornerHookTemplate ToModel()
+    public override UltimateMagnetTemplate ToModel()
     {
-        return new CornerHookTemplate
+        return new UltimateMagnetTemplate
         {
             KitID = KitID,
             TemplateID = TemplateID,

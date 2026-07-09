@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Magnets;
 using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using ReactiveUI;
 
@@ -34,7 +34,7 @@ public class FloorHookItem : BaseMagnetItem
         this.WhenAnyValue(x => x.TemplateID).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
         this.WhenAnyValue(x => x.Position).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
     }
-    public FloorHookItem(FloorHookTemplate template) : this()
+    public FloorHookItem(UltimateMagnetTemplate template) : this()
     {
         KitID = template.KitID;
         TemplateID = template.TemplateID;
@@ -42,9 +42,9 @@ public class FloorHookItem : BaseMagnetItem
         Orientation = new(template.LocalOrientation);
     }
 
-    public override FloorHookTemplate ToModel()
+    public override UltimateMagnetTemplate ToModel()
     {
-        return new FloorHookTemplate
+        return new UltimateMagnetTemplate
         {
             KitID = KitID,
             TemplateID = TemplateID,

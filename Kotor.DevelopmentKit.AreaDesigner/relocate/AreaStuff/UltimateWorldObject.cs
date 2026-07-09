@@ -4,7 +4,6 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Magnets;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 
@@ -99,12 +98,10 @@ public class UltimateWorldObject
         AttachedObjects = attachedObjects;
         attachedObjects.AddRange(
         [
-            .. Magnets.Where(x => x.Template is WallHookTemplate).Select(x => new UltimateWorldObject(Room, x, x.Template.Template, Guid.NewGuid(), WorldObjectType.Wall)),
-            .. Magnets.Where(x => x.Template is FloorHookTemplate).Select(x => new UltimateWorldObject(Room, x, x.Template.Template, Guid.NewGuid(), WorldObjectType.Floor)),
-            .. Magnets.Where(x => x.Template is CeilingHookTemplate).Select(x => new UltimateWorldObject(Room, x, x.Template.Template, Guid.NewGuid(), WorldObjectType.Ceiling)),
-            .. Magnets.Where(x => x.Template is CornerHookTemplate).Select(x => new UltimateWorldObject(Room, x, x.Template.Template, Guid.NewGuid(), WorldObjectType.InnerCorner)),
-            //.. base.Magnets.Where(x => x.Template is CornerHookTemplate).Select(x => new InnerCorner(this, x, x.Template.Template as InnerCornerTemplate)),
-            // TODO
+            .. Magnets.Where(x => x.Template is UltimateMagnetTemplate).Select(x => new UltimateWorldObject(Room, x, x.Template.Template, Guid.NewGuid(), WorldObjectType.Wall)),
+            .. Magnets.Where(x => x.Template is UltimateMagnetTemplate).Select(x => new UltimateWorldObject(Room, x, x.Template.Template, Guid.NewGuid(), WorldObjectType.Floor)),
+            .. Magnets.Where(x => x.Template is UltimateMagnetTemplate).Select(x => new UltimateWorldObject(Room, x, x.Template.Template, Guid.NewGuid(), WorldObjectType.Ceiling)),
+            .. Magnets.Where(x => x.Template is UltimateMagnetTemplate).Select(x => new UltimateWorldObject(Room, x, x.Template.Template, Guid.NewGuid(), WorldObjectType.InnerCorner)),
         ]);
     }
 }

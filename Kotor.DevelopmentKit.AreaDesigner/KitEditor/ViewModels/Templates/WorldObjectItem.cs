@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Hooks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.Hooks;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Magnets;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using ReactiveUI;
 
@@ -72,13 +72,12 @@ public abstract class WorldObjectItem : ReactiveObject
         Model = template.Model;
         Hooks =
         [
-            ..template.Magnets.OfType<MagnetTemplate>().Select(x => new MagnetItem(x)),
-            ..template.Magnets.OfType<HookTemplate>().Select(x => new HookItem(x)),
-            ..template.Magnets.OfType<WallHookTemplate>().Select(x => new WallHookItem(x)),
-            ..template.Magnets.OfType<CeilingHookTemplate>().Select(x => new CeilingHookItem(x)),
-            ..template.Magnets.OfType<FloorHookTemplate>().Select(x => new FloorHookItem(x)),
-            ..template.Magnets.OfType<CornerHookTemplate>().Select(x => new CornerHookItem(x)),
-            ..template.Magnets.OfType<DoorFrameHookTemplate>().Select(x => new DoorFrameHookItem(x)),
+            // TODO
+            //..template.Magnets.OfType<UltimateMagnetTemplate>().Select(x => new WallHookItem(x)),
+            //..template.Magnets.OfType<UltimateMagnetTemplate>().Select(x => new CeilingHookItem(x)),
+            //..template.Magnets.OfType<UltimateMagnetTemplate>().Select(x => new FloorHookItem(x)),
+            //..template.Magnets.OfType<UltimateMagnetTemplate>().Select(x => new CornerHookItem(x)),
+            //..template.Magnets.OfType<UltimateMagnetTemplate>().Select(x => new DoorFrameHookItem(x)),
         ];
     }
 
