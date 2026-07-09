@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.KitSerialization;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using Kotor.NET.Graphics.Extensions;
 using Newtonsoft.Json;
 
@@ -32,7 +33,7 @@ public class AreaSerializer_V0_1
             foreach (var tileData in roomData.tiles.ToObject<dynamic[]>())
             {
                 var template = Kit.Manager.Get(tileData.kitID.Value).Tile(tileData.templateID.Value);
-                var tile = new Tile(room, template);
+                var tile = new UltimateWorldObject(room, null, template, Guid.NewGuid(), WorldObjectType.Tile);
                 tile.SwitchTemplate(template);
                 tile.LocalPosition = new Vector3(tileData.position.ToObject<float[]>());
                 tile.LocalOrientation = ((float[])tileData.orientation.ToObject<float[]>()).ToQuaternion();
@@ -78,7 +79,7 @@ public class AreaSerializer_V0_1
         {
             position = room.Position.ToFloatArray(),
             orientation = room.Orientation.ToFloatArray(),
-            tiles = room.Objects.OfType<Tile>().Select(tile => new
+            tiles = room.Objects.Where(x => x.Type == WorldObjectType.Tile).Select(tile => new
             {
                 kitID = tile.KitID,
                 templateID = tile.TemplateID,

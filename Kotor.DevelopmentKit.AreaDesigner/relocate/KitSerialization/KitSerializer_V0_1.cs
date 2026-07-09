@@ -97,7 +97,7 @@ public class KitSerializer_V0_1
 
         foreach (var tile in data.tiles)
         {
-            kit.Objects.Add(new TileTemplate
+            kit.Objects.Add(new UltimateWorldObjectTemplate
             {
                 Type = WorldObjectType.Tile,
                 KitID = kitID,
@@ -205,7 +205,7 @@ public class KitSerializer_V0_1
         data.name = kit.Name;
         data.format = FormatID;
 
-        data.tiles = kit.Objects.OfType<TileTemplate>().Select(tile => new
+        data.tiles = kit.Objects.OfType<UltimateWorldObjectTemplate>().Select(tile => new
         {
             templateID = tile.TemplateID,
             classID = tile.ClassID,

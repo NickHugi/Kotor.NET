@@ -80,7 +80,7 @@ public class BaseMode : ReactiveObject
 
         return _area.Rooms
             .SelectMany(x => x.Objects)
-            .OfType<Tile>()
+            .Where(x => x.Template.Type == WorldObjectType.Tile)
             .SelectMany(x => x.AttachedObjects)
             .Where(x => x.Template.Type == WorldObjectType.Wall)
             //.Where(x => x.LinkedTile is null) // TODO
@@ -119,7 +119,7 @@ public class BaseMode : ReactiveObject
 
         return _area.Rooms
             .SelectMany(x => x.Objects)
-            .Concat(_area.Rooms.SelectMany(x => x.Objects.OfType<Tile>().SelectMany(x => x.AttachedObjects)))
+            .Concat(_area.Rooms.SelectMany(x => x.Objects.Where(x => x.Type == WorldObjectType.Tile).SelectMany(x => x.AttachedObjects)))
             .OrderBy(x => ray.ShortestDistanceTo(x.GlobalPosition))
             .Select(x => new RaycastResult<UltimateWorldObject>(x, ray.ShortestDistanceTo(x.GlobalPosition)))
             .Where(x => x.Distance < 1)

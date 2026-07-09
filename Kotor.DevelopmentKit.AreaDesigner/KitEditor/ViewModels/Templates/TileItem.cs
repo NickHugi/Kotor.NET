@@ -14,13 +14,13 @@ public class TileItem : WorldObjectItem
     public TileItem() : base()
     {
     }
-    public TileItem(TileTemplate tile) : base(tile)
+    public TileItem(UltimateWorldObjectTemplate tile) : base(tile)
     {
     }
 
-    public override TileTemplate ToModel()
+    public override UltimateWorldObjectTemplate ToModel()
     {
-        return new TileTemplate
+        return new UltimateWorldObjectTemplate
         {
             Type = WorldObjectType.Tile,
             KitID = KitID,

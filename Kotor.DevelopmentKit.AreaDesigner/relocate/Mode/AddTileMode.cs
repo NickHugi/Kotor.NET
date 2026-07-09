@@ -27,10 +27,10 @@ public class AddTileMode : BaseMode
     public override string Name => "Add Room";
 
     private Room _projectedRoom = default!;
-    private Tile _projectedTile => _projectedRoom.Objects.OfType<Tile>().Single();
+    private UltimateWorldObject _projectedTile => _projectedRoom.Objects.Single();
     private float angle = 0;
 
-    public List<TileTemplate> TileTemplates
+    public List<UltimateWorldObjectTemplate> TileTemplates
     {
         get
         {
@@ -40,15 +40,15 @@ public class AddTileMode : BaseMode
             if (SelectedWorldObject?.Type == WorldObjectType.Wall)
             {
                 var activeGroup = SelectedWorldObject.Template.ClassID;
-                return _objects.OfType<TileTemplate>().Where(x => x.Magnets.OfType<WallHookTemplate>().Any(y => activeGroup == y.Template.ClassID)).ToList();
+                return _objects.Where(x => x.Type == WorldObjectType.Tile).Where(x => x.Magnets.OfType<WallHookTemplate>().Any(y => activeGroup == y.Template.ClassID)).ToList();
             }
             else
             {
-                return _objects.OfType<TileTemplate>().ToList() ?? [];
+                return _objects.Where(x => x.Type == WorldObjectType.Tile).ToList() ?? [];
             }
         }
     }
-    public TileTemplate? SelectedTileTemplate
+    public UltimateWorldObjectTemplate? SelectedTileTemplate
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
@@ -133,7 +133,7 @@ public class AddTileMode : BaseMode
     }
     private void RenderPredict(List<IDrawCallDescriptor> descriptors)
     {
-        var tiles = _area.Rooms.SelectMany(x => x.Objects.OfType<Tile>()).ToList();
+        var tiles = _area.Rooms.SelectMany(x => x.Objects.Where(x => x.Type == WorldObjectType.Tile)).ToList();
 
         foreach (var existing in tiles.SelectMany(x => x.AttachedObjects.Where(x => x.Type == WorldObjectType.Wall)))
         {
@@ -180,9 +180,9 @@ public class AddTileMode : BaseMode
         var magnet = NearestMagnet(_projectedRoom.GetMagnets(), 1);
         if (magnet is not null && magnet.Target.Parent.Type == WorldObjectType.Wall)
         {
-            var template = _projectedRoom.Objects.OfType<Tile>().First().Template;
+            var template = _projectedRoom.Objects.Where(x => x.Type == WorldObjectType.Tile).First().Template;
             var room = magnet.Target.Parent.Room;
-            var newTile = new Tile(room, template);
+            var newTile = new UltimateWorldObject(room, null, template, Guid.NewGuid(), WorldObjectType.Tile);
             newTile.SwitchTemplate(template);
             newTile.GlobalPosition = _projectedRoom.Position;
             newTile.GlobalOrientation = _projectedRoom.Orientation;

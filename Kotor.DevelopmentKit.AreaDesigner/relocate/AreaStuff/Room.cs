@@ -29,9 +29,9 @@ public class Room
     {
         Parent = parent;
     }
-    public Room(Area parent, TileTemplate template) : this(parent)
+    public Room(Area parent, UltimateWorldObjectTemplate template) : this(parent)
     {
-        var tile = new Tile(this, template);
+        var tile = new UltimateWorldObject(this, null, template, Guid.NewGuid(), WorldObjectType.Tile);
         tile.SwitchTemplate(template);
         AddTile(tile);
     }
@@ -40,12 +40,12 @@ public class Room
     {
         Objects.Add(@object);
     }
-    public void AddTile(Tile tile)
+    public void AddTile(UltimateWorldObject tile)
     {
         Objects.Add(tile);
         FixWalls();
     }
-    public void DeleteTile(Tile tile)
+    public void DeleteTile(UltimateWorldObject tile)
     {
         Objects.Remove(tile);
         FixWalls();

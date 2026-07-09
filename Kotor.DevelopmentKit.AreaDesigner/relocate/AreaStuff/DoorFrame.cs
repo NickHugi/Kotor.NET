@@ -14,13 +14,15 @@ public class DoorFrame : UltimateWorldObject
     {
         get
         {
-            var area = Room.Parent;
-            var walls = area.Rooms
-                .SelectMany(x => x.Objects.OfType<Tile>())
-                .SelectMany(x => x.AttachedObjects.Where(x => x.Template.Type == WorldObjectType.Wall))
-                .ToList();
+            return null;
+            //TODO
+            //var area = Room.Parent;
+            //var walls = area.Rooms
+            //    .SelectMany(x => x.Objects.OfType<Tile>())
+            //    .SelectMany(x => x.AttachedObjects.Where(x => x.Template.Type == WorldObjectType.Wall))
+            //    .ToList();
 
-            return walls.FirstOrDefault(x => x != Parent && Magnets.Any(y => y.GlobalPosition == x.GlobalPosition));
+            //return walls.FirstOrDefault(x => x != Parent && Magnets.Any(y => y.GlobalPosition == x.GlobalPosition));
         }
     }
 

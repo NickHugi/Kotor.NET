@@ -26,7 +26,7 @@ public static class AreaExporter
         var mdl = new MDL();
         mdl.Name = "test";
 
-        foreach (var tile in room.Objects.OfType<Tile>())
+        foreach (var tile in room.Objects)
         {
             // TODO
             //mdl.Root.Children.AddRange(tile.AttachedObjects.Select(ObjectToMDLNode));

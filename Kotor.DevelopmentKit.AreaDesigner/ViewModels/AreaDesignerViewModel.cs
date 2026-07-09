@@ -39,7 +39,7 @@ namespace Kotor.DevelopmentKit.AreaDesigner.ViewModels;
 public class AreaDesignerViewModel : ReactiveObject
 {
     public Interaction<Unit, Point> GetMousePoint = new();
-    public Interaction<Unit, TileTemplate?> SelectTileTemplate = new();
+    public Interaction<Unit, UltimateWorldObjectTemplate?> SelectTileTemplate = new();
     public Interaction<Unit, string?> SelectSaveFilepathForArea = new();
     public Interaction<Unit, string?> SelectLoadFilepathForArea = new();
     public Interaction<Unit, Unit> PromptEditSettings = new();
@@ -301,15 +301,15 @@ public class AreaDesignerViewModel : ReactiveObject
     }
     public void DeletePiece(object piece)
     {
-        if (piece is UltimateWorldObject @object)
-        {
-            //TODO
-            //@object.Parent.Objects.Remove(@object);
-        }
-        else if (piece is Tile tile)
-        {
-            tile.Parent.DeleteTile(tile);
-        }
+        // TODO
+        //if (piece is UltimateWorldObject @object)
+        //{
+        //    //@object.Parent.Objects.Remove(@object);
+        //}
+        //else if (piece)
+        //{
+        //    //tile.Parent.DeleteTile(tile);
+        //}
     }
 
     public async Task RenderIntercept(OrbitCamera camera, Point mouse, List<IDrawCallDescriptor> descriptors)
@@ -319,10 +319,10 @@ public class AreaDesignerViewModel : ReactiveObject
 
         await Mode.RenderIntercept(camera, mouse, descriptors);
 
-        if (ActiveWorldObject is Tile tile)
+        if (ActiveWorldObject?.Type == WorldObjectType.Tile)
         {
             descriptors
-                .Where(x => tile.AttachedObjects.Contains(x.Tag))
+                .Where(x => ActiveWorldObject.AttachedObjects.Contains(x.Tag))
                 .OfType<MeshDescriptor>()
                 .ToList()
                 .ForEach(x => x.AmbientColor += new Vector3(0.5f, 0.5f, 0.5f));
