@@ -96,10 +96,7 @@ public class UltimateWorldObject
         AttachedObjects = attachedObjects;
         attachedObjects.AddRange(
         [
-            .. Magnets.Where(x => x.Template is UltimateMagnetTemplate).Select(x => new UltimateWorldObject(Room, x, x.Template.Template, Guid.NewGuid(), WorldObjectType.Wall)),
-            .. Magnets.Where(x => x.Template is UltimateMagnetTemplate).Select(x => new UltimateWorldObject(Room, x, x.Template.Template, Guid.NewGuid(), WorldObjectType.Floor)),
-            .. Magnets.Where(x => x.Template is UltimateMagnetTemplate).Select(x => new UltimateWorldObject(Room, x, x.Template.Template, Guid.NewGuid(), WorldObjectType.Ceiling)),
-            .. Magnets.Where(x => x.Template is UltimateMagnetTemplate).Select(x => new UltimateWorldObject(Room, x, x.Template.Template, Guid.NewGuid(), WorldObjectType.InnerCorner)),
+            .. Magnets.Where(x => x.Template is UltimateMagnetTemplate).Select(x => new UltimateWorldObject(Room, x, x.Template.Template, Guid.NewGuid(), x.Template.Template.Type)),
         ]);
     }
 }

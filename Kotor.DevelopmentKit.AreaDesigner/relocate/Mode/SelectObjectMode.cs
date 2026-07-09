@@ -104,7 +104,7 @@ public class SelectObjectMode : BaseMode
         var mouseDelta = mouse - _mousePrevious;
         _mousePrevious = mouse;
 
-        _projectedObject = IntersectingObject(camera, mouse.X, mouse.Y)?.Result;
+        _projectedObject = IntersectingWorldObject(camera, mouse.X, mouse.Y)?.Result;
         if (_projectedObject is not null)
             descriptors.Where(x => x.Tag == _projectedObject).OfType<MeshDescriptor>().ToList().ForEach(x => x.AmbientColor = new(1.5f, 1.5f, 1.5f));
 

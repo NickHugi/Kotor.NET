@@ -24,6 +24,25 @@ public class Room
 
     public ICollection<UltimateWorldObject> Objects = [];
 
+    public ICollection<UltimateWorldObject> AllObjects
+    {
+        get
+        {
+            var search = Objects.ToList();
+            var result = new List<UltimateWorldObject>();
+
+            while (search.Any())
+            {
+                var next = search.First();
+                search.Remove(next);
+                search.AddRange(next.AttachedObjects);
+                result.Add(next);
+            }
+
+            return result;
+        }
+    }
+
     public Room(Area parent)
     {
         Parent = parent;

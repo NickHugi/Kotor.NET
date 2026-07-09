@@ -88,40 +88,28 @@ public class BaseMode : ReactiveObject
             .Where(x => x.Distance < 3)
             .FirstOrDefault();
     }
-    protected RaycastResult<UltimateWorldObject>? IntersectingFloor(OrbitCamera camera, double x, double y)
+
+    protected RaycastResult<UltimateWorldObject>? IntersectingWorldObject(OrbitCamera camera, double x, double y)
     {
         var ray = camera.ProjectRay((int)x, (int)y, _engine.Width, _engine.Height);
 
         return _area.Rooms
-            .SelectMany(x => x.Objects)
-            .Where(x => x.Template.Type == WorldObjectType.Floor)
+            .SelectMany(x => x.AllObjects)
             .OrderBy(x => ray.ShortestDistanceTo(x.GlobalPosition))
             .Select(x => new RaycastResult<UltimateWorldObject>(x, ray.ShortestDistanceTo(x.GlobalPosition)))
             .Where(x => x.Distance < 3)
             .FirstOrDefault();
     }
-    protected RaycastResult<UltimateWorldObject>? IntersectingCeiling(OrbitCamera camera, double x, double y)
+    protected RaycastResult<UltimateWorldObject>? IntersectingWorldObject(OrbitCamera camera, double x, double y, WorldObjectType type)
     {
         var ray = camera.ProjectRay((int)x, (int)y, _engine.Width, _engine.Height);
 
         return _area.Rooms
-            .SelectMany(x => x.Objects)
-            .Where(x => x.Template.Type == WorldObjectType.Ceiling)
+            .SelectMany(x => x.AllObjects)
+            .Where(x => x.Template.Type == type)
             .OrderBy(x => ray.ShortestDistanceTo(x.GlobalPosition))
             .Select(x => new RaycastResult<UltimateWorldObject>(x, ray.ShortestDistanceTo(x.GlobalPosition)))
             .Where(x => x.Distance < 3)
-            .FirstOrDefault();
-    }
-    protected RaycastResult<UltimateWorldObject>? IntersectingObject(OrbitCamera camera, double x, double y)
-    {
-        var ray = camera.ProjectRay((int)x, (int)y, _engine.Width, _engine.Height);
-
-        return _area.Rooms
-            .SelectMany(x => x.Objects)
-            .Concat(_area.Rooms.SelectMany(x => x.Objects.Where(x => x.Type == WorldObjectType.Tile).SelectMany(x => x.AttachedObjects)))
-            .OrderBy(x => ray.ShortestDistanceTo(x.GlobalPosition))
-            .Select(x => new RaycastResult<UltimateWorldObject>(x, ray.ShortestDistanceTo(x.GlobalPosition)))
-            .Where(x => x.Distance < 1)
             .FirstOrDefault();
     }
 

@@ -19,7 +19,6 @@ using Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Templates;
 using Kotor.DevelopmentKit.AreaDesigner.relocate;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.KitSerialization;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.Templates;
 using Kotor.DevelopmentKit.AreaDesigner.Views;
 using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using Kotor.NET.Graphics.Model.Nodes;
