@@ -110,18 +110,21 @@ public class AddTileMode : BaseMode
 
         // Render Magnets
         var size = (0.4f) + MathF.Sin((_engine.RunningTime % 0.75f) / 0.75f * MathF.PI) * 0.2f;
-        _area.Rooms.SelectMany(x => x.GetMagnets()).Concat(_projectedRoom.GetMagnets()).ToList().ForEach(magnet =>
-        {
-            descriptors.Add(new BillboardDescriptor()
+        _area.Rooms.SelectMany(x => x.AllMagnets)
+            .Concat(_projectedRoom.AllMagnets)
+            .Where(x => x.Template.Template.Type == WorldObjectType.Wall).ToList()
+            .ForEach(magnet =>
             {
-                AllwaysOnTop = true,
-                DoRender = true,
-                FixedSize = false,
-                Image = "magnet",
-                Location = magnet.GlobalPosition,
-                Size = size
+                descriptors.Add(new BillboardDescriptor()
+                {
+                    AllwaysOnTop = true,
+                    DoRender = true,
+                    FixedSize = false,
+                    Image = "magnet",
+                    Location = magnet.GlobalPosition,
+                    Size = size
+                });
             });
-        });
     }
     private void RenderRoom(List<IDrawCallDescriptor> descriptors)
     {

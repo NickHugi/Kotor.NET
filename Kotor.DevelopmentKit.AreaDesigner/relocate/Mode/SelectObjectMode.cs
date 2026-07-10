@@ -105,7 +105,7 @@ public class SelectObjectMode : BaseMode
         _mousePrevious = mouse;
 
         _projectedObject = IntersectingWorldObject(camera, mouse.X, mouse.Y)?.Result;
-        fix sif (_projectedObject is not null)
+        if (_projectedObject is not null)
             descriptors.Where(x => x.Tag == _projectedObject).OfType<MeshDescriptor>().ToList().ForEach(x => x.AmbientColor = new(1.5f, 1.5f, 1.5f));
 
         if (_isTranslating && SelectedWorldObject is not null)

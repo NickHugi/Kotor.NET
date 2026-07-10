@@ -42,6 +42,10 @@ public class Room
             return result;
         }
     }
+    public ICollection<Magnet> AllMagnets
+    {
+        get => AllObjects.SelectMany(x => x.Magnets).ToList();
+    }
 
     public Room(Area parent)
     {
