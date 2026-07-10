@@ -73,23 +73,7 @@ public class BaseMode : ReactiveObject
         return Task.CompletedTask;
     }
 
-    protected RaycastResult<UltimateWorldObject>? NearestWallMagnest(OrbitCamera camera, double x, double y)
-    {
-        var ray = camera.ProjectRay((int)x, (int)y, _engine.Width, _engine.Height);
-
-        return _area.Rooms
-            .SelectMany(x => x.Objects)
-            .Where(x => x.Template.Type == WorldObjectType.Tile)
-            .SelectMany(x => x.AttachedObjects)
-            .Where(x => x.Template.Type == WorldObjectType.Wall)
-            //.Where(x => x.LinkedTile is null) // TODO
-            .OrderBy(x => ray.ShortestDistanceTo(x.GlobalPosition))
-            .Select(x => new RaycastResult<UltimateWorldObject>(x, ray.ShortestDistanceTo(x.GlobalPosition)))
-            .Where(x => x.Distance < 3)
-            .FirstOrDefault();
-    }
-
-    protected RaycastResult<UltimateWorldObject>? IntersectingWorldObject(OrbitCamera camera, double x, double y)
+    protected IEnumerable<RaycastResult<UltimateWorldObject>> RaycastWorldObject(OrbitCamera camera, double x, double y)
     {
         var ray = camera.ProjectRay((int)x, (int)y, _engine.Width, _engine.Height);
 
@@ -98,40 +82,7 @@ public class BaseMode : ReactiveObject
             .OrderBy(x => ray.ShortestDistanceTo(x.GlobalPosition))
             .Select(x => new RaycastResult<UltimateWorldObject>(x, ray.ShortestDistanceTo(x.GlobalPosition)))
             .Where(x => x.Distance < 3)
-            .FirstOrDefault();
-    }
-    protected RaycastResult<UltimateWorldObject>? IntersectingWorldObject(OrbitCamera camera, double x, double y, WorldObjectType type)
-    {
-        var ray = camera.ProjectRay((int)x, (int)y, _engine.Width, _engine.Height);
-
-        return _area.Rooms
-            .SelectMany(x => x.AllObjects)
-            .Where(x => x.Template.Type == type)
-            .OrderBy(x => ray.ShortestDistanceTo(x.GlobalPosition))
-            .Select(x => new RaycastResult<UltimateWorldObject>(x, ray.ShortestDistanceTo(x.GlobalPosition)))
-            .Where(x => x.Distance < 3)
-            .FirstOrDefault();
-    }
-
-    protected MagnetResult<UltimateWorldObject>? NearestAdjacentWall(Room room, float distance)
-    {
-        var near = new List<MagnetResult<UltimateWorldObject>>();
-        var otherWalls = _area.Rooms.SelectMany(x => x.Objects).Where(x => x.Template.Type == WorldObjectType.Wall).ToList();
-
-        foreach (var wall in room.Objects.Where(x => x.Template.Type == WorldObjectType.Wall))
-        {
-            var match = otherWalls
-                .Where(x => x.Template.ClassID == wall.Template.ClassID)
-                .Where(x => Vector3.Distance(wall.GlobalPosition, x.GlobalPosition) < distance)
-                .OrderBy(x => Vector3.Distance(wall.GlobalPosition, x.GlobalPosition))
-                .Select(x => new MagnetResult<UltimateWorldObject>(wall, x, Vector3.Distance(wall.GlobalPosition, x.GlobalPosition)))
-                .ToList();
-
-            if (match.Count > 0)
-                near.AddRange(match);
-        }
-
-        return near.OrderBy(x => x.Distance).FirstOrDefault();
+            .ToList();
     }
 
     protected IEnumerable<MagnetResult<Magnet>> NearbyMagnets(ICollection<Magnet> candidates, float distance)
