@@ -72,10 +72,10 @@ public class AddTileMode : BaseMode
         _projectedRoom.Position = point;
         _projectedRoom.Orientation = Quaternion.CreateFromYawPitchRoll(0, 0, angle * (float)Math.PI / 180);
 
-        var result = NearbyMagnets(_projectedRoom.GetMagnets(), 1)
-            .Where(x => x.Source.Parent.Type == WorldObjectType.Wall
-                && x.Target.Parent.Type == WorldObjectType.Wall
-                && x.Source.Parent.Template.ClassID == x.Target.Parent.Template.ClassID)
+        var result = NearbyMagnets(_projectedRoom.AllMagnets, 1)
+            .Where(x => x.Source.Template.Template.Type == WorldObjectType.Wall
+                && x.Target.Template.Template.Type == WorldObjectType.Wall
+                && x.Source.Template.Template.ClassID == x.Target.Template.Template.ClassID)
             .FirstOrDefault();
 
         if (result is not null)
@@ -179,8 +179,8 @@ public class AddTileMode : BaseMode
         if (SelectedTileTemplate is null)
             return;
 
-        var magnet = NearestMagnet(_projectedRoom.GetMagnets(), 1);
-        if (magnet is not null && magnet.Target.Parent.Type == WorldObjectType.Wall)
+        var magnet = NearbyMagnets(_projectedRoom.AllMagnets, 1).FirstOrDefault();
+        if (magnet is not null && magnet.Target.Template.Template.Type == WorldObjectType.Wall)
         {
             var template = _projectedRoom.Objects.Where(x => x.Type == WorldObjectType.Tile).First().Template;
             var room = magnet.Target.Parent.Room;

@@ -19,9 +19,13 @@ public class UltimateWorldObject
 
     public string? GroupID { get; init; }
 
-    public bool Visible { get; set; } = true;
+    public bool Visible
+    {
+        get => (ParentMagnet is null) ? field : ParentMagnet.Visible;
+        set;
+    } = true;
 
-    public IReadOnlyCollection<Magnet> Magnets => Template.Magnets.Select(x => new Magnet(this, x)).ToArray();
+    public IReadOnlyCollection<Magnet> Magnets { get; private set; }
 
     public IReadOnlyCollection<UltimateWorldObject> AttachedObjects { get; set; } = [];
 
@@ -91,6 +95,8 @@ public class UltimateWorldObject
         KitID = template.KitID;
         TemplateID = template.TemplateID;
         Type = template.Type;
+
+        Magnets = Template.Magnets.Select(x => new Magnet(this, x)).ToArray();
 
         var attachedObjects = new List<UltimateWorldObject>();
         AttachedObjects = attachedObjects;

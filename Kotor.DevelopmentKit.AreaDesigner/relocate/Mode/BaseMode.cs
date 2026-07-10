@@ -134,30 +134,10 @@ public class BaseMode : ReactiveObject
         return near.OrderBy(x => x.Distance).FirstOrDefault();
     }
 
-    protected MagnetResult<Magnet>? NearestMagnet(List<Magnet> magnets, float distance)
+    protected IEnumerable<MagnetResult<Magnet>> NearbyMagnets(ICollection<Magnet> candidates, float distance)
     {
         var near = new List<MagnetResult<Magnet>>();
-        var otherWalls = _area.Rooms.SelectMany(x => x.GetMagnets());
-
-        foreach (var magnet in magnets)
-        {
-            var match = otherWalls
-                //.Where(x => x.Template.ClassID == wall.Template.ClassID)
-                .Where(x => Vector3.Distance(magnet.GlobalPosition, x.GlobalPosition) < distance)
-                .OrderBy(x => Vector3.Distance(magnet.GlobalPosition, x.GlobalPosition))
-                .Select(x => new MagnetResult<Magnet>(magnet, x, Vector3.Distance(magnet.GlobalPosition, x.GlobalPosition)))
-                .ToList();
-
-            if (match.Count > 0)
-                near.AddRange(match);
-        }
-
-        return near.OrderBy(x => x.Distance).FirstOrDefault();
-    }
-    protected IEnumerable<MagnetResult<Magnet>> NearbyMagnets(List<Magnet> candidates, float distance)
-    {
-        var near = new List<MagnetResult<Magnet>>();
-        var allMagnets = _area.Rooms.SelectMany(x => x.GetMagnets());
+        var allMagnets = _area.Rooms.SelectMany(x => x.AllMagnets);
 
         foreach (var magnet in candidates)
         {
