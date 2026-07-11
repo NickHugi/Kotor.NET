@@ -14,16 +14,19 @@ public enum HideNumberCondition
     EqualTo,
     LessThan,
     GreaterThan,
+    Ignore
 }
 
 public class Magnet
 {
+    public Area Area => Room.Area;
     public Room Room => Parent.Room;
+    public UltimateWorldObject Child => Room.AllObjects.Single(x => x.ParentMagnet == this);
     public UltimateWorldObject Parent { get; }
     public UltimateMagnetTemplate Template { get; }
     public MagnetType Type { get; set; }
 
-
+    #region Hide Settings
     public int HideNumber
     {
         get
@@ -46,10 +49,14 @@ public class Magnet
                 WorldObjectType.Wall => HideNumberCondition.LessThan,
                 WorldObjectType.InnerCorner => HideNumberCondition.EqualTo,
                 WorldObjectType.OuterCorner => HideNumberCondition.EqualTo,
-                _ => HideNumberCondition.EqualTo
+                WorldObjectType.DoorFrame => HideNumberCondition.Ignore,
+                _ => HideNumberCondition.Ignore
             };
         }
     }
+
+    public bool HideUseLocalMagnets => false;
+
     public bool HideOverlapping
     {
         get
@@ -57,7 +64,23 @@ public class Magnet
             return true;
         }
     }
+    public bool HidePickFirstOverlap
+    {
+        get => Template.Template.Type == WorldObjectType.DoorFrame;
+    }
+    public bool HideMustHaveHooks
+    {
+        get => Template.Template.Type != WorldObjectType.DoorFrame;
+    }
+
     public bool HideOnlySameTemplate
+    {
+        get
+        {
+            return false;
+        }
+    }
+    public bool HideOnlySameClassID
     {
         get
         {
@@ -68,9 +91,18 @@ public class Magnet
     {
         get
         {
-            return true;
+            return Template.Template.Type != WorldObjectType.DoorFrame;
         }
     }
+    public WorldObjectType?[]? HideSpecificTypes
+    {
+        get => Template?.Template?.Type switch
+        {
+            WorldObjectType.DoorFrame => [null],
+            _ => null
+        };
+    }
+
     public bool HidePickClosestToCenter
     {
         get
@@ -78,6 +110,7 @@ public class Magnet
             return Template.Template.Type == WorldObjectType.OuterCorner;
         }
     }
+    #endregion
 
     public bool Visible
     {
@@ -86,15 +119,22 @@ public class Magnet
             if (!HideOverlapping)
                 return true;
 
-            var magnets = Room.AllMagnets.Where(x => x != this && x.GlobalPosition.ApproximatelyEquals(GlobalPosition, 0.1f));
+            var magnets = (HideUseLocalMagnets ? Room.AllMagnets : Area.AllMagnets).Where(x => x != this);
+
+            magnets = magnets.Where(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, 0.1f));
+
+            if (HideMustHaveHooks)
+            {
+                magnets = magnets.Where(x => !string.IsNullOrWhiteSpace(x.Template.KitID) && !string.IsNullOrEmpty(x.Template.TemplateID));
+            }
 
             if (HideOnlySameTemplate)
             {
-                magnets = magnets.Where(x => x.Template.Template == Template.Template);
+                magnets = magnets.Where(x => x.Template?.Template == Template?.Template);
             }
             if (HideOnlySameType)
             {
-                magnets = magnets.Where(x => x.Template.Template.Type == Template.Template.Type);
+                magnets = magnets.Where(x => x.Template?.Template?.Type == Template?.Template?.Type);
             }
 
             if (HidePickClosestToCenter && magnets.Count() == 2)
@@ -103,7 +143,12 @@ public class Magnet
                 return this == middle;
             }
 
-            return HideNumberCondition switch
+            if (HideSpecificTypes is not null)
+            {
+                magnets = magnets.Where(x => (x.IsHook && HideSpecificTypes.Contains(x.Template.Template.Type)) || (!x.IsHook && HideSpecificTypes.Contains(null)));
+            }
+
+            var visible = HideNumberCondition switch
             {
                 HideNumberCondition.EqualTo => magnets.Count() == HideNumber,
                 HideNumberCondition.NotEqualTo => magnets.Count() != HideNumber,
@@ -111,9 +156,23 @@ public class Magnet
                 HideNumberCondition.GreaterThan => magnets.Count() > HideNumber,
                 _ => true
             };
+
+            if (HidePickFirstOverlap)
+            {
+                var lowestGuid = magnets.Min(x => x.Parent.ID);
+                visible = visible && (lowestGuid == Child.ID);
+            }
+
+            return visible;
         }
         set;
     } = true;
+
+    public bool IsHook => !string.IsNullOrWhiteSpace(Template.TemplateID) && !string.IsNullOrWhiteSpace(Template.KitID);
+    public bool IsTileMagnet => (IsHook && Template.Template.Type == WorldObjectType.Wall) || Parent.Type == WorldObjectType.DoorFrame;
+    public string WallClassID => (IsHook && Template.Template.Type == WorldObjectType.Wall)
+        ? Template.Template.ClassID
+        : Parent.TemplateID;
 
     public Vector3 LocalPosition => Template.LocalPosition;
     public Quaternion LocalOrientation => Template.LocalOrientation;

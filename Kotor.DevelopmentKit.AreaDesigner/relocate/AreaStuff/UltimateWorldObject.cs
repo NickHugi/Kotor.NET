@@ -26,13 +26,11 @@ public class UltimateWorldObject
     } = true;
 
     public IReadOnlyCollection<Magnet> Magnets { get; private set; }
-
     public IReadOnlyCollection<UltimateWorldObject> AttachedObjects { get; set; } = [];
 
     public string KitID { get; protected set; }
     public string TemplateID { get; protected set; }
     public UltimateWorldObjectTemplate Template => Kit.Manager.Get(KitID).Object(TemplateID);
-
 
     public Vector3 LocalPosition
     {
@@ -96,13 +94,29 @@ public class UltimateWorldObject
         TemplateID = template.TemplateID;
         Type = template.Type;
 
-        Magnets = Template.Magnets.Select(x => new Magnet(this, x)).ToArray();
+        var magnets = Template.Magnets.ToList();
+        if (!string.IsNullOrWhiteSpace(template.DoorframeTemplateID) && !string.IsNullOrWhiteSpace(template.DoorframeClassID))
+        {
+            magnets.Add(new UltimateMagnetTemplate
+            {
+                LocalPosition = Vector3.Zero,
+                LocalOrientation = Quaternion.CreateFromYawPitchRoll(0, 0, MathF.PI),
+                KitID = template.DoorframeKitID,
+                TemplateID = template.DoorframeTemplateID,
+                MagnetType = MagnetType.Hook,
+            });
+        }
+        Magnets = magnets.Select(x => new Magnet(this, x)).ToArray();
+        
 
         var attachedObjects = new List<UltimateWorldObject>();
         AttachedObjects = attachedObjects;
         attachedObjects.AddRange(
         [
-            .. Magnets.Where(x => x.Template is UltimateMagnetTemplate).Select(x => new UltimateWorldObject(Room, x, x.Template.Template, Guid.NewGuid(), x.Template.Template.Type)),
+            .. Magnets
+                .Where(x => !string.IsNullOrWhiteSpace(x.Template.KitID) && !string.IsNullOrWhiteSpace(x.Template.TemplateID))
+                .Where(x => x.Template is UltimateMagnetTemplate)
+                .Select(x => new UltimateWorldObject(Room, x, x.Template.Template, Guid.NewGuid(), x.Template.Template.Type)),
         ]);
     }
 }

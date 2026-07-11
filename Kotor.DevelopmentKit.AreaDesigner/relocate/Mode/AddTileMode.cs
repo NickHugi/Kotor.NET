@@ -73,9 +73,7 @@ public class AddTileMode : BaseMode
         _projectedRoom.Orientation = Quaternion.CreateFromYawPitchRoll(0, 0, angle * (float)Math.PI / 180);
 
         var result = NearbyMagnets(_projectedRoom.AllMagnets, 1)
-            .Where(x => x.Source.Template.Template.Type == WorldObjectType.Wall
-                && x.Target.Template.Template.Type == WorldObjectType.Wall
-                && x.Source.Template.Template.ClassID == x.Target.Template.Template.ClassID)
+            .Where(x => x.Source.IsTileMagnet && x.Target.IsTileMagnet)
             .FirstOrDefault();
 
         if (result is not null)
@@ -87,14 +85,12 @@ public class AddTileMode : BaseMode
             _projectedRoom.Position = new();
             _projectedRoom.Position = result.Target.GlobalPosition - result.Source.GlobalPosition;
 
-            var sourceWall = result.Source.Parent;
+            //var sourceWall = result.Source.Parent;
+            var sourceWall = _projectedRoom.AllObjects.FirstOrDefault(x => x.Template == result.Source.Template.Template && x.GlobalPosition == result.Source.GlobalPosition);
 
             if (result.Target.Parent.Type == WorldObjectType.DoorFrame)
             {
-                // TODO
-                sourceWall.SwitchTemplate(result.Target.Parent.Template);
-                //sourceWall.DoorFrame.Enabled = false;
-
+                sourceWall.SwitchTemplate(result.Target.Parent.ParentMagnet.Parent.Template);
                 RenderRoom(descriptors);
             }
             else
@@ -112,7 +108,8 @@ public class AddTileMode : BaseMode
         var size = (0.4f) + MathF.Sin((_engine.RunningTime % 0.75f) / 0.75f * MathF.PI) * 0.2f;
         _area.Rooms.SelectMany(x => x.AllMagnets)
             .Concat(_projectedRoom.AllMagnets)
-            .Where(x => x.Template.Template.Type == WorldObjectType.Wall).ToList()
+            .Where(x => x.IsTileMagnet)
+            .ToList()
             .ForEach(magnet =>
             {
                 descriptors.Add(new BillboardDescriptor()
@@ -179,8 +176,11 @@ public class AddTileMode : BaseMode
         if (SelectedTileTemplate is null)
             return;
 
-        var magnet = NearbyMagnets(_projectedRoom.AllMagnets, 1).FirstOrDefault();
-        if (magnet is not null && magnet.Target.Template.Template.Type == WorldObjectType.Wall)
+        var magnet = NearbyMagnets(_projectedRoom.AllMagnets, 1)
+            .Where(x => x.Source.IsTileMagnet && x.Target.IsTileMagnet)
+            .FirstOrDefault();
+
+        if (magnet is not null && magnet.Target.IsHook && magnet.Target.Template?.Template?.Type == WorldObjectType.Wall)
         {
             var template = _projectedRoom.Objects.Where(x => x.Type == WorldObjectType.Tile).First().Template;
             var room = magnet.Target.Parent.Room;

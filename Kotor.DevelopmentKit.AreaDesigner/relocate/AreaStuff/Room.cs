@@ -12,7 +12,7 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
 public class Room
 {
-    public Area Parent { get; }
+    public Area Area { get; }
 
     public Vector3 Position { get; set; } = new();
     public Quaternion Orientation
@@ -49,7 +49,7 @@ public class Room
 
     public Room(Area parent)
     {
-        Parent = parent;
+        Area = parent;
     }
     public Room(Area parent, UltimateWorldObjectTemplate template) : this(parent)
     {
@@ -80,7 +80,7 @@ public class Room
 
     public void Delete()
     {
-        Parent.DeleteRoom(this);
+        Area.DeleteRoom(this);
     }
 
     public List<Magnet> GetMagnets()
