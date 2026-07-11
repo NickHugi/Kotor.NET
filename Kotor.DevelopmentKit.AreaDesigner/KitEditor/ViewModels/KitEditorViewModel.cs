@@ -199,7 +199,7 @@ public class KitEditorViewModel : ReactiveObject
             Model = filename,
             Magnets =
             [
-                ..magnetsNodes.Select(x => new MagnetItem()
+                ..magnetsNodes.Where(x => !mdl.Name.Contains("floor_")).Select(x => new MagnetItem()
                 {
                     KitID = KitIDFromNode(x),
                     TemplateID = TemplateIDFromNode(x),
@@ -226,12 +226,14 @@ public class KitEditorViewModel : ReactiveObject
         else if (filename.Contains("doorframe"))
             return WorldObjectType.DoorFrame;
         else
-            throw new ArgumentException($"Unknown world object type for filename: {filename}");
+            return WorldObjectType.Prop;
     }
     private WorldObjectItem TileFromFloor(string filename, WorldObjectItem floor, MDL mdl)
     {
         var wallNodes = mdl.Root.GetAllDescendants().Where(x => x.Name.Contains("magnet.wall."));
         var cornerNodes = mdl.Root.GetAllDescendants().Where(x => x.Name.Contains("magnet.corner."));
+        var outerCornerNodes = mdl.Root.GetAllDescendants().Where(x => x.Name.Contains("magnet.ocorner."));
+        var innerCornerNodes = mdl.Root.GetAllDescendants().Where(x => x.Name.Contains("magnet.icorner."));
         var floorNodes = mdl.Root.GetAllDescendants().Where(x => x.Name.Contains("magnet.floor."));
         var ceilingNodes = mdl.Root.GetAllDescendants().Where(x => x.Name.Contains("magnet.ceiling."));
 
@@ -265,10 +267,17 @@ public class KitEditorViewModel : ReactiveObject
                     Position = PositionFromNode(x),
                     Orientation = OrientationFromNode(x),
                 }),
-                ..cornerNodes.Select(x => new MagnetItem()
+                ..cornerNodes.Concat(innerCornerNodes).Select(x => new MagnetItem()
                 {
                     KitID = KitID,
-                    TemplateID = $"Xcorner_{x.Name.Split('.').Last()}",
+                    TemplateID = $"icorner_{x.Name.Split('.').Last()}",
+                    Position = PositionFromNode(x),
+                    Orientation = OrientationFromNode(x),
+                }),
+                ..cornerNodes.Concat(outerCornerNodes).Select(x => new MagnetItem()
+                {
+                    KitID = KitID,
+                    TemplateID = $"ocorner_{x.Name.Split('.').Last()}",
                     Position = PositionFromNode(x),
                     Orientation = OrientationFromNode(x),
                 }),
