@@ -25,10 +25,10 @@ public class AddTileMode : BaseMode
     public override string Name => "Add Room";
 
     private Room _projectedRoom = default!;
-    private UltimateWorldObject _projectedTile => _projectedRoom.Objects.Single();
+    private WorldObject _projectedTile => _projectedRoom.Objects.Single();
     private float angle = 0;
 
-    public List<UltimateWorldObjectTemplate> TileTemplates
+    public List<WorldObjectTemplate> TileTemplates
     {
         get
         {
@@ -38,7 +38,7 @@ public class AddTileMode : BaseMode
             if (SelectedWorldObject?.Type == WorldObjectType.Wall)
             {
                 var activeGroup = SelectedWorldObject.Template.ClassID;
-                return _objects.Where(x => x.Type == WorldObjectType.Tile).Where(x => x.Magnets.OfType<UltimateMagnetTemplate>().Any(y => activeGroup == y.Template.ClassID)).ToList();
+                return _objects.Where(x => x.Type == WorldObjectType.Tile).Where(x => x.Magnets.OfType<MagnetTemplate>().Any(y => activeGroup == y.Template.ClassID)).ToList();
             }
             else
             {
@@ -46,13 +46,13 @@ public class AddTileMode : BaseMode
             }
         }
     }
-    public UltimateWorldObjectTemplate? SelectedTileTemplate
+    public WorldObjectTemplate? SelectedTileTemplate
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public AddTileMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, UltimateWorldObject activeWorldObject, DesignerSettings settings) : base(engine, area, kits, activeWorldObject, settings)
+    public AddTileMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, WorldObject activeWorldObject, DesignerSettings settings) : base(engine, area, kits, activeWorldObject, settings)
     {
         Kits.ToObservableChangeSet().AutoRefresh(x => x.Active).Subscribe(_ => this.RaisePropertyChanged(nameof(TileTemplates)));
     }
@@ -184,7 +184,7 @@ public class AddTileMode : BaseMode
         {
             var template = _projectedRoom.Objects.Where(x => x.Type == WorldObjectType.Tile).First().Template;
             var room = magnet.Target.Parent.Room;
-            var newTile = new UltimateWorldObject(room, null, template, Guid.NewGuid(), WorldObjectType.Tile);
+            var newTile = new WorldObject(room, null, template, Guid.NewGuid(), WorldObjectType.Tile);
             newTile.SwitchTemplate(template);
             newTile.GlobalPosition = _projectedRoom.Position;
             newTile.GlobalOrientation = _projectedRoom.Orientation;

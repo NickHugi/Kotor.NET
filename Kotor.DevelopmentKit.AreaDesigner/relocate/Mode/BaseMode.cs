@@ -26,7 +26,7 @@ public class BaseMode : ReactiveObject
     public virtual string Name { get; } = "";
     public ObservableCollection<KitItem> Kits { get; }
 
-    public UltimateWorldObject SelectedWorldObject
+    public WorldObject SelectedWorldObject
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
@@ -36,10 +36,10 @@ public class BaseMode : ReactiveObject
     protected readonly Area _area;
     protected readonly DesignerSettings _settings;
 
-    protected IReadOnlyCollection<UltimateWorldObjectTemplate> _objects => Kits.Where(x => x.Active).SelectMany(x => x.Kit.Objects).ToList();
+    protected IReadOnlyCollection<WorldObjectTemplate> _objects => Kits.Where(x => x.Active).SelectMany(x => x.Kit.Objects).ToList();
     protected AreaEntity _areaEntity => _engine.Scene.Entities.OfType<AreaEntity>().Single(x => x.Area == _area);
 
-    public BaseMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, UltimateWorldObject activeWorldObject, DesignerSettings settings)
+    public BaseMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, WorldObject activeWorldObject, DesignerSettings settings)
     {
         Kits = kits;
         SelectedWorldObject = activeWorldObject;
@@ -73,14 +73,14 @@ public class BaseMode : ReactiveObject
         return Task.CompletedTask;
     }
 
-    protected IEnumerable<RaycastResult<UltimateWorldObject>> RaycastWorldObject(OrbitCamera camera, double x, double y)
+    protected IEnumerable<RaycastResult<WorldObject>> RaycastWorldObject(OrbitCamera camera, double x, double y)
     {
         var ray = camera.ProjectRay((int)x, (int)y, _engine.Width, _engine.Height);
 
         return _area.Rooms
             .SelectMany(x => x.AllObjects)
             .OrderBy(x => ray.ShortestDistanceTo(x.GlobalPosition))
-            .Select(x => new RaycastResult<UltimateWorldObject>(x, ray.ShortestDistanceTo(x.GlobalPosition)))
+            .Select(x => new RaycastResult<WorldObject>(x, ray.ShortestDistanceTo(x.GlobalPosition)))
             .Where(x => x.Distance < 3)
             .ToList();
     }

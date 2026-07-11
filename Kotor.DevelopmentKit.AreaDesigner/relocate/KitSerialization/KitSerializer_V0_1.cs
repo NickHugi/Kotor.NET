@@ -30,7 +30,7 @@ public class KitSerializer_V0_1
 
         foreach (var worldObject in data.worldObjects)
         {
-            kit.Objects.Add(new UltimateWorldObjectTemplate
+            kit.Objects.Add(new WorldObjectTemplate
             {
                 Type = (WorldObjectType)worldObject.type.Value,
                 KitID = kitID,
@@ -38,7 +38,7 @@ public class KitSerializer_V0_1
                 ClassID = worldObject.classID.Value,
                 Name = worldObject.name.Value,
                 Model = worldObject.model.Value,
-                Magnets = ((JArray)worldObject.magnets).Select(x => (dynamic)x).Select(magnet => new UltimateMagnetTemplate
+                Magnets = ((JArray)worldObject.magnets).Select(x => (dynamic)x).Select(magnet => new MagnetTemplate
                 {
                     KitID = magnet.kitID.Value,
                     TemplateID = magnet.templateID.Value,

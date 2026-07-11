@@ -22,14 +22,14 @@ public class Room
     }
     public Matrix4x4 Transform => Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position);
 
-    public ICollection<UltimateWorldObject> Objects = [];
+    public ICollection<WorldObject> Objects = [];
 
-    public ICollection<UltimateWorldObject> AllObjects
+    public ICollection<WorldObject> AllObjects
     {
         get
         {
             var search = Objects.ToList();
-            var result = new List<UltimateWorldObject>();
+            var result = new List<WorldObject>();
 
             while (search.Any())
             {
@@ -51,23 +51,23 @@ public class Room
     {
         Area = parent;
     }
-    public Room(Area parent, UltimateWorldObjectTemplate template) : this(parent)
+    public Room(Area parent, WorldObjectTemplate template) : this(parent)
     {
-        var tile = new UltimateWorldObject(this, null, template, Guid.NewGuid(), WorldObjectType.Tile);
+        var tile = new WorldObject(this, null, template, Guid.NewGuid(), WorldObjectType.Tile);
         tile.SwitchTemplate(template);
         AddTile(tile);
     }
 
-    public void AddObject(UltimateWorldObject @object)
+    public void AddObject(WorldObject @object)
     {
         Objects.Add(@object);
     }
-    public void AddTile(UltimateWorldObject tile)
+    public void AddTile(WorldObject tile)
     {
         Objects.Add(tile);
         FixWalls();
     }
-    public void DeleteTile(UltimateWorldObject tile)
+    public void DeleteTile(WorldObject tile)
     {
         Objects.Remove(tile);
         FixWalls();

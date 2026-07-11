@@ -23,23 +23,23 @@ public class AddObjectMode : BaseMode
 {
     public override string Name => "Add Object";
 
-    public List<UltimateWorldObjectTemplate> ObjectTemplates
+    public List<WorldObjectTemplate> ObjectTemplates
     {
         get
         {
-            return _objects.Where(x => x.GetType() == typeof(UltimateWorldObjectTemplate)).ToList();
+            return _objects.Where(x => x.GetType() == typeof(WorldObjectTemplate)).ToList();
         }
     }
-    public UltimateWorldObjectTemplate? SelectedObjectTemplate
+    public WorldObjectTemplate? SelectedObjectTemplate
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    private UltimateWorldObject _addObject = default!;
+    private WorldObject _addObject = default!;
     private float angle = 0;
 
-    public AddObjectMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, UltimateWorldObject activeWorldObject, DesignerSettings settings) : base(engine, area, kits, activeWorldObject, settings)
+    public AddObjectMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, WorldObject activeWorldObject, DesignerSettings settings) : base(engine, area, kits, activeWorldObject, settings)
     {
         Kits.ToObservableChangeSet().AutoRefresh(x => x.Active).Subscribe(_ => this.RaisePropertyChanged(nameof(ObjectTemplates)));
     }

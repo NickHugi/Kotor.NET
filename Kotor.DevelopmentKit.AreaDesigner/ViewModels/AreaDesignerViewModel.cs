@@ -38,12 +38,12 @@ namespace Kotor.DevelopmentKit.AreaDesigner.ViewModels;
 public class AreaDesignerViewModel : ReactiveObject
 {
     public Interaction<Unit, Point> GetMousePoint = new();
-    public Interaction<Unit, UltimateWorldObjectTemplate?> SelectTileTemplate = new();
+    public Interaction<Unit, WorldObjectTemplate?> SelectTileTemplate = new();
     public Interaction<Unit, string?> SelectSaveFilepathForArea = new();
     public Interaction<Unit, string?> SelectLoadFilepathForArea = new();
     public Interaction<Unit, Unit> PromptEditSettings = new();
     public Interaction<Unit, Unit> ClearSelection = new();
-    public Interaction<UltimateWorldObject, Unit> AddToSelection = new();
+    public Interaction<WorldObject, Unit> AddToSelection = new();
 
     public bool IsMode_AddTile => Mode is AddTileMode;
     public bool IsMode_SelectObject => Mode is SelectObjectMode;
@@ -56,7 +56,7 @@ public class AreaDesignerViewModel : ReactiveObject
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
-    public UltimateWorldObject? ActiveWorldObject
+    public WorldObject? ActiveWorldObject
     {
         get;
         set

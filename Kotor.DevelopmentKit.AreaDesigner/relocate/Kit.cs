@@ -15,9 +15,9 @@ public class Kit
     public string Name { get; }
     public string FilePath { get; }
     public int Version { get; }
-    public ICollection<UltimateWorldObjectTemplate> Objects { get; init; } = [];
+    public ICollection<WorldObjectTemplate> Objects { get; init; } = [];
 
-    public UltimateWorldObjectTemplate Object(string templateID) => Objects.Single(x => x.TemplateID == templateID);
+    public WorldObjectTemplate Object(string templateID) => Objects.Single(x => x.TemplateID == templateID);
 
     public Kit(string filepath, string kitID, int version, string name)
     {

@@ -46,7 +46,7 @@ public class MagnetItem : ReactiveObject
         this.WhenAnyValue(x => x.TemplateID).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
         this.WhenAnyValue(x => x.Position).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
     }
-    public MagnetItem(UltimateMagnetTemplate template) : this()
+    public MagnetItem(MagnetTemplate template) : this()
     {
         KitID = template.KitID;
         TemplateID = template.TemplateID;
@@ -54,9 +54,9 @@ public class MagnetItem : ReactiveObject
         Orientation = new ReactiveQuaternion(template.LocalOrientation);
     }
 
-    public UltimateMagnetTemplate ToModel()
+    public MagnetTemplate ToModel()
     {
-        return new UltimateMagnetTemplate
+        return new MagnetTemplate
         {
             KitID = KitID,
             TemplateID = TemplateID,

@@ -21,9 +21,9 @@ public class Magnet
 {
     public Area Area => Room.Area;
     public Room Room => Parent.Room;
-    public UltimateWorldObject Child => Room.AllObjects.Single(x => x.ParentMagnet == this);
-    public UltimateWorldObject Parent { get; }
-    public UltimateMagnetTemplate Template { get; }
+    public WorldObject Child => Room.AllObjects.Single(x => x.ParentMagnet == this);
+    public WorldObject Parent { get; }
+    public MagnetTemplate Template { get; }
     public MagnetType Type { get; set; }
 
     #region Hide Settings
@@ -188,7 +188,7 @@ public class Magnet
     }
     public Matrix4x4 GlobalTransform => LocalTransform * Parent.GlobalTransform;
 
-    public Magnet(UltimateWorldObject parent, UltimateMagnetTemplate template)
+    public Magnet(WorldObject parent, MagnetTemplate template)
     {
         Parent = parent;
         Template = template;

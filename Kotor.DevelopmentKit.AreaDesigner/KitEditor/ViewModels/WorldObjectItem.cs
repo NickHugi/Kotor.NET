@@ -60,7 +60,7 @@ public class WorldObjectItem : ReactiveObject
         Model = "";
         Magnets = [];
     }
-    public WorldObjectItem(UltimateWorldObjectTemplate template) : this()
+    public WorldObjectItem(WorldObjectTemplate template) : this()
     {
         Type = template.Type;
         KitID = template.KitID;
@@ -74,9 +74,9 @@ public class WorldObjectItem : ReactiveObject
         ];
     }
 
-    public UltimateWorldObjectTemplate ToModel()
+    public WorldObjectTemplate ToModel()
     {
-        return new UltimateWorldObjectTemplate
+        return new WorldObjectTemplate
         {
             Type = Type,
             KitID = KitID,

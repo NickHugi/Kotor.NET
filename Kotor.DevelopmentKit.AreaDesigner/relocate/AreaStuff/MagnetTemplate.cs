@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
-public class UltimateMagnetTemplate
+public class MagnetTemplate
 {
     public required Vector3 LocalPosition { get; init; }
     public required Quaternion LocalOrientation { get; init; }
@@ -15,5 +15,5 @@ public class UltimateMagnetTemplate
 
     public string KitID { get; init; } = "";
     public string TemplateID { get; init; } = "";
-    public UltimateWorldObjectTemplate Template => Kit.Manager.Get(KitID).Object(TemplateID);
+    public WorldObjectTemplate Template => Kit.Manager.Get(KitID).Object(TemplateID);
 }

@@ -32,7 +32,7 @@ public class AreaSerializer_V0_1
             foreach (var tileData in roomData.tiles.ToObject<dynamic[]>())
             {
                 var template = Kit.Manager.Get(tileData.kitID.Value).Tile(tileData.templateID.Value);
-                var tile = new UltimateWorldObject(room, null, template, Guid.NewGuid(), WorldObjectType.Tile);
+                var tile = new WorldObject(room, null, template, Guid.NewGuid(), WorldObjectType.Tile);
                 tile.SwitchTemplate(template);
                 tile.LocalPosition = new Vector3(tileData.position.ToObject<float[]>());
                 tile.LocalOrientation = ((float[])tileData.orientation.ToObject<float[]>()).ToQuaternion();

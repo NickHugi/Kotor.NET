@@ -45,7 +45,7 @@ public class AreaEntity : BaseEntity
 
         descriptors.RemoveAll(x => x is MeshDescriptor mesh && mesh.TransparencyHint != 0);
     }
-    public void RenderObject(IAssetManager assets, UltimateWorldObject worldObject, ref List<IDrawCallDescriptor> descriptors)
+    public void RenderObject(IAssetManager assets, WorldObject worldObject, ref List<IDrawCallDescriptor> descriptors)
     {
         if (!worldObject.Visible)
             return;
@@ -80,7 +80,7 @@ public class AreaEntity : BaseEntity
         //    RenderDoorFrame(assets, doorframe, ref descriptors);
         //}
     }
-    private void RenderWall(IAssetManager assets, UltimateWorldObject wall, ref List<IDrawCallDescriptor> descriptors)
+    private void RenderWall(IAssetManager assets, WorldObject wall, ref List<IDrawCallDescriptor> descriptors)
     {
         // TODO
         //if (!wall.Visible || ((wall.DoorFrame is null && !DoRenderWalls) || (wall.DoorFrame is not null && !DoRenderDoors)))
@@ -88,7 +88,7 @@ public class AreaEntity : BaseEntity
 
         //descriptors.AddRange(DescriptorsForModel(assets, wall.Template.Model, wall.GlobalTransform, wall));
     }
-    private void RenderDoorFrame(IAssetManager assets, UltimateWorldObject doorframe, ref List<IDrawCallDescriptor> descriptors)
+    private void RenderDoorFrame(IAssetManager assets, WorldObject doorframe, ref List<IDrawCallDescriptor> descriptors)
     {
         if (!doorframe.Visible || !DoRenderDoors)
             return;

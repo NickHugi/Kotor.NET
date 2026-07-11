@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
-public class UltimateWorldObject
+public class WorldObject
 {
     // TODO Doorframes (hooked)
 
@@ -26,11 +26,11 @@ public class UltimateWorldObject
     } = true;
 
     public IReadOnlyCollection<Magnet> Magnets { get; private set; }
-    public IReadOnlyCollection<UltimateWorldObject> AttachedObjects { get; set; } = [];
+    public IReadOnlyCollection<WorldObject> AttachedObjects { get; set; } = [];
 
     public string KitID { get; protected set; }
     public string TemplateID { get; protected set; }
-    public UltimateWorldObjectTemplate Template => Kit.Manager.Get(KitID).Object(TemplateID);
+    public WorldObjectTemplate Template => Kit.Manager.Get(KitID).Object(TemplateID);
 
     public Vector3 LocalPosition
     {
@@ -79,7 +79,7 @@ public class UltimateWorldObject
         ? LocalTransform * Room.Transform
         : ParentMagnet.GlobalTransform;
 
-    public UltimateWorldObject(Room room, Magnet? parent, UltimateWorldObjectTemplate template, Guid id, WorldObjectType type)
+    public WorldObject(Room room, Magnet? parent, WorldObjectTemplate template, Guid id, WorldObjectType type)
     {
         Room = room;
         ParentMagnet = parent;
@@ -88,7 +88,7 @@ public class UltimateWorldObject
         SwitchTemplate(template);
     }
 
-    public void SwitchTemplate(UltimateWorldObjectTemplate template)
+    public void SwitchTemplate(WorldObjectTemplate template)
     {
         KitID = template.KitID;
         TemplateID = template.TemplateID;
@@ -97,7 +97,7 @@ public class UltimateWorldObject
         var magnets = Template.Magnets.ToList();
         if (!string.IsNullOrWhiteSpace(template.DoorframeTemplateID) && !string.IsNullOrWhiteSpace(template.DoorframeClassID))
         {
-            magnets.Add(new UltimateMagnetTemplate
+            magnets.Add(new MagnetTemplate
             {
                 LocalPosition = Vector3.Zero,
                 LocalOrientation = Quaternion.CreateFromYawPitchRoll(0, 0, MathF.PI),
@@ -108,14 +108,14 @@ public class UltimateWorldObject
         Magnets = magnets.Select(x => new Magnet(this, x)).ToArray();
         
 
-        var attachedObjects = new List<UltimateWorldObject>();
+        var attachedObjects = new List<WorldObject>();
         AttachedObjects = attachedObjects;
         attachedObjects.AddRange(
         [
             .. Magnets
                 .Where(x => !string.IsNullOrWhiteSpace(x.Template.KitID) && !string.IsNullOrWhiteSpace(x.Template.TemplateID))
-                .Where(x => x.Template is UltimateMagnetTemplate)
-                .Select(x => new UltimateWorldObject(Room, x, x.Template.Template, Guid.NewGuid(), x.Template.Template.Type)),
+                .Where(x => x.Template is MagnetTemplate)
+                .Select(x => new WorldObject(Room, x, x.Template.Template, Guid.NewGuid(), x.Template.Template.Type)),
         ]);
     }
 }

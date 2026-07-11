@@ -37,19 +37,16 @@ public class KitEditorViewModel : ReactiveObject
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
-
     public string KitID
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
-
     public int Version
     {
         get => field;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
-
     public string FilePath
     {
         get => field;
@@ -201,7 +198,7 @@ public class KitEditorViewModel : ReactiveObject
             [
                 ..magnetsNodes.Where(x => !mdl.Name.Contains("floor_")).Select(x => new MagnetItem()
                 {
-                    KitID = KitIDFromNode(x),
+                    KitID = HookKitIDFromNode(x),
                     TemplateID = TemplateIDFromNode(x),
                     Position = PositionFromNode(x),
                     Orientation = OrientationFromNode(x),
@@ -302,12 +299,16 @@ public class KitEditorViewModel : ReactiveObject
         var node = mdl.Root.Children.SingleOrDefault(x => x.Name.StartsWith("_ClassID="));
         return node?.Name.Replace("_ClassID=", "") ?? "";
     }
-    private string KitIDFromNode(MDLNode node)
+    private string HookKitIDFromNode(MDLNode node)
     {
-        return node.Children.SingleOrDefault(x => x.Name.StartsWith("_KitID="))?.Name.Replace("_KitID=", "") ?? "";
+        const string searchTerm = "_KitID=";
+        var target = node.Children.SingleOrDefault(x => x.Name.Contains(searchTerm));
+        return (target is null) ? "" : target.Name.Substring(target.Name.IndexOf(searchTerm)+searchTerm.Length);
     }
     private string TemplateIDFromNode(MDLNode node)
     {
-        return node.Children.SingleOrDefault(x => x.Name.StartsWith("_TemplateID="))?.Name.Replace("_TemplateID=", "") ?? "";
+        const string searchTerm = "_TemplateID=";
+        var target = node.Children.SingleOrDefault(x => x.Name.Contains(searchTerm));
+        return (target is null) ? "" : target.Name.Substring(target.Name.IndexOf(searchTerm) + searchTerm.Length);
     }
 }
