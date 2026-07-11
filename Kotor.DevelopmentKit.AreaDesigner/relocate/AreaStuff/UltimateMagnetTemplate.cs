@@ -16,6 +16,4 @@ public class UltimateMagnetTemplate
     public string KitID { get; init; } = "";
     public string TemplateID { get; init; } = "";
     public UltimateWorldObjectTemplate Template => Kit.Manager.Get(KitID).Object(TemplateID);
-
-    public required MagnetType MagnetType { get; init; }
 }

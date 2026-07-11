@@ -103,7 +103,6 @@ public class UltimateWorldObject
                 LocalOrientation = Quaternion.CreateFromYawPitchRoll(0, 0, MathF.PI),
                 KitID = template.DoorframeKitID,
                 TemplateID = template.DoorframeTemplateID,
-                MagnetType = MagnetType.Hook,
             });
         }
         Magnets = magnets.Select(x => new Magnet(this, x)).ToArray();

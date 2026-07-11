@@ -70,7 +70,6 @@ public class KitSerializer_V0_1
                 {
                     LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
                     LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion(),
-                    MagnetType = MagnetType.Hook
 
                 }).ToArray()
             });
@@ -111,7 +110,6 @@ public class KitSerializer_V0_1
                         TemplateID = hook.templateID,
                         LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
                         LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion(),
-                        MagnetType = MagnetType.Hook
                     }),
                     ..((JArray)tile.ceilingHooks).Select(x => (dynamic)x).Select(hook => new UltimateMagnetTemplate
                     {
@@ -119,7 +117,6 @@ public class KitSerializer_V0_1
                         TemplateID = hook.templateID,
                         LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
                         LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion(),
-                        MagnetType = MagnetType.Hook
                     }),
                     ..((JArray)tile.wallHooks).Select(x => (dynamic)x).Select(hook => new UltimateMagnetTemplate
                     {
@@ -127,7 +124,6 @@ public class KitSerializer_V0_1
                         TemplateID = hook.templateID,
                         LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
                         LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion(),
-                        MagnetType = MagnetType.Hook
                     }),
                     ..((JArray)tile.cornerHooks).Select(x => (dynamic)x).Select(hook => new UltimateMagnetTemplate
                     {
@@ -135,7 +131,6 @@ public class KitSerializer_V0_1
                         TemplateID = hook.innerTemplateID,
                         LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
                         LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion(),
-                        MagnetType = MagnetType.Hook
                     }),
                     ..((JArray)tile.cornerHooks).Select(x => (dynamic)x).Select(hook => new UltimateMagnetTemplate
                     {
@@ -143,7 +138,6 @@ public class KitSerializer_V0_1
                         TemplateID = hook.outerTemplateID,
                         LocalPosition = new Vector3(hook.position.ToObject<float[]>()),
                         LocalOrientation = ((float[])hook.orientation.ToObject<float[]>()).ToQuaternion(),
-                        MagnetType = MagnetType.Hook
                     }),
                 ],
             });

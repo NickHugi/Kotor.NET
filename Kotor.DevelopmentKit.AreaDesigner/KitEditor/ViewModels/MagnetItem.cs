@@ -7,12 +7,11 @@ using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Hooks;
+namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
-public class FloorHookItem : BaseMagnetItem
+public class MagnetItem : ReactiveObject
 {
-    public override string Name => $"{TemplateID} ({Position.X:F2}, {Position.Y:F2}, {Position.Z:F2})";
-    public override MagnetType MagnetType => MagnetType.Hook;
+    public string Name => $"{KitID}.{TemplateID} ({Position.X:F2}, {Position.Y:F2}, {Position.Z:F2})";
 
     public string KitID
     {
@@ -25,23 +24,37 @@ public class FloorHookItem : BaseMagnetItem
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public FloorHookItem() : base()
+    public ReactiveVector3 Position
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+    public ReactiveQuaternion Orientation
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
+    public MagnetItem()
     {
         KitID = "";
         TemplateID = "";
 
+        Position = new();
+        Orientation = new();
+
         this.WhenAnyValue(x => x.TemplateID).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
         this.WhenAnyValue(x => x.Position).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
     }
-    public FloorHookItem(UltimateMagnetTemplate template) : this()
+    public MagnetItem(UltimateMagnetTemplate template) : this()
     {
         KitID = template.KitID;
         TemplateID = template.TemplateID;
-        Position = new(template.LocalPosition);
-        Orientation = new(template.LocalOrientation);
+        Position = new ReactiveVector3(template.LocalPosition);
+        Orientation = new ReactiveQuaternion(template.LocalOrientation);
     }
 
-    public override UltimateMagnetTemplate ToModel()
+    public UltimateMagnetTemplate ToModel()
     {
         return new UltimateMagnetTemplate
         {
@@ -49,7 +62,6 @@ public class FloorHookItem : BaseMagnetItem
             TemplateID = TemplateID,
             LocalPosition = Position.ToModel(),
             LocalOrientation = Orientation.ToModel(),
-            MagnetType = MagnetType.Hook
         };
     }
 }

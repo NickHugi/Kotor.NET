@@ -11,7 +11,6 @@
         x:DataType="vm:KitEditorViewModel"
         Title="KitEditorWindow">
     <Window.Styles>
-        <!--Tab Control Styles-->
         <Style Selector="TabItem">
             <Setter Property="Padding" Value="6,2" />
             <Setter Property="Margin" Value="0" />
@@ -23,73 +22,39 @@
     </Window.Styles>
 
     <Window.Resources>
-        <DataTemplate x:Key="ObjectItemList" x:DataType="templates:WorldObjectItem">
+        <DataTemplate x:Key="WorldObjectListResource" x:DataType="vm:WorldObjectItem">
             <StackPanel>
                 <TextBlock Text="{Binding Name}" FontWeight="Bold" />
                 <TextBlock Text="{Binding TemplateID}" FontSize="10" />
             </StackPanel>
         </DataTemplate>
         
-        <DataTemplate x:Key="WallItemPanel" x:DataType="templates:WallItem">
-            <StackPanel>
-                <core:LabeledTextBox Label="Model" Text="{Binding Model}" />
-                <core:LabeledTextBox Label="Doorframe Kit ID" Text="{Binding DoorframeKitID}" />
-                <core:LabeledTextBox Label="Doorframe Template ID" Text="{Binding DoorframeTemplateID}" />
-                <core:LabeledTextBox Label="Doorframe Class ID" Text="{Binding DoorframeClassID}" />
-            </StackPanel>
-        </DataTemplate>
-
-        <DataTemplate x:Key="DoorframeItemPanel" x:DataType="templates:DoorFrameItem">
-            <StackPanel>
+        <DataTemplate x:Key="WorldObjectPanelResource" x:DataType="vm:WorldObjectItem">
+            <StackPanel HorizontalAlignment="Stretch">
+                <ComboBox ItemsSource="{Binding WorldObjectTypes}"
+                          ItemTemplate="{StaticResource WorldObjectTypeComboResource}"
+                          SelectedItem="{Binding Type, Mode=TwoWay}" />
+                <core:LabeledTextBox Label="Kit ID" Text="{Binding KitID}" Grid.Row="0" />
+                <core:LabeledTextBox Label="Template ID" Text="{Binding TemplateID}" Grid.Row="1" />
+                <core:LabeledTextBox Label="Class ID" Text="{Binding ClassID}" Grid.Row="2" />
+                <core:LabeledTextBox Label="Name" Text="{Binding Name}" Grid.Row="3" />
                 <core:LabeledTextBox Label="Model" Text="{Binding Model}" />
                 
                 <StackPanel>
-                    <TextBlock Text="Wall Hooks" />
-                    <ListBox ItemTemplate="{StaticResource HookItem}"
-                                ItemsSource="{Binding Hooks}"
-                                SelectedItem="{Binding SelectedHook}"
-                                Height="100" />
+                    <TextBlock Text="Magnets" />
+                    <ListBox ItemTemplate="{StaticResource MagnetListResource}"
+                             ItemsSource="{Binding Magnets}"
+                             SelectedItem="{Binding SelectedMagnet}"
+                             Height="100" />
                     <StackPanel Orientation="Horizontal" Spacing="4">
-                        <!--<Button Content="Add" Command="{Binding TileTab.AddWallHook}" />
-                        <Button Content="Remove" Command="{Binding TileTab.DeleteSelectedWallHook}" />-->
+                        <Button Content="Add" Command="{Binding AddMagnet}" />
+                        <Button Content="Remove" Command="{Binding DeleteSelectedMagnet}" />
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
         </DataTemplate>
-
-        <DataTemplate x:Key="TileItemPanel" x:DataType="templates:TileItem">
-            <Grid RowDefinitions="Auto, *, Auto">
-                <TextBlock Text="Magnets" Grid.Row="0" />
-                <ListBox ItemTemplate="{StaticResource MagnetItemList}"
-                         ItemsSource="{Binding Hooks}"
-                         SelectedItem="{Binding SelectedHook}"
-                         Grid.Row="1"/>
-                <StackPanel Orientation="Horizontal" Spacing="4" Grid.Row="2">
-                    <DropDownButton Content="Add">
-                        <DropDownButton.Flyout>
-                            <MenuFlyout>
-                                <MenuItem Header="Magnet" Command="{Binding AddMagnet}" />
-                                <MenuItem Header="Hook - Basic" Command="{Binding AddBasicHook}" />
-                                <MenuItem Header="Hook - Floor" Command="{Binding AddFloorHook}" />
-                                <MenuItem Header="Hook - Ceiling" Command="{Binding AddCeilingHook}" />
-                                <MenuItem Header="Hook - Wall" Command="{Binding AddWallHook}" />
-                                <MenuItem Header="Hook - Doorframe" Command="{Binding AddDoorframeHook}" />
-                                <MenuItem Header="Hook - Corner" Command="{Binding AddCornerHook}" />
-                            </MenuFlyout>
-                        </DropDownButton.Flyout>
-                    </DropDownButton>
-                    <Button Content="Remove" Command="{Binding DeleteSelectedMagnet}" />
-                </StackPanel>
-            </Grid>
-        </DataTemplate>
         
-        <DataTemplate x:Key="WorldObjectItemPanel" x:DataType="templates:WorldObjectItem">
-            <StackPanel>
-                <core:LabeledTextBox Label="Model" Text="{Binding Model}" />
-            </StackPanel>
-        </DataTemplate>
-        
-        <DataTemplate x:Key="WallHookItemPanel" DataType="hooks:WallHookItem">
+        <DataTemplate x:Key="MagnetPanelResource" DataType="vm:MagnetItem">
             <StackPanel>
                 <core:LabeledTextBox Label="Kit ID" Text="{Binding KitID}" />
                 <core:LabeledTextBox Label="Template ID" Text="{Binding TemplateID}" />
@@ -98,40 +63,13 @@
             </StackPanel>
         </DataTemplate>
         
-        <DataTemplate x:Key="FloorHookItemPanel" DataType="hooks:FloorHookItem">
-            <StackPanel>
-                <core:LabeledTextBox Label="Kit ID" Text="{Binding KitID}" />
-                <core:LabeledTextBox Label="Template ID" Text="{Binding TemplateID}" />
-                <core:Vector3Edit Label="Position" Value="{Binding Position}" />
-                <core:QuaternionEdit Label="Orientation" Value="{Binding Orientation}" />
-            </StackPanel>
-        </DataTemplate>
-        
-        <DataTemplate x:Key="CeilingHookItemPanel" DataType="hooks:CeilingHookItem">
-            <StackPanel>
-                <core:LabeledTextBox Label="Kit ID" Text="{Binding KitID}" />
-                <core:LabeledTextBox Label="Template ID" Text="{Binding TemplateID}" />
-                <core:Vector3Edit Label="Position" Value="{Binding Position}" />
-                <core:QuaternionEdit Label="Orientation" Value="{Binding Orientation}" />
-            </StackPanel>
-        </DataTemplate>
-
-        <DataTemplate x:Key="CornerHookPanel" DataType="hooks:CornerHookItem">
-            <StackPanel>
-                <core:LabeledTextBox Label="Kit ID" Text="{Binding KitID}" />
-                <core:LabeledTextBox Label="Template ID" Text="{Binding TemplateID}" />
-                <core:Vector3Edit Label="Position" Value="{Binding Position}" />
-                <core:QuaternionEdit Label="Orientation" Value="{Binding Orientation}" />
-            </StackPanel>
-        </DataTemplate>
-        
-        <DataTemplate x:Key="WorldObjectTypeItemTemplate" x:DataType="vm:WorldObjectTypeItem">
+        <DataTemplate x:Key="MagnetListResource" x:DataType="vm:MagnetItem">
             <StackPanel>
                 <TextBlock Text="{Binding Name}" />
             </StackPanel>
         </DataTemplate>
         
-        <DataTemplate x:Key="MagnetItemList" x:DataType="hooks:BaseMagnetItem">
+        <DataTemplate x:Key="WorldObjectTypeComboResource" x:DataType="vm:WorldObjectTypeItem">
             <StackPanel>
                 <TextBlock Text="{Binding Name}" />
             </StackPanel>
@@ -155,32 +93,19 @@
 
                 <Border Grid.Column="0" Padding="4" Background="#ddd">
                     <Grid RowDefinitions="Auto, *, Auto" RowSpacing="5" Background="#bbb">
-                        <ComboBox ItemTemplate="{StaticResource WorldObjectTypeItemTemplate}"
+                        <ComboBox ItemTemplate="{StaticResource WorldObjectTypeComboResource}"
                                   ItemsSource="{Binding WorldObjectTypeItems}"
-                                  SelectedItem="{Binding SelectedWorldObjectTypeItem, Mode=TwoWay}"
+                                  SelectedItem="{Binding SelectedWorldObjectType, Mode=TwoWay}"
                                   Grid.Row="0" />
-                        <ListBox ItemTemplate="{StaticResource ObjectItemList}"
+                        <ListBox ItemTemplate="{StaticResource WorldObjectListResource}"
                                  ItemsSource="{Binding ObjectTemplateItems}"
-                                 SelectedItem="{Binding SelectedObjectTemplateItem}"
+                                 SelectedItem="{Binding SelectedWorldObject}"
                                  Grid.Row="1"/>
                         <StackPanel Orientation="Horizontal"
                                     Spacing="4"
                                     Grid.Row="2">
                             <Button Content="Import" Command="{Binding ImportTemplates}" />
-                            <DropDownButton Content="Add">
-                                <DropDownButton.Flyout>
-                                    <MenuFlyout>
-                                        <MenuItem Header="Object" Command="{Binding AddBasicTemplate}" />
-                                        <MenuItem Header="Tile" Command="{Binding AddTileTemplate}" />
-                                        <MenuItem Header="Floor" Command="{Binding AddFloorTemplate}" />
-                                        <MenuItem Header="Ceiling" Command="{Binding AddCeilingTemplate}" />
-                                        <MenuItem Header="Wall" Command="{Binding AddWallTemplate}" />
-                                        <MenuItem Header="Doorframe" Command="{Binding AddDoorframeTemplate}" />
-                                        <MenuItem Header="InnerCorner" Command="{Binding AddInnerCornerTemplate}" />
-                                        <MenuItem Header="OuterCorner" Command="{Binding AddOuterCornerTemplate}" />
-                                    </MenuFlyout>
-                                </DropDownButton.Flyout>
-                            </DropDownButton>
+                            <Button Content="Add" Command="{Binding AddTemplate}" />
                             <Button Content="Delete" Command="{Binding DeleteSelectedTemplate}" />
                         </StackPanel>
                     </Grid>
@@ -188,37 +113,22 @@
                 
                 <Border Grid.Column="1" Padding="5" Background="#ddd">
                     <Border Padding="5" Background="#bbb">
-                        <Grid HorizontalAlignment="Left" RowDefinitions="Auto, Auto, Auto, Auto, *">
-                            <core:LabeledTextBox Label="Kit ID" Text="{Binding SelectedObjectTemplateItem.KitID}" Grid.Row="0" />
-                            <core:LabeledTextBox Label="Template ID" Text="{Binding SelectedObjectTemplateItem.TemplateID}" Grid.Row="1" />
-                            <core:LabeledTextBox Label="Class ID" Text="{Binding SelectedObjectTemplateItem.ClassID}" Grid.Row="2" />
-                            <core:LabeledTextBox Label="Name" Text="{Binding SelectedObjectTemplateItem.Name}" Grid.Row="3" />
-
-                            <ContentControl Content="{Binding SelectedObjectTemplateItem}" Grid.Row="4">
-                                <ContentControl.DataTemplates>
-                                    <StaticResource ResourceKey="TileItemPanel" />
-                                    <StaticResource ResourceKey="WallItemPanel" />
-                                    <StaticResource ResourceKey="DoorframeItemPanel" />
-                                    <StaticResource ResourceKey="WorldObjectItemPanel" />
-                                </ContentControl.DataTemplates>
-                            </ContentControl>
-                        </Grid>
+                        <ContentControl Content="{Binding SelectedWorldObject}" Grid.Row="4">
+                            <ContentControl.DataTemplates>
+                                <StaticResource ResourceKey="WorldObjectPanelResource" />
+                            </ContentControl.DataTemplates>
+                        </ContentControl>
                     </Border>
                 </Border>
 
                 <Border Grid.Column="2" Padding="5" Background="#ddd">
                     <StackPanel Spacing="5">
                         <Border Padding="5" Background="#bbb">
-                            <StackPanel HorizontalAlignment="Left">
-                                <ContentControl Content="{Binding SelectedObjectTemplateItem.SelectedHook}">
-                                    <ContentControl.DataTemplates>
-                                        <StaticResource ResourceKey="CeilingHookItemPanel" />
-                                        <StaticResource ResourceKey="FloorHookItemPanel" />
-                                        <StaticResource ResourceKey="WallHookItemPanel" />
-                                        <StaticResource ResourceKey="CornerHookPanel" />
-                                    </ContentControl.DataTemplates>
-                                </ContentControl>
-                            </StackPanel>
+                            <ContentControl Content="{Binding SelectedWorldObject.SelectedMagnet}">
+                                <ContentControl.DataTemplates>
+                                    <StaticResource ResourceKey="MagnetPanelResource" />
+                                </ContentControl.DataTemplates>
+                            </ContentControl>
                         </Border>
                     </StackPanel>
                 </Border>

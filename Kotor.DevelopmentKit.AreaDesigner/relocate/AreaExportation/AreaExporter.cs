@@ -50,50 +50,6 @@ public static class AreaExporter
 
         return mdl;
     }
-    private static MDLNode CeilingToMDLNode(UltimateWorldObject ceiling)
-    {
-        var ceilingMDL = MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{ceiling.KitID}/{ceiling.Template.Model}.mdl");
-        ceilingMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(ceiling.GlobalPosition));
-        ceilingMDL.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(ceiling.GlobalOrientation));
-        return ceilingMDL.Root;
-    }
-
-    private static MDLNode WallToMDLNode(UltimateWorldObject wall)
-    {
-        var wallMDL = MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{wall.KitID}/{wall.Template.Model}.mdl");
-        wallMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(wall.GlobalPosition));
-        wallMDL.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(wall.GlobalOrientation));
-        AdjustWalkmesh(wallMDL, wallMDL.Root.GetAllDescendants().OfType<MDLWalkmeshNode>().First());
-        return wallMDL.Root;
-    }
-
-    private static MDLNode DoorFrameToMDLNode(UltimateWorldObject doorframe)
-    {
-        var doorframeMDL = MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{doorframe.KitID}/{doorframe.Template.Model}.mdl");
-        doorframeMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(doorframe.GlobalPosition));
-        doorframeMDL.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(doorframe.GlobalOrientation));
-        AdjustWalkmesh(doorframeMDL, doorframeMDL.Root.GetAllDescendants().OfType<MDLWalkmeshNode>().First());
-        return doorframeMDL.Root;
-    }
-
-    private static MDLNode InnerCornerToMDLNode(UltimateWorldObject corner)
-    {
-        var cornerMDL = MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{corner.KitID}/{corner.Template.Model}.mdl");
-        cornerMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(corner.GlobalPosition));
-        cornerMDL.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(corner.GlobalOrientation));
-        return cornerMDL.Root;
-    }
-
-    private static MDLNode ObjectToMDLNode(UltimateWorldObject @object)
-    {
-        return null;
-        //var objectMDL = MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{@object.KitID}/{@object.Template.Model}.mdl");
-        //objectMDL.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(@object.LocalPosition));
-        //objectMDL.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(@object.LocalOrientation));
-        //AdjustWalkmesh(objectMDL, objectMDL.Root.GetAllDescendants().OfType<MDLWalkmeshNode>().First());
-        //return objectMDL.Root;
-    }
-
     private static void DeleteWalkmeshesRecursive(MDLNode node)
     {
         foreach (var child in node.Children.ToArray())
