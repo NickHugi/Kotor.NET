@@ -158,12 +158,11 @@ public class KitEditorViewModel : ReactiveObject
 
             var existing = ObjectTemplateItems.Where(x => x.TemplateID == template.TemplateID);
             _objectTemplatesSource.RemoveMany(existing);
-
             _objectTemplatesSource.Add(template);
 
-            if (template is WorldObjectItem floorTemplate)
+            if (template.Type == WorldObjectType.Floor)
             {
-                var tileTemplate = TileFromFloor(filename, floorTemplate, mdl);
+                var tileTemplate = TileFromFloor(filename, template, mdl);
                 _objectTemplatesSource.Add(tileTemplate);
             }
         }
@@ -178,7 +177,6 @@ public class KitEditorViewModel : ReactiveObject
             Name = "New Object",
         });
     }
-
     public void DeleteSelectedTemplate()
     {
         if (SelectedWorldObject is null)
@@ -189,104 +187,46 @@ public class KitEditorViewModel : ReactiveObject
 
     private WorldObjectItem TemplateFromMDL(string filename, MDL mdl)
     {
-        if (filename.Contains("floor"))
-        {
-            return new WorldObjectItem()
-            {
-                Type = WorldObjectType.Floor,
-                KitID = KitID,
-                TemplateID = filename,
-                ClassID = ClassIDFromMDL(mdl),
-                Name = NameFromMDL(mdl),
-                Model = filename,
-            };
-        }
-        else if (filename.Contains("ceiling"))
-        {
-            return new WorldObjectItem()
-            {
-                Type = WorldObjectType.Ceiling,
-                KitID = KitID,
-                TemplateID = filename,
-                ClassID = ClassIDFromMDL(mdl),
-                Name = NameFromMDL(mdl),
-                Model = filename,
-            };
-        }
-        else if (filename.Contains("wall"))
-        {
-            return new WorldObjectItem()
-            {
-                Type = WorldObjectType.Wall,
-                KitID = KitID,
-                TemplateID = filename,
-                ClassID = ClassIDFromMDL(mdl),
-                Name = NameFromMDL(mdl),
-                Model = filename,
-            };
-        }
-        else if (filename.Contains("object"))
-        {
-            return new WorldObjectItem()
-            {
-                Type = WorldObjectType.Prop,
-                KitID = KitID,
-                TemplateID = filename,
-                ClassID = ClassIDFromMDL(mdl),
-                Name = NameFromMDL(mdl),
-                Model = filename,
-            };
-        }
-        else if (filename.Contains("icorner"))
-        {
-            return new WorldObjectItem()
-            {
-                Type = WorldObjectType.InnerCorner,
-                KitID = KitID,
-                TemplateID = filename,
-                ClassID = ClassIDFromMDL(mdl),
-                Name = NameFromMDL(mdl),
-                Model = filename,
-            };
-        }
-        else if (filename.Contains("ocorner"))
-        {
-            return new WorldObjectItem()
-            {
-                Type = WorldObjectType.OuterCorner,
-                KitID = KitID,
-                TemplateID = filename,
-                ClassID = ClassIDFromMDL(mdl),
-                Name = NameFromMDL(mdl),
-                Model = filename,
-            };
-        }
-        else if (filename.Contains("doorframe"))
-        {
-            var magnetsNodes = mdl.Root.GetAllDescendants().Where(x => x.Name.Contains("magnet."));
+        var magnetsNodes = mdl.Root.GetAllDescendants().Where(x => x.Name.Contains("magnet."));
 
-            return new WorldObjectItem()
-            {
-                Type = WorldObjectType.DoorFrame,
-                KitID = KitID,
-                TemplateID = filename,
-                ClassID = ClassIDFromMDL(mdl),
-                Name = NameFromMDL(mdl),
-                Model = filename,
-                Magnets =
-                [
-                    ..magnetsNodes.Select(x => new MagnetItem()
-                    {
-                        Position = PositionFromNode(x),
-                        Orientation = OrientationFromNode(x),
-                    }),
-                ]
-            };
-        }
-        else
+        return new WorldObjectItem()
         {
-            return null;
-        }
+            Type = WorldObjectTypeFromFilename(filename),
+            KitID = KitID,
+            TemplateID = filename,
+            ClassID = ClassIDFromMDL(mdl),
+            Name = NameFromMDL(mdl),
+            Model = filename,
+            Magnets =
+            [
+                ..magnetsNodes.Select(x => new MagnetItem()
+                {
+                    KitID = KitIDFromNode(x),
+                    TemplateID = TemplateIDFromNode(x),
+                    Position = PositionFromNode(x),
+                    Orientation = OrientationFromNode(x),
+                }),
+            ]
+        };
+    }
+    private WorldObjectType WorldObjectTypeFromFilename(string filename)
+    {
+        if (filename.Contains("floor"))
+            return WorldObjectType.Floor;
+        else if (filename.Contains("ceiling"))
+            return WorldObjectType.Ceiling;
+        else if (filename.Contains("wall"))
+            return WorldObjectType.Wall;
+        else if (filename.Contains("generic"))
+            return WorldObjectType.Prop;
+        else if (filename.Contains("icorner"))
+            return WorldObjectType.InnerCorner;
+        else if (filename.Contains("ocorner"))
+            return WorldObjectType.OuterCorner;
+        else if (filename.Contains("doorframe"))
+            return WorldObjectType.DoorFrame;
+        else
+            throw new ArgumentException($"Unknown world object type for filename: {filename}");
     }
     private WorldObjectItem TileFromFloor(string filename, WorldObjectItem floor, MDL mdl)
     {
@@ -353,20 +293,12 @@ public class KitEditorViewModel : ReactiveObject
         var node = mdl.Root.Children.SingleOrDefault(x => x.Name.StartsWith("_ClassID="));
         return node?.Name.Replace("_ClassID=", "") ?? "";
     }
-    private string DoorframeTemplateIDFromMDL(MDL mdl)
+    private string KitIDFromNode(MDLNode node)
     {
-        var node = mdl.Root.Children.SingleOrDefault(x => x.Name.StartsWith("_DoorframeTemplateID="));
-        return node?.Name.Replace("_DoorframeTemplateID=", "") ?? "";
+        return node.Children.SingleOrDefault(x => x.Name.StartsWith("_KitID="))?.Name.Replace("_KitID=", "") ?? "";
     }
-    private string DoorframeKitIDFromMDL(MDL mdl)
+    private string TemplateIDFromNode(MDLNode node)
     {
-        var node = mdl.Root.Children.SingleOrDefault(x => x.Name.StartsWith("_DoorframeKitID="));
-        var fallbackKitID = (DoorframeTemplateIDFromMDL(mdl) is null) ? "" : KitID;
-        return node?.Name.Replace("_DoorframeKitID=", "") ?? fallbackKitID;
-    }
-    private string DoorframeClassIDFromMDL(MDL mdl)
-    {
-        var node = mdl.Root.Children.SingleOrDefault(x => x.Name.StartsWith("_DoorframeClassID="));
-        return node?.Name.Replace("_DoorframeClassID=", "") ?? "";
+        return node.Children.SingleOrDefault(x => x.Name.StartsWith("_TemplateID="))?.Name.Replace("_TemplateID=", "") ?? "";
     }
 }
