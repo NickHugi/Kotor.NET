@@ -30,28 +30,28 @@
         </DataTemplate>
         
         <DataTemplate x:Key="WorldObjectPanelResource" x:DataType="vm:WorldObjectItem">
-            <StackPanel HorizontalAlignment="Stretch">
-                <ComboBox ItemsSource="{Binding WorldObjectTypes}"
-                          ItemTemplate="{StaticResource WorldObjectTypeComboResource}"
-                          SelectedItem="{Binding Type, Mode=TwoWay}" />
-                <core:LabeledTextBox Label="Kit ID" Text="{Binding KitID}" Grid.Row="0" />
-                <core:LabeledTextBox Label="Template ID" Text="{Binding TemplateID}" Grid.Row="1" />
-                <core:LabeledTextBox Label="Class ID" Text="{Binding ClassID}" Grid.Row="2" />
-                <core:LabeledTextBox Label="Name" Text="{Binding Name}" Grid.Row="3" />
-                <core:LabeledTextBox Label="Model" Text="{Binding Model}" />
-                
-                <StackPanel>
+            <Grid RowDefinitions="Auto, *, Auto">
+                <StackPanel HorizontalAlignment="Stretch" Grid.Row="0">
+                    <TextBlock Text="World Object Type" />
+                    <ComboBox ItemsSource="{Binding WorldObjectTypes}"
+                              ItemTemplate="{StaticResource WorldObjectTypeComboResource}"
+                              SelectedItem="{Binding Type, Mode=TwoWay}" />
+                    <core:LabeledTextBox Label="Kit ID" Text="{Binding KitID}" Grid.Row="0" />
+                    <core:LabeledTextBox Label="Template ID" Text="{Binding TemplateID}" Grid.Row="1" />
+                    <core:LabeledTextBox Label="Class ID" Text="{Binding ClassID}" Grid.Row="2" />
+                    <core:LabeledTextBox Label="Name" Text="{Binding Name}" Grid.Row="3" />
+                    <core:LabeledTextBox Label="Model" Text="{Binding Model}" />
                     <TextBlock Text="Magnets" />
-                    <ListBox ItemTemplate="{StaticResource MagnetListResource}"
-                             ItemsSource="{Binding Magnets}"
-                             SelectedItem="{Binding SelectedMagnet}"
-                             Height="100" />
-                    <StackPanel Orientation="Horizontal" Spacing="4">
-                        <Button Content="Add" Command="{Binding AddMagnet}" />
-                        <Button Content="Remove" Command="{Binding DeleteSelectedMagnet}" />
-                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
+                <ListBox ItemTemplate="{StaticResource MagnetListResource}"
+                         ItemsSource="{Binding Magnets}"
+                         SelectedItem="{Binding SelectedMagnet}"
+                         Grid.Row="1"/>
+                <StackPanel Orientation="Horizontal" Spacing="4" Grid.Row="2">
+                    <Button Content="Add" Command="{Binding AddMagnet}" />
+                    <Button Content="Remove" Command="{Binding DeleteSelectedMagnet}" />
+                </StackPanel>
+            </Grid>
         </DataTemplate>
         
         <DataTemplate x:Key="MagnetPanelResource" DataType="vm:MagnetItem">
