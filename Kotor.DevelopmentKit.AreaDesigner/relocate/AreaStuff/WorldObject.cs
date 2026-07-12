@@ -113,9 +113,9 @@ public class WorldObject
         attachedObjects.AddRange(
         [
             .. Magnets
-                .Where(x => !string.IsNullOrWhiteSpace(x.Template.KitID) && !string.IsNullOrWhiteSpace(x.Template.TemplateID))
-                .Where(x => x.Template is MagnetTemplate)
-                .Select(x => new WorldObject(Room, x, x.Template.Template, Guid.NewGuid(), x.Template.Template.Type)),
+                .Where(x => !string.IsNullOrWhiteSpace(x.MagnetTemplate.KitID) && !string.IsNullOrWhiteSpace(x.MagnetTemplate.TemplateID))
+                .Where(x => x.MagnetTemplate is MagnetTemplate)
+                .Select(x => new WorldObject(Room, x, x.MagnetTemplate.Template, Guid.NewGuid(), x.MagnetTemplate.Template.Type)),
         ]);
     }
 }

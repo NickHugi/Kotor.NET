@@ -2,7 +2,7 @@
 
 public enum WorldObjectType
 {
-    Prop,
+    Generic,
     Floor,
     Wall,
     DoorFrame,

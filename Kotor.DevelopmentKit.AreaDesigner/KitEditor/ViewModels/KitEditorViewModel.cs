@@ -66,7 +66,7 @@ public class KitEditorViewModel : ReactiveObject
     public List<WorldObjectTypeItem> WorldObjectTypeItems { get; } =
     [
         WorldObjectTypeItem.All,
-        new(WorldObjectType.Prop),
+        new(WorldObjectType.Generic),
         new(WorldObjectType.Tile),
         new(WorldObjectType.Floor),
         new(WorldObjectType.Wall),
@@ -215,7 +215,7 @@ public class KitEditorViewModel : ReactiveObject
         else if (filename.Contains("wall"))
             return WorldObjectType.Wall;
         else if (filename.Contains("generic"))
-            return WorldObjectType.Prop;
+            return WorldObjectType.Generic;
         else if (filename.Contains("icorner"))
             return WorldObjectType.InnerCorner;
         else if (filename.Contains("ocorner"))
@@ -223,7 +223,7 @@ public class KitEditorViewModel : ReactiveObject
         else if (filename.Contains("doorframe"))
             return WorldObjectType.DoorFrame;
         else
-            return WorldObjectType.Prop;
+            return WorldObjectType.Generic;
     }
     private WorldObjectItem TileFromFloor(string filename, WorldObjectItem floor, MDL mdl)
     {

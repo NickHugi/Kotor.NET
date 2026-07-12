@@ -86,7 +86,7 @@ public class AddTileMode : BaseMode
             _projectedRoom.Position = result.Target.GlobalPosition - result.Source.GlobalPosition;
 
             //var sourceWall = result.Source.Parent;
-            var sourceWall = _projectedRoom.AllObjects.FirstOrDefault(x => x.Template == result.Source.Template.Template && x.GlobalPosition == result.Source.GlobalPosition);
+            var sourceWall = _projectedRoom.AllObjects.FirstOrDefault(x => x.Template == result.Source.MagnetTemplate.Template && x.GlobalPosition == result.Source.GlobalPosition);
 
             if (result.Target.Parent.Type == WorldObjectType.DoorFrame)
             {
@@ -180,7 +180,7 @@ public class AddTileMode : BaseMode
             .Where(x => x.Source.IsTileMagnet && x.Target.IsTileMagnet)
             .FirstOrDefault();
 
-        if (magnet is not null && magnet.Target.IsHook && magnet.Target.Template?.Template?.Type == WorldObjectType.Wall)
+        if (magnet is not null && magnet.Target.IsHook && magnet.Target.MagnetTemplate?.Template?.Type == WorldObjectType.Wall)
         {
             var template = _projectedRoom.Objects.Where(x => x.Type == WorldObjectType.Tile).First().Template;
             var room = magnet.Target.Parent.Room;

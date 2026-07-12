@@ -8,158 +8,68 @@ using Kotor.NET.Extensions;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
-public enum HideNumberCondition
-{
-    NotEqualTo,
-    EqualTo,
-    LessThan,
-    GreaterThan,
-    Ignore
-}
-
 public class Magnet
 {
     public Area Area => Room.Area;
     public Room Room => Parent.Room;
     public WorldObject Child => Room.AllObjects.Single(x => x.ParentMagnet == this);
     public WorldObject Parent { get; }
-    public MagnetTemplate Template { get; }
+    public MagnetTemplate MagnetTemplate { get; }
+    public WorldObjectTemplate WorldObjectTemplate => MagnetTemplate.Template;
     public MagnetType Type { get; set; }
-
-    #region Hide Settings
-    public int HideNumber
-    {
-        get
-        {
-            return Template.Template.Type switch
-            {
-                WorldObjectType.Wall => 1,
-                WorldObjectType.InnerCorner => 0,
-                WorldObjectType.OuterCorner => -1,
-                _ => 0
-            };
-        }
-    }
-    public HideNumberCondition HideNumberCondition
-    {
-        get
-        {
-            return Template.Template.Type switch
-            {
-                WorldObjectType.Wall => HideNumberCondition.LessThan,
-                WorldObjectType.InnerCorner => HideNumberCondition.EqualTo,
-                WorldObjectType.OuterCorner => HideNumberCondition.EqualTo,
-                WorldObjectType.DoorFrame => HideNumberCondition.Ignore,
-                _ => HideNumberCondition.Ignore
-            };
-        }
-    }
-
-    public bool HideUseLocalMagnets => false;
-
-    public bool HideOverlapping
-    {
-        get
-        {
-            return true;
-        }
-    }
-    public bool HidePickFirstOverlap
-    {
-        get => Template.Template.Type == WorldObjectType.DoorFrame;
-    }
-    public bool HideMustHaveHooks
-    {
-        get => Template.Template.Type != WorldObjectType.DoorFrame;
-    }
-
-    public bool HideOnlySameTemplate
-    {
-        get
-        {
-            return false;
-        }
-    }
-    public bool HideOnlySameClassID
-    {
-        get
-        {
-            return false;
-        }
-    }
-    public bool HideOnlySameType
-    {
-        get
-        {
-            return Template.Template.Type != WorldObjectType.DoorFrame;
-        }
-    }
-    public WorldObjectType?[]? HideSpecificTypes
-    {
-        get => Template?.Template?.Type switch
-        {
-            WorldObjectType.DoorFrame => [null],
-            _ => null
-        };
-    }
-
-    public bool HidePickClosestToCenter
-    {
-        get
-        {
-            return Template.Template.Type == WorldObjectType.OuterCorner;
-        }
-    }
-    #endregion
 
     public bool Visible
     {
         get
         {
-            if (!HideOverlapping)
+            if (!MagnetTemplate.ConditionOverlapWillDisable)
                 return true;
 
-            var magnets = (HideUseLocalMagnets ? Room.AllMagnets : Area.AllMagnets).Where(x => x != this);
+            var magnets = (MagnetTemplate.ConditionCheckLocalMagnetsOnly ? Room.AllMagnets : Area.AllMagnets).AsEnumerable();
 
             magnets = magnets.Where(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, 0.1f));
+            magnets = magnets.Where(x => x != this);
 
-            if (HideMustHaveHooks)
+            if (MagnetTemplate.ConditionMustHaveTemplate)
             {
-                magnets = magnets.Where(x => !string.IsNullOrWhiteSpace(x.Template.KitID) && !string.IsNullOrEmpty(x.Template.TemplateID));
+                magnets = magnets.Where(x => !string.IsNullOrWhiteSpace(x.MagnetTemplate.KitID) && !string.IsNullOrEmpty(x.MagnetTemplate.TemplateID));
             }
 
-            if (HideOnlySameTemplate)
+            if (MagnetTemplate.ConditionOverlapOnlySameTemplate)
             {
-                magnets = magnets.Where(x => x.Template?.Template == Template?.Template);
+                magnets = magnets.Where(x => x.MagnetTemplate?.Template == MagnetTemplate?.Template);
             }
-            if (HideOnlySameType)
+            if (MagnetTemplate.ConditionOverlapOnlySameType)
             {
-                magnets = magnets.Where(x => x.Template?.Template?.Type == Template?.Template?.Type);
+                magnets = magnets.Where(x => x.MagnetTemplate?.Template?.Type == MagnetTemplate?.Template?.Type);
             }
 
-            if (HidePickClosestToCenter && magnets.Count() == 2)
+            if (MagnetTemplate.ConditionOverlapOnlyEnableMiddle && magnets.Count() == 2)
             {
                 var middle = MiddleMostMagnet(this, magnets.ElementAt(0), magnets.ElementAt(1));
                 return this == middle;
             }
 
-            if (HideSpecificTypes is not null)
+            if (MagnetTemplate.ConiditionOverlapOnlySpecificTypes is not null)
             {
-                magnets = magnets.Where(x => (x.IsHook && HideSpecificTypes.Contains(x.Template.Template.Type)) || (!x.IsHook && HideSpecificTypes.Contains(null)));
+                magnets = magnets.Where(x => (x.IsHook && MagnetTemplate.ConiditionOverlapOnlySpecificTypes.Contains(x.MagnetTemplate.Template.Type)) || (!x.IsHook && MagnetTemplate.ConiditionOverlapOnlySpecificTypes.Contains(null)));
             }
+            var derp = magnets.Count();
 
-            var visible = HideNumberCondition switch
+            var visible = MagnetTemplate.ConditionOverlapType switch
             {
-                HideNumberCondition.EqualTo => magnets.Count() == HideNumber,
-                HideNumberCondition.NotEqualTo => magnets.Count() != HideNumber,
-                HideNumberCondition.LessThan => magnets.Count() < HideNumber,
-                HideNumberCondition.GreaterThan => magnets.Count() > HideNumber,
+                OverlapCountType.EqualTo => magnets.Count() == MagnetTemplate.ConditionCheckOverlapCount,
+                OverlapCountType.NotEqualTo => magnets.Count() != MagnetTemplate.ConditionCheckOverlapCount,
+                OverlapCountType.LessThan => magnets.Count() < MagnetTemplate.ConditionCheckOverlapCount,
+                OverlapCountType.GreaterThan => magnets.Count() > MagnetTemplate.ConditionCheckOverlapCount,
                 _ => true
             };
 
-            if (HidePickFirstOverlap)
+            if (MagnetTemplate.ConditionOverlapOnlyEnableFirst && visible)
             {
-                var lowestGuid = magnets.Min(x => x.Parent.ID);
+                //var lowestGuid = magnets.Concat([this]).Min(x => x.Parent.ID);
+                //visible = visible && (lowestGuid == Child.ID);
+                var lowestGuid = magnets.Concat([this]).Min(x => x.Child.ID);
                 visible = visible && (lowestGuid == Child.ID);
             }
 
@@ -168,14 +78,14 @@ public class Magnet
         set;
     } = true;
 
-    public bool IsHook => !string.IsNullOrWhiteSpace(Template.TemplateID) && !string.IsNullOrWhiteSpace(Template.KitID);
-    public bool IsTileMagnet => (IsHook && Template.Template.Type == WorldObjectType.Wall) || Parent.Type == WorldObjectType.DoorFrame;
-    public string WallClassID => (IsHook && Template.Template.Type == WorldObjectType.Wall)
-        ? Template.Template.ClassID
+    public bool IsHook => !string.IsNullOrWhiteSpace(MagnetTemplate.TemplateID) && !string.IsNullOrWhiteSpace(MagnetTemplate.KitID);
+    public bool IsTileMagnet => (IsHook && MagnetTemplate.Template.Type == WorldObjectType.Wall) || Parent.Type == WorldObjectType.DoorFrame;
+    public string WallClassID => (IsHook && MagnetTemplate.Template.Type == WorldObjectType.Wall)
+        ? MagnetTemplate.Template.ClassID
         : Parent.TemplateID;
 
-    public Vector3 LocalPosition => Template.LocalPosition;
-    public Quaternion LocalOrientation => Template.LocalOrientation;
+    public Vector3 LocalPosition => MagnetTemplate.LocalPosition;
+    public Quaternion LocalOrientation => MagnetTemplate.LocalOrientation;
     public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
 
     public Vector3 GlobalPosition
@@ -191,7 +101,7 @@ public class Magnet
     public Magnet(WorldObject parent, MagnetTemplate template)
     {
         Parent = parent;
-        Template = template;
+        MagnetTemplate = template;
     }
 
     private static Magnet MiddleMostMagnet(Magnet a, Magnet b, Magnet c)

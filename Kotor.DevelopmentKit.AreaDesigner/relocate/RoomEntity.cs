@@ -61,7 +61,7 @@ public class AreaEntity : BaseEntity
             return;
         if (worldObject.Type == WorldObjectType.InnerCorner && !DoRenderWalls)
             return;
-        if (worldObject.Type == WorldObjectType.Prop && !DoRenderObjects)
+        if (worldObject.Type == WorldObjectType.Generic && !DoRenderObjects)
             return;
 
         foreach (var attachedWorldObject in worldObject.AttachedObjects)
