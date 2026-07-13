@@ -19,11 +19,13 @@ public class MagnetTemplate
 
     public string KitID { get; init; } = "";
     public string TemplateID { get; init; } = "";
-    public WorldObjectTemplate Template => Kit.Manager.Get(KitID).Object(TemplateID);
+    // Exists() and Template?. Type null conditional are hotfix for the bug
+    // where templates for magnets dont exist yet
+    public WorldObjectTemplate Template => Kit.Manager.Get(KitID).Exists(TemplateID) ? Kit.Manager.Get(KitID).Object(TemplateID) : null;
 
     public bool ConditionCheckLocalMagnetsOnly
     {
-        get => Template.Type switch
+        get => Template?.Type switch
         {
             WorldObjectType.Floor => false,
             WorldObjectType.Ceiling => false,
@@ -37,7 +39,7 @@ public class MagnetTemplate
     } = false;
     public bool ConditionMustHaveTemplate
     {
-        get => Template.Type switch
+        get => Template?.Type switch
         {
             WorldObjectType.Floor => true,
             WorldObjectType.Ceiling => true,
@@ -51,7 +53,7 @@ public class MagnetTemplate
     } = false;
     public bool ConditionOverlapWillDisable
     {
-        get => Template.Type switch
+        get => Template?.Type switch
         {
             WorldObjectType.Floor => true,
             WorldObjectType.Ceiling => true,
@@ -65,7 +67,7 @@ public class MagnetTemplate
     } = false;
     public int ConditionOverlapCheckCount
     {
-        get => Template.Type switch
+        get => Template?.Type switch
         {
             WorldObjectType.Floor => 0,
             WorldObjectType.Ceiling => 0,
@@ -79,7 +81,7 @@ public class MagnetTemplate
     } = 0;
     public bool ConditionOverlapOnlySameRotation
     {
-        get => Template.Type switch
+        get => Template?.Type switch
         {
             WorldObjectType.Floor => false,
             WorldObjectType.Ceiling => false,
@@ -93,7 +95,7 @@ public class MagnetTemplate
     } = false;
     public OverlapCountType ConditionOverlapType
     {
-        get => Template.Type switch
+        get => Template?.Type switch
         {
             WorldObjectType.Floor => OverlapCountType.Ignore,
             WorldObjectType.Ceiling => OverlapCountType.Ignore,
@@ -107,7 +109,7 @@ public class MagnetTemplate
     } = OverlapCountType.Ignore;
     public bool ConditionOverlapOnlyEnableFirst
     {
-        get => Template.Type switch
+        get => Template?.Type switch
         {
             WorldObjectType.Floor => false,
             WorldObjectType.Ceiling => false,
@@ -121,7 +123,7 @@ public class MagnetTemplate
     } = false;
     public bool ConditionOverlapOnlyEnableMiddle
     {
-       get => Template.Type switch
+       get => Template?.Type switch
         {
             WorldObjectType.Floor => false,
             WorldObjectType.Ceiling => false,
@@ -135,7 +137,7 @@ public class MagnetTemplate
     } = false;
     public bool ConditionOverlapOnlySameTemplate
     {
-        get => Template.Type switch
+        get => Template?.Type switch
         {
             WorldObjectType.Floor => false,
             WorldObjectType.Ceiling => false,
@@ -149,7 +151,7 @@ public class MagnetTemplate
     } = false;
     public bool ConditionOverlapOnlySameClass
     {
-        get => Template.Type switch
+        get => Template?.Type switch
         {
             WorldObjectType.Floor => false,
             WorldObjectType.Ceiling => false,
@@ -163,7 +165,7 @@ public class MagnetTemplate
     } = false;
     public bool ConditionOverlapOnlySameType
     {
-        get => Template.Type switch
+        get => Template?.Type switch
         {
             WorldObjectType.Floor => false,
             WorldObjectType.Ceiling => false,
@@ -177,7 +179,7 @@ public class MagnetTemplate
     } = false;
     public WorldObjectType?[]? ConditionOverlapOnlySpecificTypes
     {
-        get => Template.Type switch
+        get => Template?.Type switch
         {
             WorldObjectType.Floor => null,
             WorldObjectType.Ceiling => null,

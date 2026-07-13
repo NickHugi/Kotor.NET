@@ -64,7 +64,6 @@ public class Magnet
             {
                 magnets = magnets.Where(x => (x.IsHook && MagnetTemplate.ConditionOverlapOnlySpecificTypes.Contains(x.MagnetTemplate.Template.Type)) || (!x.IsHook && MagnetTemplate.ConditionOverlapOnlySpecificTypes.Contains(null)));
             }
-            var derp = magnets.Count();
 
             var visible = MagnetTemplate.ConditionOverlapType switch
             {
@@ -79,8 +78,6 @@ public class Magnet
             {
                 var lowestGuid = magnets.Append(this).Min(x => x.Child.ID);
                 visible = visible && (lowestGuid == Child.ID);
-                //var lowestGuid = magnets.Concat([this]).Min(x => x.Child.ID);
-                //visible = visible && (lowestGuid == Child.ID);
             }
 
             return visible;

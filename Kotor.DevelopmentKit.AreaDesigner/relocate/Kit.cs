@@ -23,6 +23,8 @@ public class Kit
             ?? throw new ArgumentException($"Could not find object with KitID={KitID} TemplateID={templateID}");
     }
 
+    public bool Exists(string templateID) => Objects.Any(x => x.TemplateID == templateID);
+
     public Kit(string filepath, string kitID, int version, string name)
     {
         FilePath = filepath;
