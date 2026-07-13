@@ -160,6 +160,8 @@ public class KitEditorViewModel : ReactiveObject
             if (template.Type == WorldObjectType.Floor)
             {
                 var tileTemplate = TileFromFloor(filename, template, mdl);
+                existing = ObjectTemplateItems.Where(x => x.TemplateID == tileTemplate.TemplateID);
+                _objectTemplatesSource.RemoveMany(existing);
                 _objectTemplatesSource.Add(tileTemplate);
             }
         }
