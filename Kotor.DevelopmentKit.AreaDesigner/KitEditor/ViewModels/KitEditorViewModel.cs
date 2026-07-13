@@ -207,6 +207,7 @@ public class KitEditorViewModel : ReactiveObject
                     ConditionOverlapWillDisable = GetBool(x, "OverlapWillDisable"),
                     ConditionOverlapCheckCount = GetInt(x, "OverlapCheckCount"),
                     ConditionOverlapType = GetOverlapCountType(x, "OverlapType"),
+                    ConditionOverlapOnlySameRotation = GetBool(x, "OverlapOnlySameRotation"),
                     ConditionOverlapOnlyEnableFirst = GetBool(x, "OverlapOnlyEnableFirst"),
                     ConditionOverlapOnlyEnableMiddle = GetBool(x, "OverlapOnlyEnableMiddle"),
                     ConditionOverlapOnlySameTemplate = GetBool(x, "OverlapOnlySameTemplate"),

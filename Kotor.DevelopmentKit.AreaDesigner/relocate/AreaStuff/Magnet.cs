@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Kotor.NET.Extensions;
+using Kotor.NET.Graphics.Extensions;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
@@ -46,6 +47,11 @@ public class Magnet
             if (MagnetTemplate.ConditionOverlapOnlySameType)
             {
                 magnets = magnets.Where(x => x.MagnetTemplate?.Template?.Type == MagnetTemplate?.Template?.Type);
+            }
+
+            if (MagnetTemplate.ConditionOverlapOnlySameRotation)
+            {
+                magnets = magnets.Where(x => x.GlobalOrientation.ApproximatelyEquals(GlobalOrientation));
             }
 
             if (MagnetTemplate.ConditionOverlapOnlyEnableMiddle && magnets.Count() == 2)

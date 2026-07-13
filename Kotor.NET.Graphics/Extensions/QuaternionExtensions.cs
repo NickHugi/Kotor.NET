@@ -60,4 +60,12 @@ public static class QuaternionExtensions
     {
         return [value.X, value.Y, value.Z, value.W];
     }
+
+    public static bool ApproximatelyEquals(this Quaternion self, Quaternion other, float maxAngleDegrees = 1f)
+    {
+        float dot = Math.Abs(Quaternion.Dot(self, other));
+        dot = Math.Clamp(dot, -1f, 1f);
+        float angle = 2f * MathF.Acos(dot) * (180f / MathF.PI);
+        return angle <= maxAngleDegrees;
+    }
 }

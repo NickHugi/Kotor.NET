@@ -55,6 +55,11 @@ public class MagnetItem : ReactiveObject
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
+    public bool ConditionOverlapOnlySameRotation
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
     public OverlapCountType ConditionOverlapType
     {
         get;
@@ -112,6 +117,7 @@ public class MagnetItem : ReactiveObject
         ConditionMustHaveTemplate = template.ConditionMustHaveTemplate;
         ConditionOverlapWillDisable = template.ConditionOverlapWillDisable;
         ConditionOverlapCheckCount = template.ConditionOverlapCheckCount;
+        ConditionOverlapOnlySameRotation = template.ConditionOverlapOnlySameRotation;
         ConditionOverlapType = template.ConditionOverlapType;
         ConditionOverlapOnlyEnableFirst = template.ConditionOverlapOnlyEnableFirst;
         ConditionOverlapOnlyEnableMiddle = template.ConditionOverlapOnlyEnableMiddle;
@@ -131,6 +137,7 @@ public class MagnetItem : ReactiveObject
             LocalOrientation = Orientation.ToModel(),
             ConditionCheckLocalMagnetsOnly = ConditionCheckLocalMagnetsOnly,
             ConditionMustHaveTemplate = ConditionMustHaveTemplate,
+            ConditionOverlapOnlySameRotation = ConditionOverlapOnlySameRotation,
             ConditionOverlapWillDisable = ConditionOverlapWillDisable,
             ConditionOverlapCheckCount = ConditionOverlapCheckCount,
             ConditionOverlapType = ConditionOverlapType,

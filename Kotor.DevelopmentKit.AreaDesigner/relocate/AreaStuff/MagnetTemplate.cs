@@ -77,6 +77,20 @@ public class MagnetTemplate
         };
         init;
     } = 0;
+    public bool ConditionOverlapOnlySameRotation
+    {
+        get => Template.Type switch
+        {
+            WorldObjectType.Floor => false,
+            WorldObjectType.Ceiling => false,
+            WorldObjectType.Wall => false,
+            WorldObjectType.OuterCorner => false,
+            WorldObjectType.InnerCorner => false,
+            WorldObjectType.DoorFrame => false,
+            _ => field
+        };
+        init;
+    } = false;
     public OverlapCountType ConditionOverlapType
     {
         get => Template.Type switch
