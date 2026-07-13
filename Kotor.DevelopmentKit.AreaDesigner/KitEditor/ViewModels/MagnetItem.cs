@@ -35,6 +35,62 @@ public class MagnetItem : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
+    public bool ConditionCheckLocalMagnetsOnly
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+    public bool ConditionMustHaveTemplate
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+    public bool ConditionOverlapWillDisable
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+    public int ConditionOverlapCheckCount
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+    public OverlapCountType ConditionOverlapType
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+    public bool ConditionOverlapOnlyEnableFirst
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+    public bool ConditionOverlapOnlyEnableMiddle
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+    public bool ConditionOverlapOnlySameTemplate
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+    public bool ConditionOverlapOnlySameClass
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+    public bool ConditionOverlapOnlySameType
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+    public WorldObjectType?[]? ConditionOverlapOnlySpecificTypes
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
     public MagnetItem()
     {
         KitID = "";
@@ -52,6 +108,17 @@ public class MagnetItem : ReactiveObject
         TemplateID = template.TemplateID;
         Position = new ReactiveVector3(template.LocalPosition);
         Orientation = new ReactiveQuaternion(template.LocalOrientation);
+        ConditionCheckLocalMagnetsOnly = template.ConditionCheckLocalMagnetsOnly;
+        ConditionMustHaveTemplate = template.ConditionMustHaveTemplate;
+        ConditionOverlapWillDisable = template.ConditionOverlapWillDisable;
+        ConditionOverlapCheckCount = template.ConditionOverlapCheckCount;
+        ConditionOverlapType = template.ConditionOverlapType;
+        ConditionOverlapOnlyEnableFirst = template.ConditionOverlapOnlyEnableFirst;
+        ConditionOverlapOnlyEnableMiddle = template.ConditionOverlapOnlyEnableMiddle;
+        ConditionOverlapOnlySameTemplate = template.ConditionOverlapOnlySameTemplate;
+        ConditionOverlapOnlySameClass = template.ConditionOverlapOnlySameClass;
+        ConditionOverlapOnlySameType = template.ConditionOverlapOnlySameType;
+        ConditionOverlapOnlySpecificTypes = template.ConditionOverlapOnlySpecificTypes;
     }
 
     public MagnetTemplate ToModel()
@@ -62,6 +129,17 @@ public class MagnetItem : ReactiveObject
             TemplateID = TemplateID,
             LocalPosition = Position.ToModel(),
             LocalOrientation = Orientation.ToModel(),
+            ConditionCheckLocalMagnetsOnly = ConditionCheckLocalMagnetsOnly,
+            ConditionMustHaveTemplate = ConditionMustHaveTemplate,
+            ConditionOverlapWillDisable = ConditionOverlapWillDisable,
+            ConditionOverlapCheckCount = ConditionOverlapCheckCount,
+            ConditionOverlapType = ConditionOverlapType,
+            ConditionOverlapOnlyEnableFirst = ConditionOverlapOnlyEnableFirst,
+            ConditionOverlapOnlyEnableMiddle = ConditionOverlapOnlyEnableMiddle,
+            ConditionOverlapOnlySameTemplate = ConditionOverlapOnlySameTemplate,
+            ConditionOverlapOnlySameClass = ConditionOverlapOnlySameClass,
+            ConditionOverlapOnlySameType = ConditionOverlapOnlySameType,
+            ConditionOverlapOnlySpecificTypes = ConditionOverlapOnlySpecificTypes
         };
     }
 }

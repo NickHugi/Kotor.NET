@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using Avalonia.Markup.Xaml.Templates;
-using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
+﻿using System.Numerics;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
@@ -70,7 +63,7 @@ public class MagnetTemplate
         };
         init;
     } = false;
-    public int ConditionCheckOverlapCount
+    public int ConditionOverlapCheckCount
     {
         get => Template.Type switch
         {
@@ -168,7 +161,7 @@ public class MagnetTemplate
         };
         init;
     } = false;
-    public WorldObjectType?[]? ConiditionOverlapOnlySpecificTypes
+    public WorldObjectType?[]? ConditionOverlapOnlySpecificTypes
     {
         get => Template.Type switch
         {

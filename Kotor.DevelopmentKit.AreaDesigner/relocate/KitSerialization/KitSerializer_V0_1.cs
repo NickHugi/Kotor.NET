@@ -44,6 +44,17 @@ public class KitSerializer_V0_1
                     TemplateID = magnet.templateID.Value,
                     LocalPosition = new Vector3(magnet.position.ToObject<float[]>()),
                     LocalOrientation = ((float[])magnet.orientation.ToObject<float[]>()).ToQuaternion(),
+                    ConditionCheckLocalMagnetsOnly = magnet.conditionCheckLocalMagnetsOnly?.ToObject<bool>() ?? false,
+                    ConditionMustHaveTemplate = magnet.conditionMustHaveTemplate?.ToObject<bool>() ?? false,
+                    ConditionOverlapWillDisable = magnet.conditionOverlapWillDisable?.ToObject<bool>() ?? false,
+                    ConditionOverlapCheckCount = magnet.conditionOverlapCheckCount?.ToObject<int>() ?? 0,
+                    ConditionOverlapType = magnet.conditionOverlapType?.ToObject<OverlapCountType>() ?? OverlapCountType.Ignore,
+                    ConditionOverlapOnlyEnableFirst = magnet.conditionOverlapOnlyEnableFirst?.ToObject<bool>() ?? false,
+                    ConditionOverlapOnlyEnableMiddle = magnet.conditionOverlapOnlyEnableMiddle?.ToObject<bool>() ?? false,
+                    ConditionOverlapOnlySameTemplate = magnet.conditionOverlapOnlySameTemplate?.ToObject<bool>() ?? false,
+                    ConditionOverlapOnlySameClass = magnet.conditionOverlapOnlySameClass?.ToObject<bool>() ?? false,
+                    ConditionOverlapOnlySameType = magnet.conditionOverlapOnlySameType?.ToObject<bool>() ?? false,
+                    ConditionOverlapOnlySpecificTypes = magnet.conditionOverlapOnlySpecificTypes?.ToObject<WorldObjectType?[]?>()
                 }).ToArray()
             });
         }
@@ -71,7 +82,18 @@ public class KitSerializer_V0_1
                 kitID = magnet.KitID,
                 templateID = magnet.TemplateID,
                 position = magnet.LocalPosition.ToFloatArray(),
-                orientation = magnet.LocalOrientation.ToFloatArray()
+                orientation = magnet.LocalOrientation.ToFloatArray(),
+                conditionCheckLocalMagnetsOnly = magnet.ConditionCheckLocalMagnetsOnly,
+                conditionMustHaveTemplate = magnet.ConditionMustHaveTemplate,
+                conditionOverlapWillDisable = magnet.ConditionOverlapWillDisable,
+                conditionOverlapCheckCount = magnet.ConditionOverlapCheckCount,
+                conditionOverlapType = magnet.ConditionOverlapType,
+                conditionOverlapOnlyEnableFirst = magnet.ConditionOverlapOnlyEnableFirst,
+                conditionOverlapOnlyEnableMiddle = magnet.ConditionOverlapOnlyEnableMiddle,
+                conditionOverlapOnlySameTemplate = magnet.ConditionOverlapOnlySameTemplate,
+                conditionOverlapOnlySameClass = magnet.ConditionOverlapOnlySameClass,
+                conditionOverlapOnlySameType = magnet.ConditionOverlapOnlySameType,
+                conditionOverlapOnlySpecificTypes = magnet.ConditionOverlapOnlySpecificTypes
             })
         });
 

@@ -35,6 +35,10 @@ public class Magnet
                 magnets = magnets.Where(x => !string.IsNullOrWhiteSpace(x.MagnetTemplate.KitID) && !string.IsNullOrEmpty(x.MagnetTemplate.TemplateID));
             }
 
+            if (MagnetTemplate.ConditionOverlapOnlySameClass)
+            {
+                magnets = magnets.Where(x => x.WorldObjectTemplate?.ClassID == WorldObjectTemplate?.ClassID);
+            }
             if (MagnetTemplate.ConditionOverlapOnlySameTemplate)
             {
                 magnets = magnets.Where(x => x.MagnetTemplate?.Template == MagnetTemplate?.Template);
@@ -50,27 +54,27 @@ public class Magnet
                 return this == middle;
             }
 
-            if (MagnetTemplate.ConiditionOverlapOnlySpecificTypes is not null)
+            if (MagnetTemplate.ConditionOverlapOnlySpecificTypes is not null)
             {
-                magnets = magnets.Where(x => (x.IsHook && MagnetTemplate.ConiditionOverlapOnlySpecificTypes.Contains(x.MagnetTemplate.Template.Type)) || (!x.IsHook && MagnetTemplate.ConiditionOverlapOnlySpecificTypes.Contains(null)));
+                magnets = magnets.Where(x => (x.IsHook && MagnetTemplate.ConditionOverlapOnlySpecificTypes.Contains(x.MagnetTemplate.Template.Type)) || (!x.IsHook && MagnetTemplate.ConditionOverlapOnlySpecificTypes.Contains(null)));
             }
             var derp = magnets.Count();
 
             var visible = MagnetTemplate.ConditionOverlapType switch
             {
-                OverlapCountType.EqualTo => magnets.Count() == MagnetTemplate.ConditionCheckOverlapCount,
-                OverlapCountType.NotEqualTo => magnets.Count() != MagnetTemplate.ConditionCheckOverlapCount,
-                OverlapCountType.LessThan => magnets.Count() < MagnetTemplate.ConditionCheckOverlapCount,
-                OverlapCountType.GreaterThan => magnets.Count() > MagnetTemplate.ConditionCheckOverlapCount,
+                OverlapCountType.EqualTo => magnets.Count() == MagnetTemplate.ConditionOverlapCheckCount,
+                OverlapCountType.NotEqualTo => magnets.Count() != MagnetTemplate.ConditionOverlapCheckCount,
+                OverlapCountType.LessThan => magnets.Count() < MagnetTemplate.ConditionOverlapCheckCount,
+                OverlapCountType.GreaterThan => magnets.Count() > MagnetTemplate.ConditionOverlapCheckCount,
                 _ => true
             };
 
             if (MagnetTemplate.ConditionOverlapOnlyEnableFirst && visible)
             {
-                //var lowestGuid = magnets.Concat([this]).Min(x => x.Parent.ID);
-                //visible = visible && (lowestGuid == Child.ID);
-                var lowestGuid = magnets.Concat([this]).Min(x => x.Child.ID);
+                var lowestGuid = magnets.Append(this).Min(x => x.Child.ID);
                 visible = visible && (lowestGuid == Child.ID);
+                //var lowestGuid = magnets.Concat([this]).Min(x => x.Child.ID);
+                //visible = visible && (lowestGuid == Child.ID);
             }
 
             return visible;

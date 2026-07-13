@@ -202,6 +202,16 @@ public class KitEditorViewModel : ReactiveObject
                     TemplateID = TemplateIDFromNode(x),
                     Position = PositionFromNode(x),
                     Orientation = OrientationFromNode(x),
+                    ConditionCheckLocalMagnetsOnly = GetBool(x, "CheckLocalMagnetsOnly"),
+                    ConditionMustHaveTemplate = GetBool(x, "MustHaveTemplate"),
+                    ConditionOverlapWillDisable = GetBool(x, "OverlapWillDisable"),
+                    ConditionOverlapCheckCount = GetInt(x, "OverlapCheckCount"),
+                    ConditionOverlapType = GetOverlapCountType(x, "OverlapType"),
+                    ConditionOverlapOnlyEnableFirst = GetBool(x, "OverlapOnlyEnableFirst"),
+                    ConditionOverlapOnlyEnableMiddle = GetBool(x, "OverlapOnlyEnableMiddle"),
+                    ConditionOverlapOnlySameTemplate = GetBool(x, "OverlapOnlySameTemplate"),
+                    ConditionOverlapOnlySameClass = GetBool(x, "OverlapOnlySameClass"),
+                    ConditionOverlapOnlySameType = GetBool(x, "OverlapOnlySameType"),
                 }),
             ]
         };
@@ -249,6 +259,7 @@ public class KitEditorViewModel : ReactiveObject
                     TemplateID = $"floor_{filename.Replace("floor_", "")}",
                     Position = new(Vector3.Zero),
                     Orientation = new(Quaternion.Identity),
+                    
                 },
                 new MagnetItem()
                 {
@@ -310,5 +321,31 @@ public class KitEditorViewModel : ReactiveObject
         const string searchTerm = "_TemplateID=";
         var target = node.Children.SingleOrDefault(x => x.Name.Contains(searchTerm));
         return (target is null) ? "" : target.Name.Substring(target.Name.IndexOf(searchTerm) + searchTerm.Length);
+    }
+    private string GetString(MDLNode node, string property)
+    {
+        var searchTerm = $"_{property}=";
+        var target = node.Children.SingleOrDefault(x => x.Name.Contains(searchTerm));
+        return (target is null) ? "" : target.Name.Substring(target.Name.IndexOf(searchTerm) + searchTerm.Length);
+    }
+    private bool GetBool(MDLNode node, string property)
+    {
+        return GetString(node, property) == "true";
+    }
+    private int GetInt(MDLNode node, string property)
+    {
+        return int.TryParse(GetString(node, property), out var result) ? result : 0;
+    }
+    private OverlapCountType GetOverlapCountType(MDLNode node, string property)
+    {
+        return GetString(node, property) switch
+        {
+            "equal" => OverlapCountType.EqualTo,
+            "notequal" => OverlapCountType.NotEqualTo,
+            "lessthan" => OverlapCountType.LessThan,
+            "greaterthan" => OverlapCountType.GreaterThan,
+            "ignore" => OverlapCountType.Ignore,
+            _ => OverlapCountType.Ignore
+        };  
     }
 }
