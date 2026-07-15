@@ -156,16 +156,9 @@ public class KitEditorViewModel : ReactiveObject
             var existing = ObjectTemplateItems.Where(x => x.TemplateID == template.TemplateID);
             _objectTemplatesSource.RemoveMany(existing);
             _objectTemplatesSource.Add(template);
-
-            if (template.Type == WorldObjectType.Floor)
-            {
-                var tileTemplate = TileFromFloor(filename, template, mdl);
-                existing = ObjectTemplateItems.Where(x => x.TemplateID == tileTemplate.TemplateID);
-                _objectTemplatesSource.RemoveMany(existing);
-                _objectTemplatesSource.Add(tileTemplate);
-            }
         }
     }
+
     public void AddTemplate()
     {
         _objectTemplatesSource.Add(new WorldObjectItem
@@ -225,6 +218,8 @@ public class KitEditorViewModel : ReactiveObject
             return WorldObjectType.Floor;
         else if (filename.Contains("ceiling"))
             return WorldObjectType.Ceiling;
+        else if (filename.Contains("tile"))
+            return WorldObjectType.Tile;
         else if (filename.Contains("wall"))
             return WorldObjectType.Wall;
         else if (filename.Contains("generic"))
@@ -237,63 +232,6 @@ public class KitEditorViewModel : ReactiveObject
             return WorldObjectType.DoorFrame;
         else
             return WorldObjectType.Generic;
-    }
-    private WorldObjectItem TileFromFloor(string filename, WorldObjectItem floor, MDL mdl)
-    {
-        var wallNodes = mdl.Root.GetAllDescendants().Where(x => x.Name.Contains("magnet.wall."));
-        var cornerNodes = mdl.Root.GetAllDescendants().Where(x => x.Name.Contains("magnet.corner."));
-        var outerCornerNodes = mdl.Root.GetAllDescendants().Where(x => x.Name.Contains("magnet.ocorner."));
-        var innerCornerNodes = mdl.Root.GetAllDescendants().Where(x => x.Name.Contains("magnet.icorner."));
-        var floorNodes = mdl.Root.GetAllDescendants().Where(x => x.Name.Contains("magnet.floor."));
-        var ceilingNodes = mdl.Root.GetAllDescendants().Where(x => x.Name.Contains("magnet.ceiling."));
-
-        return new WorldObjectItem()
-        {
-            Type = WorldObjectType.Tile,
-            KitID = KitID,
-            TemplateID = filename.Replace("floor_", "tile_"),
-            ClassID = ClassIDFromMDL(mdl),
-            Name = NameFromMDL(mdl).Replace("Floor", "Tile"),
-            Magnets =
-            [
-                new MagnetItem()
-                {
-                    KitID = KitID,
-                    TemplateID = $"floor_{filename.Replace("floor_", "")}",
-                    Position = new(Vector3.Zero),
-                    Orientation = new(Quaternion.Identity),
-                    
-                },
-                new MagnetItem()
-                {
-                    KitID = KitID,
-                    TemplateID = $"ceiling_{filename.Replace("floor_", "")}",
-                    Position = new(Vector3.Zero),
-                    Orientation = new(Quaternion.Identity),
-                },
-                ..wallNodes.Select(x => new MagnetItem()
-                {
-                    KitID = KitID,
-                    TemplateID = $"wall_{x.Name.Split('.').Last()}",
-                    Position = PositionFromNode(x),
-                    Orientation = OrientationFromNode(x),
-                }),
-                ..cornerNodes.Concat(innerCornerNodes).Select(x => new MagnetItem()
-                {
-                    KitID = KitID,
-                    TemplateID = $"icorner_{x.Name.Split('.').Last()}",
-                    Position = PositionFromNode(x),
-                    Orientation = OrientationFromNode(x),
-                }),
-                ..cornerNodes.Concat(outerCornerNodes).Select(x => new MagnetItem()
-                {
-                    KitID = KitID,
-                    TemplateID = $"ocorner_{x.Name.Split('.').Last()}",
-                    Position = PositionFromNode(x),
-                    Orientation = OrientationFromNode(x),
-                }),
-            ]
-        };
     }
     private ReactiveVector3 PositionFromNode(MDLNode node)
     {
