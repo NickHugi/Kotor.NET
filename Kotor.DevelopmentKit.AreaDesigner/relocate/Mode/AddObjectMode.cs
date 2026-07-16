@@ -58,13 +58,13 @@ public class AddObjectMode : BaseMode
         _addObject.LocalPosition = point;
         _addObject.LocalOrientation = Quaternion.CreateFromYawPitchRoll(0, 0, angle * (float)Math.PI / 180);
 
-        var roomDescriptors = new List<IDrawCallDescriptor>();
-        _areaEntity.RenderObject(_engine.AssetManager, _addObject, ref roomDescriptors);
-        roomDescriptors.OfType<MeshDescriptor>().ToList().ForEach(x => x.AmbientColor = new Vector3(1.5f, 1.5f, 1.5f));
-        descriptors.AddRange(roomDescriptors);
+        //var roomDescriptors = new List<IDrawCallDescriptor>();
+        //_areaEntity.RenderObject(_engine.AssetManager, _addObject, ref roomDescriptors);
+        //roomDescriptors.OfType<MeshDescriptor>().ToList().ForEach(x => x.AmbientColor = new Vector3(1.5f, 1.5f, 1.5f));
+        //descriptors.AddRange(roomDescriptors);
     }
 
-    public override async Task Trigger()
+    public async Task AddObject()
     {
         if (SelectedObjectTemplate is null)
             return;

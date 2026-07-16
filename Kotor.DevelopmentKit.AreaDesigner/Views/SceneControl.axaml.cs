@@ -44,7 +44,6 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
 {
     public AreaDesignerViewModel ViewModel => (AreaDesignerViewModel)DataContext;
 
-    public OrbitCamera _camera { get; } = new();
     private Point? _lastPointerPosition;
     private DateTime _lastRender = DateTime.Now;
     private DesignerResourceManager _resourceManager = new(@"C:\Kits");
@@ -64,20 +63,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
 
     private async Task LoadDefaultResources()
     {
-        _camera.Distance = 5;
-        _camera.Pitch = 1;
-        _camera.Target = new(0, 0, 2);
-
         await LoadRequiredDataForKits();
-
-        ViewModel.Engine.Scene.AddEntity(new AreaEntity());
-        ViewModel.Engine.RenderInterceptor = descriptors =>
-        {
-            if (_lastPointerPosition is null)
-                return;
-
-            ViewModel.RenderIntercept(_camera, _lastPointerPosition.GetValueOrDefault(), descriptors).Wait();
-        };
     }
 
     private async Task LoadRequiredDataForKits()
@@ -132,7 +118,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         {
             AssetManager = new AssetManager(),
             GL = new GL(context),
-            Scene = new Scene(),
+            Scene = new AreaScene(),
         };
         ViewModel.Engine.Init();
 
@@ -157,7 +143,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
 
         var delta = (float)(DateTime.Now - _lastRender).Milliseconds / 1000;
         ViewModel.Engine.Update(delta);
-        ViewModel.Engine.Render(_camera);
+        ViewModel.Engine.Render();
 
         _lastRender = DateTime.Now;
         RequestNextFrameRendering();
@@ -180,43 +166,47 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         var scale = TopLevel.GetTopLevel(this).RenderScaling;
         var pos = e.GetCurrentPoint(this).Position * scale;
 
+        ViewModel.Scene.Mouse = new Vector2((int)pos.X, (int)pos.Y);
+
         var mouseX = (int)pos.X;
         var mouseY = (int)pos.Y;
 
-        if (_lastPointerPosition.HasValue)
-        {
-            var delta = pos - _lastPointerPosition.Value;
+        ViewModel.Scene.Mode?.MouseMove(_inputs, ViewModel.Scene);
 
-            float deltaX = (float)delta.X;
-            float deltaY = (float)delta.Y;
+        //if (_lastPointerPosition.HasValue)
+        //{
+        //    var delta = pos - _lastPointerPosition.Value;
 
-            if (buttonProperties.IsRightButtonPressed && keyModifiers == KeyModifiers.None)
-            {
-                _camera.Pitch += (float)deltaY / 500;
-                _camera.Yaw -= (float)deltaX / 500;
-            }
-            if (buttonProperties.IsLeftButtonPressed && keyModifiers == KeyModifiers.Shift)
-            {
-                Vector3 forward = new Vector3(
-                    MathF.Cos(_camera.Pitch) * MathF.Cos(_camera.Yaw),
-                    MathF.Cos(_camera.Pitch) * MathF.Sin(_camera.Yaw),
-                    MathF.Sin(_camera.Pitch));
+        //    float deltaX = (float)delta.X;
+        //    float deltaY = (float)delta.Y;
 
-                forward = Vector3.Normalize(forward);
+        //    if (buttonProperties.IsRightButtonPressed && keyModifiers == KeyModifiers.None)
+        //    {
+        //        ViewModel.Scene.ActiveCamera.Pitch += (float)deltaY / 500;
+        //        ViewModel.Scene.ActiveCamera.Yaw -= (float)deltaX / 500;
+        //    }
+        //    if (buttonProperties.IsLeftButtonPressed && keyModifiers == KeyModifiers.Shift)
+        //    {
+        //        Vector3 forward = new Vector3(
+        //            MathF.Cos(ViewModel.Scene.ActiveCamera.Pitch) * MathF.Cos(_camera.Yaw),
+        //            MathF.Cos(ViewModel.Scene.ActiveCamera.Pitch) * MathF.Sin(_camera.Yaw),
+        //            MathF.Sin(ViewModel.Scene.ActiveCamera.Pitch));
 
-                Vector3 worldUp = Vector3.UnitZ;
-                Vector3 right = Vector3.Normalize(Vector3.Cross(forward, worldUp));
-                Vector3 flatForward = new Vector3(forward.X, forward.Y, 0f);
+        //        forward = Vector3.Normalize(forward);
 
-                if (flatForward.LengthSquared() > 0)
-                    flatForward = Vector3.Normalize(flatForward);
+        //        Vector3 worldUp = Vector3.UnitZ;
+        //        Vector3 right = Vector3.Normalize(Vector3.Cross(forward, worldUp));
+        //        Vector3 flatForward = new Vector3(forward.X, forward.Y, 0f);
 
-                Vector3 movement = (-right * deltaX + flatForward * deltaY) * 0.01f;
-                _camera.Target -= movement;
-            }
-        }
+        //        if (flatForward.LengthSquared() > 0)
+        //            flatForward = Vector3.Normalize(flatForward);
 
-        _lastPointerPosition = pos;
+        //        Vector3 movement = (-right * deltaX + flatForward * deltaY) * 0.01f;
+        //        ViewModel.Scene.ActiveCamera.Target -= movement;
+        //    }
+        //}
+
+        //_lastPointerPosition = pos;
     }
 
     private void PointerWheelChanged(object? sender, Avalonia.Input.PointerWheelEventArgs e)
@@ -226,13 +216,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         var scrollX = (float)e.Delta.X;
         var scrollY = (float)e.Delta.Y;
 
-        if (keyModifiers == KeyModifiers.None)
-        {
-            _camera.Distance -= scrollY / 1;
-        }
-        if (keyModifiers == KeyModifiers.Control)
-        {
-        }
+        ViewModel.Scene.Mode?.MouseScroll(_inputs, ViewModel.Scene, new(scrollX, scrollY));
     }
 
     private void PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
@@ -246,14 +230,20 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         var mouseX = (int)pos.X;
         var mouseY = (int)pos.Y;
 
-        if (keyModifiers == KeyModifiers.None && buttonProperties.IsLeftButtonPressed)
-        {
-            ViewModel.Mode?.Trigger();
-        }
-        if (keyModifiers == KeyModifiers.None && buttonProperties.IsRightButtonPressed)
-        {
-            ViewModel.Mode?.AlternativeTrigger();
-        }
+        _inputs.SetMouseButtonDown(0, buttonProperties.IsLeftButtonPressed);
+        _inputs.SetMouseButtonDown(1, buttonProperties.IsMiddleButtonPressed);
+        _inputs.SetMouseButtonDown(2, buttonProperties.IsRightButtonPressed);
+
+        ViewModel.Scene?.Mode?.MousePress(_inputs);
+    }
+
+    private void PointerReleased(object? sender, PointerReleasedEventArgs e)
+    {
+        var buttonProperties = e.GetCurrentPoint(this).Properties;
+
+        _inputs.SetMouseButtonDown(0, buttonProperties.IsLeftButtonPressed);
+        _inputs.SetMouseButtonDown(1, buttonProperties.IsMiddleButtonPressed);
+        _inputs.SetMouseButtonDown(2, buttonProperties.IsRightButtonPressed);
     }
 
     private void UserControl_KeyDown(object? sender, KeyEventArgs e)
@@ -329,7 +319,6 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         await dialog.ShowDialog((Window)TopLevel.GetTopLevel(this)!);
         context.SetOutput(Unit.Default);
     }
-
 }
 
 public class Inputs

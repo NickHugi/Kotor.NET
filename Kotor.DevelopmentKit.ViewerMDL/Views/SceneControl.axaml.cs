@@ -33,7 +33,6 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest
     // TODO - pass through only engine, handle init of context
     public MDLResourceViewerViewModel ViewModel => (MDLResourceViewerViewModel)DataContext;
 
-    public OrbitCamera _camera { get; } = new();
     private Point? _lastPointerPosition;
     private DateTime _lastRender = DateTime.Now;
 

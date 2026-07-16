@@ -4,19 +4,40 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using Avalonia.Controls;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
+using Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
 using Kotor.NET.Graphics;
-using Kotor.NET.Graphics.Entities;
-using Kotor.NET.Graphics.Model;
+using Kotor.NET.Graphics.Cameras;
 using Kotor.NET.Graphics.Renderers.Descriptors;
-using ReactiveUI;
 
-namespace Kotor.DevelopmentKit.AreaDesigner.relocate;
+namespace Kotor.DevelopmentKit.AreaDesigner;
 
-public class AreaEntity : BaseEntity
+public class AreaScene : IScene
 {
+    private Vector2 _previousMouse;
+    public Vector2 MouseDelta { get; private set; }
+    public Vector2 Mouse
+    {
+        get => field;
+        set
+        {
+            _previousMouse = field;
+            field = value;
+            MouseDelta = Mouse - _previousMouse;
+        }
+    }
+
+    public float RunningTime { get; set; }
+
+    public Camera ActiveCamera { get; } = new OrbitCamera()
+    {
+        Distance = 5,
+        Pitch = 1,
+        Target = new(0, 0, 2),
+    };
     public Area Area { get; set; } = new();
+    public List<WorldObject> Projection { get; set; } = [];
+    public BaseMode? Mode { get; set; }
 
     public bool DoRenderCorners { get; set; } = true;
     public bool DoRenderWalls { get; set; } = true;
@@ -25,13 +46,41 @@ public class AreaEntity : BaseEntity
     public bool DoRenderCeiling { get; set; } = false;
     public bool DoRenderObjects { get; set; } = true;
 
-    public override ICollection<IDrawCallDescriptor> GetDrawCallDescriptors(IAssetManager assets)
+    public void Update(IAssetManager assets, float timestep)
+    {
+        Mode?.Update(timestep, this);
+        RunningTime += timestep;
+    }
+
+    public IEnumerable<IDrawCallDescriptor> Render(IAssetManager assets)
+    {
+        return GetDrawCallDescriptors(assets);
+    }
+
+    public ICollection<IDrawCallDescriptor> GetDrawCallDescriptors(IAssetManager assets)
     {
         var descriptors = new List<IDrawCallDescriptor>();
+
+        var inject = Area.Rooms.FirstOrDefault();
+        if (inject is not null)
+        {
+            Projection.ForEach(x => inject.AddObject(x));
+        }
+        else
+        {
+            Projection.ForEach(x => RenderObject(assets, x, ref descriptors));
+        }
 
         foreach (var room in Area.Rooms)
         {
             RenderRoom(assets, room, ref descriptors);
+        }
+
+        RenderMagnets(assets, ref descriptors);
+
+        if (inject is not null)
+        {
+            Projection.ForEach(x => inject.Objects.Remove(x));
         }
 
         return descriptors;
@@ -73,27 +122,23 @@ public class AreaEntity : BaseEntity
         {
             descriptors.AddRange(DescriptorsForModel(assets, worldObject.Template.Model, worldObject.GlobalTransform, worldObject));
         }
-
-        // TODO
-        //foreach (var doorframe in tile.AttachedObjects.OfType<UltimateWorldObject>().Select(x => x.DoorFrame).Where(x => x is not null))
-        //{
-        //    RenderDoorFrame(assets, doorframe, ref descriptors);
-        //}
     }
-    private void RenderWall(IAssetManager assets, WorldObject wall, ref List<IDrawCallDescriptor> descriptors)
+    public void RenderMagnets(IAssetManager assets, ref List<IDrawCallDescriptor> descriptors)
     {
-        // TODO
-        //if (!wall.Visible || ((wall.DoorFrame is null && !DoRenderWalls) || (wall.DoorFrame is not null && !DoRenderDoors)))
-        //    return;
-
-        //descriptors.AddRange(DescriptorsForModel(assets, wall.Template.Model, wall.GlobalTransform, wall));
-    }
-    private void RenderDoorFrame(IAssetManager assets, WorldObject doorframe, ref List<IDrawCallDescriptor> descriptors)
-    {
-        if (!doorframe.Visible || !DoRenderDoors)
-            return;
-
-        descriptors.AddRange(DescriptorsForModel(assets, doorframe.Template.Model, doorframe.GlobalTransform, doorframe));
+        var size = (0.4f) + MathF.Sin((RunningTime % 0.75f) / 0.75f * MathF.PI) * 0.2f;
+        descriptors.AddRange(Area.Rooms
+            .SelectMany(x => x.AllMagnets)
+            .Where(x => x.IsTileMagnet)
+            .ToList()
+            .Select(magnet => new BillboardDescriptor()
+            {
+                AllwaysOnTop = true,
+                DoRender = true,
+                FixedSize = false,
+                Image = "magnet",
+                Location = magnet.GlobalPosition,
+                Size = size
+            }));
     }
 
     // TODO - clean this up somehow
@@ -109,10 +154,5 @@ public class AreaEntity : BaseEntity
                 return x;
             })
             .ToList();
-    }
-
-    public override void Update(IAssetManager assetManager, float delta)
-    {
-
     }
 }

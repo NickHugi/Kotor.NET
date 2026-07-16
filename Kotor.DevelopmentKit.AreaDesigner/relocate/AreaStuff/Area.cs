@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Kotor.NET.Graphics.Cameras;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
 public class Area
 {
-    private List<Room> _rooms = new();
     public IReadOnlyList<Room> Rooms => _rooms.AsReadOnly();
+    private List<Room> _rooms = new();
 
     public ICollection<Magnet> AllMagnets
     {

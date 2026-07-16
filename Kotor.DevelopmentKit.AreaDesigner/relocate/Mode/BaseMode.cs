@@ -7,6 +7,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Input;
 using DynamicData;
 using DynamicData.Binding;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
@@ -37,7 +38,7 @@ public class BaseMode : ReactiveObject
     protected readonly DesignerSettings _settings;
 
     protected IReadOnlyCollection<WorldObjectTemplate> _objects => Kits.Where(x => x.Active).SelectMany(x => x.Kit.Objects).ToList();
-    protected AreaEntity _areaEntity => _engine.Scene.Entities.OfType<AreaEntity>().Single(x => x.Area == _area);
+    //protected AreaScene _areaEntity => _engine.Scene.Entities.OfType<AreaEntity>().Single(x => x.Area == _area);
 
     public BaseMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, WorldObject activeWorldObject, DesignerSettings settings)
     {
@@ -55,22 +56,39 @@ public class BaseMode : ReactiveObject
         return Task.CompletedTask;
     }
 
-    public virtual Task Update(float delta)
+    public virtual Task Update(float delta, AreaScene scene)
     {
         return Task.CompletedTask;
     }
 
-    public virtual Task Trigger()
+    public virtual void MousePress(Inputs inputs)
     {
-        return Task.CompletedTask;
     }
-    public virtual Task AlternativeTrigger()
+    public virtual void MouseMove(Inputs inputs, AreaScene scene)
     {
-        return Task.CompletedTask;
+        if (inputs.IsMouseButtonDown(0) && inputs.IsKeyDown((int)Key.LeftShift))
+        {
+            Vector3 forward = scene.ActiveCamera.GetForward();
+
+            forward = Vector3.Normalize(forward);
+
+            Vector3 worldUp = Vector3.UnitZ;
+            Vector3 right = Vector3.Normalize(Vector3.Cross(forward, worldUp));
+            Vector3 flatForward = new Vector3(forward.X, forward.Y, 0f);
+
+            if (flatForward.LengthSquared() > 0)
+                flatForward = Vector3.Normalize(flatForward);
+
+            Vector3 movement = (-right * scene.MouseDelta.X + flatForward * scene.MouseDelta.Y) * -0.01f;
+            scene.ActiveCamera.Move(movement);
+        }
     }
-    public virtual Task KeyPress(Inputs inputs, int keyCode)
+    public virtual void MouseScroll(Inputs inputs, AreaScene scene, Vector2 scroll)
     {
-        return Task.CompletedTask;
+        scene.ActiveCamera.Zoom(scroll.Y / 1);
+    }
+    public virtual void KeyPress(Inputs inputs, int keyCode)
+    {
     }
 
     protected IEnumerable<RaycastResult<WorldObject>> RaycastWorldObject(OrbitCamera camera, double x, double y)

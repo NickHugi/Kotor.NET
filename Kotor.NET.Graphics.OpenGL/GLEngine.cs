@@ -22,7 +22,7 @@ namespace Kotor.NET.Graphics.OpenGL;
 public class GLEngine
 {
     public required GL GL { get; init; }
-    public required Scene Scene { get; init; }
+    public required IScene Scene { get; init; }
     public required AssetManager AssetManager { get; init; }
     public Action<List<IDrawCallDescriptor>>? RenderInterceptor { get; set;  }
 
@@ -62,7 +62,7 @@ public class GLEngine
         AssetManager.Dispose();
     }
 
-    public void Render(Camera camera)
+    public void Render()
     {
         while (_glQueue.Count > 0)
         {
@@ -76,20 +76,12 @@ public class GLEngine
         GL.ClearColor(0.1f, 0.0f, 0.0f, 1.0f);
         GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
-        List<IDrawCallDescriptor> descriptors =
-        [
-            ..Scene.Entities.SelectMany(x => x.GetDrawCallDescriptors(AssetManager)),
-            ..Scene.Controls.SelectMany(x => x.GetImageDescriptors(AssetManager))
-        ];
+        var descriptors = Scene.Render(AssetManager);
 
-        RenderInterceptor?.Invoke(descriptors);
-
-        //descriptors = descriptors.OrderBy(x => (x as BillboardDescriptor)?.AllwaysOnTop ?? false).ToList();
-
-        new LineRenderer().Render(AssetManager, descriptors, camera, viewport);
-        new GeometryRenderer().Render(AssetManager, descriptors, camera, viewport);
-        new BillboardRenderer().Render(AssetManager, descriptors, camera, viewport);
-        new ImageRenderer().Render(AssetManager, descriptors, camera, viewport);
+        new LineRenderer().Render(AssetManager, descriptors, Scene.ActiveCamera, viewport);
+        new GeometryRenderer().Render(AssetManager, descriptors, Scene.ActiveCamera, viewport);
+        new BillboardRenderer().Render(AssetManager, descriptors, Scene.ActiveCamera, viewport);
+        new ImageRenderer().Render(AssetManager, descriptors, Scene.ActiveCamera, viewport);
     }
 
     public void Update(float timestep)
@@ -98,7 +90,7 @@ public class GLEngine
         Scene.Update(AssetManager, timestep);
     }
 
-    public async Task<BaseEntity?> Pick(int x, int y, Camera camera)
+    public async Task<int> Pick(int x, int y, Camera camera)
     {
         return await RunOnGLThread(() =>
         {
@@ -113,7 +105,7 @@ public class GLEngine
             GL.ReadPixels(x, (int)Height - y, 1, 1, PixelFormat.Rgba, PixelType.UnsignedByte, bytes);
             var id = bytes[3] + (bytes[2] << 8) + (bytes[1] << 16) + (bytes[0] << 24);
 
-            return Scene.Entities.FirstOrDefault(x => x.ID == id);
+            return id;
         });
     }
 

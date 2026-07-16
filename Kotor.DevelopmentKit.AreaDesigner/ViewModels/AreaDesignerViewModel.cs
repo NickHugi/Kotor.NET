@@ -66,16 +66,16 @@ public class AreaDesignerViewModel : ReactiveObject
         }
     }
 
-    public AreaEntity AreaEntity
+    public AreaScene Scene
     {
-        get => Engine.Scene.Entities.OfType<AreaEntity>().Single();
+        get => Engine.Scene as AreaScene;
     }
     public Area Area
     {
-        get => AreaEntity.Area;
+        get => Scene.Area;
         set
         {
-            AreaEntity.Area = value;
+            Scene.Area = value;
             this.RaisePropertyChanged(nameof(Area));
         }
     }
@@ -87,7 +87,11 @@ public class AreaDesignerViewModel : ReactiveObject
     public BaseMode Mode
     {
         get;
-        private set => this.RaiseAndSetIfChanged(ref field, value);
+        private set
+        {
+            this.RaiseAndSetIfChanged(ref field, value);
+            Scene.Mode = value;
+        }
     }
     public DesignerSettings Settings { get; } = new();
 
@@ -97,7 +101,7 @@ public class AreaDesignerViewModel : ReactiveObject
         get;
         set
         {
-            AreaEntity?.DoRenderWalls = value;
+            Scene?.DoRenderWalls = value;
             this.RaiseAndSetIfChanged(ref field, value);
         }
     } = true;
@@ -106,7 +110,7 @@ public class AreaDesignerViewModel : ReactiveObject
         get;
         set
         {
-            AreaEntity?.DoRenderDoors = value;
+            Scene?.DoRenderDoors = value;
             this.RaiseAndSetIfChanged(ref field, value);
         }
     } = true;
@@ -115,7 +119,7 @@ public class AreaDesignerViewModel : ReactiveObject
         get;
         set
         {
-            AreaEntity?.DoRenderFloor = value;
+            Scene?.DoRenderFloor = value;
             this.RaiseAndSetIfChanged(ref field, value);
         }
     } = true;
@@ -124,7 +128,7 @@ public class AreaDesignerViewModel : ReactiveObject
         get;
         set
         {
-            AreaEntity?.DoRenderCeiling = value;
+            Scene?.DoRenderCeiling = value;
             this.RaiseAndSetIfChanged(ref field, value);
         }
     } = false;
@@ -133,7 +137,7 @@ public class AreaDesignerViewModel : ReactiveObject
         get;
         set
         {
-            AreaEntity?.DoRenderCorners = value;
+            Scene?.DoRenderCorners = value;
             this.RaiseAndSetIfChanged(ref field, value);
         }
     } = true;
@@ -142,7 +146,7 @@ public class AreaDesignerViewModel : ReactiveObject
         get;
         set
         {
-            AreaEntity?.DoRenderObjects = value;
+            Scene?.DoRenderObjects = value;
             this.RaiseAndSetIfChanged(ref field, value);
         }
     } = true;
@@ -178,13 +182,11 @@ public class AreaDesignerViewModel : ReactiveObject
 
     public void SetSceneMode_AddTile()
     {
-        var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
-        Mode = new AddTileMode(Engine, area, Kits, ActiveWorldObject, Settings);
+        Mode = new AddTileMode(Engine, Area, Kits, ActiveWorldObject, Settings);
     }
     public void SetSceneMode_AddObject()
     {
-        var area = Engine.Scene.Entities.OfType<AreaEntity>().Single().Area;
-        Mode = new AddObjectMode(Engine, area, Kits, ActiveWorldObject, Settings);
+        Mode = new AddObjectMode(Engine, Area, Kits, ActiveWorldObject, Settings);
     }
     public void SetSceneMode_SelectObject()
     {

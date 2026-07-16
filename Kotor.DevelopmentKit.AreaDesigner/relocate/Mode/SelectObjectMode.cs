@@ -151,7 +151,7 @@ public class SelectObjectMode : BaseMode
         return Task.CompletedTask;
     }
 
-    public override async Task Trigger()
+    public async Task SetSelection()
     {
         if (_projectedObject is null)
             return;
@@ -161,7 +161,7 @@ public class SelectObjectMode : BaseMode
         //SelectedObjectTemplate = _projectedObject.Template;
     }
 
-    public override Task KeyPress(Inputs inputs, int key)
+    public override void KeyPress(Inputs inputs, int key)
     {
         if (key == 50) // G
         {
@@ -183,7 +183,5 @@ public class SelectObjectMode : BaseMode
             if (_isTranslating)
                 _transformAxis = Axis.Z;
         }
-
-        return Task.CompletedTask;
     }
 }

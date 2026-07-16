@@ -5,10 +5,12 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Input;
 using DynamicData;
 using DynamicData.Binding;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.ViewModels;
+using Kotor.DevelopmentKit.AreaDesigner.Views;
 using Kotor.NET.Common.Data.Geometry;
 using Kotor.NET.Extensions;
 using Kotor.NET.Graphics;
@@ -57,12 +59,13 @@ public class AddTileMode : BaseMode
         Kits.ToObservableChangeSet().AutoRefresh(x => x.Active).Subscribe(_ => this.RaisePropertyChanged(nameof(TileTemplates)));
     }
 
-    public override async Task RenderIntercept(OrbitCamera camera, Point mouse, List<IDrawCallDescriptor> descriptors)
+    public override async Task Update(float delta, AreaScene scene)
     {
         if (SelectedTileTemplate is null)
             return;
 
-        var ray = camera.ProjectRay((int)mouse.X, (int)mouse.Y, _engine.Width, _engine.Height);
+        var ray = scene.ActiveCamera.ProjectRay((int)scene.Mouse.X, (int)scene.Mouse.Y, _engine.Width, _engine.Height);
+        //var ray = scene.ActiveCamera.ProjectRay((int)mouse.X, (int)mouse.Y, _engine.Width, _engine.Height);
         var point = ray.FindPointOnPlane(Axis.Z, 0);
 
         if (_settings.PositionSnapEnabled)
@@ -85,93 +88,34 @@ public class AddTileMode : BaseMode
             _projectedRoom.Position = new();
             _projectedRoom.Position = result.Target.GlobalPosition - result.Source.GlobalPosition;
 
-            //var sourceWall = result.Source.Parent;
             var sourceWall = _projectedRoom.AllObjects.FirstOrDefault(x => x.Template == result.Source.MagnetTemplate.Template && x.GlobalPosition == result.Source.GlobalPosition);
 
             if (result.Target.Parent.Type == WorldObjectType.DoorFrame)
             {
                 sourceWall.SwitchTemplate(result.Target.Parent.ParentMagnet.Parent.Template);
-                RenderRoom(descriptors);
             }
-            else
-            {
-                RenderRoom(descriptors);
-                RenderPredict(descriptors);
-            }
-        }
-        else
-        {
-            RenderRoom(descriptors);
         }
 
-        // Render Magnets
-        var size = (0.4f) + MathF.Sin((_engine.RunningTime % 0.75f) / 0.75f * MathF.PI) * 0.2f;
-        _area.Rooms.SelectMany(x => x.AllMagnets)
-            .Concat(_projectedRoom.AllMagnets)
-            .Where(x => x.IsTileMagnet)
-            .ToList()
-            .ForEach(magnet =>
-            {
-                descriptors.Add(new BillboardDescriptor()
-                {
-                    AllwaysOnTop = true,
-                    DoRender = true,
-                    FixedSize = false,
-                    Image = "magnet",
-                    Location = magnet.GlobalPosition,
-                    Size = size
-                });
-            });
+        scene.Projection.Clear();
+        scene.Projection.Add(_projectedTile);
     }
-    private void RenderRoom(List<IDrawCallDescriptor> descriptors)
+
+    public override void MousePress(Inputs inputs)
     {
-        var roomDescriptors = new List<IDrawCallDescriptor>();
-        _areaEntity.RenderRoom(_engine.AssetManager, _projectedRoom, ref roomDescriptors);
-        roomDescriptors.OfType<MeshDescriptor>().ToList().ForEach(x => x.AmbientColor += new Vector3(0.5f, 0.5f, 0.5f));
-        descriptors.AddRange(roomDescriptors);
+        PlaceTile();
     }
-    private void RenderPredict(List<IDrawCallDescriptor> descriptors)
+
+    public override void MouseMove(Inputs inputs, AreaScene scene)
     {
-        var tiles = _area.Rooms.SelectMany(x => x.Objects.Where(x => x.Type == WorldObjectType.Tile)).ToList();
-
-        foreach (var existing in tiles.SelectMany(x => x.AttachedObjects.Where(x => x.Type == WorldObjectType.Wall)))
-        {
-            foreach (var cursor in _projectedTile.AttachedObjects.Where(x => x.Type == WorldObjectType.Wall))
-            {
-                if (existing.GlobalPosition.ApproximatelyEquals(cursor.GlobalPosition, 0.01f))
-                {
-                    descriptors.RemoveAll(x => x.Tag == existing);
-                    descriptors.RemoveAll(x => x.Tag == cursor);
-                }
-            }
-        }
-
-        foreach (var existing in tiles.SelectMany(x => x.AttachedObjects.Where(x => x.Type == WorldObjectType.InnerCorner)))
-        {
-            foreach (var cursor in _projectedTile.AttachedObjects.Where(x => x.Type == WorldObjectType.InnerCorner))
-            {
-                if (existing.GlobalPosition.ApproximatelyEquals(cursor.GlobalPosition, 0.01f))
-                {
-                    descriptors.RemoveAll(x => x.Tag == existing);
-                    descriptors.RemoveAll(x => x.Tag == cursor);
-                }
-            }
-        }
-
-        foreach (var existing in tiles.SelectMany(x => x.AttachedObjects.Where(x => x.Type == WorldObjectType.OuterCorner)))
-        {
-            foreach (var cursor in _projectedTile.AttachedObjects.Where(x => x.Type == WorldObjectType.OuterCorner))
-            {
-                if (existing.GlobalPosition.ApproximatelyEquals(cursor.GlobalPosition, 0.01f))
-                {
-                    descriptors.RemoveAll(x => x.Tag == existing);
-                    descriptors.RemoveAll(x => x.Tag == cursor);
-                }
-            }
-        }
+        base.MouseMove(inputs, scene);
     }
 
-    public override async Task Trigger()
+    public override void MouseScroll(Inputs inputs, AreaScene scene, Vector2 scroll)
+    {
+        base.MouseScroll(inputs, scene, scroll);
+    }
+
+    public void PlaceTile()
     {
         if (SelectedTileTemplate is null)
             return;
@@ -196,3 +140,4 @@ public class AddTileMode : BaseMode
         }
     }
 }
+

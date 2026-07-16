@@ -1,6 +1,7 @@
 using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using static System.Formats.Asn1.AsnWriter;
 using Vector3 = System.Numerics.Vector3;
 
 namespace Kotor.NET.Graphics.Cameras;
@@ -111,8 +112,8 @@ public class OrbitCamera : Camera
     {
         var x = (2.0f * (float)mouseX) / (float)screenWidth - 1.0f;
         var y = 1.0f - (2.0f * (float)mouseY) / (float)screenHeight;
-        Vector4 rayClip = new Vector4(x, y, -1.0f, 1.0f);
-        Vector4 rayEye = Vector4.Transform(rayClip, Matrix4x4.Invert(GetProjectionTransform(screenWidth, screenHeight), out var value) ? value : Matrix4x4.Identity);
+        var rayClip = new Vector4(x, y, -1.0f, 1.0f);
+        var rayEye = Vector4.Transform(rayClip, Matrix4x4.Invert(GetProjectionTransform(screenWidth, screenHeight), out var value) ? value : Matrix4x4.Identity);
         rayEye = new Vector4(rayEye.X, rayEye.Y, -1.0f, 0.0f);
 
         Vector3 rayWorld = Vector3.Normalize(
@@ -120,5 +121,26 @@ public class OrbitCamera : Camera
         );
 
         return new Ray(Position, rayWorld);
+    }
+
+    public override Vector3 GetForward()
+    {
+        return new Vector3(
+            MathF.Cos(Pitch) * MathF.Cos(Yaw),
+            MathF.Cos(Pitch) * MathF.Sin(Yaw),
+            MathF.Sin(Pitch));
+    }
+
+    public override void Move(Vector3 offset)
+    {
+        Target = new(
+            Target.X + offset.X,
+            Target.Y + offset.Y,
+            Target.Z + offset.Z);
+    }
+
+    public override void Zoom(float distance)
+    {
+        Distance += distance;
     }
 }
