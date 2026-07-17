@@ -100,7 +100,7 @@ public class MagnetTemplate
             WorldObjectType.Floor => OverlapCountType.Ignore,
             WorldObjectType.Ceiling => OverlapCountType.Ignore,
             WorldObjectType.Wall => OverlapCountType.LessThan,
-            WorldObjectType.OuterCorner => OverlapCountType.EqualTo,
+            WorldObjectType.OuterCorner => OverlapCountType.LessThan,
             WorldObjectType.InnerCorner => OverlapCountType.EqualTo,
             WorldObjectType.DoorFrame => OverlapCountType.Ignore,
             _ => field
