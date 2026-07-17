@@ -21,8 +21,6 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
 
 public class AddObjectMode : BaseMode
 {
-    public override string Name => "Add Object";
-
     public List<WorldObjectTemplate> ObjectTemplates
     {
         get
@@ -44,7 +42,7 @@ public class AddObjectMode : BaseMode
         Kits.ToObservableChangeSet().AutoRefresh(x => x.Active).Subscribe(_ => this.RaisePropertyChanged(nameof(ObjectTemplates)));
     }
 
-    public override async Task RenderIntercept(OrbitCamera camera, Point mouse, List<IDrawCallDescriptor> descriptors)
+    public async Task RenderIntercept(OrbitCamera camera, Point mouse, List<IDrawCallDescriptor> descriptors)
     {
         if (SelectedObjectTemplate is null)
             return;

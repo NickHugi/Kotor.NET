@@ -24,7 +24,6 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
 
 public class BaseMode : ReactiveObject
 {
-    public virtual string Name { get; } = "";
     public ObservableCollection<KitItem> Kits { get; }
 
     public WorldObject SelectedWorldObject
@@ -38,7 +37,6 @@ public class BaseMode : ReactiveObject
     protected readonly DesignerSettings _settings;
 
     protected IReadOnlyCollection<WorldObjectTemplate> _objects => Kits.Where(x => x.Active).SelectMany(x => x.Kit.Objects).ToList();
-    //protected AreaScene _areaEntity => _engine.Scene.Entities.OfType<AreaEntity>().Single(x => x.Area == _area);
 
     public BaseMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, WorldObject activeWorldObject, DesignerSettings settings)
     {
@@ -51,14 +49,11 @@ public class BaseMode : ReactiveObject
         Kits.ToObservableChangeSet().AutoRefresh(x => x.Active).Subscribe(_ => this.RaisePropertyChanged(nameof(_objects)));
     }
 
-    public virtual Task RenderIntercept(OrbitCamera camera, Point mouse, List<IDrawCallDescriptor> descriptors)
+    public virtual void Update(float delta, AreaScene scene)
     {
-        return Task.CompletedTask;
     }
-
-    public virtual Task Update(float delta, AreaScene scene)
+    public virtual void Render(float delta, AreaScene scene, ref ICollection<IDrawCallDescriptor> descriptors)
     {
-        return Task.CompletedTask;
     }
 
     public virtual void MousePress(Inputs inputs)
@@ -107,7 +102,6 @@ public class BaseMode : ReactiveObject
             .Where(x => x.Distance < 3)
             .ToList();
     }
-
     protected IEnumerable<MagnetResult<Magnet>> NearbyMagnets(ICollection<Magnet> candidates, float distance)
     {
         var near = new List<MagnetResult<Magnet>>();

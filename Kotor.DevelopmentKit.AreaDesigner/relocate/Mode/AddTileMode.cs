@@ -24,8 +24,6 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
 
 public class AddTileMode : BaseMode
 {
-    public override string Name => "Add Room";
-
     private Room _projectedRoom = default!;
     private WorldObject _projectedTile => _projectedRoom.Objects.Single();
     private float angle = 0;
@@ -59,13 +57,12 @@ public class AddTileMode : BaseMode
         Kits.ToObservableChangeSet().AutoRefresh(x => x.Active).Subscribe(_ => this.RaisePropertyChanged(nameof(TileTemplates)));
     }
 
-    public override async Task Update(float delta, AreaScene scene)
+    public override void Update(float delta, AreaScene scene)
     {
         if (SelectedTileTemplate is null)
             return;
 
         var ray = scene.ActiveCamera.ProjectRay((int)scene.Mouse.X, (int)scene.Mouse.Y, _engine.Width, _engine.Height);
-        //var ray = scene.ActiveCamera.ProjectRay((int)mouse.X, (int)mouse.Y, _engine.Width, _engine.Height);
         var point = ray.FindPointOnPlane(Axis.Z, 0);
 
         if (_settings.PositionSnapEnabled)

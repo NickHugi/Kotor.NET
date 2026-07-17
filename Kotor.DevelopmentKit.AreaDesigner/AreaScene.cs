@@ -9,6 +9,7 @@ using Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
 using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Cameras;
 using Kotor.NET.Graphics.Renderers.Descriptors;
+using Silk.NET.Core.Native;
 
 namespace Kotor.DevelopmentKit.AreaDesigner;
 
@@ -54,7 +55,9 @@ public class AreaScene : IScene
 
     public IEnumerable<IDrawCallDescriptor> Render(IAssetManager assets)
     {
-        return GetDrawCallDescriptors(assets);
+        var descriptors = GetDrawCallDescriptors(assets);
+        Mode?.Render(0, this, ref descriptors);
+        return descriptors;
     }
 
     public ICollection<IDrawCallDescriptor> GetDrawCallDescriptors(IAssetManager assets)

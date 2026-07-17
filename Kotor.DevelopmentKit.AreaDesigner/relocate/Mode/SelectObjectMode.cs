@@ -25,8 +25,6 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
 
 public class SelectObjectMode : BaseMode
 {
-    public override string Name => "Select Object";
-
     public required Interaction<WorldObject, Unit> AddToSelection { get; init; }
     public required Interaction<Unit, Unit> ClearSelection { get; init; }
 
@@ -49,7 +47,6 @@ public class SelectObjectMode : BaseMode
     private bool _isTranslating;
     private Axis? _transformAxis;
     private WorldObject? _projectedObject;
-    private Point _mousePrevious;
 
     public SelectObjectMode(GLEngine engine, Area area, ObservableCollection<KitItem> kits, WorldObject activeWorldObject, DesignerSettings settings) : base(engine, area, kits, activeWorldObject, settings)
     {
@@ -72,6 +69,106 @@ public class SelectObjectMode : BaseMode
 
                 @object.SwitchTemplate(SelectedObjectTemplate);
             });
+    }
+
+    public override void Update(float delta, AreaScene scene)
+    {
+        base.Update(delta, scene);
+
+        _projectedObject = RaycastWorldObject(scene.ActiveCamera as OrbitCamera, scene.Mouse.X, scene.Mouse.Y).FirstOrDefault()?.Result;
+
+        if (_isTranslating && SelectedWorldObject is not null)
+        {
+            TranslateSelect(scene);
+        }
+    }
+
+    public override void Render(float delta, AreaScene scene, ref ICollection<IDrawCallDescriptor> descriptors)
+    {
+        base.Render(delta, scene, ref descriptors);
+
+        if (_projectedObject is not null)
+        {
+            descriptors.Where(x => x.Tag == _projectedObject).OfType<MeshDescriptor>().ToList().ForEach(x => x.AmbientColor += new Vector3(0.3f));
+        }
+        if (SelectedWorldObject is not null)
+        {
+            descriptors.Where(x => x.Tag == SelectedWorldObject).OfType<MeshDescriptor>().ToList().ForEach(x => x.AmbientColor += new Vector3(0.3f));
+        }
+        if (_isTranslating && SelectedWorldObject is not null)
+        {
+            Vector3 start = _transformAxis switch
+            {
+                Axis.X => new(500, 0, 0),
+                Axis.Y => new(0, 500, 0),
+                Axis.Z => new(0, 0, 500),
+                _ => new()
+            };
+            Vector4 color = _transformAxis switch
+            {
+                Axis.X => new(1, 0, 0, 1),
+                Axis.Y => new(0, 1, 0, 1),
+                Axis.Z => new(0, 0, 1, 1),
+                _ => new()
+            };
+
+            descriptors.Add(new LineDescriptor()
+            {
+                Color = color,
+                Start = SelectedWorldObject.GlobalPosition + start,
+                End = SelectedWorldObject.GlobalPosition - start,
+                Thickness = 0.5f
+            });
+        }
+    }
+
+    public override void MousePress(Inputs inputs)
+    {
+        ClearSelection.Handle(Unit.Default).Wait();
+
+        if (_projectedObject is not null)
+        {
+            AddToSelection.Handle(_projectedObject).Wait();
+        }
+    }
+
+    public override void KeyPress(Inputs inputs, int key)
+    {
+        if (key == 50) // G
+        {
+            _isTranslating = true;
+            _transformAxis = null;
+        }
+        if (key == 67) // X
+        {
+            if (_isTranslating)
+                _transformAxis = Axis.X;
+        }
+        if (key == 68) // Y
+        {
+            if (_isTranslating)
+                _transformAxis = Axis.Y;
+        }
+        if (key == 69) // Z
+        {
+            if (_isTranslating)
+                _transformAxis = Axis.Z;
+        }
+    }
+
+    public void TranslateSelect(AreaScene scene)
+    {
+        var ray = scene.ActiveCamera.ProjectRay((int)scene.Mouse.X, (int)scene.Mouse.Y, 1109, 703);
+
+        if (_transformAxis.HasValue)
+        {
+            SelectedWorldObject.LocalPosition = ray.SolveLine(_transformAxis.Value, SelectedWorldObject.LocalPosition);
+        }
+        else
+        {
+            var point = ray.FindPointOnPlane(Axis.Z, 0);
+            SelectedWorldObject.LocalPosition = new(point.X, point.Y, SelectedWorldObject.LocalPosition.Z);
+        }
     }
 
     public float ScreenDeltaToWorldMovement(Vector3 axis, Vector2 mouseDelta, OrbitCamera camera, int screenWidth, int screenHeight)
@@ -97,91 +194,5 @@ public class SelectObjectMode : BaseMode
         float worldMovement = screenMovement / screenAxisLength;
 
         return worldMovement;
-    }
-
-    public override Task RenderIntercept(OrbitCamera camera, Point mouse, List<IDrawCallDescriptor> descriptors) // Viewport viewport
-    {
-        var mouseDelta = mouse - _mousePrevious;
-        _mousePrevious = mouse;
-
-        _projectedObject = RaycastWorldObject(camera, mouse.X, mouse.Y).FirstOrDefault()?.Result;
-        if (_projectedObject is not null)
-            descriptors.Where(x => x.Tag == _projectedObject).OfType<MeshDescriptor>().ToList().ForEach(x => x.AmbientColor = new(1.5f, 1.5f, 1.5f));
-
-        if (_isTranslating && SelectedWorldObject is not null)
-        {
-            var ray = camera.ProjectRay((int)mouse.X, (int)mouse.Y, 1109, 703);
-
-            if (_transformAxis.HasValue)
-            {
-                SelectedWorldObject.LocalPosition = ray.SolveLine(_transformAxis.Value, SelectedWorldObject.LocalPosition);
-            }
-            else
-            {
-                var point = ray.FindPointOnPlane(Axis.Z, 0);
-                SelectedWorldObject.LocalPosition = new(point.X, point.Y, SelectedWorldObject.LocalPosition.Z);
-            }
-        }
-        if (SelectedWorldObject is not null && _isTranslating)
-        {
-            Vector3 start = _transformAxis switch
-            {
-                Axis.X => new(500, 0, 0),
-                Axis.Y => new(0, 500, 0),
-                Axis.Z => new(0, 0, 500),
-                _ => new()
-            };
-            Vector4 color = _transformAxis switch
-            {
-                Axis.X => new(1, 0, 0, 1),
-                Axis.Y => new(0, 1, 0, 1),
-                Axis.Z => new(0, 0, 1, 1),
-                _ => new()
-            };
-
-            descriptors.Add(new LineDescriptor()
-            {
-                Color = color,
-                Start = SelectedWorldObject.GlobalPosition + start,
-                End = SelectedWorldObject.GlobalPosition - start,
-                Thickness = 0.5f
-            });
-        }
-
-        return Task.CompletedTask;
-    }
-
-    public async Task SetSelection()
-    {
-        if (_projectedObject is null)
-            return;
-
-        await ClearSelection.Handle(Unit.Default);
-        await AddToSelection.Handle(_projectedObject);
-        //SelectedObjectTemplate = _projectedObject.Template;
-    }
-
-    public override void KeyPress(Inputs inputs, int key)
-    {
-        if (key == 50) // G
-        {
-            _isTranslating = true;
-            _transformAxis = null;
-        }
-        if (key == 67) // X
-        {
-            if (_isTranslating)
-                _transformAxis = Axis.X;
-        }
-        if (key == 68) // Y
-        {
-            if (_isTranslating)
-                _transformAxis = Axis.Y;
-        }
-        if (key == 69) // Z
-        {
-            if (_isTranslating)
-                _transformAxis = Axis.Z;
-        }
     }
 }

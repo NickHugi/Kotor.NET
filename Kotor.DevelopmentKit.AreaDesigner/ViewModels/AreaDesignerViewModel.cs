@@ -313,26 +313,26 @@ public class AreaDesignerViewModel : ReactiveObject
         //}
     }
 
-    public async Task RenderIntercept(OrbitCamera camera, Point mouse, List<IDrawCallDescriptor> descriptors)
-    {
-        if (Mode is null)
-            return;
+    //public async Task RenderIntercept(OrbitCamera camera, Point mouse, List<IDrawCallDescriptor> descriptors)
+    //{
+    //    if (Mode is null)
+    //        return;
 
-        await Mode.RenderIntercept(camera, mouse, descriptors);
+    //    await Mode.RenderIntercept(camera, mouse, descriptors);
 
-        if (ActiveWorldObject?.Type == WorldObjectType.Tile)
-        {
-            descriptors
-                .Where(x => ActiveWorldObject.AttachedObjects.Contains(x.Tag))
-                .OfType<MeshDescriptor>()
-                .ToList()
-                .ForEach(x => x.AmbientColor += new Vector3(0.5f, 0.5f, 0.5f));
-        }
+    //    if (ActiveWorldObject?.Type == WorldObjectType.Tile)
+    //    {
+    //        descriptors
+    //            .Where(x => ActiveWorldObject.AttachedObjects.Contains(x.Tag))
+    //            .OfType<MeshDescriptor>()
+    //            .ToList()
+    //            .ForEach(x => x.AmbientColor += new Vector3(0.5f, 0.5f, 0.5f));
+    //    }
 
-        descriptors
-            .Where(x => ActiveWorldObject != null && x.Tag == ActiveWorldObject)
-            .OfType<MeshDescriptor>()
-            .ToList()
-            .ForEach(x => x.AmbientColor += new Vector3(0.5f, 0.5f, 0.5f));
-    }
+    //    descriptors
+    //        .Where(x => ActiveWorldObject != null && x.Tag == ActiveWorldObject)
+    //        .OfType<MeshDescriptor>()
+    //        .ToList()
+    //        .ForEach(x => x.AmbientColor += new Vector3(0.5f, 0.5f, 0.5f));
+    //}
 }
