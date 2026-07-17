@@ -296,7 +296,7 @@ public class Inputs
         return _keysDown.Contains(key);
     }
 
-    public bool AreKeysDown(HashSet<int> keys)
+    public bool AreKeysDown(params int[] keys)
     {
         return _keysDown.SetEquals(keys);
     }
@@ -306,7 +306,7 @@ public class Inputs
         return _buttonsDown.Contains(button);
     }
 
-    public bool AreMouseButtonsDown(HashSet<int> buttons)
+    public bool AreMouseButtonsDown(params int[] buttons)
     {
         return _buttonsDown.SetEquals(buttons);
     }

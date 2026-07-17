@@ -124,11 +124,9 @@ public class SelectObjectMode : BaseMode
 
     public override void MousePress(Inputs inputs)
     {
-        ClearSelection.Handle(Unit.Default).Wait();
-
-        if (_projectedObject is not null)
+        if (inputs.AreMouseButtonsDown(0) && inputs.AreKeysDown())
         {
-            AddToSelection.Handle(_projectedObject).Wait();
+            SelectAtMouse();
         }
     }
 
@@ -153,6 +151,16 @@ public class SelectObjectMode : BaseMode
         {
             if (_isTranslating)
                 _transformAxis = Axis.Z;
+        }
+    }
+
+    public void SelectAtMouse()
+    {
+        ClearSelection.Handle(Unit.Default).Wait();
+
+        if (_projectedObject is not null)
+        {
+            AddToSelection.Handle(_projectedObject).Wait();
         }
     }
 
