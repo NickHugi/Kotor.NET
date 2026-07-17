@@ -143,4 +143,10 @@ public class OrbitCamera : Camera
     {
         Distance += distance;
     }
+
+    public override void Rotate(float yaw, float pitch)
+    {
+        Yaw += yaw;
+        Pitch += pitch;
+    }
 }

@@ -82,10 +82,15 @@ public class BaseMode : ReactiveObject
             Vector3 movement = (-right * scene.MouseDelta.X + flatForward * scene.MouseDelta.Y) * -0.01f;
             scene.ActiveCamera.Move(movement);
         }
+
+        if (inputs.IsMouseButtonDown(1))
+        {
+            scene.ActiveCamera.Rotate(-scene.MouseDelta.X / 500, scene.MouseDelta.Y / 500);
+        }
     }
     public virtual void MouseScroll(Inputs inputs, AreaScene scene, Vector2 scroll)
     {
-        scene.ActiveCamera.Zoom(scroll.Y / 1);
+        scene.ActiveCamera.Zoom(-scroll.Y / 1);
     }
     public virtual void KeyPress(Inputs inputs, int keyCode)
     {

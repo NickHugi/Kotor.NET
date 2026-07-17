@@ -172,41 +172,6 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         var mouseY = (int)pos.Y;
 
         ViewModel.Scene.Mode?.MouseMove(_inputs, ViewModel.Scene);
-
-        //if (_lastPointerPosition.HasValue)
-        //{
-        //    var delta = pos - _lastPointerPosition.Value;
-
-        //    float deltaX = (float)delta.X;
-        //    float deltaY = (float)delta.Y;
-
-        //    if (buttonProperties.IsRightButtonPressed && keyModifiers == KeyModifiers.None)
-        //    {
-        //        ViewModel.Scene.ActiveCamera.Pitch += (float)deltaY / 500;
-        //        ViewModel.Scene.ActiveCamera.Yaw -= (float)deltaX / 500;
-        //    }
-        //    if (buttonProperties.IsLeftButtonPressed && keyModifiers == KeyModifiers.Shift)
-        //    {
-        //        Vector3 forward = new Vector3(
-        //            MathF.Cos(ViewModel.Scene.ActiveCamera.Pitch) * MathF.Cos(_camera.Yaw),
-        //            MathF.Cos(ViewModel.Scene.ActiveCamera.Pitch) * MathF.Sin(_camera.Yaw),
-        //            MathF.Sin(ViewModel.Scene.ActiveCamera.Pitch));
-
-        //        forward = Vector3.Normalize(forward);
-
-        //        Vector3 worldUp = Vector3.UnitZ;
-        //        Vector3 right = Vector3.Normalize(Vector3.Cross(forward, worldUp));
-        //        Vector3 flatForward = new Vector3(forward.X, forward.Y, 0f);
-
-        //        if (flatForward.LengthSquared() > 0)
-        //            flatForward = Vector3.Normalize(flatForward);
-
-        //        Vector3 movement = (-right * deltaX + flatForward * deltaY) * 0.01f;
-        //        ViewModel.Scene.ActiveCamera.Target -= movement;
-        //    }
-        //}
-
-        //_lastPointerPosition = pos;
     }
 
     private void PointerWheelChanged(object? sender, Avalonia.Input.PointerWheelEventArgs e)

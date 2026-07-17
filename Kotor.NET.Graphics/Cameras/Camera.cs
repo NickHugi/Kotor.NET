@@ -15,4 +15,6 @@ public abstract class Camera
     public abstract void Move(Vector3 offset);
 
     public abstract void Zoom(float distance);
+
+    public abstract void Rotate(float yaw, float pitch);
 }
