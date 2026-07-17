@@ -49,6 +49,7 @@ public class AreaScene : IScene
 
     public void Update(IAssetManager assets, float timestep)
     {
+        Projection.Clear();
         Mode?.Update(timestep, this);
         RunningTime += timestep;
     }

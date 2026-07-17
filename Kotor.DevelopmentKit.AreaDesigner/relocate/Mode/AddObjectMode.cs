@@ -9,6 +9,7 @@ using DynamicData;
 using DynamicData.Binding;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.ViewModels;
+using Kotor.DevelopmentKit.AreaDesigner.Views;
 using Kotor.NET.Common.Data.Geometry;
 using Kotor.NET.Graphics;
 using Kotor.NET.Graphics.Cameras;
@@ -42,32 +43,43 @@ public class AddObjectMode : BaseMode
         Kits.ToObservableChangeSet().AutoRefresh(x => x.Active).Subscribe(_ => this.RaisePropertyChanged(nameof(ObjectTemplates)));
     }
 
-    public async Task RenderIntercept(OrbitCamera camera, Point mouse, List<IDrawCallDescriptor> descriptors)
+    public override void Update(float delta, AreaScene scene)
     {
-        if (SelectedObjectTemplate is null)
-            return;
+        base.Update(delta, scene);
 
-        var ray = camera.ProjectRay((int)mouse.X, (int)mouse.Y, _engine.Width, _engine.Height);
-        var point = ray.FindPointOnPlane(Axis.Z, 0);
+        if (SelectedObjectTemplate is not null)
+        {
+            var ray = scene.ActiveCamera.ProjectRay((int)scene.Mouse.X, (int)scene.Mouse.Y, _engine.Width, _engine.Height);
+            var point = ray.FindPointOnPlane(Axis.Z, 0);
 
-        // todo - should be placed in room where walkmesh intersects.
-        // todo - should not be hardcoded
-        _addObject = new(_area.Rooms.Last(), null, SelectedObjectTemplate, Guid.NewGuid(), WorldObjectType.Generic); 
-        _addObject.LocalPosition = point;
-        _addObject.LocalOrientation = Quaternion.CreateFromYawPitchRoll(0, 0, angle * (float)Math.PI / 180);
+            _addObject = new(_area.Rooms.Last(), null, SelectedObjectTemplate, Guid.NewGuid(), WorldObjectType.Generic);
+            _addObject.LocalPosition = point;
+            _addObject.LocalOrientation = Quaternion.CreateFromYawPitchRoll(0, 0, angle * (float)Math.PI / 180);
 
-        //var roomDescriptors = new List<IDrawCallDescriptor>();
-        //_areaEntity.RenderObject(_engine.AssetManager, _addObject, ref roomDescriptors);
-        //roomDescriptors.OfType<MeshDescriptor>().ToList().ForEach(x => x.AmbientColor = new Vector3(1.5f, 1.5f, 1.5f));
-        //descriptors.AddRange(roomDescriptors);
+            scene.Projection.Clear();
+            scene.Projection.Add(_addObject);
+        }
     }
 
-    public async Task AddObject()
+    public override void Render(float delta, AreaScene scene, ref ICollection<IDrawCallDescriptor> descriptors)
+    {
+        base.Render(delta, scene, ref descriptors);
+    }
+
+    public override void MousePress(Inputs inputs)  
+    {
+        if (inputs.AreMouseButtonsDown([0]) && inputs.AreKeysDown([]))
+        {
+            PlaceObject();
+        }
+    }
+
+    public void PlaceObject()
     {
         if (SelectedObjectTemplate is null)
             return;
 
-        // todo - add to room within bounds of the cursor
+        // TODO - need intelligent way of picking room
         var room = _area.Rooms.First();
         room.AddObject(_addObject);
     }

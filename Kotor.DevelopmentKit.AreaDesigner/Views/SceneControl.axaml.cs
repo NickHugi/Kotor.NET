@@ -296,9 +296,19 @@ public class Inputs
         return _keysDown.Contains(key);
     }
 
+    public bool AreKeysDown(HashSet<int> keys)
+    {
+        return _keysDown.SetEquals(keys);
+    }
+
     public bool IsMouseButtonDown(int button)
     {
         return _buttonsDown.Contains(button);
+    }
+
+    public bool AreMouseButtonsDown(HashSet<int> buttons)
+    {
+        return _buttonsDown.SetEquals(buttons);
     }
 
     public void SetKeyDown(int key, bool down)
