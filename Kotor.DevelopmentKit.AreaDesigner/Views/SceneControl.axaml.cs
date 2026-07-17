@@ -146,7 +146,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
         ViewModel.Engine.Render();
 
         _lastRender = DateTime.Now;
-        RequestNextFrameRendering();
+        Dispatcher.UIThread.Post(RequestNextFrameRendering);
     }
 
     protected override void OnOpenGlDeinit(GlInterface gl)
