@@ -191,7 +191,7 @@ public class KitEditorViewModel : ReactiveObject
             Model = filename,
             Magnets =
             [
-                ..magnetsNodes.Where(x => !mdl.Name.Contains("floor_")).Select(x => new MagnetItem()
+                ..magnetsNodes.Select(x => new MagnetItem()
                 {
                     KitID = HookKitIDFromNode(x),
                     TemplateID = TemplateIDFromNode(x),
@@ -271,7 +271,7 @@ public class KitEditorViewModel : ReactiveObject
     }
     private bool GetBool(MDLNode node, string property)
     {
-        return GetString(node, property) == "true";
+        return GetString(node, property).ToLower() == "true";
     }
     private int GetInt(MDLNode node, string property)
     {

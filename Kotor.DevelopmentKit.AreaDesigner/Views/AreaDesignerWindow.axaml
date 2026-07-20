@@ -158,6 +158,9 @@
                 </ContentControl.DataTemplates>
             </ContentControl>
         </Grid>
+        <StackPanel DockPanel.Dock="Bottom">
+            <TextBlock Text="" />
+        </StackPanel>
 
         <local:SceneControl KeyDown="SceneControl_KeyDown" />
     </DockPanel>

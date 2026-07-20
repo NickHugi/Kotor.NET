@@ -28,7 +28,7 @@ public class Magnet
 
             var magnets = (MagnetTemplate.ConditionCheckLocalMagnetsOnly ? Room.AllMagnets : Area.AllMagnets).AsEnumerable();
 
-            magnets = magnets.Where(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, 0.1f));
+            magnets = magnets.Where(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, 0.01f));
             magnets = magnets.Where(x => x != this);
 
             if (MagnetTemplate.ConditionMustHaveTemplate)
@@ -76,7 +76,8 @@ public class Magnet
 
             if (MagnetTemplate.ConditionOverlapOnlyEnableFirst && visible)
             {
-                var lowestGuid = magnets.Append(this).Min(x => x.Child.ID);
+                var check = magnets.Append(this).ToList();
+                var lowestGuid = check.Where(x => x.Parent.Visible).Min(x => x.Child.ID);
                 visible = visible && (lowestGuid == Child.ID);
             }
 

@@ -99,7 +99,10 @@ public class AddTileMode : BaseMode
 
     public override void MousePress(Inputs inputs)
     {
-        PlaceTile();
+        if (inputs.AreMouseButtonsDown(0) && inputs.AreKeysDown())
+        {
+            PlaceTile();
+        }
     }
 
     public override void MouseMove(Inputs inputs, AreaScene scene)
