@@ -214,21 +214,21 @@ public class KitEditorViewModel : ReactiveObject
     }
     private WorldObjectType WorldObjectTypeFromFilename(string filename)
     {
-        if (filename.Contains("floor"))
+        if (filename.StartsWith("floor"))
             return WorldObjectType.Floor;
-        else if (filename.Contains("ceiling"))
+        else if (filename.StartsWith("ceiling"))
             return WorldObjectType.Ceiling;
-        else if (filename.Contains("tile"))
+        else if (filename.StartsWith("tile"))
             return WorldObjectType.Tile;
-        else if (filename.Contains("wall"))
+        else if (filename.StartsWith("wall"))
             return WorldObjectType.Wall;
-        else if (filename.Contains("generic"))
+        else if (filename.StartsWith("generic"))
             return WorldObjectType.Generic;
-        else if (filename.Contains("icorner"))
+        else if (filename.StartsWith("icorner"))
             return WorldObjectType.InnerCorner;
-        else if (filename.Contains("ocorner"))
+        else if (filename.StartsWith("ocorner"))
             return WorldObjectType.OuterCorner;
-        else if (filename.Contains("doorframe"))
+        else if (filename.StartsWith("doorframe"))
             return WorldObjectType.DoorFrame;
         else
             return WorldObjectType.Generic;
