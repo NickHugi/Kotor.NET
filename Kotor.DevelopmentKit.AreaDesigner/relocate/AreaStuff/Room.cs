@@ -65,12 +65,10 @@ public class Room
     public void AddTile(WorldObject tile)
     {
         Objects.Add(tile);
-        FixWalls();
     }
     public void DeleteTile(WorldObject tile)
     {
         Objects.Remove(tile);
-        FixWalls();
 
         if (Objects.Count() == 0)
         {
@@ -81,59 +79,5 @@ public class Room
     public void Delete()
     {
         Area.DeleteRoom(this);
-    }
-
-    public List<Magnet> GetMagnets()
-    {
-        // TODO
-        return [];
-        //return Objects.SelectMany(x => x.Magnets).ToList();
-    }
-
-    private void FixWalls()
-    {
-        // TODO
-        //foreach (var wall in Objects.OfType<Tile>().SelectMany(x => x.AttachedObjects.OfType<UltimateWorldObject>()))
-        //{
-        //    wall.LinkedTile = null;
-        //}
-
-        //foreach (var tileA in Objects.OfType<Tile>())
-        //{
-        //    foreach (var tileB in Objects.OfType<Tile>())
-        //    {
-        //        if (tileA == tileB)
-        //            continue;
-
-        //        foreach (var adjacent in GetCombinations(tileA.AttachedObjects.OfType<UltimateWorldObject>(), tileB.AttachedObjects.OfType<UltimateWorldObject>()))
-        //        {
-        //            if (Vector3.Distance(adjacent.Item1.GlobalPosition, adjacent.Item2.GlobalPosition) < 0.01f)
-        //            {
-        //                adjacent.Item1.LinkedTile = tileB;
-        //                adjacent.Item2.LinkedTile = tileA;
-        //            }
-        //        }
-        //    }
-        //}
-    }
-
-    // todo ienumerable extension
-    private List<(T Item1, T Item2)> GetCombinations<T>(IEnumerable<T> listA, IEnumerable<T> listB)
-    {
-        // TODO convert to list extensions method?
-
-        List<(T A, T B)> combinations = new();
-
-        foreach (var a in listA)
-        {
-            foreach (var b in listB)
-            {
-                var tuple = (a, b);
-                if (!combinations.Contains(tuple))
-                    combinations.Add(tuple);
-            }
-        }
-
-        return combinations;
     }
 }

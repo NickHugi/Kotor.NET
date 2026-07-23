@@ -19,9 +19,7 @@ public class MagnetTemplate
 
     public string KitID { get; init; } = "";
     public string TemplateID { get; init; } = "";
-    // Exists() and Template?. Type null conditional are hotfix for the bug
-    // where templates for magnets dont exist yet
-    public WorldObjectTemplate Template => Kit.Manager.Get(KitID).Exists(TemplateID) ? Kit.Manager.Get(KitID).Object(TemplateID) : null;
+    public WorldObjectTemplate? Template => Kit.Manager.Get(KitID)?.Object(TemplateID);
 
     public bool ConditionCheckLocalMagnetsOnly
     {
@@ -172,7 +170,7 @@ public class MagnetTemplate
             WorldObjectType.Wall => false,
             WorldObjectType.OuterCorner => false,
             WorldObjectType.InnerCorner => false,
-            WorldObjectType.DoorFrame => true,
+            WorldObjectType.DoorFrame => false,
             _ => field
         };
         init;
@@ -200,7 +198,7 @@ public class MagnetTemplate
             WorldObjectType.Wall => null,
             WorldObjectType.OuterCorner => null,
             WorldObjectType.InnerCorner => null,
-            WorldObjectType.DoorFrame => [null],
+            WorldObjectType.DoorFrame => null,
             _ => field
         };
         init;

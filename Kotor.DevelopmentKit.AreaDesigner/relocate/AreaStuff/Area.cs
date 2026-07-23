@@ -9,10 +9,21 @@ public class Area
     public IReadOnlyList<Room> Rooms => _rooms.AsReadOnly();
     private List<Room> _rooms = new();
 
-    public ICollection<Magnet> AllMagnets
+    private ICollection<Magnet> _allMagnets => Rooms.SelectMany(x => x.AllMagnets).ToList();
+    public ICollection<Magnet> AllMagnets { get; private set; } = [];
+
+    private ICollection<Magnet> _availableMagnets => AllMagnets.Where(x =>
     {
-        get => Rooms.SelectMany(x => x.AllMagnets).ToList();
-    }
+        var visible = x.Visible;
+
+        if (x.Child is not null && x.Child.Type == WorldObjectType.Wall)
+        {
+            visible = visible && x.Child.Magnets.All(x => x.WorldObjectTemplate?.Type != WorldObjectType.DoorFrame);
+        }
+
+        return visible;
+    }).ToList();
+    public ICollection<Magnet> AvailableMagnets { get; private set; } = [];
 
     public void AddRoom(Room room)
     {
@@ -21,5 +32,11 @@ public class Area
     public void DeleteRoom(Room room)
     {
         _rooms.Remove(room);
+    }
+
+    public void Invalidate()
+    {
+        AllMagnets = _allMagnets;
+        AvailableMagnets = _availableMagnets;
     }
 }

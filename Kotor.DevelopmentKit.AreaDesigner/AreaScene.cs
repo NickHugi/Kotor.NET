@@ -50,7 +50,11 @@ public class AreaScene : IScene
     public void Update(IAssetManager assets, float timestep)
     {
         Projection.Clear();
+        Area.Invalidate();
+
         Mode?.Update(timestep, this);
+        var inject = Area.Rooms.FirstOrDefault();
+
         RunningTime += timestep;
     }
 
@@ -130,8 +134,7 @@ public class AreaScene : IScene
     public void RenderMagnets(IAssetManager assets, ref List<IDrawCallDescriptor> descriptors)
     {
         var size = (0.4f) + MathF.Sin((RunningTime % 0.75f) / 0.75f * MathF.PI) * 0.2f;
-        descriptors.AddRange(Area.Rooms
-            .SelectMany(x => x.AllMagnets)
+        descriptors.AddRange(Area.AvailableMagnets
             .Where(x => x.IsTileMagnet)
             .ToList()
             .Select(magnet => new BillboardDescriptor()

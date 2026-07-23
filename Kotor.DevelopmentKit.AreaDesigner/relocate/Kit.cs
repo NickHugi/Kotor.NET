@@ -17,13 +17,10 @@ public class Kit
     public int Version { get; }
     public ICollection<WorldObjectTemplate> Objects { get; init; } = [];
 
-    public WorldObjectTemplate Object(string templateID)
+    public WorldObjectTemplate? Object(string templateID)
     {
-        return Objects.SingleOrDefault(x => x.TemplateID == templateID)
-            ?? throw new ArgumentException($"Could not find object with KitID={KitID} TemplateID={templateID}");
+        return Objects.SingleOrDefault(x => x.TemplateID == templateID);
     }
-
-    public bool Exists(string templateID) => Objects.Any(x => x.TemplateID == templateID);
 
     public Kit(string filepath, string kitID, int version, string name)
     {

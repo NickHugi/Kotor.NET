@@ -90,6 +90,8 @@ public class AddTileMode : BaseMode
             if (result.Target.Parent.Type == WorldObjectType.DoorFrame)
             {
                 sourceWall.SwitchTemplate(result.Target.Parent.ParentMagnet.Parent.Template);
+                _projectedRoom.Position = new();
+                _projectedRoom.Position = result.Target.GlobalPosition - sourceWall.Magnets.First(x => x.WorldObjectTemplate?.Type == WorldObjectType.DoorFrame).GlobalPosition;
             }
         }
 

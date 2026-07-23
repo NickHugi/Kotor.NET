@@ -20,5 +20,5 @@ public class KitManager
             .ToList()
             .ForEach(Kits.Add);
     }
-    public Kit Get(string kitID) => Kits.Single(x => x.KitID == kitID);
+    public Kit? Get(string kitID) => Kits.SingleOrDefault(x => x.KitID == kitID);
 }

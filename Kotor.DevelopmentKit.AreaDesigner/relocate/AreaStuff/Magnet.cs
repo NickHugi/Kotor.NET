@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -9,14 +10,15 @@ using Kotor.NET.Graphics.Extensions;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
+[DebuggerDisplay("localXYZ: {LocalPosition} child: {Child}")]
 public class Magnet
 {
     public Area Area => Room.Area;
     public Room Room => Parent.Room;
-    public WorldObject Child => Room.AllObjects.Single(x => x.ParentMagnet == this);
+    public WorldObject Child => Room.AllObjects.SingleOrDefault(x => x.ParentMagnet == this);
     public WorldObject Parent { get; }
     public MagnetTemplate MagnetTemplate { get; }
-    public WorldObjectTemplate WorldObjectTemplate => MagnetTemplate.Template;
+    public WorldObjectTemplate? WorldObjectTemplate => Child?.Template;
     public MagnetType Type { get; set; }
 
     public bool Visible
@@ -65,6 +67,11 @@ public class Magnet
                 magnets = magnets.Where(x => (x.IsHook && MagnetTemplate.ConditionOverlapOnlySpecificTypes.Contains(x.MagnetTemplate.Template.Type)) || (!x.IsHook && MagnetTemplate.ConditionOverlapOnlySpecificTypes.Contains(null)));
             }
 
+            if (WorldObjectTemplate?.Type == WorldObjectType.DoorFrame)
+            {
+                magnets = magnets.Where(x => x.Parent?.Type == WorldObjectType.DoorFrame).Select(x => x.Parent.ParentMagnet);
+            }
+
             var visible = MagnetTemplate.ConditionOverlapType switch
             {
                 OverlapCountType.EqualTo => magnets.Count() == MagnetTemplate.ConditionOverlapCheckCount,
@@ -76,8 +83,8 @@ public class Magnet
 
             if (MagnetTemplate.ConditionOverlapOnlyEnableFirst && visible)
             {
-                var check = magnets.Append(this).ToList();
-                var lowestGuid = check.Where(x => x.Parent.Visible).Min(x => x.Child.ID);
+                var check = magnets.Append(this).Where(x => x.Parent.Visible).ToList();
+                var lowestGuid = check.DefaultIfEmpty().Min(x => x.Child.ID);
                 visible = visible && (lowestGuid == Child.ID);
             }
 
