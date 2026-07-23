@@ -28,7 +28,7 @@ public class Magnet
 
             var magnets = (MagnetTemplate.ConditionCheckLocalMagnetsOnly ? Room.AllMagnets : Area.AllMagnets).AsEnumerable();
 
-            magnets = magnets.Where(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, 0.01f));
+            magnets = magnets.Where(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, MagnetTemplate.ConditionOverlapDistance));
             magnets = magnets.Where(x => x != this);
 
             if (MagnetTemplate.ConditionMustHaveTemplate)

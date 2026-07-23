@@ -95,6 +95,11 @@ public class MagnetItem : ReactiveObject
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
+    public float ConditionOverlapDistance
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
 
     public MagnetItem()
     {
@@ -125,6 +130,8 @@ public class MagnetItem : ReactiveObject
         ConditionOverlapOnlySameClass = template.ConditionOverlapOnlySameClass;
         ConditionOverlapOnlySameType = template.ConditionOverlapOnlySameType;
         ConditionOverlapOnlySpecificTypes = template.ConditionOverlapOnlySpecificTypes;
+        ConditionOverlapOnlySpecificTypes = template.ConditionOverlapOnlySpecificTypes;
+        ConditionOverlapDistance = template.ConditionOverlapDistance;
     }
 
     public MagnetTemplate ToModel()
@@ -146,7 +153,8 @@ public class MagnetItem : ReactiveObject
             ConditionOverlapOnlySameTemplate = ConditionOverlapOnlySameTemplate,
             ConditionOverlapOnlySameClass = ConditionOverlapOnlySameClass,
             ConditionOverlapOnlySameType = ConditionOverlapOnlySameType,
-            ConditionOverlapOnlySpecificTypes = ConditionOverlapOnlySpecificTypes
+            ConditionOverlapOnlySpecificTypes = ConditionOverlapOnlySpecificTypes,
+            ConditionOverlapDistance = ConditionOverlapDistance,
         };
     }
 }

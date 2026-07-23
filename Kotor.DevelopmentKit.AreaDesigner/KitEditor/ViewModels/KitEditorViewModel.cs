@@ -208,6 +208,7 @@ public class KitEditorViewModel : ReactiveObject
                     ConditionOverlapOnlySameTemplate = GetBool(x, "OverlapOnlySameTemplate"),
                     ConditionOverlapOnlySameClass = GetBool(x, "OverlapOnlySameClass"),
                     ConditionOverlapOnlySameType = GetBool(x, "OverlapOnlySameType"),
+                    ConditionOverlapDistance = GetFloat(x, "OverlapDistance"),
                 }),
             ]
         };
@@ -276,6 +277,10 @@ public class KitEditorViewModel : ReactiveObject
     private int GetInt(MDLNode node, string property)
     {
         return int.TryParse(GetString(node, property), out var result) ? result : 0;
+    }
+    private float GetFloat(MDLNode node, string property)
+    {
+        return float.TryParse(GetString(node, property), out var result) ? result : 0;
     }
     private OverlapCountType GetOverlapCountType(MDLNode node, string property)
     {

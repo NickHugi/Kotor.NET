@@ -42,6 +42,12 @@ public class VertexArrayObjectFactory : IVertexArrayObjectFactory
                 gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, blockSize, (void*)positionStride);
             }
 
+            if (bitmask.HasFlag(MDLBinaryMDXVertexBitmask.Normals))
+            {
+                gl.EnableVertexAttribArray(1);
+                gl.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, blockSize, (void*)normalStride);
+            }
+
             if (bitmask.HasFlag(MDLBinaryMDXVertexBitmask.UV1))
             {
                 gl.EnableVertexAttribArray(2);

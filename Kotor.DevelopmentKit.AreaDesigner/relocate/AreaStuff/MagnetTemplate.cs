@@ -177,6 +177,20 @@ public class MagnetTemplate
         };
         init;
     } = false;
+    public float ConditionOverlapDistance
+    {
+        get => Template?.Type switch
+        {
+            WorldObjectType.Floor => 0.001f,
+            WorldObjectType.Ceiling => 0.001f,
+            WorldObjectType.Wall => 0.001f,
+            WorldObjectType.OuterCorner => 0.001f,
+            WorldObjectType.InnerCorner => 0.001f,
+            WorldObjectType.DoorFrame => 0.001f,
+            _ => field
+        };
+        init;
+    } = 0.01f;
     public WorldObjectType?[]? ConditionOverlapOnlySpecificTypes
     {
         get => Template?.Type switch

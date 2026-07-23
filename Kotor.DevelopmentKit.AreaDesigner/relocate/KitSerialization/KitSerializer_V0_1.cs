@@ -55,6 +55,7 @@ public class KitSerializer_V0_1
                     ConditionOverlapOnlySameTemplate = magnet.conditionOverlapOnlySameTemplate?.ToObject<bool>() ?? false,
                     ConditionOverlapOnlySameClass = magnet.conditionOverlapOnlySameClass?.ToObject<bool>() ?? false,
                     ConditionOverlapOnlySameType = magnet.conditionOverlapOnlySameType?.ToObject<bool>() ?? false,
+                    ConditionOverlapDistance = magnet.conditionOverlapDistance?.ToObject<float>() ?? 0.001f,
                     ConditionOverlapOnlySpecificTypes = magnet.conditionOverlapOnlySpecificTypes?.ToObject<WorldObjectType?[]?>()
                 }).ToArray()
             });
@@ -95,6 +96,7 @@ public class KitSerializer_V0_1
                 conditionOverlapOnlySameTemplate = magnet.ConditionOverlapOnlySameTemplate,
                 conditionOverlapOnlySameClass = magnet.ConditionOverlapOnlySameClass,
                 conditionOverlapOnlySameType = magnet.ConditionOverlapOnlySameType,
+                conditionOverlapDistance = magnet.ConditionOverlapDistance,
                 conditionOverlapOnlySpecificTypes = magnet.ConditionOverlapOnlySpecificTypes
             })
         });
