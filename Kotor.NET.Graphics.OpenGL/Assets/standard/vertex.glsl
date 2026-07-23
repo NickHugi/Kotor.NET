@@ -8,6 +8,7 @@ layout (location = 3) in vec2 aTexCoord2;
 layout (location = 4) in vec4 aBoneIDs; 
 layout (location = 5) in vec4 aWeights;
 
+out vec3 vNormal;
 out vec2 vTexCoord1;
 out vec2 vTexCoord2;
 
@@ -22,6 +23,8 @@ uniform mat4 uFinalBonesMatrices[MAX_BONES];
 
 void main()
 {
+    vNormal = mat3(transpose(inverse(uEntity * uMesh))) * aNormal;  
+    
     if (aBoneIDs[0] >= 0.0f && aBoneIDs[0] <= 16.0f)
     {
         vec4 localPos = vec4(aPosition, 1.0f);
