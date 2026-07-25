@@ -116,7 +116,7 @@ public class WorldObject
         [
             .. Magnets
                 .Where(x => !string.IsNullOrWhiteSpace(x.MagnetTemplate.KitID) && !string.IsNullOrWhiteSpace(x.MagnetTemplate.TemplateID))
-                .Where(x => x.MagnetTemplate is MagnetTemplate)
+                .Where(x => x.MagnetTemplate.Template is not null)
                 .Select(x => new WorldObject(Room, x, x.MagnetTemplate.Template, Guid.NewGuid(), x.MagnetTemplate.Template.Type)),
         ]);
     }

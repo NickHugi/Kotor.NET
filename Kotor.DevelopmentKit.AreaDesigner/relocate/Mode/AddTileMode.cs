@@ -38,7 +38,7 @@ public class AddTileMode : BaseMode
             if (SelectedWorldObject?.Type == WorldObjectType.Wall)
             {
                 var activeGroup = SelectedWorldObject.Template.ClassID;
-                return _objects.Where(x => x.Type == WorldObjectType.Tile).Where(x => x.Magnets.OfType<MagnetTemplate>().Any(y => activeGroup == y.Template.ClassID)).ToList();
+                return _objects.Where(x => x.Type == WorldObjectType.Tile).Where(x => x.Magnets.OfType<MagnetTemplate>().Any(y => activeGroup == y.Template?.ClassID)).ToList();
             }
             else
             {
