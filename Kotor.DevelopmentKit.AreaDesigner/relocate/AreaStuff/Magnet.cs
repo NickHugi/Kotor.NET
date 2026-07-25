@@ -84,7 +84,7 @@ public class Magnet
             if (MagnetTemplate.ConditionOverlapOnlyEnableFirst && visible)
             {
                 var check = magnets.Append(this).Where(x => x.Parent.Visible).ToList();
-                var lowestGuid = check.DefaultIfEmpty().Min(x => x.Child.ID);
+                var lowestGuid = check.DefaultIfEmpty().Min(x => x?.Child?.ID);
                 visible = visible && (lowestGuid == Child.ID);
             }
 
@@ -94,7 +94,7 @@ public class Magnet
     } = true;
 
     public bool IsHook => !string.IsNullOrWhiteSpace(MagnetTemplate.TemplateID) && !string.IsNullOrWhiteSpace(MagnetTemplate.KitID);
-    public bool IsTileMagnet => (IsHook && MagnetTemplate.Template.Type == WorldObjectType.Wall) || Parent.Type == WorldObjectType.DoorFrame;
+    public bool IsTileMagnet => (IsHook && MagnetTemplate.Template?.Type == WorldObjectType.Wall) || Parent.Type == WorldObjectType.DoorFrame;
     public string WallClassID => (IsHook && MagnetTemplate.Template.Type == WorldObjectType.Wall)
         ? MagnetTemplate.Template.ClassID
         : Parent.TemplateID;

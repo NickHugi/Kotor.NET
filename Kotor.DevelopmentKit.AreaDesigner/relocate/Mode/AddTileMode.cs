@@ -76,6 +76,11 @@ public class AddTileMode : BaseMode
             .Where(x => x.Source.IsTileMagnet && x.Target.IsTileMagnet)
             .FirstOrDefault();
 
+
+        var targets = NearbyMagnets(_projectedRoom.AllMagnets, 1)
+            .Where(x => x.Source.IsTileMagnet && x.Target.IsTileMagnet)
+            .ToList();
+
         if (result is not null)
         {
             // Target is existing wall
@@ -87,11 +92,16 @@ public class AddTileMode : BaseMode
 
             var sourceWall = _projectedRoom.AllObjects.FirstOrDefault(x => x.Template == result.Source.MagnetTemplate.Template && x.GlobalPosition == result.Source.GlobalPosition);
 
-            if (result.Target.Parent.Type == WorldObjectType.DoorFrame)
+            if (sourceWall is not null && result.Target.Parent.Type == WorldObjectType.DoorFrame)
             {
-                sourceWall.SwitchTemplate(result.Target.Parent.ParentMagnet.Parent.Template);
-                _projectedRoom.Position = new();
-                _projectedRoom.Position = result.Target.GlobalPosition - sourceWall.Magnets.First(x => x.WorldObjectTemplate?.Type == WorldObjectType.DoorFrame).GlobalPosition;
+                var swapTemplate = Kit.Manager.AllTemplates(sourceWall.Template.ClassID).Where(x => x.Magnets.Any(y => y.TemplateID == result.Target.Parent?.TemplateID)).FirstOrDefault();
+
+                if (swapTemplate is not null)
+                {
+                    sourceWall.SwitchTemplate(swapTemplate);
+                    _projectedRoom.Position = new();
+                    _projectedRoom.Position = result.Target.GlobalPosition - sourceWall.Magnets.First(x => x.WorldObjectTemplate?.Type == WorldObjectType.DoorFrame).GlobalPosition;
+                }
             }
         }
 

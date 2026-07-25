@@ -167,7 +167,7 @@ public class MagnetTemplate
         {
             WorldObjectType.Floor => false,
             WorldObjectType.Ceiling => false,
-            WorldObjectType.Wall => false,
+            WorldObjectType.Wall => true,
             WorldObjectType.OuterCorner => false,
             WorldObjectType.InnerCorner => false,
             WorldObjectType.DoorFrame => false,
