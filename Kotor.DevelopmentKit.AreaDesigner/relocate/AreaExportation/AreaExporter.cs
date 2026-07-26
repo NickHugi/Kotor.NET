@@ -25,16 +25,10 @@ public static class AreaExporter
         var mdl = new MDL();
         mdl.Name = "test";
 
-        foreach (var tile in room.Objects)
-        {
-            // TODO
-            //mdl.Root.Children.AddRange(tile.AttachedObjects.Select(ObjectToMDLNode));
-            //mdl.Root.Children.Add(CeilingToMDLNode(tile.Ceiling));
-            //mdl.Root.Children.AddRange(tile.AttachedObjects.OfType<Wall>().Where(x => x.Visible).Select(WallToMDLNode));
-            //mdl.Root.Children.AddRange(tile.AttachedObjects.OfType<Wall>().Select(x => x.DoorFrame).Where(x => x?.Visible == true).Select(DoorFrameToMDLNode));
-            //mdl.Root.Children.AddRange(tile.AttachedObjects.OfType<InnerCorner>().Where(x => x.Visible == true).Select(InnerCornerToMDLNode));
-            //mdl.Root.Children.AddRange(room.Vi.Select(ObjectToMDLNode));
-        }
+        var xyz = room.AllObjects.ElementAt(1);
+        return MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{xyz.KitID}/{xyz.Template.Model}.mdl");
+
+        mdl.Root.Children.AddRange(room.AllObjects.Select(WorldObjectToMDLNode));
 
         var walkmeshes = mdl.Root.GetAllDescendants().OfType<MDLWalkmeshNode>();
         var newWalkmesh = MergeWalkmeshes(walkmeshes.ToList());
@@ -127,6 +121,14 @@ public static class AreaExporter
             face.Vertex2 = new MDLVertex().SetPosition(Vector3.Transform(face.Vertex2.Position.Value, transform));
             face.Vertex3 = new MDLVertex().SetPosition(Vector3.Transform(face.Vertex3.Position.Value, transform));
         }
+    }
+
+    private static MDLNode WorldObjectToMDLNode(WorldObject worldObject)
+    {
+        var mdl = MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{worldObject.KitID}/{worldObject.Template.Model}.mdl");
+        mdl.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(worldObject.GlobalPosition));
+        mdl.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(worldObject.GlobalOrientation));
+        return mdl.Root;
     }
 }
 
