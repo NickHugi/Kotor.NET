@@ -27,13 +27,13 @@ public class ARE
         CreatorID = 0;
         DefaultEnvironmentMap = "";
         DisableTransit = false;
-        DynAmbientColor = 0xFFFFFFFF;
+        DynAmbientColor = 0xEEF8FCFF;
         SunFogNear = 0;
         SunFogFar = 0;
         SunFogOn = false;
-        SunFogColour = 0xFFFFFFFF;
-        SunAmbientColour = 0xFFFFFFFF;
-        SunDiffuseColour = 0xFFFFFFFF;
+        SunFogColour = 0xEEF8FCFF;
+        SunAmbientColour = 0xEEF8FCFF;
+        SunDiffuseColour = 0xEEF8FCFF;
         SunShadows = true;
         OnEnter = "";
         OnExit = "";

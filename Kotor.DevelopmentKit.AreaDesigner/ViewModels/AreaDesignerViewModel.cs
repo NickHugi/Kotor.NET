@@ -241,7 +241,9 @@ public class AreaDesignerViewModel : ReactiveObject
         var modPath = Path.Combine(gamePath, @"modules\", "test.mod");
 
         var mdl = AreaExporter.RoomToMDL(Area.Rooms.First());
-        var wok = mdl.GetWalkmesh().GenerateBWM();
+        //var wok = mdl.GetWalkmesh().GenerateBWM();
+        //MDL.FromFile(@"C:\Users\hugin\Documents\test01.mdl", @"C:\Users\hugin\Documents\test01.mdx");
+        MDL.ToFile(mdl, @"C:\Users\hugin\Documents\test01.mdl", GameEngine.K1, Platform.Windows);
         (var mdlData, var mdxData) = MDL.ToBytes(mdl, game, Platform.Windows);
 
         var ifo = new IFO();
@@ -284,7 +286,7 @@ public class AreaDesignerViewModel : ReactiveObject
         erf.Add("test", ResourceType.LYT, LYT.ToBytes(lyt));
         erf.Add("test01", ResourceType.MDL, mdlData);
         erf.Add("test01", ResourceType.MDX, mdxData);
-        erf.Add("test01", ResourceType.WOK, BWM.ToBytes(wok));
+        //erf.Add("test01", ResourceType.WOK, BWM.ToBytes(wok));
         ERF.ToFile(erf, modPath);
     }
 

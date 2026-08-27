@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Clipper2Lib;
 using DynamicData;
+using Kotor.DevelopmentKit.AreaDesigner.Geometry;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.NET.Common.Data.Geometry;
 using Kotor.NET.Graphics.GPU;
@@ -25,8 +26,8 @@ public static class AreaExporter
         var mdl = new MDL();
         mdl.Name = "test";
 
-        var xyz = room.AllObjects.ElementAt(1);
-        return MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{xyz.KitID}/{xyz.Template.Model}.mdl");
+        //var xyz = room.AllObjects.ElementAt(1);
+        //return MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{xyz.KitID}/{xyz.Template.Model}.mdl");
 
         mdl.Root.Children.AddRange(room.AllObjects.Select(WorldObjectToMDLNode));
 
@@ -128,6 +129,13 @@ public static class AreaExporter
         var mdl = MDL.FromFile($"{Kit.Manager.ActiveDirectory}/{worldObject.KitID}/{worldObject.Template.Model}.mdl");
         mdl.Root.GetController<MDLControllerDataPosition>().AddLinear(0, new(worldObject.GlobalPosition));
         mdl.Root.GetController<MDLControllerDataOrientation>().AddLinear(0, new(worldObject.GlobalOrientation));
+
+        var walkmesh = mdl.Root.GetAllDescendants().OfType<MDLWalkmeshNode>().FirstOrDefault();
+        if (walkmesh is not null)
+        {
+            AdjustWalkmesh(mdl, walkmesh);
+        }
+
         return mdl.Root;
     }
 }
@@ -176,6 +184,39 @@ public class WalkmeshBuilder
         return newNode;
     }
 
+    public MDLTrimeshNode Bake2(IEnumerable<MDLWalkmeshNode> walkmeshes)
+    {
+        var unprocessed = walkmeshes.Select(Simplify).ToList();
+        var processed = new List<Triangle3>();
+
+        while (unprocessed.Any())
+        {
+            var face = unprocessed.First();
+            unprocessed.RemoveAt(0);
+
+            if (processed.Count == 0)
+            {
+                processed.AddRange(face);
+            }
+            else
+            {
+                
+            }
+        }
+
+        var newNode = new MDLTrimeshNode("walkmesh");
+        newNode.EnableVertices();
+        newNode.Faces.AddRange(result.Select(x =>
+        {
+            return new MDLFace()
+            {
+                Vertex1 = new MDLVertex().SetPosition(x.V1),
+                Vertex2 = new MDLVertex().SetPosition(x.V2),
+                Vertex3 = new MDLVertex().SetPosition(x.V3),
+            };
+        }));
+        return newNode;
+    }
 }
 
 public static class TriangleMeshClipper
@@ -482,6 +523,467 @@ public struct Triangle3
         // --- Interpolate Z ---
         z = u * V1.Z + v * V2.Z + w * V3.Z;
         return true;
+    }
+}
+
+
+
+public class Triangle
+{
+    public Color Color { get; set; }
+    public Vector3 Point1 { get; set; }
+    public Vector3 Point2 { get; set; }
+    public Vector3 Point3 { get; set; }
+
+    public Vector3 Centre => new Vector3
+    {
+        X = (Point1.X + Point2.X + Point3.X) / 3,
+        Y = (Point1.Y + Point2.Y + Point3.Y) / 3,
+    };
+    public Triangle Squish => new Triangle()
+    {
+        Point1 = (Point1 * 0.5f) + (Centre * 0.5f),
+        Point2 = (Point2 * 0.5f) + (Centre * 0.5f),
+        Point3 = (Point3 * 0.5f) + (Centre * 0.5f),
+    };
+
+    public Triangle()
+    {
+        var rand = new Random();
+        Color = new Color(rand.Next(255), rand.Next(255), rand.Next(255));
+    }
+    public Triangle(Color color, Vector3 p1, Vector3 p2, Vector3 p3)
+    {
+        Color = color;
+        Point1 = p1;
+        Point2 = p2;
+        Point3 = p3;
+    }
+
+    public Triangle S(int scale, int nudge)
+    {
+        return new(Color,
+            (Point1 + new Vector3(nudge, nudge, nudge)) * scale,
+            (Point2 + new Vector3(nudge, nudge, nudge)) * scale,
+            (Point3 + new Vector3(nudge, nudge, nudge)) * scale);
+    }
+}
+
+
+public class Triangle
+{
+    public Color Color { get; set; }
+    public Vector3 Point1 { get; set; }
+    public Vector3 Point2 { get; set; }
+    public Vector3 Point3 { get; set; }
+
+    public Vector3 Centre => new Vector3
+    {
+        X = (Point1.X + Point2.X + Point3.X) / 3,
+        Y = (Point1.Y + Point2.Y + Point3.Y) / 3,
+    };
+    public Triangle Squish => new Triangle()
+    {
+        Point1 = (Point1 * 0.5f) + (Centre * 0.5f),
+        Point2 = (Point2 * 0.5f) + (Centre * 0.5f),
+        Point3 = (Point3 * 0.5f) + (Centre * 0.5f),
+    };
+
+    public Triangle()
+    {
+        var rand = new Random();
+        Color = new Color(rand.Next(255), rand.Next(255), rand.Next(255));
+    }
+    public Triangle(Color color, Vector3 p1, Vector3 p2, Vector3 p3)
+    {
+        Color = color;
+        Point1 = p1;
+        Point2 = p2;
+        Point3 = p3;
+    }
+
+    public Triangle S(int scale, int nudge)
+    {
+        return new(Color,
+            (Point1 + new Vector3(nudge, nudge, nudge)) * scale,
+            (Point2 + new Vector3(nudge, nudge, nudge)) * scale,
+            (Point3 + new Vector3(nudge, nudge, nudge)) * scale);
+    }
+}
+
+public static class PolygonUnion
+{
+    const float Eps = 1e-4f;
+
+    public static List<Vector3> UnionOfTwoTriangles(Triangle t1, Triangle t2, float gapTolerance = 1e-2f)
+    {
+        var A = new List<Vector3> { t1.Point1, t1.Point2, t1.Point3 };
+        var B = new List<Vector3> { t2.Point1, t2.Point2, t2.Point3 };
+
+        // Every orientation/crossing test below is evaluated relative to a
+        // single shared plane normal. That's only valid if the two triangles
+        // are coplanar (or very nearly so) — that's the only case where a
+        // 2D-style polygon union is well-defined. We derive the working
+        // normal from t1 and fail loudly if t2 isn't close to that plane.
+        Vector3 normal = TriangleNormal(t1);
+        Vector3 normal2 = TriangleNormal(t2);
+
+        if (MathF.Abs(Vector3.Dot(normal, normal2)) < 0.99f) // ~8 degrees
+            throw new InvalidOperationException(
+                "Triangles are not coplanar — UnionOfTwoTriangles only supports " +
+                "coplanar (or near-coplanar) triangles. Normals differ by more than ~8 degrees.");
+
+        var segsA = SplitEdges(A, B, gapTolerance, normal);
+        var segsB = SplitEdges(B, A, gapTolerance, normal);
+
+        var kept = new List<(Vector3 p1, Vector3 p2)>();
+
+        foreach (var s in segsA)
+        {
+            var mid = (s.p1 + s.p2) * 0.5f;
+            if (DistanceToTriangle(mid, B[0], B[1], B[2], normal) > gapTolerance)
+                kept.Add(s);
+        }
+        foreach (var s in segsB)
+        {
+            var mid = (s.p1 + s.p2) * 0.5f;
+            if (DistanceToTriangle(mid, A[0], A[1], A[2], normal) > gapTolerance)
+                kept.Add(s);
+        }
+
+        return ChainSegments(kept, MathF.Max(Eps, gapTolerance));
+    }
+
+    static Vector3 TriangleNormal(Triangle t)
+        => Vector3.Normalize(Vector3.Cross(t.Point2 - t.Point1, t.Point3 - t.Point1));
+
+    // Signed "2D" cross product of two vectors as seen looking along `normal`.
+    // Equivalent to a.X*b.Y - a.Y*b.X when normal = (0,0,1); generalizes that
+    // orientation test to any shared plane in 3D.
+    static float Cross2D(Vector3 a, Vector3 b, Vector3 normal)
+        => Vector3.Dot(Vector3.Cross(a, b), normal);
+
+    static float DistanceToTriangle(Vector3 p, Vector3 a, Vector3 b, Vector3 c, Vector3 normal)
+    {
+        if (PointInTriangleStrict(p, a, b, c, normal)) return 0f;
+
+        float d1 = Vector3.Distance(p, ClosestPointOnSegment(p, a, b));
+        float d2 = Vector3.Distance(p, ClosestPointOnSegment(p, b, c));
+        float d3 = Vector3.Distance(p, ClosestPointOnSegment(p, c, a));
+        return MathF.Min(d1, MathF.Min(d2, d3));
+    }
+
+    static Vector3 ClosestPointOnSegment(Vector3 p, Vector3 a, Vector3 b)
+    {
+        Vector3 ab = b - a;
+        float len2 = ab.LengthSquared();
+        if (len2 < Eps) return a;
+        float t = Math.Clamp(Vector3.Dot(p - a, ab) / len2, 0f, 1f);
+        return a + t * ab;
+    }
+
+    static bool PointInTriangleStrict(Vector3 p, Vector3 a, Vector3 b, Vector3 c, Vector3 normal)
+    {
+        float d1 = Cross2D(b - a, p - a, normal);
+        float d2 = Cross2D(c - b, p - b, normal);
+        float d3 = Cross2D(a - c, p - c, normal);
+
+        bool hasNeg = d1 < -Eps || d2 < -Eps || d3 < -Eps;
+        bool hasPos = d1 > Eps || d2 > Eps || d3 > Eps;
+
+        return !(hasNeg && hasPos);
+    }
+
+    static List<(Vector3 p1, Vector3 p2)> SplitEdges(List<Vector3> poly, List<Vector3> other, float gapTolerance, Vector3 normal)
+    {
+        var result = new List<(Vector3, Vector3)>();
+
+        for (int i = 0; i < poly.Count; i++)
+        {
+            Vector3 a1 = poly[i];
+            Vector3 a2 = poly[(i + 1) % poly.Count];
+            Vector3 r = a2 - a1;
+            float rLenSq = r.LengthSquared();
+
+            var ts = new List<float> { 0f, 1f };
+
+            for (int j = 0; j < other.Count; j++)
+            {
+                Vector3 b1 = other[j];
+                Vector3 b2 = other[(j + 1) % other.Count];
+                Vector3 s = b2 - b1;
+
+                float rxs = Cross2D(r, s, normal);
+
+                if (MathF.Abs(rxs) >= Eps)
+                {
+                    Vector3 qp = b1 - a1;
+                    float t = Cross2D(qp, s, normal) / rxs;
+                    float u = Cross2D(qp, r, normal) / rxs;
+
+                    if (t > Eps && t < 1 - Eps && u > -Eps && u < 1 + Eps)
+                        ts.Add(Math.Clamp(t, 0f, 1f));
+                }
+
+                if (gapTolerance > Eps && rLenSq > Eps)
+                {
+                    float tApproach = ClosestApproachParam(a1, a2, b1, b2);
+                    Vector3 pOnA = a1 + tApproach * r;
+                    Vector3 pOnB = ClosestPointOnSegment(pOnA, b1, b2);
+                    float dist = Vector3.Distance(pOnA, pOnB);
+
+                    if (dist <= gapTolerance && tApproach > Eps && tApproach < 1 - Eps)
+                        ts.Add(tApproach);
+                }
+            }
+
+            ts.Sort();
+            for (int k = 0; k < ts.Count - 1; k++)
+            {
+                if (ts[k + 1] - ts[k] < Eps) continue;
+                // Interpolated on the real 3D edge, so Z is exact — never
+                // reconstructed from a 2D projection.
+                Vector3 p1 = a1 + ts[k] * r;
+                Vector3 p2 = a1 + ts[k + 1] * r;
+                result.Add((p1, p2));
+            }
+        }
+
+        return result;
+    }
+
+    static float ClosestApproachParam(Vector3 a1, Vector3 a2, Vector3 b1, Vector3 b2)
+    {
+        float best = 0f;
+        float bestDist = float.PositiveInfinity;
+
+        void Consider(Vector3 p)
+        {
+            Vector3 c = ClosestPointOnSegment(p, a1, a2);
+            float d = Vector3.Distance(p, c);
+            if (d < bestDist)
+            {
+                bestDist = d;
+                Vector3 r = a2 - a1;
+                float len2 = r.LengthSquared();
+                best = len2 < Eps ? 0f : Vector3.Dot(c - a1, r) / len2;
+            }
+        }
+
+        Consider(b1);
+        Consider(b2);
+
+        return Math.Clamp(best, 0f, 1f);
+    }
+
+    static List<Vector3> ChainSegments(List<(Vector3 p1, Vector3 p2)> segs, float matchTolerance)
+    {
+        if (segs.Count == 0) return new List<Vector3>();
+
+        var remaining = new List<(Vector3 p1, Vector3 p2)>(segs);
+        var loop = new List<Vector3> { remaining[0].p1, remaining[0].p2 };
+        remaining.RemoveAt(0);
+
+        while (remaining.Count > 0)
+        {
+            Vector3 tail = loop[^1];
+            int idx = remaining.FindIndex(s =>
+                Vector3.Distance(s.p1, tail) < matchTolerance ||
+                Vector3.Distance(s.p2, tail) < matchTolerance);
+
+            if (idx < 0)
+                throw new InvalidOperationException(
+                    "Could not close the loop — triangles may still be too far apart " +
+                    "for the given gapTolerance, or only touch at a point.");
+
+            var seg = remaining[idx];
+            bool matchedP1 = Vector3.Distance(seg.p1, tail) < matchTolerance;
+            Vector3 next = matchedP1 ? seg.p2 : seg.p1;
+
+            if (Vector3.Distance(next, loop[0]) > matchTolerance)
+                loop.Add(next);
+
+            remaining.RemoveAt(idx);
+        }
+
+        return loop;
+    }
+}
+
+public static class PolygonTriangulator
+{
+    const float Eps = 1e-4f;
+    const float MinTriangleArea = 1e-3f;
+
+    public static List<Triangle> Triangulate(List<Vector3> polygon)
+    {
+        var triangles = new List<Triangle>();
+        var verts = CleanPolygon(polygon);
+
+        if (verts.Count < 3) return triangles;
+
+        if (verts.Count == 3)
+        {
+            triangles.Add(MakeTriangle(verts[0], verts[1], verts[2]));
+            return triangles;
+        }
+
+        Vector3 normal = ComputeNormal(verts);
+
+        if (SignedArea(verts, normal) < 0)
+            verts.Reverse();
+
+        var indices = new List<int>();
+        for (int i = 0; i < verts.Count; i++) indices.Add(i);
+
+        int guard = 0;
+        int maxIterations = verts.Count * verts.Count;
+
+        while (indices.Count > 3 && guard++ < maxIterations)
+        {
+            int bestEar = -1;
+            float bestScore = float.NegativeInfinity;
+
+            for (int i = 0; i < indices.Count; i++)
+            {
+                int iPrev = indices[(i - 1 + indices.Count) % indices.Count];
+                int iCurr = indices[i];
+                int iNext = indices[(i + 1) % indices.Count];
+
+                Vector3 a = verts[iPrev];
+                Vector3 b = verts[iCurr];
+                Vector3 c = verts[iNext];
+
+                if (Cross2D(b - a, c - b, normal) <= Eps) continue;
+
+                float triArea = TriangleArea(a, b, c);
+                if (triArea < MinTriangleArea) continue;
+
+                bool anyPointInside = false;
+                for (int j = 0; j < indices.Count; j++)
+                {
+                    int idx = indices[j];
+                    if (idx == iPrev || idx == iCurr || idx == iNext) continue;
+                    if (PointInTriangle(verts[idx], a, b, c, normal))
+                    {
+                        anyPointInside = true;
+                        break;
+                    }
+                }
+                if (anyPointInside) continue;
+
+                float quality = TriangleQuality(a, b, c);
+                if (quality > bestScore)
+                {
+                    bestScore = quality;
+                    bestEar = i;
+                }
+            }
+
+            if (bestEar < 0)
+                throw new InvalidOperationException(
+                    "No valid non-degenerate ear found — polygon may be self-intersecting, " +
+                    "non-planar, have near-zero area, or MinTriangleArea may need adjusting.");
+
+            int prevI = indices[(bestEar - 1 + indices.Count) % indices.Count];
+            int currI = indices[bestEar];
+            int nextI = indices[(bestEar + 1) % indices.Count];
+
+            triangles.Add(MakeTriangle(verts[prevI], verts[currI], verts[nextI]));
+            indices.RemoveAt(bestEar);
+        }
+
+        if (indices.Count == 3)
+            triangles.Add(MakeTriangle(verts[indices[0]], verts[indices[1]], verts[indices[2]]));
+
+        return triangles;
+    }
+
+    // Robust best-fit normal for a (near-)planar polygon, via Newell's method.
+    // Works even with slight numerical drift from the union step, or a
+    // concave/reflex boundary.
+    static Vector3 ComputeNormal(List<Vector3> poly)
+    {
+        Vector3 n = Vector3.Zero;
+        int count = poly.Count;
+        for (int i = 0; i < count; i++)
+        {
+            Vector3 curr = poly[i];
+            Vector3 next = poly[(i + 1) % count];
+            n.X += (curr.Y - next.Y) * (curr.Z + next.Z);
+            n.Y += (curr.Z - next.Z) * (curr.X + next.X);
+            n.Z += (curr.X - next.X) * (curr.Y + next.Y);
+        }
+        return Vector3.Normalize(n);
+    }
+
+    static float Cross2D(Vector3 a, Vector3 b, Vector3 normal)
+        => Vector3.Dot(Vector3.Cross(a, b), normal);
+
+    static List<Vector3> CleanPolygon(List<Vector3> poly)
+    {
+        var noDup = new List<Vector3>();
+        foreach (var p in poly)
+        {
+            if (noDup.Count == 0 || Vector3.Distance(noDup[^1], p) > Eps)
+                noDup.Add(p);
+        }
+        if (noDup.Count > 1 && Vector3.Distance(noDup[0], noDup[^1]) < Eps)
+            noDup.RemoveAt(noDup.Count - 1);
+
+        if (noDup.Count < 3) return noDup;
+
+        Vector3 normal = ComputeNormal(noDup);
+
+        var result = new List<Vector3>();
+        int n = noDup.Count;
+        for (int i = 0; i < n; i++)
+        {
+            Vector3 prev = noDup[(i - 1 + n) % n];
+            Vector3 curr = noDup[i];
+            Vector3 next = noDup[(i + 1) % n];
+
+            if (MathF.Abs(Cross2D(curr - prev, next - curr, normal)) > Eps)
+                result.Add(curr);
+        }
+
+        return result.Count >= 3 ? result : noDup;
+    }
+
+    static Triangle MakeTriangle(Vector3 a, Vector3 b, Vector3 c)
+        => new Triangle { Point1 = a, Point2 = b, Point3 = c };
+
+    static float TriangleArea(Vector3 a, Vector3 b, Vector3 c)
+        => Vector3.Cross(b - a, c - a).Length() * 0.5f;
+
+    static float TriangleQuality(Vector3 a, Vector3 b, Vector3 c)
+    {
+        float area = TriangleArea(a, b, c);
+        float ab = Vector3.DistanceSquared(a, b);
+        float bc = Vector3.DistanceSquared(b, c);
+        float ca = Vector3.DistanceSquared(c, a);
+        float denom = ab + bc + ca;
+        return denom < Eps ? 0f : (4f * MathF.Sqrt(3f) * area) / denom;
+    }
+
+    static bool PointInTriangle(Vector3 p, Vector3 a, Vector3 b, Vector3 c, Vector3 normal)
+    {
+        float d1 = Cross2D(b - a, p - a, normal);
+        float d2 = Cross2D(c - b, p - b, normal);
+        float d3 = Cross2D(a - c, p - c, normal);
+
+        bool hasNeg = d1 < -Eps || d2 < -Eps || d3 < -Eps;
+        bool hasPos = d1 > Eps || d2 > Eps || d3 > Eps;
+
+        return !(hasNeg && hasPos);
+    }
+
+    static float SignedArea(List<Vector3> poly, Vector3 normal)
+    {
+        float area = 0f;
+        for (int i = 0; i < poly.Count; i++)
+            area += Cross2D(poly[i], poly[(i + 1) % poly.Count], normal);
+        return area * 0.5f;
     }
 }
 
