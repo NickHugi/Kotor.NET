@@ -240,11 +240,17 @@ public class AreaDesignerViewModel : ReactiveObject
         var gamePath = App.ServiceProvider.GetService<AreaDesignerSettingsRoot>()!.Common.Installations.List.First(x => x.Game == game).Path;
         var modPath = Path.Combine(gamePath, @"modules\", "test.mod");
 
-        var mdl = AreaExporter.RoomToMDL(Area.Rooms.First());
-        //var wok = mdl.GetWalkmesh().GenerateBWM();
-        //MDL.FromFile(@"C:\Users\hugin\Documents\test01.mdl", @"C:\Users\hugin\Documents\test01.mdx");
-        MDL.ToFile(mdl, @"C:\Users\hugin\Documents\test01.mdl", GameEngine.K1, Platform.Windows);
-        (var mdlData, var mdxData) = MDL.ToBytes(mdl, game, Platform.Windows);
+        var data = new List<(byte[] mdl, byte[])>();
+
+        var rooms = new List<(MDL mdl, BWM bwm)>();
+
+        foreach (var room in Area.Rooms)
+        {
+            var mdl = AreaExporter.RoomToMDL(room);
+            var wok = mdl.GetWalkmesh().GenerateBWM();
+            rooms.Add((mdl, wok));
+        }
+        WalkmeshBuilder.Instance.StitchWalkmeshes(rooms.Select(x => x.bwm).ToList());
 
         var ifo = new IFO();
         ifo.ModAreaList.Add("test");
@@ -277,16 +283,24 @@ public class AreaDesignerViewModel : ReactiveObject
         git.Type = GFFType.GIT;
 
         var lyt = new LYT();
-        lyt.Rooms.Add("test01", 0, 0, 0);
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            lyt.Rooms.Add($"test{i + 1:00}", 0, 0, 0);
+        }
 
         var erf = new ERF(ERFType.MOD);
         erf.Add("module", ResourceType.IFO, IFO.ToBytes(ifo));
         erf.Add("test", ResourceType.ARE, ARE.ToBytes(are));
         erf.Add("test", ResourceType.GIT, GFF.ToBytes(git));
         erf.Add("test", ResourceType.LYT, LYT.ToBytes(lyt));
-        erf.Add("test01", ResourceType.MDL, mdlData);
-        erf.Add("test01", ResourceType.MDX, mdxData);
-        //erf.Add("test01", ResourceType.WOK, BWM.ToBytes(wok));
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            var (mdl, wok) = rooms[i];
+            var (mdlData, mdxData) = MDL.ToBytes(mdl, game, Platform.Windows);
+            erf.Add($"test{i + 1:00}", ResourceType.MDL, mdlData);
+            erf.Add($"test{i + 1:00}", ResourceType.MDX, mdxData);
+            erf.Add($"test{i + 1:00}", ResourceType.WOK, BWM.ToBytes(wok));
+        }
         ERF.ToFile(erf, modPath);
     }
 

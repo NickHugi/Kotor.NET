@@ -69,6 +69,7 @@ public class MDLFaceCollection(MDLTrimeshNode node) : ICollection<MDLFace>
             Vertex1 = face.Vertex1,
             Vertex2 = face.Vertex2,
             Vertex3 = face.Vertex3,
+            Material = face.Material
         });
     }
     public void Clear()
