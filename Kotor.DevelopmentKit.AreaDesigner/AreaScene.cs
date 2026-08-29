@@ -128,7 +128,7 @@ public class AreaScene : IScene
 
         if (!string.IsNullOrWhiteSpace(worldObject.Template.Model))
         {
-            descriptors.AddRange(DescriptorsForModel(assets, worldObject.Template.Model, worldObject.GlobalTransform, worldObject));
+            descriptors.AddRange(DescriptorsForModel(assets, $"{worldObject.Template.KitID}::{worldObject.Template.Model}", worldObject.GlobalTransform, worldObject));
         }
     }
     public void RenderMagnets(IAssetManager assets, ref List<IDrawCallDescriptor> descriptors)

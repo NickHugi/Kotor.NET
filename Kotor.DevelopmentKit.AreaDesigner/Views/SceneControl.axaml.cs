@@ -83,7 +83,7 @@ public partial class SceneControl : OpenGlControlBase, ICustomHitTest, IActivata
     {
         var mdl = File.ReadAllBytes($@"{Kit.Manager.ActiveDirectory}/{kitID}/{name}.mdl");
         var mdx = File.ReadAllBytes($@"{Kit.Manager.ActiveDirectory}/{kitID}/{name}.mdx");
-        await ViewModel.Engine.LoadModel(name, mdl, mdx);
+        await ViewModel.Engine.LoadModel($"{kitID}::{name}", mdl, mdx);
     }
     private async Task LoadTexture(string name)
     {

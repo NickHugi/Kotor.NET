@@ -29,7 +29,7 @@ public static class AreaExporter
         var mdl = new MDL();
         mdl.Name = "test";
 
-        mdl.Root.Children.AddRange(room.AllObjects.Where(x => x.Visible).Select(WorldObjectToMDLNode));
+        mdl.Root.Children.AddRange(room.AllObjects.Where(x => x.Visible).Where(x => !string.IsNullOrWhiteSpace(x.Template.Model)).Select(WorldObjectToMDLNode));
 
         var walkmeshes = mdl.Root.GetAllDescendants().OfType<MDLWalkmeshNode>();
         var newWalkmesh = WalkmeshBuilder.Instance.Bake2(walkmeshes.ToList());
@@ -139,8 +139,8 @@ public class WalkmeshBuilder
         List<Triangle> processed = TriangleOverlay.RemoveCoplanarOverlaps(
             unprocessed,
             angleToleranceDegrees: 5f,
-            planeDistanceTolerance: 0.1f,
-            overlaySnapTolerance: 0.1);
+            planeDistanceTolerance: 0.01f,
+            overlaySnapTolerance: 0.01);
 
         var newNode = new MDLWalkmeshNode("walkmesh");
         newNode.EnableVertices();
