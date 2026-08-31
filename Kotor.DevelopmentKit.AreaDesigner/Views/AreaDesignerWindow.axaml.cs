@@ -40,6 +40,20 @@ public partial class AreaDesignerWindow : ReactiveWindow<AreaDesignerViewModel>
         await dialog.ShowDialog<Kit>(this);
     }
 
+    public async Task OpenAreaSettings()
+    {
+        if (ViewModel?.Area is null)
+            return;
+
+        var viewModel = new AreaSettingsViewModel(ViewModel.Area);
+        await new AreaSettingsDialog()
+        {
+            DataContext = viewModel
+        }.ShowDialog(this);
+
+        viewModel.Apply(ViewModel.Area);
+    }
+
     public async Task OpenSettings()
     {
         var viewModel = App.ServiceProvider.GetService<SettingsDialogViewModel>();

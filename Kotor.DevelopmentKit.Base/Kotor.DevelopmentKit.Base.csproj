@@ -33,6 +33,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Controls\LabeledCheckbox.axaml.cs">
+      <DependentUpon>LabeledCheckbox.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Controls\QuaternionEdit.axaml.cs">
       <DependentUpon>QuaternionEdit.axaml</DependentUpon>
     </Compile>

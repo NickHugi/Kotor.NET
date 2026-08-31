@@ -44,6 +44,9 @@
     <Compile Update="Views\AreaDesignerWindow.axaml.cs">
       <DependentUpon>AreaDesignerWindow.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\AreaSettingsDialog.axaml.cs">
+      <DependentUpon>AreaSettingsDialog.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

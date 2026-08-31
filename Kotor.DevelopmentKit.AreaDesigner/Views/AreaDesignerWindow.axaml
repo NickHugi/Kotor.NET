@@ -82,9 +82,8 @@
                 <MenuItem Header="_Save" />
                 <MenuItem Header="_Save As" Command="{Binding SaveAreaAs}" />
                 <Separator/>
-                <MenuItem Header="_Settings" Command="{Binding EditSettings}" />
+                <MenuItem Header="_Settings" Command="{Binding #Window.OpenAreaSettings}" />
                 <Separator/>
-                <MenuItem Header="_Exit" Command="{Binding #Window.OpenKitEditor}" />
             </MenuItem>
             <MenuItem Header="_Export">
                 <MenuItem Header="_To KotOR 1" Command="{Binding ExportK1}" />

@@ -238,7 +238,7 @@ public class AreaDesignerViewModel : ReactiveObject
     public void Export(GameEngine game)
     {
         var gamePath = App.ServiceProvider.GetService<AreaDesignerSettingsRoot>()!.Common.Installations.List.First(x => x.Game == game).Path;
-        var modPath = Path.Combine(gamePath, @"modules\", "test.mod");
+        var modPath = Path.Combine(gamePath, @"modules\", $"{Area.AreaID}.mod");
 
         var data = new List<(byte[] mdl, byte[])>();
 
@@ -253,8 +253,8 @@ public class AreaDesignerViewModel : ReactiveObject
         WalkmeshBuilder.Instance.StitchWalkmeshes(rooms.Select(x => x.bwm).ToList());
 
         var ifo = new IFO();
-        ifo.ModAreaList.Add("test");
-        ifo.EntryArea = "test";
+        ifo.ModAreaList.Add(Area.AreaID);
+        ifo.EntryArea = Area.AreaID;
         ifo.Source.Root.SetUInt16("Expansion_Pack", 0);
         ifo.Source.Root.SetList("Mod_GVar_List");
         ifo.Source.Root.SetList("Mod_Expan_List");
@@ -285,21 +285,21 @@ public class AreaDesignerViewModel : ReactiveObject
         var lyt = new LYT();
         for (int i = 0; i < rooms.Count; i++)
         {
-            lyt.Rooms.Add($"test{i + 1:00}", 0, 0, 0);
+            lyt.Rooms.Add($"{Area.AreaID}{i + 1:000}", 0, 0, 0);
         }
 
         var erf = new ERF(ERFType.MOD);
         erf.Add("module", ResourceType.IFO, IFO.ToBytes(ifo));
-        erf.Add("test", ResourceType.ARE, ARE.ToBytes(are));
-        erf.Add("test", ResourceType.GIT, GFF.ToBytes(git));
-        erf.Add("test", ResourceType.LYT, LYT.ToBytes(lyt));
+        erf.Add(Area.AreaID, ResourceType.ARE, ARE.ToBytes(are));
+        erf.Add(Area.AreaID, ResourceType.GIT, GFF.ToBytes(git));
+        erf.Add(Area.AreaID, ResourceType.LYT, LYT.ToBytes(lyt));
         for (int i = 0; i < rooms.Count; i++)
         {
             var (mdl, wok) = rooms[i];
             var (mdlData, mdxData) = MDL.ToBytes(mdl, game, Platform.Windows);
-            erf.Add($"test{i + 1:00}", ResourceType.MDL, mdlData);
-            erf.Add($"test{i + 1:00}", ResourceType.MDX, mdxData);
-            erf.Add($"test{i + 1:00}", ResourceType.WOK, BWM.ToBytes(wok));
+            erf.Add($"{Area.AreaID}{i + 1:000}", ResourceType.MDL, mdlData);
+            erf.Add($"{Area.AreaID}{i + 1:000}", ResourceType.MDX, mdxData);
+            erf.Add($"{Area.AreaID}{i + 1:000}", ResourceType.WOK, BWM.ToBytes(wok));
         }
         ERF.ToFile(erf, modPath);
     }

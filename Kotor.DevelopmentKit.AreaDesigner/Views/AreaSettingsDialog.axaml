@@ -1,0 +1,17 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:Kotor.DevelopmentKit.AreaDesigner.ViewModels"
+        xmlns:core="using:Kotor.DevelopmentKit.Base.Controls"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
+        Width="300" Height="450"
+        x:Class="Kotor.DevelopmentKit.AreaDesigner.Views.AreaSettingsDialog"
+        x:DataType="vm:AreaSettingsViewModel"
+        Title="AreaSettings">
+    <StackPanel Margin="5">
+        <core:LabeledTextBox Label="Area ID" Text="{Binding AreaID}" />
+        <!--<core:LabeledTextBox Label="Texture ID" Text="{Binding TextureID}" />-->
+        <!--<core:LabeledCheckbox Label="Override textures on export by default" Checked="{Binding OverrideTextures}" />-->
+    </StackPanel>
+</Window>

@@ -1,11 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Kotor.NET.Graphics.Cameras;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 
 public class Area
 {
+    public string AreaID { get; set; } = "test01";
+    public string TextureID { get; set; } = "test01";
+    public bool OverrideTextures { get; set; } = true;
+    public Vector3 AmbientLighting { get; set; }
+    public Vector3 DiffuseLighting { get; set; }
+    public Vector3 DynamicLighting { get; set; }
+
     public IReadOnlyList<Room> Rooms => _rooms.AsReadOnly();
     private List<Room> _rooms = new();
 
