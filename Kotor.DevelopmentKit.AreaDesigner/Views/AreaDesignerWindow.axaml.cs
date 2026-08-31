@@ -1,16 +1,19 @@
+using System.Linq;
+using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.ReactiveUI;
-using Kotor.DevelopmentKit.AreaDesigner.relocate;
-using Kotor.DevelopmentKit.AreaDesigner.KitEditor.Views;
 using Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
-using Kotor.DevelopmentKit.AreaDesigner.ViewModels;
-using ReactiveUI;
-using System.Reactive;
+using Kotor.DevelopmentKit.AreaDesigner.KitEditor.Views;
+using Kotor.DevelopmentKit.AreaDesigner.relocate;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaExportation;
-using System.Linq;
-using Kotor.NET.Resources.KotorMDL;
+using Kotor.DevelopmentKit.AreaDesigner.ViewModels;
+using Kotor.DevelopmentKit.Base;
+using Kotor.DevelopmentKit.Base.Settings.ViewModels;
 using Kotor.NET.Common;
+using Kotor.NET.Resources.KotorMDL;
+using Microsoft.Extensions.DependencyInjection;
+using ReactiveUI;
 
 namespace Kotor.DevelopmentKit.AreaDesigner.Views;
 
@@ -35,6 +38,15 @@ public partial class AreaDesignerWindow : ReactiveWindow<AreaDesignerViewModel>
 
         // todo - refresh after save changes
         await dialog.ShowDialog<Kit>(this);
+    }
+
+    public async Task OpenSettings()
+    {
+        var viewModel = App.ServiceProvider.GetService<SettingsDialogViewModel>();
+        await new SettingsDialog()
+        {
+            DataContext = viewModel
+        }.ShowDialog(this);
     }
 
     private void ListBox_Initialized(object? sender, System.EventArgs e)

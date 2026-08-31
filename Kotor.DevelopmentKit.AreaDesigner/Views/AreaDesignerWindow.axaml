@@ -90,7 +90,8 @@
                 <MenuItem Header="_To KotOR 1" Command="{Binding ExportK1}" />
                 <MenuItem Header="_To KotOR 2" Command="{Binding ExportK2}" />
             </MenuItem>
-            <MenuItem Header="_Advanced">
+            <MenuItem Header="_Options">
+                <MenuItem Header="_Settings" Command="{Binding #Window.OpenSettings}" />
                 <MenuItem Header="_Edit Kit" Command="{Binding #Window.OpenKitEditor}" />
             </MenuItem>
         </Menu>
