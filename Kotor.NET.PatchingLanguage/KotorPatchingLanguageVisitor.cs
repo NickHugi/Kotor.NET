@@ -435,6 +435,13 @@ public interface IKotorPatchingLanguageVisitor<Result> : IParseTreeVisitor<Resul
 	/// <return>The visitor result.</return>
 	Result VisitGFFAssignLocalizedStringStringRef([NotNull] KotorPatchingLanguageParser.GFFAssignLocalizedStringStringRefContext context);
 	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueLocalizedString</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_locstring"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitGFFValueLocalizedString([NotNull] KotorPatchingLanguageParser.GFFValueLocalizedStringContext context);
+	/// <summary>
 	/// Visit a parse tree produced by the <c>GFFAssignVector3</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_vector3"/>.
 	/// </summary>
@@ -462,6 +469,219 @@ public interface IKotorPatchingLanguageVisitor<Result> : IParseTreeVisitor<Resul
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitGFFValueVector4Literal([NotNull] KotorPatchingLanguageParser.GFFValueVector4LiteralContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EditItem</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_item"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEditItem([NotNull] KotorPatchingLanguageParser.EditItemContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTI_SetField_BaseItem</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_item_mod"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTI_SetField_BaseItem([NotNull] KotorPatchingLanguageParser.UTI_SetField_BaseItemContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTI_SetField_LocalizedName</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_item_mod"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTI_SetField_LocalizedName([NotNull] KotorPatchingLanguageParser.UTI_SetField_LocalizedNameContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTI_SetField_Tag</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_item_mod"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTI_SetField_Tag([NotNull] KotorPatchingLanguageParser.UTI_SetField_TagContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTI_SetField_Charges</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_item_mod"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTI_SetField_Charges([NotNull] KotorPatchingLanguageParser.UTI_SetField_ChargesContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTI_SetField_Cost</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_item_mod"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTI_SetField_Cost([NotNull] KotorPatchingLanguageParser.UTI_SetField_CostContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTI_SetField_StackSize</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_item_mod"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTI_SetField_StackSize([NotNull] KotorPatchingLanguageParser.UTI_SetField_StackSizeContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTI_SetField_Plot</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_item_mod"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTI_SetField_Plot([NotNull] KotorPatchingLanguageParser.UTI_SetField_PlotContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTI_SetField_ModelVariation</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_item_mod"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTI_SetField_ModelVariation([NotNull] KotorPatchingLanguageParser.UTI_SetField_ModelVariationContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTI_SetField_TextureVariation</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_item_mod"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTI_SetField_TextureVariation([NotNull] KotorPatchingLanguageParser.UTI_SetField_TextureVariationContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTI_AddProperty</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_item_mod"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTI_AddProperty([NotNull] KotorPatchingLanguageParser.UTI_AddPropertyContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTI_SetField_BaseItem_Int32</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_set_field_base_item"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTI_SetField_BaseItem_Int32([NotNull] KotorPatchingLanguageParser.UTI_SetField_BaseItem_Int32Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTI_SetField_BaseItem_2DALabelLookup</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_set_field_base_item"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTI_SetField_BaseItem_2DALabelLookup([NotNull] KotorPatchingLanguageParser.UTI_SetField_BaseItem_2DALabelLookupContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTI_SetField_LocalizedName_LocalizedString</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_set_field_localized_name"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTI_SetField_LocalizedName_LocalizedString([NotNull] KotorPatchingLanguageParser.UTI_SetField_LocalizedName_LocalizedStringContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTI_SetField_Description_LocalizedString</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_set_field_description"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTI_SetField_Description_LocalizedString([NotNull] KotorPatchingLanguageParser.UTI_SetField_Description_LocalizedStringContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_set_field_tag"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUti_set_field_tag([NotNull] KotorPatchingLanguageParser.Uti_set_field_tagContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_set_field_charges"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUti_set_field_charges([NotNull] KotorPatchingLanguageParser.Uti_set_field_chargesContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_set_field_max_charges"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUti_set_field_max_charges([NotNull] KotorPatchingLanguageParser.Uti_set_field_max_chargesContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_set_field_cost"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUti_set_field_cost([NotNull] KotorPatchingLanguageParser.Uti_set_field_costContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_set_field_stack_size"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUti_set_field_stack_size([NotNull] KotorPatchingLanguageParser.Uti_set_field_stack_sizeContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_set_field_plot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUti_set_field_plot([NotNull] KotorPatchingLanguageParser.Uti_set_field_plotContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_set_field_model_variation"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUti_set_field_model_variation([NotNull] KotorPatchingLanguageParser.Uti_set_field_model_variationContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_set_field_texture_variation"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUti_set_field_texture_variation([NotNull] KotorPatchingLanguageParser.Uti_set_field_texture_variationContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_add_property"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUti_add_property([NotNull] KotorPatchingLanguageParser.Uti_add_propertyContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_property_mod"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUti_property_mod([NotNull] KotorPatchingLanguageParser.Uti_property_modContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_property_set_field_property_name"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUti_property_set_field_property_name([NotNull] KotorPatchingLanguageParser.Uti_property_set_field_property_nameContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_property_set_field_subtype"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUti_property_set_field_subtype([NotNull] KotorPatchingLanguageParser.Uti_property_set_field_subtypeContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_property_set_field_chance_appear"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUti_property_set_field_chance_appear([NotNull] KotorPatchingLanguageParser.Uti_property_set_field_chance_appearContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_property_set_field_cost_table"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUti_property_set_field_cost_table([NotNull] KotorPatchingLanguageParser.Uti_property_set_field_cost_tableContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_property_set_field_cost_value"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUti_property_set_field_cost_value([NotNull] KotorPatchingLanguageParser.Uti_property_set_field_cost_valueContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_property_set_field_param1"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUti_property_set_field_param1([NotNull] KotorPatchingLanguageParser.Uti_property_set_field_param1Context context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_property_set_field_param1_value"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUti_property_set_field_param1_value([NotNull] KotorPatchingLanguageParser.Uti_property_set_field_param1_valueContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_property_set_field_upgrade_type"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUti_property_set_field_upgrade_type([NotNull] KotorPatchingLanguageParser.Uti_property_set_field_upgrade_typeContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>EditAppearance</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_appearance"/>.
@@ -530,4 +750,32 @@ public interface IKotorPatchingLanguageVisitor<Result> : IParseTreeVisitor<Resul
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitEditCreatureGenderFromKeyword([NotNull] KotorPatchingLanguageParser.EditCreatureGenderFromKeywordContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EditCreatureRace</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_creature_field_race"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEditCreatureRace([NotNull] KotorPatchingLanguageParser.EditCreatureRaceContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EditCreatureRaceFromKeyword</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_creature_field_race"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEditCreatureRaceFromKeyword([NotNull] KotorPatchingLanguageParser.EditCreatureRaceFromKeywordContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EditCreatureSubrace</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_creature_field_subrace"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEditCreatureSubrace([NotNull] KotorPatchingLanguageParser.EditCreatureSubraceContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EditCreatureSubraceFromKeyword</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_creature_field_subrace"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEditCreatureSubraceFromKeyword([NotNull] KotorPatchingLanguageParser.EditCreatureSubraceFromKeywordContext context);
 }

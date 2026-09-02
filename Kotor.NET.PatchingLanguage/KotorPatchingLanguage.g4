@@ -11,6 +11,7 @@ script
 instruction                 
     : edit_appearance
     | edit_creature
+    | edit_item
     ;
 
 twoda_assign_cell
@@ -145,11 +146,12 @@ gff_assign_binary
 gff_value_binary
     : STRING_LITERAL                                                        # GFFValueBinaryBase64
     ;
-
 gff_assign_locstring
     : 'assign' 'locstring' 'set' gff_locate_field 'stringref' gff_value_int32 # GFFAssignLocalizedStringStringRef
     ;
-
+gff_value_locstring
+    : 'stringref' INT_LITERAL                                               # GFFValueLocalizedString
+    ;
 gff_assign_vector3
     : 'assign' 'vector3' 'set' gff_locate_field 'to' gff_value_vector3      # GFFAssignVector3
     ;
@@ -164,6 +166,97 @@ gff_value_vector4
     : VECTOR4_LITERAL                                                       # GFFValueVector4Literal
     ;
 
+/* */
+/* UTI */
+edit_item
+    : 'edit' 'item' STRING_LITERAL edit_item_mod* 'end' 'edit'      # EditItem
+    ;
+edit_item_mod
+    : uti_set_field_base_item                                       # UTI_SetField_BaseItem
+    | uti_set_field_localized_name                                  # UTI_SetField_LocalizedName
+    | uti_set_field_tag                                             # UTI_SetField_Tag
+    | uti_set_field_charges                                         # UTI_SetField_Charges
+    | uti_set_field_cost                                            # UTI_SetField_Cost
+    | uti_set_field_stack_size                                      # UTI_SetField_StackSize
+    | uti_set_field_plot                                            # UTI_SetField_Plot
+    | uti_set_field_model_variation                                 # UTI_SetField_ModelVariation
+    | uti_set_field_texture_variation                               # UTI_SetField_TextureVariation
+    | uti_add_property                                              # UTI_AddProperty
+    ;
+uti_set_field_base_item
+    : 'set' 'base' 'item' 'to' gff_value_int32                      # UTI_SetField_BaseItem_Int32
+    | 'set' 'base' 'item' 'to' 'label' STRING_LITERAL               # UTI_SetField_BaseItem_2DALabelLookup
+    ;
+uti_set_field_localized_name
+    : 'set' 'name' 'to' gff_value_locstring                         # UTI_SetField_LocalizedName_LocalizedString
+    ;
+uti_set_field_description
+    : 'set' 'description' 'to' gff_value_locstring                  # UTI_SetField_Description_LocalizedString
+    ;
+uti_set_field_tag
+    : 'set' 'tag' 'to' gff_value_string
+    ;
+uti_set_field_charges
+    : 'set' 'charges' 'to' gff_value_uint8
+    ;
+uti_set_field_max_charges
+    : 'set' 'max' 'charges' 'to' gff_value_uint8
+    ;
+uti_set_field_cost
+    : 'set' 'cost' 'to' gff_value_uint32
+    ;
+uti_set_field_stack_size
+    : 'set' 'stack' 'size' 'to' gff_value_uint16
+    ;
+uti_set_field_plot
+    : 'set' 'plot' 'to' gff_value_int8 //bool
+    ;
+uti_set_field_model_variation
+    : 'set' 'model' 'variation' 'to' gff_value_uint8
+    ;
+uti_set_field_texture_variation
+    : 'set' 'texture' 'variation' 'to' gff_value_uint8
+    ;
+uti_add_property
+    : 'add property' uti_property_mod*
+    ;
+uti_property_mod
+    : uti_property_set_field_property_name
+    | uti_property_set_field_subtype
+    | uti_property_set_field_chance_appear
+    | uti_property_set_field_cost_table
+    | uti_property_set_field_cost_value
+    | uti_property_set_field_param1
+    | uti_property_set_field_param1_value
+    | uti_property_set_field_upgrade_type
+    ;
+uti_property_set_field_property_name
+    : 'set' 'chance' 'appear' 'to' gff_value_uint16
+    ;
+uti_property_set_field_subtype
+    : 'set' 'chance' 'appear' 'to' gff_value_uint16
+    ;
+uti_property_set_field_chance_appear
+    : 'set' 'chance' 'appear' 'to' gff_value_uint8
+    ;
+uti_property_set_field_cost_table
+    : 'set' 'cost' 'table' 'to' gff_value_uint8
+    ;
+uti_property_set_field_cost_value
+    : 'set' 'cost' 'value' 'to' gff_value_uint16
+    ;
+uti_property_set_field_param1
+    : 'set' 'param' 'to' gff_value_uint8
+    ;
+uti_property_set_field_param1_value
+    : 'set' 'param' 'value' 'to' gff_value_uint8
+    ;
+uti_property_set_field_upgrade_type
+    : 'set' 'upgrade' 'type' 'to' gff_value_uint8
+    ;
+
+/* */
+/* Appearance */
 edit_appearance        
     : 'edit' 'appearance' edit_appearance_mod* 'end' 'edit'                 # EditAppearance
     ;
@@ -198,12 +291,13 @@ edit_creature_field_gender
     ;
 edit_creature_field_race
     : 'set' 'race' gff_value_uint8                                          # EditCreatureRace
-    | 'set' 'race' ('human' | 'droid')                                      # EditCreatureGenderFromKeyword
+    | 'set' 'race' ('human' | 'droid')                                      # EditCreatureRaceFromKeyword
     ;
 edit_creature_field_subrace
     : 'set' 'race' gff_value_uint8                                          # EditCreatureSubrace
     | 'set' 'race' ('none' | 'wookie' | 'beast')                            # EditCreatureSubraceFromKeyword
     ;
+
 
 /*
  * Lexer Rules

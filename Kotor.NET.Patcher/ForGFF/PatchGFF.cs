@@ -300,6 +300,20 @@ public class EditStringModifier : IModifier
         field.Struct.SetString(field.Label, value);
     }
 }
+public class EditLocalizedStringModifier : IModifier
+{
+    public required IFieldLocator Field { get; set; }
+    public required IValue<int> Value { get; set; }
+
+    public void Apply(GFF gff, Installation installation, PatcherMemory memory)
+    {
+        var field = Field.Locate(gff, installation, memory);
+        var value = Value.Get(gff, installation, memory);
+
+        var locstring = new LocalisedString(value);
+        field.Struct.SetLocalisedString(field.Label, locstring);
+    }
+}
 public class EditLocalizedStringStringRefModifier : IModifier
 {
     public required IFieldLocator Field { get; set; }

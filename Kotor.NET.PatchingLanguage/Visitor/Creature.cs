@@ -113,7 +113,6 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
         };
     }
 
-    public override object race
 
 
 

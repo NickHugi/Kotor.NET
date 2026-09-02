@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Antlr4.Runtime.Misc;
 using Kotor.NET.Common.Data;
+using Kotor.NET.Common.Localization;
 using Kotor.NET.Patcher.ForGFF;
 
 namespace Kotor.NET.PatchingLanguage.Visitor;
@@ -153,7 +154,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
         return new EditInt8Modifier
         {
             Field = (IFieldLocator)context.gff_locate_field(),
-            Value = (IValue<uint>)context.gff_value_uint32(),
+            Value = (IValue<sbyte>)context.gff_value_int8(),
         };
     }
     public override object VisitGFFValueInt8Literal([NotNull] KotorPatchingLanguageParser.GFFValueInt8LiteralContext context)
@@ -192,7 +193,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new ConstantValue<Int16>
         {
-            Value = ushort.Parse(context.INT_LITERAL().GetText()),
+            Value = short.Parse(context.INT_LITERAL().GetText()),
         };
     }
     public override object VisitGFFValueInt16Token([NotNull] KotorPatchingLanguageParser.GFFValueInt16TokenContext context)
@@ -430,6 +431,15 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
         {
             Field = (IFieldLocator)context.gff_locate_field(),
             Value = (IValue<int>)context.gff_value_int32(),
+        };
+    }
+    public override object VisitGFFValueLocalizedString([NotNull] KotorPatchingLanguageParser.GFFValueLocalizedStringContext context)
+    {
+        var stringref = context.INT_LITERAL();
+
+        return new ConstantValue<LocalisedString>
+        {
+            Value = new LocalisedString(int.Parse(context.INT_LITERAL().GetText())),
         };
     }
 
