@@ -11,17 +11,17 @@ namespace Kotor.NET.PatchingLanguage.Visitor;
 
 public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVisitor<object>
 {
-    public override object VisitEditCreature([NotNull] KotorPatchingLanguageParser.EditCreatureContext context)
-    {
-        var modifiers = context.edit_creature_mod().Select(Visit).OfType<IModifier>().ToList();
+    //public override object VisitEditCreature([NotNull] KotorPatchingLanguageParser.EditCreatureContext context)
+    //{
+    //    var modifiers = context.edit_creature_mod().Select(Visit).OfType<IGFFModifier>().ToList();
 
-        return new EditCreature
-        {
-            TakeFrom = new HardcodedLocateResource(), // TODO
-            SaveTo = new HardcodedLocateResource(), // TODO
-            Modifiers = modifiers,
-        };
-    }
+    //    return new EditCreature
+    //    {
+    //        TakeFrom = new HardcodedLocateResource() { FilePath = @"C:\Users\hugin\Desktop\ex\appearance.2da" },
+    //        SaveTo = new HardcodedLocateResource() { FilePath = @"C:\Users\hugin\Desktop\ex\appearance.2da" },
+    //        Modifiers = modifiers,
+    //    };
+    //}
 
     public override object VisitEditCreatureAppearance([NotNull] KotorPatchingLanguageParser.EditCreatureAppearanceContext context)
     {
@@ -29,6 +29,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
         {
             Field = new ByPathFieldLocator
             {
+                Relative = false,
                 Path = ["Appearance_Type"]
             },
             Value = (IValue<ushort>)context.gff_value_uint16(),
@@ -40,6 +41,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
         {
             Field = new ByPathFieldLocator
             {
+                Relative = false,
                 Path = ["Appearance_Type"]
             },
             Value = new TwoDARowIndexValue<ushort>
@@ -57,6 +59,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
         {
             Field = new ByPathFieldLocator
             {
+                Relative = false,
                 Path = ["PortraitId"]
             },
             Value = (IValue<ushort>)context.gff_value_uint16(),
@@ -68,6 +71,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
         {
             Field = new ByPathFieldLocator
             {
+                Relative = false,
                 Path = ["PortraitId"]
             },
             Value = new TwoDARowIndexValue<ushort>
@@ -85,6 +89,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
         {
             Field = new ByPathFieldLocator
             {
+                Relative = false,
                 Path = ["Gender"]
             },
             Value = (IValue<byte>)context.gff_value_uint8(),
@@ -96,6 +101,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
         {
             Field = new ByPathFieldLocator
             {
+                Relative = false,
                 Path = ["Gender"]
             },
             Value = new ConstantValue<byte>()

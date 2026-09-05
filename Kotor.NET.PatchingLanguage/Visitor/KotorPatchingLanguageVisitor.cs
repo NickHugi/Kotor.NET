@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Antlr4.Runtime.Tree;
+using Kotor.NET.Common;
 
 namespace Kotor.NET.PatchingLanguage.Visitor;
 
@@ -26,6 +27,25 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
         if (str.Length >= 2 && str[0] == '"' && str[^1] == '"')
             return str.Substring(1, str.Length - 2);
         return str;
+    }
+
+    private Language GetTLKLanguage(ITerminalNode node)
+    {
+        return node.GetText() switch
+        {
+            "english" => Language.English,
+            _ => throw new NotSupportedException("Unsupported language")
+        };
+    }
+
+    private Gender GetTLKGender(ITerminalNode node)
+    {
+        return node.GetText() switch
+        {
+            "male" => Gender.Male,
+            "female" => Gender.Female,
+            _ => throw new NotSupportedException("Invalid gender")
+        };
     }
 
     private string GetMemoryTokenText(ITerminalNode node)
@@ -50,7 +70,9 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
         var x = float.Parse(components[0]);
         var y = float.Parse(components[1]);
         var z = float.Parse(components[2]);
-        var z = float.Parse(components[3]);
-        return new Vector4(x, y, z);
+        var w = float.Parse(components[3]);
+        return new Vector4(x, y, z, w);
     }
+
+    
 }

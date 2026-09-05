@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Antlr4.Runtime.Misc;
+using Kotor.NET.Common;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Common.Localization;
 using Kotor.NET.Patcher.ForGFF;
@@ -17,6 +18,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new ByPathFieldLocator
         {
+            Relative = false,
             Path = GetStringLiteralText(context.STRING_LITERAL()).Split('\\')
         };
     }
@@ -442,6 +444,23 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
             Value = new LocalisedString(int.Parse(context.INT_LITERAL().GetText())),
         };
     }
+    public override object VisitGFFValue_LocalizedString_Substrings([NotNull] KotorPatchingLanguageParser.GFFValue_LocalizedString_SubstringsContext context)
+    {
+        return new ConstantValue<LocalisedString>
+        {
+            Value = new LocalisedString(context.gff_value_locstring_substring().Select(Visit).OfType<LocalisedSubstring>().ToList())
+        };
+    }
+    public override object VisitGFFValue_LocalizedString_MaleEnglish([NotNull] KotorPatchingLanguageParser.GFFValue_LocalizedString_MaleEnglishContext context)
+    {
+        var text = GetStringLiteralText(context.STRING_LITERAL());
+        var substring = new LocalisedSubstring(Language.English, Gender.Male, text);
+
+        return new ConstantValue<LocalisedString>
+        {
+            Value = new LocalisedString([substring])
+        };
+    }
 
     public override object VisitGFFAssignVector3([NotNull] KotorPatchingLanguageParser.GFFAssignVector3Context context)
     {
@@ -475,4 +494,20 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
         };
     }
 
+    public override object VisitGFFValue_LocalizedString_Substring_Language([NotNull] KotorPatchingLanguageParser.GFFValue_LocalizedString_Substring_LanguageContext context)
+    {
+        var language = GetTLKLanguage(context.TLK_LANGUAGE());
+        var gender = Gender.Female;
+        var text = GetStringLiteralText(context.STRING_LITERAL());
+
+        return new LocalisedSubstring(language, gender, text);
+    }
+    public override object VisitGFFValue_LocalizedString_Substring_LanguageGender([NotNull] KotorPatchingLanguageParser.GFFValue_LocalizedString_Substring_LanguageGenderContext context)
+    {
+        var language = GetTLKLanguage(context.TLK_LANGUAGE());
+        var gender = GetTLKGender(context.TLK_GENDER());
+        var text = GetStringLiteralText(context.STRING_LITERAL());
+
+        return new LocalisedSubstring(language, gender, text);
+    }
 }

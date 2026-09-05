@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kotor.NET.Patcher", "Kotor.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kotor.NET.Patcher.Console", "Kotor.NET.Patcher.Console\Kotor.NET.Patcher.Console.csproj", "{F7E994F5-3FA6-4E49-B199-3919C2AFCF8D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kotor.NET.Patcher.App", "Kotor.NET.Patcher.App\Kotor.NET.Patcher.App.csproj", "{11EB573D-EDD2-4493-A85A-198C5CCE891D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{F7E994F5-3FA6-4E49-B199-3919C2AFCF8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7E994F5-3FA6-4E49-B199-3919C2AFCF8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7E994F5-3FA6-4E49-B199-3919C2AFCF8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11EB573D-EDD2-4493-A85A-198C5CCE891D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11EB573D-EDD2-4493-A85A-198C5CCE891D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11EB573D-EDD2-4493-A85A-198C5CCE891D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11EB573D-EDD2-4493-A85A-198C5CCE891D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,6 +104,7 @@ Global
 		{D1BEF69E-F56A-47BE-A142-C151A878B671} = {5A80EBC7-36DC-4E56-A52B-3C3547E0F912}
 		{FCD30D9D-FB06-4B27-88CF-261B3F60331C} = {5A80EBC7-36DC-4E56-A52B-3C3547E0F912}
 		{F7E994F5-3FA6-4E49-B199-3919C2AFCF8D} = {739D01ED-DE35-4946-8809-424A58B8D01C}
+		{11EB573D-EDD2-4493-A85A-198C5CCE891D} = {739D01ED-DE35-4946-8809-424A58B8D01C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C3B4FE44-EA0E-476F-8106-438E6CC691A7}

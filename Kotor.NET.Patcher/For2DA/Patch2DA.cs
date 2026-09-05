@@ -1,33 +1,36 @@
 ﻿using System.Data.Common;
+using Kotor.NET.Encapsulations;
 using Kotor.NET.Resources.Kotor2DA;
 
 namespace Kotor.NET.Patcher.For2DA;
 
 public class Patch2DA : IPatch
 {
-    public required ILocateResource TakeFrom { get; set; }
-    public required ILocateResource SaveTo { get; set; }
+    public required ILocateContainer TakeFrom { get; set; }
+    public required ILocateContainer SaveTo { get; set; }
     public ICollection<IModifier> Modifiers { get; set; } = [];
 
-    public void Apply(PatcherMemory memory)
-    {
-        var twoda = TwoDA.FromBytes(TakeFrom.Load());
+    public void Apply(Installation installation, PatcherMemory memory) => throw new NotImplementedException();
 
-        foreach (var modifier in Modifiers)
-        {
-            modifier.Apply(twoda, memory);
-        }
+    //public void Apply(Installation installation, PatcherMemory memory)
+    //{
+    //    var twoda = TwoDA.FromBytes(TakeFrom.Load());
 
-        SaveTo.Save(TwoDA.ToBytes(twoda));
-    }
+    //    foreach (var modifier in Modifiers)
+    //    {
+    //        modifier.Apply(twoda, memory);
+    //    }
+
+    //    SaveTo.Save(TwoDA.ToBytes(twoda));
+    //}
 }
 public class EditAppearance : Patch2DA
 {
-    public EditAppearance()
-    {
-        TakeFrom = new HardcodedLocateResource();
-        SaveTo = new HardcodedLocateResource();
-    }
+    //public EditAppearance()
+    //{
+    //    TakeFrom = new HardcodedLocateResource() { FilePath = @"C:\Users\hugin\Desktop\ex\appearance.2da" };
+    //    SaveTo = new HardcodedLocateResource() { FilePath = @"C:\Users\hugin\Desktop\ex\appearance.2da" };
+    //}
 }
 
 

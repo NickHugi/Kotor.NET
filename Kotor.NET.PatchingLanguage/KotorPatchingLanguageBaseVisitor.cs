@@ -55,6 +55,105 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// <return>The visitor result.</return>
 	public virtual Result VisitInstruction([NotNull] KotorPatchingLanguageParser.InstructionContext context) { return VisitChildren(context); }
 	/// <summary>
+	/// Visit a parse tree produced by the <c>File_Operation_Create</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.file_operation"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitFile_Operation_Create([NotNull] KotorPatchingLanguageParser.File_Operation_CreateContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>File_Operation_Modify</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.file_operation"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitFile_Operation_Modify([NotNull] KotorPatchingLanguageParser.File_Operation_ModifyContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>File_Operation_CreateOrReplace</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.file_operation"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitFile_Operation_CreateOrReplace([NotNull] KotorPatchingLanguageParser.File_Operation_CreateOrReplaceContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>File_Operation_CreateOrModify</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.file_operation"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitFile_Operation_CreateOrModify([NotNull] KotorPatchingLanguageParser.File_Operation_CreateOrModifyContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>File_Source_Key</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.file_source"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitFile_Source_Key([NotNull] KotorPatchingLanguageParser.File_Source_KeyContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>File_Source_Module</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.file_source"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitFile_Source_Module([NotNull] KotorPatchingLanguageParser.File_Source_ModuleContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>File_Source_Override</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.file_source"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitFile_Source_Override([NotNull] KotorPatchingLanguageParser.File_Source_OverrideContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>File_Target_Module</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.file_target"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitFile_Target_Module([NotNull] KotorPatchingLanguageParser.File_Target_ModuleContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>File_Target_Override</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.file_target"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitFile_Target_Override([NotNull] KotorPatchingLanguageParser.File_Target_OverrideContext context) { return VisitChildren(context); }
+	/// <summary>
 	/// Visit a parse tree produced by the <c>TwoDAAssignCell</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.twoda_assign_cell"/>.
 	/// <para>
@@ -681,6 +780,50 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// <return>The visitor result.</return>
 	public virtual Result VisitGFFValueLocalizedString([NotNull] KotorPatchingLanguageParser.GFFValueLocalizedStringContext context) { return VisitChildren(context); }
 	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValue_LocalizedString_Substrings</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_locstring"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValue_LocalizedString_Substrings([NotNull] KotorPatchingLanguageParser.GFFValue_LocalizedString_SubstringsContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValue_LocalizedString_MaleEnglish</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_locstring"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValue_LocalizedString_MaleEnglish([NotNull] KotorPatchingLanguageParser.GFFValue_LocalizedString_MaleEnglishContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValue_LocalizedString_Substring_LanguageGender</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_locstring_substring"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValue_LocalizedString_Substring_LanguageGender([NotNull] KotorPatchingLanguageParser.GFFValue_LocalizedString_Substring_LanguageGenderContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValue_LocalizedString_Substring_Language</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_locstring_substring"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitGFFValue_LocalizedString_Substring_Language([NotNull] KotorPatchingLanguageParser.GFFValue_LocalizedString_Substring_LanguageContext context) { return VisitChildren(context); }
+	/// <summary>
 	/// Visit a parse tree produced by the <c>GFFAssignVector3</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_vector3"/>.
 	/// <para>
@@ -736,8 +879,7 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// <return>The visitor result.</return>
 	public virtual Result VisitEditItem([NotNull] KotorPatchingLanguageParser.EditItemContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by the <c>UTI_SetField_BaseItem</c>
-	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_item_mod"/>.
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.edit_item_mod"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -745,108 +887,9 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitUTI_SetField_BaseItem([NotNull] KotorPatchingLanguageParser.UTI_SetField_BaseItemContext context) { return VisitChildren(context); }
+	public virtual Result VisitEdit_item_mod([NotNull] KotorPatchingLanguageParser.Edit_item_modContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by the <c>UTI_SetField_LocalizedName</c>
-	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_item_mod"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitUTI_SetField_LocalizedName([NotNull] KotorPatchingLanguageParser.UTI_SetField_LocalizedNameContext context) { return VisitChildren(context); }
-	/// <summary>
-	/// Visit a parse tree produced by the <c>UTI_SetField_Tag</c>
-	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_item_mod"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitUTI_SetField_Tag([NotNull] KotorPatchingLanguageParser.UTI_SetField_TagContext context) { return VisitChildren(context); }
-	/// <summary>
-	/// Visit a parse tree produced by the <c>UTI_SetField_Charges</c>
-	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_item_mod"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitUTI_SetField_Charges([NotNull] KotorPatchingLanguageParser.UTI_SetField_ChargesContext context) { return VisitChildren(context); }
-	/// <summary>
-	/// Visit a parse tree produced by the <c>UTI_SetField_Cost</c>
-	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_item_mod"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitUTI_SetField_Cost([NotNull] KotorPatchingLanguageParser.UTI_SetField_CostContext context) { return VisitChildren(context); }
-	/// <summary>
-	/// Visit a parse tree produced by the <c>UTI_SetField_StackSize</c>
-	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_item_mod"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitUTI_SetField_StackSize([NotNull] KotorPatchingLanguageParser.UTI_SetField_StackSizeContext context) { return VisitChildren(context); }
-	/// <summary>
-	/// Visit a parse tree produced by the <c>UTI_SetField_Plot</c>
-	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_item_mod"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitUTI_SetField_Plot([NotNull] KotorPatchingLanguageParser.UTI_SetField_PlotContext context) { return VisitChildren(context); }
-	/// <summary>
-	/// Visit a parse tree produced by the <c>UTI_SetField_ModelVariation</c>
-	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_item_mod"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitUTI_SetField_ModelVariation([NotNull] KotorPatchingLanguageParser.UTI_SetField_ModelVariationContext context) { return VisitChildren(context); }
-	/// <summary>
-	/// Visit a parse tree produced by the <c>UTI_SetField_TextureVariation</c>
-	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_item_mod"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitUTI_SetField_TextureVariation([NotNull] KotorPatchingLanguageParser.UTI_SetField_TextureVariationContext context) { return VisitChildren(context); }
-	/// <summary>
-	/// Visit a parse tree produced by the <c>UTI_AddProperty</c>
-	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_item_mod"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitUTI_AddProperty([NotNull] KotorPatchingLanguageParser.UTI_AddPropertyContext context) { return VisitChildren(context); }
-	/// <summary>
-	/// Visit a parse tree produced by the <c>UTI_SetField_BaseItem_Int32</c>
+	/// Visit a parse tree produced by the <c>UTI_BaseItem_SetField_GFFValue</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_set_field_base_item"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
@@ -855,9 +898,9 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitUTI_SetField_BaseItem_Int32([NotNull] KotorPatchingLanguageParser.UTI_SetField_BaseItem_Int32Context context) { return VisitChildren(context); }
+	public virtual Result VisitUTI_BaseItem_SetField_GFFValue([NotNull] KotorPatchingLanguageParser.UTI_BaseItem_SetField_GFFValueContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by the <c>UTI_SetField_BaseItem_2DALabelLookup</c>
+	/// Visit a parse tree produced by the <c>UTI_BaseItem_SetField_2DALabelLookup</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_set_field_base_item"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
@@ -866,9 +909,9 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitUTI_SetField_BaseItem_2DALabelLookup([NotNull] KotorPatchingLanguageParser.UTI_SetField_BaseItem_2DALabelLookupContext context) { return VisitChildren(context); }
+	public virtual Result VisitUTI_BaseItem_SetField_2DALabelLookup([NotNull] KotorPatchingLanguageParser.UTI_BaseItem_SetField_2DALabelLookupContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by the <c>UTI_SetField_LocalizedName_LocalizedString</c>
+	/// Visit a parse tree produced by the <c>UTI_LocalizedName_SetField_GFFValue</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_set_field_localized_name"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
@@ -877,9 +920,9 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitUTI_SetField_LocalizedName_LocalizedString([NotNull] KotorPatchingLanguageParser.UTI_SetField_LocalizedName_LocalizedStringContext context) { return VisitChildren(context); }
+	public virtual Result VisitUTI_LocalizedName_SetField_GFFValue([NotNull] KotorPatchingLanguageParser.UTI_LocalizedName_SetField_GFFValueContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by the <c>UTI_SetField_Description_LocalizedString</c>
+	/// Visit a parse tree produced by the <c>UTI_Description_SetField_GFFValue</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_set_field_description"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
@@ -888,9 +931,10 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitUTI_SetField_Description_LocalizedString([NotNull] KotorPatchingLanguageParser.UTI_SetField_Description_LocalizedStringContext context) { return VisitChildren(context); }
+	public virtual Result VisitUTI_Description_SetField_GFFValue([NotNull] KotorPatchingLanguageParser.UTI_Description_SetField_GFFValueContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_set_field_tag"/>.
+	/// Visit a parse tree produced by the <c>UTI_Tag_SetField_GFFValue</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_set_field_tag"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -898,9 +942,10 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitUti_set_field_tag([NotNull] KotorPatchingLanguageParser.Uti_set_field_tagContext context) { return VisitChildren(context); }
+	public virtual Result VisitUTI_Tag_SetField_GFFValue([NotNull] KotorPatchingLanguageParser.UTI_Tag_SetField_GFFValueContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_set_field_charges"/>.
+	/// Visit a parse tree produced by the <c>UTI_Charges_SetField_GFFValue</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_set_field_charges"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -908,9 +953,10 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitUti_set_field_charges([NotNull] KotorPatchingLanguageParser.Uti_set_field_chargesContext context) { return VisitChildren(context); }
+	public virtual Result VisitUTI_Charges_SetField_GFFValue([NotNull] KotorPatchingLanguageParser.UTI_Charges_SetField_GFFValueContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_set_field_max_charges"/>.
+	/// Visit a parse tree produced by the <c>UTI_MaxCharges_SetField_GFFValue</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_set_field_max_charges"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -918,9 +964,10 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitUti_set_field_max_charges([NotNull] KotorPatchingLanguageParser.Uti_set_field_max_chargesContext context) { return VisitChildren(context); }
+	public virtual Result VisitUTI_MaxCharges_SetField_GFFValue([NotNull] KotorPatchingLanguageParser.UTI_MaxCharges_SetField_GFFValueContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_set_field_cost"/>.
+	/// Visit a parse tree produced by the <c>UTI_Cost_SetField_GFFValue</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_set_field_cost"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -928,9 +975,10 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitUti_set_field_cost([NotNull] KotorPatchingLanguageParser.Uti_set_field_costContext context) { return VisitChildren(context); }
+	public virtual Result VisitUTI_Cost_SetField_GFFValue([NotNull] KotorPatchingLanguageParser.UTI_Cost_SetField_GFFValueContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_set_field_stack_size"/>.
+	/// Visit a parse tree produced by the <c>UTI_StackSize_SetField_GFFValue</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_set_field_stack_size"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -938,9 +986,10 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitUti_set_field_stack_size([NotNull] KotorPatchingLanguageParser.Uti_set_field_stack_sizeContext context) { return VisitChildren(context); }
+	public virtual Result VisitUTI_StackSize_SetField_GFFValue([NotNull] KotorPatchingLanguageParser.UTI_StackSize_SetField_GFFValueContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_set_field_plot"/>.
+	/// Visit a parse tree produced by the <c>UTI_Plot_SetField_GFFValue</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_set_field_plot"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -948,9 +997,10 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitUti_set_field_plot([NotNull] KotorPatchingLanguageParser.Uti_set_field_plotContext context) { return VisitChildren(context); }
+	public virtual Result VisitUTI_Plot_SetField_GFFValue([NotNull] KotorPatchingLanguageParser.UTI_Plot_SetField_GFFValueContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_set_field_model_variation"/>.
+	/// Visit a parse tree produced by the <c>UTI_Plot_SetField_Bool</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_set_field_plot"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -958,9 +1008,10 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitUti_set_field_model_variation([NotNull] KotorPatchingLanguageParser.Uti_set_field_model_variationContext context) { return VisitChildren(context); }
+	public virtual Result VisitUTI_Plot_SetField_Bool([NotNull] KotorPatchingLanguageParser.UTI_Plot_SetField_BoolContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_set_field_texture_variation"/>.
+	/// Visit a parse tree produced by the <c>UTI_ModelVariation_SetField_GFFValue</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_set_field_model_variation"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -968,9 +1019,10 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitUti_set_field_texture_variation([NotNull] KotorPatchingLanguageParser.Uti_set_field_texture_variationContext context) { return VisitChildren(context); }
+	public virtual Result VisitUTI_ModelVariation_SetField_GFFValue([NotNull] KotorPatchingLanguageParser.UTI_ModelVariation_SetField_GFFValueContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_add_property"/>.
+	/// Visit a parse tree produced by the <c>UTI_TextureVariation_SetField_GFFValue</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_set_field_texture_variation"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -978,7 +1030,18 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitUti_add_property([NotNull] KotorPatchingLanguageParser.Uti_add_propertyContext context) { return VisitChildren(context); }
+	public virtual Result VisitUTI_TextureVariation_SetField_GFFValue([NotNull] KotorPatchingLanguageParser.UTI_TextureVariation_SetField_GFFValueContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTI_AddProperties</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_add_property"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitUTI_AddProperties([NotNull] KotorPatchingLanguageParser.UTI_AddPropertiesContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_property_mod"/>.
 	/// <para>
@@ -990,7 +1053,8 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// <return>The visitor result.</return>
 	public virtual Result VisitUti_property_mod([NotNull] KotorPatchingLanguageParser.Uti_property_modContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_property_set_field_property_name"/>.
+	/// Visit a parse tree produced by the <c>UTI_Property_PropertyName_SetField_GFFValue</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_property_set_field_property_name"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -998,9 +1062,10 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitUti_property_set_field_property_name([NotNull] KotorPatchingLanguageParser.Uti_property_set_field_property_nameContext context) { return VisitChildren(context); }
+	public virtual Result VisitUTI_Property_PropertyName_SetField_GFFValue([NotNull] KotorPatchingLanguageParser.UTI_Property_PropertyName_SetField_GFFValueContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_property_set_field_subtype"/>.
+	/// Visit a parse tree produced by the <c>UTI_Property_SubType_SetField_GFFValue</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_property_set_field_subtype"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -1008,9 +1073,10 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitUti_property_set_field_subtype([NotNull] KotorPatchingLanguageParser.Uti_property_set_field_subtypeContext context) { return VisitChildren(context); }
+	public virtual Result VisitUTI_Property_SubType_SetField_GFFValue([NotNull] KotorPatchingLanguageParser.UTI_Property_SubType_SetField_GFFValueContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_property_set_field_chance_appear"/>.
+	/// Visit a parse tree produced by the <c>UTI_Property_ChanceAppear_SetField_GFFValue</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_property_set_field_chance_appear"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -1018,9 +1084,10 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitUti_property_set_field_chance_appear([NotNull] KotorPatchingLanguageParser.Uti_property_set_field_chance_appearContext context) { return VisitChildren(context); }
+	public virtual Result VisitUTI_Property_ChanceAppear_SetField_GFFValue([NotNull] KotorPatchingLanguageParser.UTI_Property_ChanceAppear_SetField_GFFValueContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_property_set_field_cost_table"/>.
+	/// Visit a parse tree produced by the <c>UTI_Property_CostTable_SetField_GFFValue</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_property_set_field_cost_table"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -1028,9 +1095,10 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitUti_property_set_field_cost_table([NotNull] KotorPatchingLanguageParser.Uti_property_set_field_cost_tableContext context) { return VisitChildren(context); }
+	public virtual Result VisitUTI_Property_CostTable_SetField_GFFValue([NotNull] KotorPatchingLanguageParser.UTI_Property_CostTable_SetField_GFFValueContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_property_set_field_cost_value"/>.
+	/// Visit a parse tree produced by the <c>UTI_Property_CostValue_SetField_GFFValue</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_property_set_field_cost_value"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -1038,9 +1106,10 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitUti_property_set_field_cost_value([NotNull] KotorPatchingLanguageParser.Uti_property_set_field_cost_valueContext context) { return VisitChildren(context); }
+	public virtual Result VisitUTI_Property_CostValue_SetField_GFFValue([NotNull] KotorPatchingLanguageParser.UTI_Property_CostValue_SetField_GFFValueContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_property_set_field_param1"/>.
+	/// Visit a parse tree produced by the <c>UTI_Property_Param1_SetField_GFFValue</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_property_set_field_param1"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -1048,9 +1117,10 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitUti_property_set_field_param1([NotNull] KotorPatchingLanguageParser.Uti_property_set_field_param1Context context) { return VisitChildren(context); }
+	public virtual Result VisitUTI_Property_Param1_SetField_GFFValue([NotNull] KotorPatchingLanguageParser.UTI_Property_Param1_SetField_GFFValueContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_property_set_field_param1_value"/>.
+	/// Visit a parse tree produced by the <c>UTI_Property_Param1Value_SetField_GFFValue</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_property_set_field_param1_value"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -1058,9 +1128,10 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitUti_property_set_field_param1_value([NotNull] KotorPatchingLanguageParser.Uti_property_set_field_param1_valueContext context) { return VisitChildren(context); }
+	public virtual Result VisitUTI_Property_Param1Value_SetField_GFFValue([NotNull] KotorPatchingLanguageParser.UTI_Property_Param1Value_SetField_GFFValueContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.uti_property_set_field_upgrade_type"/>.
+	/// Visit a parse tree produced by the <c>UTI_Property_UpgradeType_SetField_GFFValue</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.uti_property_set_field_upgrade_type"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -1068,7 +1139,7 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitUti_property_set_field_upgrade_type([NotNull] KotorPatchingLanguageParser.Uti_property_set_field_upgrade_typeContext context) { return VisitChildren(context); }
+	public virtual Result VisitUTI_Property_UpgradeType_SetField_GFFValue([NotNull] KotorPatchingLanguageParser.UTI_Property_UpgradeType_SetField_GFFValueContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by the <c>EditAppearance</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_appearance"/>.

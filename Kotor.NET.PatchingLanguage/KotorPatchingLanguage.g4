@@ -14,6 +14,25 @@ instruction
     | edit_item
     ;
 
+/* */
+file_operation
+    : 'create'                          # File_Operation_Create
+    | 'modify'                          # File_Operation_Modify
+    | 'create' 'or' 'replace'           # File_Operation_CreateOrReplace
+    | 'create' 'or' 'modify'            # File_Operation_CreateOrModify
+    ;
+file_source
+    : 'from' 'key'                             # File_Source_Key
+    | 'from' 'module' STRING_LITERAL           # File_Source_Module
+    | 'from' 'override'                        # File_Source_Override
+    ;
+file_target
+    : 'to' 'module' STRING_LITERAL           # File_Target_Module
+    | 'to' 'override'                        # File_Target_Override
+    ;
+
+/* */
+/* 2DA */
 twoda_assign_cell
     : 'assign' 'cell' 'set' STRING_LITERAL 'to' STRING_LITERAL              # TwoDAAssignCell
     ;
@@ -24,7 +43,8 @@ twoda_copy_row
     : 'copy' 'row' 'where' STRING_LITERAL 'is' STRING_LITERAL               # TwoDACopyRow
     ;
 
-
+/* */
+/* GFF */
 gff_copy_template
     : 'copy' 'from' 'template' STRING_LITERAL                                  
     ;
@@ -151,6 +171,12 @@ gff_assign_locstring
     ;
 gff_value_locstring
     : 'stringref' INT_LITERAL                                               # GFFValueLocalizedString
+    | 'substrings' gff_value_locstring_substring* 'end' 'substrings'        # GFFValue_LocalizedString_Substrings
+    | STRING_LITERAL                                                        # GFFValue_LocalizedString_MaleEnglish
+    ;
+gff_value_locstring_substring
+    : TLK_LANGUAGE TLK_GENDER STRING_LITERAL                                # GFFValue_LocalizedString_Substring_LanguageGender
+    | TLK_LANGUAGE STRING_LITERAL                                           # GFFValue_LocalizedString_Substring_Language
     ;
 gff_assign_vector3
     : 'assign' 'vector3' 'set' gff_locate_field 'to' gff_value_vector3      # GFFAssignVector3
@@ -169,56 +195,59 @@ gff_value_vector4
 /* */
 /* UTI */
 edit_item
-    : 'edit' 'item' STRING_LITERAL edit_item_mod* 'end' 'edit'      # EditItem
+    : 'edit' 'item' STRING_LITERAL file_operation file_source file_target edit_item_mod* 'end' 'edit'              # EditItem
     ;
 edit_item_mod
-    : uti_set_field_base_item                                       # UTI_SetField_BaseItem
-    | uti_set_field_localized_name                                  # UTI_SetField_LocalizedName
-    | uti_set_field_tag                                             # UTI_SetField_Tag
-    | uti_set_field_charges                                         # UTI_SetField_Charges
-    | uti_set_field_cost                                            # UTI_SetField_Cost
-    | uti_set_field_stack_size                                      # UTI_SetField_StackSize
-    | uti_set_field_plot                                            # UTI_SetField_Plot
-    | uti_set_field_model_variation                                 # UTI_SetField_ModelVariation
-    | uti_set_field_texture_variation                               # UTI_SetField_TextureVariation
-    | uti_add_property                                              # UTI_AddProperty
+    : uti_set_field_base_item
+    | uti_set_field_localized_name
+    | uti_set_field_description
+    | uti_set_field_tag
+    | uti_set_field_charges
+    | uti_set_field_max_charges
+    | uti_set_field_cost
+    | uti_set_field_stack_size
+    | uti_set_field_plot
+    | uti_set_field_model_variation
+    | uti_set_field_texture_variation
+    | uti_add_property
     ;
 uti_set_field_base_item
-    : 'set' 'base' 'item' 'to' gff_value_int32                      # UTI_SetField_BaseItem_Int32
-    | 'set' 'base' 'item' 'to' 'label' STRING_LITERAL               # UTI_SetField_BaseItem_2DALabelLookup
+    : 'set' 'base' 'item' 'to' gff_value_int32                      # UTI_BaseItem_SetField_GFFValue
+    | 'set' 'base' 'item' 'to' 'label' STRING_LITERAL               # UTI_BaseItem_SetField_2DALabelLookup
     ;
 uti_set_field_localized_name
-    : 'set' 'name' 'to' gff_value_locstring                         # UTI_SetField_LocalizedName_LocalizedString
+    : 'set' 'name' 'to' gff_value_locstring                         # UTI_LocalizedName_SetField_GFFValue
     ;
 uti_set_field_description
-    : 'set' 'description' 'to' gff_value_locstring                  # UTI_SetField_Description_LocalizedString
+    : 'set' 'description' 'to' gff_value_locstring                  # UTI_Description_SetField_GFFValue
     ;
 uti_set_field_tag
-    : 'set' 'tag' 'to' gff_value_string
+    : 'set' 'tag' 'to' gff_value_string                             # UTI_Tag_SetField_GFFValue
     ;
 uti_set_field_charges
-    : 'set' 'charges' 'to' gff_value_uint8
+    : 'set' 'charges' 'to' gff_value_uint8                          # UTI_Charges_SetField_GFFValue
     ;
 uti_set_field_max_charges
-    : 'set' 'max' 'charges' 'to' gff_value_uint8
+    : 'set' 'max' 'charges' 'to' gff_value_uint8                    # UTI_MaxCharges_SetField_GFFValue
     ;
 uti_set_field_cost
-    : 'set' 'cost' 'to' gff_value_uint32
+    : 'set' 'cost' 'to' gff_value_uint32                            # UTI_Cost_SetField_GFFValue
     ;
 uti_set_field_stack_size
-    : 'set' 'stack' 'size' 'to' gff_value_uint16
+    : 'set' 'stack' 'size' 'to' gff_value_uint16                    # UTI_StackSize_SetField_GFFValue
     ;
 uti_set_field_plot
-    : 'set' 'plot' 'to' gff_value_int8 //bool
+    : 'set' 'plot' 'to' gff_value_int8                              # UTI_Plot_SetField_GFFValue
+    | 'set' 'plot' 'to' BOOL_LITERAL                                # UTI_Plot_SetField_Bool
     ;
 uti_set_field_model_variation
-    : 'set' 'model' 'variation' 'to' gff_value_uint8
+    : 'set' 'model' 'variation' 'to' gff_value_uint8                # UTI_ModelVariation_SetField_GFFValue
     ;
 uti_set_field_texture_variation
-    : 'set' 'texture' 'variation' 'to' gff_value_uint8
+    : 'set' 'texture' 'variation' 'to' gff_value_uint8              # UTI_TextureVariation_SetField_GFFValue
     ;
 uti_add_property
-    : 'add property' uti_property_mod*
+    : 'add property' uti_property_mod* 'end'                        # UTI_AddProperties
     ;
 uti_property_mod
     : uti_property_set_field_property_name
@@ -231,28 +260,28 @@ uti_property_mod
     | uti_property_set_field_upgrade_type
     ;
 uti_property_set_field_property_name
-    : 'set' 'chance' 'appear' 'to' gff_value_uint16
+    : 'set' 'property' 'name' 'to' gff_value_uint16                 # UTI_Property_PropertyName_SetField_GFFValue
     ;
 uti_property_set_field_subtype
-    : 'set' 'chance' 'appear' 'to' gff_value_uint16
+    : 'set' 'subtype' 'to' gff_value_uint16                         # UTI_Property_SubType_SetField_GFFValue
     ;
 uti_property_set_field_chance_appear
-    : 'set' 'chance' 'appear' 'to' gff_value_uint8
+    : 'set' 'chance' 'appear' 'to' gff_value_uint8                  # UTI_Property_ChanceAppear_SetField_GFFValue
     ;
 uti_property_set_field_cost_table
-    : 'set' 'cost' 'table' 'to' gff_value_uint8
+    : 'set' 'cost' 'table' 'to' gff_value_uint8                     # UTI_Property_CostTable_SetField_GFFValue
     ;
 uti_property_set_field_cost_value
-    : 'set' 'cost' 'value' 'to' gff_value_uint16
+    : 'set' 'cost' 'value' 'to' gff_value_uint16                    # UTI_Property_CostValue_SetField_GFFValue
     ;
 uti_property_set_field_param1
-    : 'set' 'param' 'to' gff_value_uint8
+    : 'set' 'param' 'to' gff_value_uint8                            # UTI_Property_Param1_SetField_GFFValue
     ;
 uti_property_set_field_param1_value
-    : 'set' 'param' 'value' 'to' gff_value_uint8
+    : 'set' 'param' 'value' 'to' gff_value_uint8                    # UTI_Property_Param1Value_SetField_GFFValue
     ;
 uti_property_set_field_upgrade_type
-    : 'set' 'upgrade' 'type' 'to' gff_value_uint8
+    : 'set' 'upgrade' 'type' 'to' gff_value_uint8                   # UTI_Property_UpgradeType_SetField_GFFValue
     ;
 
 /* */
@@ -287,7 +316,7 @@ edit_creature_field_portrait
     ;
 edit_creature_field_gender
     : 'set' 'appearance' gff_value_uint8                                    # EditCreatureGender
-    | 'set' 'appearance' ('male' | 'female' | 'both' | 'other' | 'none')    # EditCreatureGenderFromKeyword
+    | 'set' 'appearance' (TLK_GENDER | 'both' | 'other' | 'none')           # EditCreatureGenderFromKeyword
     ;
 edit_creature_field_race
     : 'set' 'race' gff_value_uint8                                          # EditCreatureRace
@@ -335,6 +364,13 @@ fragment EXPONENT
 BOOL_LITERAL
     : 'true'
     | 'false'
+    ;
+TLK_GENDER
+    : 'male'
+    | 'female'
+    ;
+TLK_LANGUAGE
+    : 'english'
     ;
 
 IDENTIFIER
