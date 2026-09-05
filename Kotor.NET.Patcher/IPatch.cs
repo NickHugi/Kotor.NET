@@ -9,5 +9,5 @@ namespace Kotor.NET.Patcher;
 
 public interface IPatch
 {
-    void Apply(Installation installation, PatcherMemory memory);
+    void Apply(Installation installation, PatcherMemory memory, string patchDirectory);
 }

@@ -109,6 +109,11 @@ public class ResourceType
         return All.Single(x => filepath.ToLower().EndsWith(x.Extension));
     }
 
+    public static bool IsFileValidType(string filepath)
+    {
+        return All.Any(x => filepath.ToLower().EndsWith(x.Extension));
+    }
+
     public override string ToString()
     {
         return Extension.ToUpper();

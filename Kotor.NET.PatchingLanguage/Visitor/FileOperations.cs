@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Antlr4.Runtime.Misc;
 using Kotor.NET.Patcher;
+using Kotor.NET.Patcher.FileOperation;
 
 namespace Kotor.NET.PatchingLanguage.Visitor;
 

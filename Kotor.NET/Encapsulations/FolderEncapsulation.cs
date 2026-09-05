@@ -54,6 +54,9 @@ public class FolderEncapsulation : IEncapsulation
         var files = new DirectoryInfo(Path).EnumerateFiles();
         foreach (var file in files)
         {
+            if (!ResourceType.IsFileValidType(file.FullName))
+                continue;
+
             var resource = new ResourceInfo()
             {
                 FilePath = file.FullName,

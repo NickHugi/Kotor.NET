@@ -154,6 +154,61 @@ public partial class KotorPatchingLanguageBaseVisitor<Result> : AbstractParseTre
 	/// <return>The visitor result.</return>
 	public virtual Result VisitFile_Target_Override([NotNull] KotorPatchingLanguageParser.File_Target_OverrideContext context) { return VisitChildren(context); }
 	/// <summary>
+	/// Visit a parse tree produced by the <c>CopyFiles</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.copy_files"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitCopyFiles([NotNull] KotorPatchingLanguageParser.CopyFilesContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>Copy_Files_Target_Module</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.copy_files_target"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitCopy_Files_Target_Module([NotNull] KotorPatchingLanguageParser.Copy_Files_Target_ModuleContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>Copy_Files_Target_Override</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.copy_files_target"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitCopy_Files_Target_Override([NotNull] KotorPatchingLanguageParser.Copy_Files_Target_OverrideContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>Copy_Files_Command_KeepName</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.copy_files_command"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitCopy_Files_Command_KeepName([NotNull] KotorPatchingLanguageParser.Copy_Files_Command_KeepNameContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>Copy_Files_Command_ChangeName</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.copy_files_command"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitCopy_Files_Command_ChangeName([NotNull] KotorPatchingLanguageParser.Copy_Files_Command_ChangeNameContext context) { return VisitChildren(context); }
+	/// <summary>
 	/// Visit a parse tree produced by the <c>TwoDAAssignCell</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.twoda_assign_cell"/>.
 	/// <para>

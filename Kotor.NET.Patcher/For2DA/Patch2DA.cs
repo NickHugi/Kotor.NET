@@ -1,5 +1,6 @@
 ﻿using System.Data.Common;
 using Kotor.NET.Encapsulations;
+using Kotor.NET.Patcher.LocateResource;
 using Kotor.NET.Resources.Kotor2DA;
 
 namespace Kotor.NET.Patcher.For2DA;
@@ -10,7 +11,7 @@ public class Patch2DA : IPatch
     public required ILocateContainer SaveTo { get; set; }
     public ICollection<IModifier> Modifiers { get; set; } = [];
 
-    public void Apply(Installation installation, PatcherMemory memory) => throw new NotImplementedException();
+    public void Apply(Installation installation, PatcherMemory memory, string patchDirectory) => throw new NotImplementedException();
 
     //public void Apply(Installation installation, PatcherMemory memory)
     //{

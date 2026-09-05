@@ -107,6 +107,41 @@ public interface IKotorPatchingLanguageVisitor<Result> : IParseTreeVisitor<Resul
 	/// <return>The visitor result.</return>
 	Result VisitFile_Target_Override([NotNull] KotorPatchingLanguageParser.File_Target_OverrideContext context);
 	/// <summary>
+	/// Visit a parse tree produced by the <c>CopyFiles</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.copy_files"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitCopyFiles([NotNull] KotorPatchingLanguageParser.CopyFilesContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>Copy_Files_Target_Module</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.copy_files_target"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitCopy_Files_Target_Module([NotNull] KotorPatchingLanguageParser.Copy_Files_Target_ModuleContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>Copy_Files_Target_Override</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.copy_files_target"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitCopy_Files_Target_Override([NotNull] KotorPatchingLanguageParser.Copy_Files_Target_OverrideContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>Copy_Files_Command_KeepName</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.copy_files_command"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitCopy_Files_Command_KeepName([NotNull] KotorPatchingLanguageParser.Copy_Files_Command_KeepNameContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>Copy_Files_Command_ChangeName</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.copy_files_command"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitCopy_Files_Command_ChangeName([NotNull] KotorPatchingLanguageParser.Copy_Files_Command_ChangeNameContext context);
+	/// <summary>
 	/// Visit a parse tree produced by the <c>TwoDAAssignCell</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.twoda_assign_cell"/>.
 	/// </summary>

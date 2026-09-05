@@ -40,20 +40,27 @@ try
     end edit
     """;
 
+    string copy =
+    """
+    copy files to override
+        "iw_blstrrfl_007.tga"
+    end copy
+    """;
+
     var installation = new Installation(
         @"C:\Program Files (x86)\Steam\steamapps\common\swkotor\",
         GameEngine.K2,
         Platform.Windows);
 
 
-    AntlrInputStream inputStream = new AntlrInputStream(uti);
+    AntlrInputStream inputStream = new AntlrInputStream(copy);
     KotorPatchingLanguageLexer speakLexer = new KotorPatchingLanguageLexer(inputStream);
     CommonTokenStream commonTokenStream = new CommonTokenStream(speakLexer);
     KotorPatchingLanguageParser parser = new KotorPatchingLanguageParser(commonTokenStream);
     var context = parser.script();
     KotorPatchingLanguageVisitor visitor = new KotorPatchingLanguageVisitor();
-    var patch = ((List<object>)visitor.Visit(context)).OfType<PatchUTI>().ToList();
-    patch.First().Apply(installation, new());
+    var patch = ((List<object>)visitor.Visit(context)).OfType<IPatch>().ToList();
+    patch.First().Apply(installation, new(), @"C:\Users\hugin\FotE\ModData\E11 Blaster");
 }
 catch (Exception ex)
 {

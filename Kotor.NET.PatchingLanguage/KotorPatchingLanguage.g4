@@ -12,6 +12,7 @@ instruction
     : edit_appearance
     | edit_creature
     | edit_item
+    | copy_files
     ;
 
 /* */
@@ -29,6 +30,19 @@ file_source
 file_target
     : 'to' 'module' STRING_LITERAL           # File_Target_Module
     | 'to' 'override'                        # File_Target_Override
+    ;
+/* */
+/* Copy Files */
+copy_files
+    : 'copy' 'files' 'to' copy_files_target copy_files_command* 'end' 'copy'    # CopyFiles
+    ;
+copy_files_target
+    : 'module' STRING_LITERAL                   # Copy_Files_Target_Module
+    | 'override'                                # Copy_Files_Target_Override
+    ;
+copy_files_command
+    : STRING_LITERAL                            # Copy_Files_Command_KeepName
+    | STRING_LITERAL 'as' STRING_LITERAL        # Copy_Files_Command_ChangeName
     ;
 
 /* */

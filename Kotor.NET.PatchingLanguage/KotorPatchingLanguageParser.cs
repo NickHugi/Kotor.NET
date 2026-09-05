@@ -46,79 +46,80 @@ public partial class KotorPatchingLanguageParser : Parser {
 		T__52=53, T__53=54, T__54=55, T__55=56, T__56=57, T__57=58, T__58=59, 
 		T__59=60, T__60=61, T__61=62, T__62=63, T__63=64, T__64=65, T__65=66, 
 		T__66=67, T__67=68, T__68=69, T__69=70, T__70=71, T__71=72, T__72=73, 
-		T__73=74, MEMORY_TOKEN=75, VECTOR3_LITERAL=76, VECTOR4_LITERAL=77, STRING_LITERAL=78, 
-		INT_LITERAL=79, FLOAT_LITERAL=80, BOOL_LITERAL=81, TLK_GENDER=82, TLK_LANGUAGE=83, 
-		IDENTIFIER=84, WHITESPACE=85;
+		T__73=74, T__74=75, T__75=76, MEMORY_TOKEN=77, VECTOR3_LITERAL=78, VECTOR4_LITERAL=79, 
+		STRING_LITERAL=80, INT_LITERAL=81, FLOAT_LITERAL=82, BOOL_LITERAL=83, 
+		TLK_GENDER=84, TLK_LANGUAGE=85, IDENTIFIER=86, WHITESPACE=87;
 	public const int
 		RULE_script = 0, RULE_instruction = 1, RULE_file_operation = 2, RULE_file_source = 3, 
-		RULE_file_target = 4, RULE_twoda_assign_cell = 5, RULE_twoda_target_row = 6, 
-		RULE_twoda_copy_row = 7, RULE_gff_copy_template = 8, RULE_gff_locate_field = 9, 
-		RULE_gff_assign_uint8 = 10, RULE_gff_value_uint8 = 11, RULE_gff_assign_uint16 = 12, 
-		RULE_gff_value_uint16 = 13, RULE_gff_assign_uint32 = 14, RULE_gff_value_uint32 = 15, 
-		RULE_gff_assign_uint64 = 16, RULE_gff_value_uint64 = 17, RULE_gff_assign_int8 = 18, 
-		RULE_gff_value_int8 = 19, RULE_gff_assign_int16 = 20, RULE_gff_value_int16 = 21, 
-		RULE_gff_assign_int32 = 22, RULE_gff_value_int32 = 23, RULE_gff_assign_int64 = 24, 
-		RULE_gff_value_int64 = 25, RULE_gff_assign_single = 26, RULE_gff_value_single = 27, 
-		RULE_gff_assign_double = 28, RULE_gff_value_double = 29, RULE_gff_assign_resref = 30, 
-		RULE_gff_value_resref = 31, RULE_gff_assign_string = 32, RULE_gff_value_string = 33, 
-		RULE_gff_assign_binary = 34, RULE_gff_value_binary = 35, RULE_gff_assign_locstring = 36, 
-		RULE_gff_value_locstring = 37, RULE_gff_value_locstring_substring = 38, 
-		RULE_gff_assign_vector3 = 39, RULE_gff_value_vector3 = 40, RULE_gff_assign_vector4 = 41, 
-		RULE_gff_value_vector4 = 42, RULE_edit_item = 43, RULE_edit_item_mod = 44, 
-		RULE_uti_set_field_base_item = 45, RULE_uti_set_field_localized_name = 46, 
-		RULE_uti_set_field_description = 47, RULE_uti_set_field_tag = 48, RULE_uti_set_field_charges = 49, 
-		RULE_uti_set_field_max_charges = 50, RULE_uti_set_field_cost = 51, RULE_uti_set_field_stack_size = 52, 
-		RULE_uti_set_field_plot = 53, RULE_uti_set_field_model_variation = 54, 
-		RULE_uti_set_field_texture_variation = 55, RULE_uti_add_property = 56, 
-		RULE_uti_property_mod = 57, RULE_uti_property_set_field_property_name = 58, 
-		RULE_uti_property_set_field_subtype = 59, RULE_uti_property_set_field_chance_appear = 60, 
-		RULE_uti_property_set_field_cost_table = 61, RULE_uti_property_set_field_cost_value = 62, 
-		RULE_uti_property_set_field_param1 = 63, RULE_uti_property_set_field_param1_value = 64, 
-		RULE_uti_property_set_field_upgrade_type = 65, RULE_edit_appearance = 66, 
-		RULE_edit_appearance_mod = 67, RULE_edit_creature = 68, RULE_edit_creature_mod = 69, 
-		RULE_edit_creature_field_appearance = 70, RULE_edit_creature_field_portrait = 71, 
-		RULE_edit_creature_field_gender = 72, RULE_edit_creature_field_race = 73, 
-		RULE_edit_creature_field_subrace = 74;
+		RULE_file_target = 4, RULE_copy_files = 5, RULE_copy_files_target = 6, 
+		RULE_copy_files_command = 7, RULE_twoda_assign_cell = 8, RULE_twoda_target_row = 9, 
+		RULE_twoda_copy_row = 10, RULE_gff_copy_template = 11, RULE_gff_locate_field = 12, 
+		RULE_gff_assign_uint8 = 13, RULE_gff_value_uint8 = 14, RULE_gff_assign_uint16 = 15, 
+		RULE_gff_value_uint16 = 16, RULE_gff_assign_uint32 = 17, RULE_gff_value_uint32 = 18, 
+		RULE_gff_assign_uint64 = 19, RULE_gff_value_uint64 = 20, RULE_gff_assign_int8 = 21, 
+		RULE_gff_value_int8 = 22, RULE_gff_assign_int16 = 23, RULE_gff_value_int16 = 24, 
+		RULE_gff_assign_int32 = 25, RULE_gff_value_int32 = 26, RULE_gff_assign_int64 = 27, 
+		RULE_gff_value_int64 = 28, RULE_gff_assign_single = 29, RULE_gff_value_single = 30, 
+		RULE_gff_assign_double = 31, RULE_gff_value_double = 32, RULE_gff_assign_resref = 33, 
+		RULE_gff_value_resref = 34, RULE_gff_assign_string = 35, RULE_gff_value_string = 36, 
+		RULE_gff_assign_binary = 37, RULE_gff_value_binary = 38, RULE_gff_assign_locstring = 39, 
+		RULE_gff_value_locstring = 40, RULE_gff_value_locstring_substring = 41, 
+		RULE_gff_assign_vector3 = 42, RULE_gff_value_vector3 = 43, RULE_gff_assign_vector4 = 44, 
+		RULE_gff_value_vector4 = 45, RULE_edit_item = 46, RULE_edit_item_mod = 47, 
+		RULE_uti_set_field_base_item = 48, RULE_uti_set_field_localized_name = 49, 
+		RULE_uti_set_field_description = 50, RULE_uti_set_field_tag = 51, RULE_uti_set_field_charges = 52, 
+		RULE_uti_set_field_max_charges = 53, RULE_uti_set_field_cost = 54, RULE_uti_set_field_stack_size = 55, 
+		RULE_uti_set_field_plot = 56, RULE_uti_set_field_model_variation = 57, 
+		RULE_uti_set_field_texture_variation = 58, RULE_uti_add_property = 59, 
+		RULE_uti_property_mod = 60, RULE_uti_property_set_field_property_name = 61, 
+		RULE_uti_property_set_field_subtype = 62, RULE_uti_property_set_field_chance_appear = 63, 
+		RULE_uti_property_set_field_cost_table = 64, RULE_uti_property_set_field_cost_value = 65, 
+		RULE_uti_property_set_field_param1 = 66, RULE_uti_property_set_field_param1_value = 67, 
+		RULE_uti_property_set_field_upgrade_type = 68, RULE_edit_appearance = 69, 
+		RULE_edit_appearance_mod = 70, RULE_edit_creature = 71, RULE_edit_creature_mod = 72, 
+		RULE_edit_creature_field_appearance = 73, RULE_edit_creature_field_portrait = 74, 
+		RULE_edit_creature_field_gender = 75, RULE_edit_creature_field_race = 76, 
+		RULE_edit_creature_field_subrace = 77;
 	public static readonly string[] ruleNames = {
 		"script", "instruction", "file_operation", "file_source", "file_target", 
-		"twoda_assign_cell", "twoda_target_row", "twoda_copy_row", "gff_copy_template", 
-		"gff_locate_field", "gff_assign_uint8", "gff_value_uint8", "gff_assign_uint16", 
-		"gff_value_uint16", "gff_assign_uint32", "gff_value_uint32", "gff_assign_uint64", 
-		"gff_value_uint64", "gff_assign_int8", "gff_value_int8", "gff_assign_int16", 
-		"gff_value_int16", "gff_assign_int32", "gff_value_int32", "gff_assign_int64", 
-		"gff_value_int64", "gff_assign_single", "gff_value_single", "gff_assign_double", 
-		"gff_value_double", "gff_assign_resref", "gff_value_resref", "gff_assign_string", 
-		"gff_value_string", "gff_assign_binary", "gff_value_binary", "gff_assign_locstring", 
-		"gff_value_locstring", "gff_value_locstring_substring", "gff_assign_vector3", 
-		"gff_value_vector3", "gff_assign_vector4", "gff_value_vector4", "edit_item", 
-		"edit_item_mod", "uti_set_field_base_item", "uti_set_field_localized_name", 
-		"uti_set_field_description", "uti_set_field_tag", "uti_set_field_charges", 
-		"uti_set_field_max_charges", "uti_set_field_cost", "uti_set_field_stack_size", 
-		"uti_set_field_plot", "uti_set_field_model_variation", "uti_set_field_texture_variation", 
-		"uti_add_property", "uti_property_mod", "uti_property_set_field_property_name", 
-		"uti_property_set_field_subtype", "uti_property_set_field_chance_appear", 
-		"uti_property_set_field_cost_table", "uti_property_set_field_cost_value", 
-		"uti_property_set_field_param1", "uti_property_set_field_param1_value", 
-		"uti_property_set_field_upgrade_type", "edit_appearance", "edit_appearance_mod", 
-		"edit_creature", "edit_creature_mod", "edit_creature_field_appearance", 
-		"edit_creature_field_portrait", "edit_creature_field_gender", "edit_creature_field_race", 
-		"edit_creature_field_subrace"
+		"copy_files", "copy_files_target", "copy_files_command", "twoda_assign_cell", 
+		"twoda_target_row", "twoda_copy_row", "gff_copy_template", "gff_locate_field", 
+		"gff_assign_uint8", "gff_value_uint8", "gff_assign_uint16", "gff_value_uint16", 
+		"gff_assign_uint32", "gff_value_uint32", "gff_assign_uint64", "gff_value_uint64", 
+		"gff_assign_int8", "gff_value_int8", "gff_assign_int16", "gff_value_int16", 
+		"gff_assign_int32", "gff_value_int32", "gff_assign_int64", "gff_value_int64", 
+		"gff_assign_single", "gff_value_single", "gff_assign_double", "gff_value_double", 
+		"gff_assign_resref", "gff_value_resref", "gff_assign_string", "gff_value_string", 
+		"gff_assign_binary", "gff_value_binary", "gff_assign_locstring", "gff_value_locstring", 
+		"gff_value_locstring_substring", "gff_assign_vector3", "gff_value_vector3", 
+		"gff_assign_vector4", "gff_value_vector4", "edit_item", "edit_item_mod", 
+		"uti_set_field_base_item", "uti_set_field_localized_name", "uti_set_field_description", 
+		"uti_set_field_tag", "uti_set_field_charges", "uti_set_field_max_charges", 
+		"uti_set_field_cost", "uti_set_field_stack_size", "uti_set_field_plot", 
+		"uti_set_field_model_variation", "uti_set_field_texture_variation", "uti_add_property", 
+		"uti_property_mod", "uti_property_set_field_property_name", "uti_property_set_field_subtype", 
+		"uti_property_set_field_chance_appear", "uti_property_set_field_cost_table", 
+		"uti_property_set_field_cost_value", "uti_property_set_field_param1", 
+		"uti_property_set_field_param1_value", "uti_property_set_field_upgrade_type", 
+		"edit_appearance", "edit_appearance_mod", "edit_creature", "edit_creature_mod", 
+		"edit_creature_field_appearance", "edit_creature_field_portrait", "edit_creature_field_gender", 
+		"edit_creature_field_race", "edit_creature_field_subrace"
 	};
 
 	private static readonly string[] _LiteralNames = {
 		null, "'create'", "'modify'", "'or'", "'replace'", "'from'", "'key'", 
-		"'module'", "'override'", "'to'", "'assign'", "'cell'", "'set'", "'target'", 
-		"'row'", "'where'", "'is'", "'copy'", "'template'", "'uint8'", "'2da'", 
-		"'uint16'", "'uint32'", "'uint64'", "'int8'", "'int16'", "'int32'", "'int64'", 
-		"'single'", "'double'", "'resref'", "'string'", "'binary'", "'locstring'", 
-		"'stringref'", "'substrings'", "'end'", "'vector3'", "'vector4'", "'edit'", 
-		"'item'", "'base'", "'label'", "'name'", "'description'", "'tag'", "'charges'", 
-		"'max'", "'cost'", "'stack'", "'size'", "'plot'", "'model'", "'variation'", 
-		"'texture'", "'add property'", "'property'", "'subtype'", "'chance'", 
-		"'appear'", "'table'", "'value'", "'param'", "'upgrade'", "'type'", "'appearance'", 
-		"'creature'", "'both'", "'other'", "'none'", "'race'", "'human'", "'droid'", 
-		"'wookie'", "'beast'", null, null, null, null, null, null, null, null, 
-		"'english'"
+		"'module'", "'override'", "'to'", "'copy'", "'files'", "'end'", "'as'", 
+		"'assign'", "'cell'", "'set'", "'target'", "'row'", "'where'", "'is'", 
+		"'template'", "'uint8'", "'2da'", "'uint16'", "'uint32'", "'uint64'", 
+		"'int8'", "'int16'", "'int32'", "'int64'", "'single'", "'double'", "'resref'", 
+		"'string'", "'binary'", "'locstring'", "'stringref'", "'substrings'", 
+		"'vector3'", "'vector4'", "'edit'", "'item'", "'base'", "'label'", "'name'", 
+		"'description'", "'tag'", "'charges'", "'max'", "'cost'", "'stack'", "'size'", 
+		"'plot'", "'model'", "'variation'", "'texture'", "'add property'", "'property'", 
+		"'subtype'", "'chance'", "'appear'", "'table'", "'value'", "'param'", 
+		"'upgrade'", "'type'", "'appearance'", "'creature'", "'both'", "'other'", 
+		"'none'", "'race'", "'human'", "'droid'", "'wookie'", "'beast'", null, 
+		null, null, null, null, null, null, null, "'english'"
 	};
 	private static readonly string[] _SymbolicNames = {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
@@ -127,7 +128,7 @@ public partial class KotorPatchingLanguageParser : Parser {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
 		null, null, null, null, null, null, null, null, null, null, null, null, 
 		null, null, null, null, null, null, null, null, null, null, null, null, 
-		null, null, null, "MEMORY_TOKEN", "VECTOR3_LITERAL", "VECTOR4_LITERAL", 
+		null, null, null, null, null, "MEMORY_TOKEN", "VECTOR3_LITERAL", "VECTOR4_LITERAL", 
 		"STRING_LITERAL", "INT_LITERAL", "FLOAT_LITERAL", "BOOL_LITERAL", "TLK_GENDER", 
 		"TLK_LANGUAGE", "IDENTIFIER", "WHITESPACE"
 	};
@@ -192,21 +193,21 @@ public partial class KotorPatchingLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 153;
+			State = 159;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while (_la==T__38) {
+			while (_la==T__9 || _la==T__40) {
 				{
 				{
-				State = 150;
+				State = 156;
 				instruction();
 				}
 				}
-				State = 155;
+				State = 161;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 156;
+			State = 162;
 			Match(Eof);
 			}
 		}
@@ -231,6 +232,9 @@ public partial class KotorPatchingLanguageParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public Edit_itemContext edit_item() {
 			return GetRuleContext<Edit_itemContext>(0);
 		}
+		[System.Diagnostics.DebuggerNonUserCode] public Copy_filesContext copy_files() {
+			return GetRuleContext<Copy_filesContext>(0);
+		}
 		public InstructionContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -249,28 +253,35 @@ public partial class KotorPatchingLanguageParser : Parser {
 		InstructionContext _localctx = new InstructionContext(Context, State);
 		EnterRule(_localctx, 2, RULE_instruction);
 		try {
-			State = 161;
+			State = 168;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,1,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 158;
+				State = 164;
 				edit_appearance();
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 159;
+				State = 165;
 				edit_creature();
 				}
 				break;
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 160;
+				State = 166;
 				edit_item();
+				}
+				break;
+			case 4:
+				EnterOuterAlt(_localctx, 4);
+				{
+				State = 167;
+				copy_files();
 				}
 				break;
 			}
@@ -340,14 +351,14 @@ public partial class KotorPatchingLanguageParser : Parser {
 		File_operationContext _localctx = new File_operationContext(Context, State);
 		EnterRule(_localctx, 4, RULE_file_operation);
 		try {
-			State = 171;
+			State = 178;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,2,Context) ) {
 			case 1:
 				_localctx = new File_Operation_CreateContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 163;
+				State = 170;
 				Match(T__0);
 				}
 				break;
@@ -355,7 +366,7 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new File_Operation_ModifyContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 164;
+				State = 171;
 				Match(T__1);
 				}
 				break;
@@ -363,11 +374,11 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new File_Operation_CreateOrReplaceContext(_localctx);
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 165;
+				State = 172;
 				Match(T__0);
-				State = 166;
+				State = 173;
 				Match(T__2);
-				State = 167;
+				State = 174;
 				Match(T__3);
 				}
 				break;
@@ -375,11 +386,11 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new File_Operation_CreateOrModifyContext(_localctx);
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 168;
+				State = 175;
 				Match(T__0);
-				State = 169;
+				State = 176;
 				Match(T__2);
-				State = 170;
+				State = 177;
 				Match(T__1);
 				}
 				break;
@@ -442,16 +453,16 @@ public partial class KotorPatchingLanguageParser : Parser {
 		File_sourceContext _localctx = new File_sourceContext(Context, State);
 		EnterRule(_localctx, 6, RULE_file_source);
 		try {
-			State = 180;
+			State = 187;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,3,Context) ) {
 			case 1:
 				_localctx = new File_Source_KeyContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 173;
+				State = 180;
 				Match(T__4);
-				State = 174;
+				State = 181;
 				Match(T__5);
 				}
 				break;
@@ -459,11 +470,11 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new File_Source_ModuleContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 175;
+				State = 182;
 				Match(T__4);
-				State = 176;
+				State = 183;
 				Match(T__6);
-				State = 177;
+				State = 184;
 				Match(STRING_LITERAL);
 				}
 				break;
@@ -471,9 +482,9 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new File_Source_OverrideContext(_localctx);
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 178;
+				State = 185;
 				Match(T__4);
-				State = 179;
+				State = 186;
 				Match(T__7);
 				}
 				break;
@@ -527,18 +538,18 @@ public partial class KotorPatchingLanguageParser : Parser {
 		File_targetContext _localctx = new File_targetContext(Context, State);
 		EnterRule(_localctx, 8, RULE_file_target);
 		try {
-			State = 187;
+			State = 194;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,4,Context) ) {
 			case 1:
 				_localctx = new File_Target_ModuleContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 182;
+				State = 189;
 				Match(T__8);
-				State = 183;
+				State = 190;
 				Match(T__6);
-				State = 184;
+				State = 191;
 				Match(STRING_LITERAL);
 				}
 				break;
@@ -546,10 +557,239 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new File_Target_OverrideContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 185;
+				State = 192;
 				Match(T__8);
-				State = 186;
+				State = 193;
 				Match(T__7);
+				}
+				break;
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Copy_filesContext : ParserRuleContext {
+		public Copy_filesContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_copy_files; } }
+	 
+		public Copy_filesContext() { }
+		public virtual void CopyFrom(Copy_filesContext context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class CopyFilesContext : Copy_filesContext {
+		[System.Diagnostics.DebuggerNonUserCode] public Copy_files_targetContext copy_files_target() {
+			return GetRuleContext<Copy_files_targetContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public Copy_files_commandContext[] copy_files_command() {
+			return GetRuleContexts<Copy_files_commandContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public Copy_files_commandContext copy_files_command(int i) {
+			return GetRuleContext<Copy_files_commandContext>(i);
+		}
+		public CopyFilesContext(Copy_filesContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitCopyFiles(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Copy_filesContext copy_files() {
+		Copy_filesContext _localctx = new Copy_filesContext(Context, State);
+		EnterRule(_localctx, 10, RULE_copy_files);
+		int _la;
+		try {
+			_localctx = new CopyFilesContext(_localctx);
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 196;
+			Match(T__9);
+			State = 197;
+			Match(T__10);
+			State = 198;
+			Match(T__8);
+			State = 199;
+			copy_files_target();
+			State = 203;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			while (_la==STRING_LITERAL) {
+				{
+				{
+				State = 200;
+				copy_files_command();
+				}
+				}
+				State = 205;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+			}
+			State = 206;
+			Match(T__11);
+			State = 207;
+			Match(T__9);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Copy_files_targetContext : ParserRuleContext {
+		public Copy_files_targetContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_copy_files_target; } }
+	 
+		public Copy_files_targetContext() { }
+		public virtual void CopyFrom(Copy_files_targetContext context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class Copy_Files_Target_OverrideContext : Copy_files_targetContext {
+		public Copy_Files_Target_OverrideContext(Copy_files_targetContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitCopy_Files_Target_Override(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class Copy_Files_Target_ModuleContext : Copy_files_targetContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL() { return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, 0); }
+		public Copy_Files_Target_ModuleContext(Copy_files_targetContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitCopy_Files_Target_Module(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Copy_files_targetContext copy_files_target() {
+		Copy_files_targetContext _localctx = new Copy_files_targetContext(Context, State);
+		EnterRule(_localctx, 12, RULE_copy_files_target);
+		try {
+			State = 212;
+			ErrorHandler.Sync(this);
+			switch (TokenStream.LA(1)) {
+			case T__6:
+				_localctx = new Copy_Files_Target_ModuleContext(_localctx);
+				EnterOuterAlt(_localctx, 1);
+				{
+				State = 209;
+				Match(T__6);
+				State = 210;
+				Match(STRING_LITERAL);
+				}
+				break;
+			case T__7:
+				_localctx = new Copy_Files_Target_OverrideContext(_localctx);
+				EnterOuterAlt(_localctx, 2);
+				{
+				State = 211;
+				Match(T__7);
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class Copy_files_commandContext : ParserRuleContext {
+		public Copy_files_commandContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_copy_files_command; } }
+	 
+		public Copy_files_commandContext() { }
+		public virtual void CopyFrom(Copy_files_commandContext context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class Copy_Files_Command_ChangeNameContext : Copy_files_commandContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] STRING_LITERAL() { return GetTokens(KotorPatchingLanguageParser.STRING_LITERAL); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL(int i) {
+			return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, i);
+		}
+		public Copy_Files_Command_ChangeNameContext(Copy_files_commandContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitCopy_Files_Command_ChangeName(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class Copy_Files_Command_KeepNameContext : Copy_files_commandContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING_LITERAL() { return GetToken(KotorPatchingLanguageParser.STRING_LITERAL, 0); }
+		public Copy_Files_Command_KeepNameContext(Copy_files_commandContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IKotorPatchingLanguageVisitor<TResult> typedVisitor = visitor as IKotorPatchingLanguageVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitCopy_Files_Command_KeepName(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public Copy_files_commandContext copy_files_command() {
+		Copy_files_commandContext _localctx = new Copy_files_commandContext(Context, State);
+		EnterRule(_localctx, 14, RULE_copy_files_command);
+		try {
+			State = 218;
+			ErrorHandler.Sync(this);
+			switch ( Interpreter.AdaptivePredict(TokenStream,7,Context) ) {
+			case 1:
+				_localctx = new Copy_Files_Command_KeepNameContext(_localctx);
+				EnterOuterAlt(_localctx, 1);
+				{
+				State = 214;
+				Match(STRING_LITERAL);
+				}
+				break;
+			case 2:
+				_localctx = new Copy_Files_Command_ChangeNameContext(_localctx);
+				EnterOuterAlt(_localctx, 2);
+				{
+				State = 215;
+				Match(STRING_LITERAL);
+				State = 216;
+				Match(T__12);
+				State = 217;
+				Match(STRING_LITERAL);
 				}
 				break;
 			}
@@ -594,22 +834,22 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Twoda_assign_cellContext twoda_assign_cell() {
 		Twoda_assign_cellContext _localctx = new Twoda_assign_cellContext(Context, State);
-		EnterRule(_localctx, 10, RULE_twoda_assign_cell);
+		EnterRule(_localctx, 16, RULE_twoda_assign_cell);
 		try {
 			_localctx = new TwoDAAssignCellContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 189;
-			Match(T__9);
-			State = 190;
-			Match(T__10);
-			State = 191;
-			Match(T__11);
-			State = 192;
+			State = 220;
+			Match(T__13);
+			State = 221;
+			Match(T__14);
+			State = 222;
+			Match(T__15);
+			State = 223;
 			Match(STRING_LITERAL);
-			State = 193;
+			State = 224;
 			Match(T__8);
-			State = 194;
+			State = 225;
 			Match(STRING_LITERAL);
 			}
 		}
@@ -653,22 +893,22 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Twoda_target_rowContext twoda_target_row() {
 		Twoda_target_rowContext _localctx = new Twoda_target_rowContext(Context, State);
-		EnterRule(_localctx, 12, RULE_twoda_target_row);
+		EnterRule(_localctx, 18, RULE_twoda_target_row);
 		try {
 			_localctx = new TwoDATargetRowContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 196;
-			Match(T__12);
-			State = 197;
-			Match(T__13);
-			State = 198;
-			Match(T__14);
-			State = 199;
+			State = 227;
+			Match(T__16);
+			State = 228;
+			Match(T__17);
+			State = 229;
+			Match(T__18);
+			State = 230;
 			Match(STRING_LITERAL);
-			State = 200;
-			Match(T__15);
-			State = 201;
+			State = 231;
+			Match(T__19);
+			State = 232;
 			Match(STRING_LITERAL);
 			}
 		}
@@ -712,22 +952,22 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Twoda_copy_rowContext twoda_copy_row() {
 		Twoda_copy_rowContext _localctx = new Twoda_copy_rowContext(Context, State);
-		EnterRule(_localctx, 14, RULE_twoda_copy_row);
+		EnterRule(_localctx, 20, RULE_twoda_copy_row);
 		try {
 			_localctx = new TwoDACopyRowContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 203;
-			Match(T__16);
-			State = 204;
-			Match(T__13);
-			State = 205;
-			Match(T__14);
-			State = 206;
+			State = 234;
+			Match(T__9);
+			State = 235;
+			Match(T__17);
+			State = 236;
+			Match(T__18);
+			State = 237;
 			Match(STRING_LITERAL);
-			State = 207;
-			Match(T__15);
-			State = 208;
+			State = 238;
+			Match(T__19);
+			State = 239;
 			Match(STRING_LITERAL);
 			}
 		}
@@ -760,17 +1000,17 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_copy_templateContext gff_copy_template() {
 		Gff_copy_templateContext _localctx = new Gff_copy_templateContext(Context, State);
-		EnterRule(_localctx, 16, RULE_gff_copy_template);
+		EnterRule(_localctx, 22, RULE_gff_copy_template);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 210;
-			Match(T__16);
-			State = 211;
+			State = 241;
+			Match(T__9);
+			State = 242;
 			Match(T__4);
-			State = 212;
-			Match(T__17);
-			State = 213;
+			State = 243;
+			Match(T__20);
+			State = 244;
 			Match(STRING_LITERAL);
 			}
 		}
@@ -811,12 +1051,12 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_locate_fieldContext gff_locate_field() {
 		Gff_locate_fieldContext _localctx = new Gff_locate_fieldContext(Context, State);
-		EnterRule(_localctx, 18, RULE_gff_locate_field);
+		EnterRule(_localctx, 24, RULE_gff_locate_field);
 		try {
 			_localctx = new GFFLocateFieldContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 215;
+			State = 246;
 			Match(STRING_LITERAL);
 			}
 		}
@@ -862,22 +1102,22 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_assign_uint8Context gff_assign_uint8() {
 		Gff_assign_uint8Context _localctx = new Gff_assign_uint8Context(Context, State);
-		EnterRule(_localctx, 20, RULE_gff_assign_uint8);
+		EnterRule(_localctx, 26, RULE_gff_assign_uint8);
 		try {
 			_localctx = new GFFAssignUInt8Context(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 217;
-			Match(T__9);
-			State = 218;
-			Match(T__18);
-			State = 219;
-			Match(T__11);
-			State = 220;
+			State = 248;
+			Match(T__13);
+			State = 249;
+			Match(T__21);
+			State = 250;
+			Match(T__15);
+			State = 251;
 			gff_locate_field();
-			State = 221;
+			State = 252;
 			Match(T__8);
-			State = 222;
+			State = 253;
 			gff_value_uint8();
 			}
 		}
@@ -941,16 +1181,16 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_value_uint8Context gff_value_uint8() {
 		Gff_value_uint8Context _localctx = new Gff_value_uint8Context(Context, State);
-		EnterRule(_localctx, 22, RULE_gff_value_uint8);
+		EnterRule(_localctx, 28, RULE_gff_value_uint8);
 		try {
-			State = 232;
+			State = 263;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case INT_LITERAL:
 				_localctx = new GFFValueUInt8LiteralContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 224;
+				State = 255;
 				Match(INT_LITERAL);
 				}
 				break;
@@ -958,25 +1198,25 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new GFFValueUInt8TokenContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 225;
+				State = 256;
 				Match(MEMORY_TOKEN);
 				}
 				break;
-			case T__19:
+			case T__22:
 				_localctx = new GFFValueUInt8From2DAContext(_localctx);
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 226;
+				State = 257;
+				Match(T__22);
+				State = 258;
+				Match(STRING_LITERAL);
+				State = 259;
+				Match(T__18);
+				State = 260;
+				Match(STRING_LITERAL);
+				State = 261;
 				Match(T__19);
-				State = 227;
-				Match(STRING_LITERAL);
-				State = 228;
-				Match(T__14);
-				State = 229;
-				Match(STRING_LITERAL);
-				State = 230;
-				Match(T__15);
-				State = 231;
+				State = 262;
 				Match(STRING_LITERAL);
 				}
 				break;
@@ -1026,22 +1266,22 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_assign_uint16Context gff_assign_uint16() {
 		Gff_assign_uint16Context _localctx = new Gff_assign_uint16Context(Context, State);
-		EnterRule(_localctx, 24, RULE_gff_assign_uint16);
+		EnterRule(_localctx, 30, RULE_gff_assign_uint16);
 		try {
 			_localctx = new GFFAssignUInt16Context(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 234;
-			Match(T__9);
-			State = 235;
-			Match(T__20);
-			State = 236;
-			Match(T__11);
-			State = 237;
+			State = 265;
+			Match(T__13);
+			State = 266;
+			Match(T__23);
+			State = 267;
+			Match(T__15);
+			State = 268;
 			gff_locate_field();
-			State = 238;
+			State = 269;
 			Match(T__8);
-			State = 239;
+			State = 270;
 			gff_value_uint16();
 			}
 		}
@@ -1105,16 +1345,16 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_value_uint16Context gff_value_uint16() {
 		Gff_value_uint16Context _localctx = new Gff_value_uint16Context(Context, State);
-		EnterRule(_localctx, 26, RULE_gff_value_uint16);
+		EnterRule(_localctx, 32, RULE_gff_value_uint16);
 		try {
-			State = 249;
+			State = 280;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case INT_LITERAL:
 				_localctx = new GFFValueUInt16LiteralContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 241;
+				State = 272;
 				Match(INT_LITERAL);
 				}
 				break;
@@ -1122,25 +1362,25 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new GFFValueUInt16TokenContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 242;
+				State = 273;
 				Match(MEMORY_TOKEN);
 				}
 				break;
-			case T__19:
+			case T__22:
 				_localctx = new GFFValueUInt16From2DAContext(_localctx);
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 243;
+				State = 274;
+				Match(T__22);
+				State = 275;
+				Match(STRING_LITERAL);
+				State = 276;
+				Match(T__18);
+				State = 277;
+				Match(STRING_LITERAL);
+				State = 278;
 				Match(T__19);
-				State = 244;
-				Match(STRING_LITERAL);
-				State = 245;
-				Match(T__14);
-				State = 246;
-				Match(STRING_LITERAL);
-				State = 247;
-				Match(T__15);
-				State = 248;
+				State = 279;
 				Match(STRING_LITERAL);
 				}
 				break;
@@ -1190,22 +1430,22 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_assign_uint32Context gff_assign_uint32() {
 		Gff_assign_uint32Context _localctx = new Gff_assign_uint32Context(Context, State);
-		EnterRule(_localctx, 28, RULE_gff_assign_uint32);
+		EnterRule(_localctx, 34, RULE_gff_assign_uint32);
 		try {
 			_localctx = new GFFAssignUInt32Context(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 251;
-			Match(T__9);
-			State = 252;
-			Match(T__21);
-			State = 253;
-			Match(T__11);
-			State = 254;
+			State = 282;
+			Match(T__13);
+			State = 283;
+			Match(T__24);
+			State = 284;
+			Match(T__15);
+			State = 285;
 			gff_locate_field();
-			State = 255;
+			State = 286;
 			Match(T__8);
-			State = 256;
+			State = 287;
 			gff_value_uint32();
 			}
 		}
@@ -1269,16 +1509,16 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_value_uint32Context gff_value_uint32() {
 		Gff_value_uint32Context _localctx = new Gff_value_uint32Context(Context, State);
-		EnterRule(_localctx, 30, RULE_gff_value_uint32);
+		EnterRule(_localctx, 36, RULE_gff_value_uint32);
 		try {
-			State = 266;
+			State = 297;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case INT_LITERAL:
 				_localctx = new GFFValueUInt32LiteralContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 258;
+				State = 289;
 				Match(INT_LITERAL);
 				}
 				break;
@@ -1286,25 +1526,25 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new GFFValueUInt32TokenContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 259;
+				State = 290;
 				Match(MEMORY_TOKEN);
 				}
 				break;
-			case T__19:
+			case T__22:
 				_localctx = new GFFValueUInt32From2DAContext(_localctx);
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 260;
+				State = 291;
+				Match(T__22);
+				State = 292;
+				Match(STRING_LITERAL);
+				State = 293;
+				Match(T__18);
+				State = 294;
+				Match(STRING_LITERAL);
+				State = 295;
 				Match(T__19);
-				State = 261;
-				Match(STRING_LITERAL);
-				State = 262;
-				Match(T__14);
-				State = 263;
-				Match(STRING_LITERAL);
-				State = 264;
-				Match(T__15);
-				State = 265;
+				State = 296;
 				Match(STRING_LITERAL);
 				}
 				break;
@@ -1354,22 +1594,22 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_assign_uint64Context gff_assign_uint64() {
 		Gff_assign_uint64Context _localctx = new Gff_assign_uint64Context(Context, State);
-		EnterRule(_localctx, 32, RULE_gff_assign_uint64);
+		EnterRule(_localctx, 38, RULE_gff_assign_uint64);
 		try {
 			_localctx = new GFFAssignUInt64Context(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 268;
-			Match(T__9);
-			State = 269;
-			Match(T__22);
-			State = 270;
-			Match(T__11);
-			State = 271;
+			State = 299;
+			Match(T__13);
+			State = 300;
+			Match(T__25);
+			State = 301;
+			Match(T__15);
+			State = 302;
 			gff_locate_field();
-			State = 272;
+			State = 303;
 			Match(T__8);
-			State = 273;
+			State = 304;
 			gff_value_uint64();
 			}
 		}
@@ -1433,16 +1673,16 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_value_uint64Context gff_value_uint64() {
 		Gff_value_uint64Context _localctx = new Gff_value_uint64Context(Context, State);
-		EnterRule(_localctx, 34, RULE_gff_value_uint64);
+		EnterRule(_localctx, 40, RULE_gff_value_uint64);
 		try {
-			State = 283;
+			State = 314;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case INT_LITERAL:
 				_localctx = new GFFValueUInt64LiteralContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 275;
+				State = 306;
 				Match(INT_LITERAL);
 				}
 				break;
@@ -1450,25 +1690,25 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new GFFValueUInt64TokenContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 276;
+				State = 307;
 				Match(MEMORY_TOKEN);
 				}
 				break;
-			case T__19:
+			case T__22:
 				_localctx = new GFFValueUInt64From2DAContext(_localctx);
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 277;
+				State = 308;
+				Match(T__22);
+				State = 309;
+				Match(STRING_LITERAL);
+				State = 310;
+				Match(T__18);
+				State = 311;
+				Match(STRING_LITERAL);
+				State = 312;
 				Match(T__19);
-				State = 278;
-				Match(STRING_LITERAL);
-				State = 279;
-				Match(T__14);
-				State = 280;
-				Match(STRING_LITERAL);
-				State = 281;
-				Match(T__15);
-				State = 282;
+				State = 313;
 				Match(STRING_LITERAL);
 				}
 				break;
@@ -1518,22 +1758,22 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_assign_int8Context gff_assign_int8() {
 		Gff_assign_int8Context _localctx = new Gff_assign_int8Context(Context, State);
-		EnterRule(_localctx, 36, RULE_gff_assign_int8);
+		EnterRule(_localctx, 42, RULE_gff_assign_int8);
 		try {
 			_localctx = new GFFAssignInt8Context(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 285;
-			Match(T__9);
-			State = 286;
-			Match(T__23);
-			State = 287;
-			Match(T__11);
-			State = 288;
+			State = 316;
+			Match(T__13);
+			State = 317;
+			Match(T__26);
+			State = 318;
+			Match(T__15);
+			State = 319;
 			gff_locate_field();
-			State = 289;
+			State = 320;
 			Match(T__8);
-			State = 290;
+			State = 321;
 			gff_value_int8();
 			}
 		}
@@ -1597,16 +1837,16 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_value_int8Context gff_value_int8() {
 		Gff_value_int8Context _localctx = new Gff_value_int8Context(Context, State);
-		EnterRule(_localctx, 38, RULE_gff_value_int8);
+		EnterRule(_localctx, 44, RULE_gff_value_int8);
 		try {
-			State = 300;
+			State = 331;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case INT_LITERAL:
 				_localctx = new GFFValueInt8LiteralContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 292;
+				State = 323;
 				Match(INT_LITERAL);
 				}
 				break;
@@ -1614,25 +1854,25 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new GFFValueInt8TokenContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 293;
+				State = 324;
 				Match(MEMORY_TOKEN);
 				}
 				break;
-			case T__19:
+			case T__22:
 				_localctx = new GFFValueInt8From2DAContext(_localctx);
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 294;
+				State = 325;
+				Match(T__22);
+				State = 326;
+				Match(STRING_LITERAL);
+				State = 327;
+				Match(T__18);
+				State = 328;
+				Match(STRING_LITERAL);
+				State = 329;
 				Match(T__19);
-				State = 295;
-				Match(STRING_LITERAL);
-				State = 296;
-				Match(T__14);
-				State = 297;
-				Match(STRING_LITERAL);
-				State = 298;
-				Match(T__15);
-				State = 299;
+				State = 330;
 				Match(STRING_LITERAL);
 				}
 				break;
@@ -1682,22 +1922,22 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_assign_int16Context gff_assign_int16() {
 		Gff_assign_int16Context _localctx = new Gff_assign_int16Context(Context, State);
-		EnterRule(_localctx, 40, RULE_gff_assign_int16);
+		EnterRule(_localctx, 46, RULE_gff_assign_int16);
 		try {
 			_localctx = new GFFAssignInt16Context(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 302;
-			Match(T__9);
-			State = 303;
-			Match(T__24);
-			State = 304;
-			Match(T__11);
-			State = 305;
+			State = 333;
+			Match(T__13);
+			State = 334;
+			Match(T__27);
+			State = 335;
+			Match(T__15);
+			State = 336;
 			gff_locate_field();
-			State = 306;
+			State = 337;
 			Match(T__8);
-			State = 307;
+			State = 338;
 			gff_value_int16();
 			}
 		}
@@ -1761,16 +2001,16 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_value_int16Context gff_value_int16() {
 		Gff_value_int16Context _localctx = new Gff_value_int16Context(Context, State);
-		EnterRule(_localctx, 42, RULE_gff_value_int16);
+		EnterRule(_localctx, 48, RULE_gff_value_int16);
 		try {
-			State = 317;
+			State = 348;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case INT_LITERAL:
 				_localctx = new GFFValueInt16LiteralContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 309;
+				State = 340;
 				Match(INT_LITERAL);
 				}
 				break;
@@ -1778,25 +2018,25 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new GFFValueInt16TokenContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 310;
+				State = 341;
 				Match(MEMORY_TOKEN);
 				}
 				break;
-			case T__19:
+			case T__22:
 				_localctx = new GFFValueInt16From2DAContext(_localctx);
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 311;
+				State = 342;
+				Match(T__22);
+				State = 343;
+				Match(STRING_LITERAL);
+				State = 344;
+				Match(T__18);
+				State = 345;
+				Match(STRING_LITERAL);
+				State = 346;
 				Match(T__19);
-				State = 312;
-				Match(STRING_LITERAL);
-				State = 313;
-				Match(T__14);
-				State = 314;
-				Match(STRING_LITERAL);
-				State = 315;
-				Match(T__15);
-				State = 316;
+				State = 347;
 				Match(STRING_LITERAL);
 				}
 				break;
@@ -1846,22 +2086,22 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_assign_int32Context gff_assign_int32() {
 		Gff_assign_int32Context _localctx = new Gff_assign_int32Context(Context, State);
-		EnterRule(_localctx, 44, RULE_gff_assign_int32);
+		EnterRule(_localctx, 50, RULE_gff_assign_int32);
 		try {
 			_localctx = new GFFAssignInt32Context(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 319;
-			Match(T__9);
-			State = 320;
-			Match(T__25);
-			State = 321;
-			Match(T__11);
-			State = 322;
+			State = 350;
+			Match(T__13);
+			State = 351;
+			Match(T__28);
+			State = 352;
+			Match(T__15);
+			State = 353;
 			gff_locate_field();
-			State = 323;
+			State = 354;
 			Match(T__8);
-			State = 324;
+			State = 355;
 			gff_value_int32();
 			}
 		}
@@ -1925,16 +2165,16 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_value_int32Context gff_value_int32() {
 		Gff_value_int32Context _localctx = new Gff_value_int32Context(Context, State);
-		EnterRule(_localctx, 46, RULE_gff_value_int32);
+		EnterRule(_localctx, 52, RULE_gff_value_int32);
 		try {
-			State = 334;
+			State = 365;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case INT_LITERAL:
 				_localctx = new GFFValueInt32LiteralContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 326;
+				State = 357;
 				Match(INT_LITERAL);
 				}
 				break;
@@ -1942,25 +2182,25 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new GFFValueInt32TokenContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 327;
+				State = 358;
 				Match(MEMORY_TOKEN);
 				}
 				break;
-			case T__19:
+			case T__22:
 				_localctx = new GFFValueInt32From2DAContext(_localctx);
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 328;
+				State = 359;
+				Match(T__22);
+				State = 360;
+				Match(STRING_LITERAL);
+				State = 361;
+				Match(T__18);
+				State = 362;
+				Match(STRING_LITERAL);
+				State = 363;
 				Match(T__19);
-				State = 329;
-				Match(STRING_LITERAL);
-				State = 330;
-				Match(T__14);
-				State = 331;
-				Match(STRING_LITERAL);
-				State = 332;
-				Match(T__15);
-				State = 333;
+				State = 364;
 				Match(STRING_LITERAL);
 				}
 				break;
@@ -2010,22 +2250,22 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_assign_int64Context gff_assign_int64() {
 		Gff_assign_int64Context _localctx = new Gff_assign_int64Context(Context, State);
-		EnterRule(_localctx, 48, RULE_gff_assign_int64);
+		EnterRule(_localctx, 54, RULE_gff_assign_int64);
 		try {
 			_localctx = new GFFAssignInt64Context(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 336;
-			Match(T__9);
-			State = 337;
-			Match(T__26);
-			State = 338;
-			Match(T__11);
-			State = 339;
+			State = 367;
+			Match(T__13);
+			State = 368;
+			Match(T__29);
+			State = 369;
+			Match(T__15);
+			State = 370;
 			gff_locate_field();
-			State = 340;
+			State = 371;
 			Match(T__8);
-			State = 341;
+			State = 372;
 			gff_value_int64();
 			}
 		}
@@ -2089,16 +2329,16 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_value_int64Context gff_value_int64() {
 		Gff_value_int64Context _localctx = new Gff_value_int64Context(Context, State);
-		EnterRule(_localctx, 50, RULE_gff_value_int64);
+		EnterRule(_localctx, 56, RULE_gff_value_int64);
 		try {
-			State = 351;
+			State = 382;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case INT_LITERAL:
 				_localctx = new GFFValueInt64LiteralContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 343;
+				State = 374;
 				Match(INT_LITERAL);
 				}
 				break;
@@ -2106,25 +2346,25 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new GFFValueInt64TokenContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 344;
+				State = 375;
 				Match(MEMORY_TOKEN);
 				}
 				break;
-			case T__19:
+			case T__22:
 				_localctx = new GFFValueInt64From2DAContext(_localctx);
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 345;
+				State = 376;
+				Match(T__22);
+				State = 377;
+				Match(STRING_LITERAL);
+				State = 378;
+				Match(T__18);
+				State = 379;
+				Match(STRING_LITERAL);
+				State = 380;
 				Match(T__19);
-				State = 346;
-				Match(STRING_LITERAL);
-				State = 347;
-				Match(T__14);
-				State = 348;
-				Match(STRING_LITERAL);
-				State = 349;
-				Match(T__15);
-				State = 350;
+				State = 381;
 				Match(STRING_LITERAL);
 				}
 				break;
@@ -2174,22 +2414,22 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_assign_singleContext gff_assign_single() {
 		Gff_assign_singleContext _localctx = new Gff_assign_singleContext(Context, State);
-		EnterRule(_localctx, 52, RULE_gff_assign_single);
+		EnterRule(_localctx, 58, RULE_gff_assign_single);
 		try {
 			_localctx = new GFFAssignSingleContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 353;
-			Match(T__9);
-			State = 354;
-			Match(T__27);
-			State = 355;
-			Match(T__11);
-			State = 356;
+			State = 384;
+			Match(T__13);
+			State = 385;
+			Match(T__30);
+			State = 386;
+			Match(T__15);
+			State = 387;
 			gff_locate_field();
-			State = 357;
+			State = 388;
 			Match(T__8);
-			State = 358;
+			State = 389;
 			gff_value_single();
 			}
 		}
@@ -2253,16 +2493,16 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_value_singleContext gff_value_single() {
 		Gff_value_singleContext _localctx = new Gff_value_singleContext(Context, State);
-		EnterRule(_localctx, 54, RULE_gff_value_single);
+		EnterRule(_localctx, 60, RULE_gff_value_single);
 		try {
-			State = 368;
+			State = 399;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case FLOAT_LITERAL:
 				_localctx = new GFFValueSingleLiteralContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 360;
+				State = 391;
 				Match(FLOAT_LITERAL);
 				}
 				break;
@@ -2270,25 +2510,25 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new GFFValueSingleTokenContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 361;
+				State = 392;
 				Match(MEMORY_TOKEN);
 				}
 				break;
-			case T__19:
+			case T__22:
 				_localctx = new GFFValueSingleFrom2DAContext(_localctx);
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 362;
+				State = 393;
+				Match(T__22);
+				State = 394;
+				Match(STRING_LITERAL);
+				State = 395;
+				Match(T__18);
+				State = 396;
+				Match(STRING_LITERAL);
+				State = 397;
 				Match(T__19);
-				State = 363;
-				Match(STRING_LITERAL);
-				State = 364;
-				Match(T__14);
-				State = 365;
-				Match(STRING_LITERAL);
-				State = 366;
-				Match(T__15);
-				State = 367;
+				State = 398;
 				Match(STRING_LITERAL);
 				}
 				break;
@@ -2338,22 +2578,22 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_assign_doubleContext gff_assign_double() {
 		Gff_assign_doubleContext _localctx = new Gff_assign_doubleContext(Context, State);
-		EnterRule(_localctx, 56, RULE_gff_assign_double);
+		EnterRule(_localctx, 62, RULE_gff_assign_double);
 		try {
 			_localctx = new GFFAssignDoubleContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 370;
-			Match(T__9);
-			State = 371;
-			Match(T__28);
-			State = 372;
-			Match(T__11);
-			State = 373;
+			State = 401;
+			Match(T__13);
+			State = 402;
+			Match(T__31);
+			State = 403;
+			Match(T__15);
+			State = 404;
 			gff_locate_field();
-			State = 374;
+			State = 405;
 			Match(T__8);
-			State = 375;
+			State = 406;
 			gff_value_double();
 			}
 		}
@@ -2417,16 +2657,16 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_value_doubleContext gff_value_double() {
 		Gff_value_doubleContext _localctx = new Gff_value_doubleContext(Context, State);
-		EnterRule(_localctx, 58, RULE_gff_value_double);
+		EnterRule(_localctx, 64, RULE_gff_value_double);
 		try {
-			State = 385;
+			State = 416;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case FLOAT_LITERAL:
 				_localctx = new GFFValueDoubleLiteralContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 377;
+				State = 408;
 				Match(FLOAT_LITERAL);
 				}
 				break;
@@ -2434,25 +2674,25 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new GFFValueDoubleTokenContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 378;
+				State = 409;
 				Match(MEMORY_TOKEN);
 				}
 				break;
-			case T__19:
+			case T__22:
 				_localctx = new GFFValueDoubleFrom2DAContext(_localctx);
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 379;
+				State = 410;
+				Match(T__22);
+				State = 411;
+				Match(STRING_LITERAL);
+				State = 412;
+				Match(T__18);
+				State = 413;
+				Match(STRING_LITERAL);
+				State = 414;
 				Match(T__19);
-				State = 380;
-				Match(STRING_LITERAL);
-				State = 381;
-				Match(T__14);
-				State = 382;
-				Match(STRING_LITERAL);
-				State = 383;
-				Match(T__15);
-				State = 384;
+				State = 415;
 				Match(STRING_LITERAL);
 				}
 				break;
@@ -2502,22 +2742,22 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_assign_resrefContext gff_assign_resref() {
 		Gff_assign_resrefContext _localctx = new Gff_assign_resrefContext(Context, State);
-		EnterRule(_localctx, 60, RULE_gff_assign_resref);
+		EnterRule(_localctx, 66, RULE_gff_assign_resref);
 		try {
 			_localctx = new GFFAssignResRefContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 387;
-			Match(T__9);
-			State = 388;
-			Match(T__29);
-			State = 389;
-			Match(T__11);
-			State = 390;
+			State = 418;
+			Match(T__13);
+			State = 419;
+			Match(T__32);
+			State = 420;
+			Match(T__15);
+			State = 421;
 			gff_locate_field();
-			State = 391;
+			State = 422;
 			Match(T__8);
-			State = 392;
+			State = 423;
 			gff_value_resref();
 			}
 		}
@@ -2581,16 +2821,16 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_value_resrefContext gff_value_resref() {
 		Gff_value_resrefContext _localctx = new Gff_value_resrefContext(Context, State);
-		EnterRule(_localctx, 62, RULE_gff_value_resref);
+		EnterRule(_localctx, 68, RULE_gff_value_resref);
 		try {
-			State = 402;
+			State = 433;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case STRING_LITERAL:
 				_localctx = new GFFValueResRefLiteralContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 394;
+				State = 425;
 				Match(STRING_LITERAL);
 				}
 				break;
@@ -2598,25 +2838,25 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new GFFValueResRefTokenContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 395;
+				State = 426;
 				Match(MEMORY_TOKEN);
 				}
 				break;
-			case T__19:
+			case T__22:
 				_localctx = new GFFValueResRefFrom2DAContext(_localctx);
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 396;
+				State = 427;
+				Match(T__22);
+				State = 428;
+				Match(STRING_LITERAL);
+				State = 429;
+				Match(T__18);
+				State = 430;
+				Match(STRING_LITERAL);
+				State = 431;
 				Match(T__19);
-				State = 397;
-				Match(STRING_LITERAL);
-				State = 398;
-				Match(T__14);
-				State = 399;
-				Match(STRING_LITERAL);
-				State = 400;
-				Match(T__15);
-				State = 401;
+				State = 432;
 				Match(STRING_LITERAL);
 				}
 				break;
@@ -2666,22 +2906,22 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_assign_stringContext gff_assign_string() {
 		Gff_assign_stringContext _localctx = new Gff_assign_stringContext(Context, State);
-		EnterRule(_localctx, 64, RULE_gff_assign_string);
+		EnterRule(_localctx, 70, RULE_gff_assign_string);
 		try {
 			_localctx = new GFFAssignStringContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 404;
-			Match(T__9);
-			State = 405;
-			Match(T__30);
-			State = 406;
-			Match(T__11);
-			State = 407;
+			State = 435;
+			Match(T__13);
+			State = 436;
+			Match(T__33);
+			State = 437;
+			Match(T__15);
+			State = 438;
 			gff_locate_field();
-			State = 408;
+			State = 439;
 			Match(T__8);
-			State = 409;
+			State = 440;
 			gff_value_string();
 			}
 		}
@@ -2745,16 +2985,16 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_value_stringContext gff_value_string() {
 		Gff_value_stringContext _localctx = new Gff_value_stringContext(Context, State);
-		EnterRule(_localctx, 66, RULE_gff_value_string);
+		EnterRule(_localctx, 72, RULE_gff_value_string);
 		try {
-			State = 419;
+			State = 450;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case STRING_LITERAL:
 				_localctx = new GFFValueStringLiteralContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 411;
+				State = 442;
 				Match(STRING_LITERAL);
 				}
 				break;
@@ -2762,25 +3002,25 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new GFFValueStringTokenContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 412;
+				State = 443;
 				Match(MEMORY_TOKEN);
 				}
 				break;
-			case T__19:
+			case T__22:
 				_localctx = new GFFValueStringFrom2DAContext(_localctx);
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 413;
+				State = 444;
+				Match(T__22);
+				State = 445;
+				Match(STRING_LITERAL);
+				State = 446;
+				Match(T__18);
+				State = 447;
+				Match(STRING_LITERAL);
+				State = 448;
 				Match(T__19);
-				State = 414;
-				Match(STRING_LITERAL);
-				State = 415;
-				Match(T__14);
-				State = 416;
-				Match(STRING_LITERAL);
-				State = 417;
-				Match(T__15);
-				State = 418;
+				State = 449;
 				Match(STRING_LITERAL);
 				}
 				break;
@@ -2830,22 +3070,22 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_assign_binaryContext gff_assign_binary() {
 		Gff_assign_binaryContext _localctx = new Gff_assign_binaryContext(Context, State);
-		EnterRule(_localctx, 68, RULE_gff_assign_binary);
+		EnterRule(_localctx, 74, RULE_gff_assign_binary);
 		try {
 			_localctx = new GFFAssignBinaryContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 421;
-			Match(T__9);
-			State = 422;
-			Match(T__31);
-			State = 423;
-			Match(T__11);
-			State = 424;
+			State = 452;
+			Match(T__13);
+			State = 453;
+			Match(T__34);
+			State = 454;
+			Match(T__15);
+			State = 455;
 			gff_locate_field();
-			State = 425;
+			State = 456;
 			Match(T__8);
-			State = 426;
+			State = 457;
 			gff_value_binary();
 			}
 		}
@@ -2886,12 +3126,12 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_value_binaryContext gff_value_binary() {
 		Gff_value_binaryContext _localctx = new Gff_value_binaryContext(Context, State);
-		EnterRule(_localctx, 70, RULE_gff_value_binary);
+		EnterRule(_localctx, 76, RULE_gff_value_binary);
 		try {
 			_localctx = new GFFValueBinaryBase64Context(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 428;
+			State = 459;
 			Match(STRING_LITERAL);
 			}
 		}
@@ -2937,22 +3177,22 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_assign_locstringContext gff_assign_locstring() {
 		Gff_assign_locstringContext _localctx = new Gff_assign_locstringContext(Context, State);
-		EnterRule(_localctx, 72, RULE_gff_assign_locstring);
+		EnterRule(_localctx, 78, RULE_gff_assign_locstring);
 		try {
 			_localctx = new GFFAssignLocalizedStringStringRefContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 430;
-			Match(T__9);
-			State = 431;
-			Match(T__32);
-			State = 432;
-			Match(T__11);
-			State = 433;
+			State = 461;
+			Match(T__13);
+			State = 462;
+			Match(T__35);
+			State = 463;
+			Match(T__15);
+			State = 464;
 			gff_locate_field();
-			State = 434;
-			Match(T__33);
-			State = 435;
+			State = 465;
+			Match(T__36);
+			State = 466;
 			gff_value_int32();
 			}
 		}
@@ -3018,53 +3258,53 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_value_locstringContext gff_value_locstring() {
 		Gff_value_locstringContext _localctx = new Gff_value_locstringContext(Context, State);
-		EnterRule(_localctx, 74, RULE_gff_value_locstring);
+		EnterRule(_localctx, 80, RULE_gff_value_locstring);
 		int _la;
 		try {
-			State = 449;
+			State = 480;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
-			case T__33:
+			case T__36:
 				_localctx = new GFFValueLocalizedStringContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 437;
-				Match(T__33);
-				State = 438;
+				State = 468;
+				Match(T__36);
+				State = 469;
 				Match(INT_LITERAL);
 				}
 				break;
-			case T__34:
+			case T__37:
 				_localctx = new GFFValue_LocalizedString_SubstringsContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 439;
-				Match(T__34);
-				State = 443;
+				State = 470;
+				Match(T__37);
+				State = 474;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				while (_la==TLK_LANGUAGE) {
 					{
 					{
-					State = 440;
+					State = 471;
 					gff_value_locstring_substring();
 					}
 					}
-					State = 445;
+					State = 476;
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
 				}
-				State = 446;
-				Match(T__35);
-				State = 447;
-				Match(T__34);
+				State = 477;
+				Match(T__11);
+				State = 478;
+				Match(T__37);
 				}
 				break;
 			case STRING_LITERAL:
 				_localctx = new GFFValue_LocalizedString_MaleEnglishContext(_localctx);
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 448;
+				State = 479;
 				Match(STRING_LITERAL);
 				}
 				break;
@@ -3122,20 +3362,20 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_value_locstring_substringContext gff_value_locstring_substring() {
 		Gff_value_locstring_substringContext _localctx = new Gff_value_locstring_substringContext(Context, State);
-		EnterRule(_localctx, 76, RULE_gff_value_locstring_substring);
+		EnterRule(_localctx, 82, RULE_gff_value_locstring_substring);
 		try {
-			State = 456;
+			State = 487;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,19,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,22,Context) ) {
 			case 1:
 				_localctx = new GFFValue_LocalizedString_Substring_LanguageGenderContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 451;
+				State = 482;
 				Match(TLK_LANGUAGE);
-				State = 452;
+				State = 483;
 				Match(TLK_GENDER);
-				State = 453;
+				State = 484;
 				Match(STRING_LITERAL);
 				}
 				break;
@@ -3143,9 +3383,9 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new GFFValue_LocalizedString_Substring_LanguageContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 454;
+				State = 485;
 				Match(TLK_LANGUAGE);
-				State = 455;
+				State = 486;
 				Match(STRING_LITERAL);
 				}
 				break;
@@ -3193,22 +3433,22 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_assign_vector3Context gff_assign_vector3() {
 		Gff_assign_vector3Context _localctx = new Gff_assign_vector3Context(Context, State);
-		EnterRule(_localctx, 78, RULE_gff_assign_vector3);
+		EnterRule(_localctx, 84, RULE_gff_assign_vector3);
 		try {
 			_localctx = new GFFAssignVector3Context(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 458;
-			Match(T__9);
-			State = 459;
-			Match(T__36);
-			State = 460;
-			Match(T__11);
-			State = 461;
+			State = 489;
+			Match(T__13);
+			State = 490;
+			Match(T__38);
+			State = 491;
+			Match(T__15);
+			State = 492;
 			gff_locate_field();
-			State = 462;
+			State = 493;
 			Match(T__8);
-			State = 463;
+			State = 494;
 			gff_value_vector3();
 			}
 		}
@@ -3249,12 +3489,12 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_value_vector3Context gff_value_vector3() {
 		Gff_value_vector3Context _localctx = new Gff_value_vector3Context(Context, State);
-		EnterRule(_localctx, 80, RULE_gff_value_vector3);
+		EnterRule(_localctx, 86, RULE_gff_value_vector3);
 		try {
 			_localctx = new GFFValueVector3LiteralContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 465;
+			State = 496;
 			Match(VECTOR3_LITERAL);
 			}
 		}
@@ -3300,22 +3540,22 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_assign_vector4Context gff_assign_vector4() {
 		Gff_assign_vector4Context _localctx = new Gff_assign_vector4Context(Context, State);
-		EnterRule(_localctx, 82, RULE_gff_assign_vector4);
+		EnterRule(_localctx, 88, RULE_gff_assign_vector4);
 		try {
 			_localctx = new GFFAssignVector4Context(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 467;
-			Match(T__9);
-			State = 468;
-			Match(T__37);
-			State = 469;
-			Match(T__11);
-			State = 470;
+			State = 498;
+			Match(T__13);
+			State = 499;
+			Match(T__39);
+			State = 500;
+			Match(T__15);
+			State = 501;
 			gff_locate_field();
-			State = 471;
+			State = 502;
 			Match(T__8);
-			State = 472;
+			State = 503;
 			gff_value_vector4();
 			}
 		}
@@ -3356,12 +3596,12 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Gff_value_vector4Context gff_value_vector4() {
 		Gff_value_vector4Context _localctx = new Gff_value_vector4Context(Context, State);
-		EnterRule(_localctx, 84, RULE_gff_value_vector4);
+		EnterRule(_localctx, 90, RULE_gff_value_vector4);
 		try {
 			_localctx = new GFFValueVector4LiteralContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 474;
+			State = 505;
 			Match(VECTOR4_LITERAL);
 			}
 		}
@@ -3417,42 +3657,42 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Edit_itemContext edit_item() {
 		Edit_itemContext _localctx = new Edit_itemContext(Context, State);
-		EnterRule(_localctx, 86, RULE_edit_item);
+		EnterRule(_localctx, 92, RULE_edit_item);
 		int _la;
 		try {
 			_localctx = new EditItemContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 476;
-			Match(T__38);
-			State = 477;
-			Match(T__39);
-			State = 478;
+			State = 507;
+			Match(T__40);
+			State = 508;
+			Match(T__41);
+			State = 509;
 			Match(STRING_LITERAL);
-			State = 479;
+			State = 510;
 			file_operation();
-			State = 480;
+			State = 511;
 			file_source();
-			State = 481;
+			State = 512;
 			file_target();
-			State = 485;
+			State = 516;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while (_la==T__11 || _la==T__54) {
+			while (_la==T__15 || _la==T__56) {
 				{
 				{
-				State = 482;
+				State = 513;
 				edit_item_mod();
 				}
 				}
-				State = 487;
+				State = 518;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 488;
-			Match(T__35);
-			State = 489;
-			Match(T__38);
+			State = 519;
+			Match(T__11);
+			State = 520;
+			Match(T__40);
 			}
 		}
 		catch (RecognitionException re) {
@@ -3519,92 +3759,92 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Edit_item_modContext edit_item_mod() {
 		Edit_item_modContext _localctx = new Edit_item_modContext(Context, State);
-		EnterRule(_localctx, 88, RULE_edit_item_mod);
+		EnterRule(_localctx, 94, RULE_edit_item_mod);
 		try {
-			State = 503;
+			State = 534;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,21,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,24,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 491;
+				State = 522;
 				uti_set_field_base_item();
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 492;
+				State = 523;
 				uti_set_field_localized_name();
 				}
 				break;
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 493;
+				State = 524;
 				uti_set_field_description();
 				}
 				break;
 			case 4:
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 494;
+				State = 525;
 				uti_set_field_tag();
 				}
 				break;
 			case 5:
 				EnterOuterAlt(_localctx, 5);
 				{
-				State = 495;
+				State = 526;
 				uti_set_field_charges();
 				}
 				break;
 			case 6:
 				EnterOuterAlt(_localctx, 6);
 				{
-				State = 496;
+				State = 527;
 				uti_set_field_max_charges();
 				}
 				break;
 			case 7:
 				EnterOuterAlt(_localctx, 7);
 				{
-				State = 497;
+				State = 528;
 				uti_set_field_cost();
 				}
 				break;
 			case 8:
 				EnterOuterAlt(_localctx, 8);
 				{
-				State = 498;
+				State = 529;
 				uti_set_field_stack_size();
 				}
 				break;
 			case 9:
 				EnterOuterAlt(_localctx, 9);
 				{
-				State = 499;
+				State = 530;
 				uti_set_field_plot();
 				}
 				break;
 			case 10:
 				EnterOuterAlt(_localctx, 10);
 				{
-				State = 500;
+				State = 531;
 				uti_set_field_model_variation();
 				}
 				break;
 			case 11:
 				EnterOuterAlt(_localctx, 11);
 				{
-				State = 501;
+				State = 532;
 				uti_set_field_texture_variation();
 				}
 				break;
 			case 12:
 				EnterOuterAlt(_localctx, 12);
 				{
-				State = 502;
+				State = 533;
 				uti_add_property();
 				}
 				break;
@@ -3659,24 +3899,24 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Uti_set_field_base_itemContext uti_set_field_base_item() {
 		Uti_set_field_base_itemContext _localctx = new Uti_set_field_base_itemContext(Context, State);
-		EnterRule(_localctx, 90, RULE_uti_set_field_base_item);
+		EnterRule(_localctx, 96, RULE_uti_set_field_base_item);
 		try {
-			State = 516;
+			State = 547;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,22,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,25,Context) ) {
 			case 1:
 				_localctx = new UTI_BaseItem_SetField_GFFValueContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 505;
-				Match(T__11);
-				State = 506;
-				Match(T__40);
-				State = 507;
-				Match(T__39);
-				State = 508;
+				State = 536;
+				Match(T__15);
+				State = 537;
+				Match(T__42);
+				State = 538;
+				Match(T__41);
+				State = 539;
 				Match(T__8);
-				State = 509;
+				State = 540;
 				gff_value_int32();
 				}
 				break;
@@ -3684,17 +3924,17 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new UTI_BaseItem_SetField_2DALabelLookupContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 510;
-				Match(T__11);
-				State = 511;
-				Match(T__40);
-				State = 512;
-				Match(T__39);
-				State = 513;
-				Match(T__8);
-				State = 514;
+				State = 541;
+				Match(T__15);
+				State = 542;
+				Match(T__42);
+				State = 543;
 				Match(T__41);
-				State = 515;
+				State = 544;
+				Match(T__8);
+				State = 545;
+				Match(T__43);
+				State = 546;
 				Match(STRING_LITERAL);
 				}
 				break;
@@ -3739,18 +3979,18 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Uti_set_field_localized_nameContext uti_set_field_localized_name() {
 		Uti_set_field_localized_nameContext _localctx = new Uti_set_field_localized_nameContext(Context, State);
-		EnterRule(_localctx, 92, RULE_uti_set_field_localized_name);
+		EnterRule(_localctx, 98, RULE_uti_set_field_localized_name);
 		try {
 			_localctx = new UTI_LocalizedName_SetField_GFFValueContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 518;
-			Match(T__11);
-			State = 519;
-			Match(T__42);
-			State = 520;
+			State = 549;
+			Match(T__15);
+			State = 550;
+			Match(T__44);
+			State = 551;
 			Match(T__8);
-			State = 521;
+			State = 552;
 			gff_value_locstring();
 			}
 		}
@@ -3793,18 +4033,18 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Uti_set_field_descriptionContext uti_set_field_description() {
 		Uti_set_field_descriptionContext _localctx = new Uti_set_field_descriptionContext(Context, State);
-		EnterRule(_localctx, 94, RULE_uti_set_field_description);
+		EnterRule(_localctx, 100, RULE_uti_set_field_description);
 		try {
 			_localctx = new UTI_Description_SetField_GFFValueContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 523;
-			Match(T__11);
-			State = 524;
-			Match(T__43);
-			State = 525;
+			State = 554;
+			Match(T__15);
+			State = 555;
+			Match(T__45);
+			State = 556;
 			Match(T__8);
-			State = 526;
+			State = 557;
 			gff_value_locstring();
 			}
 		}
@@ -3847,18 +4087,18 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Uti_set_field_tagContext uti_set_field_tag() {
 		Uti_set_field_tagContext _localctx = new Uti_set_field_tagContext(Context, State);
-		EnterRule(_localctx, 96, RULE_uti_set_field_tag);
+		EnterRule(_localctx, 102, RULE_uti_set_field_tag);
 		try {
 			_localctx = new UTI_Tag_SetField_GFFValueContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 528;
-			Match(T__11);
-			State = 529;
-			Match(T__44);
-			State = 530;
+			State = 559;
+			Match(T__15);
+			State = 560;
+			Match(T__46);
+			State = 561;
 			Match(T__8);
-			State = 531;
+			State = 562;
 			gff_value_string();
 			}
 		}
@@ -3901,18 +4141,18 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Uti_set_field_chargesContext uti_set_field_charges() {
 		Uti_set_field_chargesContext _localctx = new Uti_set_field_chargesContext(Context, State);
-		EnterRule(_localctx, 98, RULE_uti_set_field_charges);
+		EnterRule(_localctx, 104, RULE_uti_set_field_charges);
 		try {
 			_localctx = new UTI_Charges_SetField_GFFValueContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 533;
-			Match(T__11);
-			State = 534;
-			Match(T__45);
-			State = 535;
+			State = 564;
+			Match(T__15);
+			State = 565;
+			Match(T__47);
+			State = 566;
 			Match(T__8);
-			State = 536;
+			State = 567;
 			gff_value_uint8();
 			}
 		}
@@ -3955,20 +4195,20 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Uti_set_field_max_chargesContext uti_set_field_max_charges() {
 		Uti_set_field_max_chargesContext _localctx = new Uti_set_field_max_chargesContext(Context, State);
-		EnterRule(_localctx, 100, RULE_uti_set_field_max_charges);
+		EnterRule(_localctx, 106, RULE_uti_set_field_max_charges);
 		try {
 			_localctx = new UTI_MaxCharges_SetField_GFFValueContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 538;
-			Match(T__11);
-			State = 539;
-			Match(T__46);
-			State = 540;
-			Match(T__45);
-			State = 541;
+			State = 569;
+			Match(T__15);
+			State = 570;
+			Match(T__48);
+			State = 571;
+			Match(T__47);
+			State = 572;
 			Match(T__8);
-			State = 542;
+			State = 573;
 			gff_value_uint8();
 			}
 		}
@@ -4011,18 +4251,18 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Uti_set_field_costContext uti_set_field_cost() {
 		Uti_set_field_costContext _localctx = new Uti_set_field_costContext(Context, State);
-		EnterRule(_localctx, 102, RULE_uti_set_field_cost);
+		EnterRule(_localctx, 108, RULE_uti_set_field_cost);
 		try {
 			_localctx = new UTI_Cost_SetField_GFFValueContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 544;
-			Match(T__11);
-			State = 545;
-			Match(T__47);
-			State = 546;
+			State = 575;
+			Match(T__15);
+			State = 576;
+			Match(T__49);
+			State = 577;
 			Match(T__8);
-			State = 547;
+			State = 578;
 			gff_value_uint32();
 			}
 		}
@@ -4065,20 +4305,20 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Uti_set_field_stack_sizeContext uti_set_field_stack_size() {
 		Uti_set_field_stack_sizeContext _localctx = new Uti_set_field_stack_sizeContext(Context, State);
-		EnterRule(_localctx, 104, RULE_uti_set_field_stack_size);
+		EnterRule(_localctx, 110, RULE_uti_set_field_stack_size);
 		try {
 			_localctx = new UTI_StackSize_SetField_GFFValueContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 549;
-			Match(T__11);
-			State = 550;
-			Match(T__48);
-			State = 551;
-			Match(T__49);
-			State = 552;
+			State = 580;
+			Match(T__15);
+			State = 581;
+			Match(T__50);
+			State = 582;
+			Match(T__51);
+			State = 583;
 			Match(T__8);
-			State = 553;
+			State = 584;
 			gff_value_uint16();
 			}
 		}
@@ -4131,22 +4371,22 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Uti_set_field_plotContext uti_set_field_plot() {
 		Uti_set_field_plotContext _localctx = new Uti_set_field_plotContext(Context, State);
-		EnterRule(_localctx, 106, RULE_uti_set_field_plot);
+		EnterRule(_localctx, 112, RULE_uti_set_field_plot);
 		try {
-			State = 563;
+			State = 594;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,23,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,26,Context) ) {
 			case 1:
 				_localctx = new UTI_Plot_SetField_GFFValueContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 555;
-				Match(T__11);
-				State = 556;
-				Match(T__50);
-				State = 557;
+				State = 586;
+				Match(T__15);
+				State = 587;
+				Match(T__52);
+				State = 588;
 				Match(T__8);
-				State = 558;
+				State = 589;
 				gff_value_int8();
 				}
 				break;
@@ -4154,13 +4394,13 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new UTI_Plot_SetField_BoolContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 559;
-				Match(T__11);
-				State = 560;
-				Match(T__50);
-				State = 561;
+				State = 590;
+				Match(T__15);
+				State = 591;
+				Match(T__52);
+				State = 592;
 				Match(T__8);
-				State = 562;
+				State = 593;
 				Match(BOOL_LITERAL);
 				}
 				break;
@@ -4205,20 +4445,20 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Uti_set_field_model_variationContext uti_set_field_model_variation() {
 		Uti_set_field_model_variationContext _localctx = new Uti_set_field_model_variationContext(Context, State);
-		EnterRule(_localctx, 108, RULE_uti_set_field_model_variation);
+		EnterRule(_localctx, 114, RULE_uti_set_field_model_variation);
 		try {
 			_localctx = new UTI_ModelVariation_SetField_GFFValueContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 565;
-			Match(T__11);
-			State = 566;
-			Match(T__51);
-			State = 567;
-			Match(T__52);
-			State = 568;
+			State = 596;
+			Match(T__15);
+			State = 597;
+			Match(T__53);
+			State = 598;
+			Match(T__54);
+			State = 599;
 			Match(T__8);
-			State = 569;
+			State = 600;
 			gff_value_uint8();
 			}
 		}
@@ -4261,20 +4501,20 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Uti_set_field_texture_variationContext uti_set_field_texture_variation() {
 		Uti_set_field_texture_variationContext _localctx = new Uti_set_field_texture_variationContext(Context, State);
-		EnterRule(_localctx, 110, RULE_uti_set_field_texture_variation);
+		EnterRule(_localctx, 116, RULE_uti_set_field_texture_variation);
 		try {
 			_localctx = new UTI_TextureVariation_SetField_GFFValueContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 571;
-			Match(T__11);
-			State = 572;
-			Match(T__53);
-			State = 573;
-			Match(T__52);
-			State = 574;
+			State = 602;
+			Match(T__15);
+			State = 603;
+			Match(T__55);
+			State = 604;
+			Match(T__54);
+			State = 605;
 			Match(T__8);
-			State = 575;
+			State = 606;
 			gff_value_uint8();
 			}
 		}
@@ -4320,30 +4560,30 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Uti_add_propertyContext uti_add_property() {
 		Uti_add_propertyContext _localctx = new Uti_add_propertyContext(Context, State);
-		EnterRule(_localctx, 112, RULE_uti_add_property);
+		EnterRule(_localctx, 118, RULE_uti_add_property);
 		int _la;
 		try {
 			_localctx = new UTI_AddPropertiesContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 577;
-			Match(T__54);
-			State = 581;
+			State = 608;
+			Match(T__56);
+			State = 612;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while (_la==T__11) {
+			while (_la==T__15) {
 				{
 				{
-				State = 578;
+				State = 609;
 				uti_property_mod();
 				}
 				}
-				State = 583;
+				State = 614;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 584;
-			Match(T__35);
+			State = 615;
+			Match(T__11);
 			}
 		}
 		catch (RecognitionException re) {
@@ -4398,64 +4638,64 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Uti_property_modContext uti_property_mod() {
 		Uti_property_modContext _localctx = new Uti_property_modContext(Context, State);
-		EnterRule(_localctx, 114, RULE_uti_property_mod);
+		EnterRule(_localctx, 120, RULE_uti_property_mod);
 		try {
-			State = 594;
+			State = 625;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,25,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,28,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 586;
+				State = 617;
 				uti_property_set_field_property_name();
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 587;
+				State = 618;
 				uti_property_set_field_subtype();
 				}
 				break;
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 588;
+				State = 619;
 				uti_property_set_field_chance_appear();
 				}
 				break;
 			case 4:
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 589;
+				State = 620;
 				uti_property_set_field_cost_table();
 				}
 				break;
 			case 5:
 				EnterOuterAlt(_localctx, 5);
 				{
-				State = 590;
+				State = 621;
 				uti_property_set_field_cost_value();
 				}
 				break;
 			case 6:
 				EnterOuterAlt(_localctx, 6);
 				{
-				State = 591;
+				State = 622;
 				uti_property_set_field_param1();
 				}
 				break;
 			case 7:
 				EnterOuterAlt(_localctx, 7);
 				{
-				State = 592;
+				State = 623;
 				uti_property_set_field_param1_value();
 				}
 				break;
 			case 8:
 				EnterOuterAlt(_localctx, 8);
 				{
-				State = 593;
+				State = 624;
 				uti_property_set_field_upgrade_type();
 				}
 				break;
@@ -4500,20 +4740,20 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Uti_property_set_field_property_nameContext uti_property_set_field_property_name() {
 		Uti_property_set_field_property_nameContext _localctx = new Uti_property_set_field_property_nameContext(Context, State);
-		EnterRule(_localctx, 116, RULE_uti_property_set_field_property_name);
+		EnterRule(_localctx, 122, RULE_uti_property_set_field_property_name);
 		try {
 			_localctx = new UTI_Property_PropertyName_SetField_GFFValueContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 596;
-			Match(T__11);
-			State = 597;
-			Match(T__55);
-			State = 598;
-			Match(T__42);
-			State = 599;
+			State = 627;
+			Match(T__15);
+			State = 628;
+			Match(T__57);
+			State = 629;
+			Match(T__44);
+			State = 630;
 			Match(T__8);
-			State = 600;
+			State = 631;
 			gff_value_uint16();
 			}
 		}
@@ -4556,18 +4796,18 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Uti_property_set_field_subtypeContext uti_property_set_field_subtype() {
 		Uti_property_set_field_subtypeContext _localctx = new Uti_property_set_field_subtypeContext(Context, State);
-		EnterRule(_localctx, 118, RULE_uti_property_set_field_subtype);
+		EnterRule(_localctx, 124, RULE_uti_property_set_field_subtype);
 		try {
 			_localctx = new UTI_Property_SubType_SetField_GFFValueContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 602;
-			Match(T__11);
-			State = 603;
-			Match(T__56);
-			State = 604;
+			State = 633;
+			Match(T__15);
+			State = 634;
+			Match(T__58);
+			State = 635;
 			Match(T__8);
-			State = 605;
+			State = 636;
 			gff_value_uint16();
 			}
 		}
@@ -4610,20 +4850,20 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Uti_property_set_field_chance_appearContext uti_property_set_field_chance_appear() {
 		Uti_property_set_field_chance_appearContext _localctx = new Uti_property_set_field_chance_appearContext(Context, State);
-		EnterRule(_localctx, 120, RULE_uti_property_set_field_chance_appear);
+		EnterRule(_localctx, 126, RULE_uti_property_set_field_chance_appear);
 		try {
 			_localctx = new UTI_Property_ChanceAppear_SetField_GFFValueContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 607;
-			Match(T__11);
-			State = 608;
-			Match(T__57);
-			State = 609;
-			Match(T__58);
-			State = 610;
+			State = 638;
+			Match(T__15);
+			State = 639;
+			Match(T__59);
+			State = 640;
+			Match(T__60);
+			State = 641;
 			Match(T__8);
-			State = 611;
+			State = 642;
 			gff_value_uint8();
 			}
 		}
@@ -4666,20 +4906,20 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Uti_property_set_field_cost_tableContext uti_property_set_field_cost_table() {
 		Uti_property_set_field_cost_tableContext _localctx = new Uti_property_set_field_cost_tableContext(Context, State);
-		EnterRule(_localctx, 122, RULE_uti_property_set_field_cost_table);
+		EnterRule(_localctx, 128, RULE_uti_property_set_field_cost_table);
 		try {
 			_localctx = new UTI_Property_CostTable_SetField_GFFValueContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 613;
-			Match(T__11);
-			State = 614;
-			Match(T__47);
-			State = 615;
-			Match(T__59);
-			State = 616;
+			State = 644;
+			Match(T__15);
+			State = 645;
+			Match(T__49);
+			State = 646;
+			Match(T__61);
+			State = 647;
 			Match(T__8);
-			State = 617;
+			State = 648;
 			gff_value_uint8();
 			}
 		}
@@ -4722,20 +4962,20 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Uti_property_set_field_cost_valueContext uti_property_set_field_cost_value() {
 		Uti_property_set_field_cost_valueContext _localctx = new Uti_property_set_field_cost_valueContext(Context, State);
-		EnterRule(_localctx, 124, RULE_uti_property_set_field_cost_value);
+		EnterRule(_localctx, 130, RULE_uti_property_set_field_cost_value);
 		try {
 			_localctx = new UTI_Property_CostValue_SetField_GFFValueContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 619;
-			Match(T__11);
-			State = 620;
-			Match(T__47);
-			State = 621;
-			Match(T__60);
-			State = 622;
+			State = 650;
+			Match(T__15);
+			State = 651;
+			Match(T__49);
+			State = 652;
+			Match(T__62);
+			State = 653;
 			Match(T__8);
-			State = 623;
+			State = 654;
 			gff_value_uint16();
 			}
 		}
@@ -4778,18 +5018,18 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Uti_property_set_field_param1Context uti_property_set_field_param1() {
 		Uti_property_set_field_param1Context _localctx = new Uti_property_set_field_param1Context(Context, State);
-		EnterRule(_localctx, 126, RULE_uti_property_set_field_param1);
+		EnterRule(_localctx, 132, RULE_uti_property_set_field_param1);
 		try {
 			_localctx = new UTI_Property_Param1_SetField_GFFValueContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 625;
-			Match(T__11);
-			State = 626;
-			Match(T__61);
-			State = 627;
+			State = 656;
+			Match(T__15);
+			State = 657;
+			Match(T__63);
+			State = 658;
 			Match(T__8);
-			State = 628;
+			State = 659;
 			gff_value_uint8();
 			}
 		}
@@ -4832,20 +5072,20 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Uti_property_set_field_param1_valueContext uti_property_set_field_param1_value() {
 		Uti_property_set_field_param1_valueContext _localctx = new Uti_property_set_field_param1_valueContext(Context, State);
-		EnterRule(_localctx, 128, RULE_uti_property_set_field_param1_value);
+		EnterRule(_localctx, 134, RULE_uti_property_set_field_param1_value);
 		try {
 			_localctx = new UTI_Property_Param1Value_SetField_GFFValueContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 630;
-			Match(T__11);
-			State = 631;
-			Match(T__61);
-			State = 632;
-			Match(T__60);
-			State = 633;
+			State = 661;
+			Match(T__15);
+			State = 662;
+			Match(T__63);
+			State = 663;
+			Match(T__62);
+			State = 664;
 			Match(T__8);
-			State = 634;
+			State = 665;
 			gff_value_uint8();
 			}
 		}
@@ -4888,20 +5128,20 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Uti_property_set_field_upgrade_typeContext uti_property_set_field_upgrade_type() {
 		Uti_property_set_field_upgrade_typeContext _localctx = new Uti_property_set_field_upgrade_typeContext(Context, State);
-		EnterRule(_localctx, 130, RULE_uti_property_set_field_upgrade_type);
+		EnterRule(_localctx, 136, RULE_uti_property_set_field_upgrade_type);
 		try {
 			_localctx = new UTI_Property_UpgradeType_SetField_GFFValueContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 636;
-			Match(T__11);
-			State = 637;
-			Match(T__62);
-			State = 638;
-			Match(T__63);
-			State = 639;
+			State = 667;
+			Match(T__15);
+			State = 668;
+			Match(T__64);
+			State = 669;
+			Match(T__65);
+			State = 670;
 			Match(T__8);
-			State = 640;
+			State = 671;
 			gff_value_uint8();
 			}
 		}
@@ -4947,34 +5187,34 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Edit_appearanceContext edit_appearance() {
 		Edit_appearanceContext _localctx = new Edit_appearanceContext(Context, State);
-		EnterRule(_localctx, 132, RULE_edit_appearance);
+		EnterRule(_localctx, 138, RULE_edit_appearance);
 		int _la;
 		try {
 			_localctx = new EditAppearanceContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 642;
-			Match(T__38);
-			State = 643;
-			Match(T__64);
-			State = 647;
+			State = 673;
+			Match(T__40);
+			State = 674;
+			Match(T__66);
+			State = 678;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 140288L) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 148480L) != 0)) {
 				{
 				{
-				State = 644;
+				State = 675;
 				edit_appearance_mod();
 				}
 				}
-				State = 649;
+				State = 680;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 650;
-			Match(T__35);
-			State = 651;
-			Match(T__38);
+			State = 681;
+			Match(T__11);
+			State = 682;
+			Match(T__40);
 			}
 		}
 		catch (RecognitionException re) {
@@ -5014,29 +5254,29 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Edit_appearance_modContext edit_appearance_mod() {
 		Edit_appearance_modContext _localctx = new Edit_appearance_modContext(Context, State);
-		EnterRule(_localctx, 134, RULE_edit_appearance_mod);
+		EnterRule(_localctx, 140, RULE_edit_appearance_mod);
 		try {
-			State = 656;
+			State = 687;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
-			case T__12:
+			case T__16:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 653;
+				State = 684;
 				twoda_target_row();
 				}
 				break;
-			case T__16:
+			case T__9:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 654;
+				State = 685;
 				twoda_copy_row();
 				}
 				break;
-			case T__9:
+			case T__13:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 655;
+				State = 686;
 				twoda_assign_cell();
 				}
 				break;
@@ -5087,36 +5327,36 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Edit_creatureContext edit_creature() {
 		Edit_creatureContext _localctx = new Edit_creatureContext(Context, State);
-		EnterRule(_localctx, 136, RULE_edit_creature);
+		EnterRule(_localctx, 142, RULE_edit_creature);
 		int _la;
 		try {
 			_localctx = new EditCreatureContext(_localctx);
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 658;
-			Match(T__38);
-			State = 659;
-			Match(T__65);
-			State = 660;
+			State = 689;
+			Match(T__40);
+			State = 690;
+			Match(T__67);
+			State = 691;
 			Match(STRING_LITERAL);
-			State = 664;
+			State = 695;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 136192L) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 82944L) != 0)) {
 				{
 				{
-				State = 661;
+				State = 692;
 				edit_creature_mod();
 				}
 				}
-				State = 666;
+				State = 697;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 667;
-			Match(T__35);
-			State = 668;
-			Match(T__38);
+			State = 698;
+			Match(T__11);
+			State = 699;
+			Match(T__40);
 			}
 		}
 		catch (RecognitionException re) {
@@ -5165,50 +5405,50 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Edit_creature_modContext edit_creature_mod() {
 		Edit_creature_modContext _localctx = new Edit_creature_modContext(Context, State);
-		EnterRule(_localctx, 138, RULE_edit_creature_mod);
+		EnterRule(_localctx, 144, RULE_edit_creature_mod);
 		try {
-			State = 676;
+			State = 707;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,29,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,32,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 670;
+				State = 701;
 				gff_copy_template();
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 671;
+				State = 702;
 				gff_assign_uint8();
 				}
 				break;
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 672;
+				State = 703;
 				gff_assign_uint16();
 				}
 				break;
 			case 4:
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 673;
+				State = 704;
 				edit_creature_field_appearance();
 				}
 				break;
 			case 5:
 				EnterOuterAlt(_localctx, 5);
 				{
-				State = 674;
+				State = 705;
 				edit_creature_field_portrait();
 				}
 				break;
 			case 6:
 				EnterOuterAlt(_localctx, 6);
 				{
-				State = 675;
+				State = 706;
 				edit_creature_field_gender();
 				}
 				break;
@@ -5263,20 +5503,20 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Edit_creature_field_appearanceContext edit_creature_field_appearance() {
 		Edit_creature_field_appearanceContext _localctx = new Edit_creature_field_appearanceContext(Context, State);
-		EnterRule(_localctx, 140, RULE_edit_creature_field_appearance);
+		EnterRule(_localctx, 146, RULE_edit_creature_field_appearance);
 		try {
-			State = 686;
+			State = 717;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,30,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,33,Context) ) {
 			case 1:
 				_localctx = new EditCreatureAppearanceContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 678;
-				Match(T__11);
-				State = 679;
-				Match(T__64);
-				State = 680;
+				State = 709;
+				Match(T__15);
+				State = 710;
+				Match(T__66);
+				State = 711;
 				gff_value_uint16();
 				}
 				break;
@@ -5284,15 +5524,15 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new EditCreatureAppearanceFromLabelContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 681;
-				Match(T__11);
-				State = 682;
-				Match(T__64);
-				State = 683;
+				State = 712;
+				Match(T__15);
+				State = 713;
+				Match(T__66);
+				State = 714;
 				Match(T__4);
-				State = 684;
-				Match(T__41);
-				State = 685;
+				State = 715;
+				Match(T__43);
+				State = 716;
 				Match(STRING_LITERAL);
 				}
 				break;
@@ -5347,20 +5587,20 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Edit_creature_field_portraitContext edit_creature_field_portrait() {
 		Edit_creature_field_portraitContext _localctx = new Edit_creature_field_portraitContext(Context, State);
-		EnterRule(_localctx, 142, RULE_edit_creature_field_portrait);
+		EnterRule(_localctx, 148, RULE_edit_creature_field_portrait);
 		try {
-			State = 696;
+			State = 727;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,31,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,34,Context) ) {
 			case 1:
 				_localctx = new EditCreaturePortraitContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 688;
-				Match(T__11);
-				State = 689;
-				Match(T__64);
-				State = 690;
+				State = 719;
+				Match(T__15);
+				State = 720;
+				Match(T__66);
+				State = 721;
 				gff_value_uint16();
 				}
 				break;
@@ -5368,15 +5608,15 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new EditCreaturePortraitFromLabelContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 691;
-				Match(T__11);
-				State = 692;
-				Match(T__64);
-				State = 693;
+				State = 722;
+				Match(T__15);
+				State = 723;
+				Match(T__66);
+				State = 724;
 				Match(T__4);
-				State = 694;
-				Match(T__41);
-				State = 695;
+				State = 725;
+				Match(T__43);
+				State = 726;
 				Match(STRING_LITERAL);
 				}
 				break;
@@ -5431,21 +5671,21 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Edit_creature_field_genderContext edit_creature_field_gender() {
 		Edit_creature_field_genderContext _localctx = new Edit_creature_field_genderContext(Context, State);
-		EnterRule(_localctx, 144, RULE_edit_creature_field_gender);
+		EnterRule(_localctx, 150, RULE_edit_creature_field_gender);
 		int _la;
 		try {
-			State = 704;
+			State = 735;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,32,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,35,Context) ) {
 			case 1:
 				_localctx = new EditCreatureGenderContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 698;
-				Match(T__11);
-				State = 699;
-				Match(T__64);
-				State = 700;
+				State = 729;
+				Match(T__15);
+				State = 730;
+				Match(T__66);
+				State = 731;
 				gff_value_uint8();
 				}
 				break;
@@ -5453,13 +5693,13 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new EditCreatureGenderFromKeywordContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 701;
-				Match(T__11);
-				State = 702;
-				Match(T__64);
-				State = 703;
+				State = 732;
+				Match(T__15);
+				State = 733;
+				Match(T__66);
+				State = 734;
 				_la = TokenStream.LA(1);
-				if ( !(((((_la - 67)) & ~0x3f) == 0 && ((1L << (_la - 67)) & 32775L) != 0)) ) {
+				if ( !(((((_la - 69)) & ~0x3f) == 0 && ((1L << (_la - 69)) & 32775L) != 0)) ) {
 				ErrorHandler.RecoverInline(this);
 				}
 				else {
@@ -5518,21 +5758,21 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Edit_creature_field_raceContext edit_creature_field_race() {
 		Edit_creature_field_raceContext _localctx = new Edit_creature_field_raceContext(Context, State);
-		EnterRule(_localctx, 146, RULE_edit_creature_field_race);
+		EnterRule(_localctx, 152, RULE_edit_creature_field_race);
 		int _la;
 		try {
-			State = 712;
+			State = 743;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,33,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,36,Context) ) {
 			case 1:
 				_localctx = new EditCreatureRaceContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 706;
-				Match(T__11);
-				State = 707;
-				Match(T__69);
-				State = 708;
+				State = 737;
+				Match(T__15);
+				State = 738;
+				Match(T__71);
+				State = 739;
 				gff_value_uint8();
 				}
 				break;
@@ -5540,13 +5780,13 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new EditCreatureRaceFromKeywordContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 709;
-				Match(T__11);
-				State = 710;
-				Match(T__69);
-				State = 711;
+				State = 740;
+				Match(T__15);
+				State = 741;
+				Match(T__71);
+				State = 742;
 				_la = TokenStream.LA(1);
-				if ( !(_la==T__70 || _la==T__71) ) {
+				if ( !(_la==T__72 || _la==T__73) ) {
 				ErrorHandler.RecoverInline(this);
 				}
 				else {
@@ -5605,21 +5845,21 @@ public partial class KotorPatchingLanguageParser : Parser {
 	[RuleVersion(0)]
 	public Edit_creature_field_subraceContext edit_creature_field_subrace() {
 		Edit_creature_field_subraceContext _localctx = new Edit_creature_field_subraceContext(Context, State);
-		EnterRule(_localctx, 148, RULE_edit_creature_field_subrace);
+		EnterRule(_localctx, 154, RULE_edit_creature_field_subrace);
 		int _la;
 		try {
-			State = 720;
+			State = 751;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,34,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,37,Context) ) {
 			case 1:
 				_localctx = new EditCreatureSubraceContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 714;
-				Match(T__11);
-				State = 715;
-				Match(T__69);
-				State = 716;
+				State = 745;
+				Match(T__15);
+				State = 746;
+				Match(T__71);
+				State = 747;
 				gff_value_uint8();
 				}
 				break;
@@ -5627,13 +5867,13 @@ public partial class KotorPatchingLanguageParser : Parser {
 				_localctx = new EditCreatureSubraceFromKeywordContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 717;
-				Match(T__11);
-				State = 718;
-				Match(T__69);
-				State = 719;
+				State = 748;
+				Match(T__15);
+				State = 749;
+				Match(T__71);
+				State = 750;
 				_la = TokenStream.LA(1);
-				if ( !(((((_la - 69)) & ~0x3f) == 0 && ((1L << (_la - 69)) & 49L) != 0)) ) {
+				if ( !(((((_la - 71)) & ~0x3f) == 0 && ((1L << (_la - 71)) & 49L) != 0)) ) {
 				ErrorHandler.RecoverInline(this);
 				}
 				else {
@@ -5656,7 +5896,7 @@ public partial class KotorPatchingLanguageParser : Parser {
 	}
 
 	private static int[] _serializedATN = {
-		4,1,85,723,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
+		4,1,87,754,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
 		7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,14,
 		2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,2,19,7,19,2,20,7,20,2,21,7,21,
 		2,22,7,22,2,23,7,23,2,24,7,24,2,25,7,25,2,26,7,26,2,27,7,27,2,28,7,28,
@@ -5666,223 +5906,233 @@ public partial class KotorPatchingLanguageParser : Parser {
 		2,50,7,50,2,51,7,51,2,52,7,52,2,53,7,53,2,54,7,54,2,55,7,55,2,56,7,56,
 		2,57,7,57,2,58,7,58,2,59,7,59,2,60,7,60,2,61,7,61,2,62,7,62,2,63,7,63,
 		2,64,7,64,2,65,7,65,2,66,7,66,2,67,7,67,2,68,7,68,2,69,7,69,2,70,7,70,
-		2,71,7,71,2,72,7,72,2,73,7,73,2,74,7,74,1,0,5,0,152,8,0,10,0,12,0,155,
-		9,0,1,0,1,0,1,1,1,1,1,1,3,1,162,8,1,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,3,
-		2,172,8,2,1,3,1,3,1,3,1,3,1,3,1,3,1,3,3,3,181,8,3,1,4,1,4,1,4,1,4,1,4,
-		3,4,188,8,4,1,5,1,5,1,5,1,5,1,5,1,5,1,5,1,6,1,6,1,6,1,6,1,6,1,6,1,6,1,
-		7,1,7,1,7,1,7,1,7,1,7,1,7,1,8,1,8,1,8,1,8,1,8,1,9,1,9,1,10,1,10,1,10,1,
-		10,1,10,1,10,1,10,1,11,1,11,1,11,1,11,1,11,1,11,1,11,1,11,3,11,233,8,11,
-		1,12,1,12,1,12,1,12,1,12,1,12,1,12,1,13,1,13,1,13,1,13,1,13,1,13,1,13,
-		1,13,3,13,250,8,13,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,15,1,15,1,15,1,
-		15,1,15,1,15,1,15,1,15,3,15,267,8,15,1,16,1,16,1,16,1,16,1,16,1,16,1,16,
-		1,17,1,17,1,17,1,17,1,17,1,17,1,17,1,17,3,17,284,8,17,1,18,1,18,1,18,1,
-		18,1,18,1,18,1,18,1,19,1,19,1,19,1,19,1,19,1,19,1,19,1,19,3,19,301,8,19,
-		1,20,1,20,1,20,1,20,1,20,1,20,1,20,1,21,1,21,1,21,1,21,1,21,1,21,1,21,
-		1,21,3,21,318,8,21,1,22,1,22,1,22,1,22,1,22,1,22,1,22,1,23,1,23,1,23,1,
-		23,1,23,1,23,1,23,1,23,3,23,335,8,23,1,24,1,24,1,24,1,24,1,24,1,24,1,24,
-		1,25,1,25,1,25,1,25,1,25,1,25,1,25,1,25,3,25,352,8,25,1,26,1,26,1,26,1,
-		26,1,26,1,26,1,26,1,27,1,27,1,27,1,27,1,27,1,27,1,27,1,27,3,27,369,8,27,
-		1,28,1,28,1,28,1,28,1,28,1,28,1,28,1,29,1,29,1,29,1,29,1,29,1,29,1,29,
-		1,29,3,29,386,8,29,1,30,1,30,1,30,1,30,1,30,1,30,1,30,1,31,1,31,1,31,1,
-		31,1,31,1,31,1,31,1,31,3,31,403,8,31,1,32,1,32,1,32,1,32,1,32,1,32,1,32,
-		1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,3,33,420,8,33,1,34,1,34,1,34,1,
-		34,1,34,1,34,1,34,1,35,1,35,1,36,1,36,1,36,1,36,1,36,1,36,1,36,1,37,1,
-		37,1,37,1,37,5,37,442,8,37,10,37,12,37,445,9,37,1,37,1,37,1,37,3,37,450,
-		8,37,1,38,1,38,1,38,1,38,1,38,3,38,457,8,38,1,39,1,39,1,39,1,39,1,39,1,
-		39,1,39,1,40,1,40,1,41,1,41,1,41,1,41,1,41,1,41,1,41,1,42,1,42,1,43,1,
-		43,1,43,1,43,1,43,1,43,1,43,5,43,484,8,43,10,43,12,43,487,9,43,1,43,1,
-		43,1,43,1,44,1,44,1,44,1,44,1,44,1,44,1,44,1,44,1,44,1,44,1,44,1,44,3,
-		44,504,8,44,1,45,1,45,1,45,1,45,1,45,1,45,1,45,1,45,1,45,1,45,1,45,3,45,
-		517,8,45,1,46,1,46,1,46,1,46,1,46,1,47,1,47,1,47,1,47,1,47,1,48,1,48,1,
-		48,1,48,1,48,1,49,1,49,1,49,1,49,1,49,1,50,1,50,1,50,1,50,1,50,1,50,1,
-		51,1,51,1,51,1,51,1,51,1,52,1,52,1,52,1,52,1,52,1,52,1,53,1,53,1,53,1,
-		53,1,53,1,53,1,53,1,53,3,53,564,8,53,1,54,1,54,1,54,1,54,1,54,1,54,1,55,
-		1,55,1,55,1,55,1,55,1,55,1,56,1,56,5,56,580,8,56,10,56,12,56,583,9,56,
-		1,56,1,56,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,3,57,595,8,57,1,58,1,
-		58,1,58,1,58,1,58,1,58,1,59,1,59,1,59,1,59,1,59,1,60,1,60,1,60,1,60,1,
-		60,1,60,1,61,1,61,1,61,1,61,1,61,1,61,1,62,1,62,1,62,1,62,1,62,1,62,1,
-		63,1,63,1,63,1,63,1,63,1,64,1,64,1,64,1,64,1,64,1,64,1,65,1,65,1,65,1,
-		65,1,65,1,65,1,66,1,66,1,66,5,66,646,8,66,10,66,12,66,649,9,66,1,66,1,
-		66,1,66,1,67,1,67,1,67,3,67,657,8,67,1,68,1,68,1,68,1,68,5,68,663,8,68,
-		10,68,12,68,666,9,68,1,68,1,68,1,68,1,69,1,69,1,69,1,69,1,69,1,69,3,69,
-		677,8,69,1,70,1,70,1,70,1,70,1,70,1,70,1,70,1,70,3,70,687,8,70,1,71,1,
-		71,1,71,1,71,1,71,1,71,1,71,1,71,3,71,697,8,71,1,72,1,72,1,72,1,72,1,72,
-		1,72,3,72,705,8,72,1,73,1,73,1,73,1,73,1,73,1,73,3,73,713,8,73,1,74,1,
-		74,1,74,1,74,1,74,1,74,3,74,721,8,74,1,74,0,0,75,0,2,4,6,8,10,12,14,16,
-		18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,
-		66,68,70,72,74,76,78,80,82,84,86,88,90,92,94,96,98,100,102,104,106,108,
-		110,112,114,116,118,120,122,124,126,128,130,132,134,136,138,140,142,144,
-		146,148,0,3,2,0,67,69,82,82,1,0,71,72,2,0,69,69,73,74,720,0,153,1,0,0,
-		0,2,161,1,0,0,0,4,171,1,0,0,0,6,180,1,0,0,0,8,187,1,0,0,0,10,189,1,0,0,
-		0,12,196,1,0,0,0,14,203,1,0,0,0,16,210,1,0,0,0,18,215,1,0,0,0,20,217,1,
-		0,0,0,22,232,1,0,0,0,24,234,1,0,0,0,26,249,1,0,0,0,28,251,1,0,0,0,30,266,
-		1,0,0,0,32,268,1,0,0,0,34,283,1,0,0,0,36,285,1,0,0,0,38,300,1,0,0,0,40,
-		302,1,0,0,0,42,317,1,0,0,0,44,319,1,0,0,0,46,334,1,0,0,0,48,336,1,0,0,
-		0,50,351,1,0,0,0,52,353,1,0,0,0,54,368,1,0,0,0,56,370,1,0,0,0,58,385,1,
-		0,0,0,60,387,1,0,0,0,62,402,1,0,0,0,64,404,1,0,0,0,66,419,1,0,0,0,68,421,
-		1,0,0,0,70,428,1,0,0,0,72,430,1,0,0,0,74,449,1,0,0,0,76,456,1,0,0,0,78,
-		458,1,0,0,0,80,465,1,0,0,0,82,467,1,0,0,0,84,474,1,0,0,0,86,476,1,0,0,
-		0,88,503,1,0,0,0,90,516,1,0,0,0,92,518,1,0,0,0,94,523,1,0,0,0,96,528,1,
-		0,0,0,98,533,1,0,0,0,100,538,1,0,0,0,102,544,1,0,0,0,104,549,1,0,0,0,106,
-		563,1,0,0,0,108,565,1,0,0,0,110,571,1,0,0,0,112,577,1,0,0,0,114,594,1,
-		0,0,0,116,596,1,0,0,0,118,602,1,0,0,0,120,607,1,0,0,0,122,613,1,0,0,0,
-		124,619,1,0,0,0,126,625,1,0,0,0,128,630,1,0,0,0,130,636,1,0,0,0,132,642,
-		1,0,0,0,134,656,1,0,0,0,136,658,1,0,0,0,138,676,1,0,0,0,140,686,1,0,0,
-		0,142,696,1,0,0,0,144,704,1,0,0,0,146,712,1,0,0,0,148,720,1,0,0,0,150,
-		152,3,2,1,0,151,150,1,0,0,0,152,155,1,0,0,0,153,151,1,0,0,0,153,154,1,
-		0,0,0,154,156,1,0,0,0,155,153,1,0,0,0,156,157,5,0,0,1,157,1,1,0,0,0,158,
-		162,3,132,66,0,159,162,3,136,68,0,160,162,3,86,43,0,161,158,1,0,0,0,161,
-		159,1,0,0,0,161,160,1,0,0,0,162,3,1,0,0,0,163,172,5,1,0,0,164,172,5,2,
-		0,0,165,166,5,1,0,0,166,167,5,3,0,0,167,172,5,4,0,0,168,169,5,1,0,0,169,
-		170,5,3,0,0,170,172,5,2,0,0,171,163,1,0,0,0,171,164,1,0,0,0,171,165,1,
-		0,0,0,171,168,1,0,0,0,172,5,1,0,0,0,173,174,5,5,0,0,174,181,5,6,0,0,175,
-		176,5,5,0,0,176,177,5,7,0,0,177,181,5,78,0,0,178,179,5,5,0,0,179,181,5,
-		8,0,0,180,173,1,0,0,0,180,175,1,0,0,0,180,178,1,0,0,0,181,7,1,0,0,0,182,
-		183,5,9,0,0,183,184,5,7,0,0,184,188,5,78,0,0,185,186,5,9,0,0,186,188,5,
-		8,0,0,187,182,1,0,0,0,187,185,1,0,0,0,188,9,1,0,0,0,189,190,5,10,0,0,190,
-		191,5,11,0,0,191,192,5,12,0,0,192,193,5,78,0,0,193,194,5,9,0,0,194,195,
-		5,78,0,0,195,11,1,0,0,0,196,197,5,13,0,0,197,198,5,14,0,0,198,199,5,15,
-		0,0,199,200,5,78,0,0,200,201,5,16,0,0,201,202,5,78,0,0,202,13,1,0,0,0,
-		203,204,5,17,0,0,204,205,5,14,0,0,205,206,5,15,0,0,206,207,5,78,0,0,207,
-		208,5,16,0,0,208,209,5,78,0,0,209,15,1,0,0,0,210,211,5,17,0,0,211,212,
-		5,5,0,0,212,213,5,18,0,0,213,214,5,78,0,0,214,17,1,0,0,0,215,216,5,78,
-		0,0,216,19,1,0,0,0,217,218,5,10,0,0,218,219,5,19,0,0,219,220,5,12,0,0,
-		220,221,3,18,9,0,221,222,5,9,0,0,222,223,3,22,11,0,223,21,1,0,0,0,224,
-		233,5,79,0,0,225,233,5,75,0,0,226,227,5,20,0,0,227,228,5,78,0,0,228,229,
-		5,15,0,0,229,230,5,78,0,0,230,231,5,16,0,0,231,233,5,78,0,0,232,224,1,
-		0,0,0,232,225,1,0,0,0,232,226,1,0,0,0,233,23,1,0,0,0,234,235,5,10,0,0,
-		235,236,5,21,0,0,236,237,5,12,0,0,237,238,3,18,9,0,238,239,5,9,0,0,239,
-		240,3,26,13,0,240,25,1,0,0,0,241,250,5,79,0,0,242,250,5,75,0,0,243,244,
-		5,20,0,0,244,245,5,78,0,0,245,246,5,15,0,0,246,247,5,78,0,0,247,248,5,
-		16,0,0,248,250,5,78,0,0,249,241,1,0,0,0,249,242,1,0,0,0,249,243,1,0,0,
-		0,250,27,1,0,0,0,251,252,5,10,0,0,252,253,5,22,0,0,253,254,5,12,0,0,254,
-		255,3,18,9,0,255,256,5,9,0,0,256,257,3,30,15,0,257,29,1,0,0,0,258,267,
-		5,79,0,0,259,267,5,75,0,0,260,261,5,20,0,0,261,262,5,78,0,0,262,263,5,
-		15,0,0,263,264,5,78,0,0,264,265,5,16,0,0,265,267,5,78,0,0,266,258,1,0,
-		0,0,266,259,1,0,0,0,266,260,1,0,0,0,267,31,1,0,0,0,268,269,5,10,0,0,269,
-		270,5,23,0,0,270,271,5,12,0,0,271,272,3,18,9,0,272,273,5,9,0,0,273,274,
-		3,34,17,0,274,33,1,0,0,0,275,284,5,79,0,0,276,284,5,75,0,0,277,278,5,20,
-		0,0,278,279,5,78,0,0,279,280,5,15,0,0,280,281,5,78,0,0,281,282,5,16,0,
-		0,282,284,5,78,0,0,283,275,1,0,0,0,283,276,1,0,0,0,283,277,1,0,0,0,284,
-		35,1,0,0,0,285,286,5,10,0,0,286,287,5,24,0,0,287,288,5,12,0,0,288,289,
-		3,18,9,0,289,290,5,9,0,0,290,291,3,38,19,0,291,37,1,0,0,0,292,301,5,79,
-		0,0,293,301,5,75,0,0,294,295,5,20,0,0,295,296,5,78,0,0,296,297,5,15,0,
-		0,297,298,5,78,0,0,298,299,5,16,0,0,299,301,5,78,0,0,300,292,1,0,0,0,300,
-		293,1,0,0,0,300,294,1,0,0,0,301,39,1,0,0,0,302,303,5,10,0,0,303,304,5,
-		25,0,0,304,305,5,12,0,0,305,306,3,18,9,0,306,307,5,9,0,0,307,308,3,42,
-		21,0,308,41,1,0,0,0,309,318,5,79,0,0,310,318,5,75,0,0,311,312,5,20,0,0,
-		312,313,5,78,0,0,313,314,5,15,0,0,314,315,5,78,0,0,315,316,5,16,0,0,316,
-		318,5,78,0,0,317,309,1,0,0,0,317,310,1,0,0,0,317,311,1,0,0,0,318,43,1,
-		0,0,0,319,320,5,10,0,0,320,321,5,26,0,0,321,322,5,12,0,0,322,323,3,18,
-		9,0,323,324,5,9,0,0,324,325,3,46,23,0,325,45,1,0,0,0,326,335,5,79,0,0,
-		327,335,5,75,0,0,328,329,5,20,0,0,329,330,5,78,0,0,330,331,5,15,0,0,331,
-		332,5,78,0,0,332,333,5,16,0,0,333,335,5,78,0,0,334,326,1,0,0,0,334,327,
-		1,0,0,0,334,328,1,0,0,0,335,47,1,0,0,0,336,337,5,10,0,0,337,338,5,27,0,
-		0,338,339,5,12,0,0,339,340,3,18,9,0,340,341,5,9,0,0,341,342,3,50,25,0,
-		342,49,1,0,0,0,343,352,5,79,0,0,344,352,5,75,0,0,345,346,5,20,0,0,346,
-		347,5,78,0,0,347,348,5,15,0,0,348,349,5,78,0,0,349,350,5,16,0,0,350,352,
-		5,78,0,0,351,343,1,0,0,0,351,344,1,0,0,0,351,345,1,0,0,0,352,51,1,0,0,
-		0,353,354,5,10,0,0,354,355,5,28,0,0,355,356,5,12,0,0,356,357,3,18,9,0,
-		357,358,5,9,0,0,358,359,3,54,27,0,359,53,1,0,0,0,360,369,5,80,0,0,361,
-		369,5,75,0,0,362,363,5,20,0,0,363,364,5,78,0,0,364,365,5,15,0,0,365,366,
-		5,78,0,0,366,367,5,16,0,0,367,369,5,78,0,0,368,360,1,0,0,0,368,361,1,0,
-		0,0,368,362,1,0,0,0,369,55,1,0,0,0,370,371,5,10,0,0,371,372,5,29,0,0,372,
-		373,5,12,0,0,373,374,3,18,9,0,374,375,5,9,0,0,375,376,3,58,29,0,376,57,
-		1,0,0,0,377,386,5,80,0,0,378,386,5,75,0,0,379,380,5,20,0,0,380,381,5,78,
-		0,0,381,382,5,15,0,0,382,383,5,78,0,0,383,384,5,16,0,0,384,386,5,78,0,
-		0,385,377,1,0,0,0,385,378,1,0,0,0,385,379,1,0,0,0,386,59,1,0,0,0,387,388,
-		5,10,0,0,388,389,5,30,0,0,389,390,5,12,0,0,390,391,3,18,9,0,391,392,5,
-		9,0,0,392,393,3,62,31,0,393,61,1,0,0,0,394,403,5,78,0,0,395,403,5,75,0,
-		0,396,397,5,20,0,0,397,398,5,78,0,0,398,399,5,15,0,0,399,400,5,78,0,0,
-		400,401,5,16,0,0,401,403,5,78,0,0,402,394,1,0,0,0,402,395,1,0,0,0,402,
-		396,1,0,0,0,403,63,1,0,0,0,404,405,5,10,0,0,405,406,5,31,0,0,406,407,5,
-		12,0,0,407,408,3,18,9,0,408,409,5,9,0,0,409,410,3,66,33,0,410,65,1,0,0,
-		0,411,420,5,78,0,0,412,420,5,75,0,0,413,414,5,20,0,0,414,415,5,78,0,0,
-		415,416,5,15,0,0,416,417,5,78,0,0,417,418,5,16,0,0,418,420,5,78,0,0,419,
-		411,1,0,0,0,419,412,1,0,0,0,419,413,1,0,0,0,420,67,1,0,0,0,421,422,5,10,
-		0,0,422,423,5,32,0,0,423,424,5,12,0,0,424,425,3,18,9,0,425,426,5,9,0,0,
-		426,427,3,70,35,0,427,69,1,0,0,0,428,429,5,78,0,0,429,71,1,0,0,0,430,431,
-		5,10,0,0,431,432,5,33,0,0,432,433,5,12,0,0,433,434,3,18,9,0,434,435,5,
-		34,0,0,435,436,3,46,23,0,436,73,1,0,0,0,437,438,5,34,0,0,438,450,5,79,
-		0,0,439,443,5,35,0,0,440,442,3,76,38,0,441,440,1,0,0,0,442,445,1,0,0,0,
-		443,441,1,0,0,0,443,444,1,0,0,0,444,446,1,0,0,0,445,443,1,0,0,0,446,447,
-		5,36,0,0,447,450,5,35,0,0,448,450,5,78,0,0,449,437,1,0,0,0,449,439,1,0,
-		0,0,449,448,1,0,0,0,450,75,1,0,0,0,451,452,5,83,0,0,452,453,5,82,0,0,453,
-		457,5,78,0,0,454,455,5,83,0,0,455,457,5,78,0,0,456,451,1,0,0,0,456,454,
-		1,0,0,0,457,77,1,0,0,0,458,459,5,10,0,0,459,460,5,37,0,0,460,461,5,12,
-		0,0,461,462,3,18,9,0,462,463,5,9,0,0,463,464,3,80,40,0,464,79,1,0,0,0,
-		465,466,5,76,0,0,466,81,1,0,0,0,467,468,5,10,0,0,468,469,5,38,0,0,469,
-		470,5,12,0,0,470,471,3,18,9,0,471,472,5,9,0,0,472,473,3,84,42,0,473,83,
-		1,0,0,0,474,475,5,77,0,0,475,85,1,0,0,0,476,477,5,39,0,0,477,478,5,40,
-		0,0,478,479,5,78,0,0,479,480,3,4,2,0,480,481,3,6,3,0,481,485,3,8,4,0,482,
-		484,3,88,44,0,483,482,1,0,0,0,484,487,1,0,0,0,485,483,1,0,0,0,485,486,
-		1,0,0,0,486,488,1,0,0,0,487,485,1,0,0,0,488,489,5,36,0,0,489,490,5,39,
-		0,0,490,87,1,0,0,0,491,504,3,90,45,0,492,504,3,92,46,0,493,504,3,94,47,
-		0,494,504,3,96,48,0,495,504,3,98,49,0,496,504,3,100,50,0,497,504,3,102,
-		51,0,498,504,3,104,52,0,499,504,3,106,53,0,500,504,3,108,54,0,501,504,
-		3,110,55,0,502,504,3,112,56,0,503,491,1,0,0,0,503,492,1,0,0,0,503,493,
-		1,0,0,0,503,494,1,0,0,0,503,495,1,0,0,0,503,496,1,0,0,0,503,497,1,0,0,
-		0,503,498,1,0,0,0,503,499,1,0,0,0,503,500,1,0,0,0,503,501,1,0,0,0,503,
-		502,1,0,0,0,504,89,1,0,0,0,505,506,5,12,0,0,506,507,5,41,0,0,507,508,5,
-		40,0,0,508,509,5,9,0,0,509,517,3,46,23,0,510,511,5,12,0,0,511,512,5,41,
-		0,0,512,513,5,40,0,0,513,514,5,9,0,0,514,515,5,42,0,0,515,517,5,78,0,0,
-		516,505,1,0,0,0,516,510,1,0,0,0,517,91,1,0,0,0,518,519,5,12,0,0,519,520,
-		5,43,0,0,520,521,5,9,0,0,521,522,3,74,37,0,522,93,1,0,0,0,523,524,5,12,
-		0,0,524,525,5,44,0,0,525,526,5,9,0,0,526,527,3,74,37,0,527,95,1,0,0,0,
-		528,529,5,12,0,0,529,530,5,45,0,0,530,531,5,9,0,0,531,532,3,66,33,0,532,
-		97,1,0,0,0,533,534,5,12,0,0,534,535,5,46,0,0,535,536,5,9,0,0,536,537,3,
-		22,11,0,537,99,1,0,0,0,538,539,5,12,0,0,539,540,5,47,0,0,540,541,5,46,
-		0,0,541,542,5,9,0,0,542,543,3,22,11,0,543,101,1,0,0,0,544,545,5,12,0,0,
-		545,546,5,48,0,0,546,547,5,9,0,0,547,548,3,30,15,0,548,103,1,0,0,0,549,
-		550,5,12,0,0,550,551,5,49,0,0,551,552,5,50,0,0,552,553,5,9,0,0,553,554,
-		3,26,13,0,554,105,1,0,0,0,555,556,5,12,0,0,556,557,5,51,0,0,557,558,5,
-		9,0,0,558,564,3,38,19,0,559,560,5,12,0,0,560,561,5,51,0,0,561,562,5,9,
-		0,0,562,564,5,81,0,0,563,555,1,0,0,0,563,559,1,0,0,0,564,107,1,0,0,0,565,
-		566,5,12,0,0,566,567,5,52,0,0,567,568,5,53,0,0,568,569,5,9,0,0,569,570,
-		3,22,11,0,570,109,1,0,0,0,571,572,5,12,0,0,572,573,5,54,0,0,573,574,5,
-		53,0,0,574,575,5,9,0,0,575,576,3,22,11,0,576,111,1,0,0,0,577,581,5,55,
-		0,0,578,580,3,114,57,0,579,578,1,0,0,0,580,583,1,0,0,0,581,579,1,0,0,0,
-		581,582,1,0,0,0,582,584,1,0,0,0,583,581,1,0,0,0,584,585,5,36,0,0,585,113,
-		1,0,0,0,586,595,3,116,58,0,587,595,3,118,59,0,588,595,3,120,60,0,589,595,
-		3,122,61,0,590,595,3,124,62,0,591,595,3,126,63,0,592,595,3,128,64,0,593,
-		595,3,130,65,0,594,586,1,0,0,0,594,587,1,0,0,0,594,588,1,0,0,0,594,589,
-		1,0,0,0,594,590,1,0,0,0,594,591,1,0,0,0,594,592,1,0,0,0,594,593,1,0,0,
-		0,595,115,1,0,0,0,596,597,5,12,0,0,597,598,5,56,0,0,598,599,5,43,0,0,599,
-		600,5,9,0,0,600,601,3,26,13,0,601,117,1,0,0,0,602,603,5,12,0,0,603,604,
-		5,57,0,0,604,605,5,9,0,0,605,606,3,26,13,0,606,119,1,0,0,0,607,608,5,12,
-		0,0,608,609,5,58,0,0,609,610,5,59,0,0,610,611,5,9,0,0,611,612,3,22,11,
-		0,612,121,1,0,0,0,613,614,5,12,0,0,614,615,5,48,0,0,615,616,5,60,0,0,616,
-		617,5,9,0,0,617,618,3,22,11,0,618,123,1,0,0,0,619,620,5,12,0,0,620,621,
-		5,48,0,0,621,622,5,61,0,0,622,623,5,9,0,0,623,624,3,26,13,0,624,125,1,
-		0,0,0,625,626,5,12,0,0,626,627,5,62,0,0,627,628,5,9,0,0,628,629,3,22,11,
-		0,629,127,1,0,0,0,630,631,5,12,0,0,631,632,5,62,0,0,632,633,5,61,0,0,633,
-		634,5,9,0,0,634,635,3,22,11,0,635,129,1,0,0,0,636,637,5,12,0,0,637,638,
-		5,63,0,0,638,639,5,64,0,0,639,640,5,9,0,0,640,641,3,22,11,0,641,131,1,
-		0,0,0,642,643,5,39,0,0,643,647,5,65,0,0,644,646,3,134,67,0,645,644,1,0,
-		0,0,646,649,1,0,0,0,647,645,1,0,0,0,647,648,1,0,0,0,648,650,1,0,0,0,649,
-		647,1,0,0,0,650,651,5,36,0,0,651,652,5,39,0,0,652,133,1,0,0,0,653,657,
-		3,12,6,0,654,657,3,14,7,0,655,657,3,10,5,0,656,653,1,0,0,0,656,654,1,0,
-		0,0,656,655,1,0,0,0,657,135,1,0,0,0,658,659,5,39,0,0,659,660,5,66,0,0,
-		660,664,5,78,0,0,661,663,3,138,69,0,662,661,1,0,0,0,663,666,1,0,0,0,664,
-		662,1,0,0,0,664,665,1,0,0,0,665,667,1,0,0,0,666,664,1,0,0,0,667,668,5,
-		36,0,0,668,669,5,39,0,0,669,137,1,0,0,0,670,677,3,16,8,0,671,677,3,20,
-		10,0,672,677,3,24,12,0,673,677,3,140,70,0,674,677,3,142,71,0,675,677,3,
-		144,72,0,676,670,1,0,0,0,676,671,1,0,0,0,676,672,1,0,0,0,676,673,1,0,0,
-		0,676,674,1,0,0,0,676,675,1,0,0,0,677,139,1,0,0,0,678,679,5,12,0,0,679,
-		680,5,65,0,0,680,687,3,26,13,0,681,682,5,12,0,0,682,683,5,65,0,0,683,684,
-		5,5,0,0,684,685,5,42,0,0,685,687,5,78,0,0,686,678,1,0,0,0,686,681,1,0,
-		0,0,687,141,1,0,0,0,688,689,5,12,0,0,689,690,5,65,0,0,690,697,3,26,13,
-		0,691,692,5,12,0,0,692,693,5,65,0,0,693,694,5,5,0,0,694,695,5,42,0,0,695,
-		697,5,78,0,0,696,688,1,0,0,0,696,691,1,0,0,0,697,143,1,0,0,0,698,699,5,
-		12,0,0,699,700,5,65,0,0,700,705,3,22,11,0,701,702,5,12,0,0,702,703,5,65,
-		0,0,703,705,7,0,0,0,704,698,1,0,0,0,704,701,1,0,0,0,705,145,1,0,0,0,706,
-		707,5,12,0,0,707,708,5,70,0,0,708,713,3,22,11,0,709,710,5,12,0,0,710,711,
-		5,70,0,0,711,713,7,1,0,0,712,706,1,0,0,0,712,709,1,0,0,0,713,147,1,0,0,
-		0,714,715,5,12,0,0,715,716,5,70,0,0,716,721,3,22,11,0,717,718,5,12,0,0,
-		718,719,5,70,0,0,719,721,7,2,0,0,720,714,1,0,0,0,720,717,1,0,0,0,721,149,
-		1,0,0,0,35,153,161,171,180,187,232,249,266,283,300,317,334,351,368,385,
-		402,419,443,449,456,485,503,516,563,581,594,647,656,664,676,686,696,704,
-		712,720
+		2,71,7,71,2,72,7,72,2,73,7,73,2,74,7,74,2,75,7,75,2,76,7,76,2,77,7,77,
+		1,0,5,0,158,8,0,10,0,12,0,161,9,0,1,0,1,0,1,1,1,1,1,1,1,1,3,1,169,8,1,
+		1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,3,2,179,8,2,1,3,1,3,1,3,1,3,1,3,1,3,1,
+		3,3,3,188,8,3,1,4,1,4,1,4,1,4,1,4,3,4,195,8,4,1,5,1,5,1,5,1,5,1,5,5,5,
+		202,8,5,10,5,12,5,205,9,5,1,5,1,5,1,5,1,6,1,6,1,6,3,6,213,8,6,1,7,1,7,
+		1,7,1,7,3,7,219,8,7,1,8,1,8,1,8,1,8,1,8,1,8,1,8,1,9,1,9,1,9,1,9,1,9,1,
+		9,1,9,1,10,1,10,1,10,1,10,1,10,1,10,1,10,1,11,1,11,1,11,1,11,1,11,1,12,
+		1,12,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,14,1,14,1,14,1,14,1,14,1,14,
+		1,14,1,14,3,14,264,8,14,1,15,1,15,1,15,1,15,1,15,1,15,1,15,1,16,1,16,1,
+		16,1,16,1,16,1,16,1,16,1,16,3,16,281,8,16,1,17,1,17,1,17,1,17,1,17,1,17,
+		1,17,1,18,1,18,1,18,1,18,1,18,1,18,1,18,1,18,3,18,298,8,18,1,19,1,19,1,
+		19,1,19,1,19,1,19,1,19,1,20,1,20,1,20,1,20,1,20,1,20,1,20,1,20,3,20,315,
+		8,20,1,21,1,21,1,21,1,21,1,21,1,21,1,21,1,22,1,22,1,22,1,22,1,22,1,22,
+		1,22,1,22,3,22,332,8,22,1,23,1,23,1,23,1,23,1,23,1,23,1,23,1,24,1,24,1,
+		24,1,24,1,24,1,24,1,24,1,24,3,24,349,8,24,1,25,1,25,1,25,1,25,1,25,1,25,
+		1,25,1,26,1,26,1,26,1,26,1,26,1,26,1,26,1,26,3,26,366,8,26,1,27,1,27,1,
+		27,1,27,1,27,1,27,1,27,1,28,1,28,1,28,1,28,1,28,1,28,1,28,1,28,3,28,383,
+		8,28,1,29,1,29,1,29,1,29,1,29,1,29,1,29,1,30,1,30,1,30,1,30,1,30,1,30,
+		1,30,1,30,3,30,400,8,30,1,31,1,31,1,31,1,31,1,31,1,31,1,31,1,32,1,32,1,
+		32,1,32,1,32,1,32,1,32,1,32,3,32,417,8,32,1,33,1,33,1,33,1,33,1,33,1,33,
+		1,33,1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,3,34,434,8,34,1,35,1,35,1,
+		35,1,35,1,35,1,35,1,35,1,36,1,36,1,36,1,36,1,36,1,36,1,36,1,36,3,36,451,
+		8,36,1,37,1,37,1,37,1,37,1,37,1,37,1,37,1,38,1,38,1,39,1,39,1,39,1,39,
+		1,39,1,39,1,39,1,40,1,40,1,40,1,40,5,40,473,8,40,10,40,12,40,476,9,40,
+		1,40,1,40,1,40,3,40,481,8,40,1,41,1,41,1,41,1,41,1,41,3,41,488,8,41,1,
+		42,1,42,1,42,1,42,1,42,1,42,1,42,1,43,1,43,1,44,1,44,1,44,1,44,1,44,1,
+		44,1,44,1,45,1,45,1,46,1,46,1,46,1,46,1,46,1,46,1,46,5,46,515,8,46,10,
+		46,12,46,518,9,46,1,46,1,46,1,46,1,47,1,47,1,47,1,47,1,47,1,47,1,47,1,
+		47,1,47,1,47,1,47,1,47,3,47,535,8,47,1,48,1,48,1,48,1,48,1,48,1,48,1,48,
+		1,48,1,48,1,48,1,48,3,48,548,8,48,1,49,1,49,1,49,1,49,1,49,1,50,1,50,1,
+		50,1,50,1,50,1,51,1,51,1,51,1,51,1,51,1,52,1,52,1,52,1,52,1,52,1,53,1,
+		53,1,53,1,53,1,53,1,53,1,54,1,54,1,54,1,54,1,54,1,55,1,55,1,55,1,55,1,
+		55,1,55,1,56,1,56,1,56,1,56,1,56,1,56,1,56,1,56,3,56,595,8,56,1,57,1,57,
+		1,57,1,57,1,57,1,57,1,58,1,58,1,58,1,58,1,58,1,58,1,59,1,59,5,59,611,8,
+		59,10,59,12,59,614,9,59,1,59,1,59,1,60,1,60,1,60,1,60,1,60,1,60,1,60,1,
+		60,3,60,626,8,60,1,61,1,61,1,61,1,61,1,61,1,61,1,62,1,62,1,62,1,62,1,62,
+		1,63,1,63,1,63,1,63,1,63,1,63,1,64,1,64,1,64,1,64,1,64,1,64,1,65,1,65,
+		1,65,1,65,1,65,1,65,1,66,1,66,1,66,1,66,1,66,1,67,1,67,1,67,1,67,1,67,
+		1,67,1,68,1,68,1,68,1,68,1,68,1,68,1,69,1,69,1,69,5,69,677,8,69,10,69,
+		12,69,680,9,69,1,69,1,69,1,69,1,70,1,70,1,70,3,70,688,8,70,1,71,1,71,1,
+		71,1,71,5,71,694,8,71,10,71,12,71,697,9,71,1,71,1,71,1,71,1,72,1,72,1,
+		72,1,72,1,72,1,72,3,72,708,8,72,1,73,1,73,1,73,1,73,1,73,1,73,1,73,1,73,
+		3,73,718,8,73,1,74,1,74,1,74,1,74,1,74,1,74,1,74,1,74,3,74,728,8,74,1,
+		75,1,75,1,75,1,75,1,75,1,75,3,75,736,8,75,1,76,1,76,1,76,1,76,1,76,1,76,
+		3,76,744,8,76,1,77,1,77,1,77,1,77,1,77,1,77,3,77,752,8,77,1,77,0,0,78,
+		0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,
+		50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,86,88,90,92,94,96,
+		98,100,102,104,106,108,110,112,114,116,118,120,122,124,126,128,130,132,
+		134,136,138,140,142,144,146,148,150,152,154,0,3,2,0,69,71,84,84,1,0,73,
+		74,2,0,71,71,75,76,752,0,159,1,0,0,0,2,168,1,0,0,0,4,178,1,0,0,0,6,187,
+		1,0,0,0,8,194,1,0,0,0,10,196,1,0,0,0,12,212,1,0,0,0,14,218,1,0,0,0,16,
+		220,1,0,0,0,18,227,1,0,0,0,20,234,1,0,0,0,22,241,1,0,0,0,24,246,1,0,0,
+		0,26,248,1,0,0,0,28,263,1,0,0,0,30,265,1,0,0,0,32,280,1,0,0,0,34,282,1,
+		0,0,0,36,297,1,0,0,0,38,299,1,0,0,0,40,314,1,0,0,0,42,316,1,0,0,0,44,331,
+		1,0,0,0,46,333,1,0,0,0,48,348,1,0,0,0,50,350,1,0,0,0,52,365,1,0,0,0,54,
+		367,1,0,0,0,56,382,1,0,0,0,58,384,1,0,0,0,60,399,1,0,0,0,62,401,1,0,0,
+		0,64,416,1,0,0,0,66,418,1,0,0,0,68,433,1,0,0,0,70,435,1,0,0,0,72,450,1,
+		0,0,0,74,452,1,0,0,0,76,459,1,0,0,0,78,461,1,0,0,0,80,480,1,0,0,0,82,487,
+		1,0,0,0,84,489,1,0,0,0,86,496,1,0,0,0,88,498,1,0,0,0,90,505,1,0,0,0,92,
+		507,1,0,0,0,94,534,1,0,0,0,96,547,1,0,0,0,98,549,1,0,0,0,100,554,1,0,0,
+		0,102,559,1,0,0,0,104,564,1,0,0,0,106,569,1,0,0,0,108,575,1,0,0,0,110,
+		580,1,0,0,0,112,594,1,0,0,0,114,596,1,0,0,0,116,602,1,0,0,0,118,608,1,
+		0,0,0,120,625,1,0,0,0,122,627,1,0,0,0,124,633,1,0,0,0,126,638,1,0,0,0,
+		128,644,1,0,0,0,130,650,1,0,0,0,132,656,1,0,0,0,134,661,1,0,0,0,136,667,
+		1,0,0,0,138,673,1,0,0,0,140,687,1,0,0,0,142,689,1,0,0,0,144,707,1,0,0,
+		0,146,717,1,0,0,0,148,727,1,0,0,0,150,735,1,0,0,0,152,743,1,0,0,0,154,
+		751,1,0,0,0,156,158,3,2,1,0,157,156,1,0,0,0,158,161,1,0,0,0,159,157,1,
+		0,0,0,159,160,1,0,0,0,160,162,1,0,0,0,161,159,1,0,0,0,162,163,5,0,0,1,
+		163,1,1,0,0,0,164,169,3,138,69,0,165,169,3,142,71,0,166,169,3,92,46,0,
+		167,169,3,10,5,0,168,164,1,0,0,0,168,165,1,0,0,0,168,166,1,0,0,0,168,167,
+		1,0,0,0,169,3,1,0,0,0,170,179,5,1,0,0,171,179,5,2,0,0,172,173,5,1,0,0,
+		173,174,5,3,0,0,174,179,5,4,0,0,175,176,5,1,0,0,176,177,5,3,0,0,177,179,
+		5,2,0,0,178,170,1,0,0,0,178,171,1,0,0,0,178,172,1,0,0,0,178,175,1,0,0,
+		0,179,5,1,0,0,0,180,181,5,5,0,0,181,188,5,6,0,0,182,183,5,5,0,0,183,184,
+		5,7,0,0,184,188,5,80,0,0,185,186,5,5,0,0,186,188,5,8,0,0,187,180,1,0,0,
+		0,187,182,1,0,0,0,187,185,1,0,0,0,188,7,1,0,0,0,189,190,5,9,0,0,190,191,
+		5,7,0,0,191,195,5,80,0,0,192,193,5,9,0,0,193,195,5,8,0,0,194,189,1,0,0,
+		0,194,192,1,0,0,0,195,9,1,0,0,0,196,197,5,10,0,0,197,198,5,11,0,0,198,
+		199,5,9,0,0,199,203,3,12,6,0,200,202,3,14,7,0,201,200,1,0,0,0,202,205,
+		1,0,0,0,203,201,1,0,0,0,203,204,1,0,0,0,204,206,1,0,0,0,205,203,1,0,0,
+		0,206,207,5,12,0,0,207,208,5,10,0,0,208,11,1,0,0,0,209,210,5,7,0,0,210,
+		213,5,80,0,0,211,213,5,8,0,0,212,209,1,0,0,0,212,211,1,0,0,0,213,13,1,
+		0,0,0,214,219,5,80,0,0,215,216,5,80,0,0,216,217,5,13,0,0,217,219,5,80,
+		0,0,218,214,1,0,0,0,218,215,1,0,0,0,219,15,1,0,0,0,220,221,5,14,0,0,221,
+		222,5,15,0,0,222,223,5,16,0,0,223,224,5,80,0,0,224,225,5,9,0,0,225,226,
+		5,80,0,0,226,17,1,0,0,0,227,228,5,17,0,0,228,229,5,18,0,0,229,230,5,19,
+		0,0,230,231,5,80,0,0,231,232,5,20,0,0,232,233,5,80,0,0,233,19,1,0,0,0,
+		234,235,5,10,0,0,235,236,5,18,0,0,236,237,5,19,0,0,237,238,5,80,0,0,238,
+		239,5,20,0,0,239,240,5,80,0,0,240,21,1,0,0,0,241,242,5,10,0,0,242,243,
+		5,5,0,0,243,244,5,21,0,0,244,245,5,80,0,0,245,23,1,0,0,0,246,247,5,80,
+		0,0,247,25,1,0,0,0,248,249,5,14,0,0,249,250,5,22,0,0,250,251,5,16,0,0,
+		251,252,3,24,12,0,252,253,5,9,0,0,253,254,3,28,14,0,254,27,1,0,0,0,255,
+		264,5,81,0,0,256,264,5,77,0,0,257,258,5,23,0,0,258,259,5,80,0,0,259,260,
+		5,19,0,0,260,261,5,80,0,0,261,262,5,20,0,0,262,264,5,80,0,0,263,255,1,
+		0,0,0,263,256,1,0,0,0,263,257,1,0,0,0,264,29,1,0,0,0,265,266,5,14,0,0,
+		266,267,5,24,0,0,267,268,5,16,0,0,268,269,3,24,12,0,269,270,5,9,0,0,270,
+		271,3,32,16,0,271,31,1,0,0,0,272,281,5,81,0,0,273,281,5,77,0,0,274,275,
+		5,23,0,0,275,276,5,80,0,0,276,277,5,19,0,0,277,278,5,80,0,0,278,279,5,
+		20,0,0,279,281,5,80,0,0,280,272,1,0,0,0,280,273,1,0,0,0,280,274,1,0,0,
+		0,281,33,1,0,0,0,282,283,5,14,0,0,283,284,5,25,0,0,284,285,5,16,0,0,285,
+		286,3,24,12,0,286,287,5,9,0,0,287,288,3,36,18,0,288,35,1,0,0,0,289,298,
+		5,81,0,0,290,298,5,77,0,0,291,292,5,23,0,0,292,293,5,80,0,0,293,294,5,
+		19,0,0,294,295,5,80,0,0,295,296,5,20,0,0,296,298,5,80,0,0,297,289,1,0,
+		0,0,297,290,1,0,0,0,297,291,1,0,0,0,298,37,1,0,0,0,299,300,5,14,0,0,300,
+		301,5,26,0,0,301,302,5,16,0,0,302,303,3,24,12,0,303,304,5,9,0,0,304,305,
+		3,40,20,0,305,39,1,0,0,0,306,315,5,81,0,0,307,315,5,77,0,0,308,309,5,23,
+		0,0,309,310,5,80,0,0,310,311,5,19,0,0,311,312,5,80,0,0,312,313,5,20,0,
+		0,313,315,5,80,0,0,314,306,1,0,0,0,314,307,1,0,0,0,314,308,1,0,0,0,315,
+		41,1,0,0,0,316,317,5,14,0,0,317,318,5,27,0,0,318,319,5,16,0,0,319,320,
+		3,24,12,0,320,321,5,9,0,0,321,322,3,44,22,0,322,43,1,0,0,0,323,332,5,81,
+		0,0,324,332,5,77,0,0,325,326,5,23,0,0,326,327,5,80,0,0,327,328,5,19,0,
+		0,328,329,5,80,0,0,329,330,5,20,0,0,330,332,5,80,0,0,331,323,1,0,0,0,331,
+		324,1,0,0,0,331,325,1,0,0,0,332,45,1,0,0,0,333,334,5,14,0,0,334,335,5,
+		28,0,0,335,336,5,16,0,0,336,337,3,24,12,0,337,338,5,9,0,0,338,339,3,48,
+		24,0,339,47,1,0,0,0,340,349,5,81,0,0,341,349,5,77,0,0,342,343,5,23,0,0,
+		343,344,5,80,0,0,344,345,5,19,0,0,345,346,5,80,0,0,346,347,5,20,0,0,347,
+		349,5,80,0,0,348,340,1,0,0,0,348,341,1,0,0,0,348,342,1,0,0,0,349,49,1,
+		0,0,0,350,351,5,14,0,0,351,352,5,29,0,0,352,353,5,16,0,0,353,354,3,24,
+		12,0,354,355,5,9,0,0,355,356,3,52,26,0,356,51,1,0,0,0,357,366,5,81,0,0,
+		358,366,5,77,0,0,359,360,5,23,0,0,360,361,5,80,0,0,361,362,5,19,0,0,362,
+		363,5,80,0,0,363,364,5,20,0,0,364,366,5,80,0,0,365,357,1,0,0,0,365,358,
+		1,0,0,0,365,359,1,0,0,0,366,53,1,0,0,0,367,368,5,14,0,0,368,369,5,30,0,
+		0,369,370,5,16,0,0,370,371,3,24,12,0,371,372,5,9,0,0,372,373,3,56,28,0,
+		373,55,1,0,0,0,374,383,5,81,0,0,375,383,5,77,0,0,376,377,5,23,0,0,377,
+		378,5,80,0,0,378,379,5,19,0,0,379,380,5,80,0,0,380,381,5,20,0,0,381,383,
+		5,80,0,0,382,374,1,0,0,0,382,375,1,0,0,0,382,376,1,0,0,0,383,57,1,0,0,
+		0,384,385,5,14,0,0,385,386,5,31,0,0,386,387,5,16,0,0,387,388,3,24,12,0,
+		388,389,5,9,0,0,389,390,3,60,30,0,390,59,1,0,0,0,391,400,5,82,0,0,392,
+		400,5,77,0,0,393,394,5,23,0,0,394,395,5,80,0,0,395,396,5,19,0,0,396,397,
+		5,80,0,0,397,398,5,20,0,0,398,400,5,80,0,0,399,391,1,0,0,0,399,392,1,0,
+		0,0,399,393,1,0,0,0,400,61,1,0,0,0,401,402,5,14,0,0,402,403,5,32,0,0,403,
+		404,5,16,0,0,404,405,3,24,12,0,405,406,5,9,0,0,406,407,3,64,32,0,407,63,
+		1,0,0,0,408,417,5,82,0,0,409,417,5,77,0,0,410,411,5,23,0,0,411,412,5,80,
+		0,0,412,413,5,19,0,0,413,414,5,80,0,0,414,415,5,20,0,0,415,417,5,80,0,
+		0,416,408,1,0,0,0,416,409,1,0,0,0,416,410,1,0,0,0,417,65,1,0,0,0,418,419,
+		5,14,0,0,419,420,5,33,0,0,420,421,5,16,0,0,421,422,3,24,12,0,422,423,5,
+		9,0,0,423,424,3,68,34,0,424,67,1,0,0,0,425,434,5,80,0,0,426,434,5,77,0,
+		0,427,428,5,23,0,0,428,429,5,80,0,0,429,430,5,19,0,0,430,431,5,80,0,0,
+		431,432,5,20,0,0,432,434,5,80,0,0,433,425,1,0,0,0,433,426,1,0,0,0,433,
+		427,1,0,0,0,434,69,1,0,0,0,435,436,5,14,0,0,436,437,5,34,0,0,437,438,5,
+		16,0,0,438,439,3,24,12,0,439,440,5,9,0,0,440,441,3,72,36,0,441,71,1,0,
+		0,0,442,451,5,80,0,0,443,451,5,77,0,0,444,445,5,23,0,0,445,446,5,80,0,
+		0,446,447,5,19,0,0,447,448,5,80,0,0,448,449,5,20,0,0,449,451,5,80,0,0,
+		450,442,1,0,0,0,450,443,1,0,0,0,450,444,1,0,0,0,451,73,1,0,0,0,452,453,
+		5,14,0,0,453,454,5,35,0,0,454,455,5,16,0,0,455,456,3,24,12,0,456,457,5,
+		9,0,0,457,458,3,76,38,0,458,75,1,0,0,0,459,460,5,80,0,0,460,77,1,0,0,0,
+		461,462,5,14,0,0,462,463,5,36,0,0,463,464,5,16,0,0,464,465,3,24,12,0,465,
+		466,5,37,0,0,466,467,3,52,26,0,467,79,1,0,0,0,468,469,5,37,0,0,469,481,
+		5,81,0,0,470,474,5,38,0,0,471,473,3,82,41,0,472,471,1,0,0,0,473,476,1,
+		0,0,0,474,472,1,0,0,0,474,475,1,0,0,0,475,477,1,0,0,0,476,474,1,0,0,0,
+		477,478,5,12,0,0,478,481,5,38,0,0,479,481,5,80,0,0,480,468,1,0,0,0,480,
+		470,1,0,0,0,480,479,1,0,0,0,481,81,1,0,0,0,482,483,5,85,0,0,483,484,5,
+		84,0,0,484,488,5,80,0,0,485,486,5,85,0,0,486,488,5,80,0,0,487,482,1,0,
+		0,0,487,485,1,0,0,0,488,83,1,0,0,0,489,490,5,14,0,0,490,491,5,39,0,0,491,
+		492,5,16,0,0,492,493,3,24,12,0,493,494,5,9,0,0,494,495,3,86,43,0,495,85,
+		1,0,0,0,496,497,5,78,0,0,497,87,1,0,0,0,498,499,5,14,0,0,499,500,5,40,
+		0,0,500,501,5,16,0,0,501,502,3,24,12,0,502,503,5,9,0,0,503,504,3,90,45,
+		0,504,89,1,0,0,0,505,506,5,79,0,0,506,91,1,0,0,0,507,508,5,41,0,0,508,
+		509,5,42,0,0,509,510,5,80,0,0,510,511,3,4,2,0,511,512,3,6,3,0,512,516,
+		3,8,4,0,513,515,3,94,47,0,514,513,1,0,0,0,515,518,1,0,0,0,516,514,1,0,
+		0,0,516,517,1,0,0,0,517,519,1,0,0,0,518,516,1,0,0,0,519,520,5,12,0,0,520,
+		521,5,41,0,0,521,93,1,0,0,0,522,535,3,96,48,0,523,535,3,98,49,0,524,535,
+		3,100,50,0,525,535,3,102,51,0,526,535,3,104,52,0,527,535,3,106,53,0,528,
+		535,3,108,54,0,529,535,3,110,55,0,530,535,3,112,56,0,531,535,3,114,57,
+		0,532,535,3,116,58,0,533,535,3,118,59,0,534,522,1,0,0,0,534,523,1,0,0,
+		0,534,524,1,0,0,0,534,525,1,0,0,0,534,526,1,0,0,0,534,527,1,0,0,0,534,
+		528,1,0,0,0,534,529,1,0,0,0,534,530,1,0,0,0,534,531,1,0,0,0,534,532,1,
+		0,0,0,534,533,1,0,0,0,535,95,1,0,0,0,536,537,5,16,0,0,537,538,5,43,0,0,
+		538,539,5,42,0,0,539,540,5,9,0,0,540,548,3,52,26,0,541,542,5,16,0,0,542,
+		543,5,43,0,0,543,544,5,42,0,0,544,545,5,9,0,0,545,546,5,44,0,0,546,548,
+		5,80,0,0,547,536,1,0,0,0,547,541,1,0,0,0,548,97,1,0,0,0,549,550,5,16,0,
+		0,550,551,5,45,0,0,551,552,5,9,0,0,552,553,3,80,40,0,553,99,1,0,0,0,554,
+		555,5,16,0,0,555,556,5,46,0,0,556,557,5,9,0,0,557,558,3,80,40,0,558,101,
+		1,0,0,0,559,560,5,16,0,0,560,561,5,47,0,0,561,562,5,9,0,0,562,563,3,72,
+		36,0,563,103,1,0,0,0,564,565,5,16,0,0,565,566,5,48,0,0,566,567,5,9,0,0,
+		567,568,3,28,14,0,568,105,1,0,0,0,569,570,5,16,0,0,570,571,5,49,0,0,571,
+		572,5,48,0,0,572,573,5,9,0,0,573,574,3,28,14,0,574,107,1,0,0,0,575,576,
+		5,16,0,0,576,577,5,50,0,0,577,578,5,9,0,0,578,579,3,36,18,0,579,109,1,
+		0,0,0,580,581,5,16,0,0,581,582,5,51,0,0,582,583,5,52,0,0,583,584,5,9,0,
+		0,584,585,3,32,16,0,585,111,1,0,0,0,586,587,5,16,0,0,587,588,5,53,0,0,
+		588,589,5,9,0,0,589,595,3,44,22,0,590,591,5,16,0,0,591,592,5,53,0,0,592,
+		593,5,9,0,0,593,595,5,83,0,0,594,586,1,0,0,0,594,590,1,0,0,0,595,113,1,
+		0,0,0,596,597,5,16,0,0,597,598,5,54,0,0,598,599,5,55,0,0,599,600,5,9,0,
+		0,600,601,3,28,14,0,601,115,1,0,0,0,602,603,5,16,0,0,603,604,5,56,0,0,
+		604,605,5,55,0,0,605,606,5,9,0,0,606,607,3,28,14,0,607,117,1,0,0,0,608,
+		612,5,57,0,0,609,611,3,120,60,0,610,609,1,0,0,0,611,614,1,0,0,0,612,610,
+		1,0,0,0,612,613,1,0,0,0,613,615,1,0,0,0,614,612,1,0,0,0,615,616,5,12,0,
+		0,616,119,1,0,0,0,617,626,3,122,61,0,618,626,3,124,62,0,619,626,3,126,
+		63,0,620,626,3,128,64,0,621,626,3,130,65,0,622,626,3,132,66,0,623,626,
+		3,134,67,0,624,626,3,136,68,0,625,617,1,0,0,0,625,618,1,0,0,0,625,619,
+		1,0,0,0,625,620,1,0,0,0,625,621,1,0,0,0,625,622,1,0,0,0,625,623,1,0,0,
+		0,625,624,1,0,0,0,626,121,1,0,0,0,627,628,5,16,0,0,628,629,5,58,0,0,629,
+		630,5,45,0,0,630,631,5,9,0,0,631,632,3,32,16,0,632,123,1,0,0,0,633,634,
+		5,16,0,0,634,635,5,59,0,0,635,636,5,9,0,0,636,637,3,32,16,0,637,125,1,
+		0,0,0,638,639,5,16,0,0,639,640,5,60,0,0,640,641,5,61,0,0,641,642,5,9,0,
+		0,642,643,3,28,14,0,643,127,1,0,0,0,644,645,5,16,0,0,645,646,5,50,0,0,
+		646,647,5,62,0,0,647,648,5,9,0,0,648,649,3,28,14,0,649,129,1,0,0,0,650,
+		651,5,16,0,0,651,652,5,50,0,0,652,653,5,63,0,0,653,654,5,9,0,0,654,655,
+		3,32,16,0,655,131,1,0,0,0,656,657,5,16,0,0,657,658,5,64,0,0,658,659,5,
+		9,0,0,659,660,3,28,14,0,660,133,1,0,0,0,661,662,5,16,0,0,662,663,5,64,
+		0,0,663,664,5,63,0,0,664,665,5,9,0,0,665,666,3,28,14,0,666,135,1,0,0,0,
+		667,668,5,16,0,0,668,669,5,65,0,0,669,670,5,66,0,0,670,671,5,9,0,0,671,
+		672,3,28,14,0,672,137,1,0,0,0,673,674,5,41,0,0,674,678,5,67,0,0,675,677,
+		3,140,70,0,676,675,1,0,0,0,677,680,1,0,0,0,678,676,1,0,0,0,678,679,1,0,
+		0,0,679,681,1,0,0,0,680,678,1,0,0,0,681,682,5,12,0,0,682,683,5,41,0,0,
+		683,139,1,0,0,0,684,688,3,18,9,0,685,688,3,20,10,0,686,688,3,16,8,0,687,
+		684,1,0,0,0,687,685,1,0,0,0,687,686,1,0,0,0,688,141,1,0,0,0,689,690,5,
+		41,0,0,690,691,5,68,0,0,691,695,5,80,0,0,692,694,3,144,72,0,693,692,1,
+		0,0,0,694,697,1,0,0,0,695,693,1,0,0,0,695,696,1,0,0,0,696,698,1,0,0,0,
+		697,695,1,0,0,0,698,699,5,12,0,0,699,700,5,41,0,0,700,143,1,0,0,0,701,
+		708,3,22,11,0,702,708,3,26,13,0,703,708,3,30,15,0,704,708,3,146,73,0,705,
+		708,3,148,74,0,706,708,3,150,75,0,707,701,1,0,0,0,707,702,1,0,0,0,707,
+		703,1,0,0,0,707,704,1,0,0,0,707,705,1,0,0,0,707,706,1,0,0,0,708,145,1,
+		0,0,0,709,710,5,16,0,0,710,711,5,67,0,0,711,718,3,32,16,0,712,713,5,16,
+		0,0,713,714,5,67,0,0,714,715,5,5,0,0,715,716,5,44,0,0,716,718,5,80,0,0,
+		717,709,1,0,0,0,717,712,1,0,0,0,718,147,1,0,0,0,719,720,5,16,0,0,720,721,
+		5,67,0,0,721,728,3,32,16,0,722,723,5,16,0,0,723,724,5,67,0,0,724,725,5,
+		5,0,0,725,726,5,44,0,0,726,728,5,80,0,0,727,719,1,0,0,0,727,722,1,0,0,
+		0,728,149,1,0,0,0,729,730,5,16,0,0,730,731,5,67,0,0,731,736,3,28,14,0,
+		732,733,5,16,0,0,733,734,5,67,0,0,734,736,7,0,0,0,735,729,1,0,0,0,735,
+		732,1,0,0,0,736,151,1,0,0,0,737,738,5,16,0,0,738,739,5,72,0,0,739,744,
+		3,28,14,0,740,741,5,16,0,0,741,742,5,72,0,0,742,744,7,1,0,0,743,737,1,
+		0,0,0,743,740,1,0,0,0,744,153,1,0,0,0,745,746,5,16,0,0,746,747,5,72,0,
+		0,747,752,3,28,14,0,748,749,5,16,0,0,749,750,5,72,0,0,750,752,7,2,0,0,
+		751,745,1,0,0,0,751,748,1,0,0,0,752,155,1,0,0,0,38,159,168,178,187,194,
+		203,212,218,263,280,297,314,331,348,365,382,399,416,433,450,474,480,487,
+		516,534,547,594,612,625,678,687,695,707,717,727,735,743,751
 	};
 
 	public static readonly ATN _ATN =

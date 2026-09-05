@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Encapsulations;
+using Kotor.NET.Patcher.FileOperation;
 using Kotor.NET.Patcher.For2DA;
+using Kotor.NET.Patcher.LocateResource;
 using Kotor.NET.Resources.Kotor2DA;
 using Kotor.NET.Resources.KotorGFF;
 
@@ -22,15 +24,15 @@ public class PatchGFF : IPatch
     public required IFileOperation FileOperation { get; set; }
     public ICollection<IGFFModifier> Modifiers { get; set; } = [];
 
-    public void Apply(Installation installation, PatcherMemory memory)
+    public void Apply(Installation installation, PatcherMemory memory, string patchDirectory)
     {
-        var data = FileOperation.Read(installation, TakeFrom, ResRef, ResourceType);
+        var data = FileOperation.Read(patchDirectory, installation, TakeFrom, ResRef, ResourceType);
         var gff = (data is null) ? (new GFF()) : GFF.FromBytes(data);
         
         Modifiers.ToList().ForEach(x => x.Apply(gff, new RootNode() { Struct = gff.Root }, installation, memory));
 
         data = GFF.ToBytes(gff);
-        FileOperation.Write(installation, SaveTo, ResRef, ResourceType, data);
+        FileOperation.Write(patchDirectory, installation, SaveTo, ResRef, ResourceType, data);
     }
 }
 public class EditCreature : PatchGFF

@@ -13,7 +13,7 @@ namespace Kotor.NET.PatchingLanguage;
 
 public static class KotorModPatcher
 {
-    public static void Install(Installation installation, string script)
+    public static void Install(string patchDirectory, Installation installation, string script)
     {
         AntlrInputStream inputStream = new AntlrInputStream(script);
         KotorPatchingLanguageLexer speakLexer = new KotorPatchingLanguageLexer(inputStream);
@@ -22,6 +22,6 @@ public static class KotorModPatcher
         var context = parser.script();
         KotorPatchingLanguageVisitor visitor = new KotorPatchingLanguageVisitor();
         var patch = ((List<object>)visitor.Visit(context)).OfType<PatchUTI>().ToList();
-        patch.First().Apply(installation, new());
+        patch.First().Apply(installation, new(), patchDirectory);
     }
 }

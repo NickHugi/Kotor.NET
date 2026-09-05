@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using Antlr4.Build.Tasks;
 using Antlr4.Runtime.Misc;
 using Kotor.NET.Common.Data;
-using Kotor.NET.Patcher;
+using Kotor.NET.Patcher.FileOperation;
 using Kotor.NET.Patcher.ForGFF;
 using Kotor.NET.Patcher.ForUTI;
+using Kotor.NET.Patcher.LocateResource;
 
 namespace Kotor.NET.PatchingLanguage.Visitor;
 
