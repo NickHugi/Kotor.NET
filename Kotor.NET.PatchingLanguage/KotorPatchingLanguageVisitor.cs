@@ -204,6 +204,13 @@ public interface IKotorPatchingLanguageVisitor<Result> : IParseTreeVisitor<Resul
 	/// <return>The visitor result.</return>
 	Result VisitGFFValueUInt8From2DA([NotNull] KotorPatchingLanguageParser.GFFValueUInt8From2DAContext context);
 	/// <summary>
+	/// Visit a parse tree produced by the <c>GFFValueUInt8BoolLiteral</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_value_uint8"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitGFFValueUInt8BoolLiteral([NotNull] KotorPatchingLanguageParser.GFFValueUInt8BoolLiteralContext context);
+	/// <summary>
 	/// Visit a parse tree produced by the <c>GFFAssignUInt16</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.gff_assign_uint16"/>.
 	/// </summary>
@@ -596,6 +603,795 @@ public interface IKotorPatchingLanguageVisitor<Result> : IParseTreeVisitor<Resul
 	/// <return>The visitor result.</return>
 	Result VisitGFFValueVector4Literal([NotNull] KotorPatchingLanguageParser.GFFValueVector4LiteralContext context);
 	/// <summary>
+	/// Visit a parse tree produced by the <c>EditCreature</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_creature"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEditCreature([NotNull] KotorPatchingLanguageParser.EditCreatureContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.edit_creature_mod"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEdit_creature_mod([NotNull] KotorPatchingLanguageParser.Edit_creature_modContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_AppearanceType_SetField_Int32</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_appearance_type"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_AppearanceType_SetField_Int32([NotNull] KotorPatchingLanguageParser.UTC_AppearanceType_SetField_Int32Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_AppearanceType_SetField_2DALabelLookup</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_appearance_type"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_AppearanceType_SetField_2DALabelLookup([NotNull] KotorPatchingLanguageParser.UTC_AppearanceType_SetField_2DALabelLookupContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_BlindSpot_SetField_Single</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_blind_spot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_BlindSpot_SetField_Single([NotNull] KotorPatchingLanguageParser.UTC_BlindSpot_SetField_SingleContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Cha_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_cha"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Cha_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_Cha_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_ChallengeRating_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_challenge_rating"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_ChallengeRating_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_ChallengeRating_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Con_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_con"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Con_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_Con_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Conversation_SetField_ResRef</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_conversation"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Conversation_SetField_ResRef([NotNull] KotorPatchingLanguageParser.UTC_Conversation_SetField_ResRefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_CurrentForce_SetField_Int16</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_current_force"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_CurrentForce_SetField_Int16([NotNull] KotorPatchingLanguageParser.UTC_CurrentForce_SetField_Int16Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_CurrentHitPoints_SetField_Int16</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_current_hit_points"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_CurrentHitPoints_SetField_Int16([NotNull] KotorPatchingLanguageParser.UTC_CurrentHitPoints_SetField_Int16Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Description_SetField_LocalizedString</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_description"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Description_SetField_LocalizedString([NotNull] KotorPatchingLanguageParser.UTC_Description_SetField_LocalizedStringContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Dex_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_dex"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Dex_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_Dex_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Disarmable_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_disarmable"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Disarmable_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_Disarmable_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_FactionID_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_faction_id"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_FactionID_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_FactionID_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_FactionID_SetField_2DALabelLookup</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_faction_id"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_FactionID_SetField_2DALabelLookup([NotNull] KotorPatchingLanguageParser.UTC_FactionID_SetField_2DALabelLookupContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_FirstName_SetField_LocalizedString</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_first_name"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_FirstName_SetField_LocalizedString([NotNull] KotorPatchingLanguageParser.UTC_FirstName_SetField_LocalizedStringContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_ForcePoints_SetField_Int16</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_force_points"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_ForcePoints_SetField_Int16([NotNull] KotorPatchingLanguageParser.UTC_ForcePoints_SetField_Int16Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Gender_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_gender"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Gender_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_Gender_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_GoodEvil_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_good_evil"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_GoodEvil_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_GoodEvil_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_HitPoints_SetField_Int16</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_hit_points"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_HitPoints_SetField_Int16([NotNull] KotorPatchingLanguageParser.UTC_HitPoints_SetField_Int16Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Hologram_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_hologram"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Hologram_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_Hologram_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_IgnoreCrePath_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_ignore_cre_path"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_IgnoreCrePath_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_IgnoreCrePath_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Int_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_int"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Int_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_Int_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_IsPC_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_is_pc"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_IsPC_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_IsPC_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_LastName_SetField_LocalizedString</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_last_name"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_LastName_SetField_LocalizedString([NotNull] KotorPatchingLanguageParser.UTC_LastName_SetField_LocalizedStringContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_MaxHitPoints_SetField_Int16</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_max_hit_points"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_MaxHitPoints_SetField_Int16([NotNull] KotorPatchingLanguageParser.UTC_MaxHitPoints_SetField_Int16Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Min1HP_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_min_1_hp"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Min1HP_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_Min1HP_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_MultiplierSet_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_multiplier_set"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_MultiplierSet_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_MultiplierSet_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_NaturalAC_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_natural_ac"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_NaturalAC_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_NaturalAC_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_NoPermanentDeath_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_no_perm_death"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_NoPermanentDeath_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_NoPermanentDeath_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_NotReorienting_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_not_reorienting"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_NotReorienting_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_NotReorienting_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_PartInteract_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_party_interact"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_PartInteract_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_PartInteract_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_PerceiptionRange_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_perception_range"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_PerceiptionRange_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_PerceiptionRange_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Plot_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_plot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Plot_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_Plot_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Phenotype_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_phenotype"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Phenotype_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_Phenotype_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Phenotype_SetField_2DALabelLookup</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_phenotype"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Phenotype_SetField_2DALabelLookup([NotNull] KotorPatchingLanguageParser.UTC_Phenotype_SetField_2DALabelLookupContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_PortraitID_SetField_Int32</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_portrait_id"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_PortraitID_SetField_Int32([NotNull] KotorPatchingLanguageParser.UTC_PortraitID_SetField_Int32Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_PortraitID_SetField_2DALabelLookup</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_portrait_id"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_PortraitID_SetField_2DALabelLookup([NotNull] KotorPatchingLanguageParser.UTC_PortraitID_SetField_2DALabelLookupContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Race_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_race"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Race_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_Race_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Race_SetField_2DALabelLookup</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_race"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Race_SetField_2DALabelLookup([NotNull] KotorPatchingLanguageParser.UTC_Race_SetField_2DALabelLookupContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_ScriptAttacked_SetField_ResRef</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_script_attacked"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_ScriptAttacked_SetField_ResRef([NotNull] KotorPatchingLanguageParser.UTC_ScriptAttacked_SetField_ResRefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_ScriptDamaged_SetField_ResRef</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_script_damaged"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_ScriptDamaged_SetField_ResRef([NotNull] KotorPatchingLanguageParser.UTC_ScriptDamaged_SetField_ResRefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_ScriptDeath_SetField_ResRef</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_script_death"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_ScriptDeath_SetField_ResRef([NotNull] KotorPatchingLanguageParser.UTC_ScriptDeath_SetField_ResRefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_ScriptDialogue_SetField_ResRef</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_script_dialogue"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_ScriptDialogue_SetField_ResRef([NotNull] KotorPatchingLanguageParser.UTC_ScriptDialogue_SetField_ResRefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_ScriptDisturbed_SetField_ResRef</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_script_disturbed"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_ScriptDisturbed_SetField_ResRef([NotNull] KotorPatchingLanguageParser.UTC_ScriptDisturbed_SetField_ResRefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_ScriptEndDialog_SetField_ResRef</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_script_end_dialogu"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_ScriptEndDialog_SetField_ResRef([NotNull] KotorPatchingLanguageParser.UTC_ScriptEndDialog_SetField_ResRefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_ScriptEndRound_SetField_ResRef</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_script_end_round"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_ScriptEndRound_SetField_ResRef([NotNull] KotorPatchingLanguageParser.UTC_ScriptEndRound_SetField_ResRefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_ScriptHeartbeat_SetField_ResRef</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_script_heartbeat"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_ScriptHeartbeat_SetField_ResRef([NotNull] KotorPatchingLanguageParser.UTC_ScriptHeartbeat_SetField_ResRefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_ScriptBlocked_SetField_ResRef</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_script_on_blocked"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_ScriptBlocked_SetField_ResRef([NotNull] KotorPatchingLanguageParser.UTC_ScriptBlocked_SetField_ResRefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_ScriptNotice_SetField_ResRef</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_script_on_notice"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_ScriptNotice_SetField_ResRef([NotNull] KotorPatchingLanguageParser.UTC_ScriptNotice_SetField_ResRefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_ScriptRested_SetField_ResRef</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_script_rested"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_ScriptRested_SetField_ResRef([NotNull] KotorPatchingLanguageParser.UTC_ScriptRested_SetField_ResRefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_ScriptSpawn_SetField_ResRef</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_script_spawn"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_ScriptSpawn_SetField_ResRef([NotNull] KotorPatchingLanguageParser.UTC_ScriptSpawn_SetField_ResRefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_ScriptSpellAt_SetField_ResRef</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_script_spell_at"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_ScriptSpellAt_SetField_ResRef([NotNull] KotorPatchingLanguageParser.UTC_ScriptSpellAt_SetField_ResRefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_ScriptUserDefine_SetField_ResRef</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_script_user_define"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_ScriptUserDefine_SetField_ResRef([NotNull] KotorPatchingLanguageParser.UTC_ScriptUserDefine_SetField_ResRefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_SoundsetFile_SetField_UInt16</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_sound_set_file"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_SoundsetFile_SetField_UInt16([NotNull] KotorPatchingLanguageParser.UTC_SoundsetFile_SetField_UInt16Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_SoundsetFile_SetField_2DALabelLookup</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_sound_set_file"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_SoundsetFile_SetField_2DALabelLookup([NotNull] KotorPatchingLanguageParser.UTC_SoundsetFile_SetField_2DALabelLookupContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Str_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_str"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Str_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_Str_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Subrace_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_subrace_index"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Subrace_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_Subrace_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Tag_SetField_String</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_tag"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Tag_SetField_String([NotNull] KotorPatchingLanguageParser.UTC_Tag_SetField_StringContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_WalkRate_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_walk_rate"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_WalkRate_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_WalkRate_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_WalkRate_SetField_2DALabelLookup</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_walk_rate"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_WalkRate_SetField_2DALabelLookup([NotNull] KotorPatchingLanguageParser.UTC_WalkRate_SetField_2DALabelLookupContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Wis_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_wis"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Wis_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_Wis_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_FortBonus_SetField_Int16</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_fortbonus"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_FortBonus_SetField_Int16([NotNull] KotorPatchingLanguageParser.UTC_FortBonus_SetField_Int16Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_RefBonus_SetField_Int16</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_refbonus"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_RefBonus_SetField_Int16([NotNull] KotorPatchingLanguageParser.UTC_RefBonus_SetField_Int16Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_WillBonus_SetField_Int16</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_field_willbonus"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_WillBonus_SetField_Int16([NotNull] KotorPatchingLanguageParser.UTC_WillBonus_SetField_Int16Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Skills_ComputerUse_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_skills_set_field_computer_use"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Skills_ComputerUse_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_Skills_ComputerUse_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Skills_Demolutions_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_skills_set_field_demolitions"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Skills_Demolutions_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_Skills_Demolutions_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Skills_Stealth_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_skills_set_field_stealth"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Skills_Stealth_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_Skills_Stealth_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Skills_Awareness_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_skills_set_field_awareness"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Skills_Awareness_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_Skills_Awareness_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Skills_Persuade_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_skills_set_field_persuade"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Skills_Persuade_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_Skills_Persuade_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Skills_Repair_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_skills_set_field_repair"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Skills_Repair_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_Skills_Repair_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Skills_Security_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_skills_set_field_security"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Skills_Security_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_Skills_Security_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Skills_TreatInjury_SetField_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_skills_set_field_treat_injury"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Skills_TreatInjury_SetField_UInt8([NotNull] KotorPatchingLanguageParser.UTC_Skills_TreatInjury_SetField_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_AddFeat_UInt16</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_add_feat"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_AddFeat_UInt16([NotNull] KotorPatchingLanguageParser.UTC_AddFeat_UInt16Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_AddFeat_2DALabelLookup</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_add_feat"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_AddFeat_2DALabelLookup([NotNull] KotorPatchingLanguageParser.UTC_AddFeat_2DALabelLookupContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Class_SetNew</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_class"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Class_SetNew([NotNull] KotorPatchingLanguageParser.UTC_Class_SetNewContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Class_SetFirst</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_class"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Class_SetFirst([NotNull] KotorPatchingLanguageParser.UTC_Class_SetFirstContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Class_SetSecond</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_class"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Class_SetSecond([NotNull] KotorPatchingLanguageParser.UTC_Class_SetSecondContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.utc_class_mod"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUtc_class_mod([NotNull] KotorPatchingLanguageParser.Utc_class_modContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Class_AddPower_UInt16</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_class_add_power"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Class_AddPower_UInt16([NotNull] KotorPatchingLanguageParser.UTC_Class_AddPower_UInt16Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Class_AddPower_UInt16_2DALabelLookup</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_class_add_power"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Class_AddPower_UInt16_2DALabelLookup([NotNull] KotorPatchingLanguageParser.UTC_Class_AddPower_UInt16_2DALabelLookupContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Class_Type_SetField_Int32</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_class_type_set_field"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Class_Type_SetField_Int32([NotNull] KotorPatchingLanguageParser.UTC_Class_Type_SetField_Int32Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Class_Type_SetField_2DALookup</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_class_type_set_field"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Class_Type_SetField_2DALookup([NotNull] KotorPatchingLanguageParser.UTC_Class_Type_SetField_2DALookupContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_Class_Level_SetField_Int16</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_class_level_set_field"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_Class_Level_SetField_Int16([NotNull] KotorPatchingLanguageParser.UTC_Class_Level_SetField_Int16Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_AddItem</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_add_inventory"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_AddItem([NotNull] KotorPatchingLanguageParser.UTC_AddItemContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_AddItem_SetField_ResRef</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_add_inventory_mod"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_AddItem_SetField_ResRef([NotNull] KotorPatchingLanguageParser.UTC_AddItem_SetField_ResRefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_AddItem_SetField_Dropable</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_add_inventory_mod"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_AddItem_SetField_Dropable([NotNull] KotorPatchingLanguageParser.UTC_AddItem_SetField_DropableContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_SetEquipment</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_equipment"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_SetEquipment([NotNull] KotorPatchingLanguageParser.UTC_SetEquipmentContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_SetEquipment_ResRef_ResRef</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_equipment_mod"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_SetEquipment_ResRef_ResRef([NotNull] KotorPatchingLanguageParser.UTC_SetEquipment_ResRef_ResRefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UTC_SetEquipment_Dropable_UInt8</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.utc_set_equipment_mod"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUTC_SetEquipment_Dropable_UInt8([NotNull] KotorPatchingLanguageParser.UTC_SetEquipment_Dropable_UInt8Context context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EquipmentSlot_Implant</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.equipment_slot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEquipmentSlot_Implant([NotNull] KotorPatchingLanguageParser.EquipmentSlot_ImplantContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EquipmentSlot_LeftUtility</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.equipment_slot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEquipmentSlot_LeftUtility([NotNull] KotorPatchingLanguageParser.EquipmentSlot_LeftUtilityContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EquipmentSlot_Head</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.equipment_slot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEquipmentSlot_Head([NotNull] KotorPatchingLanguageParser.EquipmentSlot_HeadContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EquipmentSlot_Sensor</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.equipment_slot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEquipmentSlot_Sensor([NotNull] KotorPatchingLanguageParser.EquipmentSlot_SensorContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EquipmentSlot_Hands</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.equipment_slot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEquipmentSlot_Hands([NotNull] KotorPatchingLanguageParser.EquipmentSlot_HandsContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EquipmentSlot_RightUtility</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.equipment_slot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEquipmentSlot_RightUtility([NotNull] KotorPatchingLanguageParser.EquipmentSlot_RightUtilityContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EquipmentSlot_LeftArm</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.equipment_slot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEquipmentSlot_LeftArm([NotNull] KotorPatchingLanguageParser.EquipmentSlot_LeftArmContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EquipmentSlot_LeftSpecialWeapon</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.equipment_slot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEquipmentSlot_LeftSpecialWeapon([NotNull] KotorPatchingLanguageParser.EquipmentSlot_LeftSpecialWeaponContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EquipmentSlot_Body</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.equipment_slot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEquipmentSlot_Body([NotNull] KotorPatchingLanguageParser.EquipmentSlot_BodyContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EquipmentSlot_Plating</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.equipment_slot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEquipmentSlot_Plating([NotNull] KotorPatchingLanguageParser.EquipmentSlot_PlatingContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EquipmentSlot_RightArm</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.equipment_slot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEquipmentSlot_RightArm([NotNull] KotorPatchingLanguageParser.EquipmentSlot_RightArmContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EquipmentSlot_RightSpecialWeapon</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.equipment_slot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEquipmentSlot_RightSpecialWeapon([NotNull] KotorPatchingLanguageParser.EquipmentSlot_RightSpecialWeaponContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EquipmentSlot_LeftWeapon</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.equipment_slot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEquipmentSlot_LeftWeapon([NotNull] KotorPatchingLanguageParser.EquipmentSlot_LeftWeaponContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EquipmentSlot_Belt</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.equipment_slot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEquipmentSlot_Belt([NotNull] KotorPatchingLanguageParser.EquipmentSlot_BeltContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EquipmentSlot_Shield</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.equipment_slot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEquipmentSlot_Shield([NotNull] KotorPatchingLanguageParser.EquipmentSlot_ShieldContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EquipmentSlot_RightWeapon</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.equipment_slot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEquipmentSlot_RightWeapon([NotNull] KotorPatchingLanguageParser.EquipmentSlot_RightWeaponContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EquipmentSlot_FirstClaw</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.equipment_slot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEquipmentSlot_FirstClaw([NotNull] KotorPatchingLanguageParser.EquipmentSlot_FirstClawContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EquipmentSlot_SecondClaw</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.equipment_slot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEquipmentSlot_SecondClaw([NotNull] KotorPatchingLanguageParser.EquipmentSlot_SecondClawContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EquipmentSlot_ThirdClaw</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.equipment_slot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEquipmentSlot_ThirdClaw([NotNull] KotorPatchingLanguageParser.EquipmentSlot_ThirdClawContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EquipmentSlot_Hide</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.equipment_slot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEquipmentSlot_Hide([NotNull] KotorPatchingLanguageParser.EquipmentSlot_HideContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EquipmentSlot_AltLeftWeapon</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.equipment_slot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEquipmentSlot_AltLeftWeapon([NotNull] KotorPatchingLanguageParser.EquipmentSlot_AltLeftWeaponContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>EquipmentSlot_AltRight_Weapon</c>
+	/// labeled alternative in <see cref="KotorPatchingLanguageParser.equipment_slot"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEquipmentSlot_AltRight_Weapon([NotNull] KotorPatchingLanguageParser.EquipmentSlot_AltRight_WeaponContext context);
+	/// <summary>
 	/// Visit a parse tree produced by the <c>EditItem</c>
 	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_item"/>.
 	/// </summary>
@@ -781,87 +1577,4 @@ public interface IKotorPatchingLanguageVisitor<Result> : IParseTreeVisitor<Resul
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitEdit_appearance_mod([NotNull] KotorPatchingLanguageParser.Edit_appearance_modContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>EditCreature</c>
-	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_creature"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitEditCreature([NotNull] KotorPatchingLanguageParser.EditCreatureContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="KotorPatchingLanguageParser.edit_creature_mod"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitEdit_creature_mod([NotNull] KotorPatchingLanguageParser.Edit_creature_modContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>EditCreatureAppearance</c>
-	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_creature_field_appearance"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitEditCreatureAppearance([NotNull] KotorPatchingLanguageParser.EditCreatureAppearanceContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>EditCreatureAppearanceFromLabel</c>
-	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_creature_field_appearance"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitEditCreatureAppearanceFromLabel([NotNull] KotorPatchingLanguageParser.EditCreatureAppearanceFromLabelContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>EditCreaturePortrait</c>
-	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_creature_field_portrait"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitEditCreaturePortrait([NotNull] KotorPatchingLanguageParser.EditCreaturePortraitContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>EditCreaturePortraitFromLabel</c>
-	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_creature_field_portrait"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitEditCreaturePortraitFromLabel([NotNull] KotorPatchingLanguageParser.EditCreaturePortraitFromLabelContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>EditCreatureGender</c>
-	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_creature_field_gender"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitEditCreatureGender([NotNull] KotorPatchingLanguageParser.EditCreatureGenderContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>EditCreatureGenderFromKeyword</c>
-	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_creature_field_gender"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitEditCreatureGenderFromKeyword([NotNull] KotorPatchingLanguageParser.EditCreatureGenderFromKeywordContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>EditCreatureRace</c>
-	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_creature_field_race"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitEditCreatureRace([NotNull] KotorPatchingLanguageParser.EditCreatureRaceContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>EditCreatureRaceFromKeyword</c>
-	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_creature_field_race"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitEditCreatureRaceFromKeyword([NotNull] KotorPatchingLanguageParser.EditCreatureRaceFromKeywordContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>EditCreatureSubrace</c>
-	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_creature_field_subrace"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitEditCreatureSubrace([NotNull] KotorPatchingLanguageParser.EditCreatureSubraceContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>EditCreatureSubraceFromKeyword</c>
-	/// labeled alternative in <see cref="KotorPatchingLanguageParser.edit_creature_field_subrace"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitEditCreatureSubraceFromKeyword([NotNull] KotorPatchingLanguageParser.EditCreatureSubraceFromKeywordContext context);
 }

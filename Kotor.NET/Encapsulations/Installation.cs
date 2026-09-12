@@ -79,8 +79,8 @@ public class Installation
 
     public TwoDA Get2DA(ResRef filename)
     {
-        var resource = _overrideDirectory.FirstOrDefault(x => x.ResRef == filename && x.Type == ResourceType.TWODA)
-            ?? _chitin.FirstOrDefault(x => x.ResRef == filename && x.Type == ResourceType.TWODA);
+        var resource = _overrideDirectory.FirstOrDefault(x => x.ResRef == filename.Value && x.Type == ResourceType.TWODA)
+            ?? _chitin.FirstOrDefault(x => x.ResRef == filename.Value && x.Type == ResourceType.TWODA);
 
         var data = resource.ReadData();
         return TwoDA.FromBytes(data);

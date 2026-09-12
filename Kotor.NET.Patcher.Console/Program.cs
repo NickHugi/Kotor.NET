@@ -47,13 +47,41 @@ try
     end copy
     """;
 
+    string utc = """
+    edit creature "c_stormtrooper"
+        create or replace
+        from key
+        to override
+
+        set appearance to label "Sith_Soldier_02"
+        set computer use to 10
+        set demolitions to 11
+
+        add feat 13
+
+        add equipment to right weapon
+            set resref to "w_e11"
+            set dropable to true
+        end add
+        add item to inventory
+            set resref to "w_e11"
+            set dropable to false
+        end add
+        set new class
+            set class to 2
+            set level to 13
+            add power 5
+        end set
+    end edit
+    """;
+
     var installation = new Installation(
         @"C:\Program Files (x86)\Steam\steamapps\common\swkotor\",
         GameEngine.K2,
         Platform.Windows);
 
 
-    AntlrInputStream inputStream = new AntlrInputStream(copy);
+    AntlrInputStream inputStream = new AntlrInputStream(utc);
     KotorPatchingLanguageLexer speakLexer = new KotorPatchingLanguageLexer(inputStream);
     CommonTokenStream commonTokenStream = new CommonTokenStream(speakLexer);
     KotorPatchingLanguageParser parser = new KotorPatchingLanguageParser(commonTokenStream);

@@ -9,12 +9,11 @@ namespace Kotor.NET.Common.Data;
 public class ResRef
 {
     private string _value = "";
+    public string Value => _value;
 
     public ResRef()
     {
-
     }
-
     public ResRef(string value)
     {
         Set(value);
@@ -25,7 +24,7 @@ public class ResRef
         return _value;
     }
 
-    public void Set(string value)
+    private void Set(string value)
     {
         if (value.Length > 16)
         {

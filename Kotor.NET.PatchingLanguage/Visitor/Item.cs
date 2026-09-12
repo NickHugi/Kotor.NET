@@ -8,6 +8,9 @@ using Antlr4.Runtime.Misc;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Patcher.FileOperation;
 using Kotor.NET.Patcher.ForGFF;
+using Kotor.NET.Patcher.ForGFF.FieldLocators;
+using Kotor.NET.Patcher.ForGFF.Modifiers;
+using Kotor.NET.Patcher.ForGFF.Values;
 using Kotor.NET.Patcher.ForUTI;
 using Kotor.NET.Patcher.LocateResource;
 
@@ -38,7 +41,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditInt32Modifier
         {
-            Field = new ByPathFieldLocator()
+            Field = new ByPathFieldResolver()
             {
                 Relative = false,
                 Path = ["BaseItem"]
@@ -52,7 +55,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
 
         return new EditInt32Modifier
         {
-            Field = new ByPathFieldLocator()
+            Field = new ByPathFieldResolver()
             {
                 Relative = false,
                 Path = ["BaseItem"]
@@ -70,7 +73,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditLocalizedStringModifier
         {
-            Field = new ByPathFieldLocator()
+            Field = new ByPathFieldResolver()
             {
                 Relative = false,
                 Path = ["LocalizedName"]
@@ -83,7 +86,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditLocalizedStringModifier
         {
-            Field = new ByPathFieldLocator()
+            Field = new ByPathFieldResolver()
             {
                 Relative = false,
                 Path = ["Description"]
@@ -99,7 +102,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditStringModifier
         {
-            Field = new ByPathFieldLocator()
+            Field = new ByPathFieldResolver()
             {
                 Relative = false,
                 Path = ["Tag"]
@@ -112,7 +115,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditUInt8Modifier
         {
-            Field = new ByPathFieldLocator
+            Field = new ByPathFieldResolver
             {
                 Relative = false,
                 Path = ["Charges"]
@@ -125,7 +128,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditUInt8Modifier
         {
-            Field = new ByPathFieldLocator
+            Field = new ByPathFieldResolver
             {
                 Relative = false,
                 Path = ["MaxCharges"]
@@ -138,7 +141,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditUInt32Modifier
         {
-            Field = new ByPathFieldLocator
+            Field = new ByPathFieldResolver
             {
                 Relative = false,
                 Path = ["Cost"]
@@ -151,7 +154,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditUInt16Modifier
         {
-            Field = new ByPathFieldLocator
+            Field = new ByPathFieldResolver
             {
                 Relative = false,
                 Path = ["StackSize"]
@@ -164,7 +167,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditInt8Modifier
         {
-            Field = new ByPathFieldLocator
+            Field = new ByPathFieldResolver
             {
                 Relative = false,
                 Path = ["Plot"]
@@ -177,7 +180,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditInt8Modifier
         {
-            Field = new ByPathFieldLocator
+            Field = new ByPathFieldResolver
             {
                 Relative = false,
                 Path = ["Plot"]
@@ -193,7 +196,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditUInt8Modifier
         {
-            Field = new ByPathFieldLocator
+            Field = new ByPathFieldResolver
             {
                 Relative = false,
                 Path = ["ModelVariation"]
@@ -206,7 +209,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditUInt8Modifier
         {
-            Field = new ByPathFieldLocator
+            Field = new ByPathFieldResolver
             {
                 Relative = false,
                 Path = ["TextureVar"]
@@ -221,7 +224,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
         var setFields = context.uti_property_mod().Select(Visit).OfType<IGFFModifier>().ToList();
         var setStruct = new SetStructModifier()
         {
-            Parent = new ByPathFieldLocator()
+            Parent = new ByPathFieldResolver()
             {
                 Relative = true,
                 Path = ["-1"]
@@ -231,7 +234,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
         };
         var setList = new SetListModifier
         {
-            Parent = new ByPathFieldLocator()
+            Parent = new ByPathFieldResolver()
             {
                 Relative = false,
                 Path = ["PropertiesList"]
@@ -246,7 +249,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditUInt16Modifier
         {
-            Field = new ByPathFieldLocator
+            Field = new ByPathFieldResolver
             {
                 Relative = true,
                 Path = ["PropertyName"]
@@ -259,7 +262,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditUInt16Modifier
         {
-            Field = new ByPathFieldLocator
+            Field = new ByPathFieldResolver
             {
                 Relative = true,
                 Path = ["Subtype"]
@@ -272,7 +275,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditUInt8Modifier
         {
-            Field = new ByPathFieldLocator
+            Field = new ByPathFieldResolver
             {
                 Relative = true,
                 Path = ["ChanceAppear"]
@@ -285,7 +288,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditUInt8Modifier
         {
-            Field = new ByPathFieldLocator
+            Field = new ByPathFieldResolver
             {
                 Relative = true,
                 Path = ["CostTable"]
@@ -298,7 +301,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditUInt16Modifier
         {
-            Field = new ByPathFieldLocator
+            Field = new ByPathFieldResolver
             {
                 Relative = true,
                 Path = ["CostValue"]
@@ -311,7 +314,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditUInt8Modifier
         {
-            Field = new ByPathFieldLocator
+            Field = new ByPathFieldResolver
             {
                 Relative = true,
                 Path = ["Param1"]
@@ -324,7 +327,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditUInt8Modifier
         {
-            Field = new ByPathFieldLocator
+            Field = new ByPathFieldResolver
             {
                 Relative = true,
                 Path = ["Param1Value"]
@@ -337,7 +340,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditUInt8Modifier
         {
-            Field = new ByPathFieldLocator
+            Field = new ByPathFieldResolver
             {
                 Relative = true,
                 Path = ["UpgradeType"]

@@ -74,5 +74,15 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
         return new Vector4(x, y, z, w);
     }
 
-    
+    private int GetEquipmentSlot(ITerminalNode node)
+    {
+        var text = node.ToStringTree();
+        return node.GetText() switch
+        {
+            "implant" => 0,
+            "head" => 0,
+            "hands" => 0,
+            "left" => 0,
+        };
+    }
 }

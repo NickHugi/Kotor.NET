@@ -9,6 +9,9 @@ using Kotor.NET.Common;
 using Kotor.NET.Common.Data;
 using Kotor.NET.Common.Localization;
 using Kotor.NET.Patcher.ForGFF;
+using Kotor.NET.Patcher.ForGFF.FieldLocators;
+using Kotor.NET.Patcher.ForGFF.Modifiers;
+using Kotor.NET.Patcher.ForGFF.Values;
 
 namespace Kotor.NET.PatchingLanguage.Visitor;
 
@@ -16,7 +19,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
 {
     public override object VisitGFFLocateField([NotNull] KotorPatchingLanguageParser.GFFLocateFieldContext context)
     {
-        return new ByPathFieldLocator
+        return new ByPathFieldResolver
         {
             Relative = false,
             Path = GetStringLiteralText(context.STRING_LITERAL()).Split('\\')
@@ -27,7 +30,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditUInt8Modifier
         {
-            Field = (IFieldLocator)context.gff_locate_field(),
+            Field = (INodeResolver)context.gff_locate_field(),
             Value = (IValue<byte>)context.gff_value_uint8(),
         };
     }
@@ -54,12 +57,19 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
             SearchForCell = GetStringLiteralText(context.STRING_LITERAL(2)),
         };
     }
+    public override object VisitGFFValueUInt8BoolLiteral([NotNull] KotorPatchingLanguageParser.GFFValueUInt8BoolLiteralContext context)
+    {
+        return new ConstantValue<byte>
+        {
+            Value = (context.BOOL_LITERAL().GetText() == "true") ? (byte)1 : (byte)0,
+        };
+    }
 
     public override object VisitGFFAssignUInt16([NotNull] KotorPatchingLanguageParser.GFFAssignUInt16Context context)
     {
         return new EditUInt16Modifier
         {
-            Field = (IFieldLocator)context.gff_locate_field(),
+            Field = (INodeResolver)context.gff_locate_field(),
             Value = (IValue<UInt16>)context.gff_value_uint16(),
         };
     }
@@ -91,7 +101,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditUInt32Modifier
         {
-            Field = (IFieldLocator)context.gff_locate_field(),
+            Field = (INodeResolver)context.gff_locate_field(),
             Value = (IValue<uint>)context.gff_value_uint32(),
         };
     }
@@ -123,7 +133,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditUInt64Modifier
         {
-            Field = (IFieldLocator)context.gff_locate_field(),
+            Field = (INodeResolver)context.gff_locate_field(),
             Value = (IValue<UInt64>)context.gff_value_uint64(),
         };
     }
@@ -155,7 +165,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditInt8Modifier
         {
-            Field = (IFieldLocator)context.gff_locate_field(),
+            Field = (INodeResolver)context.gff_locate_field(),
             Value = (IValue<sbyte>)context.gff_value_int8(),
         };
     }
@@ -187,7 +197,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditInt16Modifier
         {
-            Field = (IFieldLocator)context.gff_locate_field(),
+            Field = (INodeResolver)context.gff_locate_field(),
             Value = (IValue<Int16>)context.gff_value_int16(),
         };
     }
@@ -219,7 +229,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditInt32Modifier
         {
-            Field = (IFieldLocator)context.gff_locate_field(),
+            Field = (INodeResolver)context.gff_locate_field(),
             Value = (IValue<Int32>)context.gff_value_int32(),
         };
     }
@@ -251,7 +261,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditInt64Modifier
         {
-            Field = (IFieldLocator)context.gff_locate_field(),
+            Field = (INodeResolver)context.gff_locate_field(),
             Value = (IValue<Int64>)context.gff_value_int64(),
         };
     }
@@ -283,7 +293,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditSingleModifier
         {
-            Field = (IFieldLocator)context.gff_locate_field(),
+            Field = (INodeResolver)context.gff_locate_field(),
             Value = (IValue<Single>)context.gff_value_single(),
         };
     }
@@ -316,7 +326,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditDoubleModifier
         {
-            Field = (IFieldLocator)context.gff_locate_field(),
+            Field = (INodeResolver)context.gff_locate_field(),
             Value = (IValue<Double>)context.gff_value_double(),
         };
     }
@@ -348,7 +358,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditResRefModifier
         {
-            Field = (IFieldLocator)context.gff_locate_field(),
+            Field = (INodeResolver)context.gff_locate_field(),
             Value = (IValue<ResRef>)context.gff_value_resref(),
         };
     }
@@ -380,7 +390,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditStringModifier
         {
-            Field = (IFieldLocator)context.gff_locate_field(),
+            Field = (INodeResolver)context.gff_locate_field(),
             Value = (IValue<String>)context.gff_value_string(),
         };
     }
@@ -412,7 +422,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditBinaryModifier
         {
-            Field = (IFieldLocator)context.gff_locate_field(),
+            Field = (INodeResolver)context.gff_locate_field(),
             Value = (IValue<byte[]>)context.gff_value_binary(),
         };
     }
@@ -431,7 +441,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditLocalizedStringStringRefModifier
         {
-            Field = (IFieldLocator)context.gff_locate_field(),
+            Field = (INodeResolver)context.gff_locate_field(),
             Value = (IValue<int>)context.gff_value_int32(),
         };
     }
@@ -466,7 +476,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditVector3Modifier
         {
-            Field = (IFieldLocator)context.gff_locate_field(),
+            Field = (INodeResolver)context.gff_locate_field(),
             Value = (IValue<Vector3>)context.gff_value_vector3(),
         };
     }
@@ -482,7 +492,7 @@ public partial class KotorPatchingLanguageVisitor : KotorPatchingLanguageBaseVis
     {
         return new EditVector4Modifier
         {
-            Field = (IFieldLocator)context.gff_locate_field(),
+            Field = (INodeResolver)context.gff_locate_field(),
             Value = (IValue<Vector4>)context.gff_value_vector4(),
         };
     }
