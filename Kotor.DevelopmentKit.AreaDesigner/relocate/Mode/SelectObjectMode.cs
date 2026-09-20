@@ -32,10 +32,9 @@ public class SelectObjectMode : BaseMode
     {
         get
         {
-            return SelectedWorldObject switch
-            {
-                _ => _objects.Where(x => SelectedWorldObject is null || x.Type == SelectedWorldObject.Type).ToList()
-            };
+            return (SelectedWorldObject is null)
+                ? _objects
+                : _objects.Where(x => x.Type == SelectedWorldObject.Type && x.ClassID == SelectedWorldObject.Template.ClassID);
         }
     }
     public WorldObjectTemplate? SelectedObjectTemplate
