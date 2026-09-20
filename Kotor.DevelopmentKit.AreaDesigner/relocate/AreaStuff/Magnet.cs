@@ -101,7 +101,8 @@ public class Magnet
 
     public Vector3 LocalPosition => MagnetTemplate.LocalPosition;
     public Quaternion LocalOrientation => MagnetTemplate.LocalOrientation;
-    public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
+    public Vector3 LocalScale => MagnetTemplate.LocalScale;
+    public Matrix4x4 LocalTransform => Matrix4x4.CreateScale(LocalScale) * Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
 
     public Vector3 GlobalPosition
     {
@@ -110,6 +111,10 @@ public class Magnet
     public Quaternion GlobalOrientation
     {
         get => Quaternion.Normalize(LocalOrientation * Parent.GlobalOrientation);
+    }
+    public Vector3 GlobalScale
+    {
+        get => LocalScale + Parent.GlobalScale;
     }
     public Matrix4x4 GlobalTransform => LocalTransform * Parent.GlobalTransform;
 

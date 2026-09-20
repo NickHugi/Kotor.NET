@@ -44,7 +44,12 @@ public class WorldObject
         get => (ParentMagnet is null) ? field : ParentMagnet.LocalOrientation;
         set;
     } = Quaternion.Identity;
-    public Matrix4x4 LocalTransform => Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
+    public Vector3 LocalScale
+    {
+        get => (ParentMagnet is null) ? field : ParentMagnet.LocalScale;
+        set;
+    } = Vector3.One;
+    public Matrix4x4 LocalTransform => Matrix4x4.CreateScale(LocalScale) * Matrix4x4.CreateFromQuaternion(LocalOrientation) * Matrix4x4.CreateTranslation(LocalPosition);
 
     public Vector3 ParentPosition
     {
@@ -53,6 +58,10 @@ public class WorldObject
     public Quaternion ParentOrientation
     {
         get => (ParentMagnet is null) ? Room.Orientation : ParentMagnet.GlobalOrientation;
+    }
+    public Vector3 ParentScale
+    {
+        get => (ParentMagnet is null) ? Vector3.One : ParentMagnet.GlobalScale;
     }
     public Matrix4x4 ParentTransform
     {
@@ -76,6 +85,12 @@ public class WorldObject
         set => _ = (ParentMagnet is null)
             ? LocalOrientation = value * Quaternion.Inverse(Room.Orientation)
             : Quaternion.Identity;
+    }
+    public Vector3 GlobalScale
+    {
+        get => (ParentMagnet is null)
+            ? LocalScale
+            : ParentMagnet.GlobalScale;
     }
     public Matrix4x4 GlobalTransform => (ParentMagnet is null)
         ? LocalTransform * Room.Transform
@@ -103,6 +118,7 @@ public class WorldObject
             {
                 LocalPosition = Vector3.Zero,
                 LocalOrientation = Quaternion.CreateFromYawPitchRoll(0, 0, MathF.PI),
+                LocalScale = Vector3.One,
                 KitID = template.DoorframeKitID,
                 TemplateID = template.DoorframeTemplateID,
             });

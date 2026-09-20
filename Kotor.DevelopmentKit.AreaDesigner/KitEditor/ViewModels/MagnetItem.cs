@@ -23,6 +23,11 @@ public class MagnetItem : ReactiveObject
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
+    public MagnetType MagnetType
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
 
     public ReactiveVector3 Position
     {
@@ -30,6 +35,11 @@ public class MagnetItem : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
     public ReactiveQuaternion Orientation
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+    public ReactiveVector3 Scale
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
@@ -107,7 +117,8 @@ public class MagnetItem : ReactiveObject
         TemplateID = "";
 
         Position = new();
-        Orientation = new();
+        Orientation = new(0, 0, 0, 1);
+        Scale = new(1, 1, 1);
 
         this.WhenAnyValue(x => x.TemplateID).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
         this.WhenAnyValue(x => x.Position).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
@@ -118,6 +129,9 @@ public class MagnetItem : ReactiveObject
         TemplateID = template.TemplateID;
         Position = new ReactiveVector3(template.LocalPosition);
         Orientation = new ReactiveQuaternion(template.LocalOrientation);
+        Scale = new ReactiveVector3(template.LocalScale);
+        MagnetType = template.MagnetType;
+
         ConditionCheckLocalMagnetsOnly = template.ConditionCheckLocalMagnetsOnly;
         ConditionMustHaveTemplate = template.ConditionMustHaveTemplate;
         ConditionOverlapWillDisable = template.ConditionOverlapWillDisable;
@@ -142,6 +156,9 @@ public class MagnetItem : ReactiveObject
             TemplateID = TemplateID,
             LocalPosition = Position.ToModel(),
             LocalOrientation = Orientation.ToModel(),
+            LocalScale = Scale.ToModel(),
+            MagnetType = MagnetType,
+
             ConditionCheckLocalMagnetsOnly = ConditionCheckLocalMagnetsOnly,
             ConditionMustHaveTemplate = ConditionMustHaveTemplate,
             ConditionOverlapOnlySameRotation = ConditionOverlapOnlySameRotation,

@@ -44,6 +44,9 @@ public class KitSerializer_V0_1
                     TemplateID = magnet.templateID.Value,
                     LocalPosition = new Vector3(magnet.position.ToObject<float[]>()),
                     LocalOrientation = ((float[])magnet.orientation.ToObject<float[]>()).ToQuaternion(),
+                    LocalScale = new Vector3(magnet.scale?.ToObject<float[]>() ?? new float[] {1,1,1}),
+                    MagnetType = (MagnetType)((int?)magnet.magnetType?.ToObject<int?>() ?? 0),
+
                     ConditionCheckLocalMagnetsOnly = magnet.conditionCheckLocalMagnetsOnly?.ToObject<bool>() ?? false,
                     ConditionMustHaveTemplate = magnet.conditionMustHaveTemplate?.ToObject<bool>() ?? false,
                     ConditionOverlapWillDisable = magnet.conditionOverlapWillDisable?.ToObject<bool>() ?? false,
@@ -85,6 +88,9 @@ public class KitSerializer_V0_1
                 templateID = magnet.TemplateID,
                 position = magnet.LocalPosition.ToFloatArray(),
                 orientation = magnet.LocalOrientation.ToFloatArray(),
+                scale = magnet.LocalScale.ToFloatArray(),
+                magnetType = (int)magnet.MagnetType,
+
                 conditionCheckLocalMagnetsOnly = magnet.ConditionCheckLocalMagnetsOnly,
                 conditionMustHaveTemplate = magnet.ConditionMustHaveTemplate,
                 conditionOverlapWillDisable = magnet.ConditionOverlapWillDisable,

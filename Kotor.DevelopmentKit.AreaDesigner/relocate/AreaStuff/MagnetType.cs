@@ -2,6 +2,13 @@
 
 public enum MagnetType
 {
-    Magnet,
-    Hook,
+    None,
+    Floor,
+    Ceiling,
+    WallCentre,
+    WallFull,
+    WallEdge,
+    WallCorner,
+    Corner,
+    WallConnector
 }

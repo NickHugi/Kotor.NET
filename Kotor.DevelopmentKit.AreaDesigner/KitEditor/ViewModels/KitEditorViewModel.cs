@@ -197,6 +197,9 @@ public class KitEditorViewModel : ReactiveObject
                     TemplateID = TemplateIDFromNode(x),
                     Position = PositionFromNode(x),
                     Orientation = OrientationFromNode(x),
+                    Scale = ScaleFromNode(x),
+                    MagnetType = GetMagnetType(x),
+
                     ConditionCheckLocalMagnetsOnly = GetBool(x, "CheckLocalMagnetsOnly"),
                     ConditionMustHaveTemplate = GetBool(x, "MustHaveTemplate"),
                     ConditionOverlapWillDisable = GetBool(x, "OverlapWillDisable"),
@@ -215,21 +218,23 @@ public class KitEditorViewModel : ReactiveObject
     }
     private WorldObjectType WorldObjectTypeFromFilename(string filename)
     {
-        if (filename.StartsWith("floor"))
+        if (filename.Contains("_floor_"))
             return WorldObjectType.Floor;
-        else if (filename.StartsWith("ceiling"))
+        else if (filename.Contains("_ceiling"))
             return WorldObjectType.Ceiling;
-        else if (filename.StartsWith("tile"))
+        else if (filename.Contains("_tile_"))
             return WorldObjectType.Tile;
-        else if (filename.StartsWith("wall"))
+        else if (filename.Contains("_wall_"))
             return WorldObjectType.Wall;
-        else if (filename.StartsWith("generic"))
+        else if (filename.Contains("_walledge_"))
+            return WorldObjectType.Wall;
+        else if (filename.Contains("_wallcorner_"))
+            return WorldObjectType.Wall;
+        else if (filename.Contains("_generic_"))
             return WorldObjectType.Generic;
-        else if (filename.StartsWith("icorner"))
+        else if (filename.Contains("_corner_"))
             return WorldObjectType.InnerCorner;
-        else if (filename.StartsWith("ocorner"))
-            return WorldObjectType.OuterCorner;
-        else if (filename.StartsWith("doorframe"))
+        else if (filename.Contains("_doorframe_"))
             return WorldObjectType.DoorFrame;
         else
             return WorldObjectType.Generic;
@@ -241,6 +246,14 @@ public class KitEditorViewModel : ReactiveObject
     private ReactiveQuaternion OrientationFromNode(MDLNode node)
     {
         return new(node.GetController<MDLControllerDataOrientation>().First().Data[0].ToQuaternion());
+    }
+    private ReactiveVector3 ScaleFromNode(MDLNode node)
+    {
+        return new(
+            GetFloat(node, "XScale", 1),
+            GetFloat(node, "YScale", 1),
+            GetFloat(node, "ZScale", 1)
+            );
     }
     private string NameFromMDL(MDL mdl)
     {
@@ -278,9 +291,23 @@ public class KitEditorViewModel : ReactiveObject
     {
         return int.TryParse(GetString(node, property), out var result) ? result : 0;
     }
-    private float GetFloat(MDLNode node, string property)
+    private float GetFloat(MDLNode node, string property, float defaultValue = 0)
     {
-        return float.TryParse(GetString(node, property), out var result) ? result : 0;
+        return float.TryParse(GetString(node, property), out var result) ? result : defaultValue;
+    }
+    private MagnetType GetMagnetType(MDLNode node)
+    {
+        return GetString(node, "HookType") switch
+        {
+            "floor" => MagnetType.Floor,
+            "ceiling" => MagnetType.Ceiling,
+            "wallfull" => MagnetType.WallFull,
+            "walledge" => MagnetType.WallEdge,
+            "wallcorner" => MagnetType.WallCorner,
+            "corner" => MagnetType.Corner,
+            "connector" => MagnetType.WallConnector,
+            _ => MagnetType.None
+        };
     }
     private OverlapCountType GetOverlapCountType(MDLNode node, string property)
     {

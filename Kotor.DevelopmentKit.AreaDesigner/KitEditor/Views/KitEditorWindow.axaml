@@ -60,6 +60,7 @@
                 <core:LabeledTextBox Label="Template ID" Text="{Binding TemplateID}" />
                 <core:Vector3Edit Label="Position" Value="{Binding Position}" />
                 <core:QuaternionEdit Label="Orientation" Value="{Binding Orientation}" />
+                <core:Vector3Edit Label="Scale" Value="{Binding Scale}" />
             </StackPanel>
         </DataTemplate>
         
