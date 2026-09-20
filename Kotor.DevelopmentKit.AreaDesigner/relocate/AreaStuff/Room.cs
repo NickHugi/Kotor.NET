@@ -19,7 +19,7 @@ public class Room
     {
         get;
         set => field = Quaternion.Normalize(value);
-    }
+    } = Quaternion.Identity;
     public Matrix4x4 Transform => Matrix4x4.CreateFromQuaternion(Orientation) * Matrix4x4.CreateTranslation(Position);
 
     public ICollection<WorldObject> Objects = [];

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Avalonia.Markup.Xaml.Templates;
 using Kotor.NET.Extensions;
 using Kotor.NET.Graphics.Extensions;
 
@@ -25,70 +26,110 @@ public class Magnet
     {
         get
         {
-            if (!MagnetTemplate.ConditionOverlapWillDisable)
-                return true;
-
-            var magnets = (MagnetTemplate.ConditionCheckLocalMagnetsOnly ? Room.AllMagnets : Area.AllMagnets).AsEnumerable();
-
-            magnets = magnets.Where(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, MagnetTemplate.ConditionOverlapDistance));
+            var magnets = Area.AllMagnets.AsEnumerable();
             magnets = magnets.Where(x => x != this);
 
-            if (MagnetTemplate.ConditionMustHaveTemplate)
+            //if (MagnetTemplate.MagnetType == MagnetType.WallCentre)
+            if (WorldObjectTemplate.TemplateID.Contains("_wall_"))
             {
-                magnets = magnets.Where(x => !string.IsNullOrWhiteSpace(x.MagnetTemplate.KitID) && !string.IsNullOrEmpty(x.MagnetTemplate.TemplateID));
+                magnets = magnets.Where(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, 0.01f));
+                return magnets.Count() == 0;
+            }
+            if (WorldObjectTemplate.TemplateID.Contains("_walledge"))
+            {
+                magnets = magnets
+                    .Where(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, 2))
+                    .Where(x => x.WorldObjectTemplate.Model.Contains("_walledge"));
+                return magnets.Count() < 4;
+            }
+            if (WorldObjectTemplate.TemplateID.Contains("_wallcorner"))
+            {
+                magnets = magnets
+                    .Where(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, 2))
+                    .Where(x => x.WorldObjectTemplate.Model.Contains("_walledge"));
+                return magnets.Count() >= 4;
+            }
+            if (WorldObjectTemplate.TemplateID.Contains("_corner"))
+            {
+                magnets = magnets.Where(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, 0.01f));
+                return magnets.Count() == 0;
             }
 
-            if (MagnetTemplate.ConditionOverlapOnlySameClass)
+            if (WorldObjectTemplate.TemplateID.Contains("_floor_"))
             {
-                magnets = magnets.Where(x => x.WorldObjectTemplate?.ClassID == WorldObjectTemplate?.ClassID);
+                return true;
             }
-            if (MagnetTemplate.ConditionOverlapOnlySameTemplate)
+            if (WorldObjectTemplate.TemplateID.Contains("_ceiling_"))
             {
-                magnets = magnets.Where(x => x.MagnetTemplate?.Template == MagnetTemplate?.Template);
-            }
-            if (MagnetTemplate.ConditionOverlapOnlySameType)
-            {
-                magnets = magnets.Where(x => x.MagnetTemplate?.Template?.Type == MagnetTemplate?.Template?.Type);
+                return true;
             }
 
-            if (MagnetTemplate.ConditionOverlapOnlySameRotation)
-            {
-                magnets = magnets.Where(x => x.GlobalOrientation.ApproximatelyEquals(GlobalOrientation));
-            }
 
-            if (MagnetTemplate.ConditionOverlapOnlyEnableMiddle && magnets.Count() == 2)
-            {
-                var middle = MiddleMostMagnet(this, magnets.ElementAt(0), magnets.ElementAt(1));
-                return this == middle;
-            }
+            return false;
+            //if (!MagnetTemplate.ConditionOverlapWillDisable)
+            //    return true;
 
-            if (MagnetTemplate.ConditionOverlapOnlySpecificTypes is not null)
-            {
-                magnets = magnets.Where(x => (x.IsHook && MagnetTemplate.ConditionOverlapOnlySpecificTypes.Contains(x.MagnetTemplate.Template.Type)) || (!x.IsHook && MagnetTemplate.ConditionOverlapOnlySpecificTypes.Contains(null)));
-            }
+            //var magnets = (MagnetTemplate.ConditionCheckLocalMagnetsOnly ? Room.AllMagnets : Area.AllMagnets).AsEnumerable();
 
-            if (WorldObjectTemplate?.Type == WorldObjectType.DoorFrame)
-            {
-                magnets = magnets.Where(x => x.Parent?.Type == WorldObjectType.DoorFrame).Select(x => x.Parent.ParentMagnet);
-            }
+            //magnets = magnets.Where(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, MagnetTemplate.ConditionOverlapDistance));
+            //magnets = magnets.Where(x => x != this);
 
-            var visible = MagnetTemplate.ConditionOverlapType switch
-            {
-                OverlapCountType.EqualTo => magnets.Count() == MagnetTemplate.ConditionOverlapCheckCount,
-                OverlapCountType.NotEqualTo => magnets.Count() != MagnetTemplate.ConditionOverlapCheckCount,
-                OverlapCountType.LessThan => magnets.Count() < MagnetTemplate.ConditionOverlapCheckCount,
-                OverlapCountType.GreaterThan => magnets.Count() > MagnetTemplate.ConditionOverlapCheckCount,
-                _ => true
-            };
+            //if (MagnetTemplate.ConditionMustHaveTemplate)
+            //{
+            //    magnets = magnets.Where(x => !string.IsNullOrWhiteSpace(x.MagnetTemplate.KitID) && !string.IsNullOrEmpty(x.MagnetTemplate.TemplateID));
+            //}
 
-            if (MagnetTemplate.ConditionOverlapOnlyEnableFirst && visible)
-            {
-                var check = magnets.Append(this).Where(x => x.Parent.Visible).ToList();
-                var lowestGuid = check.DefaultIfEmpty().Min(x => x?.Child?.ID);
-                visible = visible && (lowestGuid == Child.ID);
-            }
+            //if (MagnetTemplate.ConditionOverlapOnlySameClass)
+            //{
+            //    magnets = magnets.Where(x => x.WorldObjectTemplate?.ClassID == WorldObjectTemplate?.ClassID);
+            //}
+            //if (MagnetTemplate.ConditionOverlapOnlySameTemplate)
+            //{
+            //    magnets = magnets.Where(x => x.MagnetTemplate?.Template == MagnetTemplate?.Template);
+            //}
+            //if (MagnetTemplate.ConditionOverlapOnlySameType)
+            //{
+            //    magnets = magnets.Where(x => x.MagnetTemplate?.Template?.Type == MagnetTemplate?.Template?.Type);
+            //}
 
-            return visible;
+            //if (MagnetTemplate.ConditionOverlapOnlySameRotation)
+            //{
+            //    magnets = magnets.Where(x => x.GlobalOrientation.ApproximatelyEquals(GlobalOrientation));
+            //}
+
+            //if (MagnetTemplate.ConditionOverlapOnlyEnableMiddle && magnets.Count() == 2)
+            //{
+            //    var middle = MiddleMostMagnet(this, magnets.ElementAt(0), magnets.ElementAt(1));
+            //    return this == middle;
+            //}
+
+            //if (MagnetTemplate.ConditionOverlapOnlySpecificTypes is not null)
+            //{
+            //    magnets = magnets.Where(x => (x.IsHook && MagnetTemplate.ConditionOverlapOnlySpecificTypes.Contains(x.MagnetTemplate.Template.Type)) || (!x.IsHook && MagnetTemplate.ConditionOverlapOnlySpecificTypes.Contains(null)));
+            //}
+
+            //if (WorldObjectTemplate?.Type == WorldObjectType.DoorFrame)
+            //{
+            //    magnets = magnets.Where(x => x.Parent?.Type == WorldObjectType.DoorFrame).Select(x => x.Parent.ParentMagnet);
+            //}
+
+            //var visible = MagnetTemplate.ConditionOverlapType switch
+            //{
+            //    OverlapCountType.EqualTo => magnets.Count() == MagnetTemplate.ConditionOverlapCheckCount,
+            //    OverlapCountType.NotEqualTo => magnets.Count() != MagnetTemplate.ConditionOverlapCheckCount,
+            //    OverlapCountType.LessThan => magnets.Count() < MagnetTemplate.ConditionOverlapCheckCount,
+            //    OverlapCountType.GreaterThan => magnets.Count() > MagnetTemplate.ConditionOverlapCheckCount,
+            //    _ => true
+            //};
+
+            //if (MagnetTemplate.ConditionOverlapOnlyEnableFirst && visible)
+            //{
+            //    var check = magnets.Append(this).Where(x => x.Parent.Visible).ToList();
+            //    var lowestGuid = check.DefaultIfEmpty().Min(x => x?.Child?.ID);
+            //    visible = visible && (lowestGuid == Child.ID);
+            //}
+
+            //return visible;
         }
         set;
     } = true;
@@ -106,7 +147,7 @@ public class Magnet
 
     public Vector3 GlobalPosition
     {
-        get => Vector3.Transform(LocalPosition, Parent.GlobalOrientation) + Parent.GlobalPosition;
+        get => Vector3.Transform(Vector3.Zero, GlobalTransform);
     }
     public Quaternion GlobalOrientation
     {
@@ -114,7 +155,7 @@ public class Magnet
     }
     public Vector3 GlobalScale
     {
-        get => LocalScale + Parent.GlobalScale;
+        get => Vector3.Transform(Vector3.Zero, GlobalTransform);
     }
     public Matrix4x4 GlobalTransform => LocalTransform * Parent.GlobalTransform;
 
