@@ -145,6 +145,7 @@ public class AddTileMode : BaseMode
             newTile.GlobalPosition = _projectedRoom.Position;
             newTile.GlobalOrientation = _projectedRoom.Orientation;
             room.AddTile(newTile);
+            room.Area.Dirty = true;
         }
         else
         {

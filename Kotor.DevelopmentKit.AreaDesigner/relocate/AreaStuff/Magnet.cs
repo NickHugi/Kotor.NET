@@ -22,50 +22,58 @@ public class Magnet
     public WorldObjectTemplate? WorldObjectTemplate => Child?.Template;
     public MagnetType Type { get; set; }
 
+    public bool Dirty { get; set; } = true;
+
     public bool Visible
     {
         get
         {
-            var magnets = Area.AllMagnets.AsEnumerable();
-            magnets = magnets.Where(x => x != this);
+            if (Dirty)
+            {
+                var magnets = Area.AllMagnets.AsEnumerable();
+                magnets = magnets.Where(x => x != this);
 
-            //if (MagnetTemplate.MagnetType == MagnetType.WallCentre)
-            if (WorldObjectTemplate.TemplateID.Contains("_wall_"))
-            {
-                magnets = magnets.Where(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, 0.01f));
-                return magnets.Count() == 0;
-            }
-            if (WorldObjectTemplate.TemplateID.Contains("_walledge"))
-            {
-                magnets = magnets
-                    .Where(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, 2))
-                    .Where(x => x.WorldObjectTemplate.Model.Contains("_walledge"));
-                return magnets.Count() < 4;
-            }
-            if (WorldObjectTemplate.TemplateID.Contains("_wallcorner"))
-            {
-                magnets = magnets
-                    .Where(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, 2))
-                    .Where(x => x.WorldObjectTemplate.Model.Contains("_walledge"));
-                return magnets.Count() >= 4;
-            }
-            if (WorldObjectTemplate.TemplateID.Contains("_corner"))
-            {
-                magnets = magnets.Where(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, 0.01f));
-                return magnets.Count() == 0;
+                //if (MagnetTemplate.MagnetType == MagnetType.WallCentre)
+                if (WorldObjectTemplate.TemplateID.Contains("_wall_"))
+                {
+                    magnets = magnets.Where(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, 0.01f));
+                    field = magnets.Count() == 0;
+                }
+                else if (WorldObjectTemplate.TemplateID.Contains("_walledge"))
+                {
+                    magnets = magnets
+                        .Where(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, 2))
+                        .Where(x => x.WorldObjectTemplate.Model.Contains("_walledge"));
+                    field = magnets.Count() < 4;
+                }
+                else if (WorldObjectTemplate.TemplateID.Contains("_wallcorner"))
+                {
+                    magnets = magnets
+                        .Where(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, 2))
+                        .Where(x => x.WorldObjectTemplate.Model.Contains("_walledge"));
+                    field = magnets.Count() >= 4;
+                }
+                else if (WorldObjectTemplate.TemplateID.Contains("_corner"))
+                {
+                    magnets = magnets.Where(x => x.GlobalPosition.ApproximatelyEquals(GlobalPosition, 0.01f));
+                    field = magnets.Count() == 0;
+                }
+
+                else if (WorldObjectTemplate.TemplateID.Contains("_floor_"))
+                {
+                    field = true;
+                }
+                else if (WorldObjectTemplate.TemplateID.Contains("_ceiling_"))
+                {
+                    field = true;
+                }
+
+                Dirty = false;
             }
 
-            if (WorldObjectTemplate.TemplateID.Contains("_floor_"))
-            {
-                return true;
-            }
-            if (WorldObjectTemplate.TemplateID.Contains("_ceiling_"))
-            {
-                return true;
-            }
+            return field;
 
-
-            return false;
+                
             //if (!MagnetTemplate.ConditionOverlapWillDisable)
             //    return true;
 
@@ -131,8 +139,7 @@ public class Magnet
 
             //return visible;
         }
-        set;
-    } = true;
+    } 
 
     public bool IsHook => !string.IsNullOrWhiteSpace(MagnetTemplate.TemplateID) && !string.IsNullOrWhiteSpace(MagnetTemplate.KitID);
     public bool IsTileMagnet => (IsHook && MagnetTemplate.Template?.Type == WorldObjectType.Wall) || Parent.Type == WorldObjectType.DoorFrame;

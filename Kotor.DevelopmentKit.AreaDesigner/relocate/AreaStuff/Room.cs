@@ -69,6 +69,7 @@ public class Room
     public void DeleteTile(WorldObject tile)
     {
         Objects.Remove(tile);
+        Area.Dirty = true;
 
         if (Objects.Count() == 0)
         {

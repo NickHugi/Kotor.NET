@@ -14,6 +14,8 @@ public class Area
     public Vector3 DiffuseLighting { get; set; }
     public Vector3 DynamicLighting { get; set; }
 
+    public bool Dirty { get; set; }
+
     public IReadOnlyList<Room> Rooms => _rooms.AsReadOnly();
     private List<Room> _rooms = new();
 
@@ -36,10 +38,12 @@ public class Area
     public void AddRoom(Room room)
     {
         _rooms.Add(room);
+        Dirty = true;
     }
     public void DeleteRoom(Room room)
     {
         _rooms.Remove(room);
+        Dirty = true;
     }
 
     public void Invalidate()

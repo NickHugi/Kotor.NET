@@ -55,6 +55,12 @@ public class AreaScene : IScene
         Mode?.Update(timestep, this);
         var inject = Area.Rooms.FirstOrDefault();
 
+        if (Area.Dirty)
+        {
+            Area.AllMagnets.ToList().ForEach(x => x.Dirty = true);
+            Area.Dirty = false;
+        }
+
         RunningTime += timestep;
     }
 
