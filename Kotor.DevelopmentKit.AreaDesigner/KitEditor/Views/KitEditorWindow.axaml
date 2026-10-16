@@ -4,7 +4,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels"
         xmlns:hooks="using:Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Hooks"
-        xmlns:templates="using:Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Templates"
         xmlns:core="using:Kotor.DevelopmentKit.Base.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Kotor.DevelopmentKit.AreaDesigner.KitEditor.Views.KitEditorWindow"
@@ -47,17 +46,42 @@
                          ItemsSource="{Binding Magnets}"
                          SelectedItem="{Binding SelectedMagnet}"
                          Grid.Row="1"/>
-                <StackPanel Orientation="Horizontal" Spacing="4" Grid.Row="2">
-                    <Button Content="Add" Command="{Binding AddMagnet}" />
-                    <Button Content="Remove" Command="{Binding DeleteSelectedMagnet}" />
-                </StackPanel>
+                <Grid ColumnDefinitions="*,*" Grid.Row="2">
+                    <Button Content="Add Magnet" Command="{Binding AddMagnet}" Margin="0,0,2,0" />
+                    <Button Content="Remove" Command="{Binding DeleteSelectedMagnet}" Grid.Column="1" Margin="2,0,0,0" />
+                </Grid>
             </Grid>
         </DataTemplate>
         
-        <DataTemplate x:Key="MagnetPanelResource" DataType="vm:MagnetItem">
+        <DataTemplate x:Key="MagnetPanelResource" DataType="vm:MagnetItem" x:DataType="vm:MagnetItem">
             <StackPanel>
+                <TextBlock Text="Magnet" FontWeight="Bold" />
+                <core:LabeledTextBox Label="Tag" Text="{Binding Tag}" />
+                <core:Vector3Edit Label="Position" Value="{Binding Position}" />
+                <core:QuaternionEdit Label="Orientation" Value="{Binding Orientation}" />
+                <core:Vector3Edit Label="Scale" Value="{Binding Scale}" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="TargetHookPanelResource" DataType="hooks:SourceHookItem" x:DataType="hooks:SourceHookItem">
+            <StackPanel>
+                <TextBlock Text="Source Hook" FontWeight="Bold" />
+                <core:LabeledTextBox Label="Tag" Text="{Binding Tag}" />
                 <core:LabeledTextBox Label="Kit ID" Text="{Binding KitID}" />
-                <core:LabeledTextBox Label="Template ID" Text="{Binding TemplateID}" />
+                <core:LabeledTextBox Label="C1 Template ID" Text="{Binding C1TemplateID}" />
+                <core:LabeledTextBox Label="C2 Template ID" Text="{Binding C2TemplateID}" />
+                <core:LabeledTextBox Label="C3 Template ID" Text="{Binding C3TemplateID}" />
+                <core:LabeledTextBox Label="C4 Template ID" Text="{Binding C4TemplateID}" />
+                <core:Vector3Edit Label="Position" Value="{Binding Position}" />
+                <core:QuaternionEdit Label="Orientation" Value="{Binding Orientation}" />
+                <core:Vector3Edit Label="Scale" Value="{Binding Scale}" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="SourceHookPanelResource" DataType="hooks:TargetHookItem" x:DataType="hooks:TargetHookItem">
+            <StackPanel>
+                <TextBlock Text="Target Hook" FontWeight="Bold" />
+                <core:LabeledTextBox Label="Tag" Text="{Binding Tag}" />
                 <core:Vector3Edit Label="Position" Value="{Binding Position}" />
                 <core:QuaternionEdit Label="Orientation" Value="{Binding Orientation}" />
                 <core:Vector3Edit Label="Scale" Value="{Binding Scale}" />
@@ -75,6 +99,7 @@
                 <TextBlock Text="{Binding Name}" />
             </StackPanel>
         </DataTemplate>
+
     </Window.Resources>
 
     <TabControl>
@@ -123,15 +148,27 @@
                 </Border>
 
                 <Border Grid.Column="2" Padding="5" Background="#ddd">
-                    <StackPanel Spacing="5">
-                        <Border Padding="5" Background="#bbb">
+                    <Border Padding="5" Background="#bbb">
+                        <Grid RowDefinitions="Auto,*">
+                            <StackPanel>
+                                <TextBlock Text="Magnet Type" />
+                                <ComboBox ItemsSource="{Binding SelectedWorldObject.MagnetTypes}"
+                                          SelectedItem="{Binding SelectedWorldObject.SelectedMagnetType, Mode=TwoWay}" />
+                            </StackPanel>
+                            <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                          VerticalScrollBarVisibility="Auto"
+                                          Margin="0,5,0,0"
+                                          Grid.Row="1">
                             <ContentControl Content="{Binding SelectedWorldObject.SelectedMagnet}">
                                 <ContentControl.DataTemplates>
+                                    <StaticResource ResourceKey="TargetHookPanelResource" />
+                                    <StaticResource ResourceKey="SourceHookPanelResource" />
                                     <StaticResource ResourceKey="MagnetPanelResource" />
                                 </ContentControl.DataTemplates>
                             </ContentControl>
-                        </Border>
-                    </StackPanel>
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
                 </Border>
             </Grid>
         </TabItem>

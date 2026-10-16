@@ -105,7 +105,7 @@ public class BaseMode : ReactiveObject
     protected IEnumerable<MagnetResult<Magnet>> NearbyMagnets(ICollection<Magnet> candidates, float distance)
     {
         var near = new List<MagnetResult<Magnet>>();
-        var allMagnets = _area.AvailableMagnets;
+        var allMagnets = _area.AvailableHooks;
 
         foreach (var magnet in candidates)
         {

@@ -14,6 +14,7 @@ using Avalonia.Layout;
 using Avalonia.Markup.Xaml.Templates;
 using DynamicData;
 using DynamicData.Binding;
+using Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Hooks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.KitSerialization;
@@ -179,7 +180,9 @@ public class KitEditorViewModel : ReactiveObject
 
     private WorldObjectItem TemplateFromMDL(string filename, MDL mdl)
     {
-        var magnetsNodes = mdl.Root.GetAllDescendants().Where(x => x.Name.Contains("magnet."));
+        var magnetsNodes = mdl.Root.GetAllDescendants().Where(x => x.Name.Contains("magnet.")
+            || x.Name.Contains("source.")
+            || x.Name.Contains("target."));
 
         return new WorldObjectItem()
         {
@@ -191,30 +194,34 @@ public class KitEditorViewModel : ReactiveObject
             Model = filename,
             Magnets =
             [
-                ..magnetsNodes.Select(x => new MagnetItem()
-                {
-                    KitID = HookKitIDFromNode(x),
-                    TemplateID = TemplateIDFromNode(x),
-                    Position = PositionFromNode(x),
-                    Orientation = OrientationFromNode(x),
-                    Scale = ScaleFromNode(x),
-                    MagnetType = GetMagnetType(x),
-
-                    ConditionCheckLocalMagnetsOnly = GetBool(x, "CheckLocalMagnetsOnly"),
-                    ConditionMustHaveTemplate = GetBool(x, "MustHaveTemplate"),
-                    ConditionOverlapWillDisable = GetBool(x, "OverlapWillDisable"),
-                    ConditionOverlapCheckCount = GetInt(x, "OverlapCheckCount"),
-                    ConditionOverlapType = GetOverlapCountType(x, "OverlapType"),
-                    ConditionOverlapOnlySameRotation = GetBool(x, "OverlapOnlySameRotation"),
-                    ConditionOverlapOnlyEnableFirst = GetBool(x, "OverlapOnlyEnableFirst"),
-                    ConditionOverlapOnlyEnableMiddle = GetBool(x, "OverlapOnlyEnableMiddle"),
-                    ConditionOverlapOnlySameTemplate = GetBool(x, "OverlapOnlySameTemplate"),
-                    ConditionOverlapOnlySameClass = GetBool(x, "OverlapOnlySameClass"),
-                    ConditionOverlapOnlySameType = GetBool(x, "OverlapOnlySameType"),
-                    ConditionOverlapDistance = GetFloat(x, "OverlapDistance"),
-                }),
+                ..magnetsNodes.Select(MagnetItemFromNode),
             ]
         };
+    }
+    private MagnetItem MagnetItemFromNode(MDLNode node)
+    {
+        var kitID = HookKitIDFromNode(node);
+        var magnetType = GetMagnetType(node);
+        MagnetItem item = magnetType switch
+        {
+            MagnetType.TargetHook => new TargetHookItem(),
+            MagnetType.SourceHook => new SourceHookItem
+            {
+                KitID = kitID,
+                C1TemplateID = GetString(node, "C1"),
+                C2TemplateID = GetString(node, "C2"),
+                C3TemplateID = GetString(node, "C3"),
+                C4TemplateID = GetString(node, "C4"),
+            },
+            _ => new MagnetItem(),
+        };
+
+        item.Tag = GetString(node, "Tag") is { Length: > 0 } tag ? tag : node.Name;
+        item.Position = PositionFromNode(node);
+        item.Orientation = OrientationFromNode(node);
+        item.Scale = ScaleFromNode(node);
+        item.MagnetType = magnetType;
+        return item;
     }
     private WorldObjectType WorldObjectTypeFromFilename(string filename)
     {
@@ -297,28 +304,21 @@ public class KitEditorViewModel : ReactiveObject
     }
     private MagnetType GetMagnetType(MDLNode node)
     {
-        return GetString(node, "HookType") switch
+        if (node.Name.StartsWith("magnet"))
         {
-            "floor" => MagnetType.Floor,
-            "ceiling" => MagnetType.Ceiling,
-            "wallfull" => MagnetType.WallFull,
-            "walledge" => MagnetType.WallEdge,
-            "wallcorner" => MagnetType.WallCorner,
-            "corner" => MagnetType.Corner,
-            "connector" => MagnetType.WallConnector,
-            _ => MagnetType.None
-        };
-    }
-    private OverlapCountType GetOverlapCountType(MDLNode node, string property)
-    {
-        return GetString(node, property) switch
+            return MagnetType.Magnet;
+        }
+        else if (node.Name.StartsWith("source"))
         {
-            "equal" => OverlapCountType.EqualTo,
-            "notequal" => OverlapCountType.NotEqualTo,
-            "lessthan" => OverlapCountType.LessThan,
-            "greaterthan" => OverlapCountType.GreaterThan,
-            "ignore" => OverlapCountType.Ignore,
-            _ => OverlapCountType.Ignore
-        };  
+            return MagnetType.SourceHook;
+        }
+        else if (node.Name.StartsWith("target"))
+        {
+            return MagnetType.TargetHook;
+        }
+        else
+        {
+            throw new Exception();
+        }
     }
 }

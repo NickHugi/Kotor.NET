@@ -6,6 +6,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Input;
+using Avalonia.Markup.Xaml.Templates;
 using DynamicData;
 using DynamicData.Binding;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
@@ -25,7 +26,6 @@ namespace Kotor.DevelopmentKit.AreaDesigner.relocate.Mode;
 public class AddTileMode : BaseMode
 {
     private Room _projectedRoom = default!;
-    private WorldObject _projectedTile => _projectedRoom.Objects.Single();
     private float angle = 0;
 
     public List<WorldObjectTemplate> TileTemplates
@@ -35,15 +35,17 @@ public class AddTileMode : BaseMode
             if (Kits is null)
                 return [];
 
-            if (SelectedWorldObject?.Type == WorldObjectType.Wall)
-            {
-                var activeGroup = SelectedWorldObject.Template.ClassID;
-                return _objects.Where(x => x.Type == WorldObjectType.Tile).Where(x => x.Magnets.OfType<MagnetTemplate>().Any(y => activeGroup == y.Template?.ClassID)).ToList();
-            }
-            else
-            {
-                return _objects.Where(x => x.Type == WorldObjectType.Tile).ToList() ?? [];
-            }
+            //TODO
+            return _objects.Where(x => x.Type == WorldObjectType.Floor).ToList() ?? [];
+            //if (SelectedWorldObject?.Type == WorldObjectType.Wall)
+            //{
+            //    var activeGroup = SelectedWorldObject.Template.ClassID;
+            //    return _objects.Where(x => x.Type == WorldObjectType.Tile).Where(x => x.Magnets.OfType<SourceHookTemplate>().Any(y => activeGroup == y.Template?.ClassID)).ToList();
+            //}
+            //else
+            //{
+            //    return _objects.Where(x => x.Type == WorldObjectType.Tile).ToList() ?? [];
+            //}
         }
     }
     public WorldObjectTemplate? SelectedTileTemplate
@@ -68,45 +70,77 @@ public class AddTileMode : BaseMode
         if (_settings.PositionSnapEnabled)
             point = point.Snap(Axis.X, _settings.PositionSnapSize).Snap(Axis.Y, _settings.PositionSnapSize);
 
-        _projectedRoom = new Room(_area, SelectedTileTemplate);
+        _projectedRoom = new Room(_area);
         _projectedRoom.Position = point;
         _projectedRoom.Orientation = Quaternion.CreateFromYawPitchRoll(0, 0, angle * (float)Math.PI / 180);
 
+        var newWorldObject = new WorldObject(_projectedRoom, null, SelectedTileTemplate, Guid.NewGuid(), WorldObjectType.Floor);
+        _projectedRoom.AddObject(newWorldObject);
+        UnpackHooks(newWorldObject);
+
         var result = NearbyMagnets(_projectedRoom.AllMagnets, 1)
-            .Where(x => x.Source.IsTileMagnet && x.Target.IsTileMagnet)
             .FirstOrDefault();
-
-
-        var targets = NearbyMagnets(_projectedRoom.AllMagnets, 1)
-            .Where(x => x.Source.IsTileMagnet && x.Target.IsTileMagnet)
-            .ToList();
 
         if (result is not null)
         {
-            // Target is existing wall
-            // Source is cursor
-
             _projectedRoom.Orientation = result.Target.GlobalOrientation / result.Source.GlobalOrientation * Quaternion.CreateFromYawPitchRoll(0, 0, MathF.PI);
             _projectedRoom.Position = new();
             _projectedRoom.Position = result.Target.GlobalPosition - result.Source.GlobalPosition;
-
-            var sourceWall = _projectedRoom.AllObjects.FirstOrDefault(x => x.Template == result.Source.MagnetTemplate.Template && x.GlobalPosition == result.Source.GlobalPosition);
-
-            if (sourceWall is not null && result.Target.Parent.Type == WorldObjectType.DoorFrame)
-            {
-                var swapTemplate = Kit.Manager.AllTemplates(sourceWall.Template.ClassID).Where(x => x.Magnets.Any(y => y.TemplateID == result.Target.Parent?.TemplateID)).FirstOrDefault();
-
-                if (swapTemplate is not null)
-                {
-                    sourceWall.SwitchTemplate(swapTemplate);
-                    _projectedRoom.Position = new();
-                    _projectedRoom.Position = result.Target.GlobalPosition - sourceWall.Magnets.First(x => x.WorldObjectTemplate?.Type == WorldObjectType.DoorFrame).GlobalPosition;
-                }
-            }
         }
 
+
+        //var targets = NearbyMagnets(_projectedRoom.AllMagnets, 1)
+        //    .Where(x => x.Source.IsTileMagnet && x.Target.IsTileMagnet)
+        //    .ToList();
+
+        //if (result is not null)
+        //{
+        //    // Target is existing wall
+        //    // Source is cursor
+
+        //    _projectedRoom.Orientation = result.Target.GlobalOrientation / result.Source.GlobalOrientation * Quaternion.CreateFromYawPitchRoll(0, 0, MathF.PI);
+        //    _projectedRoom.Position = new();
+        //    _projectedRoom.Position = result.Target.GlobalPosition - result.Source.GlobalPosition;
+
+        //    var sourceTemplate = result.Source.TargetHook?.Template;
+        //    var sourceWall = _projectedRoom.AllObjects.FirstOrDefault(x => x.Template == sourceTemplate && x.GlobalPosition == result.Source.GlobalPosition);
+
+        //    if (sourceWall is not null && result.Target.Parent.Type == WorldObjectType.DoorFrame)
+        //    {
+        //        var swapTemplate = Kit.Manager.AllTemplates(sourceWall.Template.ClassID)
+        //            .FirstOrDefault(x => x.Magnets.OfType<TargetHookTemplate>()
+        //                .Any(y => y.TemplateIDs.Contains(result.Target.Parent?.TemplateID)));
+
+        //        if (swapTemplate is not null)
+        //        {
+        //            sourceWall.SwitchTemplate(swapTemplate);
+        //            _projectedRoom.Position = new();
+        //            _projectedRoom.Position = result.Target.GlobalPosition - sourceWall.Magnets.First(x => x.WorldObjectTemplate?.Type == WorldObjectType.DoorFrame).GlobalPosition;
+        //        }
+        //    }
+        //}
+
         scene.Projection.Clear();
-        scene.Projection.Add(_projectedTile);
+        scene.Projection.AddRange(_projectedRoom.AllObjects);
+    }
+
+    private void UnpackHooks(WorldObject worldObject)
+    {
+        foreach (var hook in worldObject.Template.Magnets.OfType<SourceHookTemplate>())
+        {
+            var position = worldObject.GlobalPosition + hook.LocalPosition;
+            var orientation = worldObject.GlobalOrientation * hook.LocalOrientation;
+
+            var c = worldObject.Room.Area.AllMagnets.Count(x => x.GlobalPosition == position);
+
+            if (!string.IsNullOrWhiteSpace(hook.C1TemplateID))
+            {
+                var child = new WorldObject(_projectedRoom, null, hook.Templates.ElementAt(0), Guid.NewGuid(), WorldObjectType.Floor);
+                child.GlobalPosition = position;
+                child.GlobalOrientation = orientation;
+                worldObject.Room.AddObject(child);
+            }
+        }
     }
 
     public override void MousePress(Inputs inputs)
@@ -132,25 +166,26 @@ public class AddTileMode : BaseMode
         if (SelectedTileTemplate is null)
             return;
 
-        var magnet = NearbyMagnets(_projectedRoom.AllMagnets, 1)
-            .Where(x => x.Source.IsTileMagnet && x.Target.IsTileMagnet)
-            .FirstOrDefault();
+        _area.AddRoom(_projectedRoom);
+        //var magnet = NearbyMagnets(_projectedRoom.AllMagnets, 1)
+        //    .Where(x => x.Source.IsTileMagnet && x.Target.IsTileMagnet)
+        //    .FirstOrDefault();
 
-        if (magnet is not null && magnet.Target.IsHook && magnet.Target.MagnetTemplate?.Template?.Type == WorldObjectType.Wall)
-        {
-            var template = _projectedRoom.Objects.Where(x => x.Type == WorldObjectType.Tile).First().Template;
-            var room = magnet.Target.Parent.Room;
-            var newTile = new WorldObject(room, null, template, Guid.NewGuid(), WorldObjectType.Tile);
-            newTile.SwitchTemplate(template);
-            newTile.GlobalPosition = _projectedRoom.Position;
-            newTile.GlobalOrientation = _projectedRoom.Orientation;
-            room.AddTile(newTile);
-            room.Area.Dirty = true;
-        }
-        else
-        {
-            _area.AddRoom(_projectedRoom);
-        }
+        //if (magnet is not null && magnet.Target.TargetHook?.Template?.Type == WorldObjectType.Wall)
+        //{
+        //    var template = _projectedRoom.Objects.Where(x => x.Type == WorldObjectType.Tile).First().Template;
+        //    var room = magnet.Target.Parent.Room;
+        //    var newTile = new WorldObject(room, null, template, Guid.NewGuid(), WorldObjectType.Tile);
+        //    newTile.SwitchTemplate(template);
+        //    newTile.GlobalPosition = _projectedRoom.Position;
+        //    newTile.GlobalOrientation = _projectedRoom.Orientation;
+        //    room.AddTile(newTile);
+        //    room.Area.Dirty = true;
+        //}
+        //else
+        //{
+        //    _area.AddRoom(_projectedRoom);
+        //}
     }
 }
 

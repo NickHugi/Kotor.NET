@@ -28,6 +28,7 @@ public class WorldObject
     } = true;
 
     public IReadOnlyCollection<Magnet> Magnets { get; private set; }
+    [Obsolete]
     public IReadOnlyCollection<WorldObject> AttachedObjects { get; set; } = [];
 
     public string KitID { get; protected set; }
@@ -114,26 +115,30 @@ public class WorldObject
         var magnets = Template.Magnets.ToList();
         if (!string.IsNullOrWhiteSpace(template.DoorframeTemplateID) && !string.IsNullOrWhiteSpace(template.DoorframeClassID))
         {
-            magnets.Add(new MagnetTemplate
+            magnets.Add(new SourceHookTemplate
             {
+                Tag = "doorframe",
                 LocalPosition = Vector3.Zero,
                 LocalOrientation = Quaternion.CreateFromYawPitchRoll(0, 0, MathF.PI),
                 LocalScale = Vector3.One,
                 KitID = template.DoorframeKitID,
-                TemplateID = template.DoorframeTemplateID,
+                C1TemplateID = template.DoorframeTemplateID,
+                C2TemplateID = template.DoorframeTemplateID,
+                C3TemplateID = template.DoorframeTemplateID,
+                C4TemplateID = template.DoorframeTemplateID,
+                MagnetType = MagnetType.TargetHook,
             });
         }
         Magnets = magnets.Select(x => new Magnet(this, x)).ToArray();
         
 
-        var attachedObjects = new List<WorldObject>();
-        AttachedObjects = attachedObjects;
-        attachedObjects.AddRange(
-        [
-            .. Magnets
-                .Where(x => !string.IsNullOrWhiteSpace(x.MagnetTemplate.KitID) && !string.IsNullOrWhiteSpace(x.MagnetTemplate.TemplateID))
-                .Where(x => x.MagnetTemplate.Template is not null)
-                .Select(x => new WorldObject(Room, x, x.MagnetTemplate.Template, Guid.NewGuid(), x.MagnetTemplate.Template.Type)),
-        ]);
+        //var attachedObjects = new List<WorldObject>();
+        //AttachedObjects = attachedObjects;
+        //attachedObjects.AddRange(
+        //[
+        //    .. Magnets
+        //        .Where(x => x.SourceHook?.Template is not null)
+        //        .Select(x => new WorldObject(Room, x, x.TargetHook!.Template!, Guid.NewGuid(), x.TargetHook.Template!.Type)),
+        //]);
     }
 }

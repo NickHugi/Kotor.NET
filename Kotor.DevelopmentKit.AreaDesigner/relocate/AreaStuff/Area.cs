@@ -19,21 +19,32 @@ public class Area
     public IReadOnlyList<Room> Rooms => _rooms.AsReadOnly();
     private List<Room> _rooms = new();
 
-    private ICollection<Magnet> _allMagnets => Rooms.SelectMany(x => x.AllMagnets).ToList();
-    public ICollection<Magnet> AllMagnets { get; private set; } = [];
+    //private ICollection<Magnet> _allMagnets => Rooms.SelectMany(x => x.AllMagnets).ToList();
+    //public ICollection<Magnet> AllMagnets { get; private set; } = [];
 
-    private ICollection<Magnet> _availableMagnets => AllMagnets.Where(x =>
+    //private ICollection<Magnet> _availableMagnets => AllMagnets.Where(x =>
+    //{
+    //    var visible = x.Visible;
+
+    //    if (x.Child is not null && x.Child.Type == WorldObjectType.Wall)
+    //    {
+    //        visible = visible && x.Child.Magnets.All(x => x.WorldObjectTemplate?.Type != WorldObjectType.DoorFrame);
+    //    }
+
+    //    return visible;
+    //}).ToList();
+    //public ICollection<Magnet> AvailableMagnets { get; private set; } = [];
+
+    public ICollection<Magnet> AllMagnets => Rooms.SelectMany(x => x.AllMagnets).ToList();
+    public ICollection<Magnet> AvailableHooks => AllMagnets.Where(x =>
     {
-        var visible = x.Visible;
+        if (x?.MagnetTemplate?.MagnetType != MagnetType.TargetHook)
+            return false;
+        if (AllMagnets.Any(y => y.GlobalPosition == x.GlobalPosition && y != x))
+            return false;
 
-        if (x.Child is not null && x.Child.Type == WorldObjectType.Wall)
-        {
-            visible = visible && x.Child.Magnets.All(x => x.WorldObjectTemplate?.Type != WorldObjectType.DoorFrame);
-        }
-
-        return visible;
+        return true;
     }).ToList();
-    public ICollection<Magnet> AvailableMagnets { get; private set; } = [];
 
     public void AddRoom(Room room)
     {
@@ -48,7 +59,7 @@ public class Area
 
     public void Invalidate()
     {
-        AllMagnets = _allMagnets;
-        AvailableMagnets = _availableMagnets;
+        //AllMagnets = _allMagnets;
+        //AvailableMagnets = _availableMagnets;
     }
 }

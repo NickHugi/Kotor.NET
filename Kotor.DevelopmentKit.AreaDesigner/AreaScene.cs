@@ -140,8 +140,7 @@ public class AreaScene : IScene
     public void RenderMagnets(IAssetManager assets, ref List<IDrawCallDescriptor> descriptors)
     {
         var size = (0.4f) + MathF.Sin((RunningTime % 0.75f) / 0.75f * MathF.PI) * 0.2f;
-        descriptors.AddRange(Area.AvailableMagnets
-            .Where(x => x.IsTileMagnet)
+        descriptors.AddRange(Area.AvailableHooks
             .ToList()
             .Select(magnet => new BillboardDescriptor()
             {

@@ -37,30 +37,6 @@ public class AreaSerializer_V0_1
                 tile.LocalPosition = new Vector3(tileData.position.ToObject<float[]>());
                 tile.LocalOrientation = ((float[])tileData.orientation.ToObject<float[]>()).ToQuaternion();
 
-                // TODO
-
-                //foreach (var floor in tile.AttachedObjects)
-                //{
-                //    var floorData = tileData.floor;
-                //    var floorTemplate = Kit.Manager.Get(floorData.kitID.Value).Floor(floorData.templateID.Value);
-                //    floor.SwitchTemplate(floorTemplate);
-                //}
-
-                //foreach (var ceiling in tile.AttachedObjects.OfType<Ceiling>())
-                //{
-                //    var ceilingData = tileData.ceiling;
-                //    var ceilingTemplate = Kit.Manager.Get(ceilingData.kitID.Value).Ceiling(ceilingData.templateID.Value);
-                //    ceiling.SwitchTemplate(ceilingTemplate);
-                //}
-
-                //for (int i = 0; i < tileData.walls.Count; i++)
-                //{
-                //    var wallData = tileData.walls[i];
-                //    var wallTemplate = Kit.Manager.Get(wallData.kitID.Value).Wall(wallData.templateID.Value);
-                //    var wall = tile.AttachedObjects.OfType<Wall>().ElementAt(i);
-                //    wall.SwitchTemplate(wallTemplate);
-                //}
-
                 room.AddTile(tile);
             }
         }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System;
+using Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels.Hooks;
 using Kotor.DevelopmentKit.AreaDesigner.relocate.AreaStuff;
 using Kotor.DevelopmentKit.Base.ReactiveObjects;
 using ReactiveUI;
@@ -11,14 +8,10 @@ namespace Kotor.DevelopmentKit.AreaDesigner.KitEditor.ViewModels;
 
 public class MagnetItem : ReactiveObject
 {
-    public string Name => $"{KitID}.{TemplateID} ({Position.X:F2}, {Position.Y:F2}, {Position.Z:F2})";
+    public virtual string TypeName => "Magnet";
+    public string Name => $"{TypeName}: {Tag} ({Position.X:F2}, {Position.Y:F2}, {Position.Z:F2})";
 
-    public string KitID
-    {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-    public string TemplateID
+    public string Tag
     {
         get;
         set => this.RaiseAndSetIfChanged(ref field, value);
@@ -45,133 +38,45 @@ public class MagnetItem : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    public bool ConditionCheckLocalMagnetsOnly
-    {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-    public bool ConditionMustHaveTemplate
-    {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-    public bool ConditionOverlapWillDisable
-    {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-    public int ConditionOverlapCheckCount
-    {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-    public bool ConditionOverlapOnlySameRotation
-    {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-    public OverlapCountType ConditionOverlapType
-    {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-    public bool ConditionOverlapOnlyEnableFirst
-    {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-    public bool ConditionOverlapOnlyEnableMiddle
-    {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-    public bool ConditionOverlapOnlySameTemplate
-    {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-    public bool ConditionOverlapOnlySameClass
-    {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-    public bool ConditionOverlapOnlySameType
-    {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-    public WorldObjectType?[]? ConditionOverlapOnlySpecificTypes
-    {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-    public float ConditionOverlapDistance
-    {
-        get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
-    }
-
     public MagnetItem()
     {
-        KitID = "";
-        TemplateID = "";
-
+        Tag = "";
         Position = new();
         Orientation = new(0, 0, 0, 1);
         Scale = new(1, 1, 1);
 
-        this.WhenAnyValue(x => x.TemplateID).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
+        this.WhenAnyValue(x => x.Tag).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
         this.WhenAnyValue(x => x.Position).Subscribe(_ => this.RaisePropertyChanged(nameof(Name)));
     }
+
     public MagnetItem(MagnetTemplate template) : this()
     {
-        KitID = template.KitID;
-        TemplateID = template.TemplateID;
+        Tag = template.Tag;
         Position = new ReactiveVector3(template.LocalPosition);
         Orientation = new ReactiveQuaternion(template.LocalOrientation);
         Scale = new ReactiveVector3(template.LocalScale);
         MagnetType = template.MagnetType;
-
-        ConditionCheckLocalMagnetsOnly = template.ConditionCheckLocalMagnetsOnly;
-        ConditionMustHaveTemplate = template.ConditionMustHaveTemplate;
-        ConditionOverlapWillDisable = template.ConditionOverlapWillDisable;
-        ConditionOverlapCheckCount = template.ConditionOverlapCheckCount;
-        ConditionOverlapOnlySameRotation = template.ConditionOverlapOnlySameRotation;
-        ConditionOverlapType = template.ConditionOverlapType;
-        ConditionOverlapOnlyEnableFirst = template.ConditionOverlapOnlyEnableFirst;
-        ConditionOverlapOnlyEnableMiddle = template.ConditionOverlapOnlyEnableMiddle;
-        ConditionOverlapOnlySameTemplate = template.ConditionOverlapOnlySameTemplate;
-        ConditionOverlapOnlySameClass = template.ConditionOverlapOnlySameClass;
-        ConditionOverlapOnlySameType = template.ConditionOverlapOnlySameType;
-        ConditionOverlapOnlySpecificTypes = template.ConditionOverlapOnlySpecificTypes;
-        ConditionOverlapOnlySpecificTypes = template.ConditionOverlapOnlySpecificTypes;
-        ConditionOverlapDistance = template.ConditionOverlapDistance;
     }
 
-    public MagnetTemplate ToModel()
+    public static MagnetItem FromModel(MagnetTemplate template)
+    {
+        return template switch
+        {
+            TargetHookTemplate targetHook => new TargetHookItem(targetHook),
+            SourceHookTemplate sourceHook => new SourceHookItem(sourceHook),
+            _ => new MagnetItem(template),
+        };
+    }
+
+    public virtual MagnetTemplate ToModel()
     {
         return new MagnetTemplate
         {
-            KitID = KitID,
-            TemplateID = TemplateID,
+            Tag = Tag,
             LocalPosition = Position.ToModel(),
             LocalOrientation = Orientation.ToModel(),
             LocalScale = Scale.ToModel(),
             MagnetType = MagnetType,
-
-            ConditionCheckLocalMagnetsOnly = ConditionCheckLocalMagnetsOnly,
-            ConditionMustHaveTemplate = ConditionMustHaveTemplate,
-            ConditionOverlapOnlySameRotation = ConditionOverlapOnlySameRotation,
-            ConditionOverlapWillDisable = ConditionOverlapWillDisable,
-            ConditionOverlapCheckCount = ConditionOverlapCheckCount,
-            ConditionOverlapType = ConditionOverlapType,
-            ConditionOverlapOnlyEnableFirst = ConditionOverlapOnlyEnableFirst,
-            ConditionOverlapOnlyEnableMiddle = ConditionOverlapOnlyEnableMiddle,
-            ConditionOverlapOnlySameTemplate = ConditionOverlapOnlySameTemplate,
-            ConditionOverlapOnlySameClass = ConditionOverlapOnlySameClass,
-            ConditionOverlapOnlySameType = ConditionOverlapOnlySameType,
-            ConditionOverlapOnlySpecificTypes = ConditionOverlapOnlySpecificTypes,
-            ConditionOverlapDistance = ConditionOverlapDistance,
         };
     }
 }
